@@ -1,0 +1,13 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">LED Strip Animator</a>
+    </div>
+</nav>
+
+<div class="container" style="padding-top: 70px;">
+    <div ng-controller="SelectorController as selector">
+        <div class="row">
+            <song-entry ng-repeat="song in selector.songs" song="song" remove="selector.removeSong(song)"></song-entry>
+        </div>
+    </div>
+</div>

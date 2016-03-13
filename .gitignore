@@ -20,7 +20,14 @@ syntax: glob
 **/build/
 **/dist/
 **/maps/
+**/target/
 out
+
+# Compiled artefacts
+*.class
+*.jar
+*.war
+*.ear
 
 # Logs and databases
 *.log

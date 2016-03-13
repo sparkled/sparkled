@@ -1,0 +1,84 @@
+@import "variables";
+@import "mixins";
+
+$timeline-label-width: 80px;
+
+* {
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body, div[ui-view] {
+  height: 100%;
+  font-size: 14px;
+}
+
+.wrapper {
+  min-height: 100%;
+  margin: 0 auto -350px;
+}
+
+#footer {
+  position: relative;
+  background: #ddd;
+  padding: 3px;
+  font-size: 0;
+
+ &, #push {
+   height: 350px;
+ }
+}
+
+.timeline-labels {
+  position: absolute;
+  top: 3px;
+  z-index: 1;
+}
+
+.timeline-label {
+  font-size: 1rem;
+  text-align: right;
+  padding-right: 5px;
+  left:3px;
+  height:30px;
+  line-height:30px;
+  width: $timeline-label-width;
+  background: #ccc;
+  border-right: 1px solid #999;
+
+  &:not(:last-of-type) {
+    margin-bottom: 3px;
+  }
+}
+
+.timelines {
+  overflow: auto;
+  width: calc(100% - $timeline-label-width);
+  margin-left: $timeline-label-width;
+}
+
+.timeline {
+  position:relative;
+  font-size: 1rem;
+  width: 4000px;
+  height: 30px;
+  display: inline-block;
+  background: #eee;
+  border: 1px solid #999;
+  border-left: 0;
+
+  &:not(:last-of-type) {
+    margin-bottom: 3px;
+  }
+}
+
+.timeline-content {
+  margin-left: -$timeline-label-width;
+}
+

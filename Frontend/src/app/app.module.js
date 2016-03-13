@@ -12,6 +12,8 @@
                  * Feature dependencies
                  */
                 'ledStripAnimator.core',
-                'ledStripAnimator.dashboard'
+                'ledStripAnimator.editor',
+                'ledStripAnimator.rest',
+                'ledStripAnimator.selector'
             ]);
 }());

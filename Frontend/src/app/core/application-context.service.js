@@ -7,5 +7,13 @@
         .factory('applicationContextService', applicationContextService);
 
     function applicationContextService() {
+
+        return {
+            getVar: getVar
+        };
+
+        function getVar() {
+            return "someVar";
+        }
     }
 }());

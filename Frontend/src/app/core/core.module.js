@@ -6,11 +6,7 @@
     angular.module('ledStripAnimator.core', [
         'ngAnimate',
         'ngCookies',
-        'ngTouch',
-        'ngSanitize',
         'ngResource',
-        'ui.router',
-        'ui.bootstrap',
-        'ui.select'
+        'ui.router'
     ]);
 }());
