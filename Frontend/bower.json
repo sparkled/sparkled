@@ -10,6 +10,7 @@
     "angular": "~1.4.9",
     "bootstrap": "3.3.6",
     "font-awesome": "~4.3.0",
+    "jsmediatags-sebastianha": "3.0.5",
     "restangular": "1.5.2",
     "sweetalert2": "0.4.3"
   },

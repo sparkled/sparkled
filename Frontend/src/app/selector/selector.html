@@ -8,6 +8,7 @@
     <div ng-controller="SelectorController as selector">
         <div class="row">
             <song-entry ng-repeat="song in selector.songs" song="song" remove="selector.removeSong(song)"></song-entry>
+            <new-song-dropzone add-song="selector.addSong"></new-song-dropzone>
         </div>
     </div>
 </div>

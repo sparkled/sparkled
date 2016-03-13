@@ -3,7 +3,7 @@
 }
 
 .panel-title {
-  padding-top: 8px;
+  padding: 8px 0;
 }
 
 .panel-body {
@@ -16,4 +16,20 @@
 
 .song-duration {
   text-align: right;
+}
+
+.dropzone {
+  border: 3px #ddd dashed;
+  text-align: center;
+  font-size: 20px;
+  padding: 10px;
+  margin: 5px -5px;
+  background: #f5f5f5;
+
+
+  &.dragged {
+    background: #286090;
+    border: 3px solid #2e6da4;
+    color: #fff;
+  }
 }

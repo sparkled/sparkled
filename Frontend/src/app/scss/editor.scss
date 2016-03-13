@@ -59,7 +59,7 @@ html, body, div[ui-view] {
 
 .timelines {
   overflow: auto;
-  width: calc(100% - $timeline-label-width);
+  width: calc(100% - #{$timeline-label-width});
   margin-left: $timeline-label-width;
 }
 

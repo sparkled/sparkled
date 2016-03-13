@@ -9,7 +9,7 @@
         var self = this;
         this.songs = null;
 
-        this.removeSong = function(song) {
+        this.removeSong = function (song) {
             sweetAlert({
                     title: 'Remove Song',
                     text: "Are you sure you want to remove this song?",
@@ -20,7 +20,7 @@
                     confirmButtonText: 'Remove',
                     closeOnConfirm: false
                 },
-                function(isConfirm) {
+                function (isConfirm) {
                     if (isConfirm) {
                         song.remove().then(function () {
                             var songIndex = self.songs.indexOf(song);
@@ -35,8 +35,30 @@
                 });
         };
 
-        RestService.all('song').getList().then(function(songs) {
-            self.songs = songs;
-        });
+        this.addSong = function (file, songData) {
+            var formData = new FormData();
+            formData.append('song', JSON.stringify(songData));
+            formData.append('mp3', file);
+
+            RestService.one('song').withHttpConfig({
+                    transformRequest: angular.identity
+                })
+                .customPUT(formData, undefined, undefined, {'Content-Type': undefined}).then(function (response) {
+                self.getAllSongs();
+                swal(
+                    'Song Added',
+                    'Your song has been added.',
+                    'success'
+                );
+            });
+        };
+
+        this.getAllSongs = function() {
+            RestService.service('song').getList().then(function (songs) {
+                self.songs = songs;
+            });
+        };
+
+        this.getAllSongs();
     }
 }());
