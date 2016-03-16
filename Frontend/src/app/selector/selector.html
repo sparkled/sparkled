@@ -4,7 +4,7 @@
     </div>
 </nav>
 
-<div class="container" style="padding-top: 70px;">
+<div class="container animated fadeInRight" style="padding-top: 70px;">
     <div ng-controller="SelectorController as selector">
         <div class="row">
             <song-entry ng-repeat="song in selector.songs" song="song" remove="selector.removeSong(song)"></song-entry>

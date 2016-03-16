@@ -44,6 +44,8 @@
             event.preventDefault();
         }
 
+        $(event.target).removeClass('dragged');
+
         reader = new FileReader();
         reader.onload = function (evt) {
             if (!isTypeValid(type)) {

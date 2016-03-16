@@ -2,14 +2,15 @@
   "name": "led-strip-animator",
   "version": "0.0.1",
   "dependencies": {
-    "jquery": "~2.1.1",
     "angular-animate": "~1.4.9",
     "angular-cookies": "~1.4.9",
     "angular-resource": "~1.4.9",
     "angular-ui-router": "~0.2.13",
     "angular": "~1.4.9",
+    "animate.css": "3.5.1",
     "bootstrap": "3.3.6",
     "font-awesome": "~4.3.0",
+    "jquery": "~2.1.1",
     "jsmediatags-sebastianha": "3.0.5",
     "restangular": "1.5.2",
     "sweetalert2": "0.4.3"
