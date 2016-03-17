@@ -8,6 +8,7 @@
 
         <class>net.chrisparton.xmas.entity.Song</class>
         <class>net.chrisparton.xmas.entity.SongData</class>
+        <class>net.chrisparton.xmas.entity.AnimationEffect</class>
 
         <properties>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>

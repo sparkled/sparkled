@@ -6,6 +6,7 @@ import com.sun.jersey.multipart.FormDataParam;
 import net.chrisparton.xmas.entity.Song;
 import net.chrisparton.xmas.entity.SongData;
 import net.chrisparton.xmas.persistence.song.SongPersistenceService;
+import net.chrisparton.xmas.rest.RestService;
 import net.chrisparton.xmas.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
 
@@ -21,13 +22,13 @@ import java.util.Optional;
 public class SongRestService extends RestService {
 
     private static final String MP3_MIME_TYPE = "audio/mpeg";
-    private SongPersistenceService songPersistenceService = new SongPersistenceService();
+    private SongPersistenceService persistenceService = new SongPersistenceService();
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSong(@PathParam("id") int id) {
-        Optional<Song> song = songPersistenceService.getSongById(id);
+        Optional<Song> song = persistenceService.getSongById(id);
 
         if (song.isPresent()) {
             return getJsonResponse(song);
@@ -39,7 +40,7 @@ public class SongRestService extends RestService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSongs() {
-        List<Song> songs = songPersistenceService.getAllSongs();
+        List<Song> songs = persistenceService.getAllSongs();
         return getJsonResponse(songs);
     }
 
@@ -47,7 +48,7 @@ public class SongRestService extends RestService {
     @Path("/data/{id}")
     @Produces(MP3_MIME_TYPE)
     public Response getSongData(@PathParam("id") int id) {
-        Optional<SongData> songData = songPersistenceService.getSongDataById(id);
+        Optional<SongData> songData = persistenceService.getSongDataById(id);
 
         if (songData.isPresent()) {
             return getBinaryResponse(songData.get().getMp3Data(), MP3_MIME_TYPE);
@@ -78,7 +79,7 @@ public class SongRestService extends RestService {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeSong(@PathParam("id") int id) {
-        boolean success = songPersistenceService.removeSongAndData(id);
+        boolean success = persistenceService.removeSongAndData(id);
         return getResponse(
                 success ? Response.Status.OK : Response.Status.NOT_MODIFIED
         );
@@ -92,12 +93,12 @@ public class SongRestService extends RestService {
                                         @FormDataParam("animation-data") String animationData) {
 
         try {
-            Optional<Song> songOptional = songPersistenceService.getSongById(songId);
+            Optional<Song> songOptional = persistenceService.getSongById(songId);
 
             if (songOptional.isPresent()) {
                 Song song = songOptional.get();
                 song.setAnimationData(animationData);
-                songPersistenceService.saveSong(song);
+                persistenceService.saveSong(song);
 
                 IdResponse idResponse = new IdResponse(songId);
                 return getJsonResponse(idResponse);
@@ -112,7 +113,7 @@ public class SongRestService extends RestService {
     private int persistSong(String songJson) {
         Song song = new Gson().fromJson(songJson, Song.class);
         song.setId(null);
-        return songPersistenceService.saveSong(song);
+        return persistenceService.saveSong(song);
     }
 
     private void persistSongData(InputStream uploadedInputStream, int songId) throws IOException {
@@ -122,6 +123,6 @@ public class SongRestService extends RestService {
         songData.setSongId(songId);
         songData.setMp3Data(bytes);
 
-        songPersistenceService.saveSongData(songData);
+        persistenceService.saveSongData(songData);
     }
 }
