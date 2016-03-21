@@ -1,0 +1,27 @@
+<svg id="time-indicator" height="20px" ng-attr-width="{{width}}">
+    <pattern id="frame-pattern" width="2" height="10" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="3"></line>
+    </pattern>
+
+    <pattern id="quarter-second-pattern" width="30" height="10" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="3" x2="0" y2="6"></line>
+    </pattern>
+
+    <pattern id="half-second-pattern" width="60" height="10" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="3" x2="0" y2="8"></line>
+    </pattern>
+
+    <pattern id="second-pattern" width="120" height="10" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="3" x2="0" y2="10"></line>
+    </pattern>
+
+    <line x1="0" y1="0" ng-attr-x2="{{width}}" y2="0"></line>
+    <line ng-repeat="time in times" ng-attr-x1="{{time.xPos}}" ng-attr-y1="0" ng-attr-x2="{{time.xPos}}" ng-attr-y2="{{time.height}}"></line>
+
+    <rect fill="url(#frame-pattern)" height="10" ng-attr-width="{{width}}" x="0" y="0" ></rect>
+    <rect fill="url(#quarter-second-pattern)" height="10" ng-attr-width="{{width}}" x="0" y="0" ></rect>
+    <rect fill="url(#half-second-pattern)" height="10" ng-attr-width="{{width}}" x="0" y="0" ></rect>
+    <rect fill="url(#second-pattern)" height="10" ng-attr-width="{{width}}" x="0" y="0" ></rect>
+
+    <text ng-repeat="second in seconds" ng-attr-x="{{second * 120}}" y="20">{{second | time}}</text>
+</svg>

@@ -12,6 +12,7 @@
                  * Feature dependencies
                  */
                 'ledStripAnimator.core',
+                'ledStripAnimator.context',
                 'ledStripAnimator.editor',
                 'ledStripAnimator.rest',
                 'ledStripAnimator.selector'

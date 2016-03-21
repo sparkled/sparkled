@@ -1,0 +1,9 @@
+#selector-page {
+  display: flex;
+  flex-grow: 1;
+  overflow: auto;
+
+  > .container {
+    margin-top: 20px;
+  }
+}

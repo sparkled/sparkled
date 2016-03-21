@@ -1,19 +1,22 @@
-<div id="wrap" ng-controller="EditorController as editor" class="wrapper wrapper-content animated fadeIn">
-    <div class="container">
-        <div class="page-header">
-            <h1>Sticky footer</h1>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <a ui-sref="selector" title="Back" class="btn btn-default navbar-btn"><i class="fa fa-arrow-left"></i></a>
+    </div>
+</nav>
+
+<div id="editor-page" ng-controller="EditorController as editor">
+    <div id="body">
+        <div id="animation-preview" style="background: #f5f5f5">
+            <img id="stage" src="/assets/stages/home-stage.svg"/>
         </div>
-        <p class="lead">
-            Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom
-            HTML and CSS.
-        </p>
+        <div id="effect-list" class="container" style="background: #f5f5f5;border-left: 1px solid #e7e7e7">
+            <!--<div class="row">-->
+            <!--<animation-effect ng-repeat="effect in editor.animationEffects" effect="effect"></animation-effect>-->
+            <!--</div>-->
+        </div>
     </div>
 
-    <div id="push"></div>
-</div>
-
-<div id="footer">
-    <div id="footer-container">
+    <div id="timeline" style="background: #f5f5f5;border-top: 1px solid #e7e7e7">
         <div class="timeline-labels">
             <div class="timeline-label">Pillar 1</div>
             <div class="timeline-label">Pillar 2</div>
@@ -27,41 +30,16 @@
         </div>
 
         <div class="timelines">
-            <div class="timeline pillar-1">
-                <div class="timeline-content">aaa</div>
-            </div>
-
-            <div class="timeline pillar-2">
-                <div class="timeline-content">aaa</div>
-            </div>
-
-            <div class="timeline pillar-3">
-                <div class="timeline-content">aaa</div>
-            </div>
-
-            <div class="timeline pillar-4">
-                <div class="timeline-content">aaa</div>
-            </div>
-
-            <div class="timeline arch-1">
-                <div class="timeline-content">aaa</div>
-            </div>
-
-            <div class="timeline arch-2">
-                <div class="timeline-content">aaa</div>
-            </div>
-
-            <div class="timeline arch-3">
-                <div class="timeline-content">aaa</div>
-            </div>
-
-            <div class="timeline arch-4">
-                <div class="timeline-content">aaa</div>
-            </div>
-
-            <div class="timeline global">
-                <div class="timeline-content">aaa</div>
-            </div>
+            <timeline duration="editor.currentSong.durationSeconds" class="pillar-1">aaa</timeline>
+            <timeline duration="editor.currentSong.durationSeconds" class="pillar-2">aaa</timeline>
+            <timeline duration="editor.currentSong.durationSeconds" class="pillar-3">aaa</timeline>
+            <timeline duration="editor.currentSong.durationSeconds" class="pillar-4">aaa</timeline>
+            <timeline duration="editor.currentSong.durationSeconds" class="arch-1">aaa</timeline>
+            <timeline duration="editor.currentSong.durationSeconds" class="arch-2">aaa</timeline>
+            <timeline duration="editor.currentSong.durationSeconds" class="arch-3">aaa</timeline>
+            <timeline duration="editor.currentSong.durationSeconds" class="arch-4">aaa</timeline>
+            <timeline duration="editor.currentSong.durationSeconds" class="global">aaa</timeline>
+            <time-indicator duration="editor.currentSong.durationSeconds"></time-indicator>
         </div>
     </div>
 </div>

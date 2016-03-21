@@ -7,6 +7,7 @@
                 restrict: 'E',
                 scope: {
                     song: '=',
+                    edit: '&',
                     remove: '&'
                 },
                 replace: true,

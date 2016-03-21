@@ -31,7 +31,7 @@ public class SongRestService extends RestService {
         Optional<Song> song = persistenceService.getSongById(id);
 
         if (song.isPresent()) {
-            return getJsonResponse(song);
+            return getJsonResponse(song.get());
         }
 
         return getResponse(Response.Status.NOT_FOUND);

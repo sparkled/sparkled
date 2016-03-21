@@ -1,14 +1,18 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-static-top">
     <div class="container">
         <a class="navbar-brand" href="#">LED Strip Animator</a>
     </div>
 </nav>
 
-<div class="container animated fadeInRight" style="padding-top: 70px;">
-    <div ng-controller="SelectorController as selector">
-        <div class="row">
-            <song-entry ng-repeat="song in selector.songs" song="song" remove="selector.removeSong(song)"></song-entry>
-            <new-song-dropzone add-song="selector.addSong"></new-song-dropzone>
+<div id="selector-page">
+    <div class="container animated fadeInRight">
+        <div ng-controller="SelectorController as selector">
+            <div class="row">
+                <song-entry ng-repeat="song in selector.songs" song="song"
+                            edit="selector.setCurrentSong(song)"
+                            remove="selector.removeSong(song)"></song-entry>
+                <new-song-dropzone add-song="selector.addSong"></new-song-dropzone>
+            </div>
         </div>
     </div>
 </div>

@@ -3,6 +3,7 @@
     'use strict';
 
     angular.module('ledStripAnimator.selector', [
-        'ledStripAnimator.component'
+        'ledStripAnimator.component',
+        'ledStripAnimator.context'
     ]);
 }());

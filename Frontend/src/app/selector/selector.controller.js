@@ -53,7 +53,7 @@
             });
         };
 
-        this.getAllSongs = function() {
+        this.getAllSongs = function () {
             RestService.service('song').getList().then(function (songs) {
                 self.songs = songs;
             });
