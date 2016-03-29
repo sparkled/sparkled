@@ -15,13 +15,13 @@
         <line x1="0" y1="3" x2="0" y2="10"></line>
     </pattern>
 
-    <line x1="0" y1="0" ng-attr-x2="{{width}}" y2="0"></line>
+    <line x1="0" y1="0" ng-attr-x2="{{patternWidth}}" y2="0"></line>
     <line ng-repeat="time in times" ng-attr-x1="{{time.xPos}}" ng-attr-y1="0" ng-attr-x2="{{time.xPos}}" ng-attr-y2="{{time.height}}"></line>
 
-    <rect fill="url(#frame-pattern)" height="10" ng-attr-width="{{width}}" x="0" y="0" ></rect>
-    <rect fill="url(#quarter-second-pattern)" height="10" ng-attr-width="{{width}}" x="0" y="0" ></rect>
-    <rect fill="url(#half-second-pattern)" height="10" ng-attr-width="{{width}}" x="0" y="0" ></rect>
-    <rect fill="url(#second-pattern)" height="10" ng-attr-width="{{width}}" x="0" y="0" ></rect>
+    <rect fill="url(#frame-pattern)" height="10" ng-attr-width="{{patternWidth}}" x="0" y="0" ></rect>
+    <rect fill="url(#quarter-second-pattern)" height="10" ng-attr-width="{{patternWidth}}" x="0" y="0" ></rect>
+    <rect fill="url(#half-second-pattern)" height="10" ng-attr-width="{{patternWidth}}" x="0" y="0" ></rect>
+    <rect fill="url(#second-pattern)" height="10" ng-attr-width="{{patternWidth}}" x="0" y="0" ></rect>
 
     <text ng-repeat="second in seconds" ng-attr-x="{{second * 120}}" y="20">{{second | time}}</text>
 </svg>

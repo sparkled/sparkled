@@ -15,7 +15,7 @@
 
                     scope.$watch('duration', function (newVal, oldVal) {
                         if (newVal != null) {
-                            var frameCount = (newVal - 1) * 60;
+                            var frameCount = newVal * 60;
                             var width = frameCount * 2 + 1;
                             $(element).css('width', width);
                         }

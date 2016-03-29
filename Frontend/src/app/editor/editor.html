@@ -27,6 +27,8 @@
             <div class="timeline-label">Arch 3</div>
             <div class="timeline-label">Arch 4</div>
             <div class="timeline-label">Global</div>
+            <div class="timeline-label music"><i class="fa fa-music"></i></div>
+            <div class="timeline-label time">Time</div>
         </div>
 
         <div class="timelines">
@@ -39,7 +41,9 @@
             <timeline duration="editor.currentSong.durationSeconds" class="arch-3">aaa</timeline>
             <timeline duration="editor.currentSong.durationSeconds" class="arch-4">aaa</timeline>
             <timeline duration="editor.currentSong.durationSeconds" class="global">aaa</timeline>
+            <waveform duration="editor.currentSong.durationSeconds" current-frame="editor.currentFrame" mp3-url="editor.mp3Url" id="waveform"></waveform>
             <time-indicator duration="editor.currentSong.durationSeconds"></time-indicator>
+            <current-frame-bar current-frame="editor.currentFrame"></current-frame-bar>
         </div>
     </div>
 </div>
