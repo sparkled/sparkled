@@ -14,7 +14,8 @@
     "jsmediatags-sebastianha": "3.0.5",
     "restangular": "1.5.2",
     "sweetalert2": "0.4.3",
-    "wavesurfer.js": "1.1.0"
+    "wavesurfer.js": "1.1.0",
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#1.7.0"
   },
   "overrides": {
     "bootstrap": {

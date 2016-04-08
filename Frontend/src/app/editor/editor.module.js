@@ -2,5 +2,5 @@
 (function () {
     'use strict';
 
-    angular.module('ledStripAnimator.editor', []);
+    angular.module('ledStripAnimator.editor', ['cfp.hotkeys']);
 }());
