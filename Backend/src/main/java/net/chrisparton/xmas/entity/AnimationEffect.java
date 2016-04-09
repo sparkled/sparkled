@@ -1,6 +1,7 @@
 package net.chrisparton.xmas.entity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -9,10 +10,9 @@ public class AnimationEffect {
 
     private String code;
     private String name;
-    private String imagePath;
+    private List<AnimationEffectParam> parameters;
 
     @Id
-    @Basic
     @Column(name = "code", nullable = false, length = 64)
     public String getCode() {
         return code;
@@ -32,14 +32,19 @@ public class AnimationEffect {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "image_path", nullable = false, length = 128)
-    public String getImagePath() {
-        return imagePath;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "animation_effect_param_map",
+            schema = "xmas",
+            joinColumns = @JoinColumn(name = "animation_effect_code", nullable = false, updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "animation_effect_param_code", nullable = false, updatable = false)
+    )
+    public List<AnimationEffectParam> getParameters() {
+        return parameters;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setParameters(List<AnimationEffectParam> parameters) {
+        this.parameters = parameters;
     }
 
     @Override
@@ -48,12 +53,11 @@ public class AnimationEffect {
         if (!(o instanceof AnimationEffect)) return false;
         AnimationEffect that = (AnimationEffect) o;
         return Objects.equals(code, that.code) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(imagePath, that.imagePath);
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code, name, imagePath);
+        return Objects.hash(code, name);
     }
 }
