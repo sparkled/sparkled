@@ -1,6 +1,6 @@
 package net.chrisparton.xmas.entity;
 
-public enum AnimationEffectParamCode {
+public enum AnimationEffectParamTypeCode {
     /**
      * A single colour value.
      */

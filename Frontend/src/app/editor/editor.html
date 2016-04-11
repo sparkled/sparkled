@@ -4,7 +4,15 @@
     </div>
 </nav>
 
-<div id="editor-page" ng-controller="EditorController as editor">
+<div id="editor-page" ng-controller="EditorController as editor" ng-class="{loading: editor.loading}">
+    <div class="loader-container">
+        <div class="loader sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child"></div>
+        </div>
+    </div>
+
     <div id="body">
         <div id="animation-preview" style="background: #f5f5f5">
             <img id="stage" src="/assets/stages/home-stage.svg"/>
@@ -18,30 +26,14 @@
 
     <div id="timeline" style="background: #f5f5f5;border-top: 1px solid #e7e7e7">
         <div class="timeline-labels">
-            <div class="timeline-label">Pillar 1</div>
-            <div class="timeline-label">Pillar 2</div>
-            <div class="timeline-label">Pillar 3</div>
-            <div class="timeline-label">Pillar 4</div>
-            <div class="timeline-label">Arch 1</div>
-            <div class="timeline-label">Arch 2</div>
-            <div class="timeline-label">Arch 3</div>
-            <div class="timeline-label">Arch 4</div>
-            <div class="timeline-label">Global</div>
+            <div class="timeline-label" ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'">{{channel.name}}</div>
             <div class="timeline-label music"><i class="fa fa-music"></i></div>
             <div class="timeline-label time">Time</div>
         </div>
 
         <div class="timelines">
-            <timeline duration="editor.currentSong.durationSeconds" class="pillar-1">aaa</timeline>
-            <timeline duration="editor.currentSong.durationSeconds" class="pillar-2">aaa</timeline>
-            <timeline duration="editor.currentSong.durationSeconds" class="pillar-3">aaa</timeline>
-            <timeline duration="editor.currentSong.durationSeconds" class="pillar-4">aaa</timeline>
-            <timeline duration="editor.currentSong.durationSeconds" class="arch-1">aaa</timeline>
-            <timeline duration="editor.currentSong.durationSeconds" class="arch-2">aaa</timeline>
-            <timeline duration="editor.currentSong.durationSeconds" class="arch-3">aaa</timeline>
-            <timeline duration="editor.currentSong.durationSeconds" class="arch-4">aaa</timeline>
-            <timeline duration="editor.currentSong.durationSeconds" class="global">aaa</timeline>
-            <waveform duration="editor.currentSong.durationSeconds" current-frame="editor.currentFrame" mp3-url="editor.mp3Url" id="waveform"></waveform>
+            <timeline ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'" duration="editor.currentSong.durationSeconds"></timeline>
+            <waveform loading="editor.loading" duration="editor.currentSong.durationSeconds" current-frame="editor.currentFrame" mp3-url="editor.mp3Url" id="waveform"></waveform>
             <time-indicator duration="editor.currentSong.durationSeconds"></time-indicator>
             <current-frame-bar current-frame="editor.currentFrame"></current-frame-bar>
         </div>

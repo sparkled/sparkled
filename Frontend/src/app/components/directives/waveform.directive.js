@@ -8,6 +8,7 @@
                 replace: true,
                 templateUrl: 'app/components/directives/waveform.template.html',
                 scope: {
+                    loading: '=',
                     currentFrame: '=',
                     duration: '=',
                     mp3Url: '='
@@ -70,7 +71,9 @@
                                 updateCurrentFrame();
                             });
                             wavesurfer.on('ready', function () {
-                                //wavesurfer.play();
+                                scope.$apply(function () {
+                                    scope.loading = false;
+                                });
                             });
                         }
                     }, true);

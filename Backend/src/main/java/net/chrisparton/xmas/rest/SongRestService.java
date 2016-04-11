@@ -3,10 +3,10 @@ package net.chrisparton.xmas.rest;
 import com.google.gson.Gson;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+import net.chrisparton.xmas.entity.SongAnimationData;
 import net.chrisparton.xmas.entity.Song;
 import net.chrisparton.xmas.entity.SongData;
 import net.chrisparton.xmas.persistence.song.SongPersistenceService;
-import net.chrisparton.xmas.rest.RestService;
 import net.chrisparton.xmas.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
 
@@ -23,6 +23,7 @@ public class SongRestService extends RestService {
 
     private static final String MP3_MIME_TYPE = "audio/mpeg";
     private SongPersistenceService persistenceService = new SongPersistenceService();
+    private Gson gson = new Gson();
 
     @GET
     @Path("/{id}")
@@ -113,6 +114,7 @@ public class SongRestService extends RestService {
     private int persistSong(String songJson) {
         Song song = new Gson().fromJson(songJson, Song.class);
         song.setId(null);
+        song.setAnimationData(gson.toJson(new SongAnimationData()));
         return persistenceService.saveSong(song);
     }
 

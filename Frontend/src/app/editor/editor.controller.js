@@ -7,8 +7,10 @@
 
     function EditorController($scope, $stateParams, hotkeys, RestService) {
         var self = this;
-        this.animationEffects = null;
+        this.loading = true;
+        this.animationEffectTypes = null;
         this.currentSong = null;
+        this.animationData = [];
         this.currentFrame = 0;
         this.mp3Url = null;
 
@@ -68,17 +70,18 @@
         this.getCurrentSong = function () {
             RestService.one('song', $stateParams.id).get().then(function (song) {
                 self.currentSong = song;
+                self.animationData = JSON.parse(song.animationData);
                 self.mp3Url = RestService.configuration.baseUrl + '/song/data/' + song.id;
             });
         };
 
-        this.getAllAnimationEffects = function () {
-            RestService.service('animation-effect').getList().then(function (animationEffects) {
+        this.getAllAnimationEffectTypes = function () {
+            RestService.service('animation-effect-type').getList().then(function (animationEffects) {
                 self.animationEffects = animationEffects;
             });
         };
 
         this.getCurrentSong();
-        this.getAllAnimationEffects();
+        this.getAllAnimationEffectTypes();
     }
 }());

@@ -4,20 +4,20 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "animation_effect_param", schema = "xmas", catalog = "postgres")
-public class AnimationEffectParam {
+@Table(name = "animation_effect_type_param", schema = "xmas", catalog = "postgres")
+public class AnimationEffectTypeParam {
 
-    private AnimationEffectParamCode code;
+    private AnimationEffectParamTypeCode code;
     private String name;
 
     @Id
     @Enumerated(EnumType.STRING)
     @Column(name = "code", nullable = false, length = 64)
-    public AnimationEffectParamCode getCode() {
+    public AnimationEffectParamTypeCode getCode() {
         return code;
     }
 
-    public void setCode(AnimationEffectParamCode code) {
+    public void setCode(AnimationEffectParamTypeCode code) {
         this.code = code;
     }
 
@@ -34,8 +34,8 @@ public class AnimationEffectParam {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AnimationEffectParam)) return false;
-        AnimationEffectParam that = (AnimationEffectParam) o;
+        if (!(o instanceof AnimationEffectTypeParam)) return false;
+        AnimationEffectTypeParam that = (AnimationEffectTypeParam) o;
         return Objects.equals(code, that.code) && Objects.equals(name, that.name);
     }
 
