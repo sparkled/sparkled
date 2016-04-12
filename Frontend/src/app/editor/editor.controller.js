@@ -88,11 +88,48 @@
         };
 
         this.addAnimationEffect = function () {
-            self.currentChannel.effects.push({
+            var effectCount = self.currentChannel.effects.length,
+                destIndex = effectCount;
+            // abc
+            for (var i = 0; i < effectCount; i++) {
+                if (self.currentChannel.effects[i].endFrame > self.currentFrame) {
+                    destIndex = i;
+                    break;
+                }
+            }
+
+            // Ensure effect doesn't go past end of song or collide with another frame.
+            var endFrame = Math.min(self.currentFrame + 15, self.currentSong.durationSeconds * 60);
+            if (destIndex < effectCount) {
+                var nextElementStartFrame = self.currentChannel.effects[destIndex].startFrame;
+
+                if (self.currentFrame >= nextElementStartFrame) {
+                    sweetAlert(
+                        'Error',
+                        'There is already an animation effect on the current frame.',
+                        'error'
+                    );
+                    return;
+                }
+
+                endFrame = Math.min(endFrame, self.currentChannel.effects[destIndex].startFrame);
+            }
+
+            if (endFrame - self.currentFrame < 5) {
+                sweetAlert(
+                    'Error',
+                    'For usability purposes, effects must be at least 5 frames long.',
+                    'error'
+                );
+
+                return;
+            }
+
+            self.currentChannel.effects.splice(destIndex, 0, {
                 effectType: '',
-                value: '',
                 startFrame: self.currentFrame,
-                endFrame: self.currentFrame + 15
+                endFrame: endFrame,
+                params: []
             });
         };
 

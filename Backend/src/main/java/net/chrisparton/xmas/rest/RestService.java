@@ -26,4 +26,8 @@ public abstract class RestService {
     protected Response getResponse(Response.Status status) {
         return Response.status(status).build();
     }
+
+    protected Response getResponse(Response.Status status, Object responseEntity) {
+        return Response.status(status).entity(responseEntity).build();
+    }
 }

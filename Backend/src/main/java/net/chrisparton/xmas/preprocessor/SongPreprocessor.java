@@ -2,12 +2,10 @@ package net.chrisparton.xmas.preprocessor;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import net.chrisparton.xmas.entity.AnimationEffect;
-import net.chrisparton.xmas.entity.AnimationEffectChannel;
-import net.chrisparton.xmas.entity.Song;
-import net.chrisparton.xmas.entity.SongAnimationData;
+import net.chrisparton.xmas.entity.*;
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -22,11 +20,11 @@ public class SongPreprocessor {
         this.song = song;
     }
 
-    public void validate() throws IllegalStateException {
+    public void validate() throws EntityValidationException {
         String rawAnimationData = song.getAnimationData();
 
         if (rawAnimationData == null) {
-            throw new IllegalStateException("Song has no animation data.");
+            throw new EntityValidationException("Song has no animation data.");
         }
 
         animationData = parseAnimationData(rawAnimationData);
@@ -42,7 +40,7 @@ public class SongPreprocessor {
         try {
             animationData = gson.fromJson(rawAnimationData, SongAnimationData.class);
         } catch (JsonSyntaxException e) {
-            throw new IllegalStateException("Animation data is malformed.");
+            throw new EntityValidationException("Animation data is malformed.");
         }
 
         return animationData;
@@ -54,40 +52,50 @@ public class SongPreprocessor {
         int endLed = animationEffectChannel.getEndLed();
 
         if (channelName == null) {
-            throw new IllegalStateException("Animation effect channel doesn't have a name.");
+            throw new EntityValidationException("Animation effect channel doesn't have a name.");
         }
 
         if (startLed < 0) {
-            throw new IllegalStateException("Start LED cannot be negative for channel " + channelName + '.');
+            throw new EntityValidationException("Start LED cannot be negative for channel " + channelName + '.');
         } else if (startLed > endLed) {
-            throw new IllegalStateException("Start LED cannot be after end LED for channel " + channelName + '.');
+            throw new EntityValidationException("Start LED cannot be after end LED for channel " + channelName + '.');
         }
     }
 
-    private void validateChannelEffects(AnimationEffectChannel animationEffectChannel) {
-        int previousStartFrame = -1;
+    private void validateChannelEffects(AnimationEffectChannel channel) {
         int previousEndFrame = -1;
-        String channelName = animationEffectChannel.getName();
+        String channelName = channel.getName();
 
-        for (AnimationEffect effect : animationEffectChannel.getEffects()) {
-            if (effect.getStartFrame() < previousEndFrame) {
-                throw new IllegalStateException(getOverlapErrorMessage(channelName, previousEndFrame));
-            } else if (effect.getEndFrame() > previousStartFrame) {
-                throw new IllegalStateException(getOverlapErrorMessage(channelName, previousStartFrame));
+        List<AnimationEffect> effects = channel.getEffects();
+        if (effects == null) {
+            throw new EntityValidationException("Channel effects list cannot be null.");
+        }
+
+        for (AnimationEffect effect : effects) {
+            if (effect.getStartFrame() > effect.getEndFrame()) {
+                throw new EntityValidationException("Effect start frame cannot be after end frame.");
+            } else if (effect.getStartFrame() < previousEndFrame) {
+                throw new EntityValidationException("Overlapping or out-of-order effects detected at frame " + previousEndFrame + " for channel " + channelName + '.');
             }
 
-            previousStartFrame = effect.getStartFrame();
+            Map<AnimationEffectTypeParam, String> params = effect.getParams();
+            if (params == null) {
+                throw new EntityValidationException("Effect params list cannot be null.");
+            }
+
+            for (Map.Entry<AnimationEffectTypeParam, String> entry : params.entrySet()) {
+                if (entry.getKey() == null) {
+                    throw new EntityValidationException("Effect param type cannot be null.");
+                }
+            }
+
             previousEndFrame = effect.getEndFrame();
         }
     }
 
-    private String getOverlapErrorMessage(String channelName, int previousEndFrame) {
-        return "Overlapping or out-of-order effects detected at frame " + previousEndFrame + " for channel " + channelName + '.';
-    }
-
     public void escapeText() {
         if (animationData == null) {
-            throw new IllegalStateException("Song has not been validated yet.");
+            throw new EntityValidationException("Song has not been validated yet.");
         }
 
         escape(song::getName, song::setName);
@@ -97,7 +105,8 @@ public class SongPreprocessor {
         animationData.getChannels().forEach(channel -> {
             escape(channel::getName, channel::setName);
 
-            channel.getEffects().forEach(effect -> {
+            List<AnimationEffect> effects = channel.getEffects();
+            effects.forEach(effect -> {
                 effect.getParams().entrySet().forEach(paramMap -> {
                     escape(paramMap::getValue, paramMap::setValue);
                 });

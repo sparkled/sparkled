@@ -7,6 +7,7 @@ import net.chrisparton.xmas.entity.Song;
 import net.chrisparton.xmas.entity.SongAnimationData;
 import net.chrisparton.xmas.entity.SongData;
 import net.chrisparton.xmas.persistence.song.SongPersistenceService;
+import net.chrisparton.xmas.preprocessor.EntityValidationException;
 import net.chrisparton.xmas.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
 
@@ -104,6 +105,8 @@ public class SongRestService extends RestService {
             }
 
             return getResponse(Response.Status.NOT_FOUND);
+        } catch (EntityValidationException e) {
+            return getResponse(Response.Status.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
             return getResponse(Response.Status.INTERNAL_SERVER_ERROR);
         }

@@ -12,7 +12,7 @@ public class SongAnimationData {
         channels.addAll(Arrays.asList(
                 new AnimationEffectChannel("Pillar 1", 0, 200, 249),
                 new AnimationEffectChannel("Pillar 2", 1, 250, 299),
-                new AnimationEffectChannel("Pillar 3", 2, 300, 249),
+                new AnimationEffectChannel("Pillar 3", 2, 249, 300),
                 new AnimationEffectChannel("Pillar 4", 3, 350, 399),
                 new AnimationEffectChannel("Arch 1", 4, 0, 49),
                 new AnimationEffectChannel("Arch 2", 5, 50, 99),
