@@ -5,6 +5,7 @@ import net.chrisparton.xmas.entity.SongData;
 import net.chrisparton.xmas.entity.SongData_;
 import net.chrisparton.xmas.entity.Song_;
 import net.chrisparton.xmas.persistence.PersistenceService;
+import net.chrisparton.xmas.preprocessor.SongPreprocessor;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -117,6 +118,10 @@ public class SongPersistenceService {
     }
 
     public int saveSong(Song song) {
+        SongPreprocessor preprocessor = new SongPreprocessor(song);
+        preprocessor.validate();
+        preprocessor.escapeText();
+
         return saveEntity(song).getId();
     }
 

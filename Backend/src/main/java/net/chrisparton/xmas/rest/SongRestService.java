@@ -3,8 +3,8 @@ package net.chrisparton.xmas.rest;
 import com.google.gson.Gson;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
-import net.chrisparton.xmas.entity.SongAnimationData;
 import net.chrisparton.xmas.entity.Song;
+import net.chrisparton.xmas.entity.SongAnimationData;
 import net.chrisparton.xmas.entity.SongData;
 import net.chrisparton.xmas.persistence.song.SongPersistenceService;
 import net.chrisparton.xmas.rest.response.IdResponse;
@@ -87,21 +87,19 @@ public class SongRestService extends RestService {
     }
 
     @POST
-    @Path("/{id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateAnimationData(@PathParam("id") int songId,
-                                        @FormDataParam("animation-data") String animationData) {
+    public Response updateSong(String songJson) {
+        Song updatedSong = gson.fromJson(songJson, Song.class);
 
         try {
-            Optional<Song> songOptional = persistenceService.getSongById(songId);
-
+            Optional<Song> songOptional = persistenceService.getSongById(updatedSong.getId());
             if (songOptional.isPresent()) {
                 Song song = songOptional.get();
-                song.setAnimationData(animationData);
+                song.setAnimationData(updatedSong.getAnimationData());
                 persistenceService.saveSong(song);
 
-                IdResponse idResponse = new IdResponse(songId);
+                IdResponse idResponse = new IdResponse(song.getId());
                 return getJsonResponse(idResponse);
             }
 

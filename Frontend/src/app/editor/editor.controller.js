@@ -96,6 +96,18 @@
             });
         };
 
+        this.saveAnimationData = function () {
+            self.currentSong.animationData = angular.toJson(self.animationData);
+
+            RestService.one('song').withHttpConfig({
+                    transformRequest: angular.identity
+                })
+                .customPOST(JSON.stringify(self.currentSong), undefined, undefined, {'Content-Type': 'application/json'})
+                .then(function (response) {
+                    console.log('Saved');
+                });
+        };
+
         this.getCurrentSong();
         this.getAllAnimationEffectTypes();
     }
