@@ -8,7 +8,8 @@
                 replace: true,
                 templateUrl: 'app/components/directives/timeline.template.html',
                 scope: {
-                    duration: '='
+                    duration: '=',
+                    channel: '='
                 },
                 link: function (scope, element, attrs) {
                     scope.width = 0;

@@ -1,3 +1,1 @@
-<div class="col-md-6 animation-effect">
-    <img ng-src="assets/images/effects/{{effect.imagePath}}" width="50px"/>
-</div>
+<div class="animation-effect" ng-style="{width: (effect.endFrame - effect.startFrame) * 2, left: effect.startFrame * 2}"></div>

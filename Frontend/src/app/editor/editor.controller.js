@@ -10,6 +10,7 @@
         this.loading = true;
         this.animationEffectTypes = null;
         this.currentSong = null;
+        this.currentChannel = null;
         this.animationData = [];
         this.currentFrame = 0;
         this.mp3Url = null;
@@ -71,13 +72,27 @@
             RestService.one('song', $stateParams.id).get().then(function (song) {
                 self.currentSong = song;
                 self.animationData = JSON.parse(song.animationData);
+                self.setCurrentChannel(self.animationData.channels[0]);
                 self.mp3Url = RestService.configuration.baseUrl + '/song/data/' + song.id;
             });
+        };
+
+        this.setCurrentChannel = function (channel) {
+            self.currentChannel = channel;
         };
 
         this.getAllAnimationEffectTypes = function () {
             RestService.service('animation-effect-type').getList().then(function (animationEffects) {
                 self.animationEffects = animationEffects;
+            });
+        };
+
+        this.addAnimationEffect = function () {
+            self.currentChannel.effects.push({
+                effectType: '',
+                value: '',
+                startFrame: self.currentFrame,
+                endFrame: self.currentFrame + 15
             });
         };
 

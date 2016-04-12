@@ -1,10 +1,12 @@
-<nav class="navbar navbar-default navbar-static-top">
-    <div class="container-fluid">
-        <a ui-sref="selector" title="Back" class="btn btn-default navbar-btn"><i class="fa fa-arrow-left"></i></a>
-    </div>
-</nav>
-
 <div id="editor-page" ng-controller="EditorController as editor" ng-class="{loading: editor.loading}">
+
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid">
+            <a ui-sref="selector" title="Back" class="btn btn-default navbar-btn"><i class="fa fa-arrow-left"></i></a>
+            <a title="Add Effect" class="btn btn-default navbar-btn" ng-click="editor.addAnimationEffect()"><i class="fa fa-magic"></i></a>
+        </div>
+    </nav>
+
     <div class="loader-container">
         <div class="loader sk-three-bounce">
             <div class="sk-child sk-bounce1"></div>
@@ -24,15 +26,15 @@
         </div>
     </div>
 
-    <div id="timeline" style="background: #f5f5f5;border-top: 1px solid #e7e7e7">
+    <div id="timeline" class="{{editor.currentChannel.name | cssClass}}" style="background: #f5f5f5;border-top: 1px solid #e7e7e7">
         <div class="timeline-labels">
-            <div class="timeline-label" ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'">{{channel.name}}</div>
+            <div class="timeline-label {{channel.name | cssClass}}" ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'" ng-click="editor.setCurrentChannel(channel)">{{channel.name}}</div>
             <div class="timeline-label music"><i class="fa fa-music"></i></div>
             <div class="timeline-label time">Time</div>
         </div>
 
         <div class="timelines">
-            <timeline ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'" duration="editor.currentSong.durationSeconds"></timeline>
+            <timeline ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'" channel="channel" duration="editor.currentSong.durationSeconds"></timeline>
             <waveform loading="editor.loading" duration="editor.currentSong.durationSeconds" current-frame="editor.currentFrame" mp3-url="editor.mp3Url" id="waveform"></waveform>
             <time-indicator duration="editor.currentSong.durationSeconds"></time-indicator>
             <current-frame-bar current-frame="editor.currentFrame"></current-frame-bar>
