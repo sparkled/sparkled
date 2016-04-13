@@ -2,6 +2,6 @@
     <animation-effect ng-repeat="effect in channel.effects"
                       effect="effect"
                       ng-class="{selected: isCurrentEffect(effect)}"
-                      ng-click="setCurrentEffect(effect)">
+                      ng-click="setCurrentEffect(channel, effect)">
     </animation-effect>
 </div>

@@ -138,7 +138,8 @@
             });
         };
 
-        this.setCurrentEffect = function (effect) {
+        this.setCurrentEffect = function (channel, effect) {
+            self.setCurrentChannel(channel);
             self.currentEffect = effect;
         };
 
