@@ -2,11 +2,11 @@
 (function () {
     'use strict';
     angular.module('ledStripAnimator.component')
-        .directive('timeline', function () {
+        .directive('effectChannel', function () {
             return {
                 restrict: 'E',
                 replace: true,
-                templateUrl: 'app/components/directives/timeline.template.html',
+                templateUrl: 'app/components/directives/effectChannel.template.html',
                 scope: {
                     duration: '=',
                     channel: '=',

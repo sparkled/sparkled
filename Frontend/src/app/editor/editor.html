@@ -43,13 +43,13 @@
             <div class="timeline-label time">Time</div>
         </div>
 
-        <div class="timelines">
-            <timeline ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'"
+        <div class="channels">
+            <effect-channel ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'"
                       channel="channel" duration="editor.currentSong.durationSeconds"
                       ng-class="{selected: editor.isCurrentChannel(channel)}"
                       set-current-effect="editor.setCurrentEffect"
                       is-current-effect="editor.isCurrentEffect">
-            </timeline>
+            </effect-channel>
 
             <waveform id="waveform"
                       loading="editor.loading"

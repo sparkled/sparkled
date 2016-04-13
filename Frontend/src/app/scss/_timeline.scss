@@ -80,13 +80,13 @@ $timeline-background-color: #eee;
     }
   }
 
-  .timelines {
+  .channels {
     position: relative;
     overflow: auto;
     flex-grow: 1;
   }
 
-  .timeline {
+  .effect-channel {
     box-sizing: content-box;
     margin-right: $timeline-gap;
     height: 18px;
