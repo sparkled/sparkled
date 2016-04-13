@@ -14,6 +14,6 @@ public class AnimationEffectTypeRestService extends RestService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAnimationEffectTypes() {
-        return getJsonResponse(AnimationEffectType.values());
+        return getJsonResponse(AnimationEffectType.TYPES);
     }
 }

@@ -67,6 +67,14 @@
 
                     event.preventDefault();
                 }
+            })
+            .add({
+                combo: 'ctrl+backspace',
+                description: 'Delete Selected Animation Effect',
+                callback: function (event) {
+                    self.removeAnimationEffect();
+                    event.preventDefault();
+                }
             });
 
         this.getCurrentSong = function () {
@@ -87,8 +95,8 @@
         };
 
         this.getAllAnimationEffectTypes = function () {
-            RestService.service('animation-effect-type').getList().then(function (animationEffects) {
-                self.animationEffects = animationEffects;
+            RestService.service('animation-effect-type').getList().then(function (animationEffectTypes) {
+                self.animationEffectTypes = animationEffectTypes;
             });
         };
 
