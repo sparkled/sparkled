@@ -11,6 +11,7 @@
         this.animationEffectTypes = null;
         this.currentSong = null;
         this.currentChannel = null;
+        this.currentEffect = null;
         this.animationData = [];
         this.currentFrame = 0;
         this.mp3Url = null;
@@ -81,6 +82,10 @@
             self.currentChannel = channel;
         };
 
+        this.isCurrentChannel = function (channel) {
+            return self.currentChannel === channel;
+        };
+
         this.getAllAnimationEffectTypes = function () {
             RestService.service('animation-effect-type').getList().then(function (animationEffects) {
                 self.animationEffects = animationEffects;
@@ -90,7 +95,7 @@
         this.addAnimationEffect = function () {
             var effectCount = self.currentChannel.effects.length,
                 destIndex = effectCount;
-            // abc
+
             for (var i = 0; i < effectCount; i++) {
                 if (self.currentChannel.effects[i].endFrame > self.currentFrame) {
                     destIndex = i;
@@ -131,6 +136,18 @@
                 endFrame: endFrame,
                 params: []
             });
+        };
+
+        this.setCurrentEffect = function (effect) {
+            self.currentEffect = effect;
+        };
+
+        this.isCurrentEffect = function (effect) {
+            return self.currentEffect === effect;
+        };
+
+        this.removeAnimationEffect = function () {
+
         };
 
         this.saveAnimationData = function () {

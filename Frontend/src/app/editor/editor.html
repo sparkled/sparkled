@@ -3,9 +3,13 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container-fluid">
             <a ui-sref="selector" title="Back" class="btn btn-default navbar-btn"><i class="fa fa-arrow-left"></i></a>
-            <div class="navbar-collapse navbar-right">
-                <a title="Add Effect" class="btn btn-default navbar-btn" ng-click="editor.addAnimationEffect()"><i class="fa fa-magic"></i></a>
-                <a title="Save" class="btn btn-default navbar-btn" ng-click="editor.saveAnimationData()"><i class="fa fa-save"></i></a>
+            <div class="navbar-collapse navbar-right btn-group">
+                <a title="Add Effect" class="btn btn-default navbar-btn" ng-click="editor.addAnimationEffect()"><i
+                        class="fa fa-magic"></i></a>
+                <a title="Remove Selected Effect" class="btn btn-default navbar-btn"
+                   ng-click="editor.removeAnimationEffect()"><i class="fa fa-trash"></i></a>
+                <a title="Save" class="btn btn-default navbar-btn" ng-click="editor.saveAnimationData()"><i
+                        class="fa fa-save"></i></a>
             </div>
         </div>
     </nav>
@@ -26,16 +30,34 @@
         </div>
     </div>
 
-    <div id="timeline" class="{{editor.currentChannel.name | cssClass}}" style="background: #f5f5f5;border-top: 1px solid #e7e7e7">
+    <div id="timeline" class="{{editor.currentChannel.name | cssClass}}">
         <div class="timeline-labels">
-            <div class="timeline-label {{channel.name | cssClass}}" ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'" ng-click="editor.setCurrentChannel(channel)">{{channel.name}}</div>
+            <div class="timeline-label {{channel.name | cssClass}}"
+                 ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'"
+                 ng-class="{selected: editor.isCurrentChannel(channel)}"
+                 ng-click="editor.setCurrentChannel(channel)">
+                {{channel.name}}
+            </div>
+
             <div class="timeline-label music"><i class="fa fa-music"></i></div>
             <div class="timeline-label time">Time</div>
         </div>
 
         <div class="timelines">
-            <timeline ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'" channel="channel" duration="editor.currentSong.durationSeconds"></timeline>
-            <waveform loading="editor.loading" duration="editor.currentSong.durationSeconds" current-frame="editor.currentFrame" mp3-url="editor.mp3Url" id="waveform"></waveform>
+            <timeline ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'"
+                      channel="channel" duration="editor.currentSong.durationSeconds"
+                      ng-class="{selected: editor.isCurrentChannel(channel)}"
+                      set-current-effect="editor.setCurrentEffect"
+                      is-current-effect="editor.isCurrentEffect">
+            </timeline>
+
+            <waveform id="waveform"
+                      loading="editor.loading"
+                      duration="editor.currentSong.durationSeconds"
+                      current-frame="editor.currentFrame"
+                      mp3-url="editor.mp3Url">
+            </waveform>
+
             <time-indicator duration="editor.currentSong.durationSeconds"></time-indicator>
             <current-frame-bar current-frame="editor.currentFrame"></current-frame-bar>
         </div>

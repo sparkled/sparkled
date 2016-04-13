@@ -3,29 +3,13 @@
 $timeline-gap: 2px;
 $timeline-background-color: #eee;
 
-@mixin active-arch($arch) {
-   &.#{$arch} .timeline-labels .#{$arch} {
-    background-color: #337ab7;
-     color: #fff;
-  }
-}
-
 #timeline {
   background: $timeline-background-color;
+  border-top: 1px solid #e7e7e7;
   display: flex;
   flex-direction: row;
   flex-grow: 0;
   flex-shrink: 0;
-
-  @include active-arch('Arch1');
-  @include active-arch('Arch2');
-  @include active-arch('Arch3');
-  @include active-arch('Arch4');
-  @include active-arch('Pillar1');
-  @include active-arch('Pillar2');
-  @include active-arch('Pillar3');
-  @include active-arch('Pillar4');
-  @include active-arch('Global');
 
   #footer {
     flex-grow: 0;
@@ -73,6 +57,11 @@ $timeline-background-color: #eee;
       margin-left: $timeline-gap;
       flex-grow: 0;
 
+      &.selected {
+        background-color: #337ab7;
+        color: #fff;
+      }
+
       &.time {
         height: 23px;
         line-height: 23px;
@@ -119,6 +108,10 @@ $timeline-background-color: #eee;
       height: 18px - $timeline-gap * 2;
       margin-left: $timeline-gap;
       background: #337ab7;
+
+      &.selected {
+        background: #6699cc;
+      }
     }
   }
 }

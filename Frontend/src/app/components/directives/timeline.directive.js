@@ -9,7 +9,9 @@
                 templateUrl: 'app/components/directives/timeline.template.html',
                 scope: {
                     duration: '=',
-                    channel: '='
+                    channel: '=',
+                    setCurrentEffect: '=',
+                    isCurrentEffect: '='
                 },
                 link: function (scope, element, attrs) {
                     scope.width = 0;
