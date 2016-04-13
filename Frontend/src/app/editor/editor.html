@@ -4,12 +4,24 @@
         <div class="container-fluid">
             <a ui-sref="selector" title="Back" class="btn btn-default navbar-btn"><i class="fa fa-arrow-left"></i></a>
             <div class="navbar-collapse navbar-right btn-group">
-                <a title="Add Effect" class="btn btn-default navbar-btn" ng-click="editor.addAnimationEffect()"><i
-                        class="fa fa-magic"></i></a>
-                <a title="Remove Selected Effect" class="btn btn-default navbar-btn"
-                   ng-click="editor.removeAnimationEffect()"><i class="fa fa-trash"></i></a>
-                <a title="Save" class="btn btn-default navbar-btn" ng-click="editor.saveAnimationData()"><i
-                        class="fa fa-save"></i></a>
+                <a title="Add Effect"
+                   class="btn btn-default navbar-btn"
+                   ng-click="editor.addAnimationEffect()">
+                    <i class="fa fa-magic"></i>
+                </a>
+
+                <a title="Remove Selected Effect"
+                   class="btn btn-default navbar-btn"
+                   ng-class="{disabled: editor.getCurrentEffect() === null}"
+                   ng-click="editor.removeAnimationEffect()">
+                    <i class="fa fa-trash"></i>
+                </a>
+
+                <a title="Save"
+                   class="btn btn-default navbar-btn"
+                   ng-click="editor.saveAnimationData()">
+                    <i class="fa fa-save"></i>
+                </a>
             </div>
         </div>
     </nav>
@@ -34,7 +46,7 @@
         <div class="timeline-labels">
             <div class="timeline-label {{channel.name | cssClass}}"
                  ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'"
-                 ng-class="{selected: editor.isCurrentChannel(channel)}"
+                 ng-class="{selected: editor.getCurrentChannel() === channel}"
                  ng-click="editor.setCurrentChannel(channel)">
                 {{channel.name}}
             </div>
@@ -45,10 +57,10 @@
 
         <div class="channels">
             <effect-channel ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'"
-                      channel="channel" duration="editor.currentSong.durationSeconds"
-                      ng-class="{selected: editor.isCurrentChannel(channel)}"
-                      set-current-effect="editor.setCurrentEffect"
-                      is-current-effect="editor.isCurrentEffect">
+                            channel="channel" duration="editor.currentSong.durationSeconds"
+                            ng-class="{selected: editor.isCurrentChannel(channel)}"
+                            get-current-effect="editor.getCurrentEffect"
+                            set-current-effect="editor.setCurrentEffect">
             </effect-channel>
 
             <waveform id="waveform"

@@ -78,12 +78,12 @@
             });
         };
 
-        this.setCurrentChannel = function (channel) {
-            self.currentChannel = channel;
+        this.getCurrentChannel = function () {
+            return self.currentChannel;
         };
 
-        this.isCurrentChannel = function (channel) {
-            return self.currentChannel === channel;
+        this.setCurrentChannel = function (channel) {
+            self.currentChannel = channel;
         };
 
         this.getAllAnimationEffectTypes = function () {
@@ -138,17 +138,23 @@
             });
         };
 
+        this.getCurrentEffect = function () {
+            return self.currentEffect;
+        };
+
         this.setCurrentEffect = function (channel, effect) {
             self.setCurrentChannel(channel);
             self.currentEffect = effect;
         };
 
-        this.isCurrentEffect = function (effect) {
-            return self.currentEffect === effect;
-        };
-
         this.removeAnimationEffect = function () {
+            if (self.currentEffect != null) {
+                self.currentChannel.effects.splice(
+                    $.inArray(self.currentEffect, self.currentChannel.effects), 1
+                );
 
+                self.currentEffect = null;
+            }
         };
 
         this.saveAnimationData = function () {

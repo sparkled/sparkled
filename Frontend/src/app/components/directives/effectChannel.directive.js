@@ -10,8 +10,8 @@
                 scope: {
                     duration: '=',
                     channel: '=',
-                    setCurrentEffect: '=',
-                    isCurrentEffect: '='
+                    getCurrentEffect: '=',
+                    setCurrentEffect: '='
                 },
                 link: function (scope, element, attrs) {
                     scope.width = 0;
