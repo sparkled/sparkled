@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import net.chrisparton.xmas.entity.*;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -51,7 +51,7 @@ public class SongPreprocessor {
         int startLed = animationEffectChannel.getStartLed();
         int endLed = animationEffectChannel.getEndLed();
 
-        if (channelName == null) {
+        if (StringUtils.isEmpty(channelName)) {
             throw new EntityValidationException("Animation effect channel doesn't have a name.");
         }
 
@@ -78,13 +78,13 @@ public class SongPreprocessor {
                 throw new EntityValidationException("Overlapping or out-of-order effects detected at frame " + previousEndFrame + " for channel " + channelName + '.');
             }
 
-            Map<AnimationEffectTypeParam, String> params = effect.getParams();
+            List<AnimationEffectParam> params = effect.getParams();
             if (params == null) {
                 throw new EntityValidationException("Effect params list cannot be null.");
             }
 
-            for (Map.Entry<AnimationEffectTypeParam, String> entry : params.entrySet()) {
-                if (entry.getKey() == null) {
+            for (AnimationEffectParam param : params) {
+                if (StringUtils.isEmpty(param.getParamCode())) {
                     throw new EntityValidationException("Effect param type cannot be null.");
                 }
             }
@@ -107,8 +107,8 @@ public class SongPreprocessor {
 
             List<AnimationEffect> effects = channel.getEffects();
             effects.forEach(effect -> {
-                effect.getParams().entrySet().forEach(paramMap -> {
-                    escape(paramMap::getValue, paramMap::setValue);
+                effect.getParams().forEach(param -> {
+                    escape(param::getValue, param::setValue);
                 });
             });
         });

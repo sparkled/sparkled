@@ -1,30 +1,30 @@
 package net.chrisparton.xmas.entity;
 
-import java.util.Map;
+import java.util.List;
 
 public class AnimationEffect {
 
-    private AnimationEffectType effectType;
-    private Map<AnimationEffectTypeParam, String> params;
+    private String effectType;
+    private List<AnimationEffectParam> params;
     private int startFrame;
     private int endFrame;
 
     public AnimationEffect() {
     }
 
-    public AnimationEffectType getEffectType() {
+    public String getEffectType() {
         return effectType;
     }
 
-    public void setEffectType(AnimationEffectType effectType) {
+    public void setEffectType(String effectType) {
         this.effectType = effectType;
     }
 
-    public Map<AnimationEffectTypeParam, String> getParams() {
+    public List<AnimationEffectParam> getParams() {
         return params;
     }
 
-    public void setParams(Map<AnimationEffectTypeParam, String> params) {
+    public void setParams(List<AnimationEffectParam> params) {
         this.params = params;
     }
 
