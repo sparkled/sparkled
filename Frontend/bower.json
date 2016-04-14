@@ -11,12 +11,13 @@
     "animate.css": "3.5.1",
     "bootstrap": "3.3.6",
     "font-awesome": "~4.3.0",
-    "jquery": "~2.1.1",
+    "jquery": "~2.1.4",
     "jsmediatags-sebastianha": "3.0.5",
     "restangular": "1.5.2",
     "spinkit": "spinkit#1.2.5",
     "sweetalert2": "0.4.3",
-    "wavesurfer.js": "1.1.0"
+    "wavesurfer.js": "1.1.0",
+    "jquery-ui": "1.11.4"
   },
   "overrides": {
     "bootstrap": {

@@ -12,7 +12,11 @@
 
         <div class="form-group" ng-repeat="param in effect.params">
             <label for="editor-param-{{param.paramCode}}">{{param.paramName}}</label>
-            <input type="text" class="form-control" id="editor-param-{{param.paramCode}}" ng-model="param.value" placeholder="{{param.paramName}}">
+            <input type="text"
+                   class="form-control"
+                   id="editor-param-{{param.paramCode}}"
+                   ng-model="param.value"
+                   placeholder="{{param.paramName}}"/>
         </div>
     </form>
 </div>
