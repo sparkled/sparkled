@@ -13,6 +13,13 @@
                     duration: '='
                 },
                 link: function (scope, element, attrs) {
+                    $(element).resizable({
+                        handles: 'e, w',
+                        stop: function () {
+                            handleDrop(scope, element);
+                        }
+                    });
+
                     $(element).draggable({
                         stop: function () {
                             handleDrop(scope, element);
@@ -23,30 +30,25 @@
         });
 
     var handleDrop = function (scope, element) {
-        var duration = scope.effect.endFrame - scope.effect.startFrame,
+        var duration = Math.round($(element).width() / 2),
             newStartFrame = Math.round(
                 ($(element).closest('.channels').scrollLeft() + $(element).position().left) / 2
             ),
             newEndFrame = newStartFrame + duration,
             validPlacement = isValidPlacement(scope, newStartFrame, newEndFrame);
 
-        // Remove css added by jQuery, let Angular recalculate it.
+        // Remove offsets added by jQuery, let Angular recalculate them.
         $(element).css('top', '').css('left', '');
 
         if (validPlacement) {
             scope.$apply(function () {
                 scope.effect.startFrame = newStartFrame;
                 scope.effect.endFrame = newEndFrame;
-            });
-        } else {
-            // Force angular to revert the effect's position to before the drag.
-            scope.$apply(function () {
-                scope.effect.endFrame--;
-            });
-            scope.$apply(function () {
-                scope.effect.endFrame++;
+                ensureOrderedElements(scope.channel);
             });
         }
+
+        forceRedraw(scope);
     };
 
     // Ensure new effect position is within the timeline and not colliding with another effect.
@@ -64,22 +66,44 @@
     };
 
     var isColliding = function (scope, newStartFrame, newEndFrame) {
-        for (var i = 0; i < scope.channel.effects.length - 1; i++) {
-            var channelEffect = scope.channel.effects[i];
+        for (var i = 0; i < scope.channel.effects.length; i++) {
+            var channelEffect = scope.channel.effects[i],
+                coords;
 
-            var coords = {
+            if (channelEffect === scope.effect) {
+                continue;
+            }
+
+            coords = {
                 r1left: channelEffect.startFrame,
                 r1right: channelEffect.endFrame,
                 r2left: newStartFrame,
                 r2right: newEndFrame
             };
 
-            if ((coords.r2left <= coords.r1right && coords.r2right >= coords.r1left)) {
+            if (coords.r1left < coords.r2right && coords.r1right > coords.r2left) {
                 return true;
             }
         }
 
         return false;
+    };
+
+    var ensureOrderedElements = function (channel) {
+        channel.effects.sort(function compare(lhs, rhs) {
+            return lhs.startFrame - rhs.startFrame;
+        });
+    };
+
+    /* In the event of an placement or unchanged coordinates, force angular to reposition the element after resetting
+    the offsets added by jQuery. */
+    var forceRedraw = function (scope) {
+        scope.$apply(function () {
+            scope.effect.endFrame--;
+        });
+        scope.$apply(function () {
+            scope.effect.endFrame++;
+        });
     }
 })();
 

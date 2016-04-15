@@ -16,7 +16,7 @@
                 link: function (scope, element, attrs) {
                     scope.width = 0;
 
-                    scope.$watch('duration', function (newVal, oldVal) {
+                    scope.$watch('duration', function (newVal) {
                         if (newVal != null) {
                             var frameCount = newVal * 60;
                             var width = frameCount * 2 + 1;

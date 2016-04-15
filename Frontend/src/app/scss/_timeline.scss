@@ -112,6 +112,26 @@ $timeline-background-color: #eee;
       &.selected {
         background: #6699cc;
       }
+
+      .ui-resizable-handle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: rgba(0, 0, 0, .2);
+
+        &:hover {
+          cursor: col-resize;
+        }
+
+        &.ui-resizable-e {
+          right: 0;
+        }
+
+        &.ui-resizable-w {
+          left: 0;
+        }
+      }
     }
   }
 }
