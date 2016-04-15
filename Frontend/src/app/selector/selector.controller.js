@@ -12,7 +12,7 @@
         this.removeSong = function (song) {
             sweetAlert({
                     title: 'Remove Song',
-                    text: "Are you sure you want to remove this song?",
+                    text: 'Are you sure you want to remove this song?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -45,7 +45,7 @@
                 })
                 .customPUT(formData, undefined, undefined, {'Content-Type': undefined}).then(function (response) {
                 self.getAllSongs();
-                swal(
+                sweetAlert(
                     'Song Added',
                     'Your song has been added.',
                     'success'

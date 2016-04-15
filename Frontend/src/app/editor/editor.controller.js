@@ -173,7 +173,9 @@
                 })
                 .customPOST(JSON.stringify(self.currentSong), undefined, undefined, {'Content-Type': 'application/json'})
                 .then(function (response) {
-                    console.log('Saved');
+                    toastr['success']('Song saved successfully');
+                }, function (response) {
+                    toastr['error']('Failed to save song');
                 });
         };
 
