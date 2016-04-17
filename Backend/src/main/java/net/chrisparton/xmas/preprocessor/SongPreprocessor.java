@@ -72,6 +72,10 @@ public class SongPreprocessor {
         }
 
         for (AnimationEffect effect : effects) {
+            if (StringUtils.isEmpty(effect.getEffectType())) {
+                throw new EntityValidationException("Effect type cannot be empty.");
+            }
+
             if (effect.getStartFrame() > effect.getEndFrame()) {
                 throw new EntityValidationException("Effect start frame cannot be after end frame.");
             } else if (effect.getStartFrame() < previousEndFrame) {
