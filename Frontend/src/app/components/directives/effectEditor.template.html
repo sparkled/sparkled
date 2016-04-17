@@ -1,5 +1,10 @@
 <div id="effect-editor">
-    <form style="width: 100%; padding: 10px 15px 0 15px; overflow: auto">
+    <div ng-if="effect == null" class="no-effect-selected">
+        <h4>No effect selected</h4>
+        <p>Select an effect in the timeline to view and edit its properties.</p>
+    </div>
+
+    <form style="width: 100%; padding: 10px 15px 0 15px; overflow: auto" ng-if="effect != null">
         <div class="form-group">
             <label for="effect-editor-type">Effect Type</label>
 
