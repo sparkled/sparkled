@@ -63,6 +63,7 @@
             <effect-channel ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'"
                             channel="channel" duration="editor.currentSong.durationSeconds"
                             ng-class="{selected: editor.isCurrentChannel(channel)}"
+                            ng-click="editor.setCurrentEffect(channel, null)"
                             get-current-effect="editor.getCurrentEffect"
                             set-current-effect="editor.setCurrentEffect">
             </effect-channel>
