@@ -18,7 +18,8 @@
     "sweetalert2": "0.4.3",
     "toastr": "2.1.2",
     "wavesurfer.js": "1.1.0",
-    "jquery-ui": "1.11.4"
+    "jquery-ui": "1.11.4",
+    "jqueryui-touch-punch": "*"
   },
   "overrides": {
     "bootstrap": {
