@@ -9,7 +9,7 @@
     "angular-ui-router": "~0.2.13",
     "angular": "~1.4.9",
     "animate.css": "3.5.1",
-    "bootstrap": "3.3.6",
+    "bootswatch-dist": "3.3.6-superhero",
     "font-awesome": "~4.3.0",
     "jquery": "~2.1.4",
     "jsmediatags-sebastianha": "3.0.5",
@@ -22,10 +22,10 @@
     "jqueryui-touch-punch": "*"
   },
   "overrides": {
-    "bootstrap": {
+    "bootswatch-dist": {
       "main": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.css"
+        "js/bootstrap.min.js",
+        "css/bootstrap.min.css"
       ]
     }
   }

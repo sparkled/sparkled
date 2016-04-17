@@ -58,7 +58,6 @@
     display: flex;
     flex-grow: 1;
     flex-direction: row;
-    background: #f5f5f5;
     padding-top: 50px;
 
     @media (min-width: 768px) {
@@ -95,6 +94,6 @@
     width: 300px;
     flex-grow: 0;
     flex-shrink: 0;
-    background: #ddd;
+    background: $navbar-bg-color;
   }
 }

@@ -1,16 +1,15 @@
 @import "variables";
 
 $timeline-gap: 2px;
-$timeline-background-color: #eee;
 
 #timeline {
-  background: $timeline-background-color;
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid $navbar-bg-color;
   display: flex;
   flex-direction: row;
   flex-grow: 0;
   flex-shrink: 0;
   z-index: $z-index-timeline;
+  background: $body-bg-color;
 
   #footer {
     flex-grow: 0;
@@ -22,7 +21,7 @@ $timeline-background-color: #eee;
     bottom: 15px;
     width: 2px;
     margin-left: $timeline-gap;
-    background: #337ab7;
+    background: $primary-button-bg-color;
     z-index: 3;
   }
 
@@ -31,7 +30,7 @@ $timeline-background-color: #eee;
   }
 
   wave {
-    background: #f5f5f5;
+    background: $body-bg-color;
 
     wave {
       border-right: none !important;
@@ -45,22 +44,17 @@ $timeline-background-color: #eee;
     flex-shrink: 0;
 
     .timeline-label {
-      color: #555;
       height: 20px;
       line-height: 18px;
       margin-bottom: $timeline-gap;
       text-align: right;
       padding: 0 5px;
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-      background: $timeline-background-color;
-      border: 1px solid #ccc;
+      background: $navbar-bg-color;
       margin-left: $timeline-gap;
       flex-grow: 0;
 
       &.selected {
         background-color: #337ab7;
-        color: #fff;
       }
 
       &.time {
@@ -93,11 +87,10 @@ $timeline-background-color: #eee;
     height: 18px;
     margin-bottom: $timeline-gap;
     padding: 0 $timeline-gap;
-    border: 1px solid #ccc;
+    border: 1px solid $navbar-bg-color;
     border-left: 0;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    background: $secondary-bg-color;
 
     &:first-of-type {
       margin-top: $timeline-gap;
@@ -111,7 +104,7 @@ $timeline-background-color: #eee;
       background: #337ab7;
 
       &.selected {
-        background: #6699cc;
+        background: $primary-button-bg-color;
       }
 
       .ui-resizable-handle {
@@ -139,17 +132,20 @@ $timeline-background-color: #eee;
 
 #time-indicator {
   box-sizing: content-box;
+  height: 20px;
   padding-left: $timeline-gap;
   margin-right: 5px;
 
   line {
-    stroke: #000;
     stroke-width: 1;
+    stroke: $text-color;
   }
 
   text {
     text-anchor: middle;
     font-size: $timeline-font-size;
+    fill: $text-color;
+    vertical-align: bottom;
   }
 
   text:first-of-type {

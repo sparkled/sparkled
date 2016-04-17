@@ -41,8 +41,8 @@
                                 container: element[0],
                                 renderer: 'MultiCanvas',
                                 maxCanvasWidth: 16000,
-                                waveColor: '#337ab7',
-                                progressColor: '#999',
+                                waveColor: '#ebebeb',
+                                progressColor: '#4e5d6c',
                                 height: 50,
                                 barWidth: 1
                             });

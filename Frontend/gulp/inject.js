@@ -13,12 +13,12 @@ gulp.task('inject', ['styles'], function () {
 
     var injectStyles = gulp.src([
         paths.tmp + '/serve/{app,components}/**/*.css',
-        '/bower_components/bootstrap/dist/css/*.css'
+        '/bower_components/bootswatch-dist/css/bootstrap.css'
     ], {read: false});
 
     var injectScripts = gulp.src([
         paths.src + '/{app,components}/**/*.js',
-        '/bower_components/bootstrap/dist/js/bootstrap.min.js'
+        '/bower_components/bootswatch-dist/js/bootstrap.min.js'
     ]).pipe($.angularFilesort());
 
     var injectOptions = {

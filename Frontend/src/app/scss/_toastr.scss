@@ -1,31 +1,49 @@
 // Toastr CSS overrides to use FontAwesome icons instead of images.
-#toast-container > .toast {
-  background-image: none !important;
-}
+#toast-container {
 
-#toast-container > .toast:before {
-  position: fixed;
-  font-family: FontAwesome;
-  font-size: 24px;
-  line-height: 18px;
-  float: left;
-  color: #FFF;
-  padding-right: 0.5em;
-  margin: auto 0.5em auto -1.5em;
-}
+  > .toast {
+    background-image: none !important;
+    border-radius: 0 !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
 
-#toast-container > .toast-warning:before {
-  content: "\f06a";
-}
+    .toast-close-button {
+      text-shadow: none !important;
+    }
 
-#toast-container > .toast-error:before {
-  content: "\f057";
-}
+    &:hover {
+      opacity: .9 !important;
+    }
+  }
 
-#toast-container > .toast-info:before {
-  content: "\f05a";
-}
+  > .toast:before {
+    position: fixed;
+    font-family: FontAwesome;
+    font-size: 24px;
+    line-height: 18px;
+    float: left;
+    color: #FFF;
+    padding-right: 0.5em;
+    margin: auto 0.5em auto -1.5em;
+  }
 
-#toast-container > .toast-success:before {
-  content: "\f058";
+  > .toast-warning:before {
+    content: "\f06a";
+  }
+
+
+  > .toast-error:before {
+    content: "\f057";
+  }
+
+
+  > .toast-info:before {
+    content: "\f05a";
+  }
+
+
+  > .toast-success:before {
+    content: "\f058";
+  }
 }

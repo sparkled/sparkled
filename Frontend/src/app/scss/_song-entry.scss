@@ -1,9 +1,11 @@
+@import 'variables';
+
 .panel-heading {
   overflow: hidden;
 }
 
 .panel-title {
-  padding: 8px 0;
+  padding: $song-title-padding 0;
 }
 
 .panel-body {
@@ -19,17 +21,16 @@
 }
 
 .dropzone {
-  border: 3px #ddd dashed;
+  border: 3px $text-color dashed;
   text-align: center;
   font-size: 20px;
   padding: 9px;
   margin: 5px -5px;
-  background: #f5f5f5;
+  background: $heading-bg-color;
 
 
   &.dragged {
-    background: #286090;
-    border: 3px solid #2e6da4;
-    color: #fff;
+    background: $primary-button-bg-color;
+    border-color: $primary-button-bg-color;
   }
 }

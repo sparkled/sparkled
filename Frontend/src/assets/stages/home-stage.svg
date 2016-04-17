@@ -4,174 +4,174 @@
 <g id="Worm_Line">
     <g id="Line_1_1_">
         <g>
-            <path id="Line_4_" fill="none" stroke="#666766" stroke-width="2" stroke-miterlimit="10" d="M205.768,423     c0-48.601-40.389-88-89.033-88s-88.078,39.399-88.078,88"/>
+            <path id="Line_4_" fill="none" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" d="M205.768,423     c0-48.601-40.389-88-89.033-88s-88.078,39.399-88.078,88"/>
             <g id="LEDs_5_">
-                <circle id="led0" fill="none" stroke="#000000" stroke-miterlimit="10" cx="28.657" cy="423" r="2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="29.018" cy="414.972" r="2" id="led1"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="30.082" cy="407.146" r="2" id="led2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="31.817" cy="399.555" r="2" id="led3"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="34.192" cy="392.228" r="2" id="led4"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="37.175" cy="385.197" r="2" id="led5"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="40.735" cy="378.495" r="2" id="led6"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="44.841" cy="372.151" r="2" id="led7"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="49.461" cy="366.197" r="2" id="led8"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="54.564" cy="360.664" r="2" id="led9"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="60.12" cy="355.585" r="2" id="led10"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="66.096" cy="350.989" r="2" id="led11"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="72.461" cy="346.909" r="2" id="led12"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="79.184" cy="343.375" r="2" id="led13"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="86.233" cy="340.42" r="2" id="led14"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="93.578" cy="338.073" r="2" id="led15"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="101.187" cy="336.367" r="2" id="led16"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="109.028" cy="335.332" r="2" id="led17"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="117.069" cy="335.001" r="2" id="led18"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="125.07" cy="335.388" r="2" id="led19"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="132.883" cy="336.47" r="2" id="led20"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="140.478" cy="338.214" r="2" id="led21"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="147.821" cy="340.592" r="2" id="led22"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="154.878" cy="343.57" r="2" id="led23"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="161.618" cy="347.12" r="2" id="led24"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="168.008" cy="351.209" r="2" id="led25"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="174.014" cy="355.808" r="2" id="led26"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="179.604" cy="360.884" r="2" id="led27"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="184.745" cy="366.408" r="2" id="led28"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="189.404" cy="372.349" r="2" id="led29"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="193.548" cy="378.675" r="2" id="led30"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="197.145" cy="385.355" r="2" id="led31"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="200.162" cy="392.36" r="2" id="led32"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="202.565" cy="399.657" r="2" id="led33"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="204.323" cy="407.217" r="2" id="led34"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="205.401" cy="415.008" r="2" id="led35"/>
-                <circle id="led36" fill="none" stroke="#000000" stroke-miterlimit="10" cx="205.768" cy="423" r="2"/>
+                <circle id="led0" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="28.657" cy="423" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="29.018" cy="414.972" r="2" id="led1"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="30.082" cy="407.146" r="2" id="led2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="31.817" cy="399.555" r="2" id="led3"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="34.192" cy="392.228" r="2" id="led4"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="37.175" cy="385.197" r="2" id="led5"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="40.735" cy="378.495" r="2" id="led6"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="44.841" cy="372.151" r="2" id="led7"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="49.461" cy="366.197" r="2" id="led8"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="54.564" cy="360.664" r="2" id="led9"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="60.12" cy="355.585" r="2" id="led10"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="66.096" cy="350.989" r="2" id="led11"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="72.461" cy="346.909" r="2" id="led12"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="79.184" cy="343.375" r="2" id="led13"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="86.233" cy="340.42" r="2" id="led14"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="93.578" cy="338.073" r="2" id="led15"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="101.187" cy="336.367" r="2" id="led16"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="109.028" cy="335.332" r="2" id="led17"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="117.069" cy="335.001" r="2" id="led18"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="125.07" cy="335.388" r="2" id="led19"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="132.883" cy="336.47" r="2" id="led20"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="140.478" cy="338.214" r="2" id="led21"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="147.821" cy="340.592" r="2" id="led22"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="154.878" cy="343.57" r="2" id="led23"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="161.618" cy="347.12" r="2" id="led24"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="168.008" cy="351.209" r="2" id="led25"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="174.014" cy="355.808" r="2" id="led26"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="179.604" cy="360.884" r="2" id="led27"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="184.745" cy="366.408" r="2" id="led28"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="189.404" cy="372.349" r="2" id="led29"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="193.548" cy="378.675" r="2" id="led30"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="197.145" cy="385.355" r="2" id="led31"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="200.162" cy="392.36" r="2" id="led32"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="202.565" cy="399.657" r="2" id="led33"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="204.323" cy="407.217" r="2" id="led34"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="205.401" cy="415.008" r="2" id="led35"/>
+                <circle id="led36" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="205.768" cy="423" r="2"/>
             </g>
         </g>
     </g><g id="Line_2">
         <g>
-            <path id="Line_1_" fill="none" stroke="#666766" stroke-width="2" stroke-miterlimit="10" d="M392.845,423     c0-48.601-40.389-88-89.033-88s-88.078,39.399-88.078,88"/>
+            <path id="Line_1_" fill="none" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" d="M392.845,423     c0-48.601-40.389-88-89.033-88s-88.078,39.399-88.078,88"/>
             <g id="LEDs_4_">
-                <circle id="led37" fill="none" stroke="#000000" stroke-miterlimit="10" cx="215.734" cy="423" r="2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="216.096" cy="414.972" r="2" id="led38"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="217.159" cy="407.146" r="2" id="led39"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="218.894" cy="399.555" r="2" id="led40"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="221.269" cy="392.228" r="2" id="led41"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="224.252" cy="385.197" r="2" id="led42"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="227.812" cy="378.495" r="2" id="led43"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="231.918" cy="372.151" r="2" id="led44"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="236.538" cy="366.197" r="2" id="led45"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="241.642" cy="360.664" r="2" id="led46"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="247.197" cy="355.585" r="2" id="led47"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="253.173" cy="350.989" r="2" id="led48"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="259.538" cy="346.909" r="2" id="led49"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="266.261" cy="343.375" r="2" id="led50"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="273.311" cy="340.42" r="2" id="led51"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="280.655" cy="338.073" r="2" id="led52"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="288.264" cy="336.367" r="2" id="led53"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="296.106" cy="335.332" r="2" id="led54"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="304.147" cy="335.001" r="2" id="led55"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="312.147" cy="335.388" r="2" id="led56"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="319.961" cy="336.47" r="2" id="led57"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="327.555" cy="338.214" r="2" id="led58"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="334.898" cy="340.592" r="2" id="led59"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="341.956" cy="343.57" r="2" id="led60"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="348.696" cy="347.12" r="2" id="led61"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="355.085" cy="351.209" r="2" id="led62"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="361.091" cy="355.808" r="2" id="led63"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="366.681" cy="360.884" r="2" id="led64"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="371.822" cy="366.408" r="2" id="led65"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="376.481" cy="372.349" r="2" id="led66"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="380.626" cy="378.675" r="2" id="led67"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="384.223" cy="385.355" r="2" id="led68"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="387.239" cy="392.36" r="2" id="led69"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="389.643" cy="399.657" r="2" id="led70"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="391.4" cy="407.217" r="2" id="led71"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="392.478" cy="415.008" r="2" id="led72"/>
-                <circle id="led73" fill="none" stroke="#000000" stroke-miterlimit="10" cx="392.845" cy="423" r="2"/>
+                <circle id="led37" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="215.734" cy="423" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="216.096" cy="414.972" r="2" id="led38"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="217.159" cy="407.146" r="2" id="led39"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="218.894" cy="399.555" r="2" id="led40"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="221.269" cy="392.228" r="2" id="led41"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="224.252" cy="385.197" r="2" id="led42"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="227.812" cy="378.495" r="2" id="led43"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="231.918" cy="372.151" r="2" id="led44"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="236.538" cy="366.197" r="2" id="led45"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="241.642" cy="360.664" r="2" id="led46"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="247.197" cy="355.585" r="2" id="led47"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="253.173" cy="350.989" r="2" id="led48"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="259.538" cy="346.909" r="2" id="led49"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="266.261" cy="343.375" r="2" id="led50"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="273.311" cy="340.42" r="2" id="led51"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="280.655" cy="338.073" r="2" id="led52"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="288.264" cy="336.367" r="2" id="led53"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="296.106" cy="335.332" r="2" id="led54"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="304.147" cy="335.001" r="2" id="led55"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="312.147" cy="335.388" r="2" id="led56"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="319.961" cy="336.47" r="2" id="led57"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="327.555" cy="338.214" r="2" id="led58"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="334.898" cy="340.592" r="2" id="led59"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="341.956" cy="343.57" r="2" id="led60"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="348.696" cy="347.12" r="2" id="led61"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="355.085" cy="351.209" r="2" id="led62"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="361.091" cy="355.808" r="2" id="led63"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="366.681" cy="360.884" r="2" id="led64"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="371.822" cy="366.408" r="2" id="led65"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="376.481" cy="372.349" r="2" id="led66"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="380.626" cy="378.675" r="2" id="led67"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="384.223" cy="385.355" r="2" id="led68"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="387.239" cy="392.36" r="2" id="led69"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="389.643" cy="399.657" r="2" id="led70"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="391.4" cy="407.217" r="2" id="led71"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="392.478" cy="415.008" r="2" id="led72"/>
+                <circle id="led73" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="392.845" cy="423" r="2"/>
             </g>
         </g>
     </g><g id="Line_3">
         <g>
-            <path id="Line_12_" fill="none" stroke="#666766" stroke-width="2" stroke-miterlimit="10" d="M579.923,423     c0-48.601-40.389-88-89.033-88s-88.078,39.399-88.078,88"/>
+            <path id="Line_12_" fill="none" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" d="M579.923,423     c0-48.601-40.389-88-89.033-88s-88.078,39.399-88.078,88"/>
             <g id="LEDs_9_">
-                <circle id="led74" fill="none" stroke="#000000" stroke-miterlimit="10" cx="402.811" cy="423" r="2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="403.173" cy="414.972" r="2" id="led75"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="404.237" cy="407.146" r="2" id="led76"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="405.972" cy="399.555" r="2" id="led77"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="408.346" cy="392.228" r="2" id="led78"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="411.329" cy="385.197" r="2" id="led79"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="414.89" cy="378.495" r="2" id="led80"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="418.995" cy="372.151" r="2" id="led81"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="423.616" cy="366.197" r="2" id="led82"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="428.719" cy="360.664" r="2" id="led83"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="434.275" cy="355.585" r="2" id="led84"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="440.25" cy="350.989" r="2" id="led85"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="446.615" cy="346.909" r="2" id="led86"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="453.338" cy="343.375" r="2" id="led87"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="460.388" cy="340.42" r="2" id="led88"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="467.733" cy="338.073" r="2" id="led89"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="475.342" cy="336.367" r="2" id="led90"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="483.183" cy="335.332" r="2" id="led91"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="491.224" cy="335.001" r="2" id="led92"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="499.224" cy="335.388" r="2" id="led93"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="507.038" cy="336.47" r="2" id="led94"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="514.633" cy="338.214" r="2" id="led95"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="521.975" cy="340.592" r="2" id="led96"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="529.033" cy="343.57" r="2" id="led97"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="535.773" cy="347.12" r="2" id="led98"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="542.163" cy="351.209" r="2" id="led99"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="548.169" cy="355.808" r="2" id="led100"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="553.759" cy="360.884" r="2" id="led101"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="558.9" cy="366.408" r="2" id="led102"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="563.559" cy="372.349" r="2" id="led103"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="567.703" cy="378.675" r="2" id="led104"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="571.3" cy="385.355" r="2" id="led105"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="574.317" cy="392.36" r="2" id="led106"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="576.72" cy="399.657" r="2" id="led107"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="578.477" cy="407.217" r="2" id="led108"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="579.556" cy="415.008" r="2" id="led109"/>
-                <circle id="led110" fill="none" stroke="#000000" stroke-miterlimit="10" cx="579.923" cy="423" r="2"/>
+                <circle id="led74" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="402.811" cy="423" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="403.173" cy="414.972" r="2" id="led75"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="404.237" cy="407.146" r="2" id="led76"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="405.972" cy="399.555" r="2" id="led77"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="408.346" cy="392.228" r="2" id="led78"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="411.329" cy="385.197" r="2" id="led79"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="414.89" cy="378.495" r="2" id="led80"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="418.995" cy="372.151" r="2" id="led81"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="423.616" cy="366.197" r="2" id="led82"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="428.719" cy="360.664" r="2" id="led83"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="434.275" cy="355.585" r="2" id="led84"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="440.25" cy="350.989" r="2" id="led85"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="446.615" cy="346.909" r="2" id="led86"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="453.338" cy="343.375" r="2" id="led87"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="460.388" cy="340.42" r="2" id="led88"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="467.733" cy="338.073" r="2" id="led89"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="475.342" cy="336.367" r="2" id="led90"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="483.183" cy="335.332" r="2" id="led91"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="491.224" cy="335.001" r="2" id="led92"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="499.224" cy="335.388" r="2" id="led93"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="507.038" cy="336.47" r="2" id="led94"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="514.633" cy="338.214" r="2" id="led95"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="521.975" cy="340.592" r="2" id="led96"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="529.033" cy="343.57" r="2" id="led97"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="535.773" cy="347.12" r="2" id="led98"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="542.163" cy="351.209" r="2" id="led99"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="548.169" cy="355.808" r="2" id="led100"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="553.759" cy="360.884" r="2" id="led101"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="558.9" cy="366.408" r="2" id="led102"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="563.559" cy="372.349" r="2" id="led103"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="567.703" cy="378.675" r="2" id="led104"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="571.3" cy="385.355" r="2" id="led105"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="574.317" cy="392.36" r="2" id="led106"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="576.72" cy="399.657" r="2" id="led107"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="578.477" cy="407.217" r="2" id="led108"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="579.556" cy="415.008" r="2" id="led109"/>
+                <circle id="led110" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="579.923" cy="423" r="2"/>
             </g>
         </g>
     </g><g id="Line_4">
         <g>
-            <path id="Line_8_" fill="none" stroke="#666766" stroke-width="2" stroke-miterlimit="10" d="M767,423     c0-48.601-40.389-88-89.033-88c-48.644,0-88.078,39.399-88.078,88"/>
+            <path id="Line_8_" fill="none" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" d="M767,423     c0-48.601-40.389-88-89.033-88c-48.644,0-88.078,39.399-88.078,88"/>
             <g id="LEDs_7_">
-                <circle id="led111" fill="none" stroke="#000000" stroke-miterlimit="10" cx="589.889" cy="423" r="2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="590.25" cy="414.972" r="2" id="led112"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="591.314" cy="407.146" r="2" id="led113"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="593.049" cy="399.555" r="2" id="led114"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="595.424" cy="392.228" r="2" id="led115"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="598.407" cy="385.197" r="2" id="led116"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="601.967" cy="378.495" r="2" id="led117"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="606.073" cy="372.151" r="2" id="led118"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="610.693" cy="366.197" r="2" id="led119"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="615.797" cy="360.664" r="2" id="led120"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="621.352" cy="355.585" r="2" id="led121"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="627.328" cy="350.989" r="2" id="led122"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="633.693" cy="346.909" r="2" id="led123"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="640.416" cy="343.375" r="2" id="led124"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="647.465" cy="340.42" r="2" id="led125"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="654.81" cy="338.073" r="2" id="led126"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="662.419" cy="336.367" r="2" id="led127"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="670.261" cy="335.332" r="2" id="led128"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="678.302" cy="335.001" r="2" id="led129"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="686.302" cy="335.388" r="2" id="led130"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="694.116" cy="336.47" r="2" id="led131"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="701.71" cy="338.214" r="2" id="led132"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="709.053" cy="340.592" r="2" id="led133"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="716.111" cy="343.57" r="2" id="led134"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="722.851" cy="347.12" r="2" id="led135"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="729.24" cy="351.209" r="2" id="led136"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="735.246" cy="355.808" r="2" id="led137"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="740.836" cy="360.884" r="2" id="led138"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="745.977" cy="366.408" r="2" id="led139"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="750.636" cy="372.349" r="2" id="led140"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="754.781" cy="378.675" r="2" id="led141"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="758.378" cy="385.355" r="2" id="led142"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="761.394" cy="392.36" r="2" id="led143"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="763.797" cy="399.657" r="2" id="led144"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="765.555" cy="407.217" r="2" id="led145"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="766.633" cy="415.008" r="2" id="led146"/>
-                <circle id="led147" fill="none" stroke="#000000" stroke-miterlimit="10" cx="767" cy="423" r="2"/>
+                <circle id="led111" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="589.889" cy="423" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="590.25" cy="414.972" r="2" id="led112"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="591.314" cy="407.146" r="2" id="led113"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="593.049" cy="399.555" r="2" id="led114"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="595.424" cy="392.228" r="2" id="led115"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="598.407" cy="385.197" r="2" id="led116"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="601.967" cy="378.495" r="2" id="led117"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="606.073" cy="372.151" r="2" id="led118"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="610.693" cy="366.197" r="2" id="led119"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="615.797" cy="360.664" r="2" id="led120"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="621.352" cy="355.585" r="2" id="led121"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="627.328" cy="350.989" r="2" id="led122"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="633.693" cy="346.909" r="2" id="led123"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="640.416" cy="343.375" r="2" id="led124"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="647.465" cy="340.42" r="2" id="led125"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="654.81" cy="338.073" r="2" id="led126"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="662.419" cy="336.367" r="2" id="led127"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="670.261" cy="335.332" r="2" id="led128"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="678.302" cy="335.001" r="2" id="led129"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="686.302" cy="335.388" r="2" id="led130"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="694.116" cy="336.47" r="2" id="led131"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="701.71" cy="338.214" r="2" id="led132"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="709.053" cy="340.592" r="2" id="led133"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="716.111" cy="343.57" r="2" id="led134"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="722.851" cy="347.12" r="2" id="led135"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="729.24" cy="351.209" r="2" id="led136"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="735.246" cy="355.808" r="2" id="led137"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="740.836" cy="360.884" r="2" id="led138"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="745.977" cy="366.408" r="2" id="led139"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="750.636" cy="372.349" r="2" id="led140"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="754.781" cy="378.675" r="2" id="led141"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="758.378" cy="385.355" r="2" id="led142"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="761.394" cy="392.36" r="2" id="led143"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="763.797" cy="399.657" r="2" id="led144"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="765.555" cy="407.217" r="2" id="led145"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="766.633" cy="415.008" r="2" id="led146"/>
+                <circle id="led147" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="767" cy="423" r="2"/>
             </g>
         </g>
     </g>
@@ -184,195 +184,195 @@
     <g id="Pillar_1_1_">
         <g id="Pillar">
             
-                <rect id="Bottom_3_" x="34.05" y="34.193" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="42" height="238"/>
+                <rect id="Bottom_3_" x="34.05" y="34.193" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="42" height="238"/>
             
-                <rect id="Pole_3_" x="26.657" y="265.42" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
+                <rect id="Pole_3_" x="26.657" y="265.42" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
             
-                <rect id="Top_3_" x="26.657" y="27.807" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
+                <rect id="Top_3_" x="26.657" y="27.807" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
         </g>
         <g id="LEDs">
-            <path id="Strip_1_" fill="none" stroke="#666766" stroke-width="2" stroke-miterlimit="10" d="M33.941,265.001     c0-10.426,46.109-10.669,46.109-21.095c0-10.427-50-10.427-50-20.854c0-10.425,50-10.425,50-20.851c0-10.426-50-10.426-50-20.853     c0-10.427,50-10.427,50-20.853c0-10.428-50-10.428-50-20.856c0-10.428,50-10.428,50-20.856c0-10.428-50-10.428-50-20.856     c0-10.428,50-10.428,50-20.857c0-10.43-50-10.43-50-20.86s46-10.43,46-20.86"/>
+            <path id="Strip_1_" fill="none" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" d="M33.941,265.001     c0-10.426,46.109-10.669,46.109-21.095c0-10.427-50-10.427-50-20.854c0-10.425,50-10.425,50-20.851c0-10.426-50-10.426-50-20.853     c0-10.427,50-10.427,50-20.853c0-10.428-50-10.428-50-20.856c0-10.428,50-10.428,50-20.856c0-10.428-50-10.428-50-20.856     c0-10.428,50-10.428,50-20.857c0-10.43-50-10.43-50-20.86s46-10.43,46-20.86"/>
             <g>
-                <circle id="led150" fill="none" stroke="#000000" stroke-miterlimit="10" cx="33.941" cy="265.001" r="2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="40.459" cy="259.042" r="2" id="led151"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="55.133" cy="254.885" r="2" id="led152"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="70.642" cy="250.912" r="2" id="led153"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="79.662" cy="245.506" r="2" id="led154"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="76.149" cy="239.36" r="2" id="led155"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="62.935" cy="235.174" r="2" id="led156"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="46.566" cy="231.646" r="2" id="led157"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="33.6" cy="227.409" r="2" id="led158"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="30.551" cy="221.312" r="2" id="led159"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="39.667" cy="216.273" r="2" id="led160"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="55.258" cy="212.583" r="2" id="led161"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="70.767" cy="208.876" r="2" id="led162"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="79.637" cy="203.785" r="2" style="3px;
+                <circle id="led150" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="33.941" cy="265.001" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="40.459" cy="259.042" r="2" id="led151"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="55.133" cy="254.885" r="2" id="led152"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="70.642" cy="250.912" r="2" id="led153"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="79.662" cy="245.506" r="2" id="led154"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="76.149" cy="239.36" r="2" id="led155"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="62.935" cy="235.174" r="2" id="led156"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="46.566" cy="231.646" r="2" id="led157"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="33.6" cy="227.409" r="2" id="led158"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="30.551" cy="221.312" r="2" id="led159"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="39.667" cy="216.273" r="2" id="led160"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="55.258" cy="212.583" r="2" id="led161"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="70.767" cy="208.876" r="2" id="led162"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="79.637" cy="203.785" r="2" style="3px;
 " id="led163"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="76.269" cy="197.719" r="2" id="led164"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="63.138" cy="193.516" r="2" id="led165"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="46.768" cy="189.989" r="2" id="led166"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="33.717" cy="185.769" r="2" id="led167"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="30.504" cy="179.688" r="2" id="led168"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="39.495" cy="174.621" r="2" id="led169"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="55.044" cy="170.923" r="2" id="led170"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="70.595" cy="167.224" r="2" id="led171"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="79.593" cy="162.16" r="2" id="led172"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="76.389" cy="156.077" r="2" id="led173"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="63.343" cy="151.856" r="2" id="led174"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="46.973" cy="148.328" r="2" id="led175"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="33.837" cy="144.126" r="2" id="led176"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="30.46" cy="138.059" r="2" id="led177"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="39.321" cy="132.965" r="2" id="led178"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="54.827" cy="129.257" r="2" id="led179"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="70.42" cy="125.567" r="2" id="led180"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="79.545" cy="120.529" r="2" id="led181"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="76.509" cy="114.431" r="2" id="led182"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="63.55" cy="110.191" r="2" id="led183"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="47.182" cy="106.663" r="2" id="led184"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="33.961" cy="102.479" r="2" id="led185"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="30.417" cy="96.429" r="2" id="led186"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="39.148" cy="91.308" r="2" id="led187"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="54.608" cy="87.59" r="2" id="led188"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="70.243" cy="83.909" r="2" id="led189"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="79.495" cy="78.897" r="2" id="led190"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="76.627" cy="72.784" r="2" id="led191"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="63.757" cy="68.525" r="2" id="led192"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="47.392" cy="64.996" r="2" id="led193"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="34.087" cy="60.829" r="2" id="led194"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="30.392" cy="54.702" r="2" id="led195"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="39.298" cy="49.296" r="2" id="led196"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="54.796" cy="45.383" r="2" id="led197"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="69.506" cy="41.293" r="2" id="led198"/>
-                <circle id="led199" fill="none" stroke="#000000" stroke-miterlimit="10" cx="76.05" cy="35.35" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="76.269" cy="197.719" r="2" id="led164"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="63.138" cy="193.516" r="2" id="led165"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="46.768" cy="189.989" r="2" id="led166"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="33.717" cy="185.769" r="2" id="led167"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="30.504" cy="179.688" r="2" id="led168"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="39.495" cy="174.621" r="2" id="led169"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="55.044" cy="170.923" r="2" id="led170"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="70.595" cy="167.224" r="2" id="led171"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="79.593" cy="162.16" r="2" id="led172"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="76.389" cy="156.077" r="2" id="led173"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="63.343" cy="151.856" r="2" id="led174"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="46.973" cy="148.328" r="2" id="led175"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="33.837" cy="144.126" r="2" id="led176"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="30.46" cy="138.059" r="2" id="led177"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="39.321" cy="132.965" r="2" id="led178"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="54.827" cy="129.257" r="2" id="led179"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="70.42" cy="125.567" r="2" id="led180"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="79.545" cy="120.529" r="2" id="led181"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="76.509" cy="114.431" r="2" id="led182"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="63.55" cy="110.191" r="2" id="led183"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="47.182" cy="106.663" r="2" id="led184"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="33.961" cy="102.479" r="2" id="led185"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="30.417" cy="96.429" r="2" id="led186"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="39.148" cy="91.308" r="2" id="led187"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="54.608" cy="87.59" r="2" id="led188"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="70.243" cy="83.909" r="2" id="led189"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="79.495" cy="78.897" r="2" id="led190"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="76.627" cy="72.784" r="2" id="led191"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="63.757" cy="68.525" r="2" id="led192"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="47.392" cy="64.996" r="2" id="led193"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="34.087" cy="60.829" r="2" id="led194"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="30.392" cy="54.702" r="2" id="led195"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="39.298" cy="49.296" r="2" id="led196"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="54.796" cy="45.383" r="2" id="led197"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="69.506" cy="41.293" r="2" id="led198"/>
+                <circle id="led199" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="76.05" cy="35.35" r="2"/>
             </g>
         </g>
     </g>
     <g id="Pillar_2_1_">
         <g id="Pillar_2_">
             
-                <rect id="Bottom_5_" x="262.902" y="34.193" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="42" height="238"/>
+                <rect id="Bottom_5_" x="262.902" y="34.193" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="42" height="238"/>
             
-                <rect id="Pole_5_" x="255.509" y="265.42" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
+                <rect id="Pole_5_" x="255.509" y="265.42" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
             
-                <rect id="Top_5_" x="255.509" y="27.807" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
+                <rect id="Top_5_" x="255.509" y="27.807" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
         </g>
         <g id="LEDs_1_">
-            <path id="Strip_4_" fill="none" stroke="#666766" stroke-width="2" stroke-miterlimit="10" d="M262.793,265.001     c0-10.426,46.109-10.669,46.109-21.095c0-10.427-50-10.427-50-20.854c0-10.425,50-10.425,50-20.851c0-10.426-50-10.426-50-20.853     c0-10.427,50-10.427,50-20.853c0-10.428-50-10.428-50-20.856c0-10.428,50-10.428,50-20.856c0-10.428-50-10.428-50-20.856     c0-10.428,50-10.428,50-20.857c0-10.43-50-10.43-50-20.86s46-10.43,46-20.86"/>
+            <path id="Strip_4_" fill="none" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" d="M262.793,265.001     c0-10.426,46.109-10.669,46.109-21.095c0-10.427-50-10.427-50-20.854c0-10.425,50-10.425,50-20.851c0-10.426-50-10.426-50-20.853     c0-10.427,50-10.427,50-20.853c0-10.428-50-10.428-50-20.856c0-10.428,50-10.428,50-20.856c0-10.428-50-10.428-50-20.856     c0-10.428,50-10.428,50-20.857c0-10.43-50-10.43-50-20.86s46-10.43,46-20.86"/>
             <g>
-                <circle id="led200" fill="none" stroke="#000000" stroke-miterlimit="10" cx="262.793" cy="265.001" r="2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="269.312" cy="259.042" r="2" id="led201"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="283.986" cy="254.885" r="2" id="led202"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="299.494" cy="250.912" r="2" id="led203"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="308.515" cy="245.506" r="2" id="led204"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="305.001" cy="239.36" r="2" id="led205"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="291.787" cy="235.174" r="2" id="led206"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="275.419" cy="231.646" r="2" id="led207"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="262.452" cy="227.409" r="2" id="led208"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="259.403" cy="221.312" r="2" id="led209"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="268.519" cy="216.273" r="2" id="led210"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="284.11" cy="212.583" r="2" id="led211"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="299.619" cy="208.876" r="2" id="led212"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="308.489" cy="203.785" r="2" id="led213"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="305.122" cy="197.719" r="2" id="led214"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="291.99" cy="193.516" r="2" id="led215"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="275.621" cy="189.989" r="2" id="led216"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="262.569" cy="185.769" r="2" id="led217"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="259.357" cy="179.688" r="2" id="led218"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="268.347" cy="174.621" r="2" id="led219"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="283.896" cy="170.923" r="2" id="led220"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="299.448" cy="167.224" r="2" id="led221"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="308.445" cy="162.16" r="2" id="led222"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="305.241" cy="156.077" r="2" id="led223"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="292.195" cy="151.856" r="2" id="led224"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="275.826" cy="148.328" r="2" id="led225"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="262.69" cy="144.126" r="2" id="led226"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="259.312" cy="138.059" r="2" id="led227"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="268.174" cy="132.965" r="2" id="led228"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="283.679" cy="129.257" r="2" id="led229"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="299.272" cy="125.567" r="2" id="led230"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="308.398" cy="120.529" r="2" id="led231"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="305.361" cy="114.431" r="2" id="led232"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="292.402" cy="110.191" r="2" id="led233"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="276.034" cy="106.663" r="2" id="led234"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="262.813" cy="102.479" r="2" id="led235"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="259.269" cy="96.429" r="2" id="led236"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="268" cy="91.308" r="2" id="led237"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="283.461" cy="87.59" r="2" id="led238"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="299.095" cy="83.909" r="2" id="led239"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="308.348" cy="78.897" r="2" id="led240"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="305.48" cy="72.784" r="2" id="led241"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="292.61" cy="68.525" r="2" id="led242"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="276.244" cy="64.996" r="2" id="led243"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="262.939" cy="60.829" r="2" id="led244"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="259.244" cy="54.702" r="2" id="led245"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="268.151" cy="49.296" r="2" id="led246"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="283.648" cy="45.383" r="2" id="led247"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="298.359" cy="41.293" r="2" id="led248"/>
-                <circle id="led249" fill="none" stroke="#000000" stroke-miterlimit="10" cx="304.902" cy="35.35" r="2"/>
+                <circle id="led200" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="262.793" cy="265.001" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="269.312" cy="259.042" r="2" id="led201"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="283.986" cy="254.885" r="2" id="led202"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="299.494" cy="250.912" r="2" id="led203"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="308.515" cy="245.506" r="2" id="led204"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="305.001" cy="239.36" r="2" id="led205"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="291.787" cy="235.174" r="2" id="led206"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="275.419" cy="231.646" r="2" id="led207"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="262.452" cy="227.409" r="2" id="led208"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="259.403" cy="221.312" r="2" id="led209"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="268.519" cy="216.273" r="2" id="led210"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="284.11" cy="212.583" r="2" id="led211"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="299.619" cy="208.876" r="2" id="led212"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="308.489" cy="203.785" r="2" id="led213"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="305.122" cy="197.719" r="2" id="led214"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="291.99" cy="193.516" r="2" id="led215"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="275.621" cy="189.989" r="2" id="led216"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="262.569" cy="185.769" r="2" id="led217"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="259.357" cy="179.688" r="2" id="led218"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="268.347" cy="174.621" r="2" id="led219"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="283.896" cy="170.923" r="2" id="led220"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="299.448" cy="167.224" r="2" id="led221"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="308.445" cy="162.16" r="2" id="led222"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="305.241" cy="156.077" r="2" id="led223"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="292.195" cy="151.856" r="2" id="led224"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="275.826" cy="148.328" r="2" id="led225"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="262.69" cy="144.126" r="2" id="led226"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="259.312" cy="138.059" r="2" id="led227"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="268.174" cy="132.965" r="2" id="led228"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="283.679" cy="129.257" r="2" id="led229"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="299.272" cy="125.567" r="2" id="led230"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="308.398" cy="120.529" r="2" id="led231"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="305.361" cy="114.431" r="2" id="led232"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="292.402" cy="110.191" r="2" id="led233"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="276.034" cy="106.663" r="2" id="led234"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="262.813" cy="102.479" r="2" id="led235"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="259.269" cy="96.429" r="2" id="led236"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="268" cy="91.308" r="2" id="led237"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="283.461" cy="87.59" r="2" id="led238"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="299.095" cy="83.909" r="2" id="led239"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="308.348" cy="78.897" r="2" id="led240"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="305.48" cy="72.784" r="2" id="led241"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="292.61" cy="68.525" r="2" id="led242"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="276.244" cy="64.996" r="2" id="led243"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="262.939" cy="60.829" r="2" id="led244"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="259.244" cy="54.702" r="2" id="led245"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="268.151" cy="49.296" r="2" id="led246"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="283.648" cy="45.383" r="2" id="led247"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="298.359" cy="41.293" r="2" id="led248"/>
+                <circle id="led249" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="304.902" cy="35.35" r="2"/>
             </g>
         </g>
     </g><g id="Pillar_3_1_">
         <g id="Pillar_1_">
             
-                <rect id="Bottom_2_" x="490.754" y="34.193" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="42" height="238"/>
+                <rect id="Bottom_2_" x="490.754" y="34.193" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="42" height="238"/>
             
-                <rect id="Pole_2_" x="483.361" y="265.42" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
+                <rect id="Pole_2_" x="483.361" y="265.42" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
             
-                <rect id="Top_2_" x="483.361" y="27.807" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
+                <rect id="Top_2_" x="483.361" y="27.807" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
         </g>
         <g id="LEDs_3_">
-            <path id="Strip_6_" fill="none" stroke="#666766" stroke-width="2" stroke-miterlimit="10" d="M490.645,265.001     c0-10.426,46.109-10.669,46.109-21.095c0-10.427-50-10.427-50-20.854c0-10.425,50-10.425,50-20.851c0-10.426-50-10.426-50-20.853     c0-10.427,50-10.427,50-20.853c0-10.428-50-10.428-50-20.856c0-10.428,50-10.428,50-20.856c0-10.428-50-10.428-50-20.856     c0-10.428,50-10.428,50-20.857c0-10.43-50-10.43-50-20.86s46-10.43,46-20.86"/>
+            <path id="Strip_6_" fill="none" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" d="M490.645,265.001     c0-10.426,46.109-10.669,46.109-21.095c0-10.427-50-10.427-50-20.854c0-10.425,50-10.425,50-20.851c0-10.426-50-10.426-50-20.853     c0-10.427,50-10.427,50-20.853c0-10.428-50-10.428-50-20.856c0-10.428,50-10.428,50-20.856c0-10.428-50-10.428-50-20.856     c0-10.428,50-10.428,50-20.857c0-10.43-50-10.43-50-20.86s46-10.43,46-20.86"/>
             <g>
-                <circle id="led250" fill="none" stroke="#000000" stroke-miterlimit="10" cx="490.645" cy="265.001" r="2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="497.164" cy="259.042" r="2" id="led251"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="511.838" cy="254.885" r="2" id="led252"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="527.346" cy="250.912" r="2" id="led253"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="536.367" cy="245.506" r="2" id="led254"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="532.854" cy="239.36" r="2" id="led255"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="519.64" cy="235.174" r="2" id="led256"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="503.271" cy="231.646" r="2" id="led257"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="490.305" cy="227.409" r="2" id="led258"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="487.255" cy="221.312" r="2" id="led259"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="496.371" cy="216.273" r="2" id="led260"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="511.962" cy="212.583" r="2" id="led261"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="527.471" cy="208.876" r="2" id="led262"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="536.342" cy="203.785" r="2" id="led263"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="532.974" cy="197.719" r="2" id="led264"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="519.843" cy="193.516" r="2" id="led265"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="503.473" cy="189.989" r="2" id="led266"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="490.422" cy="185.769" r="2" id="led267"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="487.209" cy="179.688" r="2" id="led268"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="496.2" cy="174.621" r="2" id="led269"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="511.749" cy="170.923" r="2" id="led270"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="527.3" cy="167.224" r="2" id="led271"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="536.297" cy="162.16" r="2" id="led272"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="533.094" cy="156.077" r="2" id="led273"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="520.047" cy="151.856" r="2" id="led274"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="503.678" cy="148.328" r="2" id="led275"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="490.542" cy="144.126" r="2" id="led276"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="487.164" cy="138.059" r="2" id="led277"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="496.026" cy="132.965" r="2" id="led278"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="511.531" cy="129.257" r="2" id="led279"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="527.125" cy="125.567" r="2" id="led280"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="536.25" cy="120.529" r="2" id="led281"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="533.214" cy="114.431" r="2" id="led282"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="520.254" cy="110.191" r="2" id="led283"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="503.886" cy="106.663" r="2" id="led284"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="490.665" cy="102.479" r="2" id="led285"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="487.122" cy="96.429" r="2" id="led286"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="495.853" cy="91.308" r="2" id="led287"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="511.313" cy="87.59" r="2" id="led288"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="526.947" cy="83.909" r="2" id="led289"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="536.2" cy="78.897" r="2" id="led290"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="533.332" cy="72.784" r="2" id="led291"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="520.462" cy="68.525" r="2" id="led292"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="504.097" cy="64.996" r="2" id="led293"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="490.792" cy="60.829" r="2" id="led294"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="487.097" cy="54.702" r="2" id="led295"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="496.003" cy="49.296" r="2" id="led296"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="511.501" cy="45.383" r="2" id="led297"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="526.211" cy="41.293" r="2" id="led298"/>
-                <circle id="led299" fill="none" stroke="#000000" stroke-miterlimit="10" cx="532.754" cy="35.35" r="2"/>
+                <circle id="led250" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="490.645" cy="265.001" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="497.164" cy="259.042" r="2" id="led251"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="511.838" cy="254.885" r="2" id="led252"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="527.346" cy="250.912" r="2" id="led253"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="536.367" cy="245.506" r="2" id="led254"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="532.854" cy="239.36" r="2" id="led255"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="519.64" cy="235.174" r="2" id="led256"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="503.271" cy="231.646" r="2" id="led257"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="490.305" cy="227.409" r="2" id="led258"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="487.255" cy="221.312" r="2" id="led259"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="496.371" cy="216.273" r="2" id="led260"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="511.962" cy="212.583" r="2" id="led261"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="527.471" cy="208.876" r="2" id="led262"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="536.342" cy="203.785" r="2" id="led263"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="532.974" cy="197.719" r="2" id="led264"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="519.843" cy="193.516" r="2" id="led265"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="503.473" cy="189.989" r="2" id="led266"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="490.422" cy="185.769" r="2" id="led267"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="487.209" cy="179.688" r="2" id="led268"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="496.2" cy="174.621" r="2" id="led269"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="511.749" cy="170.923" r="2" id="led270"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="527.3" cy="167.224" r="2" id="led271"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="536.297" cy="162.16" r="2" id="led272"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="533.094" cy="156.077" r="2" id="led273"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="520.047" cy="151.856" r="2" id="led274"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="503.678" cy="148.328" r="2" id="led275"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="490.542" cy="144.126" r="2" id="led276"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="487.164" cy="138.059" r="2" id="led277"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="496.026" cy="132.965" r="2" id="led278"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="511.531" cy="129.257" r="2" id="led279"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="527.125" cy="125.567" r="2" id="led280"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="536.25" cy="120.529" r="2" id="led281"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="533.214" cy="114.431" r="2" id="led282"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="520.254" cy="110.191" r="2" id="led283"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="503.886" cy="106.663" r="2" id="led284"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="490.665" cy="102.479" r="2" id="led285"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="487.122" cy="96.429" r="2" id="led286"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="495.853" cy="91.308" r="2" id="led287"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="511.313" cy="87.59" r="2" id="led288"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="526.947" cy="83.909" r="2" id="led289"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="536.2" cy="78.897" r="2" id="led290"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="533.332" cy="72.784" r="2" id="led291"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="520.462" cy="68.525" r="2" id="led292"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="504.097" cy="64.996" r="2" id="led293"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="490.792" cy="60.829" r="2" id="led294"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="487.097" cy="54.702" r="2" id="led295"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="496.003" cy="49.296" r="2" id="led296"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="511.501" cy="45.383" r="2" id="led297"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="526.211" cy="41.293" r="2" id="led298"/>
+                <circle id="led299" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="532.754" cy="35.35" r="2"/>
             </g>
         </g>
     </g>
@@ -381,65 +381,65 @@
 <g id="Pillar_4_1_">
         <g id="Pillar_3_">
             
-                <rect id="Bottom_4_" x="719.607" y="34.193" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="42" height="238"/>
+                <rect id="Bottom_4_" x="719.607" y="34.193" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="42" height="238"/>
             
-                <rect id="Pole_4_" x="712.214" y="265.42" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
+                <rect id="Pole_4_" x="712.214" y="265.42" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
             
-                <rect id="Top_4_" x="712.214" y="27.807" fill="#F5F5F5" stroke="#666766" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
+                <rect id="Top_4_" x="712.214" y="27.807" fill="#354758" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" width="56.786" height="6.773"/>
         </g>
         <g id="LEDs_2_">
-            <path id="Strip_8_" fill="none" stroke="#666766" stroke-width="2" stroke-miterlimit="10" d="M719.498,265.001     c0-10.426,46.109-10.669,46.109-21.095c0-10.427-50-10.427-50-20.854c0-10.425,50-10.425,50-20.851c0-10.426-50-10.426-50-20.853     c0-10.427,50-10.427,50-20.853c0-10.428-50-10.428-50-20.856c0-10.428,50-10.428,50-20.856c0-10.428-50-10.428-50-20.856     c0-10.428,50-10.428,50-20.857c0-10.43-50-10.43-50-20.86s46-10.43,46-20.86"/>
+            <path id="Strip_8_" fill="none" stroke="#4e5d6c" stroke-width="2" stroke-miterlimit="10" d="M719.498,265.001     c0-10.426,46.109-10.669,46.109-21.095c0-10.427-50-10.427-50-20.854c0-10.425,50-10.425,50-20.851c0-10.426-50-10.426-50-20.853     c0-10.427,50-10.427,50-20.853c0-10.428-50-10.428-50-20.856c0-10.428,50-10.428,50-20.856c0-10.428-50-10.428-50-20.856     c0-10.428,50-10.428,50-20.857c0-10.43-50-10.43-50-20.86s46-10.43,46-20.86"/>
             <g>
-                <circle id="led300" fill="none" stroke="#000000" stroke-miterlimit="10" cx="719.498" cy="265.001" r="2"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="726.016" cy="259.042" r="2" id="led301"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="740.69" cy="254.885" r="2" id="led302"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="756.199" cy="250.912" r="2" id="led303"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="765.219" cy="245.506" r="2" id="led304"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="761.706" cy="239.36" r="2" id="led305"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="748.492" cy="235.174" r="2" id="led306"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="732.124" cy="231.646" r="2" id="led307"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="719.157" cy="227.409" r="2" id="led308"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="716.108" cy="221.312" r="2" id="led309"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="725.224" cy="216.273" r="2" id="led310"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="740.815" cy="212.583" r="2" id="led311"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="756.324" cy="208.876" r="2" id="led312"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="765.194" cy="203.785" r="2" id="led313"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="761.827" cy="197.719" r="2" id="led314"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="748.695" cy="193.516" r="2" id="led315"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="732.326" cy="189.989" r="2" id="led316"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="719.274" cy="185.769" r="2" id="led317"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="716.062" cy="179.688" r="2" id="led318"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="725.052" cy="174.621" r="2" id="led319"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="740.601" cy="170.923" r="2" id="led320"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="756.152" cy="167.224" r="2" id="led321"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="765.15" cy="162.16" r="2" id="led322"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="761.946" cy="156.077" r="2" id="led323"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="748.9" cy="151.856" r="2" id="led324"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="732.531" cy="148.328" r="2" id="led325"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="719.394" cy="144.126" r="2" id="led326"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="716.017" cy="138.059" r="2" id="led327"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="724.879" cy="132.965" r="2" id="led328"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="740.384" cy="129.257" r="2" id="led329"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="755.977" cy="125.567" r="2" id="led330"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="765.102" cy="120.529" r="2" id="led331"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="762.066" cy="114.431" r="2" id="led332"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="749.107" cy="110.191" r="2" id="led333"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="732.739" cy="106.663" r="2" id="led334"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="719.518" cy="102.479" r="2" id="led335"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="715.974" cy="96.429" r="2" id="led336"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="724.705" cy="91.308" r="2" id="led337"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="740.165" cy="87.59" r="2" id="led338"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="755.8" cy="83.909" r="2" id="led339"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="765.052" cy="78.897" r="2" id="led340"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="762.184" cy="72.784" r="2" id="led341"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="749.314" cy="68.525" r="2" id="led342"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="732.949" cy="64.996" r="2" id="led343"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="719.644" cy="60.829" r="2" id="led344"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="715.949" cy="54.702" r="2" id="led345"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="724.855" cy="49.296" r="2" id="led346"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="740.353" cy="45.383" r="2" id="led347"/>
-                <circle fill="none" stroke="#000000" stroke-miterlimit="10" cx="755.064" cy="41.293" r="2" id="led348"/>
-                <circle id="led349" fill="none" stroke="#000000" stroke-miterlimit="10" cx="761.607" cy="35.35" r="2"/>
+                <circle id="led300" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="719.498" cy="265.001" r="2"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="726.016" cy="259.042" r="2" id="led301"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="740.69" cy="254.885" r="2" id="led302"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="756.199" cy="250.912" r="2" id="led303"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="765.219" cy="245.506" r="2" id="led304"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="761.706" cy="239.36" r="2" id="led305"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="748.492" cy="235.174" r="2" id="led306"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="732.124" cy="231.646" r="2" id="led307"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="719.157" cy="227.409" r="2" id="led308"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="716.108" cy="221.312" r="2" id="led309"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="725.224" cy="216.273" r="2" id="led310"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="740.815" cy="212.583" r="2" id="led311"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="756.324" cy="208.876" r="2" id="led312"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="765.194" cy="203.785" r="2" id="led313"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="761.827" cy="197.719" r="2" id="led314"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="748.695" cy="193.516" r="2" id="led315"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="732.326" cy="189.989" r="2" id="led316"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="719.274" cy="185.769" r="2" id="led317"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="716.062" cy="179.688" r="2" id="led318"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="725.052" cy="174.621" r="2" id="led319"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="740.601" cy="170.923" r="2" id="led320"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="756.152" cy="167.224" r="2" id="led321"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="765.15" cy="162.16" r="2" id="led322"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="761.946" cy="156.077" r="2" id="led323"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="748.9" cy="151.856" r="2" id="led324"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="732.531" cy="148.328" r="2" id="led325"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="719.394" cy="144.126" r="2" id="led326"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="716.017" cy="138.059" r="2" id="led327"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="724.879" cy="132.965" r="2" id="led328"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="740.384" cy="129.257" r="2" id="led329"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="755.977" cy="125.567" r="2" id="led330"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="765.102" cy="120.529" r="2" id="led331"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="762.066" cy="114.431" r="2" id="led332"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="749.107" cy="110.191" r="2" id="led333"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="732.739" cy="106.663" r="2" id="led334"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="719.518" cy="102.479" r="2" id="led335"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="715.974" cy="96.429" r="2" id="led336"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="724.705" cy="91.308" r="2" id="led337"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="740.165" cy="87.59" r="2" id="led338"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="755.8" cy="83.909" r="2" id="led339"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="765.052" cy="78.897" r="2" id="led340"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="762.184" cy="72.784" r="2" id="led341"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="749.314" cy="68.525" r="2" id="led342"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="732.949" cy="64.996" r="2" id="led343"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="719.644" cy="60.829" r="2" id="led344"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="715.949" cy="54.702" r="2" id="led345"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="724.855" cy="49.296" r="2" id="led346"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="740.353" cy="45.383" r="2" id="led347"/>
+                <circle fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="755.064" cy="41.293" r="2" id="led348"/>
+                <circle id="led349" fill="none" stroke="#ebebeb" stroke-miterlimit="10" cx="761.607" cy="35.35" r="2"/>
             </g>
         </g>
     </g></g>
