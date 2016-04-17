@@ -3,6 +3,7 @@
                       channel="channel"
                       effect="effect"
                       duration="duration"
+                      set-current-effect="setCurrentEffect"
                       ng-class="{selected: getCurrentEffect() === effect}"
                       ng-click="setCurrentEffect(channel, effect); $event.stopPropagation()">
     </animation-effect>

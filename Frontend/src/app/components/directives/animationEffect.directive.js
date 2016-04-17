@@ -10,7 +10,8 @@
                 scope: {
                     channel: '=',
                     effect: '=',
-                    duration: '='
+                    duration: '=',
+                    setCurrentEffect: '='
                 },
                 link: function (scope, element, attrs) {
                     $(element).resizable({
@@ -21,6 +22,7 @@
                     });
 
                     $(element).draggable({
+                        distance: 3,
                         stop: function () {
                             handleDrop(scope, element);
                         }
@@ -30,6 +32,8 @@
         });
 
     var handleDrop = function (scope, element) {
+        scope.setCurrentEffect(scope.channel, scope.effect);
+
         var duration = Math.round($(element).width() / 2),
             newStartFrame = Math.round(
                 ($(element).closest('.channels').scrollLeft() + $(element).position().left) / 2
