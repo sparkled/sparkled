@@ -118,24 +118,16 @@
                 var nextElementStartFrame = self.currentChannel.effects[destIndex].startFrame;
 
                 if (self.currentFrame >= nextElementStartFrame) {
-                    sweetAlert(
-                        'Error',
-                        'There is already an animation effect on the current frame.',
-                        'error'
-                    );
+                    toastr['error']('There is already an animation effect on the current frame.');
                     return;
                 }
 
                 endFrame = Math.min(endFrame, self.currentChannel.effects[destIndex].startFrame);
             }
 
-            if (endFrame - self.currentFrame < 5) {
-                sweetAlert(
-                    'Error',
-                    'For usability purposes, effects must be at least 5 frames long.',
-                    'error'
-                );
-
+            var minFrames = 10;
+            if (endFrame - self.currentFrame < minFrames) {
+                toastr['error']('For usability purposes, effects must be at least ' + minFrames + ' frames long.');
                 return;
             }
 
