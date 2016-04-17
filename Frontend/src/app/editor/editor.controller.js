@@ -8,6 +8,7 @@
     function EditorController($scope, $stateParams, hotkeys, RestService) {
         var self = this;
         this.loading = true;
+        this.stageExpanded = true;
         this.animationEffectTypes = null;
         this.currentSong = null;
         this.currentChannel = null;

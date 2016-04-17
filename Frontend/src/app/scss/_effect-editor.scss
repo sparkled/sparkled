@@ -1,9 +1,27 @@
 @import "variables";
 
+$effect-editor-width: 250px;
+
 #effect-editor {
   display: flex;
-  width: 250px;
+  width: $effect-editor-width;
   flex-shrink: 0;
   background: #f5f5f5;
   border-left: 1px solid #e7e7e7;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
+#body {
+  &.editor-expand #effect-editor {
+    animation: $animation-duration slide-in ease-in-out;
+  }
+
+  &.editor-contract #effect-editor {
+    animation: $animation-duration slide-out ease-in-out;
+    width: 0;
+  }
+
+  @keyframes slide-in { from { width: 0 } to { width: $effect-editor-width }}
+  @keyframes slide-out { from { width: $effect-editor-width } to { width: 0; }}
 }
