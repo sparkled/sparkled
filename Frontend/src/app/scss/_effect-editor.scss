@@ -13,6 +13,7 @@ $effect-editor-width: 250px;
 
   @media (min-width: 768px) {
     width: $effect-editor-width !important;
+    animation: none !important;
   }
 
   .no-effect-selected {
