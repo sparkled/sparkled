@@ -42,8 +42,7 @@
                                 maxCanvasWidth: 16000,
                                 waveColor: '#ebebeb',
                                 progressColor: '#4e5d6c',
-                                height: 50,
-                                barWidth: 1
+                                height: 50
                             });
 
                             wavesurfer.load(newVal);
