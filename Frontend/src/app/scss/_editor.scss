@@ -11,36 +11,6 @@
   .container {
     flex-grow: 1;
   }
-
-  .loader-container {
-    display: none;
-  }
-
-  &.loading {
-    background: #333;
-
-    > * {
-      visibility: hidden;
-      height: 0;
-      flex-grow: 0;
-    }
-
-    .loader-container {
-      display: flex;
-      flex-grow: 1;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .loader {
-      visibility: visible;
-      display: block;
-
-      > div {
-        background-color: #f5f5f5;
-      }
-    }
-  }
 }
 
 #body {

@@ -16,7 +16,15 @@
     <!-- endinject -->
     <!-- endbuild -->
 </head>
-<body ng-controller="MainCtrl as main">
+<body ng-controller="MainCtrl as main" ng-class="{loading: main.loading}">
+    <div id="loader">
+        <div class="loader-animation sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child"></div>
+        </div>
+    </div>
+
     <div class="view" ui-view></div>
 
     <!-- build:js(src) scripts/vendor.js -->

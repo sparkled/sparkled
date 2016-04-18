@@ -2,13 +2,12 @@
 (function () {
     'use strict';
     angular.module('ledStripAnimator.component')
-        .directive('waveform', function ($timeout) {
+        .directive('waveform', function ($rootScope, $timeout) {
             return {
                 restrict: 'E',
                 replace: true,
                 templateUrl: 'app/components/directives/waveform.template.html',
                 scope: {
-                    loading: '=',
                     currentFrame: '=',
                     duration: '=',
                     mp3Url: '='
@@ -72,7 +71,7 @@
                             });
                             wavesurfer.on('ready', function () {
                                 scope.$apply(function () {
-                                    scope.loading = false;
+                                    $rootScope.$broadcast('loading', {loading: false});
                                 });
                             });
                         }

@@ -5,7 +5,7 @@
     angular.module('ledStripAnimator.selector')
         .controller('SelectorController', SelectorController);
 
-    function SelectorController(RestService) {
+    function SelectorController($rootScope, RestService) {
         var self = this;
         this.songs = null;
 
@@ -56,6 +56,7 @@
         this.getAllSongs = function () {
             RestService.service('song').getList().then(function (songs) {
                 self.songs = songs;
+                $rootScope.$broadcast('loading', {loading: false});
             });
         };
 

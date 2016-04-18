@@ -5,7 +5,7 @@
 </nav>
 
 <div id="selector-page">
-    <div class="container animated fadeInRight">
+    <div class="container animated fadeInRight" ng-show="!main.loading">
         <div ng-controller="SelectorController as selector">
             <div class="row">
                 <song-entry ng-repeat="song in selector.songs" song="song"
