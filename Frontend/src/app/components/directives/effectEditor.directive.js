@@ -9,7 +9,8 @@
                 templateUrl: 'app/components/directives/effectEditor.template.html',
                 scope: {
                     effect: '=',
-                    effectTypes: '='
+                    effectTypes: '=',
+                    deleteCurrentEffect: '='
                 },
                 link: function (scope, element, attrs) {
                     scope.$watch('effect.effectType', function (newValue) {

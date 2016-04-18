@@ -24,6 +24,15 @@ $effect-editor-width: 250px;
       border-bottom: 1px solid $navbar-bg-color;
     }
   }
+
+  .remove-selected-effect {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .remove-selected-effect .fa {
+    padding-right: 10px;
+  }
 }
 
 #body {

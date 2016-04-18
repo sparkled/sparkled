@@ -14,13 +14,6 @@
                     <i class="fa fa-magic"></i>
                 </a>
 
-                <a title="Remove Selected Effect"
-                   class="btn btn-default navbar-btn"
-                   ng-class="{disabled: editor.getCurrentEffect() === null}"
-                   ng-click="editor.removeAnimationEffect()">
-                    <i class="fa fa-trash"></i>
-                </a>
-
                 <a title="Save"
                    class="btn btn-default navbar-btn"
                    ng-click="editor.saveAnimationData()">
@@ -42,7 +35,8 @@
         <animation-preview stage-expanded="editor.stageExpanded">
         </animation-preview>
         <effect-editor effect="editor.currentEffect"
-                       effect-types="editor.animationEffectTypes">
+                       effect-types="editor.animationEffectTypes"
+                       delete-current-effect="editor.deleteCurrentEffect">
         </effect-editor>
     </div>
 

@@ -17,11 +17,20 @@
 
         <div class="form-group" ng-repeat="param in effect.params">
             <label for="editor-param-{{param.paramCode}}">{{param.paramName}}</label>
+
             <input type="text"
                    class="form-control"
                    id="editor-param-{{param.paramCode}}"
                    ng-model="param.value"
                    placeholder="{{param.paramName}}"/>
+        </div>
+
+        <div class="form-group">
+            <button title="Delete Selected Effect"
+                    class="btn btn-danger remove-selected-effect"
+                    ng-click="deleteCurrentEffect()">
+                <i class="fa fa-trash"></i>Delete Effect
+            </button>
         </div>
     </form>
 </div>

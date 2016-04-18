@@ -73,7 +73,7 @@
                 combo: 'ctrl+backspace',
                 description: 'Delete Selected Animation Effect',
                 callback: function (event) {
-                    self.removeAnimationEffect();
+                    self.deleteCurrentEffect();
                     event.preventDefault();
                 }
             });
@@ -148,7 +148,7 @@
             self.currentEffect = effect;
         };
 
-        this.removeAnimationEffect = function () {
+        this.deleteCurrentEffect = function () {
             if (self.currentEffect != null) {
                 self.currentChannel.effects.splice(
                     $.inArray(self.currentEffect, self.currentChannel.effects), 1
