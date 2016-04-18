@@ -4,7 +4,7 @@
                       effect="effect"
                       duration="duration"
                       set-current-effect="setCurrentEffect"
-                      ng-class="{selected: getCurrentEffect() === effect}"
+                      ng-class="{selected: getCurrentEffect() === effect, 'wide-effect': effect.endFrame - effect.startFrame > 45}"
                       ng-click="setCurrentEffect(channel, effect); $event.stopPropagation()">
     </animation-effect>
 </div>
