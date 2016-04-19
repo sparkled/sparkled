@@ -8,9 +8,14 @@
                 replace: true,
                 templateUrl: 'app/components/directives/animationPreview.template.html',
                 scope: {
+                    stageSvg: '=',
                     stageExpanded: '='
                 },
                 link: function (scope, element, attrs) {
+                    scope.$watch('stageSvg', function (newVal) {
+                        $(element).find('#stage').append(newVal);
+                    });
+
                     $(element).find('.stage-resize').click(function () {
                         scope.$apply(function () {
                             scope.stageExpanded = !scope.stageExpanded;

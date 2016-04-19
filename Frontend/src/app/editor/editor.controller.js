@@ -7,6 +7,7 @@
 
     function EditorController($scope, $stateParams, hotkeys, RestService) {
         var self = this;
+        this.stageSvg = null;
         this.stageExpanded = true;
         this.animationEffectTypes = null;
         this.currentSong = null;
@@ -77,27 +78,12 @@
                 }
             });
 
-        this.getCurrentSong = function () {
-            RestService.one('song', $stateParams.id).get().then(function (song) {
-                self.currentSong = song;
-                self.animationData = JSON.parse(song.animationData);
-                self.setCurrentChannel(self.animationData.channels[0]);
-                self.mp3Url = RestService.configuration.baseUrl + '/song/data/' + song.id;
-            });
-        };
-
         this.getCurrentChannel = function () {
             return self.currentChannel;
         };
 
         this.setCurrentChannel = function (channel) {
             self.currentChannel = channel;
-        };
-
-        this.getAllAnimationEffectTypes = function () {
-            RestService.service('animation-effect-type').getList().then(function (animationEffectTypes) {
-                self.animationEffectTypes = animationEffectTypes;
-            });
         };
 
         this.addAnimationEffect = function () {
@@ -171,6 +157,29 @@
                 });
         };
 
+        this.getStageSvg = function () {
+            RestService.one('stage', 1).get().then(function (stage) {
+                self.stageSvg = stage.svg;
+            });
+        };
+
+
+        this.getCurrentSong = function () {
+            RestService.one('song', $stateParams.id).get().then(function (song) {
+                self.currentSong = song;
+                self.animationData = JSON.parse(song.animationData);
+                self.setCurrentChannel(self.animationData.channels[0]);
+                self.mp3Url = RestService.configuration.baseUrl + '/song/data/' + song.id;
+            });
+        };
+
+        this.getAllAnimationEffectTypes = function () {
+            RestService.service('animation-effect-type').getList().then(function (animationEffectTypes) {
+                self.animationEffectTypes = animationEffectTypes;
+            });
+        };
+
+        this.getStageSvg();
         this.getCurrentSong();
         this.getAllAnimationEffectTypes();
     }

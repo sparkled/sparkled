@@ -28,8 +28,10 @@
     </nav>
 
     <div id="body" ng-class="{'editor-expand': editor.stageExpanded, 'editor-contract': !editor.stageExpanded}">
-        <animation-preview stage-expanded="editor.stageExpanded">
+        <animation-preview stage-svg="editor.stageSvg"
+                           stage-expanded="editor.stageExpanded">
         </animation-preview>
+
         <effect-editor effect="editor.currentEffect"
                        effect-types="editor.animationEffectTypes"
                        delete-current-effect="editor.deleteCurrentEffect">

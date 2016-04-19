@@ -20,7 +20,18 @@
   z-index: $z-index-body;
 
   #stage {
+    position: relative;
     width: 100%;
+
+    svg {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+    }
   }
 
   #animation-preview {
@@ -49,14 +60,28 @@
   &.editor-expand #animation-preview .stage-resize .fa {
     animation: $animation-duration rotate-to-expand ease-in-out;
 
-    @keyframes rotate-to-expand { from { transform: rotateY(180deg) } to { transform: rotateY(0deg) }}
+    @keyframes rotate-to-expand {
+      from {
+        transform: rotateY(180deg)
+      }
+      to {
+        transform: rotateY(0deg)
+      }
+    }
   }
 
   &.editor-contract #animation-preview .stage-resize .fa {
     animation: $animation-duration rotate-to-contract ease-in-out;
     transform: rotateY(180deg);
 
-    @keyframes rotate-to-contract { from { transform: rotateY(0deg) } to { transform: rotateY(180deg) }}
+    @keyframes rotate-to-contract {
+      from {
+        transform: rotateY(0deg)
+      }
+      to {
+        transform: rotateY(180deg)
+      }
+    }
   }
 
   #effect-list {
