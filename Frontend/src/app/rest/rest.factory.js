@@ -6,7 +6,7 @@
         .factory('RestService', RestService);
 
     function RestService(Restangular) {
-        Restangular.setBaseUrl('http://192.168.1.111:8080/xmas/rest/');
+        Restangular.setBaseUrl('http://localhost:8080/xmas/rest/');
         return Restangular;
     }
 }());
