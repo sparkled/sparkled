@@ -5,6 +5,7 @@ $text-color: #ebebeb;
 $primary-button-bg-color: #5bc0de;
 $secondary-bg-color: #354758;
 $navbar-bg-color: #4e5d6c;
+$active-color: #337ab7;
 
 $song-title-padding: 11px;
 $timeline-font-size: 8px;
@@ -12,4 +13,7 @@ $animation-duration: .7s;
 
 $z-index-body: 1;
 $z-index-timeline: 2;
-$z-index-loader: 3;
+$z-index-current-effect-channel: 3;
+$z-index-current-frame-bar: 4;
+$z-index-current-effect-bounds: 5;
+$z-index-loader: 100;

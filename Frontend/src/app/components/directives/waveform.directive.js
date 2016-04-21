@@ -52,7 +52,7 @@
                                     $timeout(function () {
                                         scope.$apply(function () {
                                             var progressWidth = $(element).find('wave wave').width();
-                                            scope.currentFrame = 2 * Math.round(progressWidth / 2) / 2;
+                                            scope.currentFrame = 2 * Math.floor(progressWidth / 2) / 2;
                                             if (scope.currentFrame >= scope.duration * 60) {
                                                 scope.currentFrame = scope.duration * 60 - 1;
                                             }
