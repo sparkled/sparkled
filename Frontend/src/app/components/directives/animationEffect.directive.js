@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('ledStripAnimator.component')
-        .directive('animationEffect', function () {
+        .directive('animationEffect', function ($rootScope) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -16,20 +16,37 @@
                 link: function (scope, element, attrs) {
                     $(element).resizable({
                         handles: 'e, w',
+                        grid: [2, 1],
+                        start: function () {
+                            broadcastElementDimensions($rootScope, element, true);
+                        },
                         stop: function () {
+                            broadcastElementDimensions($rootScope, element, false);
                             handleDrop(scope, element);
                         }
                     });
 
                     $(element).draggable({
                         distance: 3,
+                        grid: [2, 1],
+                        start: function () {
+                            broadcastElementDimensions($rootScope, element, true);
+                        },
                         stop: function () {
+                            broadcastElementDimensions($rootScope, element, false);
                             handleDrop(scope, element);
                         }
                     });
                 }
             }
         });
+
+    var broadcastElementDimensions = function ($rootScope, element, isVisible) {
+        $rootScope.$broadcast('animationEffectMove', {
+            visible: isVisible,
+            element: element
+        });
+    };
 
     var handleDrop = function (scope, element) {
         scope.setCurrentEffect(scope.channel, scope.effect);

@@ -25,6 +25,17 @@ $timeline-gap: 2px;
     z-index: 3;
   }
 
+  #current-effect-bounds {
+    position: absolute;
+    display: none;
+    top: $timeline-gap;
+    bottom: 15px;
+    width: 1px;
+    margin-left: $timeline-gap;
+    border-left: 2px solid $primary-button-bg-color;
+    border-right: 2px solid $primary-button-bg-color;
+  }
+
   .waveform {
     margin: 0 0 $timeline-gap $timeline-gap;
   }
