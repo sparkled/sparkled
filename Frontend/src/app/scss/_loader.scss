@@ -12,14 +12,49 @@ body.loading {
     display: flex;
     flex-grow: 1;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     width: 100%;
     height: 100%;
     z-index: $z-index-loader;
     background: $body-bg-color;
 
-    .loader-animation > div {
-      background-color: $text-color;
+    .loader-animation {
+      width: 100px;
+      height: 100px;
+      background: url('/assets/images/logos/logo-small.svg') no-repeat;
+      margin-bottom: 10px;
+
+      animation: animationFrames ease-in-out 2.5s;
+      animation-iteration-count: infinite;
+      transform-origin: center 60%;
+
+      @keyframes animationFrames{
+        0% {
+          transform:  rotate(0deg) ;
+        }
+        25% {
+          transform:  rotate(130deg) ;
+        }
+        32% {
+          transform:  rotate(115deg) ;
+        }
+        57% {
+          transform:  rotate(250deg) ;
+        }
+        64% {
+          transform:  rotate(235deg) ;
+        }
+        89% {
+          transform:  rotate(370deg) ;
+        }
+        96% {
+          transform:  rotate(355deg) ;
+        }
+        100% {
+          transform:  rotate(360deg) ;
+        }
+      }
     }
   }
 }
