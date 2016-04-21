@@ -115,6 +115,7 @@ $timeline-gap: 2px;
       height: 18px - $timeline-gap * 2;
       margin-left: $timeline-gap;
       background: #337ab7;
+      z-index: $z-index-animation-effect;
 
       &.selected {
         background: $primary-button-bg-color;

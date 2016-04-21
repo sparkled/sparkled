@@ -14,6 +14,8 @@ $animation-duration: .7s;
 $z-index-body: 1;
 $z-index-timeline: 2;
 $z-index-current-effect-channel: 3;
-$z-index-current-frame-bar: 4;
-$z-index-current-effect-bounds: 5;
+$z-index-current-effect-bounds: 4;
+$z-index-animation-effect: 5;
+$z-index-current-frame-bar: 6;
+
 $z-index-loader: 100;
