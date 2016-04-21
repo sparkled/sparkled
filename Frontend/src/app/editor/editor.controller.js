@@ -116,12 +116,15 @@
                 return;
             }
 
-            self.currentChannel.effects.splice(destIndex, 0, {
+            var newEffect = {
                 effectType: '',
                 startFrame: self.currentFrame,
                 endFrame: endFrame,
                 params: []
-            });
+            };
+
+            self.currentChannel.effects.splice(destIndex, 0, newEffect);
+            self.setCurrentEffect(self.getCurrentChannel(), newEffect);
         };
 
         this.getCurrentEffect = function () {
