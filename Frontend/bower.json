@@ -1,5 +1,5 @@
 {
-  "name": "led-strip-animator",
+  "name": "sparkled",
   "version": "0.0.1",
   "dependencies": {
     "angular-animate": "~1.4.9",
