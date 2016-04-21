@@ -23,6 +23,10 @@ $timeline-gap: 2px;
     margin-left: $timeline-gap;
     background: $primary-button-bg-color;
     z-index: $z-index-current-frame-bar;
+
+    &:hover {
+      cursor: col-resize;
+    }
   }
 
   #current-effect-bounds {
@@ -64,6 +68,10 @@ $timeline-gap: 2px;
       background: $navbar-bg-color;
       margin-left: $timeline-gap;
       flex-grow: 0;
+
+      &.effect-channel-label:hover {
+        cursor: pointer;
+      }
 
       &.selected {
         background-color: $active-color;
@@ -149,10 +157,12 @@ $timeline-gap: 2px;
 }
 
 #time-indicator {
+  position: relative;
   box-sizing: content-box;
   height: 20px;
   padding-left: $timeline-gap;
   margin-right: 5px;
+  z-index: $z-index-time-indicator;
 
   line {
     stroke-width: 1;

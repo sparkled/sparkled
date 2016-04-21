@@ -17,6 +17,19 @@
         this.currentFrame = 0;
         this.mp3Url = null;
 
+        $scope.$watch('editor.currentFrame', function (newVal, oldVal) {
+            if (self.currentSong === null) {
+                return;
+            }
+
+            var maxDuration = self.currentSong.durationSeconds * 60 - 1;
+            if (newVal < 0) {
+                self.currentFrame = 0;
+            } else if (newVal > maxDuration) {
+                self.currentFrame = maxDuration;
+            }
+        });
+
         hotkeys.bindTo($scope)
             .add({
                 combo: 'alt+left',

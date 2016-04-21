@@ -40,7 +40,7 @@
 
     <div id="timeline" class="{{editor.currentChannel.name | cssClass}}">
         <div class="timeline-labels">
-            <div class="timeline-label {{channel.name | cssClass}}"
+            <div class="timeline-label effect-channel-label {{channel.name | cssClass}}"
                  ng-repeat="channel in editor.animationData.channels | orderBy:'displayOrder'"
                  ng-class="{selected: editor.getCurrentChannel() === channel}"
                  ng-click="editor.setCurrentChannel(channel)">
