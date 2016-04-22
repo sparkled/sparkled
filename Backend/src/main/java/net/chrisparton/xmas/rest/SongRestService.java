@@ -3,6 +3,7 @@ package net.chrisparton.xmas.rest;
 import com.google.gson.Gson;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+import net.chrisparton.xmas.entity.AnimationEffectChannel;
 import net.chrisparton.xmas.entity.Song;
 import net.chrisparton.xmas.entity.SongAnimationData;
 import net.chrisparton.xmas.entity.SongData;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,8 +117,24 @@ public class SongRestService extends RestService {
     private int persistSong(String songJson) {
         Song song = new Gson().fromJson(songJson, Song.class);
         song.setId(null);
-        song.setAnimationData(gson.toJson(new SongAnimationData()));
+        song.setAnimationData(gson.toJson(createSongAnimationData()));
         return persistenceService.saveSong(song);
+    }
+
+    private SongAnimationData createSongAnimationData() {
+        SongAnimationData animationData = new SongAnimationData();
+        animationData.getChannels().addAll(Arrays.asList(
+                new AnimationEffectChannel("Pillar 1", 0, 200, 249),
+                new AnimationEffectChannel("Pillar 2", 1, 250, 299),
+                new AnimationEffectChannel("Pillar 3", 2, 249, 300),
+                new AnimationEffectChannel("Pillar 4", 3, 350, 399),
+                new AnimationEffectChannel("Arch 1", 4, 0, 49),
+                new AnimationEffectChannel("Arch 2", 5, 50, 99),
+                new AnimationEffectChannel("Arch 3", 6, 100, 149),
+                new AnimationEffectChannel("Arch 4", 7, 150, 299),
+                new AnimationEffectChannel("Global", 8, 0, 399)
+        ));
+        return animationData;
     }
 
     private void persistSongData(InputStream uploadedInputStream, int songId) throws IOException {
