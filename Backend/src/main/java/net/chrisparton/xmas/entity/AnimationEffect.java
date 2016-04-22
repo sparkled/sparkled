@@ -1,22 +1,23 @@
 package net.chrisparton.xmas.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnimationEffect {
 
-    private String effectType;
-    private List<AnimationEffectParam> params;
+    private AnimationEffectTypeCode effectType;
+    private List<AnimationEffectParam> params = new ArrayList<>();
     private int startFrame;
     private int endFrame;
 
     public AnimationEffect() {
     }
 
-    public String getEffectType() {
+    public AnimationEffectTypeCode getEffectType() {
         return effectType;
     }
 
-    public void setEffectType(String effectType) {
+    public void setEffectType(AnimationEffectTypeCode effectType) {
         this.effectType = effectType;
     }
 

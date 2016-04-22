@@ -149,6 +149,18 @@
             self.currentEffect = effect;
         };
 
+        this.getParamName = function (effectTypeCode, paramCode) {
+            var effectType = _.find(self.animationEffectTypes, function (item) {
+                return item.code === effectTypeCode;
+            });
+
+            var param = _.find(effectType.parameters, function (item) {
+                return item.code === paramCode
+            });
+
+            return param.name;
+        };
+
         this.deleteCurrentEffect = function () {
             if (self.currentEffect != null) {
                 self.currentChannel.effects.splice(

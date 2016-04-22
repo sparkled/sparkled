@@ -16,13 +16,13 @@
         </div>
 
         <div class="form-group" ng-repeat="param in effect.params">
-            <label for="editor-param-{{param.paramCode}}">{{param.paramName}}</label>
+            <label for="editor-param-{{param.paramCode}}">{{getParamName(effect.effectType, param.paramCode)}}</label>
 
             <input type="text"
                    class="form-control"
                    id="editor-param-{{param.paramCode}}"
                    ng-model="param.value"
-                   placeholder="{{param.paramName}}"/>
+                   placeholder="{{getParamName(effect.effectType, param.paramCode)}}"/>
         </div>
 
         <div class="form-group">

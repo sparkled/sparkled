@@ -10,7 +10,8 @@
                 scope: {
                     effect: '=',
                     effectTypes: '=',
-                    deleteCurrentEffect: '='
+                    deleteCurrentEffect: '=',
+                    getParamName: '='
                 },
                 link: function (scope, element, attrs) {
                     scope.$watch('effect.effectType', function (newValue) {
@@ -26,8 +27,7 @@
         });
 
     var updateParams = function (scope, newValue) {
-        var requiresParamUpdate = newValue !== scope.effect.effectType || scope.effect.params.length === 0;
-        if (requiresParamUpdate) {
+        if (scope.effect.params.length === 0) {
             var effectType = findEffect(scope, newValue);
 
             if (effectType != null) {
@@ -54,7 +54,6 @@
         for (var i = 0; i < effectType.parameters.length; i++) {
             scope.effect.params.push({
                 paramCode: effectType.parameters[i].code,
-                paramName: effectType.parameters[i].name,
                 value: ''
             });
         }

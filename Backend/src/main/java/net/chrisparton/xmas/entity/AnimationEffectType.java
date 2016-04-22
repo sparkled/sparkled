@@ -1,23 +1,14 @@
 package net.chrisparton.xmas.entity;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class AnimationEffectType {
-
-    public static final AnimationEffectType FLASH = new AnimationEffectType("FLASH", "Flash", AnimationEffectTypeParam.COLOUR);
-    public static final AnimationEffectType LINE_LEFT = new AnimationEffectType("LINE_LEFT", "Line Left", AnimationEffectTypeParam.MULTI_COLOUR);
-    public static final AnimationEffectType LINE_RIGHT = new AnimationEffectType("LINE_RIGHT", "Line Right", AnimationEffectTypeParam.MULTI_COLOUR);
-    public static final List<AnimationEffectType> TYPES = Arrays.asList(
-            FLASH, LINE_LEFT, LINE_RIGHT
-    );
 
     private String code;
     private String name;
     private List<AnimationEffectTypeParam> parameters;
 
-    public AnimationEffectType(String code, String name, AnimationEffectTypeParam... parameters) {
+    AnimationEffectType(String code, String name, AnimationEffectTypeParam... parameters) {
         this.code = code;
         this.name = name;
         this.parameters = Arrays.asList(parameters);

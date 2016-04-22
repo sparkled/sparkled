@@ -72,7 +72,7 @@ public class SongPreprocessor {
         }
 
         for (AnimationEffect effect : effects) {
-            if (StringUtils.isEmpty(effect.getEffectType())) {
+            if (effect.getEffectType() == null) {
                 throw new EntityValidationException("Effect type cannot be empty.");
             }
 
@@ -88,7 +88,7 @@ public class SongPreprocessor {
             }
 
             for (AnimationEffectParam param : params) {
-                if (StringUtils.isEmpty(param.getParamCode())) {
+                if (param.getParamCode() == null) {
                     throw new EntityValidationException("Effect param type cannot be null.");
                 }
             }

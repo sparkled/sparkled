@@ -4,30 +4,18 @@ import java.util.Objects;
 
 public class AnimationEffectParam {
 
-    private String paramCode;
-    private String paramName;
+    private AnimationEffectTypeParamCode paramCode;
     private String value;
 
-    public AnimationEffectParam(String paramCode, String paramName, String value) {
-        this.paramCode = paramCode;
-        this.paramName = paramName;
-        this.value = value;
+    public AnimationEffectParam() {
     }
 
-    public String getParamCode() {
+    public AnimationEffectTypeParamCode getParamCode() {
         return paramCode;
     }
 
-    public void setParamCode(String paramCode) {
+    public void setParamCode(AnimationEffectTypeParamCode paramCode) {
         this.paramCode = paramCode;
-    }
-
-    public String getParamName() {
-        return paramName;
-    }
-
-    public void setParamName(String paramName) {
-        this.paramName = paramName;
     }
 
     public String getValue() {
@@ -48,12 +36,11 @@ public class AnimationEffectParam {
 
         AnimationEffectParam that = (AnimationEffectParam) o;
         return Objects.equals(paramCode, that.paramCode) &&
-                Objects.equals(paramName, that.paramName) &&
                 Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(paramCode, paramName, value);
+        return Objects.hash(paramCode, value);
     }
 }

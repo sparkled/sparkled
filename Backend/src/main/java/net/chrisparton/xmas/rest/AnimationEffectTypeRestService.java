@@ -1,6 +1,6 @@
 package net.chrisparton.xmas.rest;
 
-import net.chrisparton.xmas.entity.AnimationEffectType;
+import net.chrisparton.xmas.entity.AnimationEffectTypeCode;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,6 +14,6 @@ public class AnimationEffectTypeRestService extends RestService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAnimationEffectTypes() {
-        return getJsonResponse(AnimationEffectType.TYPES);
+        return getJsonResponse(AnimationEffectTypeCode.EFFECT_TYPES);
     }
 }
