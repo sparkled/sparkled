@@ -178,10 +178,10 @@
                     transformRequest: angular.identity
                 })
                 .customPOST(JSON.stringify(self.currentSong), undefined, undefined, {'Content-Type': 'application/json'})
-                .then(function (response) {
+                .then(function () {
                     toastr['success']('Song saved successfully');
                 }, function (response) {
-                    toastr['error']('Failed to save song');
+                    toastr['error'](response.data, 'Failed to save song');
                 });
         };
 
@@ -190,7 +190,6 @@
                 self.stageSvg = stage.svg;
             });
         };
-
 
         this.getCurrentSong = function () {
             RestService.one('song', $stateParams.id).get().then(function (song) {

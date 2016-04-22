@@ -52,7 +52,7 @@ public class SongPreprocessor {
         int endLed = animationEffectChannel.getEndLed();
 
         if (StringUtils.isEmpty(channelName)) {
-            throw new EntityValidationException("Animation effect channel doesn't have a name.");
+            throw new EntityValidationException("Animation effect channels must have names.");
         }
 
         if (startLed < 0) {
@@ -68,28 +68,50 @@ public class SongPreprocessor {
 
         List<AnimationEffect> effects = channel.getEffects();
         if (effects == null) {
-            throw new EntityValidationException("Channel effects list cannot be null.");
+            String errorMessage = "Effects list must be populated for channel '" + channelName + "'.";
+            throw new EntityValidationException(errorMessage);
         }
 
         for (AnimationEffect effect : effects) {
             if (effect.getEffectType() == null) {
-                throw new EntityValidationException("Effect type cannot be empty.");
+                String errorMessage = String.format(
+                        "Effect type cannot be empty for effect at frame %d in channel '%s'.",
+                        effect.getStartFrame(), channelName
+                );
+                throw new EntityValidationException(errorMessage);
             }
 
             if (effect.getStartFrame() > effect.getEndFrame()) {
-                throw new EntityValidationException("Effect start frame cannot be after end frame.");
+                String errorMessage = String.format(
+                        "Effect start frame cannot be after end frame for effect at frame %d in channel '%s'.",
+                        effect.getStartFrame(), channelName
+                );
+                throw new EntityValidationException(errorMessage);
             } else if (effect.getStartFrame() < previousEndFrame) {
-                throw new EntityValidationException("Overlapping or out-of-order effects detected at frame " + previousEndFrame + " for channel " + channelName + '.');
+                String errorMessage = String.format(
+                        "Overlapping or out-of-order effects detected at frame %d for channel '%s'.",
+                        previousEndFrame,
+                        channelName
+                );
+                throw new EntityValidationException(errorMessage);
             }
 
             List<AnimationEffectParam> params = effect.getParams();
             if (params == null) {
-                throw new EntityValidationException("Effect params list cannot be null.");
+                String errorMessage = String.format(
+                        "Effect parameters list is not populated for effect at frame %d in channel '%s'.",
+                        effect.getStartFrame(), channelName
+                );
+                throw new EntityValidationException(errorMessage);
             }
 
             for (AnimationEffectParam param : params) {
                 if (param.getParamCode() == null) {
-                    throw new EntityValidationException("Effect param type cannot be null.");
+                    String errorMessage = String.format(
+                            "Effect parameter type cannot be empty for effect at frame %d in channel '%s'.",
+                            effect.getStartFrame(), channelName
+                    );
+                    throw new EntityValidationException(errorMessage);
                 }
             }
 

@@ -36,7 +36,7 @@ public class SongRestService extends RestService {
             return getJsonResponse(song.get());
         }
 
-        return getResponse(Response.Status.NOT_FOUND);
+        return getJsonResponse(Response.Status.NOT_FOUND, "Failed to find song.");
     }
 
     @GET
@@ -104,11 +104,11 @@ public class SongRestService extends RestService {
                 return getJsonResponse(idResponse);
             }
 
-            return getResponse(Response.Status.NOT_FOUND);
+            return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
         } catch (EntityValidationException e) {
-            return getResponse(Response.Status.BAD_REQUEST, e.getMessage());
+            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
-            return getResponse(Response.Status.INTERNAL_SERVER_ERROR);
+            return getJsonResponse(Response.Status.INTERNAL_SERVER_ERROR, "An internal error occurred.");
         }
     }
 

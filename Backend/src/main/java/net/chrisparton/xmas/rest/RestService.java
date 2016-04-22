@@ -8,9 +8,13 @@ import javax.ws.rs.core.Response;
 public abstract class RestService {
 
     protected Response getJsonResponse(Object responseObject) {
+        return getJsonResponse(Response.Status.OK, responseObject);
+    }
+
+    protected Response getJsonResponse(Response.Status status, Object responseObject) {
         String responseJson = new Gson().toJson(responseObject);
 
-        return Response.status(Response.Status.OK)
+        return Response.status(status)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .entity(responseJson)
                 .build();
