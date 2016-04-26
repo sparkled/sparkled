@@ -5,7 +5,7 @@
     angular.module('ledStripAnimator.editor')
         .controller('EditorController', EditorController);
 
-    function EditorController($scope, $stateParams, hotkeys, RestService) {
+    function EditorController($rootScope, $scope, $stateParams, hotkeys, RestService) {
         var self = this;
         this.stageSvg = null;
         this.stageExpanded = true;
@@ -171,7 +171,7 @@
             }
         };
 
-        this.saveAnimationData = function () {
+        this.saveAnimationData = function (successCallback) {
             self.currentSong.animationData = angular.toJson(self.animationData);
 
             RestService.one('song').withHttpConfig({
@@ -179,11 +179,35 @@
                 })
                 .customPOST(JSON.stringify(self.currentSong), undefined, undefined, {'Content-Type': 'application/json'})
                 .then(function () {
-                    toastr['success']('Song saved successfully');
+                    if (successCallback !== undefined) {
+                        successCallback();
+                    } else {
+                        toastr['success']('Song saved successfully');
+                    }
                 }, function (response) {
                     toastr['error'](response.data, 'Failed to save song');
                 });
         };
+
+        this.previewAnimation = function () {
+            self.saveAnimationData(function () {
+                RestService.one('song/render', self.currentSong.id)
+                    .customGET('', {
+                        'duration-seconds': 5,
+                        'start-frame': self.currentFrame
+                    })
+                    .then(function (renderData) {
+                        $rootScope.$broadcast('animationPreview', {
+                            startFrame: self.currentFrame,
+                            renderData: renderData
+                        });
+                    });
+            });
+        };
+
+        $rootScope.$on('animationPreviewFinished', function (event, args) {
+            self.currentFrame = args.startFrame;
+        });
 
         this.getStageSvg = function () {
             RestService.one('stage', 1).get().then(function (stage) {

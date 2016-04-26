@@ -6,6 +6,21 @@ public class Led {
     private short g = 0;
     private short b = 0;
 
+    public Led() {
+    }
+
+    public Led(int r, int g, int b) {
+        this.r = (short) r;
+        this.g = (short) g;
+        this.b = (short) b;
+    }
+
+    public Led(Led led) {
+        this.r = led.r;
+        this.g = led.g;
+        this.b = led.b;
+    }
+
     public short getR() {
         return r;
     }

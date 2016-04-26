@@ -9,6 +9,8 @@ import net.chrisparton.xmas.entity.SongAnimationData;
 import net.chrisparton.xmas.entity.SongData;
 import net.chrisparton.xmas.persistence.song.SongPersistenceService;
 import net.chrisparton.xmas.preprocessor.EntityValidationException;
+import net.chrisparton.xmas.renderer.Renderer;
+import net.chrisparton.xmas.renderer.data.AnimationFrame;
 import net.chrisparton.xmas.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
 
@@ -59,6 +61,24 @@ public class SongRestService extends RestService {
         }
 
         return getResponse(Response.Status.NOT_FOUND);
+    }
+
+    @GET
+    @Path("/render/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRenderedSong(@PathParam("id") int id,
+                                    @QueryParam("duration-seconds") int durationSeconds,
+                                    @QueryParam("start-frame") int startFrame) {
+        Optional<Song> song = persistenceService.getSongById(id);
+
+        if (song.isPresent()) {
+            Renderer renderer = new Renderer(song.get(), startFrame, durationSeconds);
+            List<AnimationFrame> animationFrames = renderer.render();
+
+            return getJsonResponse(animationFrames);
+        }
+
+        return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
     }
 
     @PUT
@@ -115,7 +135,7 @@ public class SongRestService extends RestService {
     }
 
     private int persistSong(String songJson) {
-        Song song = new Gson().fromJson(songJson, Song.class);
+        Song song = gson.fromJson(songJson, Song.class);
         song.setId(null);
         song.setAnimationData(gson.toJson(createSongAnimationData()));
         return persistenceService.saveSong(song);
@@ -124,15 +144,15 @@ public class SongRestService extends RestService {
     private SongAnimationData createSongAnimationData() {
         SongAnimationData animationData = new SongAnimationData();
         animationData.getChannels().addAll(Arrays.asList(
-                new AnimationEffectChannel("Pillar 1", 0, 200, 249),
-                new AnimationEffectChannel("Pillar 2", 1, 250, 299),
-                new AnimationEffectChannel("Pillar 3", 2, 249, 300),
-                new AnimationEffectChannel("Pillar 4", 3, 350, 399),
-                new AnimationEffectChannel("Arch 1", 4, 0, 49),
-                new AnimationEffectChannel("Arch 2", 5, 50, 99),
-                new AnimationEffectChannel("Arch 3", 6, 100, 149),
-                new AnimationEffectChannel("Arch 4", 7, 150, 299),
-                new AnimationEffectChannel("Global", 8, 0, 399)
+                new AnimationEffectChannel("Pillar 1", 0, 148, 197),
+                new AnimationEffectChannel("Pillar 2", 1, 198, 247),
+                new AnimationEffectChannel("Pillar 3", 2, 248, 297),
+                new AnimationEffectChannel("Pillar 4", 3, 298, 347),
+                new AnimationEffectChannel("Arch 1", 4, 0, 36),
+                new AnimationEffectChannel("Arch 2", 5, 37, 73),
+                new AnimationEffectChannel("Arch 3", 6, 74, 110),
+                new AnimationEffectChannel("Arch 4", 7, 111, 147),
+                new AnimationEffectChannel("Global", 8, 0, 347)
         ));
         return animationData;
     }

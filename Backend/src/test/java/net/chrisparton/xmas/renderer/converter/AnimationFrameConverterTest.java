@@ -1,21 +1,24 @@
-package net.chrisparton.xmas.renderer;
+package net.chrisparton.xmas.renderer.converter;
 
 import com.google.gson.Gson;
 import net.chrisparton.xmas.entity.*;
+import net.chrisparton.xmas.renderer.Renderer;
 import net.chrisparton.xmas.renderer.data.AnimationFrame;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class RendererTest {
+public class AnimationFrameConverterTest {
 
     private Gson gson = new Gson();
 
     @Test
-    public void can_render() {
+    public void can_render() throws IOException {
         SongAnimationData animationData = new SongAnimationData();
 
         {
@@ -38,7 +41,9 @@ public class RendererTest {
         song.setAnimationData(gson.toJson(animationData));
 
         List<AnimationFrame> renderedFrames = new Renderer(song).render();
-        assertThat(renderedFrames.size(), is(60));
+
+        AnimationFrameConverter animationFrameConverter = new AnimationFrameConverter(renderedFrames);
+        ByteArrayOutputStream convert = animationFrameConverter.convert();
     }
 
     private AnimationEffectChannel createAnimationEffectChannel(int startLed, int endLed) {

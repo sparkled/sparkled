@@ -6,7 +6,7 @@ import java.util.List;
 public class AnimationFrame {
 
     int frameNumber;
-    private List<Led> leds;
+    private final List<Led> leds;
 
     public AnimationFrame(int frameNumber, int ledCount) {
         this.frameNumber = frameNumber;

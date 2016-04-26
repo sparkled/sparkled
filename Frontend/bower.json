@@ -2,23 +2,24 @@
   "name": "sparkled",
   "version": "0.0.1",
   "dependencies": {
+    "angular": "~1.4.9",
     "angular-animate": "~1.4.9",
     "angular-cookies": "~1.4.9",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#1.7.0",
     "angular-resource": "~1.4.9",
     "angular-ui-router": "~0.2.13",
-    "angular": "~1.4.9",
     "animate.css": "3.5.1",
     "bootswatch-dist": "3.3.6-superhero",
     "font-awesome": "~4.3.0",
     "jquery": "~2.1.4",
+    "jquery-ui": "1.11.4",
+    "jqueryui-touch-punch": "*",
     "jsmediatags-sebastianha": "3.0.5",
+    "requestAnimationFrame": "^0.0.23",
     "restangular": "1.5.2",
     "sweetalert2": "0.4.3",
     "toastr": "2.1.2",
-    "wavesurfer.js": "1.1.0",
-    "jquery-ui": "1.11.4",
-    "jqueryui-touch-punch": "*"
+    "wavesurfer.js": "1.1.0"
   },
   "overrides": {
     "bootswatch-dist": {

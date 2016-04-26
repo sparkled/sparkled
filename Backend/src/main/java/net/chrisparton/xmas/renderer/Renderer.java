@@ -7,32 +7,44 @@ import net.chrisparton.xmas.renderer.effect.EffectRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class Renderer {
-
-    private static final Logger logger = Logger.getLogger(Renderer.class.getName());
 
     private static final int FRAMES_PER_SECOND = 60;
     private final List<AnimationFrame> frameList;
     private final Gson gson = new Gson();
 
     private Song song;
+    private int startFrame;
+    private int durationSeconds;
     private SongAnimationData animationData;
 
-    public Renderer(Song song) {
+    public Renderer(Song song, int startFrame, int durationSeconds) {
         this.song = song;
+        this.startFrame = startFrame;
+        this.durationSeconds = durationSeconds;
         this.animationData = gson.fromJson(song.getAnimationData(), SongAnimationData.class);
         this.frameList = createFrameList();
     }
 
+    public Renderer(Song song) {
+        this(song, 0, song.getDurationSeconds());
+    }
+
     private List<AnimationFrame> createFrameList() {
-        int frameCount = song.getDurationSeconds() * FRAMES_PER_SECOND;
+        int songFrameCount = song.getDurationSeconds() * FRAMES_PER_SECOND;
+
+        int endFrame = startFrame + durationSeconds * FRAMES_PER_SECOND;
+        if (endFrame > songFrameCount) {
+            endFrame = songFrameCount;
+        }
+
+        int frameCount = endFrame - startFrame;
         List<AnimationFrame> renderedFrames = new ArrayList<>(frameCount);
 
-        int ledCount = getLedCount(animationData.getChannels());
-        for (int frameNumber = 1; frameNumber <= frameCount; frameNumber++) {
-            renderedFrames.add(new AnimationFrame(frameNumber, ledCount));
+        int ledCount = getLedCount(animationData.getChannels()) + 1;
+        for (int frameNumber = startFrame; frameNumber < startFrame + frameCount; frameNumber++) {
+            renderedFrames.add(new AnimationFrame(frameNumber - startFrame, ledCount));
         }
 
         return renderedFrames;
@@ -60,8 +72,10 @@ public class Renderer {
         AnimationEffectTypeCode effectTypeCode = effect.getEffectType();
         EffectRenderer renderer = effectTypeCode.getRenderer();
 
-        for (int frameNumber = effect.getStartFrame(); frameNumber <= effect.getEndFrame(); frameNumber++) {
-            AnimationFrame frame = frameList.get(frameNumber - 1);
+        int startFrame = Math.max(this.startFrame, effect.getStartFrame());
+        int endFrame = Math.min(frameList.size(), effect.getEndFrame());
+        for (int frameNumber = startFrame; frameNumber < endFrame; frameNumber++) {
+            AnimationFrame frame = frameList.get(frameNumber - this.startFrame);
             renderer.render(channel, frame, effect);
         }
     }

@@ -73,6 +73,14 @@
                                     $rootScope.$broadcast('loading', {loading: false});
                                 });
                             });
+
+                            $rootScope.$on('animationPreview', function (event, args) {
+                                wavesurfer.play();
+                            });
+
+                            $rootScope.$on('animationPreviewFinished', function (event, args) {
+                                wavesurfer.stop();
+                            });
                         }
                     }, true);
                 }

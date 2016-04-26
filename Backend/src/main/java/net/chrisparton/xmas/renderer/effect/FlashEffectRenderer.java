@@ -30,7 +30,7 @@ public class FlashEffectRenderer extends EffectRenderer {
         Color adjustedColor = ColorUtils.adjustBrightness(color, brightnessPercentage);
 
         frame.getLeds()
-                .subList(startLed - 1, endLed)
+                .subList(startLed, endLed + 1)
                 .forEach(led -> {
                     led.setR((short) adjustedColor.getRed());
                     led.setG((short) adjustedColor.getGreen());

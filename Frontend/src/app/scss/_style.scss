@@ -2,13 +2,14 @@
 
 @import "variables";
 @import "mixins";
-@import "reset";
+@import "animation-preview";
+@import "editor";
+@import "effect-editor";
 @import "layout";
 @import "loader";
-@import "editor";
+@import "reset";
 @import "selector";
 @import "song-entry";
-@import "timeline";
-@import "effect-editor";
 @import "sweet-alert";
+@import "timeline";
 @import "toastr";
