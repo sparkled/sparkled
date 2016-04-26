@@ -142,7 +142,10 @@ public class SongPreprocessor {
 
     private void escape(Supplier<String> getter, Consumer<String> setter) {
         String value = getter.get();
-        String escapedValue = StringEscapeUtils.escapeHtml4(value);
+
+        // Prevent duplicate escaping.
+        String unescapedValue = StringEscapeUtils.unescapeHtml4(value);
+        String escapedValue = StringEscapeUtils.escapeHtml4(unescapedValue);
 
         setter.accept(escapedValue);
     }
