@@ -3,6 +3,7 @@
     'use strict';
 
     function stateConfig($stateProvider, $urlRouterProvider) {
+        'ngInject';
 
         addState($stateProvider, '/selector', 'selector', 'Selector');
         addState($stateProvider, '/editor/:id', 'editor', 'Editor');
@@ -21,9 +22,10 @@
     }
 
     function resourceConfig($resourceProvider) {
+        'ngInject';
+
         $resourceProvider.defaults.timeout = 5000;
     }
 
     angular.module('ledStripAnimator').config(stateConfig, resourceConfig);
 }());
-

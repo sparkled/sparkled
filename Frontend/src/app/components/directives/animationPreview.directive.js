@@ -3,6 +3,8 @@
     'use strict';
     angular.module('ledStripAnimator.component')
         .directive('animationPreview', function ($rootScope) {
+            'ngInject';
+
             return {
                 restrict: 'E',
                 replace: true,

@@ -6,6 +6,8 @@
         .controller('SelectorController', SelectorController);
 
     function SelectorController($rootScope, RestService) {
+        'ngInject';
+
         var self = this;
         this.songs = null;
 

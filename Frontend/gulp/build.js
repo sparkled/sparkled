@@ -43,6 +43,8 @@ gulp.task('html', ['inject', 'partials'], function () {
     .pipe($.rev())
     .pipe(jsFilter)
     .pipe($.ngAnnotate())
+    .pipe($.deleteLines({filters: [/'ngInject';/i]}))
+    .pipe($.replace('ng-app', 'ng-strict-di ng-app'))
     .pipe($.uglify({preserveComments: $.uglifySaveLicense}))
     .pipe(jsFilter.restore())
     .pipe(cssFilter)
@@ -70,18 +72,18 @@ gulp.task('images', function () {
 
 gulp.task('fonts', function () {
   return gulp.src($.mainBowerFiles())
-    .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
+    .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))
     .pipe($.flatten())
     .pipe(gulp.dest(paths.dist + '/fonts/'));
 });
 
 gulp.task('fontawesome', function () {
-    return gulp.src('bower_components/font-awesome/fonts/*.{eot,svg,ttf,woff}')
+    return gulp.src('bower_components/font-awesome/fonts/*.{eot,svg,ttf,woff,woff2}')
      .pipe(gulp.dest(paths.dist + '/fonts/'));
 });
 
-gulp.task('misc', function () {
-  return gulp.src(paths.src + '/**/*.ico')
+gulp.task('favicons', function () {
+  return gulp.src(paths.src + '/assets/favicons/*')
     .pipe(gulp.dest(paths.dist + '/'));
 });
 
@@ -89,4 +91,4 @@ gulp.task('clean', function (done) {
   $.del([paths.dist + '/', paths.tmp + '/'], done);
 });
 
-gulp.task('build', ['html', 'images', 'fonts', 'fontawesome', 'misc']);
+gulp.task('build', ['html', 'images', 'fonts', 'fontawesome', 'favicons']);

@@ -6,6 +6,8 @@
         .factory('RestService', RestService);
 
     function RestService(Restangular) {
+        'ngInject';
+
         Restangular.setBaseUrl('http://localhost:8080/xmas/rest/');
         return Restangular;
     }

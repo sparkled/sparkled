@@ -6,6 +6,8 @@
         .controller('EditorController', EditorController);
 
     function EditorController($rootScope, $scope, $state, $stateParams, hotkeys, RestService) {
+        'ngInject';
+
         var self = this;
         this.stageSvg = null;
         this.stageExpanded = true;

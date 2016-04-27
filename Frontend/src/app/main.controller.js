@@ -3,6 +3,8 @@
     'use strict';
     angular.module('ledStripAnimator.core')
         .controller('MainCtrl', function ($rootScope, $scope) {
+            'ngInject';
+
             var self = this;
             this.loading = true;
 

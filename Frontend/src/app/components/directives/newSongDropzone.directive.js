@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('ledStripAnimator.component')
-        .directive('newSongDropzone', function () {
+        .directive('newSongDropZone', function () {
             return {
                 restrict: 'E',
                 replace: true,

@@ -3,6 +3,8 @@
     'use strict';
     angular.module('ledStripAnimator.component')
         .directive('currentEffectBounds', function ($rootScope) {
+            'ngInject';
+
             return {
                 restrict: 'E',
                 replace: true,

@@ -3,6 +3,8 @@
     'use strict';
     angular.module('ledStripAnimator.component')
         .directive('waveform', function ($rootScope, $timeout) {
+            'ngInject';
+
             return {
                 restrict: 'E',
                 replace: true,

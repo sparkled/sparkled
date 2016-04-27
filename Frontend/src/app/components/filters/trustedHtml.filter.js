@@ -4,6 +4,8 @@
 
     angular.module('ledStripAnimator.component')
         .filter('trustedHtml', function($sce) {
+            'ngInject';
+
             return $sce.trustAsHtml;
         });
 }());
