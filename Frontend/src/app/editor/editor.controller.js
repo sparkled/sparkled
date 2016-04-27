@@ -5,7 +5,7 @@
     angular.module('ledStripAnimator.editor')
         .controller('EditorController', EditorController);
 
-    function EditorController($rootScope, $scope, $stateParams, hotkeys, RestService) {
+    function EditorController($rootScope, $scope, $state, $stateParams, hotkeys, RestService) {
         var self = this;
         this.stageSvg = null;
         this.stageExpanded = true;
@@ -17,7 +17,7 @@
         this.currentFrame = 0;
         this.mp3Url = null;
 
-        $scope.$watch('editor.currentFrame', function (newVal, oldVal) {
+        $scope.$watch('editor.currentFrame', function (newVal) {
             if (self.currentSong === null) {
                 return;
             }
@@ -221,6 +221,10 @@
                 self.animationData = JSON.parse(song.animationData);
                 self.setCurrentChannel(self.animationData.channels[0]);
                 self.mp3Url = RestService.configuration.baseUrl + '/song/data/' + song.id;
+            },
+            function () {
+                $state.go('selector');
+                toastr['error']('You have been returned to the song selector.', 'Song #' + $stateParams.id + ' not found.');
             });
         };
 
