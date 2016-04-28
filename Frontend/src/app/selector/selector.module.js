@@ -2,8 +2,8 @@
 (function () {
     'use strict';
 
-    angular.module('ledStripAnimator.selector', [
-        'ledStripAnimator.component',
-        'ledStripAnimator.context'
+    angular.module('sparkled.selector', [
+        'sparkled.component',
+        'sparkled.context'
     ]);
 }());

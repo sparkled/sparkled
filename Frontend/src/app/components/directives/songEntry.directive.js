@@ -1,7 +1,7 @@
 /*global angular*/
 (function () {
     'use strict';
-    angular.module('ledStripAnimator.component')
+    angular.module('sparkled.component')
         .directive('songEntry', function () {
             return {
                 restrict: 'E',

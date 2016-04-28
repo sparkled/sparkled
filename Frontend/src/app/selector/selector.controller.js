@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('ledStripAnimator.selector')
+    angular.module('sparkled.selector')
         .controller('SelectorController', SelectorController);
 
     function SelectorController($rootScope, RestService) {

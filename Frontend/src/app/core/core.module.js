@@ -3,7 +3,7 @@
     'use strict';
 
     // Core Module
-    angular.module('ledStripAnimator.core', [
+    angular.module('sparkled.core', [
         'ngAnimate',
         'ngCookies',
         'ngResource',

@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('ledStripAnimator.context', [])
+    angular.module('sparkled.context', [])
         .factory('ContextService', ContextService);
 
     function ContextService() {

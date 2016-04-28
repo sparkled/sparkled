@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('ledStripAnimator.editor')
+    angular.module('sparkled.editor')
         .controller('EditorController', EditorController);
 
     function EditorController($rootScope, $scope, $state, $stateParams, hotkeys, RestService) {

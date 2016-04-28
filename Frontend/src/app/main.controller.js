@@ -1,7 +1,7 @@
 /*global angular*/
 (function () {
     'use strict';
-    angular.module('ledStripAnimator.core')
+    angular.module('sparkled.core')
         .controller('MainCtrl', function ($rootScope, $scope) {
             'ngInject';
 

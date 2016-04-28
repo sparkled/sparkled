@@ -27,5 +27,5 @@
         $resourceProvider.defaults.timeout = 5000;
     }
 
-    angular.module('ledStripAnimator').config(stateConfig, resourceConfig);
+    angular.module('sparkled').config(stateConfig, resourceConfig);
 }());

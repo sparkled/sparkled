@@ -3,11 +3,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.chrisparton.xmas</groupId>
-    <artifactId>xmas-2016-backend</artifactId>
+    <groupId>net.chrisparton.sparkled</groupId>
+    <artifactId>sparkled-backend</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Xmas 2016 Backend</name>
+    <name>Sparkled Backend</name>
 
     <repositories>
         <repository>
@@ -107,7 +107,7 @@
     </dependencies>
 
     <build>
-        <finalName>xmas</finalName>
+        <finalName>sparkled</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

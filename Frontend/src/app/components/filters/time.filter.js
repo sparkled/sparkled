@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('ledStripAnimator.component')
+    angular.module('sparkled.component')
         .filter('time', function () {
             return function (input) {
                 var minutes = Math.floor(input / 60);

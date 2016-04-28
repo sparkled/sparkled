@@ -2,13 +2,13 @@
 (function () {
     'use strict';
 
-    angular.module('ledStripAnimator.rest')
+    angular.module('sparkled.rest')
         .factory('RestService', RestService);
 
     function RestService(Restangular) {
         'ngInject';
 
-        Restangular.setBaseUrl('http://localhost:8080/xmas/rest/');
+        Restangular.setBaseUrl('http://localhost:8080/sparkled/rest/');
         return Restangular;
     }
 }());

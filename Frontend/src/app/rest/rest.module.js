@@ -2,5 +2,5 @@
 (function () {
     'use strict';
 
-    angular.module('ledStripAnimator.rest', ['restangular']);
+    angular.module('sparkled.rest', ['restangular']);
 }());
