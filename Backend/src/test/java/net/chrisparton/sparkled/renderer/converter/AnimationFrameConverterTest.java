@@ -40,7 +40,7 @@ public class AnimationFrameConverterTest {
         song.setDurationSeconds(1);
         song.setAnimationData(gson.toJson(animationData));
 
-        List<AnimationFrame> renderedFrames = new Renderer(song).render();
+        List<AnimationFrame> renderedFrames = new Renderer(song, 0, song.getDurationSeconds()).render();
 
         AnimationFrameConverter animationFrameConverter = new AnimationFrameConverter(renderedFrames);
         ByteArrayOutputStream convert = animationFrameConverter.convert();

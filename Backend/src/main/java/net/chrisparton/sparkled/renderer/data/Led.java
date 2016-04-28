@@ -15,10 +15,10 @@ public class Led {
         this.b = (short) b;
     }
 
-    public Led(Led led) {
-        this.r = led.r;
-        this.g = led.g;
-        this.b = led.b;
+    public void addRgb(int r, int g, int b) {
+        this.r = (short) Math.min(this.r + r, 255);
+        this.g = (short) Math.min(this.g + g, 255);
+        this.b = (short) Math.min(this.b + b, 255);
     }
 
     public short getR() {

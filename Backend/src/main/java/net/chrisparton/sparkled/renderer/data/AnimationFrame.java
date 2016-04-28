@@ -8,6 +8,14 @@ public class AnimationFrame {
     int frameNumber;
     private final List<Led> leds;
 
+    /**
+     * Default constructor required for Gson.
+     */
+    @SuppressWarnings("unused")
+    public AnimationFrame() {
+        this(0, 0);
+    }
+
     public AnimationFrame(int frameNumber, int ledCount) {
         this.frameNumber = frameNumber;
         this.leds = new ArrayList<>(ledCount);
@@ -19,6 +27,10 @@ public class AnimationFrame {
 
     public int getFrameNumber() {
         return frameNumber;
+    }
+
+    public void setFrameNumber(int frameNumber) {
+        this.frameNumber = frameNumber;
     }
 
     public List<Led> getLeds() {

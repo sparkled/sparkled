@@ -32,9 +32,11 @@ public class FlashEffectRenderer extends EffectRenderer {
         frame.getLeds()
                 .subList(startLed, endLed + 1)
                 .forEach(led -> {
-                    led.setR((short) adjustedColor.getRed());
-                    led.setG((short) adjustedColor.getGreen());
-                    led.setB((short) adjustedColor.getBlue());
+                    led.addRgb(
+                            adjustedColor.getRed(),
+                            adjustedColor.getGreen(),
+                            adjustedColor.getBlue()
+                    );
                 });
     }
 }

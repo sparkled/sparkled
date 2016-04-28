@@ -37,7 +37,7 @@ public class RendererTest {
         song.setDurationSeconds(1);
         song.setAnimationData(gson.toJson(animationData));
 
-        List<AnimationFrame> renderedFrames = new Renderer(song).render();
+        List<AnimationFrame> renderedFrames = new Renderer(song, 0, song.getDurationSeconds()).render();
         assertThat(renderedFrames.size(), is(60));
     }
 

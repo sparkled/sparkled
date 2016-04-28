@@ -27,10 +27,6 @@ public class Renderer {
         this.frameList = createFrameList();
     }
 
-    public Renderer(Song song) {
-        this(song, 0, song.getDurationSeconds());
-    }
-
     private List<AnimationFrame> createFrameList() {
         int songFrameCount = song.getDurationSeconds() * FRAMES_PER_SECOND;
 
@@ -44,7 +40,7 @@ public class Renderer {
 
         int ledCount = getLedCount(animationData.getChannels()) + 1;
         for (int frameNumber = startFrame; frameNumber < startFrame + frameCount; frameNumber++) {
-            renderedFrames.add(new AnimationFrame(frameNumber - startFrame, ledCount));
+            renderedFrames.add(new AnimationFrame(frameNumber, ledCount));
         }
 
         return renderedFrames;
@@ -73,7 +69,7 @@ public class Renderer {
         EffectRenderer renderer = effectTypeCode.getRenderer();
 
         int startFrame = Math.max(this.startFrame, effect.getStartFrame());
-        int endFrame = Math.min(frameList.size(), effect.getEndFrame());
+        int endFrame = Math.min(this.startFrame + frameList.size(), effect.getEndFrame());
         for (int frameNumber = startFrame; frameNumber < endFrame; frameNumber++) {
             AnimationFrame frame = frameList.get(frameNumber - this.startFrame);
             renderer.render(channel, frame, effect);

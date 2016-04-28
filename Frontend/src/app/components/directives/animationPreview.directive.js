@@ -76,11 +76,17 @@
                                 });
                             } else {
                                 cancelAnimationFrame(requestId);
+                                clearLastFrame();
                             }
                         }
 
                         draw();
                     });
+
+                    function clearLastFrame() {
+                        $('.active-led').css('fill', '')
+                            .attr('class', '');
+                    }
 
                     scope.$on('$destroy', function () {
                         $log.info('Cleaning up animation preview directive.');

@@ -12,7 +12,7 @@ public class AnimationEffectChannel {
     private int displayOrder;
 
     /**
-     * Constructor required for Gson.
+     * Default constructor required for Gson.
      */
     @SuppressWarnings("unused")
     public AnimationEffectChannel() {
