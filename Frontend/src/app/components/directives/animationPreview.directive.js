@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('sparkled.component')
-        .directive('animationPreview', function ($rootScope, $timeout) {
+        .directive('animationPreview', function ($log, $rootScope, $timeout) {
             'ngInject';
 
             return {
@@ -24,13 +24,19 @@
                         });
                     });
 
-                    $rootScope.$on('animationPreviewCancelled', function (event, args) {
+                    var timer = null;
+                    var unregisterAnimationPreviewCancelled = $rootScope.$on('animationPreviewCancelled', function (event, args) {
                         scope.animationCancelled = true;
+
+                        if (timer != null) {
+                            $log.info('Removing pending timer.');
+                            $timeout.cancel(timer);
+                        }
 
                         $rootScope.$broadcast('animationPreviewFinished', {});
                     });
 
-                    $rootScope.$on('animationPreview', function (event, args) {
+                    var unregisterAnimationPreview = $rootScope.$on('animationPreview', function (event, args) {
                         scope.animationCancelled = false;
 
                         var startTime = new Date().getTime(),
@@ -38,8 +44,12 @@
                             durationMs = 1000 / 60 * frameCount,
                             frameIndex = 0;
 
-                        $timeout(function () {
+                        $log.info('Animation preview started. Duration: ' + durationMs + 'ms.');
+
+                        timer = $timeout(function () {
+                            timer = null;
                             if (!scope.animationCancelled) {
+                                $log.info('Animation preview completed.');
                                 $rootScope.$broadcast('animationPreviewFinished', {});
                             }
                         }, durationMs);
@@ -71,6 +81,17 @@
 
                         draw();
                     });
+
+                    scope.$on('$destroy', function () {
+                        $log.info('Cleaning up animation preview directive.');
+                        if (timer != null) {
+                            $log.info('Removing pending timer.');
+                            $timeout.cancel(timer);
+                        }
+
+                        unregisterAnimationPreview();
+                        unregisterAnimationPreviewCancelled();
+                    })
                 }
             }
         });

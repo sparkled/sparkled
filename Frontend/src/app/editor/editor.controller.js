@@ -5,7 +5,7 @@
     angular.module('sparkled.editor')
         .controller('EditorController', EditorController);
 
-    function EditorController($rootScope, $scope, $state, $stateParams, hotkeys, RestService) {
+    function EditorController($log, $rootScope, $scope, $state, $stateParams, hotkeys, RestService) {
         'ngInject';
 
         var self = this;
@@ -201,7 +201,9 @@
                         'start-frame': self.currentFrame
                     })
                     .then(function (renderData) {
+                        self.frameBeforeAnimation = self.currentFrame;
                         self.previewing = true;
+
                         $rootScope.$broadcast('animationPreview', {
                             startFrame: self.currentFrame,
                             renderData: renderData
@@ -211,6 +213,7 @@
         };
 
         this.cancelAnimationPreview = function () {
+            $log.info('Cancelling animation preview.');
             $rootScope.$broadcast('animationPreviewCancelled', {});
         };
 
