@@ -10,7 +10,7 @@
     "angular-ui-router": "~0.2.13",
     "animate.css": "3.5.1",
     "bootswatch-dist": "3.3.6-superhero",
-    "font-awesome": "~4.3.0",
+    "font-awesome": "4.6.0",
     "jquery": "~2.1.4",
     "jquery-ui": "1.11.4",
     "jqueryui-touch-punch": "*",
@@ -26,6 +26,12 @@
       "main": [
         "js/bootstrap.min.js",
         "css/bootstrap.min.css"
+      ]
+    },
+    "font-awesome": {
+      "main": [
+        "./css/font-awesome.css",
+        "./fonts/*"
       ]
     }
   }

@@ -1,11 +1,20 @@
 <div id="editor-page" ng-controller="EditorController as editor" ng-class="{loading: editor.loading}">
 
+    <div id="animation-preview-overlay" ng-if="editor.previewing"></div>
+
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container-fluid">
 
             <div class="btn-group">
-                <a ui-sref="selector" title="Back to Song Selection" class="btn btn-default navbar-btn"><i class="fa fa-arrow-left"></i></a>
-                <a class="btn btn-default navbar-btn logo" title="About">
+                <a ui-sref="selector"
+                   title="Back to Song Selection"
+                   class="btn btn-default navbar-btn"
+                   ng-disabled="editor.previewing">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+                <a class="btn btn-default navbar-btn logo"
+                   title="About"
+                   ng-disabled="editor.previewing">
                     <img src="/assets/images/logos/logo-small.svg" class="logo-small"/>
                     <img src="/assets/images/logos/logo-large.svg" class="logo-large"/>
                 </a>
@@ -14,19 +23,29 @@
             <div class="pull-right btn-group">
                 <a title="Preview Animation"
                    class="btn btn-default navbar-btn"
-                   ng-click="editor.previewAnimation()">
+                   ng-click="editor.previewAnimation()"
+                   ng-if="!editor.previewing">
                     <i class="fa fa-video-camera"></i>
+                </a>
+
+                <a title="Cancel Animation Preview"
+                   class="btn btn-default navbar-btn"
+                   ng-click="editor.cancelAnimationPreview()"
+                   ng-if="editor.previewing">
+                    <i class="fa fa-stop-circle"></i>
                 </a>
 
                 <a title="Add Effect"
                    class="btn btn-default navbar-btn"
-                   ng-click="editor.addAnimationEffect()">
+                   ng-click="editor.addAnimationEffect()"
+                   ng-disabled="editor.previewing">
                     <i class="fa fa-magic"></i>
                 </a>
 
                 <a title="Save"
                    class="btn btn-default navbar-btn"
-                   ng-click="editor.saveAnimationData()">
+                   ng-click="editor.saveAnimationData()"
+                   ng-disabled="editor.previewing">
                     <i class="fa fa-save"></i>
                 </a>
             </div>

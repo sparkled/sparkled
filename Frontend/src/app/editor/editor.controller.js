@@ -16,8 +16,10 @@
         this.currentChannel = null;
         this.currentEffect = null;
         this.animationData = [];
+        this.frameBeforeAnimation = null;
         this.currentFrame = 0;
         this.mp3Url = null;
+        this.previewing = false;
 
         $scope.$watch('editor.currentFrame', function (newVal) {
             if (self.currentSong === null) {
@@ -199,6 +201,7 @@
                         'start-frame': self.currentFrame
                     })
                     .then(function (renderData) {
+                        self.previewing = true;
                         $rootScope.$broadcast('animationPreview', {
                             startFrame: self.currentFrame,
                             renderData: renderData
@@ -207,8 +210,18 @@
             });
         };
 
-        $rootScope.$on('animationPreviewFinished', function (event, args) {
-            self.currentFrame = args.startFrame;
+        this.cancelAnimationPreview = function () {
+            $rootScope.$broadcast('animationPreviewCancelled', {});
+        };
+
+        var unregisterAnimationPreviewFinished = $rootScope.$on('animationPreviewFinished', function (event, args) {
+            self.previewing = false;
+            self.currentFrame = self.frameBeforeAnimation;
+            self.frameBeforeAnimation = null;
+        });
+
+        $scope.$on('$destroy', function () {
+            unregisterAnimationPreviewFinished();
         });
 
         this.getStageSvg = function () {

@@ -2,6 +2,16 @@
 
 $effect-editor-width: 250px;
 
+#animation-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: not-allowed;
+  z-index: $z-index-animation-preview-overlay;
+}
+
 #effect-editor {
   display: flex;
   width: $effect-editor-width;

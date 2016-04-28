@@ -8,8 +8,12 @@
             var self = this;
             this.loading = true;
 
-            $rootScope.$on('$stateChangeStart', function () {
+            var unregisterStateChangeStart = $rootScope.$on('$stateChangeStart', function () {
                 self.loading = true;
+            });
+
+            $scope.$on('$destroy', function () {
+                unregisterStateChangeStart();
             });
 
             $scope.$on('loading', function(event, args) {

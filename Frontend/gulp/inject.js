@@ -12,13 +12,11 @@ var wiredep = require('wiredep').stream;
 gulp.task('inject', ['styles'], function () {
 
     var injectStyles = gulp.src([
-        paths.tmp + '/serve/{app,components}/**/*.css',
-        '/bower_components/bootswatch-dist/css/bootstrap.css'
+        paths.tmp + '/serve/{app,components}/**/*.css'
     ], {read: false});
 
     var injectScripts = gulp.src([
-        paths.src + '/{app,components}/**/*.js',
-        '/bower_components/bootswatch-dist/js/bootstrap.min.js'
+        paths.src + '/{app,components}/**/*.js'
     ]).pipe($.angularFilesort());
 
     var injectOptions = {

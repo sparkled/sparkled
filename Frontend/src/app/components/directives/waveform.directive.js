@@ -67,21 +67,38 @@
                             };
 
                             wavesurfer.on('audioprocess', updateCurrentFrame);
+
                             wavesurfer.on('seek', function () {
                                 updateCurrentFrame();
                             });
+
                             wavesurfer.on('ready', function () {
                                 scope.$apply(function () {
                                     $rootScope.$broadcast('loading', {loading: false});
                                 });
                             });
 
-                            $rootScope.$on('animationPreview', function (event, args) {
+                            var unregisterAnimationPreview = $rootScope.$on('animationPreview', function () {
                                 wavesurfer.play();
                             });
 
-                            $rootScope.$on('animationPreviewFinished', function (event, args) {
-                                wavesurfer.stop();
+                            var unregisterAnimationPreviewCancelled = $rootScope.$on('animationPreviewCancelled', function () {
+                                if (wavesurfer.isPlaying()) {
+                                    wavesurfer.pause();
+                                }
+                            });
+
+                            var unregisterAnimationPreviewFinished = $rootScope.$on('animationPreviewFinished', function () {
+                                if (wavesurfer.isPlaying()) {
+                                    wavesurfer.pause();
+                                }
+                            });
+
+                            scope.$on('$destroy', function () {
+                                wavesurfer.destroy();
+                                unregisterAnimationPreview();
+                                unregisterAnimationPreviewCancelled();
+                                unregisterAnimationPreviewFinished();
                             });
                         }
                     }, true);
