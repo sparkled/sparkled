@@ -44,4 +44,14 @@ public class AnimationEffect {
     public void setEndFrame(int endFrame) {
         this.endFrame = endFrame;
     }
+
+    @Override
+    public String toString() {
+        return "AnimationEffect{" +
+                "effectType=" + effectType +
+                ", params=" + params +
+                ", startFrame=" + startFrame +
+                ", endFrame=" + endFrame +
+                '}';
+    }
 }

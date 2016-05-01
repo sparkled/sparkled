@@ -1,7 +1,8 @@
 package net.chrisparton.sparkled.renderer.effect;
 
 import net.chrisparton.sparkled.converter.ColourParamConverter;
-import net.chrisparton.sparkled.entity.*;
+import net.chrisparton.sparkled.entity.AnimationEffect;
+import net.chrisparton.sparkled.entity.AnimationEffectChannel;
 import net.chrisparton.sparkled.renderer.data.AnimationFrame;
 import net.chrisparton.sparkled.renderer.util.ColorUtils;
 
@@ -17,13 +18,7 @@ public class FlashEffectRenderer extends EffectRenderer {
         int endFrame = effect.getEndFrame();
         int frameNumber = frame.getFrameNumber();
 
-        AnimationEffectParam param = effect.getParams()
-                .stream()
-                .filter(p -> AnimationEffectTypeParamCode.COLOUR == p.getParamCode())
-                .findFirst()
-                .get();
-
-        Color color = new ColourParamConverter().convert(param.getValue());
+        Color color = new ColourParamConverter().convert(effect);
 
         double progress = (frameNumber - startFrame) / (double)(endFrame - startFrame) * Math.PI;
         double brightnessPercentage = 100 * Math.sin(progress);

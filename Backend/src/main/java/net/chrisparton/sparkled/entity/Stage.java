@@ -1,8 +1,6 @@
 package net.chrisparton.sparkled.entity;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
 import java.util.Objects;
 
 @Entity

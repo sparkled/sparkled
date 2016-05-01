@@ -1,13 +1,9 @@
 package net.chrisparton.sparkled.renderer.effect;
 
-import net.chrisparton.sparkled.entity.AnimationEffect;
-import net.chrisparton.sparkled.entity.AnimationEffectChannel;
-import net.chrisparton.sparkled.renderer.data.AnimationFrame;
-
-public class LineRightEffectRenderer extends EffectRenderer {
+public class LineRightEffectRenderer extends AbstractLineEffectRenderer {
 
     @Override
-    public void render(AnimationEffectChannel channel, AnimationFrame frame, AnimationEffect effect) {
-
+    protected double calculateProgressPercentage(double progress) {
+        return 100 * progress;
     }
 }
