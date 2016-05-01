@@ -64,7 +64,9 @@
                                 var ledIndex = 0;
                                 _.forEach(args.renderData[frameIndex].leds, function (led) {
                                     var $led = $('#led-' + ledIndex);
-                                    $led.css('fill', 'rgb(' + led.r + ',' + led.g + ',' + led.b + ')');
+
+                                    var alpha = Math.max.apply(Math, [led.r, led.g, led.b]) / 255;
+                                    $led.css('fill', 'rgba(' + led.r + ',' + led.g + ',' + led.b + ',' + alpha + ')');
 
                                     if (led.r != 0 || led.g != 0 || led.b != 0) {
                                         $led.attr('class', 'active-led');
