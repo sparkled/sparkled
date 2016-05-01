@@ -15,24 +15,24 @@
                 },
                 link: function (scope, element, attrs) {
                     scope.$watch('effect.effectType', function (newValue) {
-                        if (scope.effect == null || scope.effectTypes == null) {
-                            return;
+                        if (scope.previousEffect !== scope.effect) {
+                            scope.previousEffect = scope.effect;
+                        } else {
+                            if (scope.effect != null && scope.effectTypes != null) {
+                                scope.effect.effectType = newValue;
+                                updateParams(scope, newValue);
+                            }
                         }
-
-                        scope.effect.effectType = newValue;
-                        updateParams(scope, newValue);
                     }, true);
                 }
             }
         });
 
     var updateParams = function (scope, newValue) {
-        if (scope.effect.params.length === 0) {
-            var effectType = findEffect(scope, newValue);
+        var effectType = findEffect(scope, newValue);
 
-            if (effectType != null) {
-                updateEffect(scope, effectType);
-            }
+        if (effectType != null) {
+            updateEffect(scope, effectType);
         }
     };
 
