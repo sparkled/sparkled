@@ -87,7 +87,7 @@
                 }
             })
             .add({
-                combo: 'ctrl+backspace',
+                combo: 'backspace',
                 description: 'Delete Selected Animation Effect',
                 callback: function (event) {
                     self.deleteCurrentEffect();
