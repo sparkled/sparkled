@@ -93,6 +93,26 @@
                     self.deleteCurrentEffect();
                     event.preventDefault();
                 }
+            })
+            .add({
+                combo: 'ctrl+p',
+                description: 'Preview Animation',
+                callback: function (event) {
+                    if (!self.previewing) {
+                        self.previewAnimation();
+                        event.preventDefault();
+                    }
+                }
+            })
+            .add({
+                combo: 'escape',
+                description: 'Cancel Animation Preview',
+                callback: function (event) {
+                    if (self.previewing) {
+                        self.cancelAnimationPreview();
+                        event.preventDefault();
+                    }
+                }
             });
 
         this.getCurrentChannel = function () {
