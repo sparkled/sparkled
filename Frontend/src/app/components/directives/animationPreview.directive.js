@@ -33,6 +33,7 @@
                             $timeout.cancel(timer);
                         }
 
+                        clearLastFrame();
                         $rootScope.$broadcast('animationPreviewFinished', {});
                     });
 
@@ -50,6 +51,7 @@
                             timer = null;
                             if (!scope.animationCancelled) {
                                 $log.info('Animation preview completed.');
+                                clearLastFrame();
                                 $rootScope.$broadcast('animationPreviewFinished', {});
                             }
                         }, durationMs);
@@ -78,7 +80,6 @@
                                 });
                             } else {
                                 cancelAnimationFrame(requestId);
-                                clearLastFrame();
                             }
                         }
 
