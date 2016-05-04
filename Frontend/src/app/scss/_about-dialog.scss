@@ -1,0 +1,31 @@
+@import "variables";
+@import "mixins";
+
+.sweet-alert {
+  background-color: $navbar-bg-color !important;
+
+  h4 {
+    color: $text-color;
+  }
+
+  .sweet-spacer {
+    display: none !important;
+  }
+
+  .github-link {
+    font-size: 8em;
+    color: #fff;
+
+    i {
+      transition: .3s ease-in-out;
+      transform: scale(1, 1);
+      text-shadow: 0;
+
+      &:hover {
+        transition: .3s ease-in-out;
+        transform: scale(1.2, 1.2);
+        text-shadow: 0 0 20px rgba(0, 0, 0, .5);
+      }
+    }
+  }
+}
