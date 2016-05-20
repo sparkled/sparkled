@@ -19,7 +19,15 @@ public abstract class EffectRenderer {
 
         int startFrame = effect.getStartFrame();
         int duration = effect.getEndFrame() - startFrame;
-        double progress = easing.getProgress(frame.getFrameNumber() - startFrame, 0, 1, duration);
+
+        int repetitions = effect.getRepetitions();
+        int framesPerRepetition = duration / repetitions;
+        int repetitionFrameNumber = (frame.getFrameNumber() - startFrame) % framesPerRepetition;
+
+        double progress = easing.getProgress(repetitionFrameNumber, 0, 1, framesPerRepetition);
+        if (progress < 0 || progress > 1) {
+            throw new IllegalStateException("Animation progress is out of bounds.");
+        }
         return (int) Math.round(100 * progress);
     }
 

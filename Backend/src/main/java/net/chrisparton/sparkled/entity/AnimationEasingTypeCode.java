@@ -11,7 +11,7 @@ public enum AnimationEasingTypeCode {
         return c * t / d + b;
     })),
 
-    CONSTANT_MIDPOINT(new AnimationEasingType("MIDPOINT", "Constant Midpoint (50%)", (t, b, c, d) -> .5)),
+    CONSTANT_MIDPOINT(new AnimationEasingType("CONSTANT_MIDPOINT", "Constant Midpoint (50%)", (t, b, c, d) -> .5)),
 
     EASE_IN_EXPO(new AnimationEasingType("EASE_IN_EXPO", "Ease In: Exponential", (t, b, c, d) -> {
         return (t==0) ? b : c * (float)Math.pow(2, 10 * (t/d - 1)) + b;

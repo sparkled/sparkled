@@ -104,6 +104,20 @@ public class SongPreprocessor {
                 throw new EntityValidationException(errorMessage);
             }
 
+            if (effect.getRepetitions() <= 0) {
+                String errorMessage = String.format(
+                        "Effect repetitions cannot be less than 1 for effect at frame %d in channel '%s'.",
+                        effect.getStartFrame(), channelName
+                );
+                throw new EntityValidationException(errorMessage);
+            } else if (effect.getRepetitions() > (effect.getEndFrame() - effect.getStartFrame())) {
+                String errorMessage = String.format(
+                        "Effect repetitions cannot be greater than the frame count at frame %d in channel '%s'.",
+                        effect.getStartFrame(), channelName
+                );
+                throw new EntityValidationException(errorMessage);
+            }
+
             List<AnimationEffectParam> params = effect.getParams();
             if (params == null) {
                 String errorMessage = String.format(

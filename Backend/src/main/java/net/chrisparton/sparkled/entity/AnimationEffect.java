@@ -9,6 +9,7 @@ public class AnimationEffect {
     private AnimationEasingTypeCode easingType;
     private int startFrame;
     private int endFrame;
+    private int repetitions = 1;
     private List<AnimationEffectParam> params = new ArrayList<>();
 
     public AnimationEffect() {
@@ -46,6 +47,14 @@ public class AnimationEffect {
         this.endFrame = endFrame;
     }
 
+    public int getRepetitions() {
+        return repetitions;
+    }
+
+    public void setRepetitions(int repetitions) {
+        this.repetitions = repetitions;
+    }
+
     public List<AnimationEffectParam> getParams() {
         return params;
     }
@@ -61,6 +70,7 @@ public class AnimationEffect {
                 ", easingType=" + easingType +
                 ", startFrame=" + startFrame +
                 ", endFrame=" + endFrame +
+                ", repetitions=" + repetitions +
                 ", params=" + params +
                 '}';
     }

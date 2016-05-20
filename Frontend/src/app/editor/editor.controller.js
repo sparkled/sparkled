@@ -156,8 +156,10 @@
 
             var newEffect = {
                 effectType: '',
+                easingType: 'LINEAR',
                 startFrame: self.currentFrame,
                 endFrame: endFrame,
+                repetitions: 1,
                 params: []
             };
 
@@ -283,6 +285,5 @@
         this.getCurrentSong();
         this.getAllAnimationEffectTypes();
         this.getAllAnimationEasingTypes();
-
     }
 }());
