@@ -11,17 +11,14 @@ import java.awt.*;
 public class FlashEffectRenderer extends EffectRenderer {
 
     @Override
-    public void render(AnimationEffectChannel channel, AnimationFrame frame, AnimationEffect effect) {
+    public void render(AnimationEffectChannel channel, AnimationFrame frame, AnimationEffect effect, int progressPercentage) {
         int startLed = channel.getStartLed();
         int endLed = channel.getEndLed();
-        int startFrame = effect.getStartFrame();
-        int endFrame = effect.getEndFrame();
-        int frameNumber = frame.getFrameNumber();
 
         Color color = new ColourParamConverter().convert(effect);
 
-        double progress = (frameNumber - startFrame) / (double)(endFrame - startFrame) * Math.PI;
-        double brightnessPercentage = 100 * Math.sin(progress);
+        double progress = progressPercentage / 100.0 * Math.PI;
+        double brightnessPercentage = 100.0 * Math.sin(progress);
         Color adjustedColor = ColorUtils.adjustBrightness(color, brightnessPercentage);
 
         frame.getLeds()

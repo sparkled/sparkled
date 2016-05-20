@@ -12,6 +12,7 @@
         this.stageSvg = null;
         this.stageExpanded = true;
         this.animationEffectTypes = null;
+        this.animationEasingTypes = null;
         this.currentSong = null;
         this.currentChannel = null;
         this.currentEffect = null;
@@ -272,8 +273,16 @@
             });
         };
 
+        this.getAllAnimationEasingTypes = function () {
+            RestService.service('animation-easing-type').getList().then(function (animationEasingTypes) {
+                self.animationEasingTypes = animationEasingTypes;
+            });
+        };
+
         this.getStageSvg();
         this.getCurrentSong();
         this.getAllAnimationEffectTypes();
+        this.getAllAnimationEasingTypes();
+
     }
 }());

@@ -14,21 +14,16 @@ public abstract class AbstractLineEffectRenderer extends EffectRenderer {
     private LengthParamConverter lengthParamConverter = new LengthParamConverter();
 
     @Override
-    public void render(AnimationEffectChannel channel, AnimationFrame frame, AnimationEffect effect) {
+    public void render(AnimationEffectChannel channel, AnimationFrame frame, AnimationEffect effect, int progressPercentage) {
         int startLed = channel.getStartLed();
         int endLed = channel.getEndLed();
         int ledCount = endLed - startLed;
-        int startFrame = effect.getStartFrame();
-        int endFrame = effect.getEndFrame();
-        int frameNumber = frame.getFrameNumber();
 
         Color color = colourParamConverter.convert(effect);
         int length = lengthParamConverter.convert(effect);
 
-        double progress = (frameNumber - startFrame) / (double) (endFrame - startFrame);
-        double percentage = calculateProgressPercentage(progress);
-
-        int firstLitLed = startLed + (int) Math.round((ledCount + length) * percentage / 100) - length;
+        int adjustedProgressPercentage = calculateProgressPercentage(progressPercentage);
+        int firstLitLed = startLed + (int) Math.round((ledCount + length) * adjustedProgressPercentage / 100.0) - length;
         int lastLitLed = firstLitLed + length - 1;
 
         if (firstLitLed <= endLed) {
@@ -44,5 +39,5 @@ public abstract class AbstractLineEffectRenderer extends EffectRenderer {
         }
     }
 
-    protected abstract double calculateProgressPercentage(double progress);
+    protected abstract int calculateProgressPercentage(int progressPercentage);
 }

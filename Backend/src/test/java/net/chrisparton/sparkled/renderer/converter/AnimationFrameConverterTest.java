@@ -57,6 +57,7 @@ public class AnimationFrameConverterTest {
     private AnimationEffect createAnimationEffect(AnimationEffectTypeCode effectTypeCode, int startFrame, int endFrame) {
         AnimationEffect effect = new AnimationEffect();
         effect.setEffectType(effectTypeCode);
+        effect.setEasingType(AnimationEasingTypeCode.LINEAR);
         effect.setStartFrame(startFrame);
         effect.setEndFrame(endFrame);
 

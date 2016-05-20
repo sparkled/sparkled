@@ -10,6 +10,7 @@
                 scope: {
                     effect: '=',
                     effectTypes: '=',
+                    easingTypes: '=',
                     deleteCurrentEffect: '=',
                     getParamName: '='
                 },
@@ -20,6 +21,17 @@
                         } else {
                             if (scope.effect != null && scope.effectTypes != null) {
                                 scope.effect.effectType = newValue;
+                                updateParams(scope, newValue);
+                            }
+                        }
+                    }, true);
+
+                    scope.$watch('effect.easingType', function (newValue) {
+                        if (scope.previousEffect !== scope.effect) {
+                            scope.previousEffect = scope.effect;
+                        } else {
+                            if (scope.effect != null && scope.easingTypes != null) {
+                                scope.effect.easingTypes = newValue;
                                 updateParams(scope, newValue);
                             }
                         }

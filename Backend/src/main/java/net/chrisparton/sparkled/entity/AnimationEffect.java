@@ -6,9 +6,10 @@ import java.util.List;
 public class AnimationEffect {
 
     private AnimationEffectTypeCode effectType;
-    private List<AnimationEffectParam> params = new ArrayList<>();
+    private AnimationEasingTypeCode easingType;
     private int startFrame;
     private int endFrame;
+    private List<AnimationEffectParam> params = new ArrayList<>();
 
     public AnimationEffect() {
     }
@@ -21,12 +22,12 @@ public class AnimationEffect {
         this.effectType = effectType;
     }
 
-    public List<AnimationEffectParam> getParams() {
-        return params;
+    public AnimationEasingTypeCode getEasingType() {
+        return easingType;
     }
 
-    public void setParams(List<AnimationEffectParam> params) {
-        this.params = params;
+    public void setEasingType(AnimationEasingTypeCode easingType) {
+        this.easingType = easingType;
     }
 
     public int getStartFrame() {
@@ -45,13 +46,22 @@ public class AnimationEffect {
         this.endFrame = endFrame;
     }
 
+    public List<AnimationEffectParam> getParams() {
+        return params;
+    }
+
+    public void setParams(List<AnimationEffectParam> params) {
+        this.params = params;
+    }
+
     @Override
     public String toString() {
         return "AnimationEffect{" +
                 "effectType=" + effectType +
-                ", params=" + params +
+                ", easingType=" + easingType +
                 ", startFrame=" + startFrame +
                 ", endFrame=" + endFrame +
+                ", params=" + params +
                 '}';
     }
 }

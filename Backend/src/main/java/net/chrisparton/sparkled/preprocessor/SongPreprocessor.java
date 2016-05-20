@@ -81,6 +81,14 @@ public class SongPreprocessor {
                 throw new EntityValidationException(errorMessage);
             }
 
+            if (effect.getEasingType() == null) {
+                String errorMessage = String.format(
+                        "Easing type cannot be empty for effect at frame %d in channel '%s'.",
+                        effect.getStartFrame(), channelName
+                );
+                throw new EntityValidationException(errorMessage);
+            }
+
             if (effect.getStartFrame() > effect.getEndFrame()) {
                 String errorMessage = String.format(
                         "Effect start frame cannot be after end frame for effect at frame %d in channel '%s'.",
