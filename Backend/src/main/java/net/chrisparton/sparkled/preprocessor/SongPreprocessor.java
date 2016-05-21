@@ -73,6 +73,8 @@ public class SongPreprocessor {
         }
 
         for (AnimationEffect effect : effects) {
+            int effectDuration = effect.getEndFrame() - effect.getStartFrame();
+
             if (effect.getEffectType() == null) {
                 String errorMessage = String.format(
                         "Effect type cannot be empty for effect at frame %d in channel '%s'.",
@@ -110,12 +112,20 @@ public class SongPreprocessor {
                         effect.getStartFrame(), channelName
                 );
                 throw new EntityValidationException(errorMessage);
-            } else if (effect.getRepetitions() > (effect.getEndFrame() - effect.getStartFrame())) {
-                String errorMessage = String.format(
-                        "Effect repetitions cannot be greater than the frame count at frame %d in channel '%s'.",
-                        effect.getStartFrame(), channelName
-                );
-                throw new EntityValidationException(errorMessage);
+            } else {
+                if (effect.getRepetitions() > effectDuration) {
+                    String errorMessage = String.format(
+                            "Effect repetitions cannot be greater than the frame count at frame %d in channel '%s'.",
+                            effect.getStartFrame(), channelName
+                    );
+                    throw new EntityValidationException(errorMessage);
+                } else if (effectDuration % effect.getRepetitions() > 0) {
+                    String errorMessage = String.format(
+                            "Duration must be evenly divisible by number of repetitions for effect at frame %d in channel '%s'.",
+                            effect.getStartFrame(), channelName
+                    );
+                    throw new EntityValidationException(errorMessage);
+                }
             }
 
             List<AnimationEffectParam> params = effect.getParams();
