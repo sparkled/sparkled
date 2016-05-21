@@ -160,6 +160,7 @@
                 startFrame: self.currentFrame,
                 endFrame: endFrame,
                 repetitions: 1,
+                reverse: false,
                 params: []
             };
 

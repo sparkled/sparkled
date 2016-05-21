@@ -10,6 +10,7 @@ public class AnimationEffect {
     private int startFrame;
     private int endFrame;
     private int repetitions = 1;
+    private boolean reverse = false;
     private List<AnimationEffectParam> params = new ArrayList<>();
 
     public AnimationEffect() {
@@ -55,6 +56,14 @@ public class AnimationEffect {
         this.repetitions = repetitions;
     }
 
+    public boolean isReverse() {
+        return reverse;
+    }
+
+    public void setReverse(boolean reverse) {
+        this.reverse = reverse;
+    }
+
     public List<AnimationEffectParam> getParams() {
         return params;
     }
@@ -71,6 +80,7 @@ public class AnimationEffect {
                 ", startFrame=" + startFrame +
                 ", endFrame=" + endFrame +
                 ", repetitions=" + repetitions +
+                ", reverse=" + reverse +
                 ", params=" + params +
                 '}';
     }

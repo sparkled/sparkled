@@ -11,6 +11,23 @@ public enum AnimationEasingTypeCode {
         return c * t / d + b;
     })),
 
+    HALF_TRIANGLE_WAVE_PERIOD(new AnimationEasingType("HALF_TRIANGLE_WAVE_PERIOD", "Half Triangle Wave Period", (t, b, c, d) -> {
+        double linearProgress = 2 * LINEAR.getEasingType().getEasing().getProgress(t, b, c, d);
+        return linearProgress <= 1 ? linearProgress : 2 - linearProgress;
+    })),
+
+    INVERSE_COSINE_PERIOD(new AnimationEasingType("INVERSE_COSINE_PERIOD", "Inverse Cosine Period", (t, b, c, d) -> {
+        double linearProgress = LINEAR.getEasingType().getEasing().getProgress(t, b, c, d);
+        double progressRadians = linearProgress * Math.PI;
+        return 1 - Math.abs(Math.cos(progressRadians));
+    })),
+
+    INVERSE_HALF_COSINE_PERIOD(new AnimationEasingType("INVERSE_HALF_COSINE_PERIOD", "Inverse Half Cosine Period", (t, b, c, d) -> {
+        double linearProgress = LINEAR.getEasingType().getEasing().getProgress(t, b, c, d);
+        double progressRadians = linearProgress * Math.PI / 2;
+        return 1 - Math.abs(Math.cos(progressRadians));
+    })),
+
     CONSTANT_MIDPOINT(new AnimationEasingType("CONSTANT_MIDPOINT", "Constant Midpoint (50%)", (t, b, c, d) -> .5)),
 
     EASE_IN_EXPO(new AnimationEasingType("EASE_IN_EXPO", "Ease In: Exponential", (t, b, c, d) -> {

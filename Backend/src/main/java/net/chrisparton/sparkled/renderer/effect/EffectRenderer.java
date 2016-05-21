@@ -28,7 +28,8 @@ public abstract class EffectRenderer {
         if (progress < 0 || progress > 1) {
             throw new IllegalStateException("Animation progress is out of bounds.");
         }
-        return (int) Math.round(100 * progress);
+        int progressPercentage = (int) Math.round(100 * progress);
+        return effect.isReverse() ? 100 - progressPercentage : progressPercentage;
     }
 
     public abstract void render(AnimationEffectChannel channel, AnimationFrame frame, AnimationEffect effect, int progressPercentage);
