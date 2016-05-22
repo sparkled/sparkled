@@ -21,14 +21,14 @@ public class RendererTest {
         {
             AnimationEffectChannel channel = createAnimationEffectChannel(0, 9);
             AnimationEffect flashEffect = createAnimationEffect(AnimationEffectTypeCode.FLASH, 0, 29);
-            flashEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "ff00ff"));
+            flashEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "#ff00ff"));
             channel.getEffects().add(flashEffect);
             animationData.getChannels().add(channel);
         }
         {
             AnimationEffectChannel channel = createAnimationEffectChannel(10, 19);
             AnimationEffect lineRightEffect = createAnimationEffect(AnimationEffectTypeCode.LINE_RIGHT, 30, 59);
-            lineRightEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "00ff00"));
+            lineRightEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "#00ff00"));
             channel.getEffects().add(lineRightEffect);
             animationData.getChannels().add(channel);
         }

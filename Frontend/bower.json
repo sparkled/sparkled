@@ -7,6 +7,7 @@
     "angular-cookies": "~1.4.9",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#1.7.0",
     "angular-resource": "~1.4.9",
+    "angular-spectrum-colorpicker": "~1.4.5",
     "angular-ui-router": "~0.2.13",
     "animate.css": "3.5.1",
     "bootswatch-dist": "3.3.6-superhero",

@@ -1,11 +1,14 @@
 package net.chrisparton.sparkled.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class AnimationEffectParam {
 
     private AnimationEffectTypeParamCode paramCode;
     private String value;
+    private List<AnimationEffectParamValue> multiValue = new ArrayList<>();
 
     public AnimationEffectParam() {
     }
@@ -26,6 +29,14 @@ public class AnimationEffectParam {
         this.value = value;
     }
 
+    public List<AnimationEffectParamValue> getMultiValue() {
+        return multiValue;
+    }
+
+    public void setMultiValue(List<AnimationEffectParamValue> multiValue) {
+        this.multiValue = multiValue;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -36,11 +47,12 @@ public class AnimationEffectParam {
 
         AnimationEffectParam that = (AnimationEffectParam) o;
         return Objects.equals(paramCode, that.paramCode) &&
-                Objects.equals(value, that.value);
+                Objects.equals(value, that.value) &&
+                Objects.equals(multiValue, that.multiValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(paramCode, value);
+        return Objects.hash(paramCode, value, multiValue);
     }
 }

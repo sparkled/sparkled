@@ -4,7 +4,7 @@ public enum AnimationEffectTypeParamCode {
 
     COLOUR(new AnimationEffectTypeParam("COLOUR", "Colour")),
     LENGTH(new AnimationEffectTypeParam("LENGTH", "Length")),
-    MULTI_COLOUR(new AnimationEffectTypeParam("COLOURS", "Colours"));
+    MULTI_COLOUR(new AnimationEffectTypeParam("MULTI_COLOUR", "Colours"));
 
     private AnimationEffectTypeParam effectTypeParam;
 

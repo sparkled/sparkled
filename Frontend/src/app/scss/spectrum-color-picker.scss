@@ -1,0 +1,40 @@
+@import "variables";
+
+$effect-editor-width: 250px;
+
+.sp-container, .sp-replacer {
+  background-color: $navbar-bg-color;
+  border-color: $active-color !important;
+
+  .sp-dd {
+    color: $text-color;
+  }
+}
+
+.sp-palette-container {
+  border-color: transparent;
+}
+
+.sp-clear, .sp-clear-display {
+  background-color: #eee !important;
+}
+
+.sp-picker-container {
+  border-color: $active-color;
+
+  button {
+    border-radius: 0;
+  }
+
+  .sp-cancel {
+    color: $text-color !important;
+  }
+
+  .sp-input-container {
+    background-color: #eee;
+
+    input {
+      border-radius: 0;
+    }
+  }
+}

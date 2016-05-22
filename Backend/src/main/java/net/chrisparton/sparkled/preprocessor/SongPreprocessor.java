@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static java.util.stream.Collectors.toList;
+
 public class SongPreprocessor {
 
     private static final Gson gson = new Gson();
@@ -135,6 +137,8 @@ public class SongPreprocessor {
                         effect.getStartFrame(), channelName
                 );
                 throw new EntityValidationException(errorMessage);
+            } else {
+                Converter
             }
 
             for (AnimationEffectParam param : params) {
@@ -167,6 +171,7 @@ public class SongPreprocessor {
             effects.forEach(effect -> {
                 effect.getParams().forEach(param -> {
                     escape(param::getValue, param::setValue);
+                    escapeList(param::getMultiValue, param::setMultiValue);
                 });
             });
         });
@@ -174,11 +179,24 @@ public class SongPreprocessor {
 
     private void escape(Supplier<String> getter, Consumer<String> setter) {
         String value = getter.get();
+        String escapedValue = escapeString(value);
+        setter.accept(escapedValue);
+    }
 
+    private void escapeList(Supplier<List<AnimationEffectParamValue>> getter, Consumer<List<AnimationEffectParamValue>> setter) {
+        List<AnimationEffectParamValue> escapedValues = getter.get()
+                .stream()
+                .map(AnimationEffectParamValue::getValue)
+                .map(this::escapeString)
+                .map(AnimationEffectParamValue::new)
+                .collect(toList());
+
+        setter.accept(escapedValues);
+    }
+
+    private String escapeString(String value) {
         // Prevent duplicate escaping.
         String unescapedValue = StringEscapeUtils.unescapeHtml4(value);
-        String escapedValue = StringEscapeUtils.escapeHtml4(unescapedValue);
-
-        setter.accept(escapedValue);
+        return StringEscapeUtils.escapeHtml4(unescapedValue);
     }
 }

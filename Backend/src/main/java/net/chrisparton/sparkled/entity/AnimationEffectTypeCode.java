@@ -24,7 +24,7 @@ public enum AnimationEffectTypeCode {
             new AnimationEffectType(
                     "LINE_LEFT",
                     "Line Left",
-                    AnimationEffectTypeParamCode.COLOUR.getEffectTypeParam(),
+                    AnimationEffectTypeParamCode.MULTI_COLOUR.getEffectTypeParam(),
                     AnimationEffectTypeParamCode.LENGTH.getEffectTypeParam()
             ),
             new LineLeftEffectRenderer()
@@ -33,7 +33,7 @@ public enum AnimationEffectTypeCode {
             new AnimationEffectType(
                     "LINE_RIGHT",
                     "Line Right",
-                    AnimationEffectTypeParamCode.COLOUR.getEffectTypeParam(),
+                    AnimationEffectTypeParamCode.MULTI_COLOUR.getEffectTypeParam(),
                     AnimationEffectTypeParamCode.LENGTH.getEffectTypeParam()
             ),
             new LineRightEffectRenderer()
