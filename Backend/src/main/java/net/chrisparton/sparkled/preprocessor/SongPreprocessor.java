@@ -137,8 +137,6 @@ public class SongPreprocessor {
                         effect.getStartFrame(), channelName
                 );
                 throw new EntityValidationException(errorMessage);
-            } else {
-                Converter
             }
 
             for (AnimationEffectParam param : params) {
