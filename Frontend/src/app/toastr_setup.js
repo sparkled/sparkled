@@ -10,7 +10,8 @@
         timeOut: 3000,
         extendedTimeOut: 3000,
         showMethod: 'fadeIn',
-        hideMethod: 'fadeOut'
+        hideMethod: 'fadeOut',
+        positionClass: 'toast-bottom-right'
     };
 }());
 
