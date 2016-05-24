@@ -59,9 +59,9 @@
                         showPalette: true,
                         showSelectionPalette: false,
                         palette: [
-                            ['red', 'green', 'blue', 'purple'],
-                            ['yellow', 'white', 'black', 'magenta'],
-                            ['transparent']
+                            ['#ffffff', '#ff0096', '#ff6400', '#c80a0a'],
+                            ['#ff0000', '#00ff00', '#0000ff', '#0064ff'],
+                            ['#960096', '#ff1493', '#ff5000', 'transparent']
                         ]
                     };
                 }
