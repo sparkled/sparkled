@@ -1,8 +1,6 @@
 package net.chrisparton.sparkled.rest;
 
 import com.google.gson.Gson;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
 import net.chrisparton.sparkled.entity.AnimationEffectChannel;
 import net.chrisparton.sparkled.entity.Song;
 import net.chrisparton.sparkled.entity.SongAnimationData;
@@ -13,6 +11,8 @@ import net.chrisparton.sparkled.renderer.Renderer;
 import net.chrisparton.sparkled.renderer.data.AnimationFrame;
 import net.chrisparton.sparkled.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
