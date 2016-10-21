@@ -17,7 +17,7 @@ public class Main {
         Server jettyServer = new Server(8080);
         jettyServer.setHandler(context);
 
-        ServletHolder jerseyServlet = context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, "/*");
+        ServletHolder jerseyServlet = context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, "/rest/*");
         jerseyServlet.setInitOrder(0);
 
         jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "net.chrisparton.sparkled.rest");
