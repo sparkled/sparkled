@@ -1,0 +1,15 @@
+#application {
+    #selector-page {
+        display: flex;
+        flex-grow: 1;
+        overflow: hidden;
+
+        > .container {
+            margin-top: 20px;
+        }
+
+        .panel-title {
+            padding-right: 15px;
+        }
+    }
+}
