@@ -8,7 +8,7 @@
     function RestService(Restangular) {
         'ngInject';
 
-        Restangular.setBaseUrl('http://localhost:8080/sparkled/rest/');
+        Restangular.setBaseUrl('http://localhost:8080/rest/');
         return Restangular;
     }
 }());
