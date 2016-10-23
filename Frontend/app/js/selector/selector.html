@@ -11,12 +11,14 @@
 </nav>
 
 <div id="selector-page">
-    <div class="container animated fadeInRight" ng-show="!main.loading">
+    <div class="container animated fadeIn" ng-show="!app.loader.loading">
         <div class="row">
-            <song-entry ng-repeat="song in selector.songs" song="song"
-                        edit="selector.setCurrentSong(song)"
-                        remove="selector.removeSong(song)"></song-entry>
-            <new-song-drop-zone add-song="selector.addSong"></new-song-drop-zone>
+            <song-entry song="song"
+                        ng-repeat="song in selector.songs"
+                        delete-song="selector.deleteSong">
+            </song-entry>
+
+            <song-drop-zone on-song-drop="selector.onSongAdd"></song-drop-zone>
         </div>
     </div>
 </div>

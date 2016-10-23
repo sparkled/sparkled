@@ -1,4 +1,4 @@
-/*global beforeEach, describe, expect, inject, localStorage, module, spyOn*/
+/*global beforeEach, describe, expect, inject, localStorage, module*/
 describe('timeFilter', function () {
 
     var timeFilter;

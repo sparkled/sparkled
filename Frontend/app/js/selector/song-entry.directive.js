@@ -1,13 +1,12 @@
 function songEntry() {
     return {
         restrict: 'E',
+        replace: true,
+        templateUrl: 'selector/song-entry.template.html',
         scope: {
             song: '=',
-            edit: '&',
-            remove: '&'
-        },
-        replace: true,
-        templateUrl: 'selector/song-entry.template.html'
+            deleteSong: '='
+        }
     }
 }
 
