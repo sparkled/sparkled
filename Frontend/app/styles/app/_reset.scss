@@ -1,0 +1,4 @@
+// Remove blue glow around focused elements in Chrome.
+:focus {
+    outline: none;
+}
