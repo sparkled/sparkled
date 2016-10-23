@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const sweetAlert = require('sweetAlert2');
+const sweetAlert = require('sweetalert2');
 
 function aboutDialog() {
     return {

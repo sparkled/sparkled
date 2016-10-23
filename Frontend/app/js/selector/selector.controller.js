@@ -1,4 +1,4 @@
-const sweetAlert = require('sweetAlert2');
+const sweetAlert = require('sweetalert2');
 
 function SelectorCtrl(loaderService,
                       songRestService) {
