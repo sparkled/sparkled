@@ -1,5 +1,6 @@
 // Module imports.
 require('./templates');
+require('./directives/directives.module');
 require('./services/services.module');
 require('./filters/filters.module');
 require('./environment/environment.module');
@@ -20,7 +21,7 @@ const requiredModules = [
 
     // App module dependencies.
     'templates',
-    'app.services',
+    'app.directives',
     'app.services',
     'app.environment',
     'app.navigation',
