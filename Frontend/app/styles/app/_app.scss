@@ -2,7 +2,10 @@
 @import 'reset';
 @import 'layout';
 @import 'loader';
-@import 'top_navigation';
+@import 'logo';
 @import 'about_dialog';
-@import 'selector';
-@import 'song_entry';
+@import 'selector/selector';
+@import 'selector/song_entry';
+@import 'editor/editor';
+@import 'editor/timeline';
+@import 'editor/animation_preview';

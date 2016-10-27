@@ -5,12 +5,18 @@ function songRestService(Restangular) {
 
     return {
         getSongs: getSongs,
+        getSong: getSong,
         saveSong: saveSong,
-        deleteSong: deleteSong
+        deleteSong: deleteSong,
+        renderSong: renderSong
     };
 
     function getSongs() {
         return restService.getList();
+    }
+
+    function getSong(id) {
+        return restService.one(id).get();
     }
 
     function saveSong(file, songData) {
@@ -26,6 +32,14 @@ function songRestService(Restangular) {
     function deleteSong(song) {
         return restService.one()
             .customDELETE(song.id, undefined, undefined, undefined);
+    }
+
+    function renderSong(song, durationSeconds, startFrame) {
+        return restService.one('render')
+            .customGET(song.id, {
+                'duration-seconds': durationSeconds,
+                'start-frame': startFrame
+            });
     }
 }
 

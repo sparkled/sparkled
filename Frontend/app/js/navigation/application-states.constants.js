@@ -1,5 +1,6 @@
 const applicationStates = {
     page: 'page',
+    editor: 'editor',
     selector: 'selector'
 };
 

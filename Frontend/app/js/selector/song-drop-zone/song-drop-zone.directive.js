@@ -11,7 +11,7 @@ function songDropZone($timeout) {
     const config = {
         restrict: 'E',
         replace: true,
-        templateUrl: 'selector/song-drop-zone.template.html',
+        templateUrl: 'selector/song-drop-zone/song-drop-zone.directive.html',
         scope: {
             onSongDrop: '='
         },

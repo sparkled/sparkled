@@ -1,0 +1,19 @@
+<div id="editor-page">
+    <editor-preview-overlay></editor-preview-overlay>
+    <editor-navbar></editor-navbar>
+
+    <div id="body" ng-class="{'editor-expand': editor.stageExpanded, 'editor-contract': !editor.stageExpanded}">
+        <animation-preview stage-svg="editor.stageSvg"
+                           stage-expanded="editor.stageExpanded">
+        </animation-preview>
+
+        <effect-editor effect="editor.currentEffect"
+                       effect-types="editor.animationEffectTypes"
+                       easing-types="editor.animationEasingTypes"
+                       delete-current-effect="editor.deleteCurrentEffect"
+                       get-param-name="editor.getParamName">
+        </effect-editor>
+    </div>
+
+    <editor-timeline></editor-timeline>
+</div>

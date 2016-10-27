@@ -1,8 +1,6 @@
 function loaderService() {
     const vm = this;
-    vm.state = {
-        loading: true
-    };
+    vm.loading = false;
 }
 
 module.exports = {

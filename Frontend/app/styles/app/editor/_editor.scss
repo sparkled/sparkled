@@ -1,0 +1,124 @@
+@import '../variables';
+
+$effect-editor-width: 250px;
+
+#application {
+    #editor-page {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .container {
+            flex-grow: 1;
+        }
+    }
+
+    #body {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        z-index: $z-index-body;
+
+    }
+
+    #effect-list {
+        display: flex;
+        width: 300px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        background: $navbar-bg-color;
+    }
+
+    #animation-preview-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        cursor: not-allowed;
+        z-index: $z-index-animation-preview-overlay;
+    }
+
+    #effect-editor {
+        display: flex;
+        width: $effect-editor-width;
+        flex-shrink: 0;
+        background: $secondary-bg-color;
+        border-left: 1px solid $navbar-bg-color;
+        white-space: nowrap;
+        overflow-x: hidden;
+
+        @media (min-width: 768px) {
+            width: $effect-editor-width !important;
+            animation: none !important;
+        }
+
+        .no-effect-selected {
+            padding: 10px;
+            white-space: normal;
+
+            h4 {
+                padding-bottom: 5px;
+                border-bottom: 1px solid $navbar-bg-color;
+            }
+        }
+
+        .remove-selected-effect {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .remove-selected-effect .fa {
+            padding-right: 10px;
+        }
+
+        .chosen-colour-container {
+            overflow: hidden;
+            white-space: normal;
+        }
+
+        .chosen-colour {
+            display: inline-block;
+            transform-origin: top left;
+            margin-right: 1px;
+
+            &:nth-child(4n) {
+                margin-right: 0;
+            }
+
+            &:nth-child(4n-1) {
+                margin-left: 1px;
+            }
+        }
+    }
+
+    #body {
+        &.editor-expand #effect-editor {
+            animation: $animation-duration slide-in ease-in-out;
+        }
+
+        &.editor-contract #effect-editor {
+            animation: $animation-duration slide-out ease-in-out;
+            width: 0;
+        }
+
+        @keyframes slide-in {
+            from {
+                width: 0
+            }
+            to {
+                width: $effect-editor-width
+            }
+        }
+        @keyframes slide-out {
+            from {
+                width: $effect-editor-width
+            }
+            to {
+                width: 0;
+            }
+        }
+    }
+}

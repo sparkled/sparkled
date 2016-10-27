@@ -1,0 +1,189 @@
+@import '../variables';
+
+$timeline-gap: 2px;
+$timeline-font-size: 8px;
+
+#application {
+    #timeline {
+        border-top: 1px solid $navbar-bg-color;
+        display: flex;
+        flex-direction: row;
+        flex-grow: 0;
+        flex-shrink: 0;
+        z-index: $z-index-timeline;
+        background: $body-bg-color;
+
+        #footer {
+            flex-grow: 0;
+        }
+
+        #current-frame-bar {
+            position: absolute;
+            top: $timeline-gap;
+            bottom: 15px;
+            width: 2px;
+            margin-left: $timeline-gap;
+            background: $primary-button-bg-color;
+            z-index: $z-index-current-frame-bar;
+
+            &:hover {
+                cursor: col-resize;
+            }
+        }
+
+        #current-effect-bounds {
+            position: absolute;
+            display: none;
+            top: $timeline-gap;
+            bottom: 15px;
+            width: 1px;
+            margin-left: $timeline-gap;
+            border-left: 2px solid $active-color;
+            border-right: 2px solid $active-color;
+            z-index: $z-index-current-effect-bounds;
+        }
+
+        .waveform {
+            margin: 0 0 $timeline-gap $timeline-gap;
+        }
+
+        wave {
+            background: $body-bg-color;
+
+            wave {
+                border-right: none !important;
+            }
+        }
+
+        .timeline-labels {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 0;
+            flex-shrink: 0;
+
+            .timeline-label {
+                height: 20px;
+                line-height: 18px;
+                margin-bottom: $timeline-gap;
+                text-align: right;
+                padding: 0 5px;
+                background: $navbar-bg-color;
+                margin-left: $timeline-gap;
+                flex-grow: 0;
+
+                &.effect-channel-label:hover {
+                    cursor: pointer;
+                }
+
+                &.selected {
+                    background-color: $active-color;
+                }
+
+                &.time {
+                    height: 23px;
+                    line-height: 23px;
+                }
+
+                &.music {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-grow: 1;
+                }
+
+                &:first-of-type {
+                    margin-top: $timeline-gap;
+                }
+            }
+        }
+
+        .channels {
+            position: relative;
+            overflow: auto;
+            flex-grow: 1;
+        }
+
+        .effect-channel {
+            box-sizing: content-box;
+            margin-right: $timeline-gap;
+            height: 18px;
+            margin-bottom: $timeline-gap;
+            padding: 0 $timeline-gap;
+            border: 1px solid $navbar-bg-color;
+            border-left: 0;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            background: $secondary-bg-color;
+            z-index: $z-index-current-effect-channel;
+
+            &:first-of-type {
+                margin-top: $timeline-gap;
+            }
+
+            .animation-effect {
+                position: absolute;
+                margin-top: $timeline-gap;
+                height: 18px - $timeline-gap * 2;
+                margin-left: $timeline-gap;
+                background: #337ab7;
+                z-index: $z-index-animation-effect;
+
+                &.selected {
+                    background: $primary-button-bg-color;
+                }
+
+                .ui-resizable-handle {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    width: 5px;
+                    background: rgba(0, 0, 0, .2);
+
+                    &:hover {
+                        cursor: col-resize;
+                    }
+
+                    &.ui-resizable-e {
+                        right: 0;
+                    }
+
+                    &.ui-resizable-w {
+                        left: 0;
+                    }
+                }
+
+                &.wide-effect .ui-resizable-handle {
+                    width: 10px;
+                }
+            }
+        }
+    }
+
+    #time-indicator {
+        position: relative;
+        box-sizing: content-box;
+        height: 20px;
+        padding-left: $timeline-gap;
+        margin-right: 5px;
+        z-index: $z-index-time-indicator;
+
+        line {
+            stroke-width: 1;
+            stroke: $text-color;
+        }
+
+        text {
+            text-anchor: middle;
+            font-size: $timeline-font-size;
+            fill: $text-color;
+            vertical-align: bottom;
+        }
+
+        text:first-of-type {
+            text-anchor: start;
+        }
+
+        text:last-of-type {
+            text-anchor: end;
+        }
+    }
+}

@@ -2,7 +2,7 @@ function songEntry() {
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: 'selector/song-entry.template.html',
+        templateUrl: 'selector/song-entry/song-entry.directive.html',
         scope: {
             song: '=',
             deleteSong: '='

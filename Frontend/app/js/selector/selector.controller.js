@@ -8,10 +8,10 @@ function SelectorCtrl(loaderService,
     vm.songs = [];
 
     const loadSongs = () => {
-        loaderService.state.loading = true;
+        loaderService.loading = true;
         songRestService.getSongs()
             .then(songs => vm.songs = songs)
-            .finally(() => loaderService.state.loading = false);
+            .finally(() => loaderService.loading = false);
     };
 
     const onSongAdd = (file, songData) => {

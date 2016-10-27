@@ -1,0 +1,49 @@
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="btn-group">
+            <a ui-sref="selector"
+               title="Back to Song Selection"
+               class="btn btn-default navbar-btn"
+               ng-disabled="animationService.running">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+            <a class="btn btn-default navbar-btn logo"
+               title="About"
+               ng-disabled="animationService.running"
+               about-dialog>
+                <img src="images/logos/logo-small.svg" class="logo-small"/>
+                <img src="images/logos/logo-large.svg" class="logo-large"/>
+            </a>
+        </div>
+
+        <div class="pull-right btn-group">
+            <a title="Preview Animation"
+               class="btn btn-default navbar-btn"
+               ng-click="animationService.previewAnimation()"
+               ng-if="!animationService.running">
+                <i class="fa fa-video-camera"></i>
+            </a>
+
+            <a title="Cancel Animation Preview"
+               class="btn btn-default navbar-btn"
+               ng-click="animationService.cancelAnimation()"
+               ng-if="animationService.running">
+                <i class="fa fa-stop-circle"></i>
+            </a>
+
+            <a title="Add Effect"
+               class="btn btn-default navbar-btn"
+               ng-click="addAnimationEffect()"
+               ng-if="!animationService.running">
+                <i class="fa fa-magic"></i>
+            </a>
+
+            <a title="Save"
+               class="btn btn-default navbar-btn"
+               ng-click="saveAnimationData()"
+               ng-if="!animationService.running">
+                <i class="fa fa-save"></i>
+            </a>
+        </div>
+    </div>
+</nav>

@@ -7,6 +7,7 @@ require('./environment/environment.module');
 require('./navigation/navigation.module');
 require('./rest/rest.module');
 require('./selector/selector.module');
+require('./editor/editor.module');
 
 // App module configuration.
 const appController = require('./app.controller');
@@ -26,7 +27,8 @@ const requiredModules = [
     'app.environment',
     'app.navigation',
     'app.rest',
-    'app.selector'
+    'app.selector',
+    'app.editor'
 ];
 
 const appModule = angular.module('app', requiredModules);
