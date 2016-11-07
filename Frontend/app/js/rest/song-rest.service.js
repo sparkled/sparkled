@@ -4,12 +4,17 @@ function songRestService(Restangular) {
     const restService = Restangular.service('song');
 
     return {
+        getSongUrl: getSongUrl,
         getSongs: getSongs,
         getSong: getSong,
         saveSong: saveSong,
         deleteSong: deleteSong,
         renderSong: renderSong
     };
+
+    function getSongUrl(song) {
+        return `${Restangular.configuration.baseUrl}/song/data/${song.id}`;
+    }
 
     function getSongs() {
         return restService.getList();

@@ -2,7 +2,12 @@ function editorService() {
     'ngInject';
 
     return {
-        song: undefined
+        song: undefined,
+        songUrl: undefined,
+        animationData: {},
+        currentChannel: {},
+        currentEffect: {},
+        currentFrame: 0
     };
 }
 

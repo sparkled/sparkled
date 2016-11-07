@@ -1,0 +1,30 @@
+<div id="timeline"> <!-- class="{{editor.currentChannel.name | cssClass}}"-->
+    <div class="timeline-labels">
+        <!-- {{channel.name | cssClass}}"-->
+        <div class="timeline-label effect-channel-label"
+             ng-repeat="channel in editorService.animationData.channels | orderBy:'displayOrder'"
+             ng-class="{selected: editorService.currentChannel === channel}"
+             ng-click="editorService.currentChannel = channel">
+            {{channel.name}}
+        </div>
+
+        <div class="timeline-label music"><i class="fa fa-music"></i></div>
+        <div class="timeline-label time">Time</div>
+    </div>
+
+    <div class="channels">
+        <effect-channel ng-repeat="channel in editorService.animationData.channels | orderBy:'displayOrder'"
+                        channel="channel">
+        </effect-channel>
+
+        <!--<waveform id="waveform"
+                  duration="editor.currentSong.durationSeconds"
+                  current-frame="editor.currentFrame"
+                  mp3-url="editor.mp3Url">
+        </waveform>
+
+        <time-indicator duration="editor.currentSong.durationSeconds"></time-indicator>
+        <current-frame-bar current-frame="editor.currentFrame"></current-frame-bar>
+        <current-effect-bounds></current-effect-bounds>-->
+    </div>
+</div>
