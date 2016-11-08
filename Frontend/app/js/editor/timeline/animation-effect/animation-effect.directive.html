@@ -1,5 +1,5 @@
 <div class="animation-effect"
      ng-click="setCurrentEffect(); $event.stopPropagation()"
-     ng-class="{selected: editorService.currentEffect === effect, 'wide-effect': effect.endFrame - effect.startFrame > minWidePx}"
-     ng-style="{width: (effect.endFrame - effect.startFrame) * pxPerFrame, left: effect.startFrame * pxPerFrame}">
+     ng-class="{selected: editorService.currentEffect === effect, 'wide-effect': effect.endFrame - effect.startFrame > editorConstants.minWideEffectPixels}"
+     ng-style="{width: (effect.endFrame - effect.startFrame) * editorConstants.pixelsPerFrame, left: effect.startFrame * editorConstants.pixelsPerFrame}">
 </div>

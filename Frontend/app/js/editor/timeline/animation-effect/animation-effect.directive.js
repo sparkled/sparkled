@@ -1,4 +1,5 @@
-function animationEffect(editorService) {
+function animationEffect(editorConstants,
+                         editorService) {
     'ngInject';
 
     return {
@@ -7,13 +8,10 @@ function animationEffect(editorService) {
         templateUrl: 'editor/timeline/animation-effect/animation-effect.directive.html',
         scope: {
             channel: '=',
-            effect: '=',
-            duration: '='
+            effect: '='
         },
         link: scope => {
-            scope.minWidePx = 45;
-            scope.pxPerFrame = 2;
-
+            scope.editorConstants = editorConstants;
             scope.editorService = editorService;
             scope.setCurrentEffect = () => {
                 editorService.currentChannel = scope.channel;
