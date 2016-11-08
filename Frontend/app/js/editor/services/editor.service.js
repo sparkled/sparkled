@@ -1,14 +1,23 @@
-function editorService() {
+function editorService(editorConstants) {
     'ngInject';
 
-    return {
+    const service = {
         song: undefined,
         songUrl: undefined,
         animationData: {},
         currentChannel: {},
         currentEffect: {},
-        currentFrame: 0
+        currentFrame: 1,
+        setCurrentFrame: setCurrentFrame
     };
+
+    return service;
+
+    function setCurrentFrame(newFrame) {
+        const minFrame = 1;
+        const maxFrame = service.song.durationSeconds * editorConstants.framesPerSecond;
+        service.currentFrame = Math.min(Math.max(newFrame, minFrame), maxFrame);
+    }
 }
 
 module.exports = {

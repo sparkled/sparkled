@@ -13,3 +13,4 @@ require('angular-ui-router');
 require('angular-shims-placeholder');
 require('sweetalert2');
 require('jsmediatags');
+require('draggable');

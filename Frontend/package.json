@@ -42,6 +42,7 @@
     "angularjs-toaster": "~2.0.0",
     "animate.css": "~3.5.2",
     "bootswatch-dist": "github:dbtek/bootswatch-dist#3.3.6-superhero",
+    "draggable": "^4.1.1",
     "font-awesome": "~4.6.3",
     "jquery": "~3.1.1",
     "jsmediatags": "^3.3.0",

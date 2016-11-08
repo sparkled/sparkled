@@ -19,12 +19,14 @@ $timeline-font-size: 8px;
 
         #current-frame-bar {
             position: absolute;
-            top: $timeline-gap;
-            bottom: 15px;
             width: 2px;
             margin-left: $timeline-gap;
             background: $primary-button-bg-color;
             z-index: $z-index-current-frame-bar;
+
+            // Override the top and bottom values imposed by the draggable library.
+            top: $timeline-gap !important;
+            bottom: 15px !important;
 
             &:hover {
                 cursor: col-resize;
@@ -185,5 +187,9 @@ $timeline-font-size: 8px;
         text:last-of-type {
             text-anchor: end;
         }
+    }
+
+    body.dragging-current-frame-bar *:hover {
+        cursor: col-resize;
     }
 }
