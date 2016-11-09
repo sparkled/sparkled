@@ -3,6 +3,7 @@ function editorTimeline(editorService) {
 
     return {
         restrict: 'E',
+        replace: true,
         templateUrl: 'editor/timeline/editor-timeline/editor-timeline.directive.html',
         link: scope => {
             scope.editorService = editorService;

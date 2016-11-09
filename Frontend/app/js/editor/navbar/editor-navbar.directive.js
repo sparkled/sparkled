@@ -3,6 +3,7 @@ function editorNavbar(animationService) {
 
     return {
         restrict: 'E',
+        replace: true,
         templateUrl: 'editor/navbar/editor-navbar.directive.html',
         link: scope => scope.animationService = animationService
     }

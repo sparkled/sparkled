@@ -14,6 +14,7 @@ function editorService(editorConstants) {
     return service;
 
     function setCurrentFrame(newFrame) {
+        newFrame = Math.round(newFrame);
         const minFrame = 1;
         const maxFrame = service.song.durationSeconds * editorConstants.framesPerSecond;
         service.currentFrame = Math.min(Math.max(newFrame, minFrame), maxFrame);
