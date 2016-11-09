@@ -2,7 +2,7 @@ function editorService(editorConstants) {
     'ngInject';
 
     const service = {
-        song: undefined,
+        song: {},
         songUrl: undefined,
         animationData: {},
         currentChannel: {},

@@ -8,10 +8,9 @@ function EditorCtrl(animationService,
     const vm = this;
     vm.animationService = animationService;
 
+    // Loading is completed when the MP3 is loaded by the waveform directive.
     loaderService.loading = true;
-    songRestService.getSong($stateParams.id)
-        .then(setSong)
-        .finally(() => loaderService.loading = false);
+    songRestService.getSong($stateParams.id).then(setSong);
 
     function setSong(song) {
         editorService.song = song;

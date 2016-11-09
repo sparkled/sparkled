@@ -13,6 +13,7 @@ const effectChannel = require('./timeline/effect-channel/effect-channel.directiv
 const animationEffect = require('./timeline/animation-effect/animation-effect.directive');
 const timeIndicator = require('./timeline/time-indicator/time-indicator.directive');
 const currentFrameBar = require('./timeline/current-frame-bar/current-frame-bar.directive');
+const waveform = require('./timeline/waveform/waveform.directive');
 
 const editorModule = angular.module('app.editor', [
     'app.directives',
@@ -35,6 +36,7 @@ editorModule
     .directive(effectChannel.name, effectChannel.fn)
     .directive(animationEffect.name, animationEffect.fn)
     .directive(timeIndicator.name, timeIndicator.fn)
-    .directive(currentFrameBar.name, currentFrameBar.fn);
+    .directive(currentFrameBar.name, currentFrameBar.fn)
+    .directive(waveform.name, waveform.fn);
 
 module.exports = editorModule;

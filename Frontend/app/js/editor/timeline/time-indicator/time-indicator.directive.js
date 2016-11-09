@@ -18,7 +18,7 @@ function timeIndicator(editorConstants,
             scope.$watch(() => editorService.song, update);
 
             function update(song) {
-                const duration = !!song ? song.durationSeconds : 0;
+                const duration = !!song.durationSeconds ? song.durationSeconds : 0;
 
                 scope.seconds = [];
                 for (var i = 0; i <= duration; i++) {
