@@ -1,5 +1,6 @@
 // Global third-party dependencies.
 window.$ = window.jQuery = require('jquery');
+require('jquery-ui-dist/jquery-ui');
 window._ = require('lodash');
 window.angular = require('angular');
 
@@ -13,5 +14,5 @@ require('angular-ui-router');
 require('angular-shims-placeholder');
 require('sweetalert2');
 require('jsmediatags');
-require('draggable');
+require('interact.js');
 require('angular-hotkeys');

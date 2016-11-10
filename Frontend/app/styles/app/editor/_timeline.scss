@@ -21,13 +21,15 @@ $timeline-font-size: 8px;
         #current-frame-bar {
             position: absolute;
             width: 2px;
+
+            // Sub-pixel alignment with SVG timeline frame width.
+            transform: scaleX(1.25) translateX(0.2px);
+
             background: $primary-button-bg-color;
             z-index: $z-index-current-frame-bar;
-
-            // Override the inline styles imposed by the draggable library.
-            margin-left: $timeline-gap !important;
-            top: $timeline-gap !important;
-            bottom: 15px !important;
+            margin-left: $timeline-gap;
+            top: $timeline-gap;
+            bottom: 15px;
 
             &:hover {
                 cursor: col-resize;

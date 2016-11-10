@@ -1,5 +1,3 @@
-const Draggable = require('draggable');
-
 function currentFrameBar(editorConstants,
                          editorService,
                          $timeout) {
@@ -17,15 +15,15 @@ function currentFrameBar(editorConstants,
             scope.editorConstants = editorConstants;
             scope.editorService = editorService;
 
-            new Draggable(element[0], {
-                threshold: 3,
-                grid: editorConstants.pixelsPerFrame,
-                smoothDrag: false,
-                onDragStart: () => {
+            $(element).draggable({
+                distance: editorConstants.pixelsPerFrame + 1,
+                grid: [editorConstants.pixelsPerFrame, 1],
+                axis: 'x',
+                start: function () {
                     $('body').addClass('dragging-current-frame-bar');
                 },
-                onDrag: updateCurrentFrame,
-                onDragEnd: () => {
+                drag: updateCurrentFrame,
+                stop: function () {
                     $('body').removeClass('dragging-current-frame-bar');
                     updateCurrentFrame();
                 }
