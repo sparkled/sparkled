@@ -3,8 +3,8 @@ function animationService(editorService,
                           $timeout) {
     'ngInject';
 
+    var animationStartFrame = undefined;
     const durationSeconds = 5;
-    const startFrame = 0;
 
     var service = {
         running: false,
@@ -17,7 +17,8 @@ function animationService(editorService,
 
     function previewAnimation() {
         if (!service.running) {
-            songRestService.renderSong(editorService.song, durationSeconds, startFrame)
+            animationStartFrame = editorService.currentFrame;
+            songRestService.renderSong(editorService.song, durationSeconds, editorService.currentFrame)
                 .then(renderData => {
                     service.running = true;
                     service.animationStartTime = new Date().getTime();
@@ -33,7 +34,7 @@ function animationService(editorService,
         const frameIndex = Math.floor((now - service.animationStartTime) / durationMs * frameCount);
 
         if (!service.running || frameIndex >= frameCount) {
-            $timeout(() => service.running = false);
+            $timeout(cancelAnimation);
             return undefined;
         }
 
@@ -41,6 +42,10 @@ function animationService(editorService,
     }
 
     function cancelAnimation() {
+        if (animationStartFrame !== undefined) {
+            editorService.setCurrentFrame(animationStartFrame);
+            animationStartFrame = undefined;
+        }
         service.running = false;
     }
 

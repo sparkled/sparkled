@@ -19,6 +19,7 @@ const requiredModules = [
     'ng.shims.placeholder',
     'ui.bootstrap',
     'ui.router',
+    'cfp.hotkeys',
 
     // App module dependencies.
     'templates',

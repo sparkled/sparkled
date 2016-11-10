@@ -7,7 +7,7 @@ function editorService(editorConstants) {
         animationData: {},
         currentChannel: {},
         currentEffect: {},
-        currentFrame: 1,
+        currentFrame: 0,
         setCurrentFrame: setCurrentFrame
     };
 
@@ -15,8 +15,8 @@ function editorService(editorConstants) {
 
     function setCurrentFrame(newFrame) {
         newFrame = Math.round(newFrame);
-        const minFrame = 1;
-        const maxFrame = service.song.durationSeconds * editorConstants.framesPerSecond;
+        const minFrame = 0;
+        const maxFrame = service.song.durationSeconds * editorConstants.framesPerSecond - 1;
         service.currentFrame = Math.min(Math.max(newFrame, minFrame), maxFrame);
     }
 }

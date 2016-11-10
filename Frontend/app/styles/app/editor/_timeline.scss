@@ -6,6 +6,7 @@ $timeline-font-size: 8px;
 #application {
     #timeline {
         border-top: 1px solid $navbar-bg-color;
+        margin-bottom: $timeline-gap;
         display: flex;
         flex-direction: row;
         flex-grow: 0;
@@ -20,11 +21,11 @@ $timeline-font-size: 8px;
         #current-frame-bar {
             position: absolute;
             width: 2px;
-            margin-left: $timeline-gap;
             background: $primary-button-bg-color;
             z-index: $z-index-current-frame-bar;
 
-            // Override the top and bottom values imposed by the draggable library.
+            // Override the inline styles imposed by the draggable library.
+            margin-left: $timeline-gap !important;
             top: $timeline-gap !important;
             bottom: 15px !important;
 
@@ -82,15 +83,18 @@ $timeline-font-size: 8px;
                 }
 
                 &.time {
-                    height: 23px;
-                    line-height: 23px;
+                    display: flex;
+                    flex-grow: 1;
+                    margin-bottom: 0;
+                    align-items: center;
+                    justify-content: flex-end;
                 }
 
                 &.music {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    flex-grow: 1;
+                    height: 50px;
                 }
 
                 &:first-of-type {
