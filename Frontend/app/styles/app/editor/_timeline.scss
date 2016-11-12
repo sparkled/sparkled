@@ -21,10 +21,6 @@ $timeline-font-size: 8px;
         #current-frame-bar {
             position: absolute;
             width: 2px;
-
-            // Sub-pixel alignment with SVG timeline frame width.
-            transform: scaleX(1.25) translateX(0.2px);
-
             background: $primary-button-bg-color;
             z-index: $z-index-current-frame-bar;
             margin-left: $timeline-gap;
@@ -38,7 +34,6 @@ $timeline-font-size: 8px;
 
         #current-effect-bounds {
             position: absolute;
-            display: none;
             top: $timeline-gap;
             bottom: 15px;
             width: 1px;

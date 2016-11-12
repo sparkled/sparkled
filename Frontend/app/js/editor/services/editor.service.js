@@ -8,6 +8,7 @@ function editorService(editorConstants) {
         currentChannel: {},
         currentEffect: {},
         currentFrame: 0,
+        effectMoving: false,
         setCurrentFrame: setCurrentFrame
     };
 

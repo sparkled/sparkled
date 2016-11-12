@@ -18,9 +18,9 @@
         </effect-channel>
 
         <waveform id="waveform"></waveform>
-        <time-indicator duration="editor.currentSong.durationSeconds"></time-indicator>
+        <time-indicator></time-indicator>
 
         <current-frame-bar></current-frame-bar>
-        <current-effect-bounds></current-effect-bounds>
+        <current-effect-bounds ng-if="editorService.effectMoving"></current-effect-bounds>
     </div>
 </div>

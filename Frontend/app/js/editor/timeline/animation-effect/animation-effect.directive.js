@@ -23,11 +23,10 @@ function animationEffect(editorConstants,
                 handles: 'e, w',
                 grid: [editorConstants.pixelsPerFrame, 1],
                 start: () => {
-                    //broadcastElementDimensions($rootScope, element, true);
+                    $timeout(onDrag);
                 },
                 stop: (event, ui) => {
-                    //broadcastElementDimensions($rootScope, element, false);
-                    $timeout(() => handleDrop(ui));
+                    $timeout(() => onDrop(ui));
                 }
             });
 
@@ -36,16 +35,20 @@ function animationEffect(editorConstants,
                 grid: [editorConstants.pixelsPerFrame , 1],
                 axis: 'x',
                 start: () => {
-                    //broadcastElementDimensions($rootScope, element, true);
+                    $timeout(onDrag);
                 },
                 stop: (event, ui) => {
-                    //broadcastElementDimensions($rootScope, element, false);
-                    $timeout(() => handleDrop(ui));
+                    $timeout(() => onDrop(ui));
                 }
             });
 
-            function handleDrop(ui) {
+            function onDrag() {
                 scope.setCurrentEffect();
+                editorService.effectMoving = true;
+            }
+
+            function onDrop(ui) {
+                editorService.effectMoving = false;
 
                 const duration = Math.round($(element).width() / editorConstants.pixelsPerFrame);
                 const scrollLeft = $('.channels').scrollLeft();
