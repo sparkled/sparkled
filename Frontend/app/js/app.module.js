@@ -12,6 +12,7 @@ require('./editor/editor.module');
 // App module configuration.
 const appController = require('./app.controller');
 const appConfig = require('./app.config');
+const toastrConfig = require('./toastr.config');
 
 const requiredModules = [
     // Third party module dependencies.
@@ -36,6 +37,7 @@ const appModule = angular.module('app', requiredModules);
 
 appModule
     .config(appConfig)
+    .config(toastrConfig)
     .controller(appController.name, appController.fn);
 
 module.exports = appModule;

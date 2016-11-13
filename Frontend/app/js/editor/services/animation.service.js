@@ -18,13 +18,17 @@ function animationService(editorService,
     function previewAnimation() {
         if (!service.running) {
             animationStartFrame = editorService.currentFrame;
-            songRestService.renderSong(editorService.song, durationSeconds, editorService.currentFrame)
-                .then(renderData => {
-                    service.running = true;
-                    service.animationStartTime = new Date().getTime();
-                    service.renderData = renderData;
-                });
+            songRestService.saveSong(editorService.song, editorService.animationData).then(renderSong);
         }
+    }
+
+    function renderSong() {
+        songRestService.renderSong(editorService.song, durationSeconds, editorService.currentFrame)
+            .then(renderData => {
+                service.running = true;
+                service.animationStartTime = new Date().getTime();
+                service.renderData = renderData;
+            });
     }
 
     function getFrame() {

@@ -1,3 +1,5 @@
+const angular = require('angular');
+
 function songRestService(Restangular) {
     'ngInject';
 
@@ -7,6 +9,7 @@ function songRestService(Restangular) {
         getSongUrl: getSongUrl,
         getSongs: getSongs,
         getSong: getSong,
+        saveMp3: saveMp3,
         saveSong: saveSong,
         deleteSong: deleteSong,
         renderSong: renderSong
@@ -24,7 +27,7 @@ function songRestService(Restangular) {
         return restService.one(id).get();
     }
 
-    function saveSong(file, songData) {
+    function saveMp3(file, songData) {
         var formData = new FormData();
         formData.append('song', JSON.stringify(songData));
         formData.append('mp3', file);
@@ -32,6 +35,14 @@ function songRestService(Restangular) {
         const httpConfig = {transformRequest: angular.identity};
         return restService.one().withHttpConfig(httpConfig)
             .customPUT(formData, undefined, undefined, {'Content-Type': undefined});
+    }
+
+    function saveSong(song, animationData) {
+        song.animationData = angular.toJson(animationData);
+
+        return restService.one().withHttpConfig({
+            transformRequest: angular.identity
+        }).customPOST(JSON.stringify(song), undefined, undefined, {'Content-Type': 'application/json'});
     }
 
     function deleteSong(song) {

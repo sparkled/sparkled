@@ -4,7 +4,7 @@
             <a ui-sref="selector"
                title="Back to Song Selection"
                class="btn btn-default navbar-btn"
-               ng-disabled="animationService.running">
+               ng-disabled="animationService.running || saving">
                 <i class="fa fa-arrow-left"></i>
             </a>
             <a class="btn btn-default navbar-btn logo"
@@ -20,28 +20,32 @@
             <a title="Preview Animation"
                class="btn btn-default navbar-btn"
                ng-click="animationService.previewAnimation()"
-               ng-if="!animationService.running">
+               ng-if="!animationService.running"
+               ng-disabled="saving">
                 <i class="fa fa-video-camera"></i>
             </a>
 
             <a title="Cancel Animation Preview"
                class="btn btn-default navbar-btn"
                ng-click="animationService.cancelAnimation()"
-               ng-if="animationService.running">
+               ng-if="animationService.running"
+               ng-disabled="saving">
                 <i class="fa fa-stop-circle"></i>
             </a>
 
             <a title="Add Effect"
                class="btn btn-default navbar-btn"
                ng-click="addAnimationEffect()"
-               ng-if="!animationService.running">
+               ng-if="!animationService.running"
+               ng-disabled="saving">
                 <i class="fa fa-magic"></i>
             </a>
 
             <a title="Save"
                class="btn btn-default navbar-btn"
-               ng-click="saveAnimationData()"
-               ng-if="!animationService.running">
+               ng-click="saveSong()"
+               ng-if="!animationService.running"
+               ng-disabled="saving">
                 <i class="fa fa-save"></i>
             </a>
         </div>

@@ -15,7 +15,7 @@ function SelectorCtrl(loaderService,
     };
 
     const onSongAdd = (file, songData) => {
-        songRestService.saveSong(file, songData)
+        songRestService.saveMp3(file, songData)
             .then(() => {
                 sweetAlert('Song Added', 'Your song has been added.', 'success');
                 loadSongs();

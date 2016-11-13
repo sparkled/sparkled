@@ -1,4 +1,4 @@
-function AppConfig(applicationStates,
+function appConfig(applicationStates,
                    $compileProvider,
                    $locationProvider,
                    $stateProvider,
@@ -23,4 +23,4 @@ function AppConfig(applicationStates,
     $urlRouterProvider.otherwise('/selector');
 }
 
-module.exports = AppConfig;
+module.exports = appConfig;

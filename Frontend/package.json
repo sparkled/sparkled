@@ -50,6 +50,7 @@
     "restangular": "~1.5.2",
     "source-map-support": "~0.4.5",
     "sweetalert2": "~5.3.8",
+    "toastr": "^2.1.2",
     "wavesurfer.js": "~1.2.2"
   },
   "devDependencies": {
