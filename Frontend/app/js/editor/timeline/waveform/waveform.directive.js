@@ -29,18 +29,7 @@ function waveform(animationService,
                 wavesurfer && wavesurfer.destroy();
             });
 
-            scope.$watch(() => editorService.currentFrame, newFrame => {
-                if (wavesurfer != null) {
-                    scope.isUpdatingCurrentFrame = true;
-
-                    if (!wavesurfer.isPlaying()) {
-                        var location = newFrame / (editorService.song.durationSeconds * editorConstants.framesPerSecond);
-                        wavesurfer.seekTo(location);
-                    }
-
-                    scope.isUpdatingCurrentFrame = false;
-                }
-            });
+            scope.$watch(() => editorService.currentFrame, seekToFrame);
 
             scope.$watch(() => editorService.song.durationSeconds, newDuration => {
                 if (newDuration != null) {
@@ -67,6 +56,7 @@ function waveform(animationService,
                     wavesurfer.on('ready', () => {
                         $timeout(() => {
                             loaderService.loading = false;
+                            seekToFrame(editorService.currentFrame);
                         });
                     });
 
@@ -83,6 +73,19 @@ function waveform(animationService,
                     }
                 }
             });
+
+            function seekToFrame(frame) {
+                if (wavesurfer != null) {
+                    scope.isUpdatingCurrentFrame = true;
+
+                    if (!wavesurfer.isPlaying()) {
+                        var location = frame / (editorService.song.durationSeconds * editorConstants.framesPerSecond);
+                        wavesurfer.seekTo(location);
+                    }
+
+                    scope.isUpdatingCurrentFrame = false;
+                }
+            }
         }
     }
 }
