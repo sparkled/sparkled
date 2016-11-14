@@ -1,7 +1,6 @@
 const editorConstants = {
     framesPerSecond: 60,
-    pixelsPerFrame: 2,
-    minWideEffectPixels: 45
+    pixelsPerFrame: 2
 };
 
 module.exports = {
