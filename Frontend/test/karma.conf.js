@@ -39,7 +39,7 @@ const karmaBaseConfig = {
         'app/js/**/(*.spec|*.dev|*.module|*.constants).js': ['browserify']
     },
 
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
     reporters: reporters,
 
