@@ -50,7 +50,8 @@
     "restangular": "~1.5.2",
     "source-map-support": "~0.4.5",
     "sweetalert2": "~5.3.8",
-    "toastr": "^2.1.2",
+    "toastr": "~2.1.2",
+    "ui-select": "chrisparton1991/ui-select#feat-duplicates-allowed",
     "wavesurfer.js": "~1.2.2"
   },
   "devDependencies": {
