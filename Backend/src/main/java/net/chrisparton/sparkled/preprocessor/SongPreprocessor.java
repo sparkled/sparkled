@@ -181,12 +181,10 @@ public class SongPreprocessor {
         setter.accept(escapedValue);
     }
 
-    private void escapeList(Supplier<List<AnimationEffectParamValue>> getter, Consumer<List<AnimationEffectParamValue>> setter) {
-        List<AnimationEffectParamValue> escapedValues = getter.get()
+    private void escapeList(Supplier<List<String>> getter, Consumer<List<String>> setter) {
+        List<String> escapedValues = getter.get()
                 .stream()
-                .map(AnimationEffectParamValue::getValue)
                 .map(this::escapeString)
-                .map(AnimationEffectParamValue::new)
                 .collect(toList());
 
         setter.accept(escapedValues);

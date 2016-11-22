@@ -12,6 +12,7 @@ require('./editor/editor.module');
 // App module configuration.
 const appController = require('./app.controller');
 const appConfig = require('./app.config');
+const toastr = require('toastr');
 const toastrConfig = require('./toastr.config');
 
 const requiredModules = [
@@ -20,6 +21,7 @@ const requiredModules = [
     'ng.shims.placeholder',
     'ui.bootstrap',
     'ui.router',
+    'ui.select',
     'cfp.hotkeys',
 
     // App module dependencies.
@@ -36,6 +38,8 @@ const requiredModules = [
 const appModule = angular.module('app', requiredModules);
 
 appModule
+    .constant('toastr', toastr)
+    .constant('_', window._)
     .config(appConfig)
     .config(toastrConfig)
     .controller(appController.name, appController.fn);

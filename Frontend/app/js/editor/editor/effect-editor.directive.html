@@ -1,0 +1,103 @@
+<div id="effect-editor">
+    <div ng-if="effect.startFrame == null" class="no-effect-selected">
+        <h4>No effect selected</h4>
+        <p>Select an effect in the timeline to view and edit its properties.</p>
+    </div>
+
+    <form style="width: 100%; padding: 10px 15px 0 15px; overflow: auto" ng-if="effect.startFrame != null">
+        <div class="form-group">
+            <label for="effect-editor-type">Effect Type</label>
+
+            <ui-select id="effect-editor-type" ng-model="effect.effectType">
+                <ui-select-match>{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="item.code as item in effectTypes | filter: {name: $select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+        <div class="form-group" ng-repeat="param in effect.params">
+            <div ng-if="param.paramCode === 'COLOUR'">
+                <label for="editor-param-{{param.paramCode}}">
+                    {{getParamName(effect.effectType, param.paramCode)}}
+                </label>
+
+                <ui-select id="effect-editor-colour" ng-model="param.value">
+                    <ui-select-match>
+                        <div class="colour-picker-preview" ng-if="$select.selected.code" ng-style="{'background-color': $select.selected.code}"></div>
+                        {{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.code as item in colours | filter: {name: $select.search}">
+                        <div class="colour-picker-preview" ng-style="{'background-color': item.code}"></div>
+                        <span ng-bind-html="item.name | highlight: $select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div ng-if="param.paramCode === 'MULTI_COLOUR'">
+                <label for="editor-param-{{param.paramCode}}">
+                    {{getParamName(effect.effectType, param.paramCode)}}
+                </label>
+
+                <ui-select multiple duplicates-allowed="true" sortable="true" id="effect-editor-multi-colour" ng-model="param.multiValue">
+                    <ui-select-match>
+                        <div class="colour-picker-preview" ng-if="$item.code" ng-style="{'background-color': $item.code}"></div>
+                        {{$item.name}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.code as item in colours | filter: {name: $select.search}">
+                        <div class="colour-picker-preview" ng-style="{'background-color': item.code}"></div>
+                        <span ng-bind-html="item.name | highlight: $select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div ng-if="['COLOUR', 'MULTI_COLOUR'].indexOf(param.paramCode) === -1">
+                <label for="editor-param-{{param.paramCode}}">{{getParamName(effect.effectType, param.paramCode)}}</label>
+
+                <input type="text"
+                       class="form-control"
+                       id="editor-param-{{param.paramCode}}"
+                       ng-model="param.value"
+                       placeholder="{{getParamName(effect.effectType, param.paramCode)}}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="effect-editor-easing">Easing</label>
+
+            <ui-select id="effect-editor-easing" ng-model="effect.easingType">
+                <ui-select-match>{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="item.code as item in easingTypes | filter: {name: $select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label for="effect-editor-repetitions">Repetitions</label>
+
+            <input type="number"
+                   class="form-control"
+                   id="effect-editor-repetitions"
+                   ng-model="effect.repetitions"
+                   placeholder="Repetitions"/>
+        </div>
+
+        <div class="form-group">
+            <div class="checkbox">
+                <input type="checkbox" id="effect-editor-reverse" ng-model="effect.reverse">
+                <label for="effect-editor-reverse">
+                    Reverse Animation
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button title="Delete Selected Effect"
+                    class="btn btn-danger remove-selected-effect"
+                    ng-click="deleteCurrentEffect()">
+                <i class="fa fa-trash"></i>Delete Effect
+            </button>
+        </div>
+    </form>
+</div>

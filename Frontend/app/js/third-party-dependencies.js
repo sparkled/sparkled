@@ -17,3 +17,4 @@ require('jsmediatags');
 require('interact.js');
 require('angular-hotkeys');
 require('toastr');
+require('ui-select');

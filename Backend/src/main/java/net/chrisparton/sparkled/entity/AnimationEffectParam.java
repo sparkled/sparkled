@@ -8,7 +8,7 @@ public class AnimationEffectParam {
 
     private AnimationEffectTypeParamCode paramCode;
     private String value;
-    private List<AnimationEffectParamValue> multiValue = new ArrayList<>();
+    private List<String> multiValue = new ArrayList<>();
 
     public AnimationEffectParam() {
     }
@@ -29,11 +29,11 @@ public class AnimationEffectParam {
         this.value = value;
     }
 
-    public List<AnimationEffectParamValue> getMultiValue() {
+    public List<String> getMultiValue() {
         return multiValue;
     }
 
-    public void setMultiValue(List<AnimationEffectParamValue> multiValue) {
+    public void setMultiValue(List<String> multiValue) {
         this.multiValue = multiValue;
     }
 

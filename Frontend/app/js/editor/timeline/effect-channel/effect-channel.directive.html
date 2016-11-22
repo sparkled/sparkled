@@ -1,6 +1,6 @@
 <div class="effect-channel"
      ng-attr-width="{{width}}"
-     ng-click="editorService.currentChannel = channel">
+     ng-click="setCurrentChannel()">
     <animation-effect ng-repeat="effect in channel.effects"
                       channel="channel"
                       effect="effect">

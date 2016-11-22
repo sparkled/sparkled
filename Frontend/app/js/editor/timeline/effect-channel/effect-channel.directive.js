@@ -13,6 +13,11 @@ function effectChannel(editorConstants,
         link: (scope, element) => {
             scope.editorService = editorService;
 
+            scope.setCurrentChannel = () => {
+                editorService.currentChannel = scope.channel;
+                editorService.currentEffect = null;
+            };
+
             $(element).click(event => {
                 $timeout(() => {
                     const currentFrame = (event.originalEvent.offsetX - 2) / editorConstants.pixelsPerFrame;

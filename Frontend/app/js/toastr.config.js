@@ -1,6 +1,6 @@
-const toastr = require('toastr');
+function toastrConfig(toastr) {
+    'ngInject';
 
-function toastrConfig() {
     toastr.options = {
         closeButton: true,
         preventDuplicates: true,

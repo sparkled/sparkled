@@ -1,8 +1,7 @@
-const toastr = require('toastr');
-
 function editorNavbar(animationService,
                       editorService,
-                      songRestService) {
+                      songRestService,
+                      toastr) {
     'ngInject';
 
     return {
@@ -11,6 +10,7 @@ function editorNavbar(animationService,
         templateUrl: 'editor/navbar/editor-navbar.directive.html',
         link: scope => {
             scope.animationService = animationService;
+            scope.editorService = editorService;
             scope.saving = false;
 
             scope.saveSong = () => {

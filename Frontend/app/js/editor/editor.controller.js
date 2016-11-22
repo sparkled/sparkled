@@ -9,6 +9,7 @@ function EditorCtrl(animationService,
     'ngInject';
 
     const vm = this;
+    vm.editorService = editorService;
     vm.animationService = animationService;
 
     // Loading is completed when the MP3 is loaded by the waveform directive.

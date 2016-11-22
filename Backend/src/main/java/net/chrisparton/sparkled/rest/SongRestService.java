@@ -137,24 +137,41 @@ public class SongRestService extends RestService {
     private int persistSong(String songJson) {
         Song song = gson.fromJson(songJson, Song.class);
         song.setId(null);
+        if (song.getAlbum() == null) {
+            song.setAlbum("No Album");
+        }
         song.setAnimationData(gson.toJson(createSongAnimationData()));
         return persistenceService.saveSong(song);
     }
 
     private SongAnimationData createSongAnimationData() {
         SongAnimationData animationData = new SongAnimationData();
-        animationData.getChannels().addAll(Arrays.asList(
-                new AnimationEffectChannel("Pillar 1", 0, 148, 197),
-                new AnimationEffectChannel("Pillar 2", 1, 198, 247),
-                new AnimationEffectChannel("Pillar 3", 2, 248, 297),
-                new AnimationEffectChannel("Pillar 4", 3, 298, 347),
-                new AnimationEffectChannel("Arch 1", 4, 0, 36),
-                new AnimationEffectChannel("Arch 2", 5, 37, 73),
-                new AnimationEffectChannel("Arch 3", 6, 74, 110),
-                new AnimationEffectChannel("Arch 4", 7, 111, 147),
-                new AnimationEffectChannel("Global", 8, 0, 347)
-        ));
+
+        for (int i = 1; i <= 4; i++) {
+            addChannel(animationData, "Pillar " + i, 50);
+        }
+
+        for (int i = 1; i <= 8; i++) {
+            addChannel(animationData, "Arch " + i, 16);
+        }
+
         return animationData;
+    }
+
+    private void addChannel(SongAnimationData animationData, String channelName, int ledCount) {
+        int startLed = 0;
+        int displayOrder = 0;
+
+        List<AnimationEffectChannel> channels = animationData.getChannels();
+        if (!channels.isEmpty()) {
+            AnimationEffectChannel lastChannel = channels.get(channels.size() - 1);
+            startLed = lastChannel.getEndLed() + 1;
+            displayOrder = lastChannel.getDisplayOrder() + 1;
+        }
+
+        int endLed = startLed + ledCount - 1;
+        AnimationEffectChannel channel = new AnimationEffectChannel(channelName, displayOrder, startLed, endLed);
+        channels.add(channel);
     }
 
     private void persistSongData(InputStream uploadedInputStream, int songId) throws IOException {

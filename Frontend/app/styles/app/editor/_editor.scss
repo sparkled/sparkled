@@ -1,5 +1,6 @@
 @import '../variables';
 
+$non-breaking-space: '\00a0';
 $effect-editor-width: 250px;
 
 #application {
@@ -43,16 +44,16 @@ $effect-editor-width: 250px;
 
     #effect-editor {
         display: flex;
-        width: $effect-editor-width;
+        width: $effect-editor-width;;
         flex-shrink: 0;
         background: $secondary-bg-color;
         border-left: 1px solid $navbar-bg-color;
-        white-space: nowrap;
         overflow-x: hidden;
 
         @media (min-width: 768px) {
             width: $effect-editor-width !important;
             animation: none !important;
+            opacity: 1 !important;
         }
 
         .no-effect-selected {
@@ -73,52 +74,70 @@ $effect-editor-width: 250px;
         .remove-selected-effect .fa {
             padding-right: 10px;
         }
-
-        .chosen-colour-container {
-            overflow: hidden;
-            white-space: normal;
-        }
-
-        .chosen-colour {
-            display: inline-block;
-            transform-origin: top left;
-            margin-right: 1px;
-
-            &:nth-child(4n) {
-                margin-right: 0;
-            }
-
-            &:nth-child(4n-1) {
-                margin-left: 1px;
-            }
-        }
     }
 
     #body {
-        &.editor-expand #effect-editor {
-            animation: $animation-duration slide-in ease-in-out;
+        #effect-editor {
+            transition-duration: $animation-duration;
         }
 
         &.editor-contract #effect-editor {
-            animation: $animation-duration slide-out ease-in-out;
             width: 0;
+            opacity: 0;
+        }
+    }
+}
+
+#application {
+    .colour-picker-preview {
+        display: block;
+        width: 20px;
+        margin-right: 5px;
+        border: 1px solid #333;
+        float: left;
+        font-size: 90%;
+
+        &:after {
+            content: $non-breaking-space;
+        }
+    }
+
+    .ui-select-choices-row-inner .colour-picker-preview {
+        border-color: #fff;
+    }
+}
+
+#application {
+    .ui-select-match-item.btn-primary {
+        background-color: $navbar-bg-color;
+    }
+    .ui-select-container {
+        .btn-default-focus {
+            outline: none;
+            box-shadow: none;
         }
 
-        @keyframes slide-in {
-            from {
-                width: 0
-            }
-            to {
-                width: $effect-editor-width
-            }
-        }
-        @keyframes slide-out {
-            from {
-                width: $effect-editor-width
-            }
-            to {
-                width: 0;
+        .ui-select-toggle {
+            background: #fff !important;
+            color: $body-bg-color !important;
+
+            .caret {
+                border-top-color: $body-bg-color;
             }
         }
+
+        .ui-select-choices-row-inner {
+            color: #fff;
+
+            &:hover {
+                color: $body-bg-color;
+            }
+        }
+    }
+}
+
+#application {
+    .checkbox input:focus + label::before {
+        outline: none;
     }
 }

@@ -1,4 +1,5 @@
 function animationPreview(animationService,
+                          editorService,
                           stageRestService,
                           $sce) {
     'ngInject';
@@ -9,11 +10,8 @@ function animationPreview(animationService,
         restrict: 'E',
         replace: true,
         templateUrl: 'editor/preview/animation-preview.directive.html',
-        scope: {
-            stageExpanded: '='
-        },
         link: scope => {
-            scope.stageExpanded = false;
+            scope.editorService = editorService;
             stageRestService.getStage(1).then(stage => scope.stageSvg = $sce.trustAsHtml(stage.svg));
 
             scope.$watch(() => animationService.running, (isRunning, wasRunning) => {
