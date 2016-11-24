@@ -14,7 +14,6 @@ require('angular-ui-router');
 require('angular-shims-placeholder');
 require('sweetalert2');
 require('jsmediatags');
-require('interact.js');
 require('angular-hotkeys');
 require('toastr');
 require('ui-select');
