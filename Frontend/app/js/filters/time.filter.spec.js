@@ -1,13 +1,11 @@
-/*global beforeEach, describe, expect, inject, localStorage, module*/
 describe('timeFilter', function () {
-
-    var timeFilter;
 
     beforeEach(module('app.filters'));
 
-    beforeEach(inject(function (_timeFilter_) {
-        timeFilter = _timeFilter_;
-    }));
+    var timeFilter;
+    beforeEach(
+        inject(_timeFilter_ => timeFilter = _timeFilter_)
+    );
 
     describe('timeFilter', timeFilterTests);
 
