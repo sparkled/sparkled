@@ -1,3 +1,4 @@
+const $ = require('jquery');
 const WaveSurfer = require('wavesurfer.js');
 
 function waveform(animationService,
@@ -16,7 +17,7 @@ function waveform(animationService,
             var wavesurfer = null;
 
             scope.$watch(() => animationService.running, isRunning => {
-                if (!!wavesurfer) {
+                if (wavesurfer) {
                     if (isRunning) {
                         wavesurfer.play();
                     } else {
@@ -25,7 +26,7 @@ function waveform(animationService,
                 }
             });
 
-            scope.$on('$destroy', () =>  {
+            scope.$on('$destroy', () => {
                 wavesurfer && wavesurfer.destroy();
             });
 
@@ -59,20 +60,21 @@ function waveform(animationService,
                             seekToFrame(editorService.currentFrame);
                         });
                     });
-
-                    function updateCurrentFrame() {
-                        if (!scope.isUpdatingCurrentFrame) {
-                            $timeout(() => {
-                                const progressWidth = $(element).find('wave wave').width();
-                                editorService.setCurrentFrame(progressWidth / editorConstants.pixelsPerFrame);
-
-                                // Ensure progress wave width is in sync with current frame to prevent small gaps.
-                                $(element).find('wave wave').width(scope.currentFrame * editorConstants.pixelsPerFrame);
-                            });
-                        }
-                    }
                 }
             });
+
+            function updateCurrentFrame() {
+                if (!scope.isUpdatingCurrentFrame) {
+                    $timeout(() => {
+                        const innerWave = $(element).find('wave wave');
+                        const progressWidth = innerWave.width();
+                        editorService.setCurrentFrame(progressWidth / editorConstants.pixelsPerFrame);
+
+                        // Ensure progress wave width is in sync with current frame to prevent small gaps.
+                        innerWave.width(scope.currentFrame * editorConstants.pixelsPerFrame);
+                    });
+                }
+            }
 
             function seekToFrame(frame) {
                 if (wavesurfer != null) {

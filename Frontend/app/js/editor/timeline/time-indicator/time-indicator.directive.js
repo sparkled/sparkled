@@ -16,9 +16,10 @@ function timeIndicator(editorConstants,
             scope.currentPage = $location.path();
 
             scope.$watch(() => editorService.song, update);
+            scope.$watch(() => editorService.currentFrame, keepFrameOnScreen);
 
             function update(song) {
-                const duration = !!song.durationSeconds ? song.durationSeconds : 0;
+                const duration = song.durationSeconds ? song.durationSeconds : 0;
 
                 scope.seconds = [];
                 for (var i = 0; i <= duration; i++) {
@@ -30,6 +31,26 @@ function timeIndicator(editorConstants,
                 scope.patternWidth = frameCount * editorConstants.pixelsPerFrame + 1;
                 if (scope.patternWidth > .5) {
                     scope.patternWidth -= .5;
+                }
+            }
+
+            function keepFrameOnScreen() {
+                const channels = $('.channels');
+                const channelsWidth = channels.width();
+                const boundaryWidth = Math.max(50, channelsWidth / 10);
+
+                const channelsScrollLeft = channels.scrollLeft();
+                const frameIndicatorOffset = 2;
+                const leftOffset = editorService.currentFrame * editorConstants.pixelsPerFrame + frameIndicatorOffset;
+
+                const distanceFromLeft = leftOffset - channelsScrollLeft;
+                if (distanceFromLeft < boundaryWidth) {
+                    channels.scrollLeft(leftOffset - boundaryWidth);
+                }
+
+                const distanceFromRight = -(leftOffset - (channelsScrollLeft + channelsWidth));
+                if (distanceFromRight < boundaryWidth) {
+                    channels.scrollLeft(leftOffset - channelsWidth + boundaryWidth);
                 }
             }
         }
