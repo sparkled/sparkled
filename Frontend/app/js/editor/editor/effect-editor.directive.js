@@ -1,4 +1,5 @@
 function effectEditor(animationRestService,
+                      editorService,
                       _) {
     'ngInject';
 
@@ -24,9 +25,7 @@ function effectEditor(animationRestService,
             animationRestService.getEffectTypes().then(effectTypes => scope.effectTypes = effectTypes);
 
             scope.deleteCurrentEffect = () => {
-                _.remove(scope.channel.effects, effect => {
-                    return effect === scope.effect;
-                });
+                editorService.deleteCurrentEffect();
                 scope.effect = null;
             };
 

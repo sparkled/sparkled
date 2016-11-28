@@ -1,5 +1,6 @@
 function editorService(editorConstants,
-                       toastr) {
+                       toastr,
+                       _) {
     'ngInject';
 
     const service = {
@@ -12,7 +13,8 @@ function editorService(editorConstants,
         effectMoving: false,
         stageExpanded: true,
         setCurrentFrame: setCurrentFrame,
-        addAnimationEffect: addAnimationEffect
+        addAnimationEffect: addAnimationEffect,
+        deleteCurrentEffect: deleteCurrentEffect
     };
 
     return service;
@@ -77,6 +79,12 @@ function editorService(editorConstants,
 
         service.currentChannel.effects.splice(insertionIndex, 0, newEffect);
         service.currentEffect = newEffect;
+    }
+
+    function deleteCurrentEffect() {
+        _.remove(service.currentChannel.effects, effect => {
+            return effect === service.currentEffect;
+        });
     }
 }
 

@@ -25,7 +25,7 @@ function EditorCtrl(animationService,
 
     hotkeys.bindTo($scope)
         .add({
-            combo: 'alt+left',
+            combo: 'left',
             description: 'Previous Frame',
             callback: function (event) {
                 editorService.setCurrentFrame(editorService.currentFrame - 1);
@@ -33,7 +33,7 @@ function EditorCtrl(animationService,
             }
         })
         .add({
-            combo: 'ctrl+alt+left',
+            combo: 'alt+left',
             description: 'Previous Second',
             callback: function (event) {
                 var newFrame = editorService.currentFrame;
@@ -49,7 +49,7 @@ function EditorCtrl(animationService,
             }
         })
         .add({
-            combo: 'alt+right',
+            combo: 'right',
             description: 'Next Frame',
             callback: function (event) {
                 editorService.setCurrentFrame(editorService.currentFrame + 1);
@@ -57,7 +57,7 @@ function EditorCtrl(animationService,
             }
         })
         .add({
-            combo: 'ctrl+alt+right',
+            combo: 'alt+right',
             description: 'Next Second',
             callback: function (event) {
                 var newFrame = (editorService.currentFrame + editorConstants.framesPerSecond);
@@ -70,7 +70,7 @@ function EditorCtrl(animationService,
             combo: 'backspace',
             description: 'Delete Selected Animation Effect',
             callback: function (event) {
-                self.deleteCurrentEffect();
+                editorService.deleteCurrentEffect();
                 event.preventDefault();
             }
         })
