@@ -1,7 +1,7 @@
 <div class="effect-channel"
      ng-attr-width="{{width}}"
      ng-click="setCurrentChannel()">
-    <animation-effect ng-repeat="effect in channel.effects"
+    <animation-effect ng-repeat="effect in channel.effects track by $index"
                       channel="channel"
                       effect="effect">
     </animation-effect>

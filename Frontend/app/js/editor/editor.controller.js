@@ -1,4 +1,5 @@
 function EditorCtrl(animationService,
+                    clipboardService,
                     editorConstants,
                     editorService,
                     hotkeys,
@@ -36,14 +37,7 @@ function EditorCtrl(animationService,
             combo: 'alt+left',
             description: 'Previous Second',
             callback: function (event) {
-                var newFrame = editorService.currentFrame;
-                const framesPastSecond = newFrame % editorConstants.framesPerSecond;
-                if (framesPastSecond === 0) {
-                    newFrame -= editorConstants.framesPerSecond;
-                } else {
-                    newFrame -= framesPastSecond;
-                }
-
+                const newFrame = nextSecond(editorService.currentFrame - editorConstants.framesPerSecond - 1);
                 editorService.setCurrentFrame(newFrame);
                 event.preventDefault();
             }
@@ -60,9 +54,24 @@ function EditorCtrl(animationService,
             combo: 'alt+right',
             description: 'Next Second',
             callback: function (event) {
-                var newFrame = (editorService.currentFrame + editorConstants.framesPerSecond);
-                newFrame -= newFrame % editorConstants.framesPerSecond;
+                const newFrame = nextSecond(editorService.currentFrame);
                 editorService.setCurrentFrame(newFrame);
+                event.preventDefault();
+            }
+        })
+        .add({
+            combo: 'mod+c',
+            description: 'Copy Effect',
+            callback: function (event) {
+                clipboardService.copyCurrentEffect();
+                event.preventDefault();
+            }
+        })
+        .add({
+            combo: 'mod+v',
+            description: 'Paste Effect',
+            callback: function (event) {
+                clipboardService.pasteCopiedEffect();
                 event.preventDefault();
             }
         })
@@ -90,6 +99,12 @@ function EditorCtrl(animationService,
                 event.preventDefault();
             }
         });
+
+    function nextSecond(currentFrame) {
+        var newFrame = currentFrame + editorConstants.framesPerSecond;
+        newFrame -= newFrame % editorConstants.framesPerSecond;
+        return newFrame;
+    }
 }
 
 module.exports = {

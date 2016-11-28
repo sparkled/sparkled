@@ -5,7 +5,7 @@ function editorService(editorConstants,
 
     const service = {
         song: {},
-        songUrl: undefined,
+        songUrl: null,
         animationData: {},
         currentChannel: {},
         currentEffect: {},
@@ -26,16 +26,17 @@ function editorService(editorConstants,
         service.currentFrame = Math.min(Math.max(newFrame, minFrame), maxFrame);
     }
 
-    function addAnimationEffect() {
+    function addAnimationEffect(effect) {
+        if (!effect) {
+            effect = newEffect();
+        }
+
         const effects = service.currentChannel.effects;
         const effectCount = effects.length;
         const insertionIndex = getInsertionIndex(effects);
+        const songDuration = service.song.durationSeconds * editorConstants.framesPerSecond;
 
-        // Ensure effect doesn't go past end of song or collide with another frame.
-        var endFrame = Math.min(
-            service.currentFrame + editorConstants.minimumEffectFrames,
-            service.song.durationSeconds * editorConstants.framesPerSecond
-        );
+        effect.endFrame = Math.min(effect.endFrame, songDuration);
 
         if (insertionIndex < effectCount) {
             const nextElement = effects[insertionIndex];
@@ -45,15 +46,27 @@ function editorService(editorConstants,
                 return;
             }
 
-            endFrame = Math.min(endFrame, nextElement.startFrame);
+            effect.endFrame = Math.min(effect.endFrame, nextElement.startFrame);
         }
 
-        if (endFrame - service.currentFrame < editorConstants.minimumEffectFrames) {
-            toastr.error(`Effect must be at least ${editorConstants.minimumEffectFrames} frames long.`);
+        if (effect.endFrame - service.currentFrame < editorConstants.minimumEffectFrames) {
+            toastr.error('There is not enough room to add an animation effect.');
             return;
         }
 
-        addEffectToChannel(insertionIndex, endFrame);
+        addEffectToChannel(effect, insertionIndex);
+    }
+
+    function newEffect() {
+        return {
+            effectType: '',
+            easingType: 'LINEAR',
+            startFrame: service.currentFrame,
+            endFrame: service.currentFrame + editorConstants.minimumEffectFrames,
+            repetitions: 1,
+            reverse: false,
+            params: []
+        };
     }
 
     function getInsertionIndex(effects) {
@@ -66,19 +79,9 @@ function editorService(editorConstants,
         return effects.length;
     }
 
-    function addEffectToChannel(insertionIndex, endFrame) {
-        var newEffect = {
-            effectType: '',
-            easingType: 'LINEAR',
-            startFrame: service.currentFrame,
-            endFrame: endFrame,
-            repetitions: 1,
-            reverse: false,
-            params: []
-        };
-
-        service.currentChannel.effects.splice(insertionIndex, 0, newEffect);
-        service.currentEffect = newEffect;
+    function addEffectToChannel(effect, insertionIndex) {
+        service.currentChannel.effects.splice(insertionIndex, 0, effect);
+        service.currentEffect = effect;
     }
 
     function deleteCurrentEffect() {

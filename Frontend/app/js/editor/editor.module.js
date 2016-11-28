@@ -3,6 +3,7 @@ const editorConfig = require('./editor.config');
 const editorConstants = require('./editor.constants');
 const editorController = require('./editor.controller');
 const animationService = require('./services/animation.service');
+const clipboardService = require('./services/clipboard.service');
 const editorService = require('./services/editor.service');
 const editorPreviewOverlay = require('./overlay/editor-preview-overlay.directive');
 const editorNavbar = require('./navbar/editor-navbar.directive');
@@ -28,6 +29,7 @@ editorModule
     .constant(editorConstants.name, editorConstants.obj)
     .controller(editorController.name, editorController.fn)
     .service(animationService.name, animationService.fn)
+    .service(clipboardService.name, clipboardService.fn)
     .service(editorService.name, editorService.fn)
     .directive(editorPreviewOverlay.name, editorPreviewOverlay.fn)
     .directive(editorNavbar.name, editorNavbar.fn)
