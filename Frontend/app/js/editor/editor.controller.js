@@ -28,73 +28,89 @@ function EditorCtrl(animationService,
         .add({
             combo: 'left',
             description: 'Previous Frame',
-            callback: function (event) {
-                editorService.setCurrentFrame(editorService.currentFrame - 1);
+            callback: event => {
+                if (!animationService.running) {
+                    editorService.setCurrentFrame(editorService.currentFrame - 1);
+                }
                 event.preventDefault();
             }
         })
         .add({
             combo: 'alt+left',
             description: 'Previous Second',
-            callback: function (event) {
-                const newFrame = nextSecond(editorService.currentFrame - editorConstants.framesPerSecond - 1);
-                editorService.setCurrentFrame(newFrame);
+            callback: event => {
+                if (!animationService.running) {
+                    const newFrame = nextSecond(editorService.currentFrame - editorConstants.framesPerSecond - 1);
+                    editorService.setCurrentFrame(newFrame);
+                }
                 event.preventDefault();
             }
         })
         .add({
             combo: 'right',
             description: 'Next Frame',
-            callback: function (event) {
-                editorService.setCurrentFrame(editorService.currentFrame + 1);
+            callback: event => {
+                if (!animationService.running) {
+                    editorService.setCurrentFrame(editorService.currentFrame + 1);
+                }
                 event.preventDefault();
             }
         })
         .add({
             combo: 'alt+right',
             description: 'Next Second',
-            callback: function (event) {
-                const newFrame = nextSecond(editorService.currentFrame);
-                editorService.setCurrentFrame(newFrame);
+            callback: event => {
+                if (!animationService.running) {
+                    const newFrame = nextSecond(editorService.currentFrame);
+                    editorService.setCurrentFrame(newFrame);
+                }
                 event.preventDefault();
             }
         })
         .add({
             combo: 'mod+c',
             description: 'Copy Effect',
-            callback: function (event) {
-                clipboardService.copyCurrentEffect();
+            callback: event => {
+                if (!animationService.running) {
+                    clipboardService.copyCurrentEffect();
+                }
                 event.preventDefault();
             }
         })
         .add({
             combo: 'mod+v',
             description: 'Paste Effect',
-            callback: function (event) {
-                clipboardService.pasteCopiedEffect();
+            callback: event => {
+                if (!animationService.running) {
+                    clipboardService.pasteCopiedEffect();
+                }
                 event.preventDefault();
             }
         })
         .add({
             combo: 'backspace',
             description: 'Delete Selected Animation Effect',
-            callback: function (event) {
-                editorService.deleteCurrentEffect();
+            callback: event => {
+                if (!animationService.running) {
+                    editorService.deleteCurrentEffect();
+                }
                 event.preventDefault();
             }
         })
         .add({
             combo: 'space',
             description: 'Preview Animation',
-            callback: function (event) {
-                animationService.previewAnimation();
+            callback: event => {
+                if (!animationService.running) {
+                    animationService.previewAnimation();
+                }
                 event.preventDefault();
             }
         })
         .add({
             combo: 'escape',
             description: 'Cancel Animation Preview',
-            callback: function (event) {
+            callback: event => {
                 animationService.cancelAnimation();
                 event.preventDefault();
             }
