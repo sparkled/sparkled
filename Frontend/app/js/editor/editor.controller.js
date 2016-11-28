@@ -75,7 +75,7 @@ function EditorCtrl(animationService,
             }
         })
         .add({
-            combo: 'ctrl+p',
+            combo: 'space',
             description: 'Preview Animation',
             callback: function (event) {
                 animationService.previewAnimation();
