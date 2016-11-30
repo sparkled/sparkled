@@ -33,12 +33,14 @@ public class RendererTest {
             animationData.getChannels().add(channel);
         }
 
+        final int fps = 60;
         Song song = new Song();
-        song.setDurationSeconds(1);
+        song.setFramesPerSecond(fps);
+        song.setDurationFrames(song.getFramesPerSecond());
         song.setAnimationData(gson.toJson(animationData));
 
-        List<AnimationFrame> renderedFrames = new Renderer(song, 0, song.getDurationSeconds()).render();
-        assertThat(renderedFrames.size(), is(60));
+        List<AnimationFrame> renderedFrames = new Renderer(song, 0, song.getDurationFrames()).render();
+        assertThat(renderedFrames.size(), is(fps));
     }
 
     private AnimationEffectChannel createAnimationEffectChannel(int startLed, int endLed) {

@@ -25,9 +25,9 @@ function effectChannel(editorConstants,
                 });
             });
 
-            scope.$watch(() => editorService.song.durationSeconds, newVal => {
-                if (newVal != null) {
-                    var frameCount = newVal * editorConstants.framesPerSecond;
+            scope.$watch(() => editorService.song.durationFrames, durationFrames => {
+                if (durationFrames) {
+                    var frameCount = durationFrames;
                     var width = frameCount * editorConstants.pixelsPerFrame + 1;
                     $(element).css('width', width);
                 }

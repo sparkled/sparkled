@@ -37,13 +37,13 @@ public class AnimationFrameConverterTest {
         }
 
         Song song = new Song();
-        song.setDurationSeconds(1);
+        song.setDurationFrames(song.getFramesPerSecond());
         song.setAnimationData(gson.toJson(animationData));
 
-        List<AnimationFrame> renderedFrames = new Renderer(song, 0, song.getDurationSeconds()).render();
+        List<AnimationFrame> renderedFrames = new Renderer(song, 0, song.getDurationFrames()).render();
 
         AnimationFrameConverter animationFrameConverter = new AnimationFrameConverter(renderedFrames);
-        ByteArrayOutputStream convert = animationFrameConverter.convert();
+        animationFrameConverter.convert();
     }
 
     private AnimationEffectChannel createAnimationEffectChannel(int startLed, int endLed) {

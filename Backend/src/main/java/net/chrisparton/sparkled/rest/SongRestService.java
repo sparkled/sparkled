@@ -67,12 +67,12 @@ public class SongRestService extends RestService {
     @Path("/render/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRenderedSong(@PathParam("id") int id,
-                                    @QueryParam("duration-seconds") int durationSeconds,
-                                    @QueryParam("start-frame") int startFrame) {
+                                    @QueryParam("durationFrames") int durationFrames,
+                                    @QueryParam("startFrame") int startFrame) {
         Optional<Song> song = persistenceService.getSongById(id);
 
         if (song.isPresent()) {
-            Renderer renderer = new Renderer(song.get(), startFrame, durationSeconds);
+            Renderer renderer = new Renderer(song.get(), startFrame, durationFrames);
             List<AnimationFrame> animationFrames = renderer.render();
 
             return getJsonResponse(animationFrames);

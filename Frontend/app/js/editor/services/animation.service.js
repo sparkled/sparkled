@@ -23,7 +23,8 @@ function animationService(editorService,
     }
 
     function renderSong() {
-        songRestService.renderSong(editorService.song, durationSeconds, editorService.currentFrame)
+        const durationFrames = durationSeconds * editorService.song.framesPerSecond;
+        songRestService.renderSong(editorService.song, durationFrames, editorService.currentFrame)
             .then(renderData => {
                 service.running = true;
                 service.animationStartTime = new Date().getTime();

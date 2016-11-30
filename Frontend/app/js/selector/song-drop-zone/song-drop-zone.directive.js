@@ -8,6 +8,8 @@ const draggedCssClass = 'dragged';
 function songDropZone($timeout) {
     'ngInject';
 
+    const framesPerSecond = 60;
+
     const config = {
         restrict: 'E',
         replace: true,
@@ -75,7 +77,7 @@ function songDropZone($timeout) {
                     name: tags.title,
                     artist: tags.artist,
                     album: tags.album,
-                    durationSeconds: Math.ceil(e.currentTarget.duration)
+                    durationFrames: Math.ceil(e.currentTarget.duration * framesPerSecond)
                 };
 
                 scope.onSongDrop(file, songData);
@@ -87,7 +89,9 @@ function songDropZone($timeout) {
     };
 
     var isTypeValid = type => type === 'audio/mp3';
-    var isAcceptableSize = size => size / 1048576 <= maxSizeMb;
+    var isAcceptableSize = size => {
+        return size / 1048576 <= maxMp3SizeMb;
+    }
 
     var showSongError = errorMessage => {
         sweetAlert({

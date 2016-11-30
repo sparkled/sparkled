@@ -7,7 +7,8 @@ CREATE TABLE sparkled.song (
   album VARCHAR(64) NOT NULL,
   animation_data TEXT,
   artist VARCHAR(64) NOT NULL,
-  duration_seconds INTEGER NOT NULL,
+  duration_frames INTEGER NOT NULL,
+  frames_per_second INTEGER NOT NULL,
   name VARCHAR(64) NOT NULL
 );
 

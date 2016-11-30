@@ -11,7 +11,7 @@ function timeFilter() {
 
         const hours = pad(Math.floor(input / 3600));
         const minutes = pad(Math.floor((input % 3600) / 60));
-        const seconds = pad(input % 60);
+        const seconds = pad(Math.floor(input % 60));
 
         const sign = isNegative ? '-' : '';
         const hasHours = hours > 0;

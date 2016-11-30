@@ -11,7 +11,7 @@
         <div class="panel-body">
             <div class="row">
                 <h5 class="col-xs-9 song-artist">By <span class="song-artist" ng-bind-html="song.artist"></span></h5>
-                <h5 class="col-xs-3 song-duration" ng-bind="song.durationSeconds | time"></h5>
+                <h5 class="col-xs-3 song-duration" ng-bind="song.durationFrames / song.framesPerSecond | time"></h5>
             </div>
 
             <div class="row">

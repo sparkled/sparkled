@@ -10,27 +10,26 @@ import java.util.List;
 
 public class Renderer {
 
-    private static final int FRAMES_PER_SECOND = 60;
     private final List<AnimationFrame> frameList;
     private final Gson gson = new Gson();
 
     private Song song;
     private int startFrame;
-    private int durationSeconds;
+    private int durationFrames;
     private SongAnimationData animationData;
 
-    public Renderer(Song song, int startFrame, int durationSeconds) {
+    public Renderer(Song song, int startFrame, int durationFrames) {
         this.song = song;
         this.startFrame = startFrame;
-        this.durationSeconds = durationSeconds;
+        this.durationFrames = durationFrames;
         this.animationData = gson.fromJson(song.getAnimationData(), SongAnimationData.class);
         this.frameList = createFrameList();
     }
 
     private List<AnimationFrame> createFrameList() {
-        int songFrameCount = song.getDurationSeconds() * FRAMES_PER_SECOND;
+        int songFrameCount = song.getDurationFrames();
 
-        int endFrame = startFrame + durationSeconds * FRAMES_PER_SECOND;
+        int endFrame = startFrame + durationFrames;
         if (endFrame > songFrameCount) {
             endFrame = songFrameCount;
         }

@@ -32,10 +32,10 @@ function waveform(animationService,
 
             scope.$watch(() => editorService.currentFrame, seekToFrame);
 
-            scope.$watch(() => editorService.song.durationSeconds, newDuration => {
-                if (newDuration != null) {
-                    var frameCount = newDuration * editorConstants.framesPerSecond;
-                    var width = frameCount * editorConstants.pixelsPerFrame + 1;
+            scope.$watch(() => editorService.song.durationFrames, durationFrames => {
+                if (durationFrames) {
+                    const frameCount = durationFrames;
+                    const width = frameCount * editorConstants.pixelsPerFrame + 1;
                     $(element).css('width', width);
                 }
             });
@@ -81,7 +81,7 @@ function waveform(animationService,
                     scope.isUpdatingCurrentFrame = true;
 
                     if (!wavesurfer.isPlaying()) {
-                        var location = frame / (editorService.song.durationSeconds * editorConstants.framesPerSecond);
+                        var location = frame / (editorService.song.durationFrames);
                         wavesurfer.seekTo(location);
                     }
 

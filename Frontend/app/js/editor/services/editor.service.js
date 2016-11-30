@@ -22,7 +22,7 @@ function editorService(editorConstants,
     function setCurrentFrame(newFrame) {
         newFrame = Math.round(newFrame);
         const minFrame = 0;
-        const maxFrame = service.song.durationSeconds * editorConstants.framesPerSecond - 1;
+        const maxFrame = service.song.durationFrames - 1;
         service.currentFrame = Math.min(Math.max(newFrame, minFrame), maxFrame);
     }
 
@@ -34,7 +34,7 @@ function editorService(editorConstants,
         const effects = service.currentChannel.effects;
         const effectCount = effects.length;
         const insertionIndex = getInsertionIndex(effects);
-        const songDuration = service.song.durationSeconds * editorConstants.framesPerSecond;
+        const songDuration = service.song.durationFrames;
 
         effect.endFrame = Math.min(effect.endFrame, songDuration);
 

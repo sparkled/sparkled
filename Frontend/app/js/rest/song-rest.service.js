@@ -50,11 +50,11 @@ function songRestService(Restangular) {
             .customDELETE(song.id, undefined, undefined, undefined);
     }
 
-    function renderSong(song, durationSeconds, startFrame) {
+    function renderSong(song, durationFrames, startFrame) {
         return restService.one('render')
             .customGET(song.id, {
-                'duration-seconds': durationSeconds,
-                'start-frame': startFrame
+                durationFrames: durationFrames,
+                startFrame: startFrame
             });
     }
 }

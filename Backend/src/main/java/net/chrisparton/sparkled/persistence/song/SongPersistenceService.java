@@ -30,7 +30,8 @@ public class SongPersistenceService {
                 songRoot.get(Song_.name),
                 songRoot.get(Song_.artist),
                 songRoot.get(Song_.album),
-                songRoot.get(Song_.durationSeconds)
+                songRoot.get(Song_.durationFrames),
+                songRoot.get(Song_.framesPerSecond)
         );
 
         cq.orderBy(

@@ -40,7 +40,7 @@ function EditorCtrl(animationService,
             description: 'Previous Second',
             callback: event => {
                 if (!animationService.running) {
-                    const newFrame = nextSecond(editorService.currentFrame - editorConstants.framesPerSecond - 1);
+                    const newFrame = nextSecond(editorService.currentFrame - editorService.song.framesPerSecond - 1);
                     editorService.setCurrentFrame(newFrame);
                 }
                 event.preventDefault();
@@ -117,8 +117,8 @@ function EditorCtrl(animationService,
         });
 
     function nextSecond(currentFrame) {
-        var newFrame = currentFrame + editorConstants.framesPerSecond;
-        newFrame -= newFrame % editorConstants.framesPerSecond;
+        var newFrame = currentFrame + editorService.song.framesPerSecond;
+        newFrame -= newFrame % editorService.song.framesPerSecond;
         return newFrame;
     }
 }

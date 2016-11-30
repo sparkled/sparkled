@@ -13,22 +13,25 @@ public class Song {
     private String name;
     private String artist;
     private String album;
-    private int durationSeconds;
+    private int durationFrames;
+    private int framesPerSecond;
     private String animationData;
 
     public Song() {
+        this.framesPerSecond = 60;
     }
 
     /**
      * Constructor for {@link CriteriaQuery#multiselect(List)}.
      */
     @SuppressWarnings("unused")
-    public Song(Integer id, String name, String artist, String album, int durationSeconds) {
+    public Song(Integer id, String name, String artist, String album, int durationFrames, int framesPerSecond) {
         this.id = id;
         this.name = name;
         this.artist = artist;
         this.album = album;
-        this.durationSeconds = durationSeconds;
+        this.durationFrames = durationFrames;
+        this.framesPerSecond = framesPerSecond;
     }
 
     @Id
@@ -73,13 +76,23 @@ public class Song {
     }
 
     @Basic
-    @Column(name = "duration_seconds", nullable = false)
-    public int getDurationSeconds() {
-        return durationSeconds;
+    @Column(name = "duration_frames", nullable = false)
+    public int getDurationFrames() {
+        return durationFrames;
     }
 
-    public void setDurationSeconds(int durationSeconds) {
-        this.durationSeconds = durationSeconds;
+    public void setDurationFrames(int durationFrames) {
+        this.durationFrames = durationFrames;
+    }
+
+    @Basic
+    @Column(name = "frames_per_second", nullable = false)
+    public int getFramesPerSecond() {
+        return framesPerSecond;
+    }
+
+    public void setFramesPerSecond(int framesPerSecond) {
+        this.framesPerSecond = framesPerSecond;
     }
 
     @Basic
@@ -98,7 +111,8 @@ public class Song {
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
         return Objects.equals(id, song.id) &&
-                durationSeconds == song.durationSeconds &&
+                durationFrames == song.durationFrames &&
+                framesPerSecond == song.framesPerSecond &&
                 Objects.equals(name, song.name) &&
                 Objects.equals(artist, song.artist) &&
                 Objects.equals(animationData, song.animationData);
@@ -106,6 +120,6 @@ public class Song {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, artist, durationSeconds,animationData);
+        return Objects.hash(id, name, artist, durationFrames, framesPerSecond, animationData);
     }
 }

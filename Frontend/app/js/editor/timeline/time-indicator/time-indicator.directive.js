@@ -19,16 +19,17 @@ function timeIndicator(editorConstants,
             scope.$watch(() => editorService.currentFrame, keepFrameOnScreen);
 
             function update(song) {
-                const duration = song.durationSeconds ? song.durationSeconds : 0;
+                const durationSeconds = Math.floor(song.durationFrames / song.framesPerSecond) || 0;
 
                 scope.seconds = [];
-                for (var i = 0; i <= duration; i++) {
+                for (var i = 0; i <= durationSeconds; i++) {
                     scope.seconds.push(i);
                 }
 
-                const frameCount = duration * editorConstants.framesPerSecond;
+                const frameCount = song.durationFrames || 0;
                 scope.width = frameCount * editorConstants.pixelsPerFrame + 1;
-                scope.patternWidth = frameCount * editorConstants.pixelsPerFrame + 1;
+                scope.patternWidth = scope.width;
+
                 if (scope.patternWidth > .5) {
                     scope.patternWidth -= .5;
                 }
