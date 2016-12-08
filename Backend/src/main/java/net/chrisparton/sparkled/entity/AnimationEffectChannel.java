@@ -7,6 +7,7 @@ public class AnimationEffectChannel {
 
     private List<AnimationEffect> effects = new ArrayList<>();
     private String name;
+    private String code;
     private int startLed = 0;
     private int endLed = 0;
     private int displayOrder;
@@ -18,11 +19,16 @@ public class AnimationEffectChannel {
     public AnimationEffectChannel() {
     }
 
-    public AnimationEffectChannel(String name, int displayOrder, int startLed, int endLed) {
+    public AnimationEffectChannel(String name, String code, int displayOrder, int startLed, int endLed) {
         this.name = name;
+        this.code = code;
         this.displayOrder = displayOrder;
         this.startLed = startLed;
         this.endLed = endLed;
+    }
+
+    public int getLedCount() {
+        return endLed - startLed + 1;
     }
 
     public List<AnimationEffect> getEffects() {
@@ -39,6 +45,14 @@ public class AnimationEffectChannel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public int getDisplayOrder() {

@@ -8,7 +8,8 @@ import net.chrisparton.sparkled.entity.SongData;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.preprocessor.EntityValidationException;
 import net.chrisparton.sparkled.renderer.Renderer;
-import net.chrisparton.sparkled.renderer.data.AnimationFrame;
+import net.chrisparton.sparkled.renderer.data.RenderedChannel;
+import net.chrisparton.sparkled.renderer.data.RenderedFrame;
 import net.chrisparton.sparkled.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -19,8 +20,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Path("/song")
@@ -73,9 +74,9 @@ public class SongRestService extends RestService {
 
         if (song.isPresent()) {
             Renderer renderer = new Renderer(song.get(), startFrame, durationFrames);
-            List<AnimationFrame> animationFrames = renderer.render();
+            Map<String, RenderedChannel> renderedChannels = renderer.render();
 
-            return getJsonResponse(animationFrames);
+            return getJsonResponse(renderedChannels);
         }
 
         return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
@@ -148,17 +149,17 @@ public class SongRestService extends RestService {
         SongAnimationData animationData = new SongAnimationData();
 
         for (int i = 1; i <= 4; i++) {
-            addChannel(animationData, "Pillar " + i, 50);
+            addChannel(animationData, "Pillar " + i, "P" + i, 50);
         }
 
         for (int i = 1; i <= 8; i++) {
-            addChannel(animationData, "Arch " + i, 16);
+            addChannel(animationData, "Arch " + i, "A" + i, 16);
         }
 
         return animationData;
     }
 
-    private void addChannel(SongAnimationData animationData, String channelName, int ledCount) {
+    private void addChannel(SongAnimationData animationData, String channelName, String channelCode, int ledCount) {
         int startLed = 0;
         int displayOrder = 0;
 
@@ -170,7 +171,7 @@ public class SongRestService extends RestService {
         }
 
         int endLed = startLed + ledCount - 1;
-        AnimationEffectChannel channel = new AnimationEffectChannel(channelName, displayOrder, startLed, endLed);
+        AnimationEffectChannel channel = new AnimationEffectChannel(channelName, channelCode, displayOrder, startLed, endLed);
         channels.add(channel);
     }
 

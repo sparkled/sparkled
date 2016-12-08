@@ -1,6 +1,7 @@
 function animationService(editorService,
                           songRestService,
-                          $timeout) {
+                          $timeout,
+                          _) {
     'ngInject';
 
     var animationStartFrame = undefined;
@@ -11,7 +12,7 @@ function animationService(editorService,
         previewAnimation: previewAnimation,
         getFrame: getFrame,
         cancelAnimation: cancelAnimation,
-        renderData: [],
+        renderData: {},
         animationStartTime: undefined
     };
 
@@ -28,14 +29,16 @@ function animationService(editorService,
             .then(renderData => {
                 service.running = true;
                 service.animationStartTime = new Date().getTime();
-                service.renderData = renderData;
+                service.renderData = renderData.plain();
             });
     }
 
     function getFrame() {
         const now = new Date().getTime();
-        const frameCount = service.renderData.length;
-        const durationMs = 1000 / 60 * frameCount;
+
+        const firstKey = Object.keys(service.renderData)[0];
+        const frameCount = service.renderData[firstKey].frames.length;
+        const durationMs = 1000 / editorService.song.framesPerSecond * frameCount;
         const frameIndex = Math.floor((now - service.animationStartTime) / durationMs * frameCount);
 
         if (!service.running || frameIndex >= frameCount) {
@@ -43,7 +46,7 @@ function animationService(editorService,
             return undefined;
         }
 
-        return service.renderData[frameIndex];
+        return buildFrame(frameIndex);
     }
 
     function cancelAnimation() {
@@ -52,6 +55,16 @@ function animationService(editorService,
             animationStartFrame = undefined;
         }
         service.running = false;
+    }
+
+    function buildFrame(frameIndex) {
+        const frame = {};
+
+        _(service.renderData).forOwn((value, key) => {
+            frame[key] = value.frames[frameIndex].leds;
+        });
+
+        return frame;
     }
 
     return service;

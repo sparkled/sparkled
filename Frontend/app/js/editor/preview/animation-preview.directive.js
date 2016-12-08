@@ -1,7 +1,8 @@
 function animationPreview(animationService,
                           editorService,
                           stageRestService,
-                          $sce) {
+                          $sce,
+                          _) {
     'ngInject';
 
     const activeLedClass = 'active-led';
@@ -33,8 +34,16 @@ function animationPreview(animationService,
 
             function drawFrame(frame) {
                 var ledIndex = 0;
-                _(frame.leds).forEach(led => {
-                    const $led = $(`#led-${ledIndex}`);
+
+                _(frame).forOwn((value, key) => {
+                    renderChannel(key, value);
+                });
+            }
+
+            function renderChannel(key, leds) {
+                const elements = $(`svg .${key} circle`);
+                _(leds).forEach((led, index) => {
+                    const $led = $(elements[index]);
                     const alpha = _.max([led.r, led.g, led.b]) / 255;
                     $led.css('fill', `rgba(${led.r},${led.g},${led.b},${alpha})`);
 
@@ -43,8 +52,6 @@ function animationPreview(animationService,
                     } else {
                         $led.removeClass(activeLedClass);
                     }
-
-                    ledIndex++;
                 });
             }
         }

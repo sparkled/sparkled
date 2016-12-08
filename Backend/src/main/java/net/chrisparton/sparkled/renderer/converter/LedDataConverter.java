@@ -2,6 +2,7 @@ package net.chrisparton.sparkled.renderer.converter;
 
 import net.chrisparton.sparkled.renderer.data.Led;
 
+import java.awt.*;
 import java.nio.ByteBuffer;
 
 public class LedDataConverter {

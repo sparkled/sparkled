@@ -3,7 +3,8 @@ package net.chrisparton.sparkled.renderer.effect;
 import net.chrisparton.sparkled.converter.ColourParamConverter;
 import net.chrisparton.sparkled.entity.AnimationEffect;
 import net.chrisparton.sparkled.entity.AnimationEffectChannel;
-import net.chrisparton.sparkled.renderer.data.AnimationFrame;
+import net.chrisparton.sparkled.renderer.data.RenderedChannel;
+import net.chrisparton.sparkled.renderer.data.RenderedFrame;
 import net.chrisparton.sparkled.renderer.util.ColorUtils;
 
 import java.awt.*;
@@ -11,9 +12,9 @@ import java.awt.*;
 public class FlashEffectRenderer extends EffectRenderer {
 
     @Override
-    public void render(AnimationEffectChannel channel, AnimationFrame frame, AnimationEffect effect, int progressPercentage) {
-        int startLed = channel.getStartLed();
-        int endLed = channel.getEndLed();
+    public void render(RenderedChannel channel, RenderedFrame frame, AnimationEffect effect, int progressPercentage) {
+        int startLed = 0;
+        int endLed = channel.getLedCount();
 
         Color color = new ColourParamConverter().convert(effect);
 
@@ -22,13 +23,11 @@ public class FlashEffectRenderer extends EffectRenderer {
         Color adjustedColor = ColorUtils.adjustBrightness(color, brightnessPercentage);
 
         frame.getLeds()
-                .subList(startLed, endLed + 1)
-                .forEach(led -> {
-                    led.addRgb(
-                            adjustedColor.getRed(),
-                            adjustedColor.getGreen(),
-                            adjustedColor.getBlue()
-                    );
-                });
+                .subList(startLed, endLed)
+                .forEach(led -> led.addRgb(
+                        adjustedColor.getRed(),
+                        adjustedColor.getGreen(),
+                        adjustedColor.getBlue()
+                ));
     }
 }

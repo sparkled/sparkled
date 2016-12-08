@@ -2,16 +2,21 @@ package net.chrisparton.sparkled.renderer;
 
 import com.google.gson.Gson;
 import net.chrisparton.sparkled.entity.*;
-import net.chrisparton.sparkled.renderer.data.AnimationFrame;
+import net.chrisparton.sparkled.renderer.data.RenderedChannel;
+import net.chrisparton.sparkled.renderer.data.RenderedFrame;
 import net.chrisparton.sparkled.renderer.effect.EffectRenderer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class Renderer {
 
-    private final List<AnimationFrame> frameList;
-    private final Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     private Song song;
     private int startFrame;
@@ -23,55 +28,36 @@ public class Renderer {
         this.startFrame = startFrame;
         this.durationFrames = durationFrames;
         this.animationData = gson.fromJson(song.getAnimationData(), SongAnimationData.class);
-        this.frameList = createFrameList();
     }
 
-    private List<AnimationFrame> createFrameList() {
-        int songFrameCount = song.getDurationFrames();
-
-        int endFrame = startFrame + durationFrames;
-        if (endFrame > songFrameCount) {
-            endFrame = songFrameCount;
-        }
-
-        int frameCount = endFrame - startFrame;
-        List<AnimationFrame> renderedFrames = new ArrayList<>(frameCount);
-
-        int ledCount = getLedCount(animationData.getChannels()) + 1;
-        for (int frameNumber = startFrame; frameNumber < startFrame + frameCount; frameNumber++) {
-            renderedFrames.add(new AnimationFrame(frameNumber, ledCount));
-        }
-
-        return renderedFrames;
-    }
-
-    private int getLedCount(List<AnimationEffectChannel> channels) {
-        return channels
-                .stream()
-                .mapToInt(AnimationEffectChannel::getEndLed)
-                .max().orElse(0);
-    }
-
-    public List<AnimationFrame> render() {
+    public Map<String, RenderedChannel> render() {
         List<AnimationEffectChannel> channels = animationData.getChannels();
-        channels.forEach(this::renderChannel);
+        Map<String, RenderedChannel> renderedChannels = new HashMap<>();
 
-        return frameList;
+        channels.forEach(channel ->
+            renderedChannels.put(channel.getCode(), renderChannel(channel))
+        );
+        return renderedChannels;
     }
 
-    private void renderChannel(AnimationEffectChannel channel) {
-        channel.getEffects().forEach(effect -> renderEffect(channel, effect));
+    private RenderedChannel renderChannel(AnimationEffectChannel channel) {
+        final int endFrame = Math.min(song.getDurationFrames(), startFrame + durationFrames - 1);
+        RenderedChannel renderedChannel = new RenderedChannel(startFrame, endFrame, channel.getLedCount());
+        channel.getEffects().forEach(effect -> renderEffect(renderedChannel, effect));
+
+        return renderedChannel;
     }
 
-    private void renderEffect(AnimationEffectChannel channel, AnimationEffect effect) {
+    private void renderEffect(RenderedChannel renderedChannel, AnimationEffect effect) {
         AnimationEffectTypeCode effectTypeCode = effect.getEffectType();
         EffectRenderer renderer = effectTypeCode.getRenderer();
 
         int startFrame = Math.max(this.startFrame, effect.getStartFrame());
-        int endFrame = Math.min(this.startFrame + frameList.size(), effect.getEndFrame());
-        for (int frameNumber = startFrame; frameNumber < endFrame; frameNumber++) {
-            AnimationFrame frame = frameList.get(frameNumber - this.startFrame);
-            renderer.render(channel, frame, effect);
+        int endFrame = Math.min(this.startFrame + this.durationFrames, effect.getEndFrame());
+
+        for (int frameNumber = startFrame; frameNumber <= endFrame; frameNumber++) {
+            RenderedFrame frame = renderedChannel.getFrames().get(frameNumber - this.startFrame);
+            renderer.render(renderedChannel, frame, effect);
         }
     }
 }

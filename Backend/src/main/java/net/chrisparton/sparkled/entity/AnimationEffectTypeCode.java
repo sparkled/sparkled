@@ -1,9 +1,6 @@
 package net.chrisparton.sparkled.entity;
 
-import net.chrisparton.sparkled.renderer.effect.EffectRenderer;
-import net.chrisparton.sparkled.renderer.effect.FlashEffectRenderer;
-import net.chrisparton.sparkled.renderer.effect.LineLeftEffectRenderer;
-import net.chrisparton.sparkled.renderer.effect.LineRightEffectRenderer;
+import net.chrisparton.sparkled.renderer.effect.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +9,14 @@ import static java.util.stream.Collectors.toList;
 
 public enum AnimationEffectTypeCode {
 
+    FILL(
+            new AnimationEffectType(
+                    "FILL",
+                    "Fill",
+                    AnimationEffectTypeParamCode.COLOUR.getEffectTypeParam()
+            ),
+            new FillEffectRenderer()
+    ),
     FLASH(
             new AnimationEffectType(
                     "FLASH",

@@ -4,7 +4,8 @@ import net.chrisparton.sparkled.converter.ColourParamConverter;
 import net.chrisparton.sparkled.converter.LengthParamConverter;
 import net.chrisparton.sparkled.entity.AnimationEffect;
 import net.chrisparton.sparkled.entity.AnimationEffectChannel;
-import net.chrisparton.sparkled.renderer.data.AnimationFrame;
+import net.chrisparton.sparkled.renderer.data.RenderedChannel;
+import net.chrisparton.sparkled.renderer.data.RenderedFrame;
 
 import java.awt.*;
 
@@ -14,9 +15,9 @@ public abstract class AbstractLineEffectRenderer extends EffectRenderer {
     private LengthParamConverter lengthParamConverter = new LengthParamConverter();
 
     @Override
-    public void render(AnimationEffectChannel channel, AnimationFrame frame, AnimationEffect effect, int progressPercentage) {
-        int startLed = channel.getStartLed();
-        int endLed = channel.getEndLed();
+    public void render(RenderedChannel channel, RenderedFrame frame, AnimationEffect effect, int progressPercentage) {
+        int startLed = 0;
+        int endLed = channel.getLedCount();
         int ledCount = endLed - startLed;
 
         Color color = colourParamConverter.convert(effect);
@@ -28,15 +29,18 @@ public abstract class AbstractLineEffectRenderer extends EffectRenderer {
 
         if (firstLitLed <= endLed) {
             frame.getLeds()
-                    .subList(Math.max(startLed, firstLitLed), Math.min(lastLitLed, endLed) + 1)
-                    .forEach(led -> {
-                        led.addRgb(
-                                color.getRed(),
-                                color.getGreen(),
-                                color.getBlue()
-                        );
-                    });
+                    .subList(constrain(startLed, endLed, firstLitLed), constrain(startLed, endLed, lastLitLed))
+                    .forEach(led ->
+                            led.addRgb(
+                                    color.getRed(),
+                                    color.getGreen(),
+                                    color.getBlue()
+                            ));
         }
+    }
+
+    private int constrain(int min, int max, int value) {
+        return Math.max(min, Math.min(max, value));
     }
 
     protected abstract int calculateProgressPercentage(int progressPercentage);

@@ -1,5 +1,8 @@
 package net.chrisparton.sparkled.renderer.data;
 
+import java.awt.*;
+import java.util.Objects;
+
 public class Led {
 
     private short r = 0;
@@ -13,6 +16,10 @@ public class Led {
         this.r = (short) r;
         this.g = (short) g;
         this.b = (short) b;
+    }
+
+    public void addRgb(Color color) {
+        addRgb(color.getRed(), color.getGreen(), color.getBlue());
     }
 
     public void addRgb(int r, int g, int b) {
@@ -43,5 +50,27 @@ public class Led {
 
     public void setB(short b) {
         this.b = b;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof Led)) {
+            return false;
+        }
+
+        Led led = (Led) o;
+        return r == led.r && g == led.g && b == led.b;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(r, g, b);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{r:%s, g:%s, b:%s", r, g, b);
     }
 }

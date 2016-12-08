@@ -2,49 +2,77 @@ package net.chrisparton.sparkled.renderer;
 
 import com.google.gson.Gson;
 import net.chrisparton.sparkled.entity.*;
-import net.chrisparton.sparkled.renderer.data.AnimationFrame;
+import net.chrisparton.sparkled.renderer.data.Led;
+import net.chrisparton.sparkled.renderer.data.RenderedChannel;
+import net.chrisparton.sparkled.renderer.data.RenderedFrame;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 
 public class RendererTest {
+
+    private static final String CHANNEL_CODE = "CH1";
 
     private Gson gson = new Gson();
 
     @Test
     public void can_render() {
+        final int ledCount = 10;
+        final int songFrames = 60;
+        final int effectStartFrame = 20;
+        final int effectEndFrame = 50;
+        final int renderStartFrame = effectStartFrame - 5;
+        final int renderDuration = (effectEndFrame + 5) - renderStartFrame;
+
         SongAnimationData animationData = new SongAnimationData();
 
-        {
-            AnimationEffectChannel channel = createAnimationEffectChannel(0, 9);
-            AnimationEffect flashEffect = createAnimationEffect(AnimationEffectTypeCode.FLASH, 0, 29);
-            flashEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "#ff00ff"));
-            channel.getEffects().add(flashEffect);
-            animationData.getChannels().add(channel);
-        }
-        {
-            AnimationEffectChannel channel = createAnimationEffectChannel(10, 19);
-            AnimationEffect lineRightEffect = createAnimationEffect(AnimationEffectTypeCode.LINE_RIGHT, 30, 59);
-            lineRightEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "#00ff00"));
-            channel.getEffects().add(lineRightEffect);
-            animationData.getChannels().add(channel);
-        }
+        AnimationEffectChannel channel = createAnimationEffectChannel(CHANNEL_CODE, 0, ledCount - 1);
+        AnimationEffect flashEffect = createAnimationEffect(AnimationEffectTypeCode.FILL, effectStartFrame, effectEndFrame);
+        flashEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "#ffffff"));
+        channel.getEffects().add(flashEffect);
+        animationData.getChannels().add(channel);
 
         final int fps = 60;
         Song song = new Song();
         song.setFramesPerSecond(fps);
-        song.setDurationFrames(song.getFramesPerSecond());
+        song.setDurationFrames(songFrames);
         song.setAnimationData(gson.toJson(animationData));
 
-        List<AnimationFrame> renderedFrames = new Renderer(song, 0, song.getDurationFrames()).render();
-        assertThat(renderedFrames.size(), is(fps));
+        Map<String, RenderedChannel> renderedChannels = new Renderer(song, renderStartFrame, renderDuration).render();
+        assertThat(renderedChannels.size(), is(1));
+
+        RenderedChannel renderedChannel = renderedChannels.get(CHANNEL_CODE);
+        assertNotNull(renderedChannel);
+
+        assertThat(renderedChannel.getFrames().size(), is(renderDuration));
+        assertThat(renderedChannel.getLedCount(), is(ledCount));
+
+        for (int i = 0; i < renderDuration; i++) {
+            RenderedFrame renderedFrame = renderedChannel.getFrames().get(i);
+            int frameNumber = renderedFrame.getFrameNumber();
+            assertThat(frameNumber, is(i + renderStartFrame));
+            assertThat(renderedFrame.getLeds().size(), is(ledCount));
+
+            Led expectedLed = new Led(0, 0, 0);
+            if (frameNumber >= effectStartFrame && frameNumber <= effectEndFrame) {
+                expectedLed = new Led(255, 255, 255);
+            }
+
+            for (int j = 0; j < ledCount; j++) {
+                Led renderedLed = renderedFrame.getLeds().get(j);
+                assertThat(renderedLed, is(expectedLed));
+            }
+        }
     }
 
-    private AnimationEffectChannel createAnimationEffectChannel(int startLed, int endLed) {
+    private AnimationEffectChannel createAnimationEffectChannel(String code, int startLed, int endLed) {
         AnimationEffectChannel channel = new AnimationEffectChannel();
+        channel.setCode(code);
         channel.setStartLed(startLed);
         channel.setEndLed(endLed);
 
