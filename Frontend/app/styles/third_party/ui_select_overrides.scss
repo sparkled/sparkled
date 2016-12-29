@@ -1,0 +1,18 @@
+@import '../app/variables';
+
+#application {
+    .ui-select-search {
+        width: 100% !important;
+    }
+
+    .ui-select-match-remove {
+        font-size: 15px;
+        padding-top: 3px;
+        color: $body-bg-color;
+
+        &:hover {
+            cursor: pointer;
+            color: $danger-color;
+        }
+    }
+}

@@ -5,4 +5,9 @@
 @import '../../../node_modules/angularjs-toaster/toaster.min';
 @import '../../../node_modules/sweetalert2/src/sweetalert2';
 @import '../../../node_modules/angular-hotkeys/build/hotkeys';
+
+@import 'ui_select_overrides';
 @import '../../../node_modules/ui-select/src/common';
+
+@import 'bootstrap_daterangepicker_overrides';
+@import '../../../node_modules/bootstrap-daterangepicker/daterangepicker.scss';

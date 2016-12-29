@@ -13,8 +13,14 @@ CREATE TABLE sparkled.song (
 );
 
 CREATE TABLE sparkled.song_data (
-  song_id INTEGER PRIMARY KEY NOT NULL,
+  song_id INTEGER PRIMARY KEY NOT NULL REFERENCES sparkled.song(id),
   mp3_data BYTEA NOT NULL
+);
+
+CREATE TABLE sparkled.scheduled_song (
+  id SERIAL primary key,
+  song_id INTEGER NOT NULL REFERENCES sparkled.song(id),
+  start_time TIMESTAMP NOT NULL
 );
 
 CREATE TABLE sparkled.stage (

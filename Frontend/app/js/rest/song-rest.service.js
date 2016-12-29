@@ -46,8 +46,7 @@ function songRestService(Restangular) {
     }
 
     function deleteSong(song) {
-        return restService.one()
-            .customDELETE(song.id, undefined, undefined, undefined);
+        return restService.one().customDELETE(song.id);
     }
 
     function renderSong(song, durationFrames, startFrame) {

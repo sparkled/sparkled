@@ -1,0 +1,18 @@
+#scheduler-page {
+    .centred {
+        margin: 5px auto;
+    }
+
+    .scheduler-date {
+        width: 200px;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+
+    .action-table-cell {
+        width: 1%;
+        white-space: nowrap;
+    }
+}

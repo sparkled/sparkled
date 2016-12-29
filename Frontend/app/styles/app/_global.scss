@@ -2,4 +2,21 @@
     body {
         font-family: "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif, FontAwesome;
     }
+
+    .m-a {
+        margin: auto;
+    }
+
+    .m-t-sm {
+        margin-top: 15px;
+    }
+
+    .overflow-x {
+        overflow-x: auto;
+    }
+
+    // Fix minor alignment issue in Bootswatch theme.
+    .input-group-addon {
+        border-right: 0;
+    }
 }

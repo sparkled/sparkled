@@ -1,7 +1,8 @@
 const applicationStates = {
     page: 'page',
     editor: 'editor',
-    selector: 'selector'
+    selector: 'selector',
+    scheduler: 'scheduler'
 };
 
 module.exports = {

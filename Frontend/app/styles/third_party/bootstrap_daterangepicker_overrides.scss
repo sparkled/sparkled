@@ -1,0 +1,15 @@
+@import '../app/variables';
+
+$daterangepicker-color: $body-bg-color;
+
+#application {
+    .daterangepicker {
+        &, th, td {
+            border-radius: 0;
+        }
+
+        &:before {
+            border-bottom-color: $body-bg-color;
+        }
+    }
+}

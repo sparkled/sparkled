@@ -9,7 +9,6 @@ import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.preprocessor.EntityValidationException;
 import net.chrisparton.sparkled.renderer.Renderer;
 import net.chrisparton.sparkled.renderer.data.RenderedChannel;
-import net.chrisparton.sparkled.renderer.data.RenderedFrame;
 import net.chrisparton.sparkled.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
