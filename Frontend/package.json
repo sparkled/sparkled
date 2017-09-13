@@ -22,7 +22,7 @@
   ],
   "private": false,
   "engines": {
-    "node": "~4.6.x"
+    "node": "~8.4.x"
   },
   "scripts": {
     "clean": "cross-env NODE_ENV=test ./node_modules/.bin/gulp clean",
