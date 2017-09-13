@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
-@Table(name = "song_data", schema = "sparkled", catalog = "postgres")
+@Table(name = "song_data")
 public class SongData {
 
     private int songId;
@@ -21,7 +21,7 @@ public class SongData {
         this.songId = songId;
     }
 
-    @Basic
+    @Lob
     @Column(name = "mp3_data", nullable = false)
     public byte[] getMp3Data() {
         return mp3Data;

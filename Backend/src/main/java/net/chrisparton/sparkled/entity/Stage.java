@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "stage", schema = "sparkled", catalog = "postgres")
+@Table(name = "stage")
 public class Stage {
 
     private Integer id;
@@ -22,7 +22,7 @@ public class Stage {
     }
 
     @Basic
-    @Column(name = "svg", nullable = false)
+    @Column(name = "svg", columnDefinition = "text", nullable = false)
     public String getSvg() {
         return svg;
     }

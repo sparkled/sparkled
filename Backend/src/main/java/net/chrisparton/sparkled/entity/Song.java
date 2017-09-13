@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "song", schema = "sparkled", catalog = "postgres")
+@Table(name = "song")
 public class Song {
 
     private Integer id;
@@ -96,7 +96,7 @@ public class Song {
     }
 
     @Basic
-    @Column(name = "animation_data", nullable = true)
+    @Column(name = "animation_data", columnDefinition = "text")
     public String getAnimationData() {
         return animationData;
     }

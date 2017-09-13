@@ -15,10 +15,19 @@ public class PersistenceService {
         entityManagerFactory = Persistence.createEntityManagerFactory("sparkled");
     }
 
+    /**
+     * Syntactic sugar for (optionally) starting up the persistence service prior to initial use.
+     */
+    public static void start() {
+        instance();
+    }
+
     public static PersistenceService instance() {
         if (instance == null) {
             synchronized (PersistenceService.class) {
-                instance = new PersistenceService();
+                if (instance == null) {
+                    instance = new PersistenceService();
+                }
             }
         }
 
