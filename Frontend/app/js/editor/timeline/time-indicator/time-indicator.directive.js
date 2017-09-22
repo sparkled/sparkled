@@ -1,3 +1,5 @@
+const $ = require('jquery');
+
 function timeIndicator(editorConstants,
                        editorService,
                        $location) {

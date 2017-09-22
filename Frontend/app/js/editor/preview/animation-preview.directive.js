@@ -1,3 +1,5 @@
+const $ = require('jquery');
+
 function animationPreview(animationService,
                           editorService,
                           stageRestService,

@@ -1,3 +1,5 @@
+const $ = require('jquery');
+
 function currentFrameBar(editorConstants,
                          editorService,
                          $timeout) {

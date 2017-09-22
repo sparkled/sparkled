@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const angular = require('angular');
 const jsMediaTags = require('jsmediatags');
 const sweetAlert = require('sweetalert2');
 

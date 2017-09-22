@@ -1,3 +1,4 @@
+const angular = require('angular');
 require('./third-party-dependencies');
 const $ = require('jquery');
 

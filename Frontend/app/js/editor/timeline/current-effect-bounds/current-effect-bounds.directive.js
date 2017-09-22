@@ -1,3 +1,5 @@
+const $ = require('jquery');
+
 function currentEffectBounds($interval) {
     'ngInject';
 
