@@ -1,11 +1,13 @@
 package net.chrisparton.sparkled;
 
 import net.chrisparton.sparkled.entity.Stage;
+import net.chrisparton.sparkled.music.SongSchedulerService;
 import net.chrisparton.sparkled.persistence.PersistenceService;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         PersistenceService.start();
+        SongSchedulerService.instance().start();
         bootstrapData();
         RestApi.start();
     }

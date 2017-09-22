@@ -8,6 +8,7 @@ import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import org.apache.commons.lang3.time.DateUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,8 +21,37 @@ public class ScheduledSongPersistenceService {
 
     private SongPersistenceService songPersistenceService = new SongPersistenceService();
 
-    public List<ScheduledSong> getScheduledSongs(Date startDate, Date endDate) {
+    public Optional<ScheduledSong> getNextScheduledSong() {
+        return PersistenceService.instance().perform(
+                this::getNextScheduledSong
+        );
+    }
 
+    private Optional<ScheduledSong> getNextScheduledSong(EntityManager entityManager) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ScheduledSong> cq = cb.createQuery(ScheduledSong.class);
+        Root<ScheduledSong> root = cq.from(ScheduledSong.class);
+
+        cq.where(
+            cb.greaterThan(root.get(ScheduledSong_.startTime), new Date())
+        );
+
+        cq.orderBy(
+                cb.asc(root.get(ScheduledSong_.startTime))
+        );
+
+        TypedQuery<ScheduledSong> query = entityManager.createQuery(cq);
+        query.setMaxResults(1);
+
+        try {
+            ScheduledSong scheduledSong = query.getSingleResult();
+            return Optional.ofNullable(scheduledSong);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    public List<ScheduledSong> getScheduledSongs(Date startDate, Date endDate) {
         return PersistenceService.instance().perform(
                 entityManager -> this.getScheduledSongs(entityManager, startDate, endDate)
         );

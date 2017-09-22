@@ -2,10 +2,12 @@ package net.chrisparton.sparkled.rest;
 
 import net.chrisparton.sparkled.entity.ScheduledSong;
 import net.chrisparton.sparkled.entity.Song;
+import net.chrisparton.sparkled.event.SongScheduledEvent;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
 import net.chrisparton.sparkled.viewmodel.ScheduledSongViewModel;
 import net.chrisparton.sparkled.viewmodel.converter.ScheduledSongViewModelConverter;
 import org.apache.commons.lang3.time.DateUtils;
+import org.greenrobot.eventbus.EventBus;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -22,7 +24,7 @@ public class SchedulerRestService extends RestService {
 
     private static final SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final int MIN_SECONDS_BETWEEN_SONGS = 5;
-    private static final int MIN_SECONDS_IN_FUTURE = 30;
+    private static final int MIN_SECONDS_IN_FUTURE = 5;
 
     private ScheduledSongPersistenceService persistenceService = new ScheduledSongPersistenceService();
 
@@ -83,6 +85,9 @@ public class SchedulerRestService extends RestService {
         }
 
         boolean success = persistenceService.saveScheduledSong(scheduledSong);
+        if (success) {
+            EventBus.getDefault().post(new SongScheduledEvent(scheduledSong));
+        }
         return getResponse(success ? Response.Status.OK : Response.Status.BAD_REQUEST);
     }
 
