@@ -21,12 +21,12 @@ public class FlashEffectRenderer extends EffectRenderer {
         double brightnessPercentage = 100.0 * Math.sin(progress);
         Color adjustedColor = ColorUtils.adjustBrightness(color, brightnessPercentage);
 
-        frame.getLeds()
-                .subList(startLed, endLed)
-                .forEach(led -> led.addRgb(
-                        adjustedColor.getRed(),
-                        adjustedColor.getGreen(),
-                        adjustedColor.getBlue()
-                ));
+        for (int i = startLed; i < endLed; i++) {
+            frame.getLed(i).addRgb(
+                    adjustedColor.getRed(),
+                    adjustedColor.getGreen(),
+                    adjustedColor.getBlue()
+            );
+        }
     }
 }

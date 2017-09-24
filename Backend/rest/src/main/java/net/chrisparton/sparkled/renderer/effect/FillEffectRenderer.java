@@ -11,11 +11,10 @@ public class FillEffectRenderer extends EffectRenderer {
 
     @Override
     public void render(RenderedChannel channel, RenderedFrame frame, AnimationEffect effect, int progressPercentage) {
-        int startLed = 0;
-        int endLed = channel.getLedCount();
-
         Color color = new ColourParamConverter().convert(effect);
 
-        frame.getLeds().forEach(led -> led.addRgb(color));
+        for (int i = 0; i < frame.getLedCount(); i++) {
+            frame.getLed(i).addRgb(color);
+        }
     }
 }

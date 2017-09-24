@@ -5,17 +5,19 @@ import java.util.Objects;
 
 public class Led {
 
-    private short r = 0;
-    private short g = 0;
-    private short b = 0;
+    private static final int R = 0;
+    private static final int G = 1;
+    private static final int B = 2;
+
+    private byte[] ledData;
+    private int ledIndex;
 
     public Led() {
     }
 
-    public Led(int r, int g, int b) {
-        this.r = (short) r;
-        this.g = (short) g;
-        this.b = (short) b;
+    public Led(byte[] ledData, int ledIndex) {
+        this.ledData = ledData;
+        this.ledIndex = ledIndex * 3;
     }
 
     public void addRgb(Color color) {
@@ -23,33 +25,33 @@ public class Led {
     }
 
     public void addRgb(int r, int g, int b) {
-        this.r = (short) Math.min(this.r + r, 255);
-        this.g = (short) Math.min(this.g + g, 255);
-        this.b = (short) Math.min(this.b + b, 255);
+        setR(Math.min(getR() + r, 255));
+        setG(Math.min(getG() + g, 255));
+        setB(Math.min(getB() + b, 255));
     }
 
-    public short getR() {
-        return r;
+    public int getR() {
+        return ledData[ledIndex + R] & 0xFF;
     }
 
-    public void setR(short r) {
-        this.r = r;
+    private void setR(int r) {
+        ledData[ledIndex + R] = (byte) r;
     }
 
-    public short getG() {
-        return g;
+    public int getG() {
+        return ledData[ledIndex + G] & 0xFF;
     }
 
-    public void setG(short g) {
-        this.g = g;
+    private void setG(int g) {
+        ledData[ledIndex + G] = (byte) g;
     }
 
-    public short getB() {
-        return b;
+    public int getB() {
+        return ledData[ledIndex + B] & 0xFF;
     }
 
-    public void setB(short b) {
-        this.b = b;
+    private void setB(int b) {
+        ledData[ledIndex + B] = (byte) b;
     }
 
     @Override
@@ -61,16 +63,16 @@ public class Led {
         }
 
         Led led = (Led) o;
-        return r == led.r && g == led.g && b == led.b;
+        return getR() == led.getR() && getG() == led.getG() && getB() == led.getB();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(r, g, b);
+        return Objects.hash(getR(), getG(), getB());
     }
 
     @Override
     public String toString() {
-        return String.format("{r:%s, g:%s, b:%s", r, g, b);
+        return String.format("{r:%s, g:%s, b:%s", getR(), getG(), getB());
     }
 }

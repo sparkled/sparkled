@@ -1,15 +1,14 @@
 package net.chrisparton.sparkled.rest;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
+import net.chrisparton.sparkled.rest.json.GsonProvider;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public abstract class RestService {
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
-    private static final Gson gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
+    protected final Gson gson = GsonProvider.get();
 
     protected Response getJsonResponse(Object responseObject) {
         return getJsonResponse(Response.Status.OK, responseObject);

@@ -35,8 +35,6 @@ function animationPreview(animationService,
             }
 
             function drawFrame(frame) {
-                var ledIndex = 0;
-
                 _(frame).forOwn((value, key) => {
                     renderChannel(key, value);
                 });
@@ -45,6 +43,7 @@ function animationPreview(animationService,
             function renderChannel(key, leds) {
                 const elements = $(`svg .${key} circle`);
                 _(leds).forEach((led, index) => {
+                    led = convertLed(led);
                     const $led = $(elements[index]);
                     const alpha = _.max([led.r, led.g, led.b]) / 255;
                     $led.css('fill', `rgba(${led.r},${led.g},${led.b},${alpha})`);
@@ -55,6 +54,15 @@ function animationPreview(animationService,
                         $led.removeClass(activeLedClass);
                     }
                 });
+            }
+
+            // Convert from java's signed integer representation to unsigned.
+            function convertLed(led) {
+                return {
+                    r: led.r & 0xFF,
+                    g: led.g & 0xFF,
+                    b: led.b & 0xFF
+                }
             }
         }
     }

@@ -27,14 +27,13 @@ public abstract class AbstractLineEffectRenderer extends EffectRenderer {
         int lastLitLed = firstLitLed + length - 1;
 
         if (firstLitLed <= endLed) {
-            frame.getLeds()
-                    .subList(constrain(startLed, endLed, firstLitLed), constrain(startLed, endLed, lastLitLed))
-                    .forEach(led ->
-                            led.addRgb(
-                                    color.getRed(),
-                                    color.getGreen(),
-                                    color.getBlue()
-                            ));
+            for (int i = constrain(startLed, endLed, firstLitLed); i < constrain(startLed, endLed, lastLitLed); i++) {
+                frame.getLed(i).addRgb(
+                        color.getRed(),
+                        color.getGreen(),
+                        color.getBlue()
+                );
+            }
         }
     }
 

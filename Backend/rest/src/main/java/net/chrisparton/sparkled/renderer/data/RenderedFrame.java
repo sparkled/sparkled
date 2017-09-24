@@ -1,12 +1,9 @@
 package net.chrisparton.sparkled.renderer.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RenderedFrame {
 
     int frameNumber;
-    private final List<Led> leds;
+    private final byte[] ledData;
 
     /**
      * Default constructor required for Gson.
@@ -18,22 +15,18 @@ public class RenderedFrame {
 
     public RenderedFrame(int frameNumber, int ledCount) {
         this.frameNumber = frameNumber;
-        this.leds = new ArrayList<>(ledCount);
-
-        for (int i = 0; i < ledCount; i++) {
-            leds.add(new Led());
-        }
+        this.ledData = new byte[ledCount * 3];
     }
 
     public int getFrameNumber() {
         return frameNumber;
     }
 
-    public void setFrameNumber(int frameNumber) {
-        this.frameNumber = frameNumber;
+    public int getLedCount() {
+        return ledData.length / 3;
     }
 
-    public List<Led> getLeds() {
-        return leds;
+    public Led getLed(int ledIndex) {
+        return new Led(ledData, ledIndex);
     }
 }

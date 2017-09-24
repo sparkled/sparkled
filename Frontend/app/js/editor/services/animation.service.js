@@ -61,7 +61,15 @@ function animationService(editorService,
         const frame = {};
 
         _(service.renderData).forOwn((value, key) => {
-            frame[key] = value.frames[frameIndex].leds;
+            const ledData = value.frames[frameIndex].ledData;
+            frame[key] = [];
+            for (let i = 0; i < ledData.length; i += 3) {
+                frame[key].push({
+                    r: ledData[i],
+                    g: ledData[i + 1],
+                    b: ledData[i + 2]
+                });
+            }
         });
 
         return frame;

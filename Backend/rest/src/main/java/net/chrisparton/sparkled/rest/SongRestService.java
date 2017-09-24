@@ -1,6 +1,5 @@
 package net.chrisparton.sparkled.rest;
 
-import com.google.gson.Gson;
 import net.chrisparton.sparkled.entity.AnimationEffectChannel;
 import net.chrisparton.sparkled.entity.Song;
 import net.chrisparton.sparkled.entity.SongAnimationData;
@@ -29,7 +28,6 @@ public class SongRestService extends RestService {
 
     private static final String MP3_MIME_TYPE = "audio/mpeg";
     private SongPersistenceService persistenceService = new SongPersistenceService();
-    private Gson gson = new Gson();
 
     @GET
     @Path("/{id}")

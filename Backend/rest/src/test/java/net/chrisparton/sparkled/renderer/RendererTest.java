@@ -55,16 +55,19 @@ public class RendererTest {
             RenderedFrame renderedFrame = renderedChannel.getFrames().get(i);
             int frameNumber = renderedFrame.getFrameNumber();
             assertThat(frameNumber, is(i + renderStartFrame));
-            assertThat(renderedFrame.getLeds().size(), is(ledCount));
+            assertThat(renderedFrame.getLedCount(), is(ledCount));
 
-            Led expectedLed = new Led(0, 0, 0);
+            int[] expectedLed = new int[] {0, 0, 0};
+
             if (frameNumber >= effectStartFrame && frameNumber <= effectEndFrame) {
-                expectedLed = new Led(255, 255, 255);
+                expectedLed = new int[] {255, 255, 255};
             }
 
             for (int j = 0; j < ledCount; j++) {
-                Led renderedLed = renderedFrame.getLeds().get(j);
-                assertThat(renderedLed, is(expectedLed));
+                Led renderedLed = renderedFrame.getLed(j);
+                assertThat(renderedLed.getR(), is(expectedLed[0]));
+                assertThat(renderedLed.getG(), is(expectedLed[1]));
+                assertThat(renderedLed.getB(), is(expectedLed[2]));
             }
         }
     }
