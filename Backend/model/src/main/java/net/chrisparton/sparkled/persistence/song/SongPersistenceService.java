@@ -1,12 +1,10 @@
 package net.chrisparton.sparkled.persistence.song;
 
-import net.chrisparton.sparkled.entity.Song;
-import net.chrisparton.sparkled.entity.SongData;
-import net.chrisparton.sparkled.entity.SongData_;
-import net.chrisparton.sparkled.entity.Song_;
+import net.chrisparton.sparkled.entity.*;
 import net.chrisparton.sparkled.persistence.PersistenceService;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -117,17 +115,47 @@ public class SongPersistenceService {
         }
     }
 
-    public int saveSong(Song song) {
-        return saveEntity(song).getId();
+    public Optional<RenderedSong> getRenderedSongById(int songId) {
+        return PersistenceService.instance().perform(
+                entityManager -> getRenderedSongById(entityManager, songId)
+        );
+    }
+
+    private Optional<RenderedSong> getRenderedSongById(EntityManager entityManager, int songId) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<RenderedSong> cq = cb.createQuery(RenderedSong.class);
+        Root<RenderedSong> renderedSong = cq.from(RenderedSong.class);
+        cq.where(
+                cb.equal(renderedSong.get(RenderedSong_.songId), songId)
+        );
+
+        TypedQuery<RenderedSong> query = entityManager.createQuery(cq);
+
+        try {
+            return Optional.ofNullable(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    public int saveSong(Song song, RenderedSong renderedSong) {
+        Song savedSong = PersistenceService.instance().perform(
+                entityManager -> {
+                    Song result = entityManager.merge(song);
+                    renderedSong.setSongId(result.getId());
+                    entityManager.merge(renderedSong);
+                    return result;
+                }
+        );
+
+        return savedSong.getId();
     }
 
     public int saveSongData(SongData songData) {
-        return saveEntity(songData).getSongId();
-    }
-
-    private <T> T saveEntity(T entity) {
-        return PersistenceService.instance().perform(
-                entityManager -> entityManager.merge(entity)
+        SongData savedSongData = PersistenceService.instance().perform(
+                entityManager -> entityManager.merge(songData)
         );
+
+        return savedSongData.getSongId();
     }
 }

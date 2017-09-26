@@ -1,9 +1,6 @@
 package net.chrisparton.sparkled.rest;
 
-import net.chrisparton.sparkled.entity.AnimationEffectChannel;
-import net.chrisparton.sparkled.entity.Song;
-import net.chrisparton.sparkled.entity.SongAnimationData;
-import net.chrisparton.sparkled.entity.SongData;
+import net.chrisparton.sparkled.entity.*;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.preprocessor.EntityValidationException;
 import net.chrisparton.sparkled.preprocessor.SongPreprocessor;
@@ -71,9 +68,7 @@ public class SongRestService extends RestService {
         Optional<Song> song = persistenceService.getSongById(id);
 
         if (song.isPresent()) {
-            Renderer renderer = new Renderer(song.get(), startFrame, durationFrames);
-            Map<String, RenderedChannel> renderedChannels = renderer.render();
-
+            Map<String, RenderedChannel> renderedChannels = renderSong(song.get(), startFrame, durationFrames);
             return getJsonResponse(renderedChannels);
         }
 
@@ -147,7 +142,14 @@ public class SongRestService extends RestService {
         SongPreprocessor preprocessor = new SongPreprocessor(song);
         preprocessor.validate();
         preprocessor.escapeText();
-        return persistenceService.saveSong(song);
+
+        Renderer renderer = new Renderer(song, 0, song.getDurationFrames());
+        Map<String, RenderedChannel> renderedChannels = renderer.render();
+        String renderJson = gson.toJson(renderedChannels);
+        RenderedSong renderedSong = persistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
+        renderedSong.setRenderData(renderJson);
+
+        return persistenceService.saveSong(song, renderedSong);
     }
 
     private SongAnimationData createSongAnimationData() {
@@ -188,5 +190,10 @@ public class SongRestService extends RestService {
         songData.setMp3Data(bytes);
 
         persistenceService.saveSongData(songData);
+    }
+
+    private Map<String, RenderedChannel> renderSong(Song song, int startFrame, int durationFrames) {
+        Renderer renderer = new Renderer(song, startFrame, durationFrames);
+        return renderer.render();
     }
 }
