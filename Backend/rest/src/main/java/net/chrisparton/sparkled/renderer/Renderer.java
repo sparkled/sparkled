@@ -2,13 +2,12 @@ package net.chrisparton.sparkled.renderer;
 
 import com.google.gson.Gson;
 import net.chrisparton.sparkled.entity.*;
-import net.chrisparton.sparkled.renderer.data.RenderedChannel;
-import net.chrisparton.sparkled.renderer.data.RenderedFrame;
+import net.chrisparton.sparkled.renderdata.RenderedChannel;
+import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
+import net.chrisparton.sparkled.renderdata.RenderedFrame;
 import net.chrisparton.sparkled.renderer.effect.EffectRenderer;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -28,9 +27,9 @@ public class Renderer {
         this.animationData = gson.fromJson(song.getAnimationData(), SongAnimationData.class);
     }
 
-    public Map<String, RenderedChannel> render() {
+    public RenderedChannelMap render() {
         List<AnimationEffectChannel> channels = animationData.getChannels();
-        Map<String, RenderedChannel> renderedChannels = new HashMap<>();
+        RenderedChannelMap renderedChannels = new RenderedChannelMap();
 
         channels.forEach(channel ->
             renderedChannels.put(channel.getCode(), renderChannel(channel))

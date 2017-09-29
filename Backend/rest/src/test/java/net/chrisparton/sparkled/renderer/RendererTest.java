@@ -2,12 +2,11 @@ package net.chrisparton.sparkled.renderer;
 
 import com.google.gson.Gson;
 import net.chrisparton.sparkled.entity.*;
-import net.chrisparton.sparkled.renderer.data.Led;
-import net.chrisparton.sparkled.renderer.data.RenderedChannel;
-import net.chrisparton.sparkled.renderer.data.RenderedFrame;
+import net.chrisparton.sparkled.renderdata.Led;
+import net.chrisparton.sparkled.renderdata.RenderedChannel;
+import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
+import net.chrisparton.sparkled.renderdata.RenderedFrame;
 import org.junit.Test;
-
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -42,7 +41,7 @@ public class RendererTest {
         song.setDurationFrames(songFrames);
         song.setAnimationData(gson.toJson(animationData));
 
-        Map<String, RenderedChannel> renderedChannels = new Renderer(song, renderStartFrame, renderDuration).render();
+        RenderedChannelMap renderedChannels = new Renderer(song, renderStartFrame, renderDuration).render();
         assertThat(renderedChannels.size(), is(1));
 
         RenderedChannel renderedChannel = renderedChannels.get(CHANNEL_CODE);

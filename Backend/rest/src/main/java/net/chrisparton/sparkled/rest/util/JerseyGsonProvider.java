@@ -2,6 +2,7 @@ package net.chrisparton.sparkled.rest.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import net.chrisparton.sparkled.rest.json.GsonProvider;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -36,7 +37,7 @@ public class JerseyGsonProvider implements MessageBodyWriter<Object>, MessageBod
                            Annotation[] annotations, MediaType mediaType,
                            MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
         try (InputStreamReader streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
-            return new Gson().fromJson(streamReader, genericType);
+            return GsonProvider.get().fromJson(streamReader, genericType);
         } catch (JsonSyntaxException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }

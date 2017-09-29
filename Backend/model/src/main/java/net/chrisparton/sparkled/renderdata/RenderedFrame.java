@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.renderer.data;
+package net.chrisparton.sparkled.renderdata;
 
 public class RenderedFrame {
 
@@ -20,6 +20,10 @@ public class RenderedFrame {
 
     public int getFrameNumber() {
         return frameNumber;
+    }
+
+    public byte[] getLedData() {
+        return ledData;
     }
 
     public int getLedCount() {

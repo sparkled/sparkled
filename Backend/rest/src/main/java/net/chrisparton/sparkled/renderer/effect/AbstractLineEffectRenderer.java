@@ -3,8 +3,8 @@ package net.chrisparton.sparkled.renderer.effect;
 import net.chrisparton.sparkled.converter.ColourParamConverter;
 import net.chrisparton.sparkled.converter.LengthParamConverter;
 import net.chrisparton.sparkled.entity.AnimationEffect;
-import net.chrisparton.sparkled.renderer.data.RenderedChannel;
-import net.chrisparton.sparkled.renderer.data.RenderedFrame;
+import net.chrisparton.sparkled.renderdata.RenderedChannel;
+import net.chrisparton.sparkled.renderdata.RenderedFrame;
 
 import java.awt.*;
 

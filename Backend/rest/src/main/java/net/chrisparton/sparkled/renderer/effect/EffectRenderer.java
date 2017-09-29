@@ -3,8 +3,8 @@ package net.chrisparton.sparkled.renderer.effect;
 import net.chrisparton.sparkled.entity.AnimationEasing;
 import net.chrisparton.sparkled.entity.AnimationEasingTypeCode;
 import net.chrisparton.sparkled.entity.AnimationEffect;
-import net.chrisparton.sparkled.renderer.data.RenderedChannel;
-import net.chrisparton.sparkled.renderer.data.RenderedFrame;
+import net.chrisparton.sparkled.renderdata.RenderedChannel;
+import net.chrisparton.sparkled.renderdata.RenderedFrame;
 
 public abstract class EffectRenderer {
 

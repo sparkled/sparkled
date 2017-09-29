@@ -46,6 +46,10 @@ public class SongSchedulerService {
         scheduleNextSong();
     }
 
+    public SongPlayerService getSongPlayerService() {
+        return songPlayerService;
+    }
+
     @Subscribe
     public void onSongScheduled(SongScheduledEvent event) {
         logger.info("Received song scheduled event. Song scheduled: " + event.getScheduledSong().getSong().getName());

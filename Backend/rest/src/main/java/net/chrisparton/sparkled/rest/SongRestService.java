@@ -5,7 +5,7 @@ import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.preprocessor.EntityValidationException;
 import net.chrisparton.sparkled.preprocessor.SongPreprocessor;
 import net.chrisparton.sparkled.renderer.Renderer;
-import net.chrisparton.sparkled.renderer.data.RenderedChannel;
+import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
 import net.chrisparton.sparkled.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Path("/song")
@@ -68,8 +67,8 @@ public class SongRestService extends RestService {
         Optional<Song> song = persistenceService.getSongById(id);
 
         if (song.isPresent()) {
-            Map<String, RenderedChannel> renderedChannels = renderSong(song.get(), startFrame, durationFrames);
-            return getJsonResponse(renderedChannels);
+            RenderedChannelMap renderedChannelMap = renderSong(song.get(), startFrame, durationFrames);
+            return getJsonResponse(renderedChannelMap);
         }
 
         return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
@@ -144,8 +143,9 @@ public class SongRestService extends RestService {
         preprocessor.escapeText();
 
         Renderer renderer = new Renderer(song, 0, song.getDurationFrames());
-        Map<String, RenderedChannel> renderedChannels = renderer.render();
+        RenderedChannelMap renderedChannels = renderer.render();
         String renderJson = gson.toJson(renderedChannels);
+
         RenderedSong renderedSong = persistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
         renderedSong.setRenderData(renderJson);
 
@@ -192,7 +192,7 @@ public class SongRestService extends RestService {
         persistenceService.saveSongData(songData);
     }
 
-    private Map<String, RenderedChannel> renderSong(Song song, int startFrame, int durationFrames) {
+    private RenderedChannelMap renderSong(Song song, int startFrame, int durationFrames) {
         Renderer renderer = new Renderer(song, startFrame, durationFrames);
         return renderer.render();
     }
