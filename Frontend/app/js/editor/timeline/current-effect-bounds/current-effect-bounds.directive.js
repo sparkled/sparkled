@@ -14,8 +14,8 @@ function currentEffectBounds($interval) {
             function updateBounds() {
                 const effect = $('.animation-effect.selected');
                 const leftOffset = parseInt(effect.css('left'));
-                element.css('width', effect.width())
-                    .css('left', leftOffset);
+                element.css('width', effect.width() + 'px')
+                    .css('left', leftOffset + 'px');
             }
         }
     };

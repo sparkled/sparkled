@@ -64,8 +64,8 @@ function animationEffect(editorConstants,
                     scope.effect.endFrame = newEndFrame;
                     ensureOrderedElements();
                 } else {
-                    ui.originalPosition && element.css(ui.originalPosition);
-                    ui.originalSize && element.css(ui.originalSize);
+                    ui.originalPosition && element.css('left', ui.originalPosition.left + 'px');
+                    ui.originalSize && element.css('width', ui.originalSize.width + 'px');
                 }
             }
 

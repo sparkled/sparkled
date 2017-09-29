@@ -35,7 +35,7 @@ function currentFrameBar(editorConstants,
                 return $timeout(() => {
                     var left = $(element).css('left');
                     editorService.setCurrentFrame(parseInt(left) / editorConstants.pixelsPerFrame);
-                    $(element).css('left', editorService.currentFrame * editorConstants.pixelsPerFrame);
+                    $(element).css('left', editorService.currentFrame * editorConstants.pixelsPerFrame + 'px');
                 });
             }
         }
