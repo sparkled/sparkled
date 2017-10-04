@@ -82,6 +82,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.greenrobot</groupId>
             <artifactId>eventbus</artifactId>
         </dependency>
