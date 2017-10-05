@@ -6,12 +6,11 @@ import net.chrisparton.sparkled.event.SongScheduledEvent;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
 import net.chrisparton.sparkled.viewmodel.ScheduledSongViewModel;
 import net.chrisparton.sparkled.viewmodel.converter.ScheduledSongViewModelConverter;
+import net.chrisparton.sparkled.viewmodel.converter.ScheduledSongViewModelConverterImpl;
 import org.apache.commons.lang3.time.DateUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,16 +19,23 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/scheduler")
 public class SchedulerRestService extends RestService {
 
-    private static final SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final int MIN_SECONDS_BETWEEN_SONGS = 5;
     private static final int MIN_SECONDS_IN_FUTURE = 5;
 
-    private ScheduledSongPersistenceService persistenceService = new ScheduledSongPersistenceService();
+    private final ScheduledSongPersistenceService scheduledSongPersistenceService;
+    private final ScheduledSongViewModelConverter scheduledSongViewModelConverter;
+
+    @Inject
+    public SchedulerRestService(ScheduledSongPersistenceService scheduledSongPersistenceService,
+                                ScheduledSongViewModelConverter scheduledSongViewModelConverter) {
+        this.scheduledSongPersistenceService = scheduledSongPersistenceService;
+        this.scheduledSongViewModelConverter = scheduledSongViewModelConverter;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,30 +47,24 @@ public class SchedulerRestService extends RestService {
 
         Date parsedDay;
         try {
-            parsedDay = dayFormat.parse(date);
+            parsedDay = DAY_FORMAT.parse(date);
         } catch (ParseException e) {
-            String message = "Date format must be '" + dayFormat.toPattern() + "'.";
+            String message = "Date format must be '" + DAY_FORMAT.toPattern() + "'.";
             return getJsonResponse(Response.Status.BAD_REQUEST, message);
         }
 
         Date startDay = DateUtils.truncate(parsedDay, Calendar.DATE);
         Date endDay = DateUtils.addDays(startDay, 1);
         endDay = DateUtils.addMilliseconds(endDay, -1);
-        List<ScheduledSong> scheduledSongs = persistenceService.getScheduledSongs(startDay, endDay);
-
-        ScheduledSongViewModelConverter converter = new ScheduledSongViewModelConverter();
-        List<ScheduledSongViewModel> viewModels = scheduledSongs.stream()
-                .map(converter::toViewModel)
-                .collect(Collectors.toList());
-
-        return getJsonResponse(viewModels);
+        List<ScheduledSong> scheduledSongs = scheduledSongPersistenceService.getScheduledSongs(startDay, endDay);
+        return getJsonResponse(scheduledSongs);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response scheduleSong(ScheduledSongViewModel viewModel) {
-        ScheduledSong scheduledSong = new ScheduledSongViewModelConverter().fromViewModel(viewModel);
+        ScheduledSong scheduledSong = scheduledSongViewModelConverter.fromViewModel(viewModel);
 
         Date songStartTime = scheduledSong.getStartTime();
         Date earliestStartTime = DateUtils.addSeconds(new Date(), MIN_SECONDS_IN_FUTURE);
@@ -79,7 +79,7 @@ public class SchedulerRestService extends RestService {
             int seconds = (int) Math.ceil(song.getDurationFrames() / song.getFramesPerSecond());
             seconds += MIN_SECONDS_BETWEEN_SONGS;
             Date endTime = DateUtils.addSeconds(offsetStartTime, seconds);
-            List<ScheduledSong> overlappingSongs = persistenceService.getScheduledSongs(offsetStartTime, endTime);
+            List<ScheduledSong> overlappingSongs = scheduledSongPersistenceService.getScheduledSongs(offsetStartTime, endTime);
 
             if (!overlappingSongs.isEmpty()) {
                 String message = "Scheduled songs cannot overlap, and must have at least a " + MIN_SECONDS_BETWEEN_SONGS + " second gap between them.";
@@ -87,7 +87,7 @@ public class SchedulerRestService extends RestService {
             }
         }
 
-        boolean success = persistenceService.saveScheduledSong(scheduledSong);
+        boolean success = scheduledSongPersistenceService.saveScheduledSong(scheduledSong);
         if (success) {
             EventBus.getDefault().post(new SongScheduledEvent(scheduledSong));
         }
@@ -98,7 +98,7 @@ public class SchedulerRestService extends RestService {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response unscheduleSong(@PathParam("id") int id) {
-        boolean success = persistenceService.removeScheduledSong(id);
+        boolean success = scheduledSongPersistenceService.removeScheduledSong(id);
         return getResponse(success ? Response.Status.OK : Response.Status.BAD_REQUEST);
     }
 }

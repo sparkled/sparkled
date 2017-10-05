@@ -1,9 +1,11 @@
 package net.chrisparton.sparkled.persistence.stage;
 
+import com.google.inject.persist.Transactional;
 import net.chrisparton.sparkled.entity.Stage;
 import net.chrisparton.sparkled.entity.Stage_;
-import net.chrisparton.sparkled.persistence.PersistenceService;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -12,15 +14,20 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
-public class StagePersistenceService {
+public class StagePersistenceServiceImpl implements StagePersistenceService {
 
-    public Optional<Stage> getStageById(int stageId) {
-        return PersistenceService.instance().perform(
-                entityManager -> getStageById(entityManager, stageId)
-        );
+    private Provider<EntityManager> entityManagerProvider;
+
+    @Inject
+    public StagePersistenceServiceImpl(Provider<EntityManager> entityManagerProvider) {
+        this.entityManagerProvider = entityManagerProvider;
     }
 
-    private Optional<Stage> getStageById(EntityManager entityManager, int stageId) {
+    @Override
+    @Transactional
+    public Optional<Stage> getStageById(int stageId) {
+        final EntityManager entityManager = entityManagerProvider.get();
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Stage> cq = cb.createQuery(Stage.class);
         Root<Stage> stage = cq.from(Stage.class);

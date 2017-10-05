@@ -1,8 +1,10 @@
 package net.chrisparton.sparkled.persistence.song;
 
+import com.google.inject.persist.Transactional;
 import net.chrisparton.sparkled.entity.*;
-import net.chrisparton.sparkled.persistence.PersistenceService;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -12,13 +14,20 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
-public class SongPersistenceService {
+public class SongPersistenceServiceImpl implements SongPersistenceService {
 
-    public List<Song> getAllSongs() {
-        return PersistenceService.instance().perform(this::getAllSongs);
+    private Provider<EntityManager> entityManagerProvider;
+
+    @Inject
+    public SongPersistenceServiceImpl(Provider<EntityManager> entityManagerProvider) {
+        this.entityManagerProvider = entityManagerProvider;
     }
 
-    private List<Song> getAllSongs(EntityManager entityManager) {
+    @Override
+    @Transactional
+    public List<Song> getAllSongs() {
+        final EntityManager entityManager = entityManagerProvider.get();
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Song> cq = cb.createQuery(Song.class);
         Root<Song> songRoot = cq.from(Song.class);
@@ -41,24 +50,19 @@ public class SongPersistenceService {
         return query.getResultList();
     }
 
+    @Override
+    @Transactional
     public boolean removeSongAndData(int songId) {
-        return PersistenceService.instance().perform(
-                entityManager -> removeSongData(entityManager, songId) && removeSong(entityManager, songId)
-        );
-    }
+        final EntityManager entityManager = entityManagerProvider.get();
 
-    private boolean removeSong(EntityManager entityManager, int songId) {
-        Optional<Song> song = getSongById(entityManager, songId);
+        Optional<Song> song = getSongById(songId);
         if (song.isPresent()) {
             entityManager.remove(song.get());
-            return true;
+        } else {
+            return false;
         }
 
-        return false;
-    }
-
-    private boolean removeSongData(EntityManager entityManager, int songId) {
-        Optional<SongData> songData = getSongDataById(entityManager, songId);
+        Optional<SongData> songData = getSongDataById(songId);
         if (songData.isPresent()) {
             entityManager.remove(songData.get());
             return true;
@@ -67,13 +71,11 @@ public class SongPersistenceService {
         return false;
     }
 
+    @Override
+    @Transactional
     public Optional<Song> getSongById(int songId) {
-        return PersistenceService.instance().perform(
-                entityManager -> getSongById(entityManager, songId)
-        );
-    }
+        final EntityManager entityManager = entityManagerProvider.get();
 
-    private Optional<Song> getSongById(EntityManager entityManager, int songId) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Song> cq = cb.createQuery(Song.class);
         Root<Song> song = cq.from(Song.class);
@@ -91,13 +93,11 @@ public class SongPersistenceService {
         }
     }
 
+    @Override
+    @Transactional
     public Optional<SongData> getSongDataById(int songId) {
-        return PersistenceService.instance().perform(
-                entityManager -> getSongDataById(entityManager, songId)
-        );
-    }
+        final EntityManager entityManager = entityManagerProvider.get();
 
-    private Optional<SongData> getSongDataById(EntityManager entityManager, int songId) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<SongData> cq = cb.createQuery(SongData.class);
         Root<SongData> songData = cq.from(SongData.class);
@@ -115,13 +115,11 @@ public class SongPersistenceService {
         }
     }
 
+    @Override
+    @Transactional
     public Optional<RenderedSong> getRenderedSongById(int songId) {
-        return PersistenceService.instance().perform(
-                entityManager -> getRenderedSongById(entityManager, songId)
-        );
-    }
+        final EntityManager entityManager = entityManagerProvider.get();
 
-    private Optional<RenderedSong> getRenderedSongById(EntityManager entityManager, int songId) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<RenderedSong> cq = cb.createQuery(RenderedSong.class);
         Root<RenderedSong> renderedSong = cq.from(RenderedSong.class);
@@ -138,24 +136,22 @@ public class SongPersistenceService {
         }
     }
 
+    @Override
+    @Transactional
     public int saveSong(Song song, RenderedSong renderedSong) {
-        Song savedSong = PersistenceService.instance().perform(
-                entityManager -> {
-                    Song result = entityManager.merge(song);
-                    renderedSong.setSongId(result.getId());
-                    entityManager.merge(renderedSong);
-                    return result;
-                }
-        );
+        final EntityManager entityManager = entityManagerProvider.get();
 
-        return savedSong.getId();
+        Song result = entityManager.merge(song);
+        renderedSong.setSongId(result.getId());
+        entityManager.merge(renderedSong);
+        return result.getId();
     }
 
+    @Override
+    @Transactional
     public int saveSongData(SongData songData) {
-        SongData savedSongData = PersistenceService.instance().perform(
-                entityManager -> entityManager.merge(songData)
-        );
-
+        final EntityManager entityManager = entityManagerProvider.get();
+        SongData savedSongData = entityManager.merge(songData);
         return savedSongData.getSongId();
     }
 }

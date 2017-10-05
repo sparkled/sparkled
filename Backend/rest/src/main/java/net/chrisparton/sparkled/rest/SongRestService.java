@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -23,13 +24,19 @@ import java.util.Optional;
 public class SongRestService extends RestService {
 
     private static final String MP3_MIME_TYPE = "audio/mpeg";
-    private SongPersistenceService persistenceService = new SongPersistenceService();
+
+    private final SongPersistenceService songPersistenceService;
+
+    @Inject
+    public SongRestService(SongPersistenceService songPersistenceService) {
+        this.songPersistenceService = songPersistenceService;
+    }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSong(@PathParam("id") int id) {
-        Optional<Song> song = persistenceService.getSongById(id);
+        Optional<Song> song = songPersistenceService.getSongById(id);
 
         if (song.isPresent()) {
             return getJsonResponse(song.get());
@@ -41,7 +48,7 @@ public class SongRestService extends RestService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSongs() {
-        List<Song> songs = persistenceService.getAllSongs();
+        List<Song> songs = songPersistenceService.getAllSongs();
         return getJsonResponse(songs);
     }
 
@@ -49,7 +56,7 @@ public class SongRestService extends RestService {
     @Path("/data/{id}")
     @Produces(MP3_MIME_TYPE)
     public Response getSongData(@PathParam("id") int id) {
-        Optional<SongData> songData = persistenceService.getSongDataById(id);
+        Optional<SongData> songData = songPersistenceService.getSongDataById(id);
 
         if (songData.isPresent()) {
             return getBinaryResponse(songData.get().getMp3Data(), MP3_MIME_TYPE);
@@ -64,7 +71,7 @@ public class SongRestService extends RestService {
     public Response getRenderedSong(@PathParam("id") int id,
                                     @QueryParam("durationFrames") int durationFrames,
                                     @QueryParam("startFrame") int startFrame) {
-        Optional<Song> song = persistenceService.getSongById(id);
+        Optional<Song> song = songPersistenceService.getSongById(id);
 
         if (song.isPresent()) {
             RenderedChannelMap renderedChannelMap = renderSong(song.get(), startFrame, durationFrames);
@@ -96,7 +103,7 @@ public class SongRestService extends RestService {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeSong(@PathParam("id") int id) {
-        boolean success = persistenceService.removeSongAndData(id);
+        boolean success = songPersistenceService.removeSongAndData(id);
         return getResponse(
                 success ? Response.Status.OK : Response.Status.NOT_MODIFIED
         );
@@ -109,7 +116,7 @@ public class SongRestService extends RestService {
         Song updatedSong = gson.fromJson(songJson, Song.class);
 
         try {
-            Optional<Song> songOptional = persistenceService.getSongById(updatedSong.getId());
+            Optional<Song> songOptional = songPersistenceService.getSongById(updatedSong.getId());
             if (songOptional.isPresent()) {
                 Song song = songOptional.get();
                 song.setAnimationData(updatedSong.getAnimationData());
@@ -146,10 +153,10 @@ public class SongRestService extends RestService {
         RenderedChannelMap renderedChannels = renderer.render();
         String renderJson = gson.toJson(renderedChannels);
 
-        RenderedSong renderedSong = persistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
+        RenderedSong renderedSong = songPersistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
         renderedSong.setRenderData(renderJson);
 
-        return persistenceService.saveSong(song, renderedSong);
+        return songPersistenceService.saveSong(song, renderedSong);
     }
 
     private SongAnimationData createSongAnimationData() {
@@ -189,7 +196,7 @@ public class SongRestService extends RestService {
         songData.setSongId(songId);
         songData.setMp3Data(bytes);
 
-        persistenceService.saveSongData(songData);
+        songPersistenceService.saveSongData(songData);
     }
 
     private RenderedChannelMap renderSong(Song song, int startFrame, int durationFrames) {

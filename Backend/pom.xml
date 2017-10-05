@@ -13,6 +13,7 @@
         <module>app</module>
         <module>events</module>
         <module>model</module>
+        <module>persistence</module>
         <module>music-player</module>
         <module>rest</module>
         <module>udp-server</module>

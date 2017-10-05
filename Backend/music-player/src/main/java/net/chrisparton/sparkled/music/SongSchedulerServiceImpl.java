@@ -33,11 +33,13 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
     private ScheduledFuture<?> nextScheduledSong;
 
     @Inject
-    public SongSchedulerServiceImpl(SongPlayerService songPlayerService) {
+    public SongSchedulerServiceImpl(SongPlayerService songPlayerService,
+                                    ScheduledSongPersistenceService scheduledSongPersistenceService,
+                                    SongPersistenceService songPersistenceService) {
         this.songPlayerService = songPlayerService;
+        this.scheduledSongPersistenceService = scheduledSongPersistenceService;
+        this.songPersistenceService = songPersistenceService;
         this.executor = Executors.newSingleThreadScheduledExecutor();
-        this.scheduledSongPersistenceService = new ScheduledSongPersistenceService();
-        this.songPersistenceService = new SongPersistenceService();
 
         final PlaybackListener playbackListener = new SongPlaybackListener(this::scheduleNextSong);
         songPlayerService.setPlaybackListener(playbackListener);

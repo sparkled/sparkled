@@ -3,6 +3,7 @@ package net.chrisparton.sparkled.rest;
 import net.chrisparton.sparkled.entity.Stage;
 import net.chrisparton.sparkled.persistence.stage.StagePersistenceService;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -14,13 +15,18 @@ import java.util.Optional;
 @Path("/stage")
 public class StageRestService extends RestService {
 
-    private StagePersistenceService persistenceService = new StagePersistenceService();
+    private final StagePersistenceService stagePersistenceService;
+
+    @Inject
+    public StageRestService(StagePersistenceService stagePersistenceService) {
+        this.stagePersistenceService = stagePersistenceService;
+    }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStage(@PathParam("id") int id) {
-        Optional<Stage> stage = persistenceService.getStageById(id);
+        Optional<Stage> stage = stagePersistenceService.getStageById(id);
 
         if (stage.isPresent()) {
             return getJsonResponse(stage.get());

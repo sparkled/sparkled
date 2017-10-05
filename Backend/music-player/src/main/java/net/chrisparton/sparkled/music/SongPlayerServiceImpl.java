@@ -17,21 +17,21 @@ import java.io.ByteArrayInputStream;
 
 public class SongPlayerServiceImpl implements SongPlayerService {
 
-    private final SongPersistenceService persistenceService;
+    private final SongPersistenceService songPersistenceService;
     private AudioDevice audioDevice;
     private PlaybackListener playbackListener;
     private Song currentSong;
     private RenderedChannelMap renderedChannelMap;
 
     @Inject
-    public SongPlayerServiceImpl() {
-        this.persistenceService = new SongPersistenceService();
+    public SongPlayerServiceImpl(SongPersistenceService songPersistenceService) {
+        this.songPersistenceService = songPersistenceService;
     }
 
     @Override
     public void play(Song song, SongData songData) {
         this.currentSong = song;
-        RenderedSong renderedSong = persistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
+        RenderedSong renderedSong = songPersistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
         this.renderedChannelMap = new Gson().fromJson(renderedSong.getRenderData(), RenderedChannelMap.class);
 
         try {

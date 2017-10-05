@@ -1,12 +1,14 @@
 package net.chrisparton.sparkled.persistence.scheduler;
 
+import com.google.inject.persist.Transactional;
 import net.chrisparton.sparkled.entity.ScheduledSong;
 import net.chrisparton.sparkled.entity.ScheduledSong_;
 import net.chrisparton.sparkled.entity.Song;
-import net.chrisparton.sparkled.persistence.PersistenceService;
-import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
+import net.chrisparton.sparkled.persistence.song.SongPersistenceServiceImpl;
 import org.apache.commons.lang3.time.DateUtils;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -17,23 +19,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public class ScheduledSongPersistenceService {
+public class ScheduledSongPersistenceServiceImpl implements ScheduledSongPersistenceService {
 
-    private SongPersistenceService songPersistenceService = new SongPersistenceService();
+    private Provider<EntityManager> entityManagerProvider;
+    private SongPersistenceServiceImpl songPersistenceService;
 
-    public Optional<ScheduledSong> getNextScheduledSong() {
-        return PersistenceService.instance().perform(
-                this::getNextScheduledSong
-        );
+    @Inject
+    public ScheduledSongPersistenceServiceImpl(Provider<EntityManager> entityManagerProvider,
+                                               SongPersistenceServiceImpl songPersistenceService) {
+        this.entityManagerProvider = entityManagerProvider;
+        this.songPersistenceService = songPersistenceService;
     }
 
-    private Optional<ScheduledSong> getNextScheduledSong(EntityManager entityManager) {
+    @Override
+    @Transactional
+    public Optional<ScheduledSong> getNextScheduledSong() {
+        final EntityManager entityManager = entityManagerProvider.get();
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<ScheduledSong> cq = cb.createQuery(ScheduledSong.class);
         Root<ScheduledSong> root = cq.from(ScheduledSong.class);
 
         cq.where(
-            cb.greaterThan(root.get(ScheduledSong_.startTime), new Date())
+                cb.greaterThan(root.get(ScheduledSong_.startTime), new Date())
         );
 
         cq.orderBy(
@@ -51,13 +59,11 @@ public class ScheduledSongPersistenceService {
         }
     }
 
+    @Override
+    @Transactional
     public List<ScheduledSong> getScheduledSongs(Date startDate, Date endDate) {
-        return PersistenceService.instance().perform(
-                entityManager -> this.getScheduledSongs(entityManager, startDate, endDate)
-        );
-    }
+        final EntityManager entityManager = entityManagerProvider.get();
 
-    private List<ScheduledSong> getScheduledSongs(EntityManager entityManager, Date startDate, Date endDate) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<ScheduledSong> cq = cb.createQuery(ScheduledSong.class);
         Root<ScheduledSong> root = cq.from(ScheduledSong.class);
@@ -77,13 +83,11 @@ public class ScheduledSongPersistenceService {
         return query.getResultList();
     }
 
+    @Override
+    @Transactional
     public boolean removeScheduledSong(int scheduledSongId) {
-        return PersistenceService.instance().perform(
-                entityManager -> removeScheduledSong(entityManager, scheduledSongId)
-        );
-    }
+        final EntityManager entityManager = entityManagerProvider.get();
 
-    private boolean removeScheduledSong(EntityManager entityManager, int scheduledSongId) {
         Optional<ScheduledSong> song = getScheduledSongById(entityManager, scheduledSongId);
         if (song.isPresent()) {
             entityManager.remove(song.get());
@@ -111,6 +115,8 @@ public class ScheduledSongPersistenceService {
         }
     }
 
+    @Override
+    @Transactional
     public boolean saveScheduledSong(ScheduledSong scheduledSong) {
         Song providedSong = scheduledSong.getSong();
         if (providedSong == null) {
@@ -124,9 +130,9 @@ public class ScheduledSongPersistenceService {
 
         scheduledSong.setEndTime(calculateEndTime(scheduledSong));
 
-        return PersistenceService.instance().perform(
-                entityManager -> saveScheduledSong(entityManager, scheduledSong)
-        );
+        final EntityManager entityManager = entityManagerProvider.get();
+        scheduledSong = entityManager.merge(scheduledSong);
+        return scheduledSong != null;
     }
 
     private Date calculateEndTime(ScheduledSong scheduledSong) {
@@ -140,10 +146,5 @@ public class ScheduledSongPersistenceService {
         }
 
         return endTime;
-    }
-
-    private boolean saveScheduledSong(EntityManager entityManager, ScheduledSong scheduledSong) {
-        scheduledSong = entityManager.merge(scheduledSong);
-        return scheduledSong != null;
     }
 }
