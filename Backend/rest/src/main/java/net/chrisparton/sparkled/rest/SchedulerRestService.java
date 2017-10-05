@@ -9,6 +9,9 @@ import net.chrisparton.sparkled.viewmodel.converter.ScheduledSongViewModelConver
 import org.apache.commons.lang3.time.DateUtils;
 import org.greenrobot.eventbus.EventBus;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
