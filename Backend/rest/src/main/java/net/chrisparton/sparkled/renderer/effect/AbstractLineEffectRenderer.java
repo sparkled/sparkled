@@ -27,7 +27,7 @@ public abstract class AbstractLineEffectRenderer extends EffectRenderer {
         int lastLitLed = firstLitLed + length - 1;
 
         if (firstLitLed <= endLed) {
-            for (int i = constrain(startLed, endLed, firstLitLed); i < constrain(startLed, endLed, lastLitLed); i++) {
+            for (int i = constrain(startLed, endLed, firstLitLed); i <= constrain(startLed, endLed - 1, lastLitLed); i++) {
                 frame.getLed(i).addRgb(
                         color.getRed(),
                         color.getGreen(),
