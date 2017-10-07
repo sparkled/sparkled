@@ -22,7 +22,7 @@ public abstract class EffectRenderer {
 
         int repetitions = effect.getRepetitions();
         int framesPerRepetition = duration / repetitions;
-        int repetitionFrameNumber = frame.getFrameNumber() % framesPerRepetition;
+        int repetitionFrameNumber = (frame.getFrameNumber() - startFrame) % framesPerRepetition;
 
         double progress = easing.getProgress(repetitionFrameNumber, 0, 1, framesPerRepetition);
         if (progress < 0 || progress > 1) {
