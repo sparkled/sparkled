@@ -3,11 +3,11 @@ package net.chrisparton.sparkled.persistence.inject;
 import com.google.inject.AbstractModule;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
-import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceServiceImpl;
+import net.chrisparton.sparkled.persistence.scheduler.impl.ScheduledSongPersistenceServiceImpl;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
-import net.chrisparton.sparkled.persistence.song.SongPersistenceServiceImpl;
+import net.chrisparton.sparkled.persistence.song.impl.SongPersistenceServiceImpl;
 import net.chrisparton.sparkled.persistence.stage.StagePersistenceService;
-import net.chrisparton.sparkled.persistence.stage.StagePersistenceServiceImpl;
+import net.chrisparton.sparkled.persistence.stage.impl.StagePersistenceServiceImpl;
 
 public class PersistenceModule extends AbstractModule {
 
