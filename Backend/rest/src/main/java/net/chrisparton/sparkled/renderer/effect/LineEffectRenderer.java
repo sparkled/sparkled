@@ -8,7 +8,7 @@ import net.chrisparton.sparkled.renderdata.RenderedFrame;
 
 import java.awt.*;
 
-public abstract class AbstractLineEffectRenderer extends EffectRenderer {
+public class LineEffectRenderer extends EffectRenderer {
 
     private ColourParamConverter colourParamConverter = new ColourParamConverter();
     private LengthParamConverter lengthParamConverter = new LengthParamConverter();
@@ -22,8 +22,7 @@ public abstract class AbstractLineEffectRenderer extends EffectRenderer {
         Color color = colourParamConverter.convert(effect);
         int length = lengthParamConverter.convert(effect);
 
-        int adjustedProgressPercentage = calculateProgressPercentage(progressPercentage);
-        int firstLitLed = startLed + (int) Math.round((ledCount + length) * adjustedProgressPercentage / 100.0) - length;
+        int firstLitLed = startLed + (int) Math.round((ledCount + length) * progressPercentage / 100.0) - length;
         int lastLitLed = firstLitLed + length - 1;
 
         if (firstLitLed <= endLed) {
@@ -40,6 +39,4 @@ public abstract class AbstractLineEffectRenderer extends EffectRenderer {
     private int constrain(int min, int max, int value) {
         return Math.max(min, Math.min(max, value));
     }
-
-    protected abstract int calculateProgressPercentage(int progressPercentage);
 }

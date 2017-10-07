@@ -9,14 +9,6 @@ import static java.util.stream.Collectors.toList;
 
 public enum AnimationEffectTypeCode {
 
-    FILL(
-            new AnimationEffectType(
-                    "FILL",
-                    "Fill",
-                    AnimationEffectTypeParamCode.COLOUR.getEffectTypeParam()
-            ),
-            new FillEffectRenderer()
-    ),
     FLASH(
             new AnimationEffectType(
                     "FLASH",
@@ -25,23 +17,14 @@ public enum AnimationEffectTypeCode {
             ),
             new FlashEffectRenderer()
     ),
-    LINE_LEFT(
+    LINE(
             new AnimationEffectType(
-                    "LINE_LEFT",
-                    "Line Left",
+                    "LINE",
+                    "Line",
                     AnimationEffectTypeParamCode.MULTI_COLOUR.getEffectTypeParam(),
                     AnimationEffectTypeParamCode.LENGTH.getEffectTypeParam()
             ),
-            new LineLeftEffectRenderer()
-    ),
-    LINE_RIGHT(
-            new AnimationEffectType(
-                    "LINE_RIGHT",
-                    "Line Right",
-                    AnimationEffectTypeParamCode.MULTI_COLOUR.getEffectTypeParam(),
-                    AnimationEffectTypeParamCode.LENGTH.getEffectTypeParam()
-            ),
-            new LineRightEffectRenderer()
+            new LineEffectRenderer()
     );
 
     public static final List<AnimationEffectType> EFFECT_TYPES = Arrays

@@ -30,7 +30,7 @@ public class RendererTest {
         SongAnimationData animationData = new SongAnimationData();
 
         AnimationEffectChannel channel = createAnimationEffectChannel(CHANNEL_CODE, 0, ledCount - 1);
-        AnimationEffect flashEffect = createAnimationEffect(AnimationEffectTypeCode.FILL, effectStartFrame, effectEndFrame);
+        AnimationEffect flashEffect = createAnimationEffect(AnimationEffectTypeCode.FLASH, effectStartFrame, effectEndFrame, AnimationEasingTypeCode.CONSTANT_MIDPOINT);
         flashEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "#ffffff"));
         channel.getEffects().add(flashEffect);
         animationData.getChannels().add(channel);
@@ -80,10 +80,10 @@ public class RendererTest {
         return channel;
     }
 
-    private AnimationEffect createAnimationEffect(AnimationEffectTypeCode effectTypeCode, int startFrame, int endFrame) {
+    private AnimationEffect createAnimationEffect(AnimationEffectTypeCode effectTypeCode, int startFrame, int endFrame, AnimationEasingTypeCode easingType) {
         AnimationEffect effect = new AnimationEffect();
         effect.setEffectType(effectTypeCode);
-        effect.setEasingType(AnimationEasingTypeCode.LINEAR);
+        effect.setEasingType(easingType);
         effect.setStartFrame(startFrame);
         effect.setEndFrame(endFrame);
 
