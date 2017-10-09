@@ -153,7 +153,8 @@ public class SongRestService extends RestService {
         RenderedChannelMap renderedChannels = renderer.render();
         String renderJson = gson.toJson(renderedChannels);
 
-        RenderedSong renderedSong = songPersistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
+        final int songId = song.getId() == null ? -1 : song.getId();
+        RenderedSong renderedSong = songPersistenceService.getRenderedSongById(songId).orElse(new RenderedSong());
         renderedSong.setRenderData(renderJson);
 
         return songPersistenceService.saveSong(song, renderedSong);
