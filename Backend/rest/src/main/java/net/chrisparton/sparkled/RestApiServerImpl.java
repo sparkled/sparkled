@@ -79,6 +79,7 @@ public class RestApiServerImpl implements RestApiServer {
                 context.setBaseResource(Resource.newResource(webRootUri));
                 context.setWelcomeFiles(new String[]{"index.html"});
                 context.setGzipHandler(new GzipHandler());
+                context.addFilter(TryFilesFilter.class, "*", EnumSet.of(DispatcherType.REQUEST));
             } catch (URISyntaxException | MalformedURLException e) {
                 e.printStackTrace();
             }
