@@ -69,11 +69,8 @@ lib-cov
 coverage
 
 # Coverage reports
-*.js.html
-app/js/**/index.html
-
-# Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+webui/**/*.js.html
+webui/src/app/js/**/index.html
 
 # Build files
 build

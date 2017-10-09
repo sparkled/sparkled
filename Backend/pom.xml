@@ -33,7 +33,23 @@
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
         <eventbus.version>3.1.0-RC</eventbus.version>
         <mp3spi.version>1.9.5-1</mp3spi.version>
+        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>webui</id>
+            <activation>
+                <property>
+                    <name>!omitWebUi</name>
+                </property>
+            </activation>
+
+            <modules>
+                <module>webui</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
