@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const angular = require('angular');
-const jsMediaTags = require('jsmediatags');
+const jsMediaTags = require('jsmediatags/dist/jsmediatags.min');
 const sweetAlert = require('sweetalert2');
 
 const maxMp3SizeMb = 10;
