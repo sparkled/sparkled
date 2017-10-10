@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.event;
 
-import net.chrisparton.sparkled.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.ScheduledSong;
 
 public class SongScheduledEvent {
     private ScheduledSong scheduledSong;

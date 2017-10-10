@@ -1,7 +1,9 @@
 package net.chrisparton.sparkled.renderer;
 
 import com.google.gson.Gson;
-import net.chrisparton.sparkled.entity.*;
+import net.chrisparton.sparkled.model.animation.*;
+import net.chrisparton.sparkled.model.entity.Song;
+import net.chrisparton.sparkled.model.entity.SongAnimation;
 import net.chrisparton.sparkled.renderdata.Led;
 import net.chrisparton.sparkled.renderdata.RenderedChannel;
 import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
@@ -39,9 +41,11 @@ public class RendererTest {
         Song song = new Song();
         song.setFramesPerSecond(fps);
         song.setDurationFrames(songFrames);
-        song.setAnimationData(gson.toJson(animationData));
 
-        RenderedChannelMap renderedChannels = new Renderer(song, renderStartFrame, renderDuration).render();
+        SongAnimation songAnimation = new SongAnimation();
+        songAnimation.setAnimationData(gson.toJson(animationData));
+
+        RenderedChannelMap renderedChannels = new Renderer(song, songAnimation, renderStartFrame, renderDuration).render();
         assertThat(renderedChannels.size(), is(1));
 
         RenderedChannel renderedChannel = renderedChannels.get(CHANNEL_CODE);

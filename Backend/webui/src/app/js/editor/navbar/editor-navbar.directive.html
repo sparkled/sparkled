@@ -48,6 +48,14 @@
                ng-disabled="saving">
                 <i class="fa fa-save"></i>
             </a>
+
+            <a title="Publish"
+               class="btn btn-default navbar-btn"
+               ng-click="publishSong()"
+               ng-if="!animationService.running"
+               ng-disabled="saving">
+                <i class="fa fa-check"></i>
+            </a>
         </div>
     </div>
 </nav>

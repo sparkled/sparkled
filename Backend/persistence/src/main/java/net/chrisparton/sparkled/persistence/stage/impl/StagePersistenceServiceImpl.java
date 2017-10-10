@@ -1,7 +1,7 @@
 package net.chrisparton.sparkled.persistence.stage.impl;
 
 import com.google.inject.persist.Transactional;
-import net.chrisparton.sparkled.entity.Stage;
+import net.chrisparton.sparkled.model.entity.Stage;
 import net.chrisparton.sparkled.persistence.stage.StagePersistenceService;
 import net.chrisparton.sparkled.persistence.stage.impl.query.GetStageByIdQuery;
 

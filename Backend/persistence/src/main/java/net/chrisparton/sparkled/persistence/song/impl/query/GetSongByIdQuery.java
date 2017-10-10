@@ -1,15 +1,15 @@
 package net.chrisparton.sparkled.persistence.song.impl.query;
 
-import net.chrisparton.sparkled.entity.Song;
-import net.chrisparton.sparkled.entity.Song_;
+import net.chrisparton.sparkled.model.entity.Song;
+import net.chrisparton.sparkled.model.entity.Song_;
 import net.chrisparton.sparkled.persistence.PersistenceQuery;
+import net.chrisparton.sparkled.persistence.util.PersistenceUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
 import java.util.Optional;
 
 public class GetSongByIdQuery implements PersistenceQuery<Optional<Song>> {
@@ -30,12 +30,6 @@ public class GetSongByIdQuery implements PersistenceQuery<Optional<Song>> {
         );
 
         TypedQuery<Song> query = entityManager.createQuery(cq);
-
-        List<Song> songs = query.getResultList();
-        if (!songs.isEmpty()) {
-            return Optional.of(songs.get(0));
-        } else {
-            return Optional.empty();
-        }
+        return PersistenceUtils.getSingleResult(query);
     }
 }

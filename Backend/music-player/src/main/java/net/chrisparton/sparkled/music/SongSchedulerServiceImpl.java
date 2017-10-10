@@ -1,9 +1,9 @@
 package net.chrisparton.sparkled.music;
 
 import javazoom.jl.player.advanced.PlaybackListener;
-import net.chrisparton.sparkled.entity.ScheduledSong;
-import net.chrisparton.sparkled.entity.Song;
-import net.chrisparton.sparkled.entity.SongData;
+import net.chrisparton.sparkled.model.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.Song;
+import net.chrisparton.sparkled.model.entity.SongAudio;
 import net.chrisparton.sparkled.event.SongScheduledEvent;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
@@ -76,7 +76,7 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
     }
 
     private void playSong(Song song) {
-        Optional<SongData> songData = songPersistenceService.getSongDataById(song.getId());
+        Optional<SongAudio> songData = songPersistenceService.getSongDataById(song.getId());
         songData.ifPresent(data -> songPlayerService.play(song, data));
     }
 }

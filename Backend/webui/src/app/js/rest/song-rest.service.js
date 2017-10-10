@@ -4,13 +4,16 @@ function songRestService(Restangular) {
     'ngInject';
 
     const restService = Restangular.service('song');
+    const renderRestService = Restangular.service('renderPreview');
 
     return {
         getSongUrl: getSongUrl,
         getSongs: getSongs,
         getSong: getSong,
+        getSongAnimation: getSongAnimation,
         saveMp3: saveMp3,
         saveSong: saveSong,
+        publishSong: publishSong,
         deleteSong: deleteSong,
         renderSong: renderSong
     };
@@ -27,34 +30,42 @@ function songRestService(Restangular) {
         return restService.one(id).get();
     }
 
+    function getSongAnimation(songId) {
+        return restService.one(songId).one('animation').get();
+    }
+
     function saveMp3(file, songData) {
-        var formData = new FormData();
+        const formData = new FormData();
         formData.append('song', JSON.stringify(songData));
         formData.append('mp3', file);
 
         const httpConfig = {transformRequest: angular.identity};
         return restService.one().withHttpConfig(httpConfig)
-            .customPUT(formData, undefined, undefined, {'Content-Type': undefined});
+            .customPOST(formData, undefined, undefined, {'Content-Type': undefined});
     }
 
     function saveSong(song, animationData) {
-        song.animationData = angular.toJson(animationData);
+        return restService.one(song.id).one('animation')
+            .customPUT({songId: song.id, animationData: JSON.stringify(animationData)}, undefined, undefined, {});
+    }
 
-        return restService.one().withHttpConfig({
-            transformRequest: angular.identity
-        }).customPOST(JSON.stringify(song), undefined, undefined, {'Content-Type': 'application/json'});
+    function publishSong(song, animationData) {
+        return restService.one(song.id).one('render')
+            .customPUT({songId: song.id, animationData: JSON.stringify(animationData)}, undefined, undefined, {});
     }
 
     function deleteSong(song) {
         return restService.one().customDELETE(song.id);
     }
 
-    function renderSong(song, durationFrames, startFrame) {
-        return restService.one('render')
-            .customGET(song.id, {
-                durationFrames: durationFrames,
-                startFrame: startFrame
-            });
+    function renderSong(songAnimation, startFrame, durationFrames) {
+        const queryParams = {
+            startFrame: startFrame,
+            durationFrames: durationFrames
+        };
+
+        return renderRestService.one()
+            .customPOST(songAnimation, void 0, queryParams, {});
     }
 }
 

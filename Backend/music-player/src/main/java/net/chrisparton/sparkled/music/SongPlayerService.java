@@ -1,8 +1,8 @@
 package net.chrisparton.sparkled.music;
 
 import javazoom.jl.player.advanced.PlaybackListener;
-import net.chrisparton.sparkled.entity.Song;
-import net.chrisparton.sparkled.entity.SongData;
+import net.chrisparton.sparkled.model.entity.Song;
+import net.chrisparton.sparkled.model.entity.SongAudio;
 import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
 
 public interface SongPlayerService {
@@ -10,7 +10,7 @@ public interface SongPlayerService {
     /**
      * Plays the provided song and provides the associated song data for synchronised retrieval.
      */
-    void play(Song song, SongData songData);
+    void play(Song song, SongAudio songAudio);
 
     /**
      * @return The song that is currently playing, or null if no song is playing.

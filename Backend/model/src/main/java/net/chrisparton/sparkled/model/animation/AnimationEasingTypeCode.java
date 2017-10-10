@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.entity;
+package net.chrisparton.sparkled.model.animation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -94,8 +94,7 @@ public enum AnimationEasingTypeCode {
             -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b)
     );
 
-    public static final List<AnimationEasingType> EASING_TYPES = Arrays.asList(AnimationEasingTypeCode.values())
-            .stream()
+    public static final List<AnimationEasingType> EASING_TYPES = Arrays.stream(AnimationEasingTypeCode.values())
             .map(AnimationEasingTypeCode::getEasingType)
             .collect(toList());
 

@@ -1,6 +1,4 @@
-package net.chrisparton.sparkled.entity;
-
-import net.chrisparton.sparkled.renderer.effect.*;
+package net.chrisparton.sparkled.model.animation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,8 +12,7 @@ public enum AnimationEffectTypeCode {
                     "FLASH",
                     "Flash",
                     AnimationEffectTypeParamCode.COLOUR.getEffectTypeParam()
-            ),
-            new FlashEffectRenderer()
+            )
     ),
     LINE(
             new AnimationEffectType(
@@ -23,8 +20,7 @@ public enum AnimationEffectTypeCode {
                     "Line",
                     AnimationEffectTypeParamCode.MULTI_COLOUR.getEffectTypeParam(),
                     AnimationEffectTypeParamCode.LENGTH.getEffectTypeParam()
-            ),
-            new LineEffectRenderer()
+            )
     );
 
     public static final List<AnimationEffectType> EFFECT_TYPES = Arrays
@@ -33,18 +29,12 @@ public enum AnimationEffectTypeCode {
             .collect(toList());
 
     private AnimationEffectType effectType;
-    private EffectRenderer renderer;
 
-    AnimationEffectTypeCode(AnimationEffectType effectType, EffectRenderer renderer) {
+    AnimationEffectTypeCode(AnimationEffectType effectType) {
         this.effectType = effectType;
-        this.renderer = renderer;
     }
 
     public AnimationEffectType getEffectType() {
         return effectType;
-    }
-
-    public EffectRenderer getRenderer() {
-        return renderer;
     }
 }

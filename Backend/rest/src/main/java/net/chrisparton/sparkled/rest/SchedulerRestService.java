@@ -1,12 +1,11 @@
 package net.chrisparton.sparkled.rest;
 
-import net.chrisparton.sparkled.entity.ScheduledSong;
-import net.chrisparton.sparkled.entity.Song;
+import net.chrisparton.sparkled.model.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.event.SongScheduledEvent;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
 import net.chrisparton.sparkled.viewmodel.ScheduledSongViewModel;
 import net.chrisparton.sparkled.viewmodel.converter.ScheduledSongViewModelConverter;
-import net.chrisparton.sparkled.viewmodel.converter.ScheduledSongViewModelConverterImpl;
 import org.apache.commons.lang3.time.DateUtils;
 import org.greenrobot.eventbus.EventBus;
 

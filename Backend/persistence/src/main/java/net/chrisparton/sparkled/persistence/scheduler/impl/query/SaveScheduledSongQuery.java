@@ -1,7 +1,7 @@
 package net.chrisparton.sparkled.persistence.scheduler.impl.query;
 
-import net.chrisparton.sparkled.entity.ScheduledSong;
-import net.chrisparton.sparkled.entity.Song;
+import net.chrisparton.sparkled.model.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.persistence.PersistenceQuery;
 import net.chrisparton.sparkled.persistence.song.impl.query.GetSongByIdQuery;
 import org.apache.commons.lang3.time.DateUtils;

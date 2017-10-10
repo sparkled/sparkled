@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.entity;
+package net.chrisparton.sparkled.model.animation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,5 @@ public class SongAnimationData {
 
     public List<AnimationEffectChannel> getChannels() {
         return channels;
-    }
-
-    public void setChannels(List<AnimationEffectChannel> channels) {
-        this.channels = channels;
     }
 }

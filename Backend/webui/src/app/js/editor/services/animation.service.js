@@ -19,18 +19,14 @@ function animationService(editorService,
     function previewAnimation() {
         if (!service.running) {
             animationStartFrame = editorService.currentFrame;
-            songRestService.saveSong(editorService.song, editorService.animationData).then(renderSong);
-        }
-    }
 
-    function renderSong() {
-        const durationFrames = durationSeconds * editorService.song.framesPerSecond;
-        songRestService.renderSong(editorService.song, durationFrames, editorService.currentFrame)
-            .then(renderData => {
+            const durationFrames = durationSeconds * editorService.song.framesPerSecond;
+            songRestService.renderSong({songId: editorService.song.id, animationData: JSON.stringify(editorService.animationData)}, animationStartFrame, durationFrames).then(renderData => {
                 service.running = true;
                 service.animationStartTime = new Date().getTime();
                 service.renderData = renderData.plain();
             });
+        }
     }
 
     function getFrame() {

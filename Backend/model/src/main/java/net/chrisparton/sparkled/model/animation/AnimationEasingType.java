@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.entity;
+package net.chrisparton.sparkled.model.animation;
 
 public class AnimationEasingType {
 

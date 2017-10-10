@@ -7,7 +7,11 @@ function editorConfig(applicationStates,
             url: '/editor/:id',
             controller: 'EditorCtrl as editor',
             templateUrl: 'editor/editor.html',
-            title: 'Editor'
+            title: 'Editor',
+            resolve: {
+                song: (songRestService, $stateParams) => songRestService.getSong($stateParams.id),
+                songAnimation: (songRestService, song) => songRestService.getSongAnimation(song.id)
+            }
         });
 }
 

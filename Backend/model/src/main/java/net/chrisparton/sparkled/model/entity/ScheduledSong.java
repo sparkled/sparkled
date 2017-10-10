@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.entity;
+package net.chrisparton.sparkled.model.entity;
 
 import javax.persistence.*;
 import java.util.Date;

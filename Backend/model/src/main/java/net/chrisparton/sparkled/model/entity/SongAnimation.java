@@ -1,14 +1,14 @@
-package net.chrisparton.sparkled.entity;
+package net.chrisparton.sparkled.model.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "rendered_song")
-public class RenderedSong {
+@Table(name = "song_animation")
+public class SongAnimation {
 
     private int songId;
-    private String renderData;
+    private String animationData;
 
     @Id
     @Column(name = "song_id", nullable = false)
@@ -21,26 +21,26 @@ public class RenderedSong {
     }
 
     @Basic
-    @Column(name = "render_data", columnDefinition = "text")
-    public String getRenderData() {
-        return renderData;
+    @Column(name = "animation_data", columnDefinition = "text")
+    public String getAnimationData() {
+        return animationData;
     }
 
-    public void setRenderData(String renderData) {
-        this.renderData = renderData;
+    public void setAnimationData(String animationData) {
+        this.animationData = animationData;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RenderedSong songData = (RenderedSong) o;
+        SongAnimation songData = (SongAnimation) o;
         return songId == songData.songId &&
-                Objects.equals(renderData, songData.renderData);
+                Objects.equals(animationData, songData.animationData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(songId, renderData);
+        return Objects.hash(songId, animationData);
     }
 }

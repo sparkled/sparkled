@@ -1,35 +1,33 @@
-package net.chrisparton.sparkled.preprocessor;
+package net.chrisparton.sparkled.model.validator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import net.chrisparton.sparkled.entity.*;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
+import net.chrisparton.sparkled.model.animation.AnimationEffect;
+import net.chrisparton.sparkled.model.animation.AnimationEffectChannel;
+import net.chrisparton.sparkled.model.animation.AnimationEffectParam;
+import net.chrisparton.sparkled.model.animation.SongAnimationData;
+import net.chrisparton.sparkled.model.entity.SongAnimation;
+import net.chrisparton.sparkled.model.validator.exception.EntityValidationException;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
-import static java.util.stream.Collectors.toList;
-
-public class SongPreprocessor {
+public class SongAnimationValidator {
 
     private static final Gson gson = new Gson();
-    private Song song;
-    private SongAnimationData animationData;
+    private SongAnimation songAnimation;
 
-    public SongPreprocessor(Song song) {
-        this.song = song;
+    public SongAnimationValidator(SongAnimation songAnimation) {
+        this.songAnimation = songAnimation;
     }
 
     public void validate() throws EntityValidationException {
-        String rawAnimationData = song.getAnimationData();
+        String rawAnimationData = songAnimation.getAnimationData();
 
         if (rawAnimationData == null) {
             throw new EntityValidationException("Song has no animation data.");
         }
 
-        animationData = parseAnimationData(rawAnimationData);
+        SongAnimationData animationData = parseAnimationData(rawAnimationData);
 
         animationData.getChannels().forEach(channel -> {
             validateChannel(channel);
@@ -53,7 +51,7 @@ public class SongPreprocessor {
         int startLed = animationEffectChannel.getStartLed();
         int endLed = animationEffectChannel.getEndLed();
 
-        if (StringUtils.isEmpty(channelName)) {
+        if (channelName == null || channelName.isEmpty()) {
             throw new EntityValidationException("Animation effect channels must have names.");
         }
 
@@ -151,48 +149,5 @@ public class SongPreprocessor {
 
             previousEndFrame = effect.getEndFrame();
         }
-    }
-
-    public void escapeText() {
-        if (animationData == null) {
-            throw new EntityValidationException("Song has not been validated yet.");
-        }
-
-        escape(song::getName, song::setName);
-        escape(song::getAlbum, song::setAlbum);
-        escape(song::getArtist, song::setArtist);
-
-        animationData.getChannels().forEach(channel -> {
-            escape(channel::getName, channel::setName);
-
-            List<AnimationEffect> effects = channel.getEffects();
-            effects.forEach(effect -> {
-                effect.getParams().forEach(param -> {
-                    escape(param::getValue, param::setValue);
-                    escapeList(param::getMultiValue, param::setMultiValue);
-                });
-            });
-        });
-    }
-
-    private void escape(Supplier<String> getter, Consumer<String> setter) {
-        String value = getter.get();
-        String escapedValue = escapeString(value);
-        setter.accept(escapedValue);
-    }
-
-    private void escapeList(Supplier<List<String>> getter, Consumer<List<String>> setter) {
-        List<String> escapedValues = getter.get()
-                .stream()
-                .map(this::escapeString)
-                .collect(toList());
-
-        setter.accept(escapedValues);
-    }
-
-    private String escapeString(String value) {
-        // Prevent duplicate escaping.
-        String unescapedValue = StringEscapeUtils.unescapeHtml4(value);
-        return StringEscapeUtils.escapeHtml4(unescapedValue);
     }
 }

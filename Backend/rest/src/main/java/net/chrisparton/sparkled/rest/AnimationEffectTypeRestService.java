@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.rest;
 
-import net.chrisparton.sparkled.entity.AnimationEffectTypeCode;
+import net.chrisparton.sparkled.model.animation.AnimationEffectTypeCode;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

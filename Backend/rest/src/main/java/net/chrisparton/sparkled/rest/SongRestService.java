@@ -1,11 +1,12 @@
 package net.chrisparton.sparkled.rest;
 
-import net.chrisparton.sparkled.entity.*;
+import net.chrisparton.sparkled.model.animation.AnimationEffectChannel;
+import net.chrisparton.sparkled.model.animation.SongAnimationData;
+import net.chrisparton.sparkled.model.entity.*;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
-import net.chrisparton.sparkled.preprocessor.EntityValidationException;
-import net.chrisparton.sparkled.preprocessor.SongPreprocessor;
-import net.chrisparton.sparkled.renderer.Renderer;
+import net.chrisparton.sparkled.model.validator.exception.EntityValidationException;
 import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
+import net.chrisparton.sparkled.renderer.Renderer;
 import net.chrisparton.sparkled.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -56,41 +57,27 @@ public class SongRestService extends RestService {
     @Path("/data/{id}")
     @Produces(MP3_MIME_TYPE)
     public Response getSongData(@PathParam("id") int id) {
-        Optional<SongData> songData = songPersistenceService.getSongDataById(id);
+        Optional<SongAudio> songData = songPersistenceService.getSongDataById(id);
 
         if (songData.isPresent()) {
-            return getBinaryResponse(songData.get().getMp3Data(), MP3_MIME_TYPE);
+            return getBinaryResponse(songData.get().getAudioData(), MP3_MIME_TYPE);
         }
 
         return getResponse(Response.Status.NOT_FOUND);
     }
 
-    @GET
-    @Path("/render/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRenderedSong(@PathParam("id") int id,
-                                    @QueryParam("durationFrames") int durationFrames,
-                                    @QueryParam("startFrame") int startFrame) {
-        Optional<Song> song = songPersistenceService.getSongById(id);
-
-        if (song.isPresent()) {
-            RenderedChannelMap renderedChannelMap = renderSong(song.get(), startFrame, durationFrames);
-            return getJsonResponse(renderedChannelMap);
-        }
-
-        return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
-    }
-
-    @PUT
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response putSong(@FormDataParam("song") String songJson,
-                            @FormDataParam("mp3") InputStream uploadedInputStream,
-                            @FormDataParam("mp3") FormDataContentDisposition fileDetail) {
+    public Response createSong(@FormDataParam("song") String songJson,
+                               @FormDataParam("mp3") InputStream uploadedInputStream,
+                               @FormDataParam("mp3") FormDataContentDisposition fileDetail) {
 
         try {
-            int songId = persistSong(songJson);
-            persistSongData(uploadedInputStream, songId);
+            Song song = gson.fromJson(songJson, Song.class);
+            int songId = persistSong(song);
+            persistSongAudio(uploadedInputStream, songId);
+            persistSongAnimation(songId);
 
             IdResponse idResponse = new IdResponse(songId);
             return getJsonResponse(idResponse);
@@ -102,31 +89,23 @@ public class SongRestService extends RestService {
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeSong(@PathParam("id") int id) {
-        boolean success = songPersistenceService.removeSongAndData(id);
-        return getResponse(
-                success ? Response.Status.OK : Response.Status.NOT_MODIFIED
-        );
+    public Response deleteSong(@PathParam("id") int id) {
+        songPersistenceService.deleteSong(id);
+        return getResponse(Response.Status.OK);
     }
 
-    @POST
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSong(String songJson) {
-        Song updatedSong = gson.fromJson(songJson, Song.class);
-
+    public Response updateSong(Song song) {
         try {
-            Optional<Song> songOptional = songPersistenceService.getSongById(updatedSong.getId());
-            if (songOptional.isPresent()) {
-                Song song = songOptional.get();
-                song.setAnimationData(updatedSong.getAnimationData());
-
-                int songId = saveSong(song);
-                IdResponse idResponse = new IdResponse(songId);
+            Integer savedId = songPersistenceService.saveSong(song);
+            if (savedId == null) {
+                return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
+            } else {
+                IdResponse idResponse = new IdResponse(savedId);
                 return getJsonResponse(idResponse);
             }
-
-            return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
         } catch (EntityValidationException e) {
             return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
@@ -134,33 +113,74 @@ public class SongRestService extends RestService {
         }
     }
 
-    private int persistSong(String songJson) {
-        Song song = gson.fromJson(songJson, Song.class);
+    @GET
+    @Path("/{id}/animation")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSongAnimation(@PathParam("id") int id) {
+        Optional<SongAnimation> songAnimationOptional = songPersistenceService.getSongAnimationById(id);
+        if (songAnimationOptional.isPresent()) {
+            return getJsonResponse(songAnimationOptional.get());
+        }
+        return getResponse(Response.Status.NOT_FOUND);
+    }
+
+    @PUT
+    @Path("/{id}/animation")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateSongAnimation(SongAnimation songAnimation) {
+        return saveOrSubmitAnimation(songAnimation, SongStatus.DRAFT);
+    }
+
+    @PUT
+    @Path("/{id}/render")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateRenderedSong(SongAnimation songAnimation) {
+        return saveOrSubmitAnimation(songAnimation, SongStatus.PUBLISHED);
+    }
+
+    private Response saveOrSubmitAnimation(SongAnimation songAnimation, SongStatus songStatus) {
+        try {
+            Optional<Song> song = songPersistenceService.getSongById(songAnimation.getSongId());
+
+            if (song.isPresent()) {
+                song.get().setStatus(songStatus);
+                songPersistenceService.saveSong(song.get());
+            } else {
+                return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
+            }
+
+            if (songStatus == SongStatus.PUBLISHED) {
+                persistRenderedSong(song.get(), songAnimation);
+            }
+
+            Integer savedId = songPersistenceService.saveSongAnimation(songAnimation);
+            if (savedId == null) {
+                return getJsonResponse(Response.Status.NOT_FOUND, "Song animation not found.");
+            } else {
+                IdResponse idResponse = new IdResponse(savedId);
+                return getJsonResponse(idResponse);
+            }
+        } catch (EntityValidationException e) {
+            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            return getJsonResponse(Response.Status.INTERNAL_SERVER_ERROR, "An internal error occurred.");
+        }
+    }
+
+    private int persistSong(Song song) {
         song.setId(null);
+        song.setStatus(SongStatus.NEW);
+
         if (song.getAlbum() == null) {
             song.setAlbum("No Album");
         }
-        song.setAnimationData(gson.toJson(createSongAnimationData()));
-        return saveSong(song);
+        return songPersistenceService.saveSong(song);
     }
 
-    private int saveSong(Song song) {
-        SongPreprocessor preprocessor = new SongPreprocessor(song);
-        preprocessor.validate();
-        preprocessor.escapeText();
-
-        Renderer renderer = new Renderer(song, 0, song.getDurationFrames());
-        RenderedChannelMap renderedChannels = renderer.render();
-        String renderJson = gson.toJson(renderedChannels);
-
-        final int songId = song.getId() == null ? -1 : song.getId();
-        RenderedSong renderedSong = songPersistenceService.getRenderedSongById(songId).orElse(new RenderedSong());
-        renderedSong.setRenderData(renderJson);
-
-        return songPersistenceService.saveSong(song, renderedSong);
-    }
-
-    private SongAnimationData createSongAnimationData() {
+    private String createSongAnimationData() {
         SongAnimationData animationData = new SongAnimationData();
 
         for (int i = 1; i <= 4; i++) {
@@ -171,7 +191,7 @@ public class SongRestService extends RestService {
             addChannel(animationData, "Arch " + i, "A" + i, 16);
         }
 
-        return animationData;
+        return gson.toJson(animationData);
     }
 
     private void addChannel(SongAnimationData animationData, String channelName, String channelCode, int ledCount) {
@@ -190,18 +210,31 @@ public class SongRestService extends RestService {
         channels.add(channel);
     }
 
-    private void persistSongData(InputStream uploadedInputStream, int songId) throws IOException {
+    private void persistSongAudio(InputStream uploadedInputStream, int songId) throws IOException {
         byte[] bytes = IOUtils.toByteArray(uploadedInputStream);
 
-        SongData songData = new SongData();
-        songData.setSongId(songId);
-        songData.setMp3Data(bytes);
+        SongAudio songAudio = new SongAudio();
+        songAudio.setSongId(songId);
+        songAudio.setAudioData(bytes);
 
-        songPersistenceService.saveSongData(songData);
+        songPersistenceService.saveSongAudio(songAudio);
     }
 
-    private RenderedChannelMap renderSong(Song song, int startFrame, int durationFrames) {
-        Renderer renderer = new Renderer(song, startFrame, durationFrames);
-        return renderer.render();
+    private void persistSongAnimation(int songId) throws IOException {
+        SongAnimation songAnimation = new SongAnimation();
+        songAnimation.setSongId(songId);
+        songAnimation.setAnimationData(createSongAnimationData());
+
+        songPersistenceService.saveSongAnimation(songAnimation);
+    }
+
+    private void persistRenderedSong(Song song, SongAnimation songAnimation) throws IOException {
+        RenderedChannelMap renderedChannelMap = new Renderer(song, songAnimation).render();
+
+        RenderedSong renderedSong = new RenderedSong();
+        renderedSong.setSongId(song.getId());
+        renderedSong.setRenderData(gson.toJson(renderedChannelMap));
+
+        songPersistenceService.saveRenderedSong(renderedSong);
     }
 }

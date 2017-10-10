@@ -6,11 +6,11 @@
     <persistence-unit name="sparkled">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>net.chrisparton.sparkled.entity.RenderedSong</class>
-        <class>net.chrisparton.sparkled.entity.ScheduledSong</class>
-        <class>net.chrisparton.sparkled.entity.Song</class>
-        <class>net.chrisparton.sparkled.entity.SongData</class>
-        <class>net.chrisparton.sparkled.entity.Stage</class>
+        <class>net.chrisparton.sparkled.model.entity.RenderedSong</class>
+        <class>net.chrisparton.sparkled.model.entity.ScheduledSong</class>
+        <class>net.chrisparton.sparkled.model.entity.Song</class>
+        <class>net.chrisparton.sparkled.model.entity.SongAudio</class>
+        <class>net.chrisparton.sparkled.model.entity.Stage</class>
 
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>

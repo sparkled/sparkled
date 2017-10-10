@@ -1,8 +1,8 @@
 package net.chrisparton.sparkled.renderer.util;
 
-import net.chrisparton.sparkled.entity.AnimationEffect;
-import net.chrisparton.sparkled.entity.AnimationEffectParam;
-import net.chrisparton.sparkled.entity.AnimationEffectTypeParamCode;
+import net.chrisparton.sparkled.model.animation.AnimationEffect;
+import net.chrisparton.sparkled.model.animation.AnimationEffectParam;
+import net.chrisparton.sparkled.model.animation.AnimationEffectTypeParamCode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

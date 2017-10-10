@@ -21,6 +21,16 @@ function editorNavbar(animationService,
                         () => toastr.error('Failed to save song')
                     )
                     .finally(() => scope.saving = false);
+            };
+
+            scope.publishSong = () => {
+                scope.saving = true;
+                return songRestService.publishSong(editorService.song, editorService.animationData)
+                    .then(
+                        () => toastr.success('Song published successfully'),
+                        () => toastr.error('Failed to publish song')
+                    )
+                    .finally(() => scope.saving = false);
             }
         }
     }

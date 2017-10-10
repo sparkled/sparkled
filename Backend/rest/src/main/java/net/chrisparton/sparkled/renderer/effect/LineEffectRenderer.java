@@ -2,7 +2,7 @@ package net.chrisparton.sparkled.renderer.effect;
 
 import net.chrisparton.sparkled.converter.ColourParamConverter;
 import net.chrisparton.sparkled.converter.LengthParamConverter;
-import net.chrisparton.sparkled.entity.AnimationEffect;
+import net.chrisparton.sparkled.model.animation.AnimationEffect;
 import net.chrisparton.sparkled.renderdata.RenderedChannel;
 import net.chrisparton.sparkled.renderdata.RenderedFrame;
 

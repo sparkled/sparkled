@@ -1,7 +1,7 @@
 package net.chrisparton.sparkled.persistence.song.impl.query;
 
-import net.chrisparton.sparkled.entity.RenderedSong;
-import net.chrisparton.sparkled.entity.Song;
+import net.chrisparton.sparkled.model.entity.Song;
+import net.chrisparton.sparkled.model.validator.SongValidator;
 import net.chrisparton.sparkled.persistence.PersistenceQuery;
 
 import javax.persistence.EntityManager;
@@ -9,18 +9,15 @@ import javax.persistence.EntityManager;
 public class SaveSongQuery implements PersistenceQuery<Integer> {
 
     private final Song song;
-    private final RenderedSong renderedSong;
 
-    public SaveSongQuery(Song song, RenderedSong renderedSong) {
+    public SaveSongQuery(Song song) {
         this.song = song;
-        this.renderedSong = renderedSong;
     }
 
     @Override
     public Integer perform(EntityManager entityManager) {
+        new SongValidator(song).validate();
         Song result = entityManager.merge(song);
-        renderedSong.setSongId(result.getId());
-        entityManager.merge(renderedSong);
         return result.getId();
     }
 }

@@ -6,9 +6,9 @@ import javazoom.jl.player.AudioDevice;
 import javazoom.jl.player.FactoryRegistry;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackListener;
-import net.chrisparton.sparkled.entity.RenderedSong;
-import net.chrisparton.sparkled.entity.Song;
-import net.chrisparton.sparkled.entity.SongData;
+import net.chrisparton.sparkled.model.entity.RenderedSong;
+import net.chrisparton.sparkled.model.entity.Song;
+import net.chrisparton.sparkled.model.entity.SongAudio;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
 
@@ -29,7 +29,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
     }
 
     @Override
-    public void play(Song song, SongData songData) {
+    public void play(Song song, SongAudio songAudio) {
         this.currentSong = song;
         RenderedSong renderedSong = songPersistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
         this.renderedChannelMap = new Gson().fromJson(renderedSong.getRenderData(), RenderedChannelMap.class);
@@ -38,7 +38,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
             FactoryRegistry r = FactoryRegistry.systemRegistry();
             audioDevice = r.createAudioDevice();
 
-            ByteArrayInputStream bais = new ByteArrayInputStream(songData.getMp3Data());
+            ByteArrayInputStream bais = new ByteArrayInputStream(songAudio.getAudioData());
             AdvancedPlayer player = new AdvancedPlayer(bais, audioDevice);
             player.setPlayBackListener(playbackListener);
             player.play();

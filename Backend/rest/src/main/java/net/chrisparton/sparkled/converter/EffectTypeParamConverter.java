@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.converter;
 
-import net.chrisparton.sparkled.entity.AnimationEffect;
+import net.chrisparton.sparkled.model.animation.AnimationEffect;
 
 public abstract class EffectTypeParamConverter<T> {
 

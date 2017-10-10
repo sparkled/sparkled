@@ -1,7 +1,7 @@
 package net.chrisparton.sparkled.persistence.song.impl.query;
 
-import net.chrisparton.sparkled.model.entity.RenderedSong;
-import net.chrisparton.sparkled.model.entity.RenderedSong_;
+import net.chrisparton.sparkled.model.entity.SongAnimation;
+import net.chrisparton.sparkled.model.entity.SongAnimation_;
 import net.chrisparton.sparkled.persistence.PersistenceQuery;
 import net.chrisparton.sparkled.persistence.util.PersistenceUtils;
 
@@ -12,24 +12,24 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.Optional;
 
-public class GetRenderedSongByIdQuery implements PersistenceQuery<Optional<RenderedSong>> {
+public class GetSongAnimationByIdQuery implements PersistenceQuery<Optional<SongAnimation>> {
 
     private final int songId;
 
-    public GetRenderedSongByIdQuery(int songId) {
+    public GetSongAnimationByIdQuery(int songId) {
         this.songId = songId;
     }
 
     @Override
-    public Optional<RenderedSong> perform(EntityManager entityManager) {
+    public Optional<SongAnimation> perform(EntityManager entityManager) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<RenderedSong> cq = cb.createQuery(RenderedSong.class);
-        Root<RenderedSong> renderedSong = cq.from(RenderedSong.class);
+        CriteriaQuery<SongAnimation> cq = cb.createQuery(SongAnimation.class);
+        Root<SongAnimation> SongAnimation = cq.from(SongAnimation.class);
         cq.where(
-                cb.equal(renderedSong.get(RenderedSong_.songId), songId)
+                cb.equal(SongAnimation.get(SongAnimation_.songId), songId)
         );
 
-        TypedQuery<RenderedSong> query = entityManager.createQuery(cq);
+        TypedQuery<SongAnimation> query = entityManager.createQuery(cq);
         return PersistenceUtils.getSingleResult(query);
     }
 }

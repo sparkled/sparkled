@@ -1,7 +1,7 @@
 package net.chrisparton.sparkled.converter;
 
-import net.chrisparton.sparkled.entity.AnimationEffect;
-import net.chrisparton.sparkled.entity.AnimationEffectTypeParamCode;
+import net.chrisparton.sparkled.model.animation.AnimationEffect;
+import net.chrisparton.sparkled.model.animation.AnimationEffectTypeParamCode;
 import net.chrisparton.sparkled.renderer.util.AnimationEffectUtils;
 
 import java.awt.*;

@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.viewmodel.converter;
 
-import net.chrisparton.sparkled.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.ScheduledSong;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.viewmodel.ScheduledSongViewModel;
 

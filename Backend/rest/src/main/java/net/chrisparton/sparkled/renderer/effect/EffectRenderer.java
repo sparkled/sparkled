@@ -1,8 +1,8 @@
 package net.chrisparton.sparkled.renderer.effect;
 
-import net.chrisparton.sparkled.entity.AnimationEasing;
-import net.chrisparton.sparkled.entity.AnimationEasingTypeCode;
-import net.chrisparton.sparkled.entity.AnimationEffect;
+import net.chrisparton.sparkled.model.animation.AnimationEasing;
+import net.chrisparton.sparkled.model.animation.AnimationEasingTypeCode;
+import net.chrisparton.sparkled.model.animation.AnimationEffect;
 import net.chrisparton.sparkled.renderdata.RenderedChannel;
 import net.chrisparton.sparkled.renderdata.RenderedFrame;
 

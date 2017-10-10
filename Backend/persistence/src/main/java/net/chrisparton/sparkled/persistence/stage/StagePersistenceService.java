@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.persistence.stage;
 
-import net.chrisparton.sparkled.entity.Stage;
+import net.chrisparton.sparkled.model.entity.Stage;
 
 import java.util.Optional;
 

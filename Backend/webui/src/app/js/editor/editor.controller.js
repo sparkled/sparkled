@@ -1,12 +1,12 @@
 function EditorCtrl(animationService,
                     clipboardService,
-                    editorConstants,
                     editorService,
                     hotkeys,
                     loaderService,
                     songRestService,
                     $scope,
-                    $stateParams) {
+                    song,
+                    songAnimation) {
     'ngInject';
 
     const vm = this;
@@ -15,14 +15,11 @@ function EditorCtrl(animationService,
 
     // Loading is completed when the MP3 is loaded by the waveform directive.
     loaderService.loading = true;
-    songRestService.getSong($stateParams.id).then(setSong);
 
-    function setSong(song) {
-        editorService.song = song;
-        editorService.songUrl = songRestService.getSongUrl(song);
-        editorService.animationData = JSON.parse(song.animationData);
-        editorService.currentChannel = editorService.animationData.channels[0];
-    }
+    editorService.song = song;
+    editorService.songUrl = songRestService.getSongUrl(song);
+    editorService.animationData = JSON.parse(songAnimation.animationData);
+    editorService.currentChannel = editorService.animationData.channels[0];
 
     hotkeys.bindTo($scope)
         .add({
@@ -117,7 +114,7 @@ function EditorCtrl(animationService,
         });
 
     function nextSecond(currentFrame) {
-        var newFrame = currentFrame + editorService.song.framesPerSecond;
+        let newFrame = currentFrame + editorService.song.framesPerSecond;
         newFrame -= newFrame % editorService.song.framesPerSecond;
         return newFrame;
     }

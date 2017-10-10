@@ -1,30 +1,46 @@
 package net.chrisparton.sparkled.renderer;
 
-import com.google.gson.Gson;
-import net.chrisparton.sparkled.entity.*;
+import net.chrisparton.sparkled.model.animation.AnimationEffect;
+import net.chrisparton.sparkled.model.animation.AnimationEffectChannel;
+import net.chrisparton.sparkled.model.animation.AnimationEffectTypeCode;
+import net.chrisparton.sparkled.model.animation.SongAnimationData;
+import net.chrisparton.sparkled.model.entity.Song;
+import net.chrisparton.sparkled.model.entity.SongAnimation;
 import net.chrisparton.sparkled.renderdata.RenderedChannel;
 import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
 import net.chrisparton.sparkled.renderdata.RenderedFrame;
 import net.chrisparton.sparkled.renderer.effect.EffectRenderer;
+import net.chrisparton.sparkled.renderer.effect.FlashEffectRenderer;
+import net.chrisparton.sparkled.renderer.effect.LineEffectRenderer;
+import net.chrisparton.sparkled.rest.json.GsonProvider;
 
+import java.util.HashMap;
 import java.util.List;
-
-import static java.util.stream.Collectors.toMap;
+import java.util.Map;
 
 public class Renderer {
 
-    private static final Gson gson = new Gson();
-
     private Song song;
+    private SongAnimationData animationData;
     private int startFrame;
     private int durationFrames;
-    private SongAnimationData animationData;
 
-    public Renderer(Song song, int startFrame, int durationFrames) {
+    private static Map<AnimationEffectTypeCode, EffectRenderer> effectTypeRenderers = new HashMap<>();
+
+    static {
+        effectTypeRenderers.put(AnimationEffectTypeCode.LINE, new LineEffectRenderer());
+        effectTypeRenderers.put(AnimationEffectTypeCode.FLASH, new FlashEffectRenderer());
+    }
+
+    public Renderer(Song song, SongAnimation songAnimation) {
+        this(song, songAnimation, 0, song.getDurationFrames());
+    }
+
+    public Renderer(Song song, SongAnimation songAnimation, int startFrame, int durationFrames) {
         this.song = song;
+        this.animationData = GsonProvider.get().fromJson(songAnimation.getAnimationData(), SongAnimationData.class);
         this.startFrame = startFrame;
         this.durationFrames = durationFrames;
-        this.animationData = gson.fromJson(song.getAnimationData(), SongAnimationData.class);
     }
 
     public RenderedChannelMap render() {
@@ -32,7 +48,7 @@ public class Renderer {
         RenderedChannelMap renderedChannels = new RenderedChannelMap();
 
         channels.forEach(channel ->
-            renderedChannels.put(channel.getCode(), renderChannel(channel))
+                renderedChannels.put(channel.getCode(), renderChannel(channel))
         );
         return renderedChannels;
     }
@@ -47,7 +63,7 @@ public class Renderer {
 
     private void renderEffect(RenderedChannel renderedChannel, AnimationEffect effect) {
         AnimationEffectTypeCode effectTypeCode = effect.getEffectType();
-        EffectRenderer renderer = effectTypeCode.getRenderer();
+        EffectRenderer renderer = effectTypeRenderers.get(effectTypeCode);
 
         int startFrame = Math.max(this.startFrame, effect.getStartFrame());
         int endFrame = Math.min(this.startFrame + this.durationFrames, effect.getEndFrame());

@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.rest;
 
-import net.chrisparton.sparkled.entity.Stage;
+import net.chrisparton.sparkled.model.entity.Stage;
 import net.chrisparton.sparkled.persistence.stage.StagePersistenceService;
 
 import javax.inject.Inject;

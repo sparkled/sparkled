@@ -19,6 +19,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable t) {
+        t.printStackTrace();
         if (t instanceof NotFoundException) {
             return returnNotFound();
         } else {

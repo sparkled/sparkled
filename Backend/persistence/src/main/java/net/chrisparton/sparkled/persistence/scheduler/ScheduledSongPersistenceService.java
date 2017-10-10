@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.persistence.scheduler;
 
-import net.chrisparton.sparkled.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.ScheduledSong;
 
 import java.util.Date;
 import java.util.List;

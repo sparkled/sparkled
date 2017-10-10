@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.persistence.scheduler.impl.query;
 
-import net.chrisparton.sparkled.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.ScheduledSong;
 import net.chrisparton.sparkled.persistence.PersistenceQuery;
 
 import javax.persistence.EntityManager;

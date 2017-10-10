@@ -1,18 +1,18 @@
 package net.chrisparton.sparkled.persistence.song.impl.query;
 
-import net.chrisparton.sparkled.entity.SongData;
-import net.chrisparton.sparkled.entity.SongData_;
+import net.chrisparton.sparkled.model.entity.SongAudio;
+import net.chrisparton.sparkled.model.entity.SongAudio_;
 import net.chrisparton.sparkled.persistence.PersistenceQuery;
+import net.chrisparton.sparkled.persistence.util.PersistenceUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
 import java.util.Optional;
 
-public class GetSongDataByIdQuery implements PersistenceQuery<Optional<SongData>> {
+public class GetSongDataByIdQuery implements PersistenceQuery<Optional<SongAudio>> {
 
     private final int songId;
 
@@ -21,21 +21,15 @@ public class GetSongDataByIdQuery implements PersistenceQuery<Optional<SongData>
     }
 
     @Override
-    public Optional<SongData> perform(EntityManager entityManager) {
+    public Optional<SongAudio> perform(EntityManager entityManager) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<SongData> cq = cb.createQuery(SongData.class);
-        Root<SongData> songData = cq.from(SongData.class);
+        CriteriaQuery<SongAudio> cq = cb.createQuery(SongAudio.class);
+        Root<SongAudio> songData = cq.from(SongAudio.class);
         cq.where(
-                cb.equal(songData.get(SongData_.songId), songId)
+                cb.equal(songData.get(SongAudio_.songId), songId)
         );
 
-        TypedQuery<SongData> query = entityManager.createQuery(cq);
-
-        List<SongData> songDataList = query.getResultList();
-        if (!songDataList.isEmpty()) {
-            return Optional.of(songDataList.get(0));
-        } else {
-            return Optional.empty();
-        }
+        TypedQuery<SongAudio> query = entityManager.createQuery(cq);
+        return PersistenceUtils.getSingleResult(query);
     }
 }

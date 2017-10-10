@@ -1,18 +1,16 @@
 package net.chrisparton.sparkled.persistence.song.impl;
 
 import com.google.inject.persist.Transactional;
-import net.chrisparton.sparkled.entity.*;
+import net.chrisparton.sparkled.model.entity.RenderedSong;
+import net.chrisparton.sparkled.model.entity.Song;
+import net.chrisparton.sparkled.model.entity.SongAnimation;
+import net.chrisparton.sparkled.model.entity.SongAudio;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.persistence.song.impl.query.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +31,8 @@ public class SongPersistenceServiceImpl implements SongPersistenceService {
 
     @Override
     @Transactional
-    public boolean removeSongAndData(int songId) {
-        return new RemoveSongAndDataQuery(songId).perform(entityManagerProvider.get());
+    public void deleteSong(int songId) {
+        new DeleteSongQuery(songId).perform(entityManagerProvider.get());
     }
 
     @Override
@@ -45,8 +43,14 @@ public class SongPersistenceServiceImpl implements SongPersistenceService {
 
     @Override
     @Transactional
-    public Optional<SongData> getSongDataById(int songId) {
+    public Optional<SongAudio> getSongDataById(int songId) {
         return new GetSongDataByIdQuery(songId).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Optional<SongAnimation> getSongAnimationById(int songId) {
+        return new GetSongAnimationByIdQuery(songId).perform(entityManagerProvider.get());
     }
 
     @Override
@@ -57,13 +61,25 @@ public class SongPersistenceServiceImpl implements SongPersistenceService {
 
     @Override
     @Transactional
-    public int saveSong(Song song, RenderedSong renderedSong) {
-        return new SaveSongQuery(song, renderedSong).perform(entityManagerProvider.get());
+    public Integer saveSong(Song song) {
+        return new SaveSongQuery(song).perform(entityManagerProvider.get());
     }
 
     @Override
     @Transactional
-    public int saveSongData(SongData songData) {
-        return new SaveSongDataQuery(songData).perform(entityManagerProvider.get());
+    public Integer saveSongAudio(SongAudio songAudio) {
+        return new SaveSongAudioQuery(songAudio).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Integer saveSongAnimation(SongAnimation songAnimation) {
+        return new SaveSongAnimationQuery(songAnimation).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Integer saveRenderedSong(RenderedSong renderedSong) {
+        return new SaveRenderedSongQuery(renderedSong).perform(entityManagerProvider.get());
     }
 }

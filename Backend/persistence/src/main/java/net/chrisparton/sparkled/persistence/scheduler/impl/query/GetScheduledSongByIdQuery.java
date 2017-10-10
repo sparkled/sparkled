@@ -1,15 +1,15 @@
 package net.chrisparton.sparkled.persistence.scheduler.impl.query;
 
-import net.chrisparton.sparkled.entity.ScheduledSong;
-import net.chrisparton.sparkled.entity.ScheduledSong_;
+import net.chrisparton.sparkled.model.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.ScheduledSong_;
 import net.chrisparton.sparkled.persistence.PersistenceQuery;
+import net.chrisparton.sparkled.persistence.util.PersistenceUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
 import java.util.Optional;
 
 public class GetScheduledSongByIdQuery implements PersistenceQuery<Optional<ScheduledSong>> {
@@ -30,12 +30,6 @@ public class GetScheduledSongByIdQuery implements PersistenceQuery<Optional<Sche
         );
 
         TypedQuery<ScheduledSong> query = entityManager.createQuery(cq);
-
-        List<ScheduledSong> scheduledSongs = query.getResultList();
-        if (!scheduledSongs.isEmpty()) {
-            return Optional.of(scheduledSongs.get(0));
-        } else {
-            return Optional.empty();
-        }
+        return PersistenceUtils.getSingleResult(query);
     }
 }

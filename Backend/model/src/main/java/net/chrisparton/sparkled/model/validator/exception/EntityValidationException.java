@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.preprocessor;
+package net.chrisparton.sparkled.model.validator.exception;
 
 public class EntityValidationException extends RuntimeException {
 
