@@ -1,7 +1,7 @@
 function stageRestService(Restangular) {
     'ngInject';
 
-    const restService = Restangular.service('stage');
+    const restService = Restangular.service('stages');
 
     return {
         getStage: getStage

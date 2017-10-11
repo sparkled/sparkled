@@ -3,7 +3,7 @@ const angular = require('angular');
 function schedulerRestService(Restangular) {
     'ngInject';
 
-    const restService = Restangular.service('scheduler');
+    const restService = Restangular.service('scheduledSongs');
 
     return {
         getScheduledSongs: getScheduledSongs,

@@ -3,7 +3,7 @@ const angular = require('angular');
 function songRestService(Restangular) {
     'ngInject';
 
-    const restService = Restangular.service('song');
+    const restService = Restangular.service('songs');
     const renderRestService = Restangular.service('renderPreview');
 
     return {
@@ -19,7 +19,7 @@ function songRestService(Restangular) {
     };
 
     function getSongUrl(song) {
-        return `${Restangular.configuration.baseUrl}/song/data/${song.id}`;
+        return `${Restangular.configuration.baseUrl}/songs/data/${song.id}`;
     }
 
     function getSongs() {

@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
-@Path("/stage")
+@Path("/stages")
 public class StageRestService extends RestService {
 
     private final StagePersistenceService stagePersistenceService;

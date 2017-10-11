@@ -19,8 +19,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@Path("/scheduler")
-public class SchedulerRestService extends RestService {
+@Path("/scheduledSongs")
+public class ScheduledSongRestService extends RestService {
 
     private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final int MIN_SECONDS_BETWEEN_SONGS = 5;
@@ -30,8 +30,8 @@ public class SchedulerRestService extends RestService {
     private final ScheduledSongViewModelConverter scheduledSongViewModelConverter;
 
     @Inject
-    public SchedulerRestService(ScheduledSongPersistenceService scheduledSongPersistenceService,
-                                ScheduledSongViewModelConverter scheduledSongViewModelConverter) {
+    public ScheduledSongRestService(ScheduledSongPersistenceService scheduledSongPersistenceService,
+                                    ScheduledSongViewModelConverter scheduledSongViewModelConverter) {
         this.scheduledSongPersistenceService = scheduledSongPersistenceService;
         this.scheduledSongViewModelConverter = scheduledSongViewModelConverter;
     }

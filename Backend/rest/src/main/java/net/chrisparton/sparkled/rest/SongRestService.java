@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
-@Path("/song")
+@Path("/songs")
 public class SongRestService extends RestService {
 
     private static final String MP3_MIME_TYPE = "audio/mpeg";
