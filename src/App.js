@@ -1,21 +1,19 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import HomePage from './pages/Home/HomePage';
+import EditSongPage from './pages/EditSong/EditSongPage';
+import SchedulerPage from './pages/Scheduler/SchedulerPage';
+import SongListPage from './pages/SongList/SongListPage';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <Router>
+    <Switch>
+      <Route exact path='/' component={HomePage}/>
+      <Route exact path='/scheduler' component={SchedulerPage}/>
+      <Route exact path='/songs' component={SongListPage}/>
+      <Route exact path='/songs/:songId' component={EditSongPage}/>
+    </Switch>
+  </Router>
+);
 
 export default App;
