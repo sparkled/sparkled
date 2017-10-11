@@ -1,18 +1,14 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
-import promise from 'redux-promise';
 import HomePage from './pages/Home/HomePage';
 import EditSongPage from './pages/EditSong/EditSongPage';
 import SchedulerPage from './pages/Scheduler/SchedulerPage';
 import SongListPage from './pages/SongList/SongListPage';
-
-
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+import store from './store';
 
 const App = () => (
-  <Provider store={createStoreWithMiddleware(() => {})}>
+  <Provider store={store}>
     <Router>
       <Switch>
         <Route exact path='/' component={HomePage}/>
