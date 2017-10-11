@@ -1,4 +1,4 @@
-import { isEmpty, map } from 'lodash-es';
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,7 @@ class SongListPage extends Component {
   }
 
   render() {
-    if (isEmpty(this.props.songs)) {
+    if (_.isEmpty(this.props.songs)) {
       return <div>Loading...</div>;
     }
 
@@ -26,7 +26,7 @@ class SongListPage extends Component {
   renderSongs() {
     const { match } = this.props;
 
-    return map(this.props.songs, song =>
+    return _.map(this.props.songs, song =>
       <div key={song.id}>
         <Link to={`${match.url}/${song.id}`}>Edit</Link>
         <div>{song.name}</div>
