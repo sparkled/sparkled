@@ -1,11 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import HomePage from './pages/Home/HomePage';
-import EditSongPage from './pages/EditSong/EditSongPage';
-import SchedulerPage from './pages/Scheduler/SchedulerPage';
-import SongListPage from './pages/SongList/SongListPage';
-import store from './store';
+import HomePage from '../../pages/Home';
+import EditSongPage from '../../pages/EditSong';
+import SchedulerPage from '../../pages/Scheduler';
+import SongListPage from '../../pages/SongList';
+import store from '../../store/store';
 
 const App = () => (
   <Provider store={store}>
