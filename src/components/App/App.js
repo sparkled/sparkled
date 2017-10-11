@@ -6,6 +6,7 @@ import EditSongPage from '../../pages/EditSong';
 import SchedulerPage from '../../pages/Scheduler';
 import SongListPage from '../../pages/SongList';
 import store from '../../store/store';
+import './bootswatch-superhero-v4-alpha.css';
 
 const App = () => (
   <Provider store={store}>
