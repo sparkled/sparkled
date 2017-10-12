@@ -1,45 +1,77 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { fetchSongs } from '../../services/song/actions';
+import SongEntry from './components/SongEntry';
 
 class SongListPage extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchQuery: ''
+    };
+  }
 
   componentDidMount() {
     this.props.fetchSongs();
   }
 
   render() {
-    if (_.isEmpty(this.props.songs)) {
+    const { loading, error } = this.props;
+
+    if (loading) {
       return <div>Loading...</div>;
+    } else if (error) {
+      return <div>{error}</div>;
     }
 
     return (
       <div>
-        <h2>Song List</h2>
-        {this.renderSongs()}
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 input-group input-group-lg my-4">
+              <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery} onChange={e => this.setState({searchQuery: e.target.value})}/>
+            </div>
+          </div>
+
+          <div className="row">
+            {this.renderSongs()}
+          </div>
+        </div>
       </div>
     );
   }
 
   renderSongs() {
-    const { match } = this.props;
+    const { songs } = this.props;
+    return _(songs)
+      .filter(this.songMatchesSearch.bind(this))
+      .map(song => (
+        <div className="col-md-6 col-lg-4 mb-4">
+          <SongEntry key={song.id} song={song}/>
+        </div>
+      ))
+      .value();
+  }
 
-    return _.map(this.props.songs, song =>
-      <div key={song.id}>
-        <Link to={`${match.url}/${song.id}`}>Edit</Link>
-        <div>{song.name}</div>
-        <div>{song.artist}</div>
-        <div>{song.album}</div>
-      </div>
-    );
+  songMatchesSearch(song) {
+    const searchQuery = this.state.searchQuery.trim().toLowerCase();
+    const { name, album, artist } = song;
+
+    if (!searchQuery.trim()) {
+      return true;
+    }
+
+    return _.filter([name, album, artist], field => _.includes(field.toLowerCase(), searchQuery)).length > 0;
   }
 }
 
 function mapStateToProps(state) {
   return {
-    songs: state.songs
+    songs: state.songs.data,
+    loading: state.songs.loading,
+    error: state.songs.error
   };
 }
 
