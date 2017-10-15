@@ -14,12 +14,12 @@ export default ({ song }) => (
     <div className="card-block">
       <div className="d-flex justify-content-between">
         <h6>Album: {song.album}</h6>
-        <h6>{getFormattedDuration(song)}</h6>
+        <h6 className="ml-3">{getFormattedDuration(song)}</h6>
       </div>
 
       <div className="d-flex justify-content-between">
         <h6>Artist: {song.artist}</h6>
-        <div>
+        <div className="ml-3">
           <span className="badge badge-primary">{song.status}</span>
         </div>
       </div>

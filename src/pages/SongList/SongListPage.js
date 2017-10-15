@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import LoadingIndicator from '../../components/LoadingIndicator';
+import PageContainer from '../../components/PageContainer';
 import { fetchSongs } from '../../services/song/actions';
 import SongEntry from './components/SongEntry';
 
@@ -18,28 +20,45 @@ class SongListPage extends Component {
   }
 
   render() {
-    const { loading, error } = this.props;
+    const { error, loading } = this.props;
 
+    let content = null;
     if (loading) {
-      return <div>Loading...</div>;
+      content = (
+        <div className="col-lg-12">
+          <LoadingIndicator size={100}/>
+        </div>
+      );
     } else if (error) {
-      return <div>{error}</div>;
-    }
-
-    return (
-      <div>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12 input-group input-group-lg my-4">
-              <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery} onChange={e => this.setState({searchQuery: e.target.value})}/>
+      content = (
+        <div className="col-lg-12">
+          <div className="card card-outline-danger">
+            <div className="card-block">
+              <p>Failed to load songs: {error}</p>
+              <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
             </div>
           </div>
+        </div>
+      );
+    } else {
+      content = this.renderSongs();
+    }
 
-          <div className="row">
-            {this.renderSongs()}
+    const pageBody = (
+      <div>
+        <div className="row">
+          <div className="col-lg-12 input-group input-group-lg my-4">
+            <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
+                   onChange={e => this.setState({ searchQuery: e.target.value })}/>
           </div>
         </div>
+
+        <div className="row">{content}</div>
       </div>
+    );
+
+    return (
+      <PageContainer body={pageBody}/>
     );
   }
 

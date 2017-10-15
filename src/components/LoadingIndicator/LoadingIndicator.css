@@ -1,0 +1,33 @@
+.loading-indicator {
+  text-align: center;
+}
+
+.loading-indicator img {
+  animation: animationFrames ease-in-out 2.5s;
+  animation-iteration-count: infinite;
+  transform-origin: center 65%;
+}
+
+@keyframes animationFrames {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(135deg);
+  }
+  33% {
+    transform: rotate(120deg);
+  }
+  58% {
+    transform: rotate(255deg);
+  }
+  66% {
+    transform: rotate(240deg);
+  }
+  92% {
+    transform: rotate(375deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
