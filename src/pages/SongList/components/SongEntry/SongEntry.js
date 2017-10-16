@@ -1,37 +1,61 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import './SongEntry.css';
 
-export default ({ song }) => (
-  <div className="card">
-    <div className="card-header d-flex justify-content-between align-items-center">
-      <h4 className="mb-0">{song.name}</h4>
+class SongEntry extends Component {
 
-      <div>
-        <Link className="btn btn-sm btn-info" to={`/songs/${song.id}`}>Edit</Link>
-      </div>
-    </div>
+  state = { dropdownOpen: false };
 
-    <div className="card-block">
-      <div className="d-flex justify-content-between">
-        <h6>Album: {song.album}</h6>
-        <h6 className="ml-3">{getFormattedDuration(song)}</h6>
-      </div>
+  render() {
+    const { song } = this.props;
 
-      <div className="d-flex justify-content-between">
-        <h6>Artist: {song.artist}</h6>
-        <div className="ml-3">
-          <span className="badge badge-primary">{song.status}</span>
+    return (
+      <div className="song-entry card">
+        <div className="card-header d-flex justify-content-between align-items-center">
+          <h4 className="mb-0">{song.name}</h4>
+
+          <div className="btn-group">
+            <Link className="btn btn-secondary" to={`/songs/${song.id}`}>Edit</Link>
+
+            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle.bind(this)}>
+              <DropdownToggle caret/>
+              <DropdownMenu right>
+                <DropdownItem>Delete Song</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        </div>
+
+        <div className="card-block">
+          <div className="d-flex justify-content-between">
+            <h6>Album: {song.album}</h6>
+            <h6 className="ml-3">{this.getFormattedDuration(song)}</h6>
+          </div>
+
+          <div className="d-flex justify-content-between">
+            <h6>Artist: {song.artist}</h6>
+            <div className="ml-3">
+              <span className="badge badge-primary">{song.status}</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-);
+    );
+  }
 
-function getFormattedDuration(song) {
-  const date = new Date(null);
-  date.setSeconds(Math.round(song.durationFrames / song.framesPerSecond));
+  toggle() {
+    this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
+  }
 
-  // 1970-01-01T00:01:23.000Z
-  //               ^^^^^
-  return date.toISOString().substr(14, 5);
+  getFormattedDuration(song) {
+    const date = new Date(null);
+    date.setSeconds(Math.round(song.durationFrames / song.framesPerSecond));
+
+    // 1970-01-01T00:01:23.000Z
+    //               ^^^^^
+    return date.toISOString().substr(14, 5);
+  }
 }
+
+export default SongEntry;
