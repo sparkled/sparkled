@@ -8,12 +8,7 @@ import SongEntry from './components/SongEntry';
 
 class SongListPage extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchQuery: ''
-    };
-  }
+  state = { searchQuery: '' };
 
   componentDidMount() {
     this.props.fetchSongs();
@@ -21,28 +16,6 @@ class SongListPage extends Component {
 
   render() {
     const { error, loading } = this.props;
-
-    let content = null;
-    if (loading) {
-      content = (
-        <div className="col-lg-12">
-          <LoadingIndicator size={100}/>
-        </div>
-      );
-    } else if (error) {
-      content = (
-        <div className="col-lg-12">
-          <div className="card card-outline-danger">
-            <div className="card-block">
-              <p>Failed to load songs: {error}</p>
-              <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      content = this.renderSongs();
-    }
 
     const pageBody = (
       <div>
@@ -53,22 +26,44 @@ class SongListPage extends Component {
           </div>
         </div>
 
-        <div className="row">{content}</div>
+        <div className="row">
+          {loading && this.renderLoading()}
+          {error && this.renderError(error)}
+          {this.renderSongs()}
+          </div>
       </div>
     );
 
+    return <PageContainer body={pageBody}/>;
+  }
+
+  renderLoading() {
     return (
-      <PageContainer body={pageBody}/>
+      <div className="col-lg-12">
+        <LoadingIndicator size={100}/>
+      </div>
+    );
+  }
+
+  renderError(error) {
+    return (
+      <div className="col-lg-12">
+        <div className="card card-outline-danger">
+          <div className="card-block">
+            <p>Failed to load songs: {error}</p>
+            <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
+          </div>
+        </div>
+      </div>
     );
   }
 
   renderSongs() {
-    const { songs } = this.props;
-    return _(songs)
+    return _(this.props.songs)
       .filter(this.songMatchesSearch.bind(this))
       .map(song => (
-        <div className="col-md-6 col-lg-4 mb-4">
-          <SongEntry key={song.id} song={song}/>
+        <div key={song.id} className="col-md-6 col-lg-4 mb-4">
+          <SongEntry song={song}/>
         </div>
       ))
       .value();
@@ -76,12 +71,12 @@ class SongListPage extends Component {
 
   songMatchesSearch(song) {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
-    const { name, album, artist } = song;
 
-    if (!searchQuery.trim()) {
+    if (!searchQuery) {
       return true;
     }
 
+    const { name, album, artist } = song;
     return _.filter([name, album, artist], field => _.includes(field.toLowerCase(), searchQuery)).length > 0;
   }
 }
