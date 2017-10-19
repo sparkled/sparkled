@@ -78,9 +78,7 @@ public class SongRestService extends RestService {
             int songId = persistSong(song);
             persistSongAudio(uploadedInputStream, songId);
             persistSongAnimation(songId);
-
-            IdResponse idResponse = new IdResponse(songId);
-            return getJsonResponse(idResponse);
+            return getJsonResponse(new IdResponse(songId));
         } catch (IOException e) {
             return getResponse(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -90,8 +88,8 @@ public class SongRestService extends RestService {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteSong(@PathParam("id") int id) {
-        songPersistenceService.deleteSong(id);
-        return getResponse(Response.Status.OK);
+        int songId = songPersistenceService.deleteSong(id);
+        return getJsonResponse(new IdResponse(songId));
     }
 
     @PUT
