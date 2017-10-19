@@ -26,17 +26,17 @@ public class GetScheduledSongsQuery implements PersistenceQuery<List<ScheduledSo
     public List<ScheduledSong> perform(EntityManager entityManager) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<ScheduledSong> cq = cb.createQuery(ScheduledSong.class);
-        Root<ScheduledSong> root = cq.from(ScheduledSong.class);
+        Root<ScheduledSong> scheduledSong = cq.from(ScheduledSong.class);
 
         cq.where(
                 cb.or(
-                        cb.between(root.get(ScheduledSong_.startTime), startDate, endDate),
-                        cb.between(root.get(ScheduledSong_.endTime), startDate, endDate)
+                        cb.between(scheduledSong.get(ScheduledSong_.startTime), startDate, endDate),
+                        cb.between(scheduledSong.get(ScheduledSong_.endTime), startDate, endDate)
                 )
         );
 
         cq.orderBy(
-                cb.asc(root.get(ScheduledSong_.startTime))
+                cb.asc(scheduledSong.get(ScheduledSong_.startTime))
         );
 
         TypedQuery<ScheduledSong> query = entityManager.createQuery(cq);

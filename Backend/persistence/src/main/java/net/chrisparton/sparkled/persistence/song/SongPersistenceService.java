@@ -12,7 +12,7 @@ public interface SongPersistenceService {
 
     List<Song> getAllSongs();
 
-    void deleteSong(int songId);
+    Integer deleteSong(int songId);
 
     Optional<Song> getSongById(int songId);
 

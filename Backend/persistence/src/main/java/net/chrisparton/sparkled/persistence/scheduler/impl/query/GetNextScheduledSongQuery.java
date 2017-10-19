@@ -19,14 +19,14 @@ public class GetNextScheduledSongQuery implements PersistenceQuery<Optional<Sche
     public Optional<ScheduledSong> perform(EntityManager entityManager) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<ScheduledSong> cq = cb.createQuery(ScheduledSong.class);
-        Root<ScheduledSong> root = cq.from(ScheduledSong.class);
+        Root<ScheduledSong> scheduledSong = cq.from(ScheduledSong.class);
 
         cq.where(
-                cb.greaterThan(root.get(ScheduledSong_.startTime), new Date())
+                cb.greaterThan(scheduledSong.get(ScheduledSong_.startTime), new Date())
         );
 
         cq.orderBy(
-                cb.asc(root.get(ScheduledSong_.startTime))
+                cb.asc(scheduledSong.get(ScheduledSong_.startTime))
         );
 
         TypedQuery<ScheduledSong> query = entityManager.createQuery(cq);

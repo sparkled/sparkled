@@ -24,9 +24,9 @@ public class GetScheduledSongByIdQuery implements PersistenceQuery<Optional<Sche
     public Optional<ScheduledSong> perform(EntityManager entityManager) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<ScheduledSong> cq = cb.createQuery(ScheduledSong.class);
-        Root<ScheduledSong> song = cq.from(ScheduledSong.class);
+        Root<ScheduledSong> scheduledSong = cq.from(ScheduledSong.class);
         cq.where(
-                cb.equal(song.get(ScheduledSong_.id), scheduledSongId)
+                cb.equal(scheduledSong.get(ScheduledSong_.id), scheduledSongId)
         );
 
         TypedQuery<ScheduledSong> query = entityManager.createQuery(cq);

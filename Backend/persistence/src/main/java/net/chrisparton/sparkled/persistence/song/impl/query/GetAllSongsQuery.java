@@ -17,12 +17,12 @@ public class GetAllSongsQuery implements PersistenceQuery<List<Song>> {
     public List<Song> perform(EntityManager entityManager) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Song> cq = cb.createQuery(Song.class);
-        Root<Song> songRoot = cq.from(Song.class);
+        Root<Song> song = cq.from(Song.class);
 
         cq.orderBy(
-                cb.asc(songRoot.get(Song_.artist)),
-                cb.asc(songRoot.get(Song_.album)),
-                cb.asc(songRoot.get(Song_.name))
+                cb.asc(song.get(Song_.artist)),
+                cb.asc(song.get(Song_.album)),
+                cb.asc(song.get(Song_.name))
         );
 
         TypedQuery<Song> query = entityManager.createQuery(cq);

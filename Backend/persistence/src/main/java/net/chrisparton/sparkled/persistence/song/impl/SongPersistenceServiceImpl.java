@@ -31,8 +31,8 @@ public class SongPersistenceServiceImpl implements SongPersistenceService {
 
     @Override
     @Transactional
-    public void deleteSong(int songId) {
-        new DeleteSongQuery(songId).perform(entityManagerProvider.get());
+    public Integer deleteSong(int songId) {
+        return new DeleteSongQuery(songId).perform(entityManagerProvider.get());
     }
 
     @Override
@@ -44,19 +44,19 @@ public class SongPersistenceServiceImpl implements SongPersistenceService {
     @Override
     @Transactional
     public Optional<SongAudio> getSongDataById(int songId) {
-        return new GetSongDataByIdQuery(songId).perform(entityManagerProvider.get());
+        return new GetSongDataBySongIdQuery(songId).perform(entityManagerProvider.get());
     }
 
     @Override
     @Transactional
     public Optional<SongAnimation> getSongAnimationById(int songId) {
-        return new GetSongAnimationByIdQuery(songId).perform(entityManagerProvider.get());
+        return new GetSongAnimationBySongIdQuery(songId).perform(entityManagerProvider.get());
     }
 
     @Override
     @Transactional
     public Optional<RenderedSong> getRenderedSongById(int songId) {
-        return new GetRenderedSongByIdQuery(songId).perform(entityManagerProvider.get());
+        return new GetRenderedSongBySongIdQuery(songId).perform(entityManagerProvider.get());
     }
 
     @Override
