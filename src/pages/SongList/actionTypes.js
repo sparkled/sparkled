@@ -1,0 +1,2 @@
+export const HIDE_DELETE_MODAL = 'SongList/HIDE_DELETE_MODAL';
+export const SHOW_DELETE_MODAL = 'SongList/SHOW_DELETE_MODAL';

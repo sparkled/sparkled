@@ -1,9 +1,11 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Alert from 'react-s-alert';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { fetchSongs } from '../../services/song/actions';
+import DeleteSongModal from './components/DeleteSongModal';
 import SongEntry from './components/SongEntry';
 
 class SongListPage extends Component {
@@ -14,9 +16,14 @@ class SongListPage extends Component {
     this.props.fetchSongs();
   }
 
-  render() {
-    const { error, loading } = this.props;
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.deleteSuccess && nextProps.deleteSuccess) {
+      // TODO: Remove setTimeout() once https://github.com/juliancwirko/react-s-alert/issues/49 is fixed.
+      setTimeout(() => Alert.success('Song deleted successfully'));
+    }
+  }
 
+  render() {
     const pageBody = (
       <div>
         <div className="row">
@@ -27,39 +34,57 @@ class SongListPage extends Component {
         </div>
 
         <div className="row">
-          {loading && this.renderLoading()}
-          {error && this.renderError(error)}
-          {this.renderSongs()}
+          <div className="col-lg-12">
+            {this.renderContent()}
           </div>
+        </div>
+
+        <DeleteSongModal/>
       </div>
     );
 
     return <PageContainer body={pageBody}/>;
   }
 
-  renderLoading() {
-    return (
-      <div className="col-lg-12">
-        <LoadingIndicator size={100}/>
-      </div>
-    );
+  renderContent() {
+    const { fetchError, fetching } = this.props;
+
+    if (fetching) {
+      return this.renderLoading();
+    } else if (fetchError) {
+      return this.renderError();
+    } else {
+      return this.renderSongs();
+    }
   }
 
-  renderError(error) {
+  renderLoading() {
+    return <LoadingIndicator size={100}/>;
+  }
+
+  renderError() {
     return (
-      <div className="col-lg-12">
-        <div className="card card-outline-danger">
-          <div className="card-block">
-            <p>Failed to load songs: {error}</p>
-            <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
-          </div>
+      <div className="card card-outline-danger">
+        <div className="card-block">
+          <p>Failed to load songs: {this.props.fetchError}</p>
+          <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
         </div>
       </div>
     );
   }
 
   renderSongs() {
-    return _(this.props.songs)
+    if (_.isEmpty(this.props.songs)) {
+      return (
+        <div className="card card-outline-info">
+          <div className="card-block">
+            No songs have been added.
+          </div>
+        </div>
+      );
+    }
+
+    const songs = _(this.props.songs)
       .filter(this.songMatchesSearch.bind(this))
       .map(song => (
         <div key={song.id} className="col-md-6 col-lg-4 mb-4">
@@ -67,6 +92,8 @@ class SongListPage extends Component {
         </div>
       ))
       .value();
+
+    return <div className="row">{songs}</div>;
   }
 
   songMatchesSearch(song) {
@@ -81,11 +108,12 @@ class SongListPage extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({ data: { songs } }) {
   return {
-    songs: state.songs.data,
-    loading: state.songs.loading,
-    error: state.songs.error
+    songs: songs.data,
+    fetching: songs.fetching,
+    fetchError: songs.fetchError,
+    deleteSuccess: songs.deleteSuccess
   };
 }
 

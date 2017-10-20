@@ -10,3 +10,12 @@ export const fetchSongs = () => {
     payload: request
   };
 };
+
+export const deleteSong = songId => {
+  const request = axios.delete(`${restConfig.ROOT_URL}/songs/${songId}`);
+
+  return {
+    type: actionTypes.DELETE_SONG,
+    payload: request
+  };
+};

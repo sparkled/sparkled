@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { showDeleteModal } from '../../actions';
 import './SongEntry.css';
 
 class SongEntry extends Component {
@@ -21,7 +23,7 @@ class SongEntry extends Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle.bind(this)}>
               <DropdownToggle caret/>
               <DropdownMenu right>
-                <DropdownItem>Delete Song</DropdownItem>
+                <DropdownItem onClick={this.deleteSong.bind(this)}>Delete Song</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -48,6 +50,11 @@ class SongEntry extends Component {
     this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
   }
 
+  deleteSong() {
+    const { showDeleteModal, song } = this.props;
+    showDeleteModal(song);
+  }
+
   getFormattedDuration(song) {
     const date = new Date(null);
     date.setSeconds(Math.round(song.durationFrames / song.framesPerSecond));
@@ -58,4 +65,11 @@ class SongEntry extends Component {
   }
 }
 
-export default SongEntry;
+function mapStateToProps({ data: { songs }, page: { songList } }) {
+  return {
+    songToDelete: songList.songToDelete,
+    deleting: songs.deleting
+  };
+}
+
+export default connect(mapStateToProps, { showDeleteModal })(SongEntry);

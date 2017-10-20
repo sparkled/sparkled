@@ -1,6 +1,12 @@
-import { createStore, applyMiddleware } from 'redux';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
-import reducer from '../services/reducer';
+import pageReducer from '../pages/reducer';
+import serviceReducer from '../services/reducer';
+
+const reducer = combineReducers({
+  page: pageReducer,
+  data: serviceReducer
+});
 
 const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware()
