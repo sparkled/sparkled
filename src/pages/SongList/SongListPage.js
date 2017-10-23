@@ -2,9 +2,12 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
+import { Nav, NavItem } from 'reactstrap';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { fetchSongs } from '../../services/song/actions';
+import { showAddModal } from './actions';
+import AddSongModal from './components/AddSongModal';
 import DeleteSongModal from './components/DeleteSongModal';
 import SongEntry from './components/SongEntry';
 
@@ -20,6 +23,11 @@ class SongListPage extends Component {
     if (!this.props.deleteSuccess && nextProps.deleteSuccess) {
       // TODO: Remove setTimeout() once https://github.com/juliancwirko/react-s-alert/issues/49 is fixed.
       setTimeout(() => Alert.success('Song deleted successfully'));
+      this.props.fetchSongs();
+    } else if (!this.props.addSuccess && nextProps.addSuccess) {
+      // TODO: Remove setTimeout() once https://github.com/juliancwirko/react-s-alert/issues/49 is fixed.
+      setTimeout(() => Alert.success('Song added successfully'));
+      this.props.fetchSongs();
     }
   }
 
@@ -34,16 +42,25 @@ class SongListPage extends Component {
         </div>
 
         <div className="row">
-          <div className="col-lg-12">
-            {this.renderContent()}
-          </div>
+          <div className="col-lg-12">{this.renderContent()}</div>
         </div>
 
+        <AddSongModal/>
         <DeleteSongModal/>
       </div>
     );
 
-    return <PageContainer body={pageBody}/>;
+    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
+  }
+
+  renderNavbar() {
+    return (
+      <Nav className="ml-auto" navbar>
+        <NavItem>
+          <span className="nav-link" onClick={this.props.showAddModal}>Add Song</span>
+        </NavItem>
+      </Nav>
+    );
   }
 
   renderContent() {
@@ -113,8 +130,9 @@ function mapStateToProps({ data: { songs } }) {
     songs: songs.data,
     fetching: songs.fetching,
     fetchError: songs.fetchError,
+    addSuccess: songs.addSuccess,
     deleteSuccess: songs.deleteSuccess
   };
 }
 
-export default connect(mapStateToProps, { fetchSongs })(SongListPage);
+export default connect(mapStateToProps, { showAddModal, fetchSongs })(SongListPage);

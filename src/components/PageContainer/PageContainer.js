@@ -8,7 +8,7 @@ class PageContainer extends Component {
   state = { collapsed: false };
 
   render() {
-    const { body } = this.props;
+    const { body, navbar } = this.props;
 
     return (
       <div>
@@ -28,6 +28,8 @@ class PageContainer extends Component {
                 <Link className="nav-link" to="/scheduler">Scheduler</Link>
               </NavItem>
             </Nav>
+
+            {navbar}
           </Collapse>
         </Navbar>
 

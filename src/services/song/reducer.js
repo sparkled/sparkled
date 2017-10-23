@@ -25,6 +25,30 @@ export default (state = {}, action) => {
         data: []
       };
 
+    case `${actionTypes.ADD_SONG}_PENDING`:
+      return {
+        ...state,
+        adding: true,
+        addError: null,
+        addSuccess: null
+      };
+
+    case `${actionTypes.ADD_SONG}_FULFILLED`:
+      return {
+        ...state,
+        adding: false,
+        addError: null,
+        addSuccess: true
+      };
+
+    case `${actionTypes.ADD_SONG}_REJECTED`:
+      return {
+        ...state,
+        adding: false,
+        addError: action.payload.response.data,
+        addSuccess: null
+      };
+
     case `${actionTypes.DELETE_SONG}_PENDING`:
       return {
         ...state,

@@ -23,7 +23,7 @@ class SongEntry extends Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle.bind(this)}>
               <DropdownToggle caret/>
               <DropdownMenu right>
-                <DropdownItem onClick={this.deleteSong.bind(this)}>Delete Song</DropdownItem>
+                <DropdownItem onClick={this.showDeleteModal.bind(this)}>Delete Song</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -50,7 +50,7 @@ class SongEntry extends Component {
     this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
   }
 
-  deleteSong() {
+  showDeleteModal() {
     const { showDeleteModal, song } = this.props;
     showDeleteModal(song);
   }
