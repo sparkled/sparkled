@@ -79,6 +79,8 @@ public class SongRestService extends RestService {
             persistSongAudio(uploadedInputStream, songId);
             persistSongAnimation(songId);
             return getJsonResponse(new IdResponse(songId));
+        } catch (EntityValidationException e) {
+            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
         } catch (IOException e) {
             return getResponse(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -171,10 +173,6 @@ public class SongRestService extends RestService {
     private int persistSong(Song song) {
         song.setId(null);
         song.setStatus(SongStatus.NEW);
-
-        if (song.getAlbum() == null) {
-            song.setAlbum("No Album");
-        }
         return songPersistenceService.saveSong(song);
     }
 
