@@ -21,12 +21,10 @@ class SongListPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.deleteSuccess && nextProps.deleteSuccess) {
-      // TODO: Remove setTimeout() once https://github.com/juliancwirko/react-s-alert/issues/49 is fixed.
-      setTimeout(() => Alert.success('Song deleted successfully'));
+      Alert.success('Song deleted successfully');
       this.props.fetchSongs();
     } else if (!this.props.addSuccess && nextProps.addSuccess) {
-      // TODO: Remove setTimeout() once https://github.com/juliancwirko/react-s-alert/issues/49 is fixed.
-      setTimeout(() => Alert.success('Song added successfully'));
+      Alert.success('Song added successfully');
       this.props.fetchSongs();
     }
   }
