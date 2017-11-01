@@ -2,6 +2,7 @@ package net.chrisparton.sparkled.rest;
 
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAnimation;
+import net.chrisparton.sparkled.model.validator.SongAnimationValidator;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
 import net.chrisparton.sparkled.renderer.Renderer;
@@ -32,6 +33,9 @@ public class RenderPreviewRestService extends RestService {
         Optional<Song> songOptional = songPersistenceService.getSongById(songAnimation.getSongId());
 
         if (songOptional.isPresent()) {
+            SongAnimationValidator songAnimationValidator = new SongAnimationValidator();
+            songAnimationValidator.validate(songAnimation);
+
             Song song = songOptional.get();
             RenderedChannelMap renderResult = new Renderer(song, songAnimation, startFrame, durationFrames).render();
             return getJsonResponse(renderResult);

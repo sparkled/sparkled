@@ -14,13 +14,8 @@ import java.util.List;
 public class SongAnimationValidator {
 
     private static final Gson gson = new Gson();
-    private SongAnimation songAnimation;
 
-    public SongAnimationValidator(SongAnimation songAnimation) {
-        this.songAnimation = songAnimation;
-    }
-
-    public void validate() throws EntityValidationException {
+    public void validate(SongAnimation songAnimation) throws EntityValidationException {
         String rawAnimationData = songAnimation.getAnimationData();
 
         if (rawAnimationData == null) {

@@ -16,7 +16,9 @@ public class SaveSongAnimationQuery implements PersistenceQuery<Integer> {
 
     @Override
     public Integer perform(EntityManager entityManager) {
-        new SongAnimationValidator(songAnimation).validate();
+        SongAnimationValidator songAnimationValidator = new SongAnimationValidator();
+        songAnimationValidator.validate(songAnimation);
+
         SongAnimation savedSongAnimation = entityManager.merge(songAnimation);
         return savedSongAnimation.getSongId();
     }
