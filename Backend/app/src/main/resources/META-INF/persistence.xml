@@ -9,6 +9,7 @@
         <class>net.chrisparton.sparkled.model.entity.RenderedSong</class>
         <class>net.chrisparton.sparkled.model.entity.ScheduledSong</class>
         <class>net.chrisparton.sparkled.model.entity.Song</class>
+        <class>net.chrisparton.sparkled.model.entity.SongAnimation</class>
         <class>net.chrisparton.sparkled.model.entity.SongAudio</class>
         <class>net.chrisparton.sparkled.model.entity.Stage</class>
 
