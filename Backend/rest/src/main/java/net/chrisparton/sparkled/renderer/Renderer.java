@@ -66,9 +66,9 @@ public class Renderer {
         EffectRenderer renderer = effectTypeRenderers.get(effectTypeCode);
 
         int startFrame = Math.max(this.startFrame, effect.getStartFrame());
-        int endFrame = Math.min(this.startFrame + this.durationFrames, effect.getEndFrame());
+        int endFrame = Math.min(this.startFrame + (this.durationFrames - 1), effect.getEndFrame());
 
-        for (int frameNumber = startFrame; frameNumber <= endFrame; frameNumber++) {
+        for (int frameNumber = startFrame; frameNumber < endFrame; frameNumber++) {
             RenderedFrame frame = renderedChannel.getFrames().get(frameNumber - this.startFrame);
             renderer.render(renderedChannel, frame, effect);
         }

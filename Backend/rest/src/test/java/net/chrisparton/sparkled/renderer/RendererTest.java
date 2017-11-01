@@ -25,9 +25,9 @@ public class RendererTest {
         final int ledCount = 10;
         final int songFrames = 60;
         final int effectStartFrame = 20;
-        final int effectEndFrame = 50;
-        final int renderStartFrame = effectStartFrame - 5;
-        final int renderDuration = (effectEndFrame + 5) - renderStartFrame;
+        final int effectEndFrame = 49;
+        final int renderStartFrame = 15;
+        final int renderDuration = 35;
 
         SongAnimationData animationData = new SongAnimationData();
 
@@ -62,15 +62,15 @@ public class RendererTest {
 
             int[] expectedLed = new int[] {0, 0, 0};
 
-            if (frameNumber >= effectStartFrame && frameNumber <= effectEndFrame) {
+            if (frameNumber >= effectStartFrame && frameNumber < effectEndFrame) {
                 expectedLed = new int[] {255, 255, 255};
             }
 
             for (int j = 0; j < ledCount; j++) {
                 Led renderedLed = renderedFrame.getLed(j);
-                assertThat(renderedLed.getR(), is(expectedLed[0]));
-                assertThat(renderedLed.getG(), is(expectedLed[1]));
-                assertThat(renderedLed.getB(), is(expectedLed[2]));
+                assertThat("Frame " + i + " rendered incorrect R value.", renderedLed.getR(), is(expectedLed[0]));
+                assertThat("Frame " + i + " rendered incorrect G value.", renderedLed.getG(), is(expectedLed[1]));
+                assertThat("Frame " + i + " rendered incorrect B value.", renderedLed.getB(), is(expectedLed[2]));
             }
         }
     }

@@ -72,7 +72,7 @@ function animationEffect(editorConstants,
             // Ensure new effect position is within the timeline and not colliding with another effect.
             function isValidPlacement(newStartFrame, newEndFrame) {
                 const frameCount = editorService.song.durationFrames;
-                const inBounds = newStartFrame > 0 && newEndFrame < frameCount;
+                const inBounds = newStartFrame >= 0 && newEndFrame < frameCount;
                 return inBounds && !isColliding(newStartFrame, newEndFrame);
             }
 
