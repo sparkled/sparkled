@@ -40,7 +40,7 @@ public class UdpServerImpl implements UdpServer {
             while (true) {
                 try {
                     handleRequest(serverSocket, receiveData);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     logger.log(Level.SEVERE, "Failed to handle UDP request.", e);
                 }
             }

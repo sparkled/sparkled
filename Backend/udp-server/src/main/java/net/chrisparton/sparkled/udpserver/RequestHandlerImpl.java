@@ -37,7 +37,9 @@ public class RequestHandlerImpl implements RequestHandler {
             if (currentSong == null || renderedChannelMap == null) {
                 respond(serverSocket, receivePacket, "ERR".getBytes(StandardCharsets.US_ASCII));
             } else {
-                int frameIndex = (int) Math.round(progress * currentSong.getDurationFrames());
+                final int durationFrames = currentSong.getDurationFrames();
+                final int frameIndex = (int) Math.min(durationFrames - 1, Math.round(progress * durationFrames));
+
                 RenderedFrame renderedFrame = renderedChannelMap.get(controller).getFrames().get(frameIndex);
                 respond(serverSocket, receivePacket, renderedFrame.getLedData());
             }

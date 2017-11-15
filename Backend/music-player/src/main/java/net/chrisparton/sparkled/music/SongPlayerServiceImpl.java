@@ -64,8 +64,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
         } else {
             int playbackMillis = audioDevice.getPosition();
             double songDurationMillis = currentSong.getDurationFrames() / (double) currentSong.getFramesPerSecond() * 1000;
-
-            return playbackMillis / songDurationMillis;
+            return Math.min(1f, playbackMillis / songDurationMillis);
         }
     }
 
