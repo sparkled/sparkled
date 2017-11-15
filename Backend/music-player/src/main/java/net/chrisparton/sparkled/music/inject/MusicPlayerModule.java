@@ -10,7 +10,7 @@ public class MusicPlayerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(SongSchedulerService.class).to(SongSchedulerServiceImpl.class).asEagerSingleton();
-        bind(SongPlayerService.class).to(SongPlayerServiceImpl.class).asEagerSingleton();
+        bind(SongSchedulerService.class).to(SongSchedulerServiceImpl.class);
+        bind(SongPlayerService.class).to(SongPlayerServiceImpl.class);
     }
 }

@@ -1,16 +1,17 @@
 package net.chrisparton.sparkled.music;
 
-import javazoom.jl.player.advanced.PlaybackListener;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import net.chrisparton.sparkled.event.SongScheduledEvent;
 import net.chrisparton.sparkled.model.entity.ScheduledSong;
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAudio;
-import net.chrisparton.sparkled.event.SongScheduledEvent;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -22,6 +23,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+@Singleton
 public class SongSchedulerServiceImpl implements SongSchedulerService {
 
     private static final Logger logger = Logger.getLogger(SongSchedulerServiceImpl.class.getName());
@@ -39,10 +41,12 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
         this.songPlayerService = songPlayerService;
         this.scheduledSongPersistenceService = scheduledSongPersistenceService;
         this.songPersistenceService = songPersistenceService;
-        this.executor = Executors.newSingleThreadScheduledExecutor();
 
-        final PlaybackListener playbackListener = new SongPlaybackListener(this::scheduleNextSong);
-        songPlayerService.setPlaybackListener(playbackListener);
+        this.executor = Executors.newSingleThreadScheduledExecutor(
+                new ThreadFactoryBuilder().setNameFormat("song-scheduler-%d").build()
+        );
+
+        songPlayerService.addPlaybackFinishedListener(event -> this.scheduleNextSong());
     }
 
     @Override

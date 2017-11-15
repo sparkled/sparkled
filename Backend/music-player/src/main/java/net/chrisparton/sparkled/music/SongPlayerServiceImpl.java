@@ -5,7 +5,7 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.AudioDevice;
 import javazoom.jl.player.FactoryRegistry;
 import javazoom.jl.player.advanced.AdvancedPlayer;
-import javazoom.jl.player.advanced.PlaybackListener;
+import javazoom.jl.player.advanced.PlaybackEvent;
 import net.chrisparton.sparkled.model.entity.RenderedSong;
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAudio;
@@ -13,19 +13,28 @@ import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.ByteArrayInputStream;
+import java.util.function.Consumer;
 
+@Singleton
 public class SongPlayerServiceImpl implements SongPlayerService {
 
     private final SongPersistenceService songPersistenceService;
+    private final AggregatePlaybackListener playbackListener = new AggregatePlaybackListener();
     private AudioDevice audioDevice;
-    private PlaybackListener playbackListener;
     private Song currentSong;
     private RenderedChannelMap renderedChannelMap;
 
     @Inject
     public SongPlayerServiceImpl(SongPersistenceService songPersistenceService) {
         this.songPersistenceService = songPersistenceService;
+        this.playbackListener.addPlaybackFinishedListener(event -> {
+            System.out.println("Song playback finished.");
+            this.currentSong = null;
+            this.renderedChannelMap = null;
+            this.audioDevice = null;
+        });
     }
 
     @Override
@@ -38,8 +47,8 @@ public class SongPlayerServiceImpl implements SongPlayerService {
             FactoryRegistry r = FactoryRegistry.systemRegistry();
             audioDevice = r.createAudioDevice();
 
-            ByteArrayInputStream bais = new ByteArrayInputStream(songAudio.getAudioData());
-            AdvancedPlayer player = new AdvancedPlayer(bais, audioDevice);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(songAudio.getAudioData());
+            AdvancedPlayer player = new AdvancedPlayer(inputStream, audioDevice);
             player.setPlayBackListener(playbackListener);
             player.play();
         } catch (JavaLayerException e) {
@@ -69,7 +78,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
     }
 
     @Override
-    public void setPlaybackListener(PlaybackListener playbackListener) {
-        this.playbackListener = playbackListener;
+    public void addPlaybackFinishedListener(Consumer<PlaybackEvent> playbackListener) {
+        this.playbackListener.addPlaybackFinishedListener(playbackListener);
     }
 }

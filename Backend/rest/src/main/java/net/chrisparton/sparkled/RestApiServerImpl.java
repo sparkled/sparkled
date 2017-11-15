@@ -1,5 +1,6 @@
 package net.chrisparton.sparkled;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
@@ -36,7 +37,10 @@ public class RestApiServerImpl implements RestApiServer {
     @Inject
     public RestApiServerImpl(Injector injector) {
         RestApiServerImpl.injector = injector;
-        this.threadPool = Executors.newSingleThreadExecutor();
+
+        this.threadPool = Executors.newSingleThreadExecutor(
+                new ThreadFactoryBuilder().setNameFormat("rest-api-server-%d").build()
+        );
     }
 
     @Override
