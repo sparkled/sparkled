@@ -27,11 +27,7 @@ public class LineEffectRenderer extends EffectRenderer {
 
         if (firstLitLed <= endLed) {
             for (int i = constrain(startLed, endLed, firstLitLed); i <= constrain(startLed, endLed - 1, lastLitLed); i++) {
-                frame.getLed(i).addRgb(
-                        color.getRed(),
-                        color.getGreen(),
-                        color.getBlue()
-                );
+                frame.getLed(i).addRgb(color);
             }
         }
     }

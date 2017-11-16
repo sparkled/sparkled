@@ -26,8 +26,9 @@ public class Song {
         return id;
     }
 
-    public void setId(Integer id) {
+    public Song setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     @Basic
@@ -36,8 +37,9 @@ public class Song {
         return name;
     }
 
-    public void setName(String name) {
+    public Song setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Basic
@@ -46,8 +48,9 @@ public class Song {
         return artist;
     }
 
-    public void setArtist(String artist) {
+    public Song setArtist(String artist) {
         this.artist = artist;
+        return this;
     }
 
     @Basic
@@ -56,8 +59,9 @@ public class Song {
         return album;
     }
 
-    public void setAlbum(String album) {
+    public Song setAlbum(String album) {
         this.album = album;
+        return this;
     }
 
     @Basic
@@ -66,8 +70,9 @@ public class Song {
         return durationFrames;
     }
 
-    public void setDurationFrames(int durationFrames) {
+    public Song setDurationFrames(int durationFrames) {
         this.durationFrames = durationFrames;
+        return this;
     }
 
     @Basic
@@ -76,8 +81,9 @@ public class Song {
         return framesPerSecond;
     }
 
-    public void setFramesPerSecond(int framesPerSecond) {
+    public Song setFramesPerSecond(int framesPerSecond) {
         this.framesPerSecond = framesPerSecond;
+        return this;
     }
 
     @Enumerated(EnumType.STRING)
@@ -86,8 +92,9 @@ public class Song {
         return status;
     }
 
-    public void setStatus(SongStatus status) {
+    public Song setStatus(SongStatus status) {
         this.status = status;
+        return this;
     }
 
     @Override

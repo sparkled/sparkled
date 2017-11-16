@@ -4,12 +4,14 @@ import com.google.gson.Gson;
 import net.chrisparton.sparkled.model.animation.*;
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAnimation;
-import net.chrisparton.sparkled.renderdata.Led;
 import net.chrisparton.sparkled.renderdata.RenderedChannel;
 import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
 import net.chrisparton.sparkled.renderdata.RenderedFrame;
 import org.junit.Test;
 
+import java.util.List;
+
+import static net.chrisparton.sparkled.util.matchers.SparkledMatchers.hasLeds;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -22,64 +24,49 @@ public class RendererTest {
 
     @Test
     public void can_render() {
-        final int ledCount = 10;
-        final int songFrames = 60;
-        final int effectStartFrame = 20;
-        final int effectEndFrame = 49;
-        final int renderStartFrame = 15;
-        final int renderDuration = 35;
+        final int ledCount = 5;
+        final int songFrames = 5;
+        final int effectStartFrame = 1;
+        final int effectEndFrame = 3;
+        final int renderStartFrame = 0;
+        final int renderDuration = 5;
 
         SongAnimationData animationData = new SongAnimationData();
 
-        AnimationEffectChannel channel = createAnimationEffectChannel(CHANNEL_CODE, 0, ledCount - 1);
+        AnimationEffectChannel channel = createAnimationEffectChannel(CHANNEL_CODE, ledCount);
         AnimationEffect flashEffect = createAnimationEffect(AnimationEffectTypeCode.FLASH, effectStartFrame, effectEndFrame, AnimationEasingTypeCode.CONSTANT_MIDPOINT);
         flashEffect.getParams().add(createAnimationEffectParam(AnimationEffectTypeParamCode.COLOUR, "#ffffff"));
         channel.getEffects().add(flashEffect);
         animationData.getChannels().add(channel);
 
-        final int fps = 60;
-        Song song = new Song();
-        song.setFramesPerSecond(fps);
-        song.setDurationFrames(songFrames);
-
-        SongAnimation songAnimation = new SongAnimation();
-        songAnimation.setAnimationData(gson.toJson(animationData));
+        Song song = new Song().setDurationFrames(songFrames);
+        SongAnimation songAnimation = new SongAnimation().setAnimationData(gson.toJson(animationData));
 
         RenderedChannelMap renderedChannels = new Renderer(song, songAnimation, renderStartFrame, renderDuration).render();
         assertThat(renderedChannels.size(), is(1));
 
         RenderedChannel renderedChannel = renderedChannels.get(CHANNEL_CODE);
         assertNotNull(renderedChannel);
-
-        assertThat(renderedChannel.getFrames().size(), is(renderDuration));
+        List<RenderedFrame> frames = renderedChannel.getFrames();
+        assertThat(frames.size(), is(renderDuration));
         assertThat(renderedChannel.getLedCount(), is(ledCount));
 
-        for (int i = 0; i < renderDuration; i++) {
-            RenderedFrame renderedFrame = renderedChannel.getFrames().get(i);
-            int frameNumber = renderedFrame.getFrameNumber();
-            assertThat(frameNumber, is(i + renderStartFrame));
-            assertThat(renderedFrame.getLedCount(), is(ledCount));
-
-            int[] expectedLed = new int[] {0, 0, 0};
-
-            if (frameNumber >= effectStartFrame && frameNumber < effectEndFrame) {
-                expectedLed = new int[] {255, 255, 255};
-            }
-
-            for (int j = 0; j < ledCount; j++) {
-                Led renderedLed = renderedFrame.getLed(j);
-                assertThat("Frame " + i + " rendered incorrect R value.", renderedLed.getR(), is(expectedLed[0]));
-                assertThat("Frame " + i + " rendered incorrect G value.", renderedLed.getG(), is(expectedLed[1]));
-                assertThat("Frame " + i + " rendered incorrect B value.", renderedLed.getB(), is(expectedLed[2]));
-            }
-        }
+        final int b = 0x000000; // Black
+        final int w = 0xFFFFFF; // White
+        assertThat(renderedChannel, hasLeds(new int[][] {
+                {b, b, b, b, b},
+                {w, w, w, w, w},
+                {w, w, w, w, w},
+                {w, w, w, w, w},
+                {b, b, b, b, b}
+        }));
     }
 
-    private AnimationEffectChannel createAnimationEffectChannel(String code, int startLed, int endLed) {
+    private AnimationEffectChannel createAnimationEffectChannel(String code, int leds) {
         AnimationEffectChannel channel = new AnimationEffectChannel();
         channel.setCode(code);
-        channel.setStartLed(startLed);
-        channel.setEndLed(endLed);
+        channel.setStartLed(0);
+        channel.setEndLed(leds - 1);
 
         return channel;
     }

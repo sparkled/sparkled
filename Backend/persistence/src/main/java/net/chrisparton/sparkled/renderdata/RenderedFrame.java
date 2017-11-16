@@ -1,8 +1,11 @@
 package net.chrisparton.sparkled.renderdata;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RenderedFrame {
 
-    int frameNumber;
+    private int frameNumber;
     private final byte[] ledData;
 
     /**
@@ -32,5 +35,15 @@ public class RenderedFrame {
 
     public Led getLed(int ledIndex) {
         return new Led(ledData, ledIndex);
+    }
+
+    public List<Led> getLeds() {
+        int ledCount = getLedCount();
+        List<Led> leds = new ArrayList<>(ledCount);
+        for (int i = 0; i < ledCount; i++) {
+            leds.add(getLed(i));
+        }
+
+        return leds;
     }
 }
