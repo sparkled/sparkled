@@ -15,6 +15,7 @@
         <module>model</module>
         <module>persistence</module>
         <module>music-player</module>
+        <module>renderer</module>
         <module>rest</module>
         <module>udp-server</module>
     </modules>

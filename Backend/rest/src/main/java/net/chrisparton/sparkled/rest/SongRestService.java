@@ -5,7 +5,7 @@ import net.chrisparton.sparkled.model.animation.SongAnimationData;
 import net.chrisparton.sparkled.model.entity.*;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.model.validator.exception.EntityValidationException;
-import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
+import net.chrisparton.sparkled.model.render.RenderedChannelMap;
 import net.chrisparton.sparkled.renderer.Renderer;
 import net.chrisparton.sparkled.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;

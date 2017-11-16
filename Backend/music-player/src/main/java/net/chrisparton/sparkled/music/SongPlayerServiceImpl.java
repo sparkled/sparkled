@@ -10,7 +10,7 @@ import net.chrisparton.sparkled.model.entity.RenderedSong;
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAudio;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
-import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
+import net.chrisparton.sparkled.model.render.RenderedChannelMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

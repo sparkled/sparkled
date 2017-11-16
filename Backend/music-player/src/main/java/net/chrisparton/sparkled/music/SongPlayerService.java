@@ -3,7 +3,7 @@ package net.chrisparton.sparkled.music;
 import javazoom.jl.player.advanced.PlaybackEvent;
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAudio;
-import net.chrisparton.sparkled.renderdata.RenderedChannelMap;
+import net.chrisparton.sparkled.model.render.RenderedChannelMap;
 
 import java.util.function.Consumer;
 
