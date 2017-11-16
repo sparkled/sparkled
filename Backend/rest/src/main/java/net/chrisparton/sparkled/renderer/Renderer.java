@@ -54,7 +54,7 @@ public class Renderer {
     }
 
     private RenderedChannel renderChannel(AnimationEffectChannel channel) {
-        final int endFrame = Math.min(song.getDurationFrames(), startFrame + durationFrames - 1);
+        final int endFrame = Math.min(song.getDurationFrames() - 1, startFrame + durationFrames - 1);
         RenderedChannel renderedChannel = new RenderedChannel(startFrame, endFrame, channel.getLedCount());
         channel.getEffects().forEach(effect -> renderEffect(renderedChannel, effect));
 
@@ -68,7 +68,7 @@ public class Renderer {
         int startFrame = Math.max(this.startFrame, effect.getStartFrame());
         int endFrame = Math.min(this.startFrame + (this.durationFrames - 1), effect.getEndFrame());
 
-        for (int frameNumber = startFrame; frameNumber < endFrame; frameNumber++) {
+        for (int frameNumber = startFrame; frameNumber <= endFrame; frameNumber++) {
             RenderedFrame frame = renderedChannel.getFrames().get(frameNumber - this.startFrame);
             renderer.render(renderedChannel, frame, effect);
         }
