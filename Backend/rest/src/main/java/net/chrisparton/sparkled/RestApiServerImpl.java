@@ -2,6 +2,7 @@ package net.chrisparton.sparkled;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
+import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -82,7 +83,10 @@ public class RestApiServerImpl implements RestApiServer {
                 URI webRootUri = URI.create(webappLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
                 context.setBaseResource(Resource.newResource(webRootUri));
                 context.setWelcomeFiles(new String[]{"index.html"});
-                context.setGzipHandler(new GzipHandler());
+
+                GzipHandler gzipHandler = new GzipHandler();
+                gzipHandler.setIncludedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name());
+                context.setGzipHandler(gzipHandler);
                 context.addFilter(TryFilesFilter.class, "*", EnumSet.of(DispatcherType.REQUEST));
             } catch (URISyntaxException | MalformedURLException e) {
                 e.printStackTrace();
