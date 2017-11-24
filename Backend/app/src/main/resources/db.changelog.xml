@@ -1,0 +1,106 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="chrisparton1991" id="create-table-stage">
+        <createTable tableName="stage">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_stage"/>
+            </column>
+            <column name="svg" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-song">
+        <createTable tableName="song">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_song"/>
+            </column>
+            <column name="album" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="artist" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_frames" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="frames_per_second" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-rendered-song">
+        <createTable tableName="rendered_song">
+            <column name="song_id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_rendered_song"/>
+            </column>
+            <column name="render_data" type="CLOB"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="rendered_song" baseColumnNames="song_id"
+                                 referencedTableName="song" referencedColumnNames="id"
+                                 constraintName="fk_rendered_song_song_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 deferrable="false" initiallyDeferred="false"/>
+    </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-scheduled-song">
+        <createTable tableName="scheduled_song">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_scheduled_song"/>
+            </column>
+            <column name="end_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="song_id" type="INT(10)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="scheduled_song" baseColumnNames="song_id"
+                                 referencedColumnNames="id" referencedTableName="song"
+                                 constraintName="fk_scheduled_song_song_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 deferrable="false" initiallyDeferred="false"/>
+    </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-song-animation">
+        <createTable tableName="song_animation">
+            <column name="song_id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_song_animation"/>
+            </column>
+            <column name="animation_data" type="CLOB"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="song_animation" baseColumnNames="song_id"
+                                 referencedTableName="song" referencedColumnNames="id"
+                                 constraintName="fk_song_animation_song_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 deferrable="false" initiallyDeferred="false"/>
+    </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-song-audio">
+        <createTable tableName="song_audio">
+            <column name="song_id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_song_audio"/>
+            </column>
+            <column name="audio_data" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="song_audio" baseColumnNames="song_id"
+                                 referencedTableName="song" referencedColumnNames="id"
+                                 constraintName="fk_song_audio_song_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 deferrable="false" initiallyDeferred="false"/>
+    </changeSet>
+</databaseChangeLog>

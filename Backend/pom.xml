@@ -21,20 +21,22 @@
     </modules>
 
     <properties>
-        <junit.version>4.12</junit.version>
         <apache-commons.version>3.4</apache-commons.version>
         <commons-io.version>2.4</commons-io.version>
-        <jetty.version>9.4.7.v20170914</jetty.version>
-        <jersey.version>2.23.2</jersey.version>
-        <h2.version>1.4.196</h2.version>
-        <gson.version>2.6.1</gson.version>
-        <guice.version>4.1.0</guice.version>
-        <guice-bridge.version>2.4.0</guice-bridge.version>
-        <hibernate.version>5.1.0.Final</hibernate.version>
-        <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
         <eventbus.version>3.1.0-RC</eventbus.version>
-        <mp3spi.version>1.9.5-1</mp3spi.version>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <gson.version>2.6.1</gson.version>
+        <guice-bridge.version>2.4.0</guice-bridge.version>
+        <guice.version>4.1.0</guice.version>
+        <h2.version>1.4.196</h2.version>
+        <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
+        <hibernate.version>5.1.0.Final</hibernate.version>
+        <jersey.version>2.23.2</jersey.version>
+        <jetty.version>9.4.7.v20170914</jetty.version>
+        <junit.version>4.12</junit.version>
+        <liquibase.version>3.5.3</liquibase.version>
+        <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
+        <mp3spi.version>1.9.5-1</mp3spi.version>
     </properties>
 
     <profiles>
@@ -175,6 +177,12 @@
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>${hibernate-jpa-2.1-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
             </dependency>
 
             <dependency>
