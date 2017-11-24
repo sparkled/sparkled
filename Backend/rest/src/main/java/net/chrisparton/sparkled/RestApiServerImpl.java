@@ -31,7 +31,7 @@ public class RestApiServerImpl implements RestApiServer {
     private static final String REST_PATH = "/rest/*";
 
     private boolean started;
-    public static Injector injector;
+    static Injector injector;
     private final ExecutorService threadPool;
 
     @Inject
@@ -51,6 +51,7 @@ public class RestApiServerImpl implements RestApiServer {
         }
 
         threadPool.submit(() -> startServer(port));
+        logger.info("Started REST API server at port " + port);
         started = true;
     }
 

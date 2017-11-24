@@ -47,7 +47,7 @@ public class UdpServerImpl implements UdpServer {
         });
 
         started = true;
-        logger.info("Started UDP server socket at port " + port);
+        logger.info("Started UDP server at port " + port);
     }
 
     private void handleRequest(final DatagramSocket serverSocket, final byte[] receiveData) throws IOException {

@@ -9,9 +9,6 @@ import javax.inject.Inject;
 
 public class App {
 
-    private static final int REST_API_PORT = 8080;
-    private static final int UDP_PORT = 12345;
-
     private final PersistService persistService;
     private final SchemaUpdater schemaUpdater;
     private final RestApiServer restApiServer;
@@ -32,11 +29,11 @@ public class App {
         this.schemaUpdater = schemaUpdater;
     }
 
-    void start() throws Exception {
+    void start(int restApiPort, int udpPort) throws Exception {
         persistService.start();
         schemaUpdater.update();
-        restApiServer.start(REST_API_PORT);
-        udpServer.start(UDP_PORT);
+        restApiServer.start(restApiPort);
+        udpServer.start(udpPort);
         songSchedulerService.start();
     }
 }

@@ -31,6 +31,7 @@
         <h2.version>1.4.196</h2.version>
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
         <hibernate.version>5.1.0.Final</hibernate.version>
+        <jcommander.version>1.72</jcommander.version>
         <jersey.version>2.23.2</jersey.version>
         <jetty.version>9.4.7.v20170914</jetty.version>
         <junit.version>4.12</junit.version>
@@ -75,6 +76,12 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.beust</groupId>
+                <artifactId>jcommander</artifactId>
+                <version>${jcommander.version}</version>
             </dependency>
 
             <dependency>
