@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.converter;
+package net.chrisparton.sparkled.renderer.converter;
 
 import net.chrisparton.sparkled.model.animation.AnimationEffect;
 import net.chrisparton.sparkled.model.animation.AnimationEffectTypeParamCode;

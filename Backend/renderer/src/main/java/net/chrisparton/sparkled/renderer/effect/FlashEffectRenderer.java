@@ -1,9 +1,9 @@
 package net.chrisparton.sparkled.renderer.effect;
 
-import net.chrisparton.sparkled.converter.ColourParamConverter;
 import net.chrisparton.sparkled.model.animation.AnimationEffect;
-import net.chrisparton.sparkled.renderdata.RenderedChannel;
-import net.chrisparton.sparkled.renderdata.RenderedFrame;
+import net.chrisparton.sparkled.model.render.RenderedChannel;
+import net.chrisparton.sparkled.model.render.RenderedFrame;
+import net.chrisparton.sparkled.renderer.converter.ColourParamConverter;
 import net.chrisparton.sparkled.renderer.util.ColorUtils;
 
 import java.awt.*;

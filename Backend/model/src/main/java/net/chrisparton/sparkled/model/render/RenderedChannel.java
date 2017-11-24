@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.renderdata;
+package net.chrisparton.sparkled.model.render;
 
 import java.util.ArrayList;
 import java.util.List;

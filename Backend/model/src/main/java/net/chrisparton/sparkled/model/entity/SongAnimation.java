@@ -16,8 +16,9 @@ public class SongAnimation {
         return songId;
     }
 
-    public void setSongId(int songId) {
+    public SongAnimation setSongId(int songId) {
         this.songId = songId;
+        return this;
     }
 
     @Basic
@@ -26,8 +27,9 @@ public class SongAnimation {
         return animationData;
     }
 
-    public void setAnimationData(String animationData) {
+    public SongAnimation setAnimationData(String animationData) {
         this.animationData = animationData;
+        return this;
     }
 
     @Override

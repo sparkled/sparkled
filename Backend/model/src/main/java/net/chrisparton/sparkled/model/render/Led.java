@@ -1,4 +1,4 @@
-package net.chrisparton.sparkled.renderdata;
+package net.chrisparton.sparkled.model.render;
 
 import java.awt.*;
 import java.util.Objects;
@@ -11,9 +11,6 @@ public class Led {
 
     private byte[] ledData;
     private int ledIndex;
-
-    public Led() {
-    }
 
     public Led(byte[] ledData, int ledIndex) {
         this.ledData = ledData;
@@ -73,6 +70,6 @@ public class Led {
 
     @Override
     public String toString() {
-        return String.format("{r:%s, g:%s, b:%s", getR(), getG(), getB());
+        return String.format("#%02X%02X%02X", getR(), getG(), getB());
     }
 }

@@ -1,10 +1,10 @@
 package net.chrisparton.sparkled.renderer.effect;
 
-import net.chrisparton.sparkled.converter.ColourParamConverter;
-import net.chrisparton.sparkled.converter.LengthParamConverter;
 import net.chrisparton.sparkled.model.animation.AnimationEffect;
-import net.chrisparton.sparkled.renderdata.RenderedChannel;
-import net.chrisparton.sparkled.renderdata.RenderedFrame;
+import net.chrisparton.sparkled.model.render.RenderedChannel;
+import net.chrisparton.sparkled.model.render.RenderedFrame;
+import net.chrisparton.sparkled.renderer.converter.ColourParamConverter;
+import net.chrisparton.sparkled.renderer.converter.LengthParamConverter;
 
 import java.awt.*;
 
@@ -27,11 +27,7 @@ public class LineEffectRenderer extends EffectRenderer {
 
         if (firstLitLed <= endLed) {
             for (int i = constrain(startLed, endLed, firstLitLed); i <= constrain(startLed, endLed - 1, lastLitLed); i++) {
-                frame.getLed(i).addRgb(
-                        color.getRed(),
-                        color.getGreen(),
-                        color.getBlue()
-                );
+                frame.getLed(i).addRgb(color);
             }
         }
     }

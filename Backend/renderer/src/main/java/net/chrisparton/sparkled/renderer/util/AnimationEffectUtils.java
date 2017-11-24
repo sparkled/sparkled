@@ -3,7 +3,6 @@ package net.chrisparton.sparkled.renderer.util;
 import net.chrisparton.sparkled.model.animation.AnimationEffect;
 import net.chrisparton.sparkled.model.animation.AnimationEffectParam;
 import net.chrisparton.sparkled.model.animation.AnimationEffectTypeParamCode;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class AnimationEffectUtils {
 
     public static String getEffectParamValue(AnimationEffect effect, AnimationEffectTypeParamCode effectTypeParamCode) {
         String value = getEffectParam(effect, effectTypeParamCode).getValue();
-        return StringUtils.trimToEmpty(value);
+        return value == null ? "" : value.trim();
     }
 
     public static List<String> getEffectParamMultiValue(AnimationEffect effect, AnimationEffectTypeParamCode effectTypeParamCode) {

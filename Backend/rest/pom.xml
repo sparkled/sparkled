@@ -23,6 +23,12 @@
 
         <dependency>
             <groupId>net.chrisparton.sparkled</groupId>
+            <artifactId>renderer</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.chrisparton.sparkled</groupId>
             <artifactId>events</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
