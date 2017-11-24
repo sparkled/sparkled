@@ -5,7 +5,7 @@ function animationService(editorService,
     'ngInject';
 
     var animationStartFrame = undefined;
-    const durationSeconds = 20;
+    const durationSeconds = 5;
 
     var service = {
         running: false,
