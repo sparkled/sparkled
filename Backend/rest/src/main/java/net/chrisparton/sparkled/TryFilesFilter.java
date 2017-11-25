@@ -41,8 +41,8 @@ public class TryFilesFilter implements Filter {
         URL url = request.getServletContext().getResource(resolved);
 
         if (url != null) {
-            String resourcePath = url.toString().split(JAR_RESOURCE_FILE_SEPARATOR)[1];
-            if (getClass().getResource(resourcePath) != null) {
+            String[] resourcePath = url.toString().split(JAR_RESOURCE_FILE_SEPARATOR);
+            if (resourcePath.length == 2 && getClass().getResource(resourcePath[1]) != null) {
                 chain.doFilter(httpRequest, httpResponse);
                 return;
             }
