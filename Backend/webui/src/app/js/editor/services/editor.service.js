@@ -46,10 +46,11 @@ function editorService(editorConstants,
                 return;
             }
 
-            effect.endFrame = Math.min(effect.endFrame, nextElement.startFrame);
+            effect.endFrame = Math.min(effect.endFrame, nextElement.startFrame - 1);
         }
 
-        if (effect.endFrame - service.currentFrame < editorConstants.minimumEffectFrames) {
+        const effectDuration = effect.endFrame - effect.startFrame + 1;
+        if (effectDuration < editorConstants.minimumEffectFrames) {
             toastr.error('There is not enough room to add an animation effect.');
             return;
         }
@@ -62,7 +63,7 @@ function editorService(editorConstants,
             effectType: '',
             easingType: 'LINEAR',
             startFrame: service.currentFrame,
-            endFrame: service.currentFrame + editorConstants.minimumEffectFrames,
+            endFrame: service.currentFrame + editorConstants.minimumEffectFrames - 1,
             repetitions: 1,
             reverse: false,
             params: []

@@ -56,7 +56,7 @@ function animationEffect(editorConstants,
                 const scrollLeft = $('.channels').scrollLeft();
                 const elementLeft = $(element).position().left;
                 const newStartFrame = Math.round((scrollLeft + elementLeft) / editorConstants.pixelsPerFrame);
-                const newEndFrame = newStartFrame + duration;
+                const newEndFrame = newStartFrame + duration - 1;
                 const validPlacement = isValidPlacement(newStartFrame, newEndFrame);
 
                 if (validPlacement) {
