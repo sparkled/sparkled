@@ -14,15 +14,15 @@ public class LineEffectRenderer extends EffectRenderer {
     private LengthParamConverter lengthParamConverter = new LengthParamConverter();
 
     @Override
-    public void render(RenderedChannel channel, RenderedFrame frame, AnimationEffect effect, int progressPercentage) {
+    public void render(RenderedChannel channel, RenderedFrame frame, AnimationEffect effect, double progress) {
         int startLed = 0;
-        int endLed = channel.getLedCount();
-        int ledCount = endLed - startLed;
+        int endLed = channel.getLedCount() - 1;
+        int ledCount = endLed - startLed + 1;
 
         Color color = colourParamConverter.convert(effect);
         int length = lengthParamConverter.convert(effect);
 
-        int firstLitLed = startLed + (int) Math.round((ledCount + length) * progressPercentage / 100.0) - length;
+        int firstLitLed = startLed + (int) Math.round((ledCount + length) * progress) - length;
         int lastLitLed = firstLitLed + length - 1;
 
         if (firstLitLed <= endLed) {
