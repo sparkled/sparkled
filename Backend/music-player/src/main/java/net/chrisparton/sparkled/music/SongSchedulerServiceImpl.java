@@ -1,14 +1,11 @@
 package net.chrisparton.sparkled.music;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import net.chrisparton.sparkled.event.SongScheduledEvent;
 import net.chrisparton.sparkled.model.entity.ScheduledSong;
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAudio;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -51,17 +48,11 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
 
     @Override
     public void start() {
-        EventBus.getDefault().register(this);
         scheduleNextSong();
     }
 
-    @Subscribe
-    public void onSongScheduled(SongScheduledEvent event) {
-        logger.info("Received song scheduled event. Song scheduled: " + event.getScheduledSong().getSong().getName());
-        scheduleNextSong();
-    }
-
-    private void scheduleNextSong() {
+    @Override
+    public void scheduleNextSong() {
         Optional<ScheduledSong> nextSong = scheduledSongPersistenceService.getNextScheduledSong();
         nextSong.ifPresent(this::scheduleSong);
     }

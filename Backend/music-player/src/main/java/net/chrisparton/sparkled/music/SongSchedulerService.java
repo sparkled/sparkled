@@ -8,7 +8,12 @@ import net.chrisparton.sparkled.model.entity.ScheduledSong;
 public interface SongSchedulerService {
 
     /**
-     * Load the next scheduled song and listen for further song publishing events.
+     * Start the service and load the next scheduled song.
      */
     void start();
+
+    /**
+     * Load the next scheduled song.
+     */
+    void scheduleNextSong();
 }

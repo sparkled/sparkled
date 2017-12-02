@@ -2,12 +2,11 @@ package net.chrisparton.sparkled.rest;
 
 import net.chrisparton.sparkled.model.entity.ScheduledSong;
 import net.chrisparton.sparkled.model.entity.Song;
-import net.chrisparton.sparkled.event.SongScheduledEvent;
+import net.chrisparton.sparkled.music.SongSchedulerService;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
 import net.chrisparton.sparkled.viewmodel.ScheduledSongViewModel;
 import net.chrisparton.sparkled.viewmodel.converter.ScheduledSongViewModelConverter;
 import org.apache.commons.lang3.time.DateUtils;
-import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -18,20 +17,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Path("/scheduledSongs")
 public class ScheduledSongRestService extends RestService {
 
+    private static final Logger logger = Logger.getLogger(ScheduledSongRestService.class.getName());
     private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final int MIN_SECONDS_BETWEEN_SONGS = 5;
     private static final int MIN_SECONDS_IN_FUTURE = 5;
 
+    private final SongSchedulerService songSchedulerService;
     private final ScheduledSongPersistenceService scheduledSongPersistenceService;
     private final ScheduledSongViewModelConverter scheduledSongViewModelConverter;
 
     @Inject
-    public ScheduledSongRestService(ScheduledSongPersistenceService scheduledSongPersistenceService,
+    public ScheduledSongRestService(SongSchedulerService songSchedulerService,
+                                    ScheduledSongPersistenceService scheduledSongPersistenceService,
                                     ScheduledSongViewModelConverter scheduledSongViewModelConverter) {
+        this.songSchedulerService = songSchedulerService;
         this.scheduledSongPersistenceService = scheduledSongPersistenceService;
         this.scheduledSongViewModelConverter = scheduledSongViewModelConverter;
     }
@@ -88,7 +92,8 @@ public class ScheduledSongRestService extends RestService {
 
         boolean success = scheduledSongPersistenceService.saveScheduledSong(scheduledSong);
         if (success) {
-            EventBus.getDefault().post(new SongScheduledEvent(scheduledSong));
+            logger.info("Song scheduled: " + scheduledSong.getSong().getName());
+            songSchedulerService.scheduleNextSong();
         }
         return getResponse(success ? Response.Status.OK : Response.Status.BAD_REQUEST);
     }

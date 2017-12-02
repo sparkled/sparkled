@@ -33,4 +33,9 @@ public interface SongPlayerService {
      * @param playbackListener The playback listener to register.
      */
     void addPlaybackFinishedListener(Consumer<PlaybackEvent> playbackListener);
+
+    /**
+     * Stops playback of the current scheduled song. If no song is playing, this is a NOOP.
+     */
+    void stopCurrentSong();
 }

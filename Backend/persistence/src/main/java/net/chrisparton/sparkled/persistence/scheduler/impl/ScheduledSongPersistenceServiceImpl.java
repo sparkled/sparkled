@@ -3,11 +3,7 @@ package net.chrisparton.sparkled.persistence.scheduler.impl;
 import com.google.inject.persist.Transactional;
 import net.chrisparton.sparkled.model.entity.ScheduledSong;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
-import net.chrisparton.sparkled.persistence.scheduler.impl.query.GetNextScheduledSongQuery;
-import net.chrisparton.sparkled.persistence.scheduler.impl.query.GetScheduledSongsQuery;
-import net.chrisparton.sparkled.persistence.scheduler.impl.query.RemoveScheduledSongQuery;
-import net.chrisparton.sparkled.persistence.scheduler.impl.query.SaveScheduledSongQuery;
-import net.chrisparton.sparkled.persistence.song.impl.SongPersistenceServiceImpl;
+import net.chrisparton.sparkled.persistence.scheduler.impl.query.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -19,13 +15,10 @@ import java.util.Optional;
 public class ScheduledSongPersistenceServiceImpl implements ScheduledSongPersistenceService {
 
     private Provider<EntityManager> entityManagerProvider;
-    private SongPersistenceServiceImpl songPersistenceService;
 
     @Inject
-    public ScheduledSongPersistenceServiceImpl(Provider<EntityManager> entityManagerProvider,
-                                               SongPersistenceServiceImpl songPersistenceService) {
+    public ScheduledSongPersistenceServiceImpl(Provider<EntityManager> entityManagerProvider) {
         this.entityManagerProvider = entityManagerProvider;
-        this.songPersistenceService = songPersistenceService;
     }
 
     @Override
@@ -38,6 +31,12 @@ public class ScheduledSongPersistenceServiceImpl implements ScheduledSongPersist
     @Transactional
     public List<ScheduledSong> getScheduledSongs(Date startDate, Date endDate) {
         return new GetScheduledSongsQuery(startDate, endDate).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Optional<ScheduledSong> getScheduledSongAtTime(Date time) {
+        return new GetScheduledSongAtTimeQuery(time).perform(entityManagerProvider.get());
     }
 
     @Override

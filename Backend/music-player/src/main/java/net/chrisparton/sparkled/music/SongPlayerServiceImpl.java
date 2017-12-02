@@ -16,10 +16,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.ByteArrayInputStream;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 @Singleton
 public class SongPlayerServiceImpl implements SongPlayerService {
 
+    private final Logger logger = Logger.getLogger(SongPlayerServiceImpl.class.getName());
     private final SongPersistenceService songPersistenceService;
     private final AggregatePlaybackListener playbackListener = new AggregatePlaybackListener();
     private AudioDevice audioDevice;
@@ -30,10 +32,8 @@ public class SongPlayerServiceImpl implements SongPlayerService {
     public SongPlayerServiceImpl(SongPersistenceService songPersistenceService) {
         this.songPersistenceService = songPersistenceService;
         this.playbackListener.addPlaybackFinishedListener(event -> {
-            System.out.println("Song playback finished.");
-            this.currentSong = null;
-            this.renderedChannelMap = null;
-            this.audioDevice = null;
+            logger.info("Song playback finished.");
+            this.stopCurrentSong();
         });
     }
 
@@ -80,5 +80,16 @@ public class SongPlayerServiceImpl implements SongPlayerService {
     @Override
     public void addPlaybackFinishedListener(Consumer<PlaybackEvent> playbackListener) {
         this.playbackListener.addPlaybackFinishedListener(playbackListener);
+    }
+
+    @Override
+    public void stopCurrentSong() {
+        if (this.audioDevice != null && this.audioDevice.isOpen()) {
+            this.audioDevice.close();
+        }
+
+        this.currentSong = null;
+        this.renderedChannelMap = null;
+        this.audioDevice = null;
     }
 }

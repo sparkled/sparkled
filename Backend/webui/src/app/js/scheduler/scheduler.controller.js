@@ -1,9 +1,8 @@
-function schedulerCtrl(loaderService,
-                       moment,
+function schedulerCtrl(moment,
+                       musicPlayerRestService,
                        schedulerRestService,
                        songRestService,
                        toastr,
-                       $interval,
                        $scope,
                        _) {
     'ngInject';
@@ -20,6 +19,7 @@ function schedulerCtrl(loaderService,
     vm.scheduleEndTime = null;
     vm.canSchedule = false;
 
+    vm.stopCurrentSong = stopCurrentSong;
     vm.schedule = schedule;
     vm.unschedule = unschedule;
 
@@ -63,6 +63,11 @@ function schedulerCtrl(loaderService,
         return songRestService.getSongs().then(songs => {
             vm.songs = songs;
         });
+    }
+
+    function stopCurrentSong() {
+        musicPlayerRestService.stopCurrentSong()
+            .then(loadScheduledSongs);
     }
 
     function schedule() {

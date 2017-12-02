@@ -12,6 +12,8 @@ public interface ScheduledSongPersistenceService {
 
     List<ScheduledSong> getScheduledSongs(Date startDate, Date endDate);
 
+    Optional<ScheduledSong> getScheduledSongAtTime(Date time);
+
     boolean removeScheduledSong(int scheduledSongId);
 
     boolean saveScheduledSong(ScheduledSong scheduledSong);
