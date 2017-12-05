@@ -2,6 +2,7 @@ package net.chrisparton.sparkled.persistence.scheduler.impl;
 
 import com.google.inject.persist.Transactional;
 import net.chrisparton.sparkled.model.entity.ScheduledSong;
+import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
 import net.chrisparton.sparkled.persistence.scheduler.impl.query.*;
 
@@ -25,6 +26,11 @@ public class ScheduledSongPersistenceServiceImpl implements ScheduledSongPersist
     @Transactional
     public Optional<ScheduledSong> getNextScheduledSong() {
         return new GetNextScheduledSongQuery().perform(entityManagerProvider.get());
+    }
+
+    @Override
+    public Optional<Song> getNextAutoSchedulableSong(int lastSongId) {
+        return new GetNextAutoSchedulableSongQuery(lastSongId).perform(entityManagerProvider.get());
     }
 
     @Override

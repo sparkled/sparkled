@@ -8,6 +8,8 @@ import java.util.Objects;
 @Table(name = "scheduled_song")
 public class ScheduledSong {
 
+    public static final int MIN_SECONDS_BETWEEN_SONGS = 5;
+
     private Integer id;
     private Song song;
     private Date startTime;

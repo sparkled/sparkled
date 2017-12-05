@@ -13,6 +13,7 @@ public class Song {
     private String album;
     private int durationFrames;
     private int framesPerSecond;
+    private boolean autoSchedulable;
     private SongStatus status;
 
     public Song() {
@@ -84,6 +85,16 @@ public class Song {
     public Song setFramesPerSecond(int framesPerSecond) {
         this.framesPerSecond = framesPerSecond;
         return this;
+    }
+
+    @Basic
+    @Column(name = "auto_schedulable", nullable = false)
+    public boolean isAutoSchedulable() {
+        return autoSchedulable;
+    }
+
+    public void setAutoSchedulable(boolean autoSchedulable) {
+        this.autoSchedulable = autoSchedulable;
     }
 
     @Enumerated(EnumType.STRING)

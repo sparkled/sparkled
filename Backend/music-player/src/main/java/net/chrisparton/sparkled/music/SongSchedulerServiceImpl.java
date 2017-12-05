@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 @Singleton
@@ -29,6 +30,7 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
     private final ScheduledExecutorService executor;
     private final ScheduledSongPersistenceService scheduledSongPersistenceService;
     private final SongPersistenceService songPersistenceService;
+    private final AtomicInteger lastAutoScheduledSongId = new AtomicInteger(0);
     private ScheduledFuture<?> nextScheduledSong;
 
     @Inject
@@ -54,15 +56,26 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
     @Override
     public void scheduleNextSong() {
         Optional<ScheduledSong> nextSong = scheduledSongPersistenceService.getNextScheduledSong();
-        nextSong.ifPresent(this::scheduleSong);
+        ScheduledSong scheduledSong = nextSong.orElse(null);
+        if (scheduledSong != null) {
+            scheduleSong(scheduledSong);
+        }
+
+        if (scheduledSong == null || millisBetween(scheduledSong.getStartTime(), LocalDateTime.now()) > ScheduledSong.MIN_SECONDS_BETWEEN_SONGS * 2) {
+            Optional<Song> nextAutoSchedulableSong = scheduledSongPersistenceService.getNextAutoSchedulableSong(lastAutoScheduledSongId.get());
+            if (nextAutoSchedulableSong.isPresent()) {
+                logger.info("Playing auto schedulable song until next scheduled song is due to be played.");
+                Song song = nextAutoSchedulableSong.get();
+                lastAutoScheduledSongId.set(song.getId());
+                executor.schedule(() -> playSong(song), 0, TimeUnit.MILLISECONDS);
+            }
+        }
     }
 
     private void scheduleSong(ScheduledSong scheduledSong) {
-        Date startTime = scheduledSong.getStartTime();
-        LocalDateTime startDateTime = LocalDateTime.ofInstant(startTime.toInstant(), ZoneId.systemDefault());
-        logger.info("Scheduling next song for " + startDateTime);
+        long delay = millisBetween(scheduledSong.getStartTime(), LocalDateTime.now());
+        logger.info("Playing next song in " + delay + "ms.");
 
-        long delay = ChronoUnit.MILLIS.between(LocalDateTime.now(), startDateTime);
         if (nextScheduledSong != null && !nextScheduledSong.isDone()) {
             logger.info("A song is already scheduled, cancelling it.");
             nextScheduledSong.cancel(true);
@@ -73,5 +86,10 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
     private void playSong(Song song) {
         Optional<SongAudio> songData = songPersistenceService.getSongDataById(song.getId());
         songData.ifPresent(data -> songPlayerService.play(song, data));
+    }
+
+    private long millisBetween(Date lhs, LocalDateTime rhs) {
+        LocalDateTime startDateTime = LocalDateTime.ofInstant(lhs.toInstant(), ZoneId.systemDefault());
+        return ChronoUnit.MILLIS.between(startDateTime, rhs);
     }
 }

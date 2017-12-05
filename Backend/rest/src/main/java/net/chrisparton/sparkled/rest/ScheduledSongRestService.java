@@ -19,13 +19,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static net.chrisparton.sparkled.model.entity.ScheduledSong.MIN_SECONDS_BETWEEN_SONGS;
+
 @Path("/scheduledSongs")
 public class ScheduledSongRestService extends RestService {
 
     private static final Logger logger = Logger.getLogger(ScheduledSongRestService.class.getName());
     private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    private static final int MIN_SECONDS_BETWEEN_SONGS = 5;
-    private static final int MIN_SECONDS_IN_FUTURE = 5;
 
     private final SongSchedulerService songSchedulerService;
     private final ScheduledSongPersistenceService scheduledSongPersistenceService;
@@ -70,9 +70,9 @@ public class ScheduledSongRestService extends RestService {
         ScheduledSong scheduledSong = scheduledSongViewModelConverter.fromViewModel(viewModel);
 
         Date songStartTime = scheduledSong.getStartTime();
-        Date earliestStartTime = DateUtils.addSeconds(new Date(), MIN_SECONDS_IN_FUTURE);
+        Date earliestStartTime = DateUtils.addSeconds(new Date(), MIN_SECONDS_BETWEEN_SONGS);
         if (songStartTime == null || songStartTime.before(earliestStartTime)) {
-            String message = "Songs must be scheduled at least " + MIN_SECONDS_IN_FUTURE + " seconds in the future.";
+            String message = "Songs must be scheduled at least " + MIN_SECONDS_BETWEEN_SONGS + " seconds in the future.";
             return getJsonResponse(Response.Status.BAD_REQUEST, message);
         }
 
