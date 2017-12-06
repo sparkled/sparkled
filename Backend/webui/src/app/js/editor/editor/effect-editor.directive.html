@@ -8,7 +8,7 @@
         <div class="form-group">
             <label for="effect-editor-type">Effect Type</label>
 
-            <ui-select id="effect-editor-type" ng-model="effect.effectType">
+            <ui-select id="effect-editor-type" ng-model="effect.type" ng-change="updateEffectType()">
                 <ui-select-match>
                     <span ng-bind="$select.selected.name"></span>
                 </ui-select-match>
@@ -19,55 +19,45 @@
         </div>
 
         <div class="form-group" ng-repeat="param in effect.params">
-            <div ng-if="param.paramCode === 'COLOUR'">
-                <label for="editor-param-{{param.paramCode}}">
-                    {{getParamName(effect.effectType, param.paramCode)}}
-                </label>
+            <label for="editor-param-{{param.type}}">{{param.name}}</label>
 
-                <ui-select id="effect-editor-colour" ng-model="param.value">
-                    <ui-select-match>
-                        <div class="colour-picker-preview" ng-if="$select.selected.code" ng-style="{'background-color': $select.selected.code}"></div>
-                        <span ng-bind="$select.selected.name"></span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="item.code as item in colours | filter: {name: $select.search}">
-                        <div class="colour-picker-preview" ng-style="{'background-color': item.code}"></div>
-                        <span ng-bind-html="item.name | highlight: $select.search"></span>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
+            <ui-select ng-if="param.type === 'COLOR'"
+                       id="effect-editor-color" ng-model="param.value[0]">
+                <ui-select-match>
+                    <div class="colour-picker-preview" ng-if="$select.selected.code" ng-style="{'background-color': $select.selected.code}"></div>
+                    <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.code as item in colours | filter: {name: $select.search}">
+                    <div class="colour-picker-preview" ng-style="{'background-color': item.code}"></div>
+                    <span ng-bind-html="item.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
 
-            <div ng-if="param.paramCode === 'MULTI_COLOUR'">
-                <label for="editor-param-{{param.paramCode}}">
-                    {{getParamName(effect.effectType, param.paramCode)}}
-                </label>
+            <ui-select ng-if="param.type === 'MULTI_COLOR'"
+                       multiple duplicates-allowed="true" sortable="true" id="effect-editor-multi-color" ng-model="param.value">
+                <ui-select-match>
+                    <div class="colour-picker-preview" ng-if="$item.code" ng-style="{'background-color': $item.code}"></div>
+                    {{$item.name}}
+                </ui-select-match>
+                <ui-select-choices repeat="item.code as item in colours | filter: {name: $select.search}">
+                    <div class="colour-picker-preview" ng-style="{'background-color': item.code}"></div>
+                    <span ng-bind-html="item.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
 
-                <ui-select multiple duplicates-allowed="true" sortable="true" id="effect-editor-multi-colour" ng-model="param.multiValue">
-                    <ui-select-match>
-                        <div class="colour-picker-preview" ng-if="$item.code" ng-style="{'background-color': $item.code}"></div>
-                        {{$item.name}}
-                    </ui-select-match>
-                    <ui-select-choices repeat="item.code as item in colours | filter: {name: $select.search}">
-                        <div class="colour-picker-preview" ng-style="{'background-color': item.code}"></div>
-                        <span ng-bind-html="item.name | highlight: $select.search"></span>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
-
-            <div ng-if="['COLOUR', 'MULTI_COLOUR'].indexOf(param.paramCode) === -1">
-                <label for="editor-param-{{param.paramCode}}">{{getParamName(effect.effectType, param.paramCode)}}</label>
-
-                <input type="text"
-                       class="form-control"
-                       id="editor-param-{{param.paramCode}}"
-                       ng-model="param.value"
-                       placeholder="{{getParamName(effect.effectType, param.paramCode)}}"/>
-            </div>
+            <input ng-if="param.type === 'INTEGER' || param.type === 'DECIMAL'"
+                   type="text" class="form-control"
+                   id="editor-param-{{param.type}}"
+                   ng-model="param.value[0]"
+                   placeholder="{{param.name}}"/>
         </div>
 
-        <div class="form-group">
-            <label for="effect-editor-easing">Easing</label>
+        <hr />
 
-            <ui-select id="effect-editor-easing" ng-model="effect.easingType">
+        <div class="form-group">
+            <label for="effect-editor-easingFunction">Easing</label>
+
+            <ui-select id="effect-editor-easingFunction" ng-model="effect.easing">
                 <ui-select-match>
                     <span ng-bind="$select.selected.name"></span>
                 </ui-select-match>
@@ -80,7 +70,7 @@
         <div class="form-group">
             <label for="effect-editor-repetitions">Repetitions</label>
 
-            <input type="number"
+            <input type="text"
                    class="form-control"
                    id="effect-editor-repetitions"
                    ng-model="effect.repetitions"
@@ -94,6 +84,55 @@
                     Reverse Animation
                 </label>
             </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label for="effect-fill-type">Fill Type</label>
+
+            <ui-select id="effect-fill-type" ng-model="effect.fill.type" ng-change="updateFillType()">
+                <ui-select-match>
+                    <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.code as item in fillTypes | filter: {name: $select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+        <div class="form-group" ng-repeat="param in effect.fill.params">
+            <label for="editor-fill-param-{{param.type}}">{{param.name}}</label>
+
+            <ui-select ng-if="param.type === 'COLOR'"
+                       id="effect-editor-fill-color" ng-model="param.value[0]">
+                <ui-select-match>
+                    <div class="colour-picker-preview" ng-if="$select.selected.code" ng-style="{'background-color': $select.selected.code}"></div>
+                    <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.code as item in colours | filter: {name: $select.search}">
+                    <div class="colour-picker-preview" ng-style="{'background-color': item.code}"></div>
+                    <span ng-bind-html="item.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+
+            <ui-select ng-if="param.type === 'MULTI_COLOR'"
+                       multiple duplicates-allowed="true" sortable="true" id="effect-editor-fill-multi-color" ng-model="param.value">
+                <ui-select-match>
+                    <div class="colour-picker-preview" ng-if="$item.code" ng-style="{'background-color': $item.code}"></div>
+                    {{$item.name}}
+                </ui-select-match>
+                <ui-select-choices repeat="item.code as item in colours | filter: {name: $select.search}">
+                    <div class="colour-picker-preview" ng-style="{'background-color': item.code}"></div>
+                    <span ng-bind-html="item.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+
+            <input ng-if="param.type === 'INTEGER' || param.type === 'DECIMAL'"
+                   type="text" class="form-control"
+                   id="editor-fill-param-{{param.type}}"
+                   ng-model="param.value[0]"
+                   placeholder="{{param.name}}"/>
         </div>
 
         <div class="form-group">

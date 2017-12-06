@@ -2,9 +2,9 @@ package net.chrisparton.sparkled.rest;
 
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAnimation;
+import net.chrisparton.sparkled.model.render.RenderedChannelMap;
 import net.chrisparton.sparkled.model.validator.SongAnimationValidator;
 import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
-import net.chrisparton.sparkled.model.render.RenderedChannelMap;
 import net.chrisparton.sparkled.renderer.Renderer;
 
 import javax.inject.Inject;

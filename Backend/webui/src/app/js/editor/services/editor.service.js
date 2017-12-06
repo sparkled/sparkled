@@ -60,13 +60,17 @@ function editorService(editorConstants,
 
     function newEffect() {
         return {
-            effectType: '',
-            easingType: 'LINEAR',
+            type: '',
+            params: [],
+            easing: 'LINEAR',
+            fill: {
+                type: '',
+                params: []
+            },
             startFrame: service.currentFrame,
             endFrame: service.currentFrame + editorConstants.minimumEffectFrames - 1,
             repetitions: 1,
-            reverse: false,
-            params: []
+            reverse: false
         };
     }
 

@@ -5,8 +5,8 @@ import java.util.List;
 
 public class RenderedFrame {
 
-    private int frameNumber;
     private final byte[] ledData;
+    private final int frameNumber;
 
     /**
      * Default constructor required for Gson.

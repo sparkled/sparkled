@@ -9,6 +9,7 @@ public interface UdpServer {
 
     /**
      * Start the UDP server on the provided port. This method is idempotent.
+     *
      * @param port The port to listen on.
      */
     void start(int port) throws SocketException;

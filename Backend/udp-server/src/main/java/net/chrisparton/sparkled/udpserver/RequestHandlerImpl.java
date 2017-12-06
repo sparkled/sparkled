@@ -1,9 +1,9 @@
 package net.chrisparton.sparkled.udpserver;
 
 import net.chrisparton.sparkled.model.entity.Song;
-import net.chrisparton.sparkled.music.SongPlayerServiceImpl;
 import net.chrisparton.sparkled.model.render.RenderedChannelMap;
 import net.chrisparton.sparkled.model.render.RenderedFrame;
+import net.chrisparton.sparkled.music.SongPlayerServiceImpl;
 
 import javax.inject.Inject;
 import java.io.IOException;

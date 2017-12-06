@@ -1,10 +1,10 @@
 package net.chrisparton.sparkled.renderer;
 
 import com.google.gson.Gson;
-import net.chrisparton.sparkled.model.animation.AnimationEffect;
-import net.chrisparton.sparkled.model.animation.AnimationEffectChannel;
-import net.chrisparton.sparkled.model.animation.AnimationEffectTypeCode;
 import net.chrisparton.sparkled.model.animation.SongAnimationData;
+import net.chrisparton.sparkled.model.animation.effect.Effect;
+import net.chrisparton.sparkled.model.animation.effect.EffectChannel;
+import net.chrisparton.sparkled.model.animation.effect.EffectTypeCode;
 import net.chrisparton.sparkled.model.entity.Song;
 import net.chrisparton.sparkled.model.entity.SongAnimation;
 import net.chrisparton.sparkled.model.render.RenderedChannel;
@@ -20,17 +20,17 @@ import java.util.Map;
 
 public class Renderer {
 
+    private static Map<EffectTypeCode, EffectRenderer> effectTypeRenderers = new HashMap<>();
+
+    static {
+        effectTypeRenderers.put(EffectTypeCode.LINE, new LineEffectRenderer());
+        effectTypeRenderers.put(EffectTypeCode.FLASH, new FlashEffectRenderer());
+    }
+
     private Song song;
     private SongAnimationData animationData;
     private int startFrame;
     private int durationFrames;
-
-    private static Map<AnimationEffectTypeCode, EffectRenderer> effectTypeRenderers = new HashMap<>();
-
-    static {
-        effectTypeRenderers.put(AnimationEffectTypeCode.LINE, new LineEffectRenderer());
-        effectTypeRenderers.put(AnimationEffectTypeCode.FLASH, new FlashEffectRenderer());
-    }
 
     public Renderer(Song song, SongAnimation songAnimation) {
         this(song, songAnimation, 0, song.getDurationFrames());
@@ -44,7 +44,7 @@ public class Renderer {
     }
 
     public RenderedChannelMap render() {
-        List<AnimationEffectChannel> channels = animationData.getChannels();
+        List<EffectChannel> channels = animationData.getChannels();
         RenderedChannelMap renderedChannels = new RenderedChannelMap();
 
         channels.forEach(channel ->
@@ -53,16 +53,16 @@ public class Renderer {
         return renderedChannels;
     }
 
-    private RenderedChannel renderChannel(AnimationEffectChannel channel) {
+    private RenderedChannel renderChannel(EffectChannel channel) {
         final int endFrame = Math.min(song.getDurationFrames() - 1, startFrame + durationFrames - 1);
-        RenderedChannel renderedChannel = new RenderedChannel(startFrame, endFrame, channel.getLedCount());
+        RenderedChannel renderedChannel = new RenderedChannel(startFrame, endFrame, channel.getLedCount(), song.getFramesPerSecond());
         channel.getEffects().forEach(effect -> renderEffect(renderedChannel, effect));
 
         return renderedChannel;
     }
 
-    private void renderEffect(RenderedChannel renderedChannel, AnimationEffect effect) {
-        AnimationEffectTypeCode effectTypeCode = effect.getEffectType();
+    private void renderEffect(RenderedChannel renderedChannel, Effect effect) {
+        EffectTypeCode effectTypeCode = effect.getType();
         EffectRenderer renderer = effectTypeRenderers.get(effectTypeCode);
 
         int startFrame = Math.max(this.startFrame, effect.getStartFrame());

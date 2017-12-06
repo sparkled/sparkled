@@ -2,8 +2,9 @@ package net.chrisparton.sparkled.viewmodel.converter;
 
 /**
  * Handles bidirectional conversion between view models and models.
+ *
  * @param <VM> A ViewModel class
- * @param <M> A Model class
+ * @param <M>  A Model class
  */
 public interface ViewModelConverter<VM, M> {
 

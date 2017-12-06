@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
  * Redirects nonexistent paths to index.html to support Single Page App refreshing. For example,
  * if the user navigates to the /editor page and refreshes, they will get a 404. Redirecting to index.html
  * means that the SPA will load up and automatically navigate the user to the correct SPA page based on the URL.
- *
  * REST links are explicitly excluded from rerouting.
  */
 public class TryFilesFilter implements Filter {

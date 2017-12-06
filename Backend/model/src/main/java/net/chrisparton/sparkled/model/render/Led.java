@@ -9,15 +9,17 @@ public class Led {
     private static final int G = 1;
     private static final int B = 2;
 
-    private byte[] ledData;
-    private int ledIndex;
+    private final byte[] ledData;
+    private final int ledNumber;
+    private final int index;
 
-    public Led(byte[] ledData, int ledIndex) {
+    public Led(byte[] ledData, int ledNumber) {
         this.ledData = ledData;
-        this.ledIndex = ledIndex * 3;
+        this.ledNumber = ledNumber;
+        this.index = ledNumber * 3;
     }
 
-    public void addRgb(Color color) {
+    public void addColor(Color color) {
         addRgb(color.getRed(), color.getGreen(), color.getBlue());
     }
 
@@ -27,28 +29,32 @@ public class Led {
         setB(Math.min(getB() + b, 255));
     }
 
+    public int getLedNumber() {
+        return ledNumber;
+    }
+
     public int getR() {
-        return ledData[ledIndex + R] & 0xFF;
+        return ledData[index + R] & 0xFF;
     }
 
     private void setR(int r) {
-        ledData[ledIndex + R] = (byte) r;
+        ledData[index + R] = (byte) r;
     }
 
     public int getG() {
-        return ledData[ledIndex + G] & 0xFF;
+        return ledData[index + G] & 0xFF;
     }
 
     private void setG(int g) {
-        ledData[ledIndex + G] = (byte) g;
+        ledData[index + G] = (byte) g;
     }
 
     public int getB() {
-        return ledData[ledIndex + B] & 0xFF;
+        return ledData[index + B] & 0xFF;
     }
 
     private void setB(int b) {
-        ledData[ledIndex + B] = (byte) b;
+        ledData[index + B] = (byte) b;
     }
 
     @Override

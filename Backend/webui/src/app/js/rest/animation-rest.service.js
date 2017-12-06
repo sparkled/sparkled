@@ -1,12 +1,14 @@
 function animationRestService(Restangular) {
     'ngInject';
 
-    const easingTypeRestService = Restangular.service('animation-easing-type');
-    const effectTypeRestService = Restangular.service('animation-effect-type');
+    const easingTypeRestService = Restangular.service('easing-type');
+    const effectTypeRestService = Restangular.service('effect-type');
+    const fillTypeRestService = Restangular.service('fill-type');
 
     return {
         getEasingTypes: getEasingTypes,
-        getEffectTypes: getEffectTypes
+        getEffectTypes: getEffectTypes,
+        getFillTypes: getFillTypes
     };
 
     function getEasingTypes() {
@@ -15,6 +17,10 @@ function animationRestService(Restangular) {
 
     function getEffectTypes() {
         return effectTypeRestService.getList();
+    }
+
+    function getFillTypes() {
+        return fillTypeRestService.getList();
     }
 }
 

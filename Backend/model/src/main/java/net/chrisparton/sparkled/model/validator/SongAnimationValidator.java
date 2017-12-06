@@ -2,10 +2,10 @@ package net.chrisparton.sparkled.model.validator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import net.chrisparton.sparkled.model.animation.AnimationEffect;
-import net.chrisparton.sparkled.model.animation.AnimationEffectChannel;
-import net.chrisparton.sparkled.model.animation.AnimationEffectParam;
 import net.chrisparton.sparkled.model.animation.SongAnimationData;
+import net.chrisparton.sparkled.model.animation.effect.Effect;
+import net.chrisparton.sparkled.model.animation.effect.EffectChannel;
+import net.chrisparton.sparkled.model.animation.param.Param;
 import net.chrisparton.sparkled.model.entity.SongAnimation;
 import net.chrisparton.sparkled.model.validator.exception.EntityValidationException;
 
@@ -35,16 +35,16 @@ public class SongAnimationValidator {
         try {
             animationData = gson.fromJson(rawAnimationData, SongAnimationData.class);
         } catch (JsonSyntaxException e) {
-            throw new EntityValidationException("Animation data is malformed.");
+            throw new EntityValidationException("Animation data is malformed.", e);
         }
 
         return animationData;
     }
 
-    private void validateChannel(AnimationEffectChannel animationEffectChannel) {
-        String channelName = animationEffectChannel.getName();
-        int startLed = animationEffectChannel.getStartLed();
-        int endLed = animationEffectChannel.getEndLed();
+    private void validateChannel(EffectChannel effectChannel) {
+        String channelName = effectChannel.getName();
+        int startLed = effectChannel.getStartLed();
+        int endLed = effectChannel.getEndLed();
 
         if (channelName == null || channelName.isEmpty()) {
             throw new EntityValidationException("Animation effect channels must have names.");
@@ -57,20 +57,20 @@ public class SongAnimationValidator {
         }
     }
 
-    private void validateChannelEffects(AnimationEffectChannel channel) {
+    private void validateChannelEffects(EffectChannel channel) {
         int previousEndFrame = -1;
         String channelName = channel.getName();
 
-        List<AnimationEffect> effects = channel.getEffects();
+        List<Effect> effects = channel.getEffects();
         if (effects == null) {
             String errorMessage = "Effects list must be populated for channel '" + channelName + "'.";
             throw new EntityValidationException(errorMessage);
         }
 
-        for (AnimationEffect effect : effects) {
+        for (Effect effect : effects) {
             int effectDuration = effect.getEndFrame() - effect.getStartFrame();
 
-            if (effect.getEffectType() == null) {
+            if (effect.getType() == null) {
                 String errorMessage = String.format(
                         "Effect type cannot be empty for effect at frame %d in channel '%s'.",
                         effect.getStartFrame(), channelName
@@ -78,9 +78,9 @@ public class SongAnimationValidator {
                 throw new EntityValidationException(errorMessage);
             }
 
-            if (effect.getEasingType() == null) {
+            if (effect.getEasing() == null) {
                 String errorMessage = String.format(
-                        "Easing type cannot be empty for effect at frame %d in channel '%s'.",
+                        "EasingFunction type cannot be empty for effect at frame %d in channel '%s'.",
                         effect.getStartFrame(), channelName
                 );
                 throw new EntityValidationException(errorMessage);
@@ -123,7 +123,7 @@ public class SongAnimationValidator {
                 }
             }
 
-            List<AnimationEffectParam> params = effect.getParams();
+            List<Param> params = effect.getParams();
             if (params == null) {
                 String errorMessage = String.format(
                         "Effect parameters list is not populated for effect at frame %d in channel '%s'.",
@@ -132,8 +132,8 @@ public class SongAnimationValidator {
                 throw new EntityValidationException(errorMessage);
             }
 
-            for (AnimationEffectParam param : params) {
-                if (param.getParamCode() == null) {
+            for (Param param : params) {
+                if (param.getType() == null) {
                     String errorMessage = String.format(
                             "Effect parameter type cannot be empty for effect at frame %d in channel '%s'.",
                             effect.getStartFrame(), channelName

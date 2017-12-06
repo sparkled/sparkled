@@ -1,24 +1,30 @@
 package net.chrisparton.sparkled.renderer.effect;
 
-import net.chrisparton.sparkled.model.animation.AnimationEffect;
-import net.chrisparton.sparkled.model.render.RenderedChannel;
-import net.chrisparton.sparkled.model.render.RenderedFrame;
-import net.chrisparton.sparkled.renderer.converter.ColourParamConverter;
-import net.chrisparton.sparkled.renderer.util.ColorUtils;
-
-import java.awt.*;
+import net.chrisparton.sparkled.renderer.context.RenderContext;
+import net.chrisparton.sparkled.renderer.util.FillUtils;
 
 public class FlashEffectRenderer extends EffectRenderer {
 
     @Override
-    public void render(RenderedChannel channel, RenderedFrame frame, AnimationEffect effect, double progress) {
-        Color color = new ColourParamConverter().convert(effect);
+    public void render(RenderContext ctx) {
+        float alpha = getAlpha(ctx.getProgress());
 
-        double brightnessPercentage = Math.sin(progress * Math.PI);
-        Color adjustedColor = ColorUtils.adjustBrightness(color, brightnessPercentage);
-
-        for (int i = 0; i < channel.getLedCount(); i++) {
-            frame.getLed(i).addRgb(adjustedColor);
+        for (int i = 0; i < ctx.getChannel().getLedCount(); i++) {
+            FillUtils.fill(ctx, ctx.getFrame().getLed(i), alpha);
         }
+    }
+
+    /**
+     * @param progress The 0 > 1 progress
+     * @return The progress, transformed into 0 > 1 > 0
+     */
+    private float getAlpha(float progress) {
+        float alpha = progress * 2;
+        if (progress >= .5) {
+            alpha = 1 - (progress - .5f) * 2;
+        }
+
+        // Remove floating point inaccuracies to ensure a symmetrical flash.
+        return Math.round(alpha * 10000f) / 10000f;
     }
 }

@@ -1,9 +1,6 @@
 package net.chrisparton.sparkled.persistence.song.impl.query;
 
-import net.chrisparton.sparkled.model.entity.ScheduledSong;
-import net.chrisparton.sparkled.model.entity.Song;
-import net.chrisparton.sparkled.model.entity.SongAnimation;
-import net.chrisparton.sparkled.model.entity.SongAudio;
+import net.chrisparton.sparkled.model.entity.*;
 import net.chrisparton.sparkled.persistence.PersistenceQuery;
 import net.chrisparton.sparkled.persistence.scheduler.impl.query.GetScheduledSongsBySongIdQuery;
 
@@ -29,6 +26,9 @@ public class DeleteSongQuery implements PersistenceQuery<Integer> {
 
         List<ScheduledSong> scheduledSongs = new GetScheduledSongsBySongIdQuery(songId).perform(entityManager);
         scheduledSongs.forEach(entityManager::remove);
+
+        Optional<RenderedSong> renderedSong = new GetRenderedSongBySongIdQuery(songId).perform(entityManager);
+        renderedSong.ifPresent(entityManager::remove);
 
         Optional<Song> song = new GetSongByIdQuery(songId).perform(entityManager);
         song.ifPresent(entityManager::remove);

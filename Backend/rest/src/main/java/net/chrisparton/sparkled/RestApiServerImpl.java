@@ -30,10 +30,9 @@ public class RestApiServerImpl implements RestApiServer {
 
     private static final Logger logger = Logger.getLogger(RestApiServerImpl.class.getName());
     private static final String REST_PATH = "/rest/*";
-
-    private boolean started;
     static Injector injector;
     private final ExecutorService threadPool;
+    private boolean started;
 
     @Inject
     public RestApiServerImpl(Injector injector) {

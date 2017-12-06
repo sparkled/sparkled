@@ -12,44 +12,40 @@ function effectEditor(animationRestService,
             effect: '='
         },
         link: scope => {
-            scope.previousEffect = undefined;
             scope.easingTypes = [];
             scope.effectTypes = [];
+            scope.fillTypes = [];
+            scope.updateEffectType = updateEffectType;
+            scope.updateFillType = updateFillType;
+
             scope.colours = [
                 {name: 'Red', code: '#ff0000'},
                 {name: 'Green', code: '#00ff00'},
-                {name: 'Blue', code: '#0000ff'}
+                {name: 'Blue', code: '#0000ff'},
+                {name: 'White', code: '#ffffff'},
+                {name: 'Cyan', code: '#00ffff'},
+                {name: 'Magenta', code: '#ff00ff'},
+                {name: 'Yellow', code: '#ffff00'},
+                {name: 'Black', code: '#000000'}
             ];
 
             animationRestService.getEasingTypes().then(easingTypes => scope.easingTypes = easingTypes);
             animationRestService.getEffectTypes().then(effectTypes => scope.effectTypes = effectTypes);
+            animationRestService.getFillTypes().then(fillTypes => scope.fillTypes = fillTypes);
 
             scope.deleteCurrentEffect = () => {
                 editorService.deleteCurrentEffect();
                 scope.effect = null;
             };
 
-            scope.getParamName = (effectTypeCode, paramCode) => {
-                const effectType = _.find(scope.effectTypes, item => item.code === effectTypeCode);
-                const param = _.find(effectType.parameters, item => item.code === paramCode);
-                return param ? param.name : '';
-            };
-
-            scope.$watch('effect.effectType', updateEffectType, true);
-
-            function updateEffectType(effectTypeCode) {
-                if (scope.previousEffect !== scope.effect) {
-                    scope.previousEffect = scope.effect;
-                } else {
-                    if (scope.effect != null && !_.isEmpty(scope.effectTypes)) {
-                        scope.effect.effectType = effectTypeCode;
-                        updateParams(effectTypeCode);
-                    }
+            function updateEffectType() {
+                if (scope.effect != null && !_.isEmpty(scope.effectTypes)) {
+                    updateEffectParams();
                 }
             }
 
-            function updateParams(effectTypeCode) {
-                const effectType = _(scope.effectTypes).find(effectType => effectType.code === effectTypeCode);
+            function updateEffectParams() {
+                const effectType = _(scope.effectTypes).find(effectType => effectType.code === scope.effect.type);
 
                 if (effectType != null) {
                     updateEffect(effectType);
@@ -58,17 +54,45 @@ function effectEditor(animationRestService,
 
             function updateEffect(effectType) {
                 scope.effect.params = [];
-                scope.coloursParamEntries = [];
 
-                for (var i = 0; i < effectType.parameters.length; i++) {
-                    var paramCode = effectType.parameters[i].code,
-                        param = {
-                            paramCode: paramCode,
-                            value: undefined,
-                            multiValue: []
-                        };
+                for (var i = 0; i < effectType.params.length; i++) {
+                    var typeParam = effectType.params[i];
+                    var param = {
+                        name: typeParam.name,
+                        type: typeParam.type,
+                        value: typeParam.value
+                    };
 
                     scope.effect.params.push(param);
+                }
+            }
+
+            function updateFillType() {
+                if (scope.effect.fill != null && !_.isEmpty(scope.fillTypes)) {
+                    updateFillParams();
+                }
+            }
+
+            function updateFillParams() {
+                const fillType = _(scope.fillTypes).find(fillType => fillType.code === scope.effect.fill.type);
+
+                if (fillType != null) {
+                    updateFill(fillType);
+                }
+            }
+
+            function updateFill(fillType) {
+                scope.effect.fill.params = [];
+
+                for (var i = 0; i < fillType.params.length; i++) {
+                    var typeParam = fillType.params[i];
+                    var param = {
+                        name: typeParam.name,
+                        type: typeParam.type,
+                        value: typeParam.value
+                    };
+
+                    scope.effect.fill.params.push(param);
                 }
             }
         }

@@ -1,11 +1,11 @@
 package net.chrisparton.sparkled.rest;
 
-import net.chrisparton.sparkled.model.animation.AnimationEffectChannel;
 import net.chrisparton.sparkled.model.animation.SongAnimationData;
+import net.chrisparton.sparkled.model.animation.effect.EffectChannel;
 import net.chrisparton.sparkled.model.entity.*;
-import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
-import net.chrisparton.sparkled.model.validator.exception.EntityValidationException;
 import net.chrisparton.sparkled.model.render.RenderedChannelMap;
+import net.chrisparton.sparkled.model.validator.exception.EntityValidationException;
+import net.chrisparton.sparkled.persistence.song.SongPersistenceService;
 import net.chrisparton.sparkled.renderer.Renderer;
 import net.chrisparton.sparkled.rest.response.IdResponse;
 import org.apache.commons.io.IOUtils;
@@ -194,15 +194,20 @@ public class SongRestService extends RestService {
         int startLed = 0;
         int displayOrder = 0;
 
-        List<AnimationEffectChannel> channels = animationData.getChannels();
+        List<EffectChannel> channels = animationData.getChannels();
         if (!channels.isEmpty()) {
-            AnimationEffectChannel lastChannel = channels.get(channels.size() - 1);
+            EffectChannel lastChannel = channels.get(channels.size() - 1);
             startLed = lastChannel.getEndLed() + 1;
             displayOrder = lastChannel.getDisplayOrder() + 1;
         }
 
         int endLed = startLed + ledCount - 1;
-        AnimationEffectChannel channel = new AnimationEffectChannel(channelName, channelCode, displayOrder, startLed, endLed);
+        EffectChannel channel = new EffectChannel()
+                .setName(channelName)
+                .setCode(channelCode)
+                .setDisplayOrder(displayOrder)
+                .setStartLed(startLed)
+                .setEndLed(endLed);
         channels.add(channel);
     }
 

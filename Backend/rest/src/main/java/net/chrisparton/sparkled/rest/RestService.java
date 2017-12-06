@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.rest;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 import net.chrisparton.sparkled.rest.json.GsonProvider;
 
 import javax.ws.rs.core.MediaType;

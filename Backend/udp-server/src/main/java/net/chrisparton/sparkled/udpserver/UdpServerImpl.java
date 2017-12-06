@@ -14,10 +14,9 @@ public class UdpServerImpl implements UdpServer {
 
     private static final Logger logger = Logger.getLogger(UdpServerImpl.class.getName());
     private static final int RECEIVE_BUFFER_SIZE = 16;
-
-    private boolean started;
     private final RequestHandler requestHandler;
     private final ExecutorService threadPool;
+    private boolean started;
 
     @Inject
     public UdpServerImpl(RequestHandler requestHandler) {
