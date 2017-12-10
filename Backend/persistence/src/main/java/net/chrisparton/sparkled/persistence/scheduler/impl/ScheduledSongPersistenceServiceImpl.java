@@ -29,6 +29,7 @@ public class ScheduledSongPersistenceServiceImpl implements ScheduledSongPersist
     }
 
     @Override
+    @Transactional
     public Optional<Song> getNextAutoSchedulableSong(int lastSongId) {
         return new GetNextAutoSchedulableSongQuery(lastSongId).perform(entityManagerProvider.get());
     }
