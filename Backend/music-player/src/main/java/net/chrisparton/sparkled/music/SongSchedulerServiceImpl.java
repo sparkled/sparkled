@@ -68,6 +68,9 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
                 Song song = nextAutoSchedulableSong.get();
                 lastAutoScheduledSongId.set(song.getId());
                 executor.schedule(() -> playSong(song), 0, TimeUnit.MILLISECONDS);
+            } else {
+                logger.info("No auto schedulable songs found. Checking again in " + ScheduledSong.MIN_SECONDS_BETWEEN_SONGS + " seconds.");
+                executor.schedule(this::scheduleNextSong, ScheduledSong.MIN_SECONDS_BETWEEN_SONGS, TimeUnit.SECONDS);
             }
         }
     }
