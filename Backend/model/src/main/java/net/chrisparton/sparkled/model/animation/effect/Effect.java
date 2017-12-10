@@ -1,6 +1,6 @@
 package net.chrisparton.sparkled.model.animation.effect;
 
-import net.chrisparton.sparkled.model.animation.easing.EasingTypeCode;
+import net.chrisparton.sparkled.model.animation.easing.Easing;
 import net.chrisparton.sparkled.model.animation.fill.Fill;
 import net.chrisparton.sparkled.model.animation.param.HasParams;
 import net.chrisparton.sparkled.model.animation.param.Param;
@@ -14,7 +14,7 @@ public class Effect implements HasParams {
 
     private EffectTypeCode type;
     private List<Param> params = new ArrayList<>();
-    private EasingTypeCode easing;
+    private Easing easing;
     private Fill fill = new Fill();
     private int startFrame;
     private int endFrame;
@@ -44,11 +44,11 @@ public class Effect implements HasParams {
         return this;
     }
 
-    public EasingTypeCode getEasing() {
+    public Easing getEasing() {
         return easing;
     }
 
-    public Effect setEasing(EasingTypeCode easing) {
+    public Effect setEasing(Easing easing) {
         this.easing = easing;
         return this;
     }

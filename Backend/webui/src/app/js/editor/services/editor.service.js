@@ -62,7 +62,10 @@ function editorService(editorConstants,
         return {
             type: '',
             params: [],
-            easing: 'LINEAR',
+            easing: {
+                type: '',
+                params: []
+            },
             fill: {
                 type: '',
                 params: []

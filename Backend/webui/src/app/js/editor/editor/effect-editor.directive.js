@@ -15,6 +15,7 @@ function effectEditor(animationRestService,
             scope.easingTypes = [];
             scope.effectTypes = [];
             scope.fillTypes = [];
+            scope.updateEasingType = updateEasingType;
             scope.updateEffectType = updateEffectType;
             scope.updateFillType = updateFillType;
 
@@ -37,6 +38,35 @@ function effectEditor(animationRestService,
                 editorService.deleteCurrentEffect();
                 scope.effect = null;
             };
+
+            function updateEasingType() {
+                if (scope.effect.easing != null && !_.isEmpty(scope.easingTypes)) {
+                    updateEasingParams();
+                }
+            }
+
+            function updateEasingParams() {
+                const easingType = _(scope.easingTypes).find(easingType => easingType.code === scope.effect.easing.type);
+
+                if (easingType != null) {
+                    updateEasing(easingType);
+                }
+            }
+
+            function updateEasing(easingType) {
+                scope.effect.easing.params = [];
+
+                for (var i = 0; i < easingType.params.length; i++) {
+                    var typeParam = easingType.params[i];
+                    var param = {
+                        name: typeParam.name,
+                        type: typeParam.type,
+                        value: typeParam.value
+                    };
+
+                    scope.effect.easing.params.push(param);
+                }
+            }
 
             function updateEffectType() {
                 if (scope.effect != null && !_.isEmpty(scope.effectTypes)) {

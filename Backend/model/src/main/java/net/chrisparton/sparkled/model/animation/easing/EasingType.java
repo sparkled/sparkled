@@ -1,11 +1,16 @@
 package net.chrisparton.sparkled.model.animation.easing;
 
+import net.chrisparton.sparkled.model.animation.param.HasParams;
+import net.chrisparton.sparkled.model.animation.param.Param;
+
+import java.util.List;
 import java.util.Objects;
 
-public class EasingType {
+public class EasingType implements HasParams {
 
     private EasingTypeCode code;
     private String name;
+    private List<Param> params;
 
     public EasingTypeCode getCode() {
         return code;
@@ -26,17 +31,28 @@ public class EasingType {
     }
 
     @Override
+    public List<Param> getParams() {
+        return params;
+    }
+
+    public EasingType setParams(List<Param> params) {
+        this.params = params;
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof EasingType)) return false;
-        EasingType that = (EasingType) o;
-        return code == that.code &&
-                Objects.equals(name, that.name);
+        EasingType easingType = (EasingType) o;
+        return code == easingType.code &&
+                Objects.equals(name, easingType.name) &&
+                Objects.equals(params, easingType.params);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code, name);
+        return Objects.hash(code, name, params);
     }
 
     @Override
@@ -44,6 +60,7 @@ public class EasingType {
         return "EasingType{" +
                 "code=" + code +
                 ", name='" + name + '\'' +
+                ", params=" + params +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package net.chrisparton.sparkled.renderer.easing.function;
 
+import net.chrisparton.sparkled.model.animation.easing.Easing;
 import org.junit.Test;
 
 import static org.hamcrest.number.IsCloseTo.closeTo;
@@ -14,7 +15,7 @@ public class LinearEasingTest {
         int testCount = expectedResults.length;
 
         for (int i = 0; i < testCount; i++) {
-            double progress = linearEasing.getProgress(i, testCount);
+            double progress = linearEasing.getProgress(new Easing(), i, testCount);
             assertThat(progress, closeTo(expectedResults[i], 0.01d));
         }
     }

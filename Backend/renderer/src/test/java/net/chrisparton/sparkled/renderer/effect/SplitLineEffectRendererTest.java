@@ -1,5 +1,6 @@
 package net.chrisparton.sparkled.renderer.effect;
 
+import net.chrisparton.sparkled.model.animation.easing.Easing;
 import net.chrisparton.sparkled.model.animation.easing.EasingTypeCode;
 import net.chrisparton.sparkled.model.animation.effect.Effect;
 import net.chrisparton.sparkled.model.animation.effect.EffectTypeCode;
@@ -23,7 +24,10 @@ public class SplitLineEffectRendererTest {
                 .setParams(
                         new Param().setName(ParamName.LENGTH.getName()).setValue(5)
                 )
-                .setEasing(EasingTypeCode.LINEAR)
+                .setEasing(
+                        new Easing()
+                                .setType(EasingTypeCode.LINEAR)
+                )
                 .setFill(
                         new Fill()
                                 .setType(FillTypeCode.SOLID)
@@ -96,7 +100,10 @@ public class SplitLineEffectRendererTest {
                 .setParams(
                         new Param().setName(ParamName.LENGTH.getName()).setValue(5)
                 )
-                .setEasing(EasingTypeCode.LINEAR)
+                .setEasing(
+                        new Easing()
+                                .setType(EasingTypeCode.LINEAR)
+                )
                 .setFill(
                         new Fill()
                                 .setType(FillTypeCode.SOLID)

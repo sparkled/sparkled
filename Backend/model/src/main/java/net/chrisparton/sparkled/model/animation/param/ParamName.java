@@ -4,7 +4,8 @@ public enum ParamName {
     COLOR("Color"),
     CYCLE_COUNT("Cycle Count"),
     CYCLES_PER_SECOND("Cycles Per Second"),
-    LENGTH("Length");
+    LENGTH("Length"),
+    PERCENT("Percent");
 
     private String name;
 
