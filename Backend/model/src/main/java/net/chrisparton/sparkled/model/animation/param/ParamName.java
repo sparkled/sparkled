@@ -1,8 +1,10 @@
 package net.chrisparton.sparkled.model.animation.param;
 
 public enum ParamName {
-    LENGTH("Length"),
-    COLOR("Color");
+    COLOR("Color"),
+    CYCLE_COUNT("Cycle Count"),
+    CYCLES_PER_SECOND("Cycles Per Second"),
+    LENGTH("Length");
 
     private String name;
 

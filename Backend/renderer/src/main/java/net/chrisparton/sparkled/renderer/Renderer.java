@@ -13,6 +13,7 @@ import net.chrisparton.sparkled.model.render.RenderedFrame;
 import net.chrisparton.sparkled.renderer.effect.EffectRenderer;
 import net.chrisparton.sparkled.renderer.effect.FlashEffectRenderer;
 import net.chrisparton.sparkled.renderer.effect.LineEffectRenderer;
+import net.chrisparton.sparkled.renderer.effect.SplitLineEffectRenderer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +24,9 @@ public class Renderer {
     private static Map<EffectTypeCode, EffectRenderer> effectTypeRenderers = new HashMap<>();
 
     static {
-        effectTypeRenderers.put(EffectTypeCode.LINE, new LineEffectRenderer());
         effectTypeRenderers.put(EffectTypeCode.FLASH, new FlashEffectRenderer());
+        effectTypeRenderers.put(EffectTypeCode.LINE, new LineEffectRenderer());
+        effectTypeRenderers.put(EffectTypeCode.SPLIT_LINE, new SplitLineEffectRenderer());
     }
 
     private Song song;

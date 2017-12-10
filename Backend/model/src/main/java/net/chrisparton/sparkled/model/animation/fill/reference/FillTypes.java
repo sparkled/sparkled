@@ -11,7 +11,10 @@ import java.util.List;
 
 public class FillTypes {
     private static final List<FillType> TYPES = Arrays.asList(
-            fill(FillTypeCode.RAINBOW, "Rainbow"),
+            fill(FillTypeCode.RAINBOW, "Rainbow",
+                    param(ParamName.CYCLE_COUNT, ParamType.DECIMAL).setValue(1),
+                    param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(1)
+            ),
             fill(FillTypeCode.SOLID, "Solid",
                     param(ParamName.COLOR, ParamType.COLOR)
             )
