@@ -19,6 +19,12 @@ public class ParamUtils {
         return Integer.parseInt(value.get(0));
     }
 
+    public static float getDecimalValue(HasParams parent, ParamName paramName) {
+        Param param = getParam(parent, paramName);
+        List<String> value = param.getValue();
+        return Float.parseFloat(value.get(0));
+    }
+
     public static Color getColorValue(HasParams parent, ParamName paramName) {
         return getColorsValue(parent, paramName).get(0);
     }
