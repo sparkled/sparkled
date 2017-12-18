@@ -1,5 +1,7 @@
 package net.chrisparton.sparkled.udpserver;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,15 +15,18 @@ import java.util.logging.Logger;
 public class UdpServerImpl implements UdpServer {
 
     private static final Logger logger = Logger.getLogger(UdpServerImpl.class.getName());
+    private static final int THREAD_COUNT = 4;
     private static final int RECEIVE_BUFFER_SIZE = 16;
     private final RequestHandler requestHandler;
-    private final ExecutorService threadPool;
+    private final ExecutorService executor;
     private boolean started;
 
     @Inject
     public UdpServerImpl(RequestHandler requestHandler) {
         this.requestHandler = requestHandler;
-        this.threadPool = Executors.newSingleThreadExecutor();
+        this.executor = Executors.newFixedThreadPool(THREAD_COUNT,
+                new ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
+        );
     }
 
     @Override
@@ -33,7 +38,7 @@ public class UdpServerImpl implements UdpServer {
 
         DatagramSocket serverSocket = new DatagramSocket(port);
 
-        threadPool.submit(() -> {
+        executor.submit(() -> {
             byte[] receiveData = new byte[RECEIVE_BUFFER_SIZE];
 
             while (true) {

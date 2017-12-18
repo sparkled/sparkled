@@ -31,14 +31,14 @@ public class RestApiServerImpl implements RestApiServer {
     private static final Logger logger = Logger.getLogger(RestApiServerImpl.class.getName());
     private static final String REST_PATH = "/rest/*";
     static Injector injector;
-    private final ExecutorService threadPool;
+    private final ExecutorService executor;
     private boolean started;
 
     @Inject
     public RestApiServerImpl(Injector injector) {
         RestApiServerImpl.injector = injector;
 
-        this.threadPool = Executors.newSingleThreadExecutor(
+        this.executor = Executors.newSingleThreadExecutor(
                 new ThreadFactoryBuilder().setNameFormat("rest-api-server-%d").build()
         );
     }
@@ -50,7 +50,7 @@ public class RestApiServerImpl implements RestApiServer {
             return;
         }
 
-        threadPool.submit(() -> startServer(port));
+        executor.submit(() -> startServer(port));
         logger.info("Started REST API server at port " + port);
         started = true;
     }
