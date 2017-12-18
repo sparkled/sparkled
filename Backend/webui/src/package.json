@@ -4,7 +4,7 @@
   "description": "Sparked: The web-based LED sequencer",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chrisparton1991/sparkled.git"
+    "url": "https://github.com/sparkled/sparkled.git"
   },
   "license": "UNLICENSED",
   "keywords": [

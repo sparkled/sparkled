@@ -14,7 +14,7 @@ function aboutDialog() {
                     html: `
                         <img src="images/logos/logo-large.svg"/>
                         <h4>Sparkled: The web-based LED animation sequencer</h4>
-                        <a href="https://github.com/chrisparton1991/sparkled" class="github-link" title="View GitHub Project" target="_blank">
+                        <a href="https://github.com/sparkled/sparkled" class="github-link" title="View GitHub Project" target="_blank">
                             <i class="fa fa-github"></i>
                         </a>`
                 })
