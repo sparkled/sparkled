@@ -180,11 +180,11 @@ public class SongRestService extends RestService {
         SongAnimationData animationData = new SongAnimationData();
 
         for (int i = 1; i <= 4; i++) {
-            addChannel(animationData, "Pillar " + i, "P" + i, 150);
+            addChannel(animationData, "Roof " + i, "R" + i, 50);
         }
 
-        for (int i = 1; i <= 8; i++) {
-            addChannel(animationData, "Arch " + i, "A" + i, 48);
+        for (int i = 1; i <= 4; i++) {
+            addChannel(animationData, "Pillar " + i, "P" + i, 140);
         }
 
         return gson.toJson(animationData);
