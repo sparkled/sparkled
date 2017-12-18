@@ -5,7 +5,7 @@
 
     <parent>
         <groupId>io.sparkled</groupId>
-        <artifactId>sparkled-backend</artifactId>
+        <artifactId>sparkled</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
