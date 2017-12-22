@@ -61,7 +61,7 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
             scheduleSong(scheduledSong);
         }
 
-        if (scheduledSong == null || millisBetween(scheduledSong.getStartTime(), LocalDateTime.now()) > ScheduledSong.MIN_SECONDS_BETWEEN_SONGS * 2) {
+        if (scheduledSong == null || millisUntil(scheduledSong.getStartTime()) > ScheduledSong.MIN_SECONDS_BETWEEN_SONGS * 2) {
             Optional<Song> nextAutoSchedulableSong = scheduledSongPersistenceService.getNextAutoSchedulableSong(lastAutoScheduledSongId.get());
             if (nextAutoSchedulableSong.isPresent()) {
                 logger.info("Playing auto schedulable song until next scheduled song is due to be played.");
@@ -76,7 +76,7 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
     }
 
     private void scheduleSong(ScheduledSong scheduledSong) {
-        long delay = millisBetween(scheduledSong.getStartTime(), LocalDateTime.now());
+        long delay = millisUntil(scheduledSong.getStartTime());
         logger.info("Playing next song in " + delay + "ms.");
 
         if (nextScheduledSong != null && !nextScheduledSong.isDone()) {
@@ -91,8 +91,8 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
         songData.ifPresent(data -> songPlayerService.play(song, data));
     }
 
-    private long millisBetween(Date lhs, LocalDateTime rhs) {
+    private long millisUntil(Date lhs) {
         LocalDateTime startDateTime = LocalDateTime.ofInstant(lhs.toInstant(), ZoneId.systemDefault());
-        return ChronoUnit.MILLIS.between(startDateTime, rhs);
+        return ChronoUnit.MILLIS.between(LocalDateTime.now(), startDateTime);
     }
 }
