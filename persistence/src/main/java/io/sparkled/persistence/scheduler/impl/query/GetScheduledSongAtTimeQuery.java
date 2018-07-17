@@ -3,6 +3,7 @@ package io.sparkled.persistence.scheduler.impl.query;
 import io.sparkled.model.entity.ScheduledSong;
 import io.sparkled.model.entity.ScheduledSong_;
 import io.sparkled.persistence.PersistenceQuery;
+import io.sparkled.persistence.util.PersistenceUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -35,6 +36,6 @@ public class GetScheduledSongAtTimeQuery implements PersistenceQuery<Optional<Sc
 
         TypedQuery<ScheduledSong> query = entityManager.createQuery(cq);
         query.setMaxResults(1);
-        return Optional.ofNullable(query.getSingleResult());
+        return PersistenceUtils.getSingleResult(query);
     }
 }
