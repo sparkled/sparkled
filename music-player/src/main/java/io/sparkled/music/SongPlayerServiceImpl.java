@@ -39,6 +39,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
 
     @Override
     public void play(Song song, SongAudio songAudio) {
+        logger.info("Playing song " + song.getName());
         this.currentSong = song;
         RenderedSong renderedSong = songPersistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
         this.renderedChannelMap = new Gson().fromJson(renderedSong.getRenderData(), RenderedChannelMap.class);

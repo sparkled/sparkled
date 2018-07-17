@@ -61,7 +61,7 @@ public class SongSchedulerServiceImpl implements SongSchedulerService {
             scheduleSong(scheduledSong);
         }
 
-        if (scheduledSong == null || millisUntil(scheduledSong.getStartTime()) > ScheduledSong.MIN_SECONDS_BETWEEN_SONGS * 2) {
+        if (scheduledSong == null || millisUntil(scheduledSong.getStartTime()) > ScheduledSong.MIN_SECONDS_BETWEEN_SONGS * 1000) {
             Optional<Song> nextAutoSchedulableSong = scheduledSongPersistenceService.getNextAutoSchedulableSong(lastAutoScheduledSongId.get());
             if (nextAutoSchedulableSong.isPresent()) {
                 logger.info("Playing auto schedulable song until next scheduled song is due to be played.");
