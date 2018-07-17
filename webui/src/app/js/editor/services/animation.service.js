@@ -9,6 +9,7 @@ function animationService(editorService,
 
     var service = {
         running: false,
+        playbackSpeed: 1,
         previewAnimation: previewAnimation,
         getFrame: getFrame,
         cancelAnimation: cancelAnimation,
@@ -35,7 +36,7 @@ function animationService(editorService,
         const firstKey = Object.keys(service.renderData)[0];
         const frameCount = service.renderData[firstKey].frames.length;
         const durationMs = 1000 / editorService.song.framesPerSecond * frameCount;
-        const frameIndex = Math.floor((now - service.animationStartTime) / durationMs * frameCount);
+        const frameIndex = Math.floor((now - service.animationStartTime) / durationMs * service.playbackSpeed * frameCount);
 
         if (!service.running || frameIndex >= frameCount) {
             $timeout(cancelAnimation);

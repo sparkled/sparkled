@@ -16,6 +16,12 @@ function waveform(animationService,
             scope.width = 0;
             var wavesurfer = null;
 
+            scope.$watch(() => animationService.playbackSpeed, speed => {
+                if (wavesurfer) {
+                    wavesurfer.setPlaybackRate(speed);
+                }
+            });
+
             scope.$watch(() => animationService.running, isRunning => {
                 if (wavesurfer) {
                     if (isRunning) {
