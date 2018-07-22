@@ -7,6 +7,7 @@ import io.sparkled.model.animation.effect.EffectChannel;
 import io.sparkled.model.animation.effect.EffectTypeCode;
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAnimation;
+import io.sparkled.model.render.Led;
 import io.sparkled.model.render.RenderedChannel;
 import io.sparkled.model.render.RenderedChannelMap;
 import io.sparkled.model.render.RenderedFrame;
@@ -57,13 +58,16 @@ public class Renderer {
 
     private RenderedChannel renderChannel(EffectChannel channel) {
         final int endFrame = Math.min(song.getDurationFrames() - 1, startFrame + durationFrames - 1);
-        RenderedChannel renderedChannel = new RenderedChannel(startFrame, endFrame, channel.getLedCount(), song.getFramesPerSecond());
-        channel.getEffects().forEach(effect -> renderEffect(renderedChannel, effect));
+
+        int frameCount = endFrame - startFrame + 1;
+        byte[] data = new byte[frameCount * channel.getLedCount() * Led.BYTES_PER_LED];
+        RenderedChannel renderedChannel = new RenderedChannel(startFrame, endFrame, channel.getLedCount(), data);
+        channel.getEffects().forEach(effect -> renderEffect(song, renderedChannel, effect));
 
         return renderedChannel;
     }
 
-    private void renderEffect(RenderedChannel renderedChannel, Effect effect) {
+    private void renderEffect(Song song, RenderedChannel renderedChannel, Effect effect) {
         EffectTypeCode effectTypeCode = effect.getType();
         EffectRenderer renderer = effectTypeRenderers.get(effectTypeCode);
 
@@ -72,7 +76,7 @@ public class Renderer {
 
         for (int frameNumber = startFrame; frameNumber <= endFrame; frameNumber++) {
             RenderedFrame frame = renderedChannel.getFrames().get(frameNumber - this.startFrame);
-            renderer.render(renderedChannel, frame, effect);
+            renderer.render(song, renderedChannel, frame, effect);
         }
     }
 }

@@ -27,11 +27,11 @@ public class DeleteSongQuery implements PersistenceQuery<Integer> {
         List<ScheduledSong> scheduledSongs = new GetScheduledSongsBySongIdQuery(songId).perform(entityManager);
         scheduledSongs.forEach(entityManager::remove);
 
-        Optional<RenderedSong> renderedSong = new GetRenderedSongBySongIdQuery(songId).perform(entityManager);
-        renderedSong.ifPresent(entityManager::remove);
+        new DeleteRenderedChannelsQuery(songId).perform(entityManager);
 
         Optional<Song> song = new GetSongByIdQuery(songId).perform(entityManager);
         song.ifPresent(entityManager::remove);
+
         return songId;
     }
 }

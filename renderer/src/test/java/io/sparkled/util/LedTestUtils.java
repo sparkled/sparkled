@@ -6,6 +6,7 @@ import io.sparkled.model.render.RenderedFrame;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Convenience methods for working with LEDs in tests.
@@ -28,8 +29,8 @@ public class LedTestUtils {
     }
 
     public static String toLedString(RenderedFrame frame) {
-        return frame.getLeds()
-                .stream()
+        return IntStream.range(0, frame.getLedCount())
+                .mapToObj(frame::getLed)
                 .map(Led::toString)
                 .collect(Collectors.joining(", "));
     }
@@ -43,7 +44,7 @@ public class LedTestUtils {
 
     private static Led getLedFromRgb(int rgb) {
         byte[] ledData = new byte[3];
-        Led led = new Led(ledData, 0);
+        Led led = new Led(ledData, 0, 0);
         led.addRgb((rgb & 0xFF0000) >> 16, (rgb & 0x00FF00) >> 8, (rgb & 0x0000FF));
         return led;
     }

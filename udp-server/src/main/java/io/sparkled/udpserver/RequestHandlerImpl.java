@@ -41,7 +41,7 @@ public class RequestHandlerImpl implements RequestHandler {
                 final int frameIndex = (int) Math.min(durationFrames - 1, Math.round(progress * durationFrames));
 
                 RenderedFrame renderedFrame = renderedChannelMap.get(controller).getFrames().get(frameIndex);
-                respond(serverSocket, receivePacket, renderedFrame.getLedData());
+                respond(serverSocket, receivePacket, renderedFrame.getData());
             }
         } else {
             respond(serverSocket, receivePacket, "ERR".getBytes(StandardCharsets.US_ASCII));

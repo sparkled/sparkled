@@ -5,26 +5,34 @@ import java.util.List;
 
 public class RenderedChannel {
 
-    private final List<RenderedFrame> frames;
     private final int ledCount;
-    private final int framesPerSecond;
+    private final byte[] data;
+
+    // Don't serialise frames to JSON, as each frame contains a reference to the (very large) data array
+    private transient final List<RenderedFrame> frames;
 
     /**
      * Default constructor required for Gson.
      */
     @SuppressWarnings("unused")
     public RenderedChannel() {
-        this(0, 0, 0, 0);
+        this(0, 0, 0, new byte[]{});
     }
 
-    public RenderedChannel(int startFrame, int endFrame, int ledCount, int framesPerSecond) {
-        this.frames = new ArrayList<>(endFrame - startFrame);
+    public RenderedChannel(int startFrame, int endFrame, int ledCount, byte[] data) {
         this.ledCount = ledCount;
-        this.framesPerSecond = framesPerSecond;
+        this.data = data;
 
-        for (int frame = startFrame; frame <= endFrame; ++frame) {
-            this.frames.add(new RenderedFrame(frame, ledCount));
+        int frameCount = endFrame - startFrame + 1;
+        this.frames = new ArrayList<>(frameCount);
+
+        for (int frameIndex = startFrame; frameIndex <= endFrame; ++frameIndex) {
+            this.frames.add(new RenderedFrame(startFrame, frameIndex, ledCount, data));
         }
+    }
+
+    public byte[] getData() {
+        return data;
     }
 
     public List<RenderedFrame> getFrames() {
@@ -33,9 +41,5 @@ public class RenderedChannel {
 
     public int getLedCount() {
         return ledCount;
-    }
-
-    public int getFramesPerSecond() {
-        return framesPerSecond;
     }
 }

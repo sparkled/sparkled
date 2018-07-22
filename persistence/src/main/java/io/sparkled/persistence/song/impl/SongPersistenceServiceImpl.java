@@ -1,10 +1,10 @@
 package io.sparkled.persistence.song.impl;
 
 import com.google.inject.persist.Transactional;
-import io.sparkled.model.entity.RenderedSong;
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAnimation;
 import io.sparkled.model.entity.SongAudio;
+import io.sparkled.model.render.RenderedChannelMap;
 import io.sparkled.persistence.song.impl.query.*;
 import io.sparkled.persistence.song.SongPersistenceService;
 
@@ -55,12 +55,6 @@ public class SongPersistenceServiceImpl implements SongPersistenceService {
 
     @Override
     @Transactional
-    public Optional<RenderedSong> getRenderedSongById(int songId) {
-        return new GetRenderedSongBySongIdQuery(songId).perform(entityManagerProvider.get());
-    }
-
-    @Override
-    @Transactional
     public Integer saveSong(Song song) {
         return new SaveSongQuery(song).perform(entityManagerProvider.get());
     }
@@ -79,7 +73,20 @@ public class SongPersistenceServiceImpl implements SongPersistenceService {
 
     @Override
     @Transactional
-    public Integer saveRenderedSong(RenderedSong renderedSong) {
-        return new SaveRenderedSongQuery(renderedSong).perform(entityManagerProvider.get());
+    public RenderedChannelMap getRenderedChannels(Song song) {
+        return new GetRenderedChannelsQuery(song).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public void saveRenderedChannels(Song song, RenderedChannelMap renderedChannelMap) {
+        deleteRenderedChannels(song.getId());
+        new SaveRenderedChannelsQuery(song, renderedChannelMap).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public void deleteRenderedChannels(int songId) {
+        new DeleteRenderedChannelsQuery(songId).perform(entityManagerProvider.get());
     }
 }

@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class Led {
 
+    public static final int BYTES_PER_LED = 3;
+
     private static final int R = 0;
     private static final int G = 1;
     private static final int B = 2;
@@ -12,11 +14,13 @@ public class Led {
     private final byte[] ledData;
     private final int ledNumber;
     private final int index;
+    private final int offset;
 
-    public Led(byte[] ledData, int ledNumber) {
+    public Led(byte[] ledData, int ledNumber, int offset) {
         this.ledData = ledData;
         this.ledNumber = ledNumber;
-        this.index = ledNumber * 3;
+        this.index = ledNumber * BYTES_PER_LED;
+        this.offset = offset;
     }
 
     public void addColor(Color color) {
@@ -34,27 +38,27 @@ public class Led {
     }
 
     public int getR() {
-        return ledData[index + R] & 0xFF;
+        return ledData[offset + index + R] & 0xFF;
     }
 
     private void setR(int r) {
-        ledData[index + R] = (byte) r;
+        ledData[offset + index + R] = (byte) r;
     }
 
     public int getG() {
-        return ledData[index + G] & 0xFF;
+        return ledData[offset + index + G] & 0xFF;
     }
 
     private void setG(int g) {
-        ledData[index + G] = (byte) g;
+        ledData[offset + index + G] = (byte) g;
     }
 
     public int getB() {
-        return ledData[index + B] & 0xFF;
+        return ledData[offset + index + B] & 0xFF;
     }
 
     private void setB(int b) {
-        ledData[index + B] = (byte) b;
+        ledData[offset + index + B] = (byte) b;
     }
 
     @Override

@@ -6,7 +6,7 @@
     <persistence-unit name="sparkled">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>io.sparkled.model.entity.RenderedSong</class>
+        <class>io.sparkled.model.entity.RenderedChannelData</class>
         <class>io.sparkled.model.entity.ScheduledSong</class>
         <class>io.sparkled.model.entity.Song</class>
         <class>io.sparkled.model.entity.SongAnimation</class>
