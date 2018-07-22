@@ -34,7 +34,8 @@ function animationService(editorService,
         const now = new Date().getTime();
 
         const firstKey = Object.keys(service.renderData)[0];
-        const frameCount = service.renderData[firstKey].frames.length;
+        const channel = service.renderData[firstKey];
+        const frameCount = channel.data.length / channel.ledCount / 3;
         const durationMs = 1000 / editorService.song.framesPerSecond * frameCount;
         const frameIndex = Math.floor((now - service.animationStartTime) / durationMs * service.playbackSpeed * frameCount);
 
@@ -58,9 +59,11 @@ function animationService(editorService,
         const frame = {};
 
         _(service.renderData).forOwn((value, key) => {
-            const ledData = value.frames[frameIndex].ledData;
+            const ledData = value.data;
             frame[key] = [];
-            for (let i = 0; i < ledData.length; i += 3) {
+
+            const start = frameIndex * value.ledCount * 3;
+            for (let i = start; i < ledData.length; i += 3) {
                 frame[key].push({
                     r: ledData[i],
                     g: ledData[i + 1],

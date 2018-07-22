@@ -1,21 +1,20 @@
 package io.sparkled.music;
 
-import com.google.gson.Gson;
+import io.sparkled.model.entity.Song;
+import io.sparkled.model.entity.SongAudio;
+import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.persistence.song.SongPersistenceService;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.AudioDevice;
 import javazoom.jl.player.FactoryRegistry;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
-import io.sparkled.model.entity.RenderedSong;
-import io.sparkled.model.entity.Song;
-import io.sparkled.model.entity.SongAudio;
-import io.sparkled.model.render.RenderedChannelMap;
-import io.sparkled.persistence.song.SongPersistenceService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.ByteArrayInputStream;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Singleton
@@ -41,8 +40,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
     public void play(Song song, SongAudio songAudio) {
         logger.info("Playing song " + song.getName());
         this.currentSong = song;
-        RenderedSong renderedSong = songPersistenceService.getRenderedSongById(song.getId()).orElse(new RenderedSong());
-        this.renderedChannelMap = new Gson().fromJson(renderedSong.getRenderData(), RenderedChannelMap.class);
+        this.renderedChannelMap = songPersistenceService.getRenderedChannels(song);
 
         try {
             FactoryRegistry r = FactoryRegistry.systemRegistry();
@@ -53,7 +51,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
             player.setPlayBackListener(playbackListener);
             player.play();
         } catch (JavaLayerException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to play song " + song.getId() + ": " + e.getMessage());
         }
     }
 

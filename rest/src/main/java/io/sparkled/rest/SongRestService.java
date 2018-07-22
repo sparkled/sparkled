@@ -231,11 +231,6 @@ public class SongRestService extends RestService {
 
     private void persistRenderedSong(Song song, SongAnimation songAnimation) throws IOException {
         RenderedChannelMap renderedChannelMap = new Renderer(song, songAnimation).render();
-
-        RenderedSong renderedSong = new RenderedSong();
-        renderedSong.setSongId(song.getId());
-        renderedSong.setRenderData(gson.toJson(renderedChannelMap));
-
-        songPersistenceService.saveRenderedSong(renderedSong);
+        songPersistenceService.saveRenderedChannels(song, renderedChannelMap);
     }
 }

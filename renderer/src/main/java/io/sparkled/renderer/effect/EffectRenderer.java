@@ -1,6 +1,7 @@
 package io.sparkled.renderer.effect;
 
 import io.sparkled.model.animation.effect.Effect;
+import io.sparkled.model.entity.Song;
 import io.sparkled.model.render.RenderedChannel;
 import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.renderer.context.RenderContext;
@@ -9,9 +10,9 @@ import io.sparkled.renderer.easing.EasingFunctions;
 
 public abstract class EffectRenderer {
 
-    public final void render(RenderedChannel channel, RenderedFrame frame, Effect effect) {
+    public final void render(Song song, RenderedChannel channel, RenderedFrame frame, Effect effect) {
         float progress = getProgress(frame, effect);
-        RenderContext ctx = new RenderContext(channel, frame, effect, progress);
+        RenderContext ctx = new RenderContext(song, channel, frame, effect, progress);
         render(ctx);
     }
 
