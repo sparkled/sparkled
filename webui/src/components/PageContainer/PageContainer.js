@@ -12,7 +12,7 @@ class PageContainer extends Component {
 
     return (
       <div>
-        <Navbar className="navbar-toggleable-md bg-primary navbar-inverse">
+        <Navbar className="navbar-expand-lg navbar-dark bg-dark">
           <Link to="/" className="navbar-brand mr-3">
             <AppLogo/>
           </Link>

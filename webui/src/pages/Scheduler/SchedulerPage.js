@@ -69,7 +69,7 @@ class SchedulerPage extends Component {
   renderError() {
     return (
       <div className="card card-outline-danger">
-        <div className="card-block">
+        <div className="card-body">
           <p>Failed to load songs: {this.props.fetchError}</p>
           <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
         </div>

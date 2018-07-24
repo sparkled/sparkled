@@ -9,7 +9,7 @@ import SchedulerPage from '../../pages/Scheduler';
 import SongListPage from '../../pages/SongList';
 import StageListPage from '../../pages/StageList';
 import store from '../../store/store';
-import './bootswatch-superhero-v4-alpha.css';
+import 'bootswatch/dist/superhero/bootstrap.css';
 
 const RedirectInvalidUrlToIndex = () => <Redirect to='/'/>;
 

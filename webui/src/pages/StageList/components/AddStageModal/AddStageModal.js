@@ -14,16 +14,9 @@ class AddStageModal extends Component {
     const addButtonText = adding ? 'Adding...' : 'Add stage';
     const canSubmit = valid;
 
-    // TODO: Workaround for isOpen not removing the modal on completion. Try removing once reactstrap v5 is released.
-    if (!addModalVisible) {
-      return null;
-    }
-
-    // TODO: Remove autoFocus, modalClassName and backdropClassName from Modal below once reactstrap v5 is released.
     return (
       <div>
-        <Modal isOpen={addModalVisible} wrapClassName="add-stage-modal" modalClassName="show" backdropClassName="show"
-               backdrop={true} autoFocus={false}>
+        <Modal isOpen={addModalVisible} wrapClassName="add-stage-modal" backdrop={true}>
           <form onSubmit={handleSubmit(this.addStage.bind(this))}>
             <ModalHeader>Add stage</ModalHeader>
             <ModalBody>
@@ -51,7 +44,7 @@ class AddStageModal extends Component {
     } else {
       return (
         <div className="card card-outline-danger">
-          <div className="card-block">Failed to add stage: {addError}</div>
+          <div className="card-body">Failed to add stage: {addError}</div>
         </div>
       );
     }

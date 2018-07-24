@@ -50,7 +50,8 @@ git clone https://github.com/<your_username>/sparkled.git
 ```
 
 Build the project
-*Note:* the initial build will take quite a while, as all of the Maven and NPM dependencies need to be downloaded
+
+**Note:** the initial build will take quite a while, as all of the Maven and NPM dependencies need to be downloaded
 ```
 cd sparkled
 mvn install
@@ -81,10 +82,14 @@ npm run test
 ```
 
 ## Built With
-* [AngularJS](https://angularjs.org)
+* [Java](https://java.com)
 * [Maven](https://maven.apache.org)
-* [wavesurfer.js](https://wavesurfer-js.org)
-* [H2 Database Engine](https://www.h2database.com)
+* [H2](https://www.h2database.com)
+* [HikariCP](https://github.com/brettwooldridge/HikariCP)
+* [Hibernate](https://hibernate.org)
+* [React.js](https://reactjs.org)
+* [Bootstrap](https://getbootstrap.com)
+* [Wavesurfer.js](https://wavesurfer-js.org)
 
 ## Contributing
 Please read [CONTRIBUTING.md](#todo:add-contributing) for details on our code of conduct, and the process for submitting pull requests to us.

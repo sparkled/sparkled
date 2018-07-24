@@ -80,7 +80,7 @@ class StageListPage extends Component {
   renderError() {
     return (
       <div className="card card-outline-danger">
-        <div className="card-block">
+        <div className="card-body">
           <p>Failed to load stages: {this.props.fetchError}</p>
           <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
         </div>
@@ -92,7 +92,7 @@ class StageListPage extends Component {
     if (_.isEmpty(this.props.stages)) {
       return (
         <div className="card card-outline-info">
-          <div className="card-block">
+          <div className="card-body">
             No stages have been added.
           </div>
         </div>

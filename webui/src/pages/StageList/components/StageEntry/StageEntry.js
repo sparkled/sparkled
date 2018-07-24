@@ -29,8 +29,7 @@ class StageEntry extends Component {
           </div>
         </div>
 
-        <div className="card-block">
-          TODO
+        <div className="card-body">
         </div>
       </div>
     );
