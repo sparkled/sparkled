@@ -30,6 +30,7 @@
         <h2.version>1.4.196</h2.version>
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
         <hibernate.version>5.1.0.Final</hibernate.version>
+        <hikaricp.version>2.7.8</hikaricp.version>
         <jcommander.version>1.72</jcommander.version>
         <jersey.version>2.23.2</jersey.version>
         <jetty.version>9.4.7.v20170914</jetty.version>
@@ -140,6 +141,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${hikaricp.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
@@ -184,6 +191,12 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-jpamodelgen</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-hikaricp</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
 
