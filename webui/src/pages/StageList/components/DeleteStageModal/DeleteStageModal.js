@@ -10,16 +10,13 @@ class DeleteStageModal extends Component {
     const { deleting, stageToDelete } = this.props;
     const deleteButtonText = deleting ? 'Deleting...' : 'Delete stage';
 
-    // TODO: Workaround for isOpen not removing the modal on completion. Try removing once reactstrap v5 is released.
     if (!stageToDelete) {
       return null;
     }
 
-    // TODO: Remove autoFocus, modalClassName and backdropClassName from Modal below once reactstrap v5 is released.
     return (
       <div>
-        <Modal isOpen={!!stageToDelete} wrapClassName='delete-stage-modal' modalClassName='show' backdropClassName='show'
-               backdrop={true} autoFocus={false}>
+        <Modal isOpen={!!stageToDelete} wrapClassName='delete-stage-modal' backdrop={true}>
           <ModalHeader>Delete stage</ModalHeader>
           <ModalBody>
             <p>Are you sure you want to delete <em>{stageToDelete.name}</em>?</p>
@@ -42,7 +39,7 @@ class DeleteStageModal extends Component {
     } else {
       return (
         <div className='card card-outline-danger'>
-          <div className='card-block'>Failed to delete stage: {deleteError}</div>
+          <div className='card-body'>Failed to delete stage: {deleteError}</div>
         </div>
       );
     }

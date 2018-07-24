@@ -10,16 +10,13 @@ class DeleteSongModal extends Component {
     const { deleting, songToDelete } = this.props;
     const deleteButtonText = deleting ? 'Deleting...' : 'Delete song';
 
-    // TODO: Workaround for isOpen not removing the modal on completion. Try removing once reactstrap v5 is released.
     if (!songToDelete) {
       return null;
     }
 
-    // TODO: Remove autoFocus, modalClassName and backdropClassName from Modal below once reactstrap v5 is released.
     return (
       <div>
-        <Modal isOpen={!!songToDelete} wrapClassName='delete-song-modal' modalClassName='show' backdropClassName='show'
-               backdrop={true} autoFocus={false}>
+        <Modal isOpen={!!songToDelete} wrapClassName='delete-song-modal' backdrop={true}>
           <ModalHeader>Delete song</ModalHeader>
           <ModalBody>
             <p>Are you sure you want to delete <em>{songToDelete.name}</em>?</p>
@@ -42,7 +39,7 @@ class DeleteSongModal extends Component {
     } else {
       return (
         <div className='card card-outline-danger'>
-          <div className='card-block'>Failed to delete song: {deleteError}</div>
+          <div className='card-body'>Failed to delete song: {deleteError}</div>
         </div>
       );
     }

@@ -24,16 +24,9 @@ class AddSongModal extends Component {
     const canSubmit = valid && this.state.mp3;
     const dropzoneText = this.state.mp3 ? `Selected file: ${this.state.mp3.name}.` : 'Drop .mp3 file here, or click.';
 
-    // TODO: Workaround for isOpen not removing the modal on completion. Try removing once reactstrap v5 is released.
-    if (!addModalVisible) {
-      return null;
-    }
-
-    // TODO: Remove autoFocus, modalClassName and backdropClassName from Modal below once reactstrap v5 is released.
     return (
       <div>
-        <Modal isOpen={addModalVisible} wrapClassName="add-song-modal" modalClassName="show" backdropClassName="show"
-               backdrop={true} autoFocus={false}>
+        <Modal isOpen={addModalVisible} wrapClassName="add-song-modal" backdrop={true}>
           <form onSubmit={handleSubmit(this.addSong.bind(this))}>
             <ModalHeader>Add song</ModalHeader>
             <ModalBody>
@@ -115,7 +108,7 @@ class AddSongModal extends Component {
     } else {
       return (
         <div className="card card-outline-danger">
-          <div className="card-block">Failed to add song: {addError}</div>
+          <div className="card-body">Failed to add song: {addError}</div>
         </div>
       );
     }

@@ -29,7 +29,7 @@ class SongEntry extends Component {
           </div>
         </div>
 
-        <div className="card-block">
+        <div className="card-body">
           <div className="d-flex justify-content-between">
             <h6>Album: {song.album}</h6>
             <h6 className="ml-3">{this.getFormattedDuration(song)}</h6>
