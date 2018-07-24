@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Song {
 
     private Integer id;
+    private Integer stageId;
     private String name;
     private String artist;
     private String album;
@@ -29,6 +30,17 @@ public class Song {
 
     public Song setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    @Basic
+    @Column(name = "stage_id", nullable = false)
+    public Integer getStageId() {
+        return stageId;
+    }
+
+    public Song setStageId(Integer stageId) {
+        this.stageId = stageId;
         return this;
     }
 
@@ -114,6 +126,7 @@ public class Song {
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
         return Objects.equals(id, song.id) &&
+                Objects.equals(stageId, song.stageId) &&
                 durationFrames == song.durationFrames &&
                 framesPerSecond == song.framesPerSecond &&
                 Objects.equals(name, song.name) &&
@@ -123,6 +136,6 @@ public class Song {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, artist, durationFrames, framesPerSecond, status);
+        return Objects.hash(id, stageId, name, artist, durationFrames, framesPerSecond, status);
     }
 }

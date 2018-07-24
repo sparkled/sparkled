@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Stage {
 
     private Integer id;
-    private String svg;
+    private String name;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,26 +22,27 @@ public class Stage {
     }
 
     @Basic
-    @Column(name = "svg", columnDefinition = "text", nullable = false)
-    public String getSvg() {
-        return svg;
+    @Column(name = "name", nullable = false, length = 64)
+    public String getName() {
+        return name;
     }
 
-    public void setSvg(String svg) {
-        this.svg = svg;
+    public Stage setName(String name) {
+        this.name = name;
+        return this;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Stage svg = (Stage) o;
-        return Objects.equals(id, svg.id) &&
-                Objects.equals(this.svg, svg.svg);
+        Stage stage = (Stage) o;
+        return Objects.equals(id, stage.id) &&
+                Objects.equals(this.name, stage.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, svg);
+        return Objects.hash(id, name);
     }
 }

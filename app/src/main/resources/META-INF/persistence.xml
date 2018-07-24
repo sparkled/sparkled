@@ -12,6 +12,7 @@
         <class>io.sparkled.model.entity.SongAnimation</class>
         <class>io.sparkled.model.entity.SongAudio</class>
         <class>io.sparkled.model.entity.Stage</class>
+        <class>io.sparkled.model.entity.StageChannel</class>
 
         <properties>
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
