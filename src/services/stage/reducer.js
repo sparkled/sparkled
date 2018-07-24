@@ -16,21 +16,21 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case `${actionTypes.FETCH_SONGS}_PENDING`:
+    case `${actionTypes.FETCH_STAGES}_PENDING`:
       return {
         ...state,
         fetching: true,
         data: []
       };
 
-    case `${actionTypes.FETCH_SONGS}_FULFILLED`:
+    case `${actionTypes.FETCH_STAGES}_FULFILLED`:
       return {
         ...state,
         fetching: false,
         data: _.mapKeys(action.payload.data, 'id')
       };
 
-    case `${actionTypes.FETCH_SONGS}_REJECTED`:
+    case `${actionTypes.FETCH_STAGES}_REJECTED`:
       return {
         ...state,
         fetching: false,
@@ -38,7 +38,7 @@ export default (state = initialState, action) => {
         data: []
       };
 
-    case `${actionTypes.ADD_SONG}_PENDING`:
+    case `${actionTypes.ADD_STAGE}_PENDING`:
       return {
         ...state,
         adding: true,
@@ -46,7 +46,7 @@ export default (state = initialState, action) => {
         addSuccess: null
       };
 
-    case `${actionTypes.ADD_SONG}_FULFILLED`:
+    case `${actionTypes.ADD_STAGE}_FULFILLED`:
       return {
         ...state,
         adding: false,
@@ -54,7 +54,7 @@ export default (state = initialState, action) => {
         addSuccess: true
       };
 
-    case `${actionTypes.ADD_SONG}_REJECTED`:
+    case `${actionTypes.ADD_STAGE}_REJECTED`:
       return {
         ...state,
         adding: false,
@@ -62,7 +62,7 @@ export default (state = initialState, action) => {
         addSuccess: null
       };
 
-    case `${actionTypes.DELETE_SONG}_PENDING`:
+    case `${actionTypes.DELETE_STAGE}_PENDING`:
       return {
         ...state,
         deleting: true,
@@ -70,7 +70,7 @@ export default (state = initialState, action) => {
         deleteSuccess: null
       };
 
-    case `${actionTypes.DELETE_SONG}_FULFILLED`:
+    case `${actionTypes.DELETE_STAGE}_FULFILLED`:
       return {
         ...state,
         data: _.omit(state.data, action.payload.data.id),
@@ -79,7 +79,7 @@ export default (state = initialState, action) => {
         deleteSuccess: true
       };
 
-    case `${actionTypes.DELETE_SONG}_REJECTED`:
+    case `${actionTypes.DELETE_STAGE}_REJECTED`:
       return {
         ...state,
         deleting: false,

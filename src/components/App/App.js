@@ -7,6 +7,7 @@ import 'react-s-alert/dist/s-alert-css-effects/scale.css';
 import EditSongPage from '../../pages/EditSong';
 import SchedulerPage from '../../pages/Scheduler';
 import SongListPage from '../../pages/SongList';
+import StageListPage from '../../pages/StageList';
 import store from '../../store/store';
 import './bootswatch-superhero-v4-alpha.css';
 
@@ -18,6 +19,7 @@ const App = () => (
       <Router>
         <Switch>
           <Route exact path='/' component={SongListPage}/>
+          <Route exact path='/stages' component={StageListPage}/>
           <Route exact path='/songs/:songId' component={EditSongPage}/>
           <Route exact path='/scheduler' component={SchedulerPage}/>
           <Route component={RedirectInvalidUrlToIndex}/>

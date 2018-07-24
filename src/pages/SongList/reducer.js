@@ -2,7 +2,8 @@ import * as songListActionTypes from './actionTypes';
 import * as songActionTypes from '../../services/song/actionTypes';
 
 const initialState = {
-  songToDelete: null
+  songToDelete: null,
+  addModalVisible: false
 };
 
 export default (state = initialState, action) => {

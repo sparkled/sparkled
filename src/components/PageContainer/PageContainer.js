@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem } from 'reactstrap';
+import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from 'reactstrap';
 import AppLogo from '../AppLogo';
 
 class PageContainer extends Component {
@@ -13,9 +13,9 @@ class PageContainer extends Component {
     return (
       <div>
         <Navbar className="navbar-toggleable-md bg-primary navbar-inverse">
-          <NavbarBrand className="mr-3">
+          <Link to="/" className="navbar-brand mr-3">
             <AppLogo/>
-          </NavbarBrand>
+          </Link>
 
           <NavbarToggler onClick={this.toggle.bind(this)} className="navbar-toggler-right"/>
 
@@ -26,6 +26,9 @@ class PageContainer extends Component {
               </NavItem>
               <NavItem>
                 <Link className="nav-link" to="/scheduler">Scheduler</Link>
+              </NavItem>
+              <NavItem>
+                <Link className="nav-link" to="/stages">Stages</Link>
               </NavItem>
             </Nav>
 
