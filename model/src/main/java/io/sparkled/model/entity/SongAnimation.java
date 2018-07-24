@@ -7,11 +7,14 @@ import java.util.Objects;
 @Table(name = "song_animation")
 public class SongAnimation {
 
-    private int songId;
-    private String animationData;
-
     @Id
     @Column(name = "song_id", nullable = false)
+    private int songId;
+
+    @Basic
+    @Column(name = "animation_data", columnDefinition = "text")
+    private String animationData;
+
     public int getSongId() {
         return songId;
     }
@@ -21,8 +24,6 @@ public class SongAnimation {
         return this;
     }
 
-    @Basic
-    @Column(name = "animation_data", columnDefinition = "text")
     public String getAnimationData() {
         return animationData;
     }

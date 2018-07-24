@@ -10,17 +10,25 @@ public class ScheduledSong {
 
     public static final int MIN_SECONDS_BETWEEN_SONGS = 5;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
+
+    @ManyToOne
     private Song song;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "start_time", nullable = false)
     private Date startTime;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "end_time", nullable = false)
     private Date endTime;
 
     public ScheduledSong() {
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     public Integer getId() {
         return id;
     }
@@ -29,7 +37,6 @@ public class ScheduledSong {
         this.id = id;
     }
 
-    @ManyToOne
     public Song getSong() {
         return song;
     }
@@ -38,8 +45,6 @@ public class ScheduledSong {
         this.song = song;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "start_time", nullable = false)
     public Date getStartTime() {
         return startTime;
     }
@@ -48,8 +53,6 @@ public class ScheduledSong {
         this.startTime = startTime;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "end_time", nullable = false)
     public Date getEndTime() {
         return endTime;
     }

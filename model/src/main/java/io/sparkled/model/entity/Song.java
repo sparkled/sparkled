@@ -7,23 +7,43 @@ import java.util.Objects;
 @Table(name = "song")
 public class Song {
 
-    private Integer id;
-    private Integer stageId;
-    private String name;
-    private String artist;
-    private String album;
-    private int durationFrames;
-    private int framesPerSecond;
-    private boolean autoSchedulable;
-    private SongStatus status;
-
-    public Song() {
-        this.framesPerSecond = 60;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Basic
+    @Column(name = "stage_id", nullable = false)
+    private Integer stageId;
+
+    @Basic
+    @Column(name = "name", nullable = false, length = 64)
+    private String name;
+
+    @Basic
+    @Column(name = "artist", nullable = false, length = 64)
+    private String artist;
+
+    @Basic
+    @Column(name = "album", nullable = false, length = 64)
+    private String album;
+
+    @Basic
+    @Column(name = "duration_frames", nullable = false)
+    private int durationFrames;
+
+    @Basic
+    @Column(name = "frames_per_second", nullable = false)
+    private int framesPerSecond = 60;
+
+    @Basic
+    @Column(name = "auto_schedulable", nullable = false)
+    private boolean autoSchedulable;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 16)
+    private SongStatus status;
+
     public Integer getId() {
         return id;
     }
@@ -33,8 +53,6 @@ public class Song {
         return this;
     }
 
-    @Basic
-    @Column(name = "stage_id", nullable = false)
     public Integer getStageId() {
         return stageId;
     }
@@ -44,8 +62,6 @@ public class Song {
         return this;
     }
 
-    @Basic
-    @Column(name = "name", nullable = false, length = 64)
     public String getName() {
         return name;
     }
@@ -55,8 +71,6 @@ public class Song {
         return this;
     }
 
-    @Basic
-    @Column(name = "artist", nullable = false, length = 64)
     public String getArtist() {
         return artist;
     }
@@ -66,8 +80,6 @@ public class Song {
         return this;
     }
 
-    @Basic
-    @Column(name = "album", nullable = false, length = 64)
     public String getAlbum() {
         return album;
     }
@@ -77,8 +89,6 @@ public class Song {
         return this;
     }
 
-    @Basic
-    @Column(name = "duration_frames", nullable = false)
     public int getDurationFrames() {
         return durationFrames;
     }
@@ -88,8 +98,6 @@ public class Song {
         return this;
     }
 
-    @Basic
-    @Column(name = "frames_per_second", nullable = false)
     public int getFramesPerSecond() {
         return framesPerSecond;
     }
@@ -99,8 +107,6 @@ public class Song {
         return this;
     }
 
-    @Basic
-    @Column(name = "auto_schedulable", nullable = false)
     public boolean isAutoSchedulable() {
         return autoSchedulable;
     }
@@ -109,8 +115,6 @@ public class Song {
         this.autoSchedulable = autoSchedulable;
     }
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 16)
     public SongStatus getStatus() {
         return status;
     }
@@ -129,6 +133,7 @@ public class Song {
                 Objects.equals(stageId, song.stageId) &&
                 durationFrames == song.durationFrames &&
                 framesPerSecond == song.framesPerSecond &&
+                autoSchedulable == song.autoSchedulable &&
                 Objects.equals(name, song.name) &&
                 Objects.equals(artist, song.artist) &&
                 Objects.equals(status, song.status);
@@ -136,6 +141,6 @@ public class Song {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stageId, name, artist, durationFrames, framesPerSecond, status);
+        return Objects.hash(id, stageId, name, artist, durationFrames, framesPerSecond, autoSchedulable, status);
     }
 }
