@@ -1,15 +1,15 @@
 package io.sparkled.rest;
 
 import io.sparkled.model.entity.Stage;
+import io.sparkled.model.validator.exception.EntityValidationException;
 import io.sparkled.persistence.stage.StagePersistenceService;
+import io.sparkled.rest.response.IdResponse;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 @Path("/stages")
@@ -20,6 +20,34 @@ public class StageRestService extends RestService {
     @Inject
     public StageRestService(StagePersistenceService stagePersistenceService) {
         this.stagePersistenceService = stagePersistenceService;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createStage(Stage stage) {
+        try {
+            stage.setId(null);
+            int stageId = stagePersistenceService.saveStage(stage);
+            return getJsonResponse(new IdResponse(stageId));
+        } catch (EntityValidationException e) {
+            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteStage(@PathParam("id") int id) {
+        int stageId = stagePersistenceService.deleteStage(id);
+        return getJsonResponse(new IdResponse(stageId));
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllStages() {
+        List<Stage> stages = stagePersistenceService.getAllStages();
+        return getJsonResponse(stages);
     }
 
     @GET
