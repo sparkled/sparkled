@@ -8,15 +8,25 @@ import java.util.Objects;
 @Table(name = "rendered_channel_data")
 public class RenderedChannelData {
 
-    private int id;
-    private int songId;
-    private String channelCode;
-    private int ledCount;
-    private byte[] data;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    private int id;
+
+    @Column(name = "song_id", nullable = false)
+    private int songId;
+
+    @Column(name = "channel_code", nullable = false)
+    private String channelCode;
+
+    @Column(name = "led_count", nullable = false)
+    private int ledCount;
+
+    @Lob
+    @Column(name = "data")
+    private byte[] data;
+
+
     public int getId() {
         return id;
     }
@@ -26,7 +36,6 @@ public class RenderedChannelData {
         return this;
     }
 
-    @Column(name = "song_id", nullable = false)
     public int getSongId() {
         return songId;
     }
@@ -36,7 +45,6 @@ public class RenderedChannelData {
         return this;
     }
 
-    @Column(name = "channel_code", nullable = false)
     public String getChannelCode() {
         return channelCode;
     }
@@ -46,7 +54,6 @@ public class RenderedChannelData {
         return this;
     }
 
-    @Column(name = "led_count", nullable = false)
     public int getLedCount() {
         return ledCount;
     }
@@ -56,8 +63,6 @@ public class RenderedChannelData {
         return this;
     }
 
-    @Lob
-    @Column(name = "data")
     public byte[] getData() {
         return data;
     }

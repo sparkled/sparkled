@@ -8,11 +8,14 @@ import java.util.Objects;
 @Table(name = "song_audio")
 public class SongAudio {
 
-    private int songId;
-    private byte[] audioData;
-
     @Id
     @Column(name = "song_id", nullable = false)
+    private int songId;
+
+    @Lob
+    @Column(name = "audio_data", nullable = false)
+    private byte[] audioData;
+
     public int getSongId() {
         return songId;
     }
@@ -21,8 +24,6 @@ public class SongAudio {
         this.songId = songId;
     }
 
-    @Lob
-    @Column(name = "audio_data", nullable = false)
     public byte[] getAudioData() {
         return audioData;
     }

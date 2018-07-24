@@ -7,12 +7,15 @@ import java.util.Objects;
 @Table(name = "stage")
 public class Stage {
 
-    private Integer id;
-    private String name;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Basic
+    @Column(name = "name", nullable = false, length = 64)
+    private String name;
+
     public Integer getId() {
         return id;
     }
@@ -21,8 +24,6 @@ public class Stage {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name", nullable = false, length = 64)
     public String getName() {
         return name;
     }

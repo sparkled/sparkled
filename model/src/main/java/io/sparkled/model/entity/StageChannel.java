@@ -7,20 +7,48 @@ import java.util.Objects;
 @Table(name = "stage_channel")
 public class StageChannel {
 
-    private Integer id;
-    private Integer stageId;
-    private String code;
-    private String name;
-    private String type;
-    private int positionX = 0;
-    private int positionY = 0;
-    private int scaleX = 1;
-    private int scaleY = 1;
-    private int rotation = 0;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Basic
+    @Column(name = "stage_id", nullable = false)
+    private Integer stageId;
+
+    @Basic
+    @Column(name = "code", nullable = false, length = 8)
+    private String code;
+
+    @Basic
+    @Column(name = "name", nullable = false, length = 32)
+    private String name;
+
+    @Basic
+    @Column(name = "type", nullable = false, length = 32)
+    private String type;
+
+    @Basic
+    @Column(name = "position_x", nullable = false)
+    private int positionX = 0;
+
+    @Basic
+    @Column(name = "position_y", nullable = false)
+    private int positionY = 0;
+
+    @Basic
+    @Column(name = "scale_x", nullable = false)
+    private int scaleX = 1;
+
+    @Basic
+    @Column(name = "scale_y", nullable = false)
+    private int scaleY = 1;
+
+    @Basic
+    @Column(name = "rotation", nullable = false)
+    private int rotation = 0;
+
+
     public Integer getId() {
         return id;
     }
@@ -29,8 +57,7 @@ public class StageChannel {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "stage_id", nullable = false)
+
     public Integer getStageId() {
         return stageId;
     }
@@ -40,8 +67,6 @@ public class StageChannel {
         return this;
     }
 
-    @Basic
-    @Column(name = "code", nullable = false, length = 8)
     public String getCode() {
         return code;
     }
@@ -51,8 +76,6 @@ public class StageChannel {
         return this;
     }
 
-    @Basic
-    @Column(name = "name", nullable = false, length = 32)
     public String getName() {
         return name;
     }
@@ -62,8 +85,6 @@ public class StageChannel {
         return this;
     }
 
-    @Basic
-    @Column(name = "type", nullable = false, length = 32)
     public String getType() {
         return type;
     }
@@ -73,8 +94,6 @@ public class StageChannel {
         return this;
     }
 
-    @Basic
-    @Column(name = "position_x", nullable = false)
     public int getPositionX() {
         return positionX;
     }
@@ -83,8 +102,6 @@ public class StageChannel {
         this.positionX = positionX;
     }
 
-    @Basic
-    @Column(name = "position_y", nullable = false)
     public int getPositionY() {
         return positionY;
     }
@@ -93,18 +110,6 @@ public class StageChannel {
         this.positionY = positionY;
     }
 
-    @Basic
-    @Column(name = "rotation", nullable = false)
-    public int getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(int rotation) {
-        this.rotation = rotation;
-    }
-
-    @Basic
-    @Column(name = "scale_x", nullable = false)
     public int getScaleX() {
         return scaleX;
     }
@@ -113,14 +118,20 @@ public class StageChannel {
         this.scaleX = scaleX;
     }
 
-    @Basic
-    @Column(name = "scale_y", nullable = false)
     public int getScaleY() {
         return scaleY;
     }
 
     public void setScaleY(int scaleY) {
         this.scaleY = scaleY;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
     }
 
     @Override
