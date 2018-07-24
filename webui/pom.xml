@@ -40,7 +40,7 @@
                         </goals>
                         <configuration>
                             <nodeVersion>v8.4.0</nodeVersion>
-                            <npmVersion>5.4.2</npmVersion>
+                            <npmVersion>5.5.1</npmVersion>
                         </configuration>
                     </execution>
 
@@ -52,13 +52,13 @@
                     </execution>
 
                     <execution>
-                        <id>gulp-build</id>
+                        <id>npm-build</id>
                         <goals>
-                            <goal>gulp</goal>
+                            <goal>npm</goal>
                         </goals>
 
                         <configuration>
-                            <arguments>prod --environment=production</arguments>
+                            <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>
