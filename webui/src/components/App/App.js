@@ -11,14 +11,14 @@ import StageListPage from '../../pages/StageList';
 import store from '../../store/store';
 import 'bootswatch/dist/superhero/bootstrap.css';
 
-const RedirectInvalidUrlToIndex = () => <Redirect to='/'/>;
+const RedirectInvalidUrlToIndex = () => <Redirect to='/songs'/>;
 
 const App = () => (
   <div>
     <Provider store={store}>
       <Router>
         <Switch>
-          <Route exact path='/' component={SongListPage}/>
+          <Route exact path='/songs' component={SongListPage}/>
           <Route exact path='/stages' component={StageListPage}/>
           <Route exact path='/songs/:songId' component={SongEditPage}/>
           <Route exact path='/scheduler' component={SchedulerPage}/>
