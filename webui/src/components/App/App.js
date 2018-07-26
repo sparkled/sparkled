@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/scale.css';
-import EditSongPage from '../../pages/EditSong';
+import SongEditPage from '../../pages/SongEdit';
 import SchedulerPage from '../../pages/Scheduler';
 import SongListPage from '../../pages/SongList';
 import StageListPage from '../../pages/StageList';
@@ -20,7 +20,7 @@ const App = () => (
         <Switch>
           <Route exact path='/' component={SongListPage}/>
           <Route exact path='/stages' component={StageListPage}/>
-          <Route exact path='/songs/:songId' component={EditSongPage}/>
+          <Route exact path='/songs/:songId' component={SongEditPage}/>
           <Route exact path='/scheduler' component={SchedulerPage}/>
           <Route component={RedirectInvalidUrlToIndex}/>
         </Switch>
