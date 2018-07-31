@@ -1,7 +1,7 @@
 package io.sparkled.util;
 
 import io.sparkled.model.render.Led;
-import io.sparkled.model.render.RenderedChannel;
+import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedFrame;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class LedTestUtils {
     private LedTestUtils() {
     }
 
-    public static String toLedString(RenderedChannel channel) {
+    public static String toLedString(RenderedStagePropData channel) {
         return channel.getFrames()
                 .stream()
                 .map(LedTestUtils::toLedString)

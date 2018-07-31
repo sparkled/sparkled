@@ -3,7 +3,7 @@ package io.sparkled.model.render;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RenderedChannel {
+public class RenderedStagePropData {
 
     private final int ledCount;
     private final byte[] data;
@@ -15,11 +15,11 @@ public class RenderedChannel {
      * Default constructor required for Gson.
      */
     @SuppressWarnings("unused")
-    public RenderedChannel() {
+    public RenderedStagePropData() {
         this(0, 0, 0, new byte[]{});
     }
 
-    public RenderedChannel(int startFrame, int endFrame, int ledCount, byte[] data) {
+    public RenderedStagePropData(int startFrame, int endFrame, int ledCount, byte[] data) {
         this.ledCount = ledCount;
         this.data = data;
 

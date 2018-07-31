@@ -2,7 +2,7 @@ package io.sparkled.rest;
 
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAnimation;
-import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.validator.SongAnimationValidator;
 import io.sparkled.renderer.Renderer;
 import io.sparkled.persistence.song.SongPersistenceService;
@@ -37,7 +37,7 @@ public class RenderPreviewRestService extends RestService {
             songAnimationValidator.validate(songAnimation);
 
             Song song = songOptional.get();
-            RenderedChannelMap renderResult = new Renderer(song, songAnimation, startFrame, durationFrames).render();
+            RenderedStagePropDataMap renderResult = new Renderer(song, songAnimation, startFrame, durationFrames).render();
             return getJsonResponse(renderResult);
         } else {
             return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");

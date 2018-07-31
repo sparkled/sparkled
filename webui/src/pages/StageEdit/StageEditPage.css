@@ -1,0 +1,29 @@
+.stage-editor .prop-selector {
+  height: 80px;
+  border-bottom: 2px solid #202d3a;
+  padding: 5px;
+}
+
+.prop-selector-item {
+  height: 100%;
+  padding: 10px;
+  margin: 5px;
+}
+
+.stage-editor .stage-prop-list {
+  width: 300px;
+  overflow: auto;
+  border-left: 2px solid #202d3a;
+}
+
+.stage-editor .stage-prop-list-entry {
+  margin: 5px;
+}
+
+.stage-editor .stage-canvas-container {
+  overflow: auto;
+}
+
+.stage-editor .stage-canvas {
+  border: 2px solid #000;
+}

@@ -11,13 +11,19 @@
             <column name="name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
+            <column name="width" type="INT(10)" defaultValueNumeric="800">
+                <constraints nullable="false"/>
+            </column>
+            <column name="height" type="INT(10)" defaultValueNumeric="600">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
-    <changeSet author="chrisparton1991" id="create-table-stage-channel">
-        <createTable tableName="stage_channel">
+    <changeSet author="chrisparton1991" id="create-table-stage-prop">
+        <createTable tableName="stage_prop">
             <column autoIncrement="true" name="id" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="pk_stage_channel"/>
+                <constraints primaryKey="true" primaryKeyName="pk_stage_prop"/>
             </column>
             <column name="code" type="VARCHAR(8)">
                 <constraints nullable="false"/>
@@ -28,19 +34,25 @@
             <column name="type" type="VARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
+            <column name="leds" type="INT(10)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
             <column name="position_x" type="INT(10)" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
             <column name="position_y" type="INT(10)" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
-            <column name="scale_x" type="INT(10)" defaultValueNumeric="1">
+            <column name="scale_x" type="FLOAT(4)" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
-            <column name="scale_y" type="INT(10)" defaultValueNumeric="1">
+            <column name="scale_y" type="FLOAT(4)" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
             <column name="rotation" type="INT(10)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_order" type="INT(10)" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
             <column name="stage_id" type="INT(10)">
@@ -48,9 +60,9 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="stage_channel" baseColumnNames="stage_id"
+        <addForeignKeyConstraint baseTableName="stage_prop" baseColumnNames="stage_id"
                                  referencedTableName="stage" referencedColumnNames="id"
-                                 constraintName="fk_stage_channel_stage_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_stage_prop_stage_id" onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 
@@ -91,15 +103,15 @@
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 
-    <changeSet author="chrisparton1991" id="create-table-rendered-channel-data">
-        <createTable tableName="rendered_channel_data">
+    <changeSet author="chrisparton1991" id="create-table-rendered-stage-prop">
+        <createTable tableName="rendered_stage_prop">
             <column autoIncrement="true" name="id" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="pk_rendered_channel_data"/>
+                <constraints primaryKey="true" primaryKeyName="pk_rendered_stage_prop"/>
             </column>
             <column name="song_id" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="channel_code" type="VARCHAR(16)">
+            <column name="stage_prop_code" type="VARCHAR(16)">
                 <constraints nullable="false"/>
             </column>
             <column name="led_count" type="INT(10)">
@@ -110,9 +122,9 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="rendered_channel_data" baseColumnNames="song_id"
+        <addForeignKeyConstraint baseTableName="rendered_stage_prop" baseColumnNames="song_id"
                                  referencedTableName="song" referencedColumnNames="id"
-                                 constraintName="fk_rendered_channel_data_song_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_rendered_stage_prop_song_id" onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 

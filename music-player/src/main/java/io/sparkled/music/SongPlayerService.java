@@ -3,7 +3,7 @@ package io.sparkled.music;
 import javazoom.jl.player.advanced.PlaybackEvent;
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAudio;
-import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 
 import java.util.function.Consumer;
 
@@ -22,7 +22,7 @@ public interface SongPlayerService {
     /**
      * @return The rendered data for the song that is currently playing, or null if no song is playing.
      */
-    RenderedChannelMap getRenderedChannelMap();
+    RenderedStagePropDataMap getRenderedStagePropDataMap();
 
     /**
      * @return A value between 0 and 1 indicating the playback progress of the current song.

@@ -24,8 +24,6 @@ import java.util.logging.Logger;
 @Consumes(MediaType.APPLICATION_JSON)
 public class JerseyGsonProvider implements MessageBodyWriter<Object>, MessageBodyReader<Object> {
 
-    private static final Logger logger = Logger.getLogger(JerseyGsonProvider.class.getName());
-
     @Override
     public boolean isReadable(Class<?> type, Type genericType,
                               java.lang.annotation.Annotation[] annotations, MediaType mediaType) {
@@ -38,10 +36,7 @@ public class JerseyGsonProvider implements MessageBodyWriter<Object>, MessageBod
                            MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
         try (InputStreamReader streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
             return GsonProvider.get().fromJson(streamReader, genericType);
-        } catch (JsonSyntaxException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        return null;
     }
 
     @Override

@@ -10,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Path("/stages")
@@ -30,6 +31,28 @@ public class StageRestService extends RestService {
             stage.setId(null);
             int stageId = stagePersistenceService.saveStage(stage);
             return getJsonResponse(new IdResponse(stageId));
+        } catch (EntityValidationException e) {
+            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateStage(@PathParam("id") int id, Stage stage) {
+        if (id != stage.getId()) {
+            return getJsonResponse(Response.Status.BAD_REQUEST, "Stage ID does not match URL.");
+        }
+
+        try {
+            Integer savedId = stagePersistenceService.saveStage(stage);
+            if (savedId == null) {
+                return getJsonResponse(Response.Status.NOT_FOUND, "Stage not found.");
+            } else {
+                IdResponse idResponse = new IdResponse(savedId);
+                return getJsonResponse(idResponse);
+            }
         } catch (EntityValidationException e) {
             return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
         }

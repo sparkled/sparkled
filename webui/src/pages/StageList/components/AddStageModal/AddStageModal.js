@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import InputField from '../../../../components/form/InputField';
 import { required } from '../../../../components/form/validators';
-import { addStage } from '../../../../services/stage/actions';
+import { addStage } from '../../../../services/stageList/actions';
 import { hideAddModal } from '../../actions';
 
 class AddStageModal extends Component {
@@ -61,11 +61,11 @@ class AddStageModal extends Component {
   }
 }
 
-function mapStateToProps({ data: { stages }, page: { stageList } }) {
+function mapStateToProps({ data: { stageList }, page }) {
   return {
-    addModalVisible: stageList.addModalVisible,
-    adding: stages.adding,
-    addError: stages.addError
+    addModalVisible: page.stageList.addModalVisible,
+    adding: stageList.adding,
+    addError: stageList.addError
   };
 }
 

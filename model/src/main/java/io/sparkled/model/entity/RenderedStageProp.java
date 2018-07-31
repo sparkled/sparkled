@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
-@Table(name = "rendered_channel_data")
-public class RenderedChannelData {
+@Table(name = "rendered_stage_prop")
+public class RenderedStageProp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +16,8 @@ public class RenderedChannelData {
     @Column(name = "song_id", nullable = false)
     private int songId;
 
-    @Column(name = "channel_code", nullable = false)
-    private String channelCode;
+    @Column(name = "stage_prop_code", nullable = false)
+    private String stagePropCode;
 
     @Column(name = "led_count", nullable = false)
     private int ledCount;
@@ -31,7 +31,7 @@ public class RenderedChannelData {
         return id;
     }
 
-    public RenderedChannelData setId(int id) {
+    public RenderedStageProp setId(int id) {
         this.id = id;
         return this;
     }
@@ -40,17 +40,17 @@ public class RenderedChannelData {
         return songId;
     }
 
-    public RenderedChannelData setSongId(int songId) {
+    public RenderedStageProp setSongId(int songId) {
         this.songId = songId;
         return this;
     }
 
-    public String getChannelCode() {
-        return channelCode;
+    public String getStagePropCode() {
+        return stagePropCode;
     }
 
-    public RenderedChannelData setChannelCode(String channelCode) {
-        this.channelCode = channelCode;
+    public RenderedStageProp setStagePropCode(String stagePropCode) {
+        this.stagePropCode = stagePropCode;
         return this;
     }
 
@@ -58,7 +58,7 @@ public class RenderedChannelData {
         return ledCount;
     }
 
-    public RenderedChannelData setLedCount(int ledCount) {
+    public RenderedStageProp setLedCount(int ledCount) {
         this.ledCount = ledCount;
         return this;
     }
@@ -67,7 +67,7 @@ public class RenderedChannelData {
         return data;
     }
 
-    public RenderedChannelData setData(byte[] data) {
+    public RenderedStageProp setData(byte[] data) {
         this.data = data;
         return this;
     }
@@ -76,14 +76,14 @@ public class RenderedChannelData {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RenderedChannelData that = (RenderedChannelData) o;
+        RenderedStageProp that = (RenderedStageProp) o;
         return songId == that.songId &&
-                Objects.equals(channelCode, that.channelCode) &&
+                Objects.equals(stagePropCode, that.stagePropCode) &&
                 Arrays.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(songId, channelCode, data);
+        return Objects.hash(songId, stagePropCode, data);
     }
 }

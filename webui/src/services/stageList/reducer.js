@@ -6,11 +6,6 @@ const initialState = {
   fetchError: null,
   fetchSuccess: null,
   adding: false,
-  addError: null,
-  addSuccess: null,
-  deleting: false,
-  deleteError: null,
-  deleteSuccess: null,
   data: []
 };
 

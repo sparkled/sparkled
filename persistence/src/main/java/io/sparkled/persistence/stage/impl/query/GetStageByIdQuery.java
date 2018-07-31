@@ -1,15 +1,15 @@
 package io.sparkled.persistence.stage.impl.query;
 
 import io.sparkled.model.entity.Stage;
+import io.sparkled.model.entity.StageProp;
 import io.sparkled.model.entity.Stage_;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.util.PersistenceUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.FetchType;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.Optional;
 
 public class GetStageByIdQuery implements PersistenceQuery<Optional<Stage>> {

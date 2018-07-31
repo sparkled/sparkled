@@ -5,7 +5,7 @@ import Alert from 'react-s-alert';
 import { Nav, NavItem } from 'reactstrap';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import { fetchStages } from '../../services/stage/actions';
+import { fetchStages } from '../../services/stageList/actions';
 import { showAddModal } from './actions';
 import AddStageModal from './components/AddStageModal';
 import DeleteStageModal from './components/DeleteStageModal';
@@ -31,7 +31,7 @@ class StageListPage extends Component {
 
   render() {
     const pageBody = (
-      <div>
+      <div className="container">
         <div className="row">
           <div className="col-lg-12 input-group input-group-lg my-4">
             <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
@@ -123,13 +123,13 @@ class StageListPage extends Component {
   }
 }
 
-function mapStateToProps({ data: { stages } }) {
+function mapStateToProps({ data: { stageList } }) {
   return {
-    stages: stages.data,
-    fetching: stages.fetching,
-    fetchError: stages.fetchError,
-    addSuccess: stages.addSuccess,
-    deleteSuccess: stages.deleteSuccess
+    stages: stageList.data,
+    fetching: stageList.fetching,
+    fetchError: stageList.fetchError,
+    addSuccess: stageList.addSuccess,
+    deleteSuccess: stageList.deleteSuccess
   };
 }
 

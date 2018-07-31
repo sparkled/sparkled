@@ -45,10 +45,10 @@ class StageEntry extends Component {
   }
 }
 
-function mapStateToProps({ data: { stages }, page: { stageList } }) {
+function mapStateToProps({ data: { stageList }, page }) {
   return {
-    stageToDelete: stageList.stageToDelete,
-    deleting: stages.deleting
+    stageToDelete: page.stageList.stageToDelete,
+    deleting: stageList.deleting
   };
 }
 

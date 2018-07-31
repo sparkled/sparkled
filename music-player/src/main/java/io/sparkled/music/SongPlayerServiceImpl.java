@@ -2,7 +2,7 @@ package io.sparkled.music;
 
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAudio;
-import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.persistence.song.SongPersistenceService;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.AudioDevice;
@@ -25,7 +25,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
     private final AggregatePlaybackListener playbackListener = new AggregatePlaybackListener();
     private AudioDevice audioDevice;
     private Song currentSong;
-    private RenderedChannelMap renderedChannelMap;
+    private RenderedStagePropDataMap renderedStagePropDataMap;
 
     @Inject
     public SongPlayerServiceImpl(SongPersistenceService songPersistenceService) {
@@ -40,7 +40,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
     public void play(Song song, SongAudio songAudio) {
         logger.info("Playing song " + song.getName());
         this.currentSong = song;
-        this.renderedChannelMap = songPersistenceService.getRenderedChannels(song);
+        this.renderedStagePropDataMap = songPersistenceService.getRenderedStageProps(song);
 
         try {
             FactoryRegistry r = FactoryRegistry.systemRegistry();
@@ -61,8 +61,8 @@ public class SongPlayerServiceImpl implements SongPlayerService {
     }
 
     @Override
-    public RenderedChannelMap getRenderedChannelMap() {
-        return renderedChannelMap;
+    public RenderedStagePropDataMap getRenderedStagePropDataMap() {
+        return renderedStagePropDataMap;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class SongPlayerServiceImpl implements SongPlayerService {
         }
 
         this.currentSong = null;
-        this.renderedChannelMap = null;
+        this.renderedStagePropDataMap = null;
         this.audioDevice = null;
     }
 }
