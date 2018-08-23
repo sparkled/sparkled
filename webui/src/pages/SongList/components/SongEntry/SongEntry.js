@@ -65,10 +65,10 @@ class SongEntry extends Component {
   }
 }
 
-function mapStateToProps({ data: { songs }, page: { songList } }) {
+function mapStateToProps({ page: { songList } }) {
   return {
     songToDelete: songList.songToDelete,
-    deleting: songs.deleting
+    deleting: songList.deleting
   };
 }
 

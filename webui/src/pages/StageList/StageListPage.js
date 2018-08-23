@@ -5,8 +5,7 @@ import Alert from 'react-s-alert';
 import { Nav, NavItem } from 'reactstrap';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import { fetchStages } from '../../services/stageList/actions';
-import { showAddModal } from './actions';
+import { fetchStages, showAddModal } from './actions';
 import AddStageModal from './components/AddStageModal';
 import DeleteStageModal from './components/DeleteStageModal';
 import StageEntry from './components/StageEntry';
@@ -20,12 +19,13 @@ class StageListPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.deleteSuccess && nextProps.deleteSuccess) {
+    const { props } = this;
+    if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
       Alert.success('Stage deleted successfully');
-      this.props.fetchStages();
-    } else if (!this.props.addSuccess && nextProps.addSuccess) {
+      nextProps.fetchStages();
+    } else if (this.props.adding && !nextProps.adding && !nextProps.addError) {
       Alert.success('Stage added successfully');
-      this.props.fetchStages();
+      nextProps.fetchStages();
     }
   }
 
@@ -79,7 +79,7 @@ class StageListPage extends Component {
 
   renderError() {
     return (
-      <div className="card card-outline-danger">
+      <div className="card border-danger">
         <div className="card-body">
           <p>Failed to load stages: {this.props.fetchError}</p>
           <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
@@ -91,7 +91,7 @@ class StageListPage extends Component {
   renderStages() {
     if (_.isEmpty(this.props.stages)) {
       return (
-        <div className="card card-outline-info">
+        <div className="card border-info">
           <div className="card-body">
             No stages have been added.
           </div>
@@ -123,13 +123,15 @@ class StageListPage extends Component {
   }
 }
 
-function mapStateToProps({ data: { stageList } }) {
+function mapStateToProps({ page: { stageList } }) {
   return {
-    stages: stageList.data,
+    stages: stageList.stages,
     fetching: stageList.fetching,
     fetchError: stageList.fetchError,
-    addSuccess: stageList.addSuccess,
-    deleteSuccess: stageList.deleteSuccess
+    adding: stageList.adding,
+    addError: stageList.addError,
+    deleting: stageList.deleting,
+    deleteError: stageList.deleteError
   };
 }
 

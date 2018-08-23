@@ -1,6 +1,7 @@
 package io.sparkled.model.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ public class Stage {
     private int height;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "stageId", targetEntity = StageProp.class)
-    private List<StageProp> stageProps;
+    private List<StageProp> stageProps = new ArrayList<>();
 
     public Integer getId() {
         return id;

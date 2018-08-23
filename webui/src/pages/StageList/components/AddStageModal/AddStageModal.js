@@ -4,10 +4,15 @@ import { Field, reduxForm } from 'redux-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import InputField from '../../../../components/form/InputField';
 import { required } from '../../../../components/form/validators';
-import { addStage } from '../../../../services/stageList/actions';
-import { hideAddModal } from '../../actions';
+import { addStage, hideAddModal } from '../../actions';
 
 class AddStageModal extends Component {
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.addModalVisible && nextProps.addModalVisible) {
+      this.props.initialize({});
+    }
+  }
 
   render() {
     const { adding, addModalVisible, handleSubmit, valid } = this.props;
@@ -43,7 +48,7 @@ class AddStageModal extends Component {
       return null;
     } else {
       return (
-        <div className="card card-outline-danger">
+        <div className="card border-danger">
           <div className="card-body">Failed to add stage: {addError}</div>
         </div>
       );
@@ -56,14 +61,13 @@ class AddStageModal extends Component {
 
   addStage(stage) {
     const { addStage } = this.props;
-
-    addStage(stage);
+    addStage({ ...stage, width: 800, height: 600 });
   }
 }
 
-function mapStateToProps({ data: { stageList }, page }) {
+function mapStateToProps({ page: { stageList } }) {
   return {
-    addModalVisible: page.stageList.addModalVisible,
+    addModalVisible: stageList.addModalVisible,
     adding: stageList.adding,
     addError: stageList.addError
   };

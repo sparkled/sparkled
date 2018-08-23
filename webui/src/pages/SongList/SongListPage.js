@@ -5,8 +5,8 @@ import Alert from 'react-s-alert';
 import { Nav, NavItem } from 'reactstrap';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import { fetchSongs } from '../../services/song/actions';
-import { showAddModal } from './actions';
+import { fetchSongs, showAddModal } from './actions';
+import { fetchStages } from '../StageList/actions';
 import AddSongModal from './components/AddSongModal';
 import DeleteSongModal from './components/DeleteSongModal';
 import SongEntry from './components/SongEntry';
@@ -17,15 +17,17 @@ class SongListPage extends Component {
 
   componentDidMount() {
     this.props.fetchSongs();
+    this.props.fetchStages();
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.deleteSuccess && nextProps.deleteSuccess) {
+    const { props } = this;
+    if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
       Alert.success('Song deleted successfully');
-      this.props.fetchSongs();
-    } else if (!this.props.addSuccess && nextProps.addSuccess) {
+      nextProps.fetchSongs();
+    } else if (props.adding && !nextProps.adding && !nextProps.addError) {
       Alert.success('Song added successfully');
-      this.props.fetchSongs();
+      nextProps.fetchSongs();
     }
   }
 
@@ -43,7 +45,7 @@ class SongListPage extends Component {
           <div className="col-lg-12">{this.renderContent()}</div>
         </div>
 
-        <AddSongModal/>
+        <AddSongModal stages={this.props.stages}/>
         <DeleteSongModal/>
       </div>
     );
@@ -52,9 +54,10 @@ class SongListPage extends Component {
   }
 
   renderNavbar() {
+    const canAdd = this.props.songs && this.props.stages;
     return (
       <Nav className="ml-auto" navbar>
-        <NavItem>
+        <NavItem className={canAdd ? '' : 'd-none'}>
           <span className="nav-link" onClick={this.props.showAddModal}>Add Song</span>
         </NavItem>
       </Nav>
@@ -62,12 +65,14 @@ class SongListPage extends Component {
   }
 
   renderContent() {
-    const { fetchError, fetching } = this.props;
+    const { fetching, fetchingStages, fetchError, fetchStagesError } = this.props;
 
-    if (fetching) {
+    if (fetching || fetchingStages) {
       return this.renderLoading();
     } else if (fetchError) {
-      return this.renderError();
+      return this.renderError(`Failed to load songs: ${fetchError}`);
+    } else if (fetchStagesError) {
+      return this.renderError(`Failed to load stages: ${fetchStagesError}`);
     } else {
       return this.renderSongs();
     }
@@ -77,11 +82,11 @@ class SongListPage extends Component {
     return <LoadingIndicator size={100}/>;
   }
 
-  renderError() {
+  renderError(error) {
     return (
-      <div className="card card-outline-danger">
+      <div className="card border-danger">
         <div className="card-body">
-          <p>Failed to load songs: {this.props.fetchError}</p>
+          <p>{error}</p>
           <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
         </div>
       </div>
@@ -91,7 +96,7 @@ class SongListPage extends Component {
   renderSongs() {
     if (_.isEmpty(this.props.songs)) {
       return (
-        <div className="card card-outline-info">
+        <div className="card border-info">
           <div className="card-body">
             No songs have been added.
           </div>
@@ -123,14 +128,19 @@ class SongListPage extends Component {
   }
 }
 
-function mapStateToProps({ data: { songs } }) {
+function mapStateToProps({ page: { songList, stageList } }) {
   return {
-    songs: songs.data,
-    fetching: songs.fetching,
-    fetchError: songs.fetchError,
-    addSuccess: songs.addSuccess,
-    deleteSuccess: songs.deleteSuccess
+    songs: songList.songs,
+    fetching: songList.fetching,
+    fetchError: songList.fetchError,
+    stages: stageList.stages,
+    fetchingStages: stageList.fetching,
+    fetchStagesError: stageList.fetchError,
+    adding: songList.adding,
+    addError: songList.addError,
+    deleting: songList.deleting,
+    deleteError: songList.deleteError
   };
 }
 
-export default connect(mapStateToProps, { showAddModal, fetchSongs })(SongListPage);
+export default connect(mapStateToProps, { showAddModal, fetchSongs, fetchStages })(SongListPage);
