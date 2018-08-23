@@ -4,7 +4,7 @@ import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAnimation;
 import io.sparkled.model.entity.SongAudio;
-import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.persistence.song.impl.query.*;
 import io.sparkled.persistence.song.SongPersistenceService;
 
@@ -73,20 +73,20 @@ public class SongPersistenceServiceImpl implements SongPersistenceService {
 
     @Override
     @Transactional
-    public RenderedChannelMap getRenderedChannels(Song song) {
-        return new GetRenderedChannelsQuery(song).perform(entityManagerProvider.get());
+    public RenderedStagePropDataMap getRenderedStageProps(Song song) {
+        return new GetRenderedStagePropsQuery(song).perform(entityManagerProvider.get());
     }
 
     @Override
     @Transactional
-    public void saveRenderedChannels(Song song, RenderedChannelMap renderedChannelMap) {
-        deleteRenderedChannels(song.getId());
-        new SaveRenderedChannelsQuery(song, renderedChannelMap).perform(entityManagerProvider.get());
+    public void saveRenderedChannels(Song song, RenderedStagePropDataMap renderedStagePropDataMap) {
+        deleteRenderedStageProps(song.getId());
+        new SaveRenderedStagePropQuery(song, renderedStagePropDataMap).perform(entityManagerProvider.get());
     }
 
     @Override
     @Transactional
-    public void deleteRenderedChannels(int songId) {
-        new DeleteRenderedChannelsQuery(songId).perform(entityManagerProvider.get());
+    public void deleteRenderedStageProps(int songId) {
+        new DeleteRenderedStagePropsQuery(songId).perform(entityManagerProvider.get());
     }
 }

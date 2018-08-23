@@ -3,7 +3,7 @@ package io.sparkled.persistence.song;
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAnimation;
 import io.sparkled.model.entity.SongAudio;
-import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +26,9 @@ public interface SongPersistenceService {
 
     Integer saveSongAnimation(SongAnimation songAnimation);
 
-    RenderedChannelMap getRenderedChannels(Song song);
+    RenderedStagePropDataMap getRenderedStageProps(Song song);
 
-    void saveRenderedChannels(Song song, RenderedChannelMap renderedChannelMap);
+    void saveRenderedChannels(Song song, RenderedStagePropDataMap renderedStagePropDataMap);
 
-    void deleteRenderedChannels(int songId);
+    void deleteRenderedStageProps(int songId);
 }

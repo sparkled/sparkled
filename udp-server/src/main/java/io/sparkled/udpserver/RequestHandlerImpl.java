@@ -1,7 +1,7 @@
 package io.sparkled.udpserver;
 
 import io.sparkled.model.entity.Song;
-import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.music.SongPlayerServiceImpl;
 
@@ -32,15 +32,15 @@ public class RequestHandlerImpl implements RequestHandler {
             String controller = components[1];
             double progress = songPlayerService.getSongProgress();
             Song currentSong = songPlayerService.getCurrentSong();
-            RenderedChannelMap renderedChannelMap = songPlayerService.getRenderedChannelMap();
+            RenderedStagePropDataMap renderedStagePropDataMap = songPlayerService.getRenderedStagePropDataMap();
 
-            if (currentSong == null || renderedChannelMap == null) {
+            if (currentSong == null || renderedStagePropDataMap == null) {
                 respond(serverSocket, receivePacket, "ERR".getBytes(StandardCharsets.US_ASCII));
             } else {
                 final int durationFrames = currentSong.getDurationFrames();
                 final int frameIndex = (int) Math.min(durationFrames - 1, Math.round(progress * durationFrames));
 
-                RenderedFrame renderedFrame = renderedChannelMap.get(controller).getFrames().get(frameIndex);
+                RenderedFrame renderedFrame = renderedStagePropDataMap.get(controller).getFrames().get(frameIndex);
                 respond(serverSocket, receivePacket, renderedFrame.getData());
             }
         } else {

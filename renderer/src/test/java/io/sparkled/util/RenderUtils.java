@@ -6,28 +6,28 @@ import io.sparkled.model.animation.effect.Effect;
 import io.sparkled.model.animation.effect.EffectChannel;
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAnimation;
-import io.sparkled.model.render.RenderedChannel;
-import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.model.render.RenderedStagePropData;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.renderer.Renderer;
 
 import java.util.Collections;
 
 public class RenderUtils {
 
-    private static final String CHANNEL_CODE = "CH1";
+    private static final String PROP_CODE = "A1";
     private static final Gson gson = new Gson();
 
     private RenderUtils() {
     }
 
-    public static RenderedChannel render(Effect effect, int frameCount, int ledCount) {
+    public static RenderedStagePropData render(Effect effect, int frameCount, int ledCount) {
         effect.setStartFrame(0);
         effect.setEndFrame(frameCount - 1);
         SongAnimationData animationData = new SongAnimationData();
 
         EffectChannel channel = new EffectChannel()
                 .setEndLed(ledCount - 1)
-                .setCode(CHANNEL_CODE)
+                .setPropCode(PROP_CODE)
                 .setEffects(Collections.singletonList(effect));
 
         animationData.getChannels().add(channel);
@@ -35,7 +35,7 @@ public class RenderUtils {
         Song song = new Song().setDurationFrames(frameCount);
         SongAnimation songAnimation = new SongAnimation().setAnimationData(gson.toJson(animationData));
 
-        RenderedChannelMap renderedChannels = new Renderer(song, songAnimation, 0, frameCount).render();
-        return renderedChannels.get(CHANNEL_CODE);
+        RenderedStagePropDataMap renderedChannels = new Renderer(song, songAnimation, 0, frameCount).render();
+        return renderedChannels.get(PROP_CODE);
     }
 }

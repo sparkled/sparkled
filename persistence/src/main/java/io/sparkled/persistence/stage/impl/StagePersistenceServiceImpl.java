@@ -2,11 +2,9 @@ package io.sparkled.persistence.stage.impl;
 
 import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.Stage;
+import io.sparkled.model.entity.StageProp;
 import io.sparkled.persistence.stage.StagePersistenceService;
-import io.sparkled.persistence.stage.impl.query.DeleteStageQuery;
-import io.sparkled.persistence.stage.impl.query.GetAllStagesQuery;
-import io.sparkled.persistence.stage.impl.query.GetStageByIdQuery;
-import io.sparkled.persistence.stage.impl.query.SaveStageQuery;
+import io.sparkled.persistence.stage.impl.query.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

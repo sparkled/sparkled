@@ -1,5 +1,5 @@
 import * as stageListActionTypes from './actionTypes';
-import * as stageActionTypes from '../../services/stage/actionTypes';
+import * as stageActionTypes from '../../services/stageList/actionTypes';
 
 const initialState = {
   stageToDelete: null,

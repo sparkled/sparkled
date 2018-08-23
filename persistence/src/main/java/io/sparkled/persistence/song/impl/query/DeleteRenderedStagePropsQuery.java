@@ -1,25 +1,25 @@
 package io.sparkled.persistence.song.impl.query;
 
-import io.sparkled.model.entity.RenderedChannelData;
+import io.sparkled.model.entity.RenderedStageProp;
 import io.sparkled.persistence.PersistenceQuery;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.logging.Logger;
 
-public class DeleteRenderedChannelsQuery implements PersistenceQuery<Void> {
+public class DeleteRenderedStagePropsQuery implements PersistenceQuery<Void> {
 
-    private static final Logger logger = Logger.getLogger(DeleteRenderedChannelsQuery.class.getName());
+    private static final Logger logger = Logger.getLogger(DeleteRenderedStagePropsQuery.class.getName());
 
     private final int songId;
 
-    public DeleteRenderedChannelsQuery(int songId) {
+    public DeleteRenderedStagePropsQuery(int songId) {
         this.songId = songId;
     }
 
     @Override
     public Void perform(EntityManager entityManager) {
-        String className = RenderedChannelData.class.getSimpleName();
+        String className = RenderedStageProp.class.getSimpleName();
         Query query = entityManager.createQuery("delete from " + className + " where songId = :id");
         query.setParameter("id", songId);
 

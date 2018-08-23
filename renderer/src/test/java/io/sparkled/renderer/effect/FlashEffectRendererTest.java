@@ -8,7 +8,7 @@ import io.sparkled.model.animation.fill.Fill;
 import io.sparkled.model.animation.fill.FillTypeCode;
 import io.sparkled.model.animation.param.Param;
 import io.sparkled.model.animation.param.ParamName;
-import io.sparkled.model.render.RenderedChannel;
+import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.util.matchers.SparkledMatchers;
 import io.sparkled.util.RenderUtils;
 import org.hamcrest.MatcherAssert;
@@ -35,10 +35,10 @@ public class FlashEffectRendererTest {
                                 )
                 );
 
-        RenderedChannel renderedChannel = RenderUtils.render(effect, 11, 10);
+        RenderedStagePropData renderedStagePropData = RenderUtils.render(effect, 11, 10);
 
         final int[] c = new int[]{0x000000, 0x333333, 0x666666, 0x999999, 0xCCCCCC, 0xFFFFFF};
-        MatcherAssert.assertThat(renderedChannel, SparkledMatchers.hasLeds(new int[][]{
+        MatcherAssert.assertThat(renderedStagePropData, SparkledMatchers.hasLeds(new int[][]{
                 {c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]},
                 {c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1]},
                 {c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2]},

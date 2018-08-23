@@ -31,7 +31,7 @@ class SongListPage extends Component {
 
   render() {
     const pageBody = (
-      <div>
+      <div className="container">
         <div className="row">
           <div className="col-lg-12 input-group input-group-lg my-4">
             <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}

@@ -8,7 +8,7 @@ public class EffectChannel {
 
     private List<Effect> effects = new ArrayList<>();
     private String name;
-    private String code;
+    private String propCode;
     private int startLed = 0;
     private int endLed = 0;
     private int displayOrder;
@@ -35,12 +35,12 @@ public class EffectChannel {
         return this;
     }
 
-    public String getCode() {
-        return code;
+    public String getPropCode() {
+        return propCode;
     }
 
-    public EffectChannel setCode(String code) {
-        this.code = code;
+    public EffectChannel setPropCode(String code) {
+        this.propCode = code;
         return this;
     }
 
@@ -81,12 +81,12 @@ public class EffectChannel {
                 displayOrder == that.displayOrder &&
                 Objects.equals(effects, that.effects) &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(code, that.code);
+                Objects.equals(propCode, that.propCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(effects, name, code, startLed, endLed, displayOrder);
+        return Objects.hash(effects, name, propCode, startLed, endLed, displayOrder);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class EffectChannel {
         return "EffectChannel{" +
                 "effects=" + effects +
                 ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
+                ", stagePropCode='" + propCode + '\'' +
                 ", startLed=" + startLed +
                 ", endLed=" + endLed +
                 ", displayOrder=" + displayOrder +

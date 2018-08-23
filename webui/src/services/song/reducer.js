@@ -4,7 +4,6 @@ import * as actionTypes from './actionTypes';
 const initialState = {
   fetching: false,
   fetchError: null,
-  fetchSuccess: null,
   adding: false,
   addError: null,
   addSuccess: null,

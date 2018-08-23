@@ -3,7 +3,7 @@ package io.sparkled.rest;
 import io.sparkled.model.animation.SongAnimationData;
 import io.sparkled.model.animation.effect.EffectChannel;
 import io.sparkled.model.entity.*;
-import io.sparkled.model.render.RenderedChannelMap;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.validator.exception.EntityValidationException;
 import io.sparkled.renderer.Renderer;
 import io.sparkled.rest.response.IdResponse;
@@ -95,9 +95,14 @@ public class SongRestService extends RestService {
     }
 
     @PUT
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSong(Song song) {
+    public Response updateSong(@PathParam("id") int id, Song song) {
+        if (id != song.getId()) {
+            return getJsonResponse(Response.Status.BAD_REQUEST, "Song ID does not match URL.");
+        }
+
         try {
             Integer savedId = songPersistenceService.saveSong(song);
             if (savedId == null) {
@@ -108,8 +113,6 @@ public class SongRestService extends RestService {
             }
         } catch (EntityValidationException e) {
             return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
-        } catch (Exception e) {
-            return getJsonResponse(Response.Status.INTERNAL_SERVER_ERROR, "An internal error occurred.");
         }
     }
 
@@ -165,8 +168,6 @@ public class SongRestService extends RestService {
             }
         } catch (EntityValidationException e) {
             return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
-        } catch (Exception e) {
-            return getJsonResponse(Response.Status.INTERNAL_SERVER_ERROR, "An internal error occurred.");
         }
     }
 
@@ -204,7 +205,7 @@ public class SongRestService extends RestService {
         int endLed = startLed + ledCount - 1;
         EffectChannel channel = new EffectChannel()
                 .setName(channelName)
-                .setCode(channelCode)
+                .setPropCode(channelCode)
                 .setDisplayOrder(displayOrder)
                 .setStartLed(startLed)
                 .setEndLed(endLed);
@@ -229,8 +230,8 @@ public class SongRestService extends RestService {
         songPersistenceService.saveSongAnimation(songAnimation);
     }
 
-    private void persistRenderedSong(Song song, SongAnimation songAnimation) throws IOException {
-        RenderedChannelMap renderedChannelMap = new Renderer(song, songAnimation).render();
-        songPersistenceService.saveRenderedChannels(song, renderedChannelMap);
+    private void persistRenderedSong(Song song, SongAnimation songAnimation) {
+        RenderedStagePropDataMap renderedStagePropDataMap = new Renderer(song, songAnimation).render();
+        songPersistenceService.saveRenderedChannels(song, renderedStagePropDataMap);
     }
 }

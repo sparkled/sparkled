@@ -31,7 +31,7 @@ class SchedulerPage extends Component {
 
   render() {
     const pageBody = (
-      <div>
+      <div className="container">
         <div className="row">
           <div className="col-lg-12">
             <DatePicker
