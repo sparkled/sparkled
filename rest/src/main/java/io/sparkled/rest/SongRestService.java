@@ -2,12 +2,15 @@ package io.sparkled.rest;
 
 import io.sparkled.model.animation.SongAnimationData;
 import io.sparkled.model.animation.effect.EffectChannel;
-import io.sparkled.model.entity.*;
+import io.sparkled.model.entity.Song;
+import io.sparkled.model.entity.SongAnimation;
+import io.sparkled.model.entity.SongAudio;
+import io.sparkled.model.entity.SongStatus;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.validator.exception.EntityValidationException;
+import io.sparkled.persistence.song.SongPersistenceService;
 import io.sparkled.renderer.Renderer;
 import io.sparkled.rest.response.IdResponse;
-import io.sparkled.persistence.song.SongPersistenceService;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -71,8 +74,7 @@ public class SongRestService extends RestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createSong(@FormDataParam("song") String songJson,
                                @FormDataParam("mp3") InputStream uploadedInputStream,
-                               @FormDataParam("mp3") FormDataContentDisposition fileDetail) {
-
+                               @FormDataParam("mp3") FormDataContentDisposition fileDetail) throws IOException {
         try {
             Song song = gson.fromJson(songJson, Song.class);
             int songId = persistSong(song);
@@ -81,8 +83,6 @@ public class SongRestService extends RestService {
             return getJsonResponse(new IdResponse(songId));
         } catch (EntityValidationException e) {
             return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
-        } catch (IOException e) {
-            return getResponse(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -5,21 +5,24 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import InputField from '../../../../components/form/InputField';
+import SingleSelectField from '../../../../components/form/SingleSelectField';
 import { required } from '../../../../components/form/validators';
-import { addSong } from '../../../../services/song/actions';
-import { hideAddModal } from '../../actions';
+import { addSong, hideAddModal } from '../../actions';
 import './AddSongModal.css';
 
 class AddSongModal extends Component {
 
   state = { mp3: null };
 
-  componentWillMount() {
-    this.props.initialize({ framesPerSecond: 60 });
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.addModalVisible && nextProps.addModalVisible) {
+      this.setState({mp3: null});
+      this.props.initialize({ framesPerSecond: 60 });
+    }
   }
 
   render() {
-    const { adding, addModalVisible, handleSubmit, valid } = this.props;
+    const { adding, addModalVisible, handleSubmit, stages, valid } = this.props;
     const addButtonText = adding ? 'Adding...' : 'Add song';
     const canSubmit = valid && this.state.mp3;
     const dropzoneText = this.state.mp3 ? `Selected file: ${this.state.mp3.name}.` : 'Drop .mp3 file here, or click.';
@@ -37,6 +40,9 @@ class AddSongModal extends Component {
               </Dropzone>
 
               <Field name="name" component={InputField} label="Song Title" type="text"
+                     required={true} validate={required}/>
+
+              <Field name="stageId" component={SingleSelectField} label="Stage ID" type="text" options={stages}
                      required={true} validate={required}/>
 
               <div className="row">
@@ -107,7 +113,7 @@ class AddSongModal extends Component {
       return null;
     } else {
       return (
-        <div className="card card-outline-danger">
+        <div className="card border-danger">
           <div className="card-body">Failed to add song: {addError}</div>
         </div>
       );
@@ -131,11 +137,11 @@ class AddSongModal extends Component {
   }
 }
 
-function mapStateToProps({ data: { songs }, page: { songList } }) {
+function mapStateToProps({ page: { songList } }) {
   return {
     addModalVisible: songList.addModalVisible,
-    adding: songs.adding,
-    addError: songs.addError
+    adding: songList.adding,
+    addError: songList.addError
   };
 }
 

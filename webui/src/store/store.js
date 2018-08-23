@@ -2,12 +2,10 @@ import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import promiseMiddleware from 'redux-promise-middleware';
 import pageReducer from '../pages/reducer';
-import serviceReducer from '../services/reducer';
 
 const reducer = combineReducers({
   form: formReducer,
-  page: pageReducer,
-  data: serviceReducer
+  page: pageReducer
 });
 
 const createStoreWithMiddleware = applyMiddleware(

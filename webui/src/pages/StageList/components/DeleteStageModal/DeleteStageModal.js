@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { deleteStage } from '../../../../services/stageList/actions';
-import { hideDeleteModal } from '../../actions';
+import { deleteStage, hideDeleteModal } from '../../actions';
 
 class DeleteStageModal extends Component {
 
@@ -38,7 +37,7 @@ class DeleteStageModal extends Component {
       return null;
     } else {
       return (
-        <div className='card card-outline-danger'>
+        <div className='card border-danger'>
           <div className='card-body'>Failed to delete stage: {deleteError}</div>
         </div>
       );
@@ -55,9 +54,9 @@ class DeleteStageModal extends Component {
   }
 }
 
-function mapStateToProps({ data: { stageList }, page }) {
+function mapStateToProps({ page: { stageList } }) {
   return {
-    stageToDelete: page.stageList.stageToDelete,
+    stageToDelete: stageList.stageToDelete,
     deleting: stageList.deleting,
     deleteError: stageList.deleteError
   };

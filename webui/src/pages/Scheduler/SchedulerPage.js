@@ -9,7 +9,7 @@ import FormattedDateTime from '../../components/FormattedDateTime';
 import FormattedTime from '../../components/FormattedTime';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import { fetchScheduledSongs } from '../../services/scheduledSong/actions';
+import { fetchScheduledSongs } from './actions';
 
 class SchedulerPage extends Component {
 
@@ -20,12 +20,13 @@ class SchedulerPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.deleteSuccess && nextProps.deleteSuccess) {
+    const { props } = this;
+    if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
       Alert.success('Song unscheduled successfully');
-      this.props.fetchScheduledSongs();
-    } else if (!this.props.addSuccess && nextProps.addSuccess) {
+      nextProps.fetchScheduledSongs();
+    } else if (props.adding && !nextProps.adding && !nextProps.addError) {
       Alert.success('Song scheduled successfully');
-      this.props.fetchScheduledSongs();
+      nextProps.fetchScheduledSongs();
     }
   }
 
@@ -68,7 +69,7 @@ class SchedulerPage extends Component {
 
   renderError() {
     return (
-      <div className="card card-outline-danger">
+      <div className="card border-danger">
         <div className="card-body">
           <p>Failed to load songs: {this.props.fetchError}</p>
           <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
@@ -142,13 +143,15 @@ class SchedulerPage extends Component {
   }
 }
 
-function mapStateToProps({ data: { scheduledSongs } }) {
+function mapStateToProps({ page: { scheduler } }) {
   return {
-    scheduledSongs: scheduledSongs.data,
-    fetching: scheduledSongs.fetching,
-    fetchError: scheduledSongs.fetchError,
-    addSuccess: scheduledSongs.addSuccess,
-    deleteSuccess: scheduledSongs.deleteSuccess
+    scheduledSongs: scheduler.scheduledSongs,
+    fetching: scheduler.fetching,
+    fetchError: scheduler.fetchError,
+    adding: scheduler.adding,
+    addError: scheduler.addError,
+    deleting: scheduler.deleting,
+    deleteError: scheduler.deleteError
   };
 }
 
