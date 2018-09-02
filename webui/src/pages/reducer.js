@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import undoable from 'redux-undo';
 import schedulerReducer from './Scheduler/reducer';
-import songListReducer from './SongList/reducer';
+import sequenceListReducer from './SequenceList/reducer';
 import stageEditReducer from './StageEdit/reducer';
 import stageListReducer from './StageList/reducer';
 
@@ -12,7 +12,7 @@ const undoableFilter = action => {
 
 export default combineReducers({
   scheduler: schedulerReducer,
-  songList: songListReducer,
+  sequenceList: sequenceListReducer,
   stageEdit: undoable(stageEditReducer, { filter: undoableFilter }),
   stageList: stageListReducer
 });

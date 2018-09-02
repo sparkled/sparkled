@@ -13,8 +13,8 @@ public class RenderedStageProp {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "song_id", nullable = false)
-    private int songId;
+    @Column(name = "sequence_id", nullable = false)
+    private int sequenceId;
 
     @Column(name = "stage_prop_code", nullable = false)
     private String stagePropCode;
@@ -36,12 +36,12 @@ public class RenderedStageProp {
         return this;
     }
 
-    public int getSongId() {
-        return songId;
+    public int getSequenceId() {
+        return sequenceId;
     }
 
-    public RenderedStageProp setSongId(int songId) {
-        this.songId = songId;
+    public RenderedStageProp setSequenceId(int sequenceId) {
+        this.sequenceId = sequenceId;
         return this;
     }
 
@@ -77,13 +77,13 @@ public class RenderedStageProp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RenderedStageProp that = (RenderedStageProp) o;
-        return songId == that.songId &&
+        return sequenceId == that.sequenceId &&
                 Objects.equals(stagePropCode, that.stagePropCode) &&
                 Arrays.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(songId, stagePropCode, data);
+        return Objects.hash(sequenceId, stagePropCode, data);
     }
 }

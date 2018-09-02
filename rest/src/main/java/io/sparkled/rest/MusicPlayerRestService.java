@@ -1,8 +1,8 @@
 package io.sparkled.rest;
 
-import io.sparkled.model.entity.ScheduledSong;
-import io.sparkled.music.SongPlayerService;
-import io.sparkled.persistence.scheduler.ScheduledSongPersistenceService;
+import io.sparkled.model.entity.ScheduledSequence;
+import io.sparkled.music.SequencePlayerService;
+import io.sparkled.persistence.scheduler.ScheduledSequencePersistenceService;
 
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
@@ -18,26 +18,26 @@ import java.util.logging.Logger;
 public class MusicPlayerRestService extends RestService {
 
     private final Logger logger = Logger.getLogger(MusicPlayerRestService.class.getName());
-    private ScheduledSongPersistenceService scheduledSongPersistenceService;
-    private SongPlayerService songPlayerService;
+    private ScheduledSequencePersistenceService scheduledSequencePersistenceService;
+    private SequencePlayerService sequencePlayerService;
 
     @Inject
-    public MusicPlayerRestService(ScheduledSongPersistenceService scheduledSongPersistenceService,
-                                  SongPlayerService songPlayerService) {
-        this.scheduledSongPersistenceService = scheduledSongPersistenceService;
-        this.songPlayerService = songPlayerService;
+    public MusicPlayerRestService(ScheduledSequencePersistenceService scheduledSequencePersistenceService,
+                                  SequencePlayerService sequencePlayerService) {
+        this.scheduledSequencePersistenceService = scheduledSequencePersistenceService;
+        this.sequencePlayerService = sequencePlayerService;
     }
 
     @DELETE
-    @Path("/currentSong")
+    @Path("/currentSequence")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response stopCurrentSong() {
-        logger.info("Stopping current song.");
-        songPlayerService.stopCurrentSong();
+    public Response stopCurrentSequence() {
+        logger.info("Stopping current sequence.");
+        sequencePlayerService.stopCurrentSequence();
 
-        Optional<ScheduledSong> currentScheduledSong = scheduledSongPersistenceService.getScheduledSongAtTime(new Date());
-        currentScheduledSong.ifPresent(
-                scheduledSong -> scheduledSongPersistenceService.removeScheduledSong(scheduledSong.getId())
+        Optional<ScheduledSequence> currentScheduledSequence = scheduledSequencePersistenceService.getScheduledSequenceAtTime(new Date());
+        currentScheduledSequence.ifPresent(
+                scheduledSequence -> scheduledSequencePersistenceService.removeScheduledSequence(scheduledSequence.getId())
         );
 
         return getResponse(Response.Status.OK);

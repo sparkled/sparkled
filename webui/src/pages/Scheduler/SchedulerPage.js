@@ -9,24 +9,24 @@ import FormattedDateTime from '../../components/FormattedDateTime';
 import FormattedTime from '../../components/FormattedTime';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import { fetchScheduledSongs } from './actions';
+import { fetchScheduledSequences } from './actions';
 
 class SchedulerPage extends Component {
 
   state = { startDate: moment() };
 
   componentDidMount() {
-    this.props.fetchScheduledSongs(new Date());
+    this.props.fetchScheduledSequences(new Date());
   }
 
   componentWillReceiveProps(nextProps) {
     const { props } = this;
     if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
-      Alert.success('Song unscheduled successfully');
-      nextProps.fetchScheduledSongs();
+      Alert.success('Sequence unscheduled successfully');
+      nextProps.fetchScheduledSequences();
     } else if (props.adding && !nextProps.adding && !nextProps.addError) {
-      Alert.success('Song scheduled successfully');
-      nextProps.fetchScheduledSongs();
+      Alert.success('Sequence scheduled successfully');
+      nextProps.fetchScheduledSequences();
     }
   }
 
@@ -71,7 +71,7 @@ class SchedulerPage extends Component {
     return (
       <div className="card border-danger">
         <div className="card-body">
-          <p>Failed to load songs: {this.props.fetchError}</p>
+          <p>Failed to load sequences: {this.props.fetchError}</p>
           <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
         </div>
       </div>
@@ -85,7 +85,7 @@ class SchedulerPage extends Component {
           <tr>
             <th className="text-white text-right">Start Time</th>
             <th className="text-white text-right">End Time</th>
-            <th className="text-white">Song</th>
+            <th className="text-white">Sequence</th>
             <th className="text-white">Artist</th>
             <th className="text-white">Album</th>
             <th className="text-white text-right">Duration</th>
@@ -100,32 +100,32 @@ class SchedulerPage extends Component {
   }
 
   renderRows() {
-    if (this.props.scheduledSongs.length === 0) {
+    if (this.props.scheduledSequences.length === 0) {
       return (
         <tr>
-          <td colSpan="6">No songs are scheduled for this date.</td>
+          <td colSpan="6">No sequences are scheduled for this date.</td>
         </tr>
       );
     }
 
-    return _.map(this.props.scheduledSongs, scheduledSong => (
-      <tr key={scheduledSong.id}>
+    return _.map(this.props.scheduledSequences, scheduledSequence => (
+      <tr key={scheduledSequence.id}>
         <td className="align-middle text-right">
-          <FormattedDateTime date={scheduledSong.startTime}/>
+          <FormattedDateTime date={scheduledSequence.startTime}/>
         </td>
         <td className="align-middle text-right">
-          <FormattedDateTime date={scheduledSong.endTime}/>
+          <FormattedDateTime date={scheduledSequence.endTime}/>
         </td>
-        <td className="align-middle">{scheduledSong.song.name}</td>
-        <td className="align-middle">{scheduledSong.song.artist}</td>
-        <td className="align-middle">{scheduledSong.song.album}</td>
+        <td className="align-middle">{scheduledSequence.sequence.name}</td>
+        <td className="align-middle">{scheduledSequence.sequence.artist}</td>
+        <td className="align-middle">{scheduledSequence.sequence.album}</td>
         <td className="align-middle text-right">
-          <FormattedTime millis={scheduledSong.song.durationFrames / scheduledSong.song.framesPerSecond}/>
+          <FormattedTime millis={scheduledSequence.sequence.durationFrames / scheduledSequence.sequence.framesPerSecond}/>
         </td>
         <td className="text-right">
           <button className="btn btn-danger btn-sm"
                   title="Unschedule"
-                  onClick={this.unscheduleSong.bind(this, scheduledSong)}>
+                  onClick={this.unscheduleSequence.bind(this, scheduledSequence)}>
             Unschedule
           </button>
         </td>
@@ -135,17 +135,17 @@ class SchedulerPage extends Component {
 
   updateDate(startDate) {
     this.setState({startDate});
-    this.props.fetchScheduledSongs(startDate.toDate());
+    this.props.fetchScheduledSequences(startDate.toDate());
   }
 
-  unscheduleSong(scheduledSong) {
-    alert('Unscheduling ' + scheduledSong.startTime);
+  unscheduleSequence(scheduledSequence) {
+    alert('Unscheduling ' + scheduledSequence.startTime);
   }
 }
 
 function mapStateToProps({ page: { scheduler } }) {
   return {
-    scheduledSongs: scheduler.scheduledSongs,
+    scheduledSequences: scheduler.scheduledSequences,
     fetching: scheduler.fetching,
     fetchError: scheduler.fetchError,
     adding: scheduler.adding,
@@ -155,4 +155,4 @@ function mapStateToProps({ page: { scheduler } }) {
   };
 }
 
-export default connect(mapStateToProps, { fetchScheduledSongs })(SchedulerPage);
+export default connect(mapStateToProps, { fetchScheduledSequences: fetchScheduledSequences })(SchedulerPage);

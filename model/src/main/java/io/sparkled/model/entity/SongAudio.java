@@ -9,19 +9,19 @@ import java.util.Objects;
 public class SongAudio {
 
     @Id
-    @Column(name = "song_id", nullable = false)
-    private int songId;
+    @Column(name = "sequence_id", nullable = false)
+    private int sequenceId;
 
     @Lob
     @Column(name = "audio_data", nullable = false)
     private byte[] audioData;
 
-    public int getSongId() {
-        return songId;
+    public int getSequenceId() {
+        return sequenceId;
     }
 
-    public void setSongId(int songId) {
-        this.songId = songId;
+    public void setSequenceId(int sequenceId) {
+        this.sequenceId = sequenceId;
     }
 
     public byte[] getAudioData() {
@@ -37,12 +37,12 @@ public class SongAudio {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SongAudio songAudio = (SongAudio) o;
-        return songId == songAudio.songId &&
+        return sequenceId == songAudio.sequenceId &&
                 Arrays.equals(audioData, songAudio.audioData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(songId, audioData);
+        return Objects.hash(sequenceId, audioData);
     }
 }

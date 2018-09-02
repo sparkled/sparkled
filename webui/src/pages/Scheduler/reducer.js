@@ -8,8 +8,8 @@ const initialState = {
   addError: null,
   deleting: false,
   deleteError: null,
-  songToDelete: null,
-  scheduledSongs: []
+  sequenceToDelete: null,
+  scheduledSequences: []
 };
 
 export default (state = initialState, action) => {
@@ -30,74 +30,74 @@ export default (state = initialState, action) => {
     case actionTypes.HIDE_DELETE_MODAL:
       return {
         ...state,
-        songToDelete: null,
+        sequenceToDelete: null,
         deleteError: null
       };
 
     case actionTypes.SHOW_DELETE_MODAL:
       return {
         ...state,
-        songToDelete: action.payload.songToDelete
+        sequenceToDelete: action.payload.sequenceToDelete
       };
 
-    case `${actionTypes.FETCH_SCHEDULED_SONGS}_PENDING`:
+    case `${actionTypes.FETCH_SCHEDULED_SEQUENCES}_PENDING`:
       return {
         ...state,
         fetching: true,
-        scheduledSongs: []
+        scheduledSequences: []
       };
 
-    case `${actionTypes.FETCH_SCHEDULED_SONGS}_FULFILLED`:
+    case `${actionTypes.FETCH_SCHEDULED_SEQUENCES}_FULFILLED`:
       return {
         ...state,
         fetching: false,
-        scheduledSongs: _.mapKeys(action.payload.data, 'id')
+        scheduledSequences: _.mapKeys(action.payload.data, 'id')
       };
 
-    case `${actionTypes.FETCH_SCHEDULED_SONGS}_REJECTED`:
+    case `${actionTypes.FETCH_SCHEDULED_SEQUENCES}_REJECTED`:
       return {
         ...state,
         fetching: false,
         fetchError: action.payload.response.data
       };
 
-    case `${actionTypes.ADD_SCHEDULED_SONG}_PENDING`:
+    case `${actionTypes.ADD_SCHEDULED_SEQUENCE}_PENDING`:
       return {
         ...state,
         adding: true,
         addError: null
       };
 
-    case `${actionTypes.ADD_SCHEDULED_SONG}_FULFILLED`:
+    case `${actionTypes.ADD_SCHEDULED_SEQUENCE}_FULFILLED`:
       return {
         ...state,
         adding: false,
         addModalVisible: false
       };
 
-    case `${actionTypes.ADD_SCHEDULED_SONG}_REJECTED`:
+    case `${actionTypes.ADD_SCHEDULED_SEQUENCE}_REJECTED`:
       return {
         ...state,
         adding: false,
         addError: action.payload.response.data
       };
 
-    case `${actionTypes.DELETE_SCHEDULED_SONG}_PENDING`:
+    case `${actionTypes.DELETE_SCHEDULED_SEQUENCE}_PENDING`:
       return {
         ...state,
         deleting: true,
         deleteError: null
       };
 
-    case `${actionTypes.DELETE_SCHEDULED_SONG}_FULFILLED`:
+    case `${actionTypes.DELETE_SCHEDULED_SEQUENCE}_FULFILLED`:
       return {
         ...state,
-        scheduledSongs: _.omit(state.data, action.payload.data.id),
+        scheduledSequences: _.omit(state.data, action.payload.data.id),
         deleting: false,
-        songToDelete: null
+        sequenceToDelete: null
       };
 
-    case `${actionTypes.DELETE_SCHEDULED_SONG}_REJECTED`:
+    case `${actionTypes.DELETE_SCHEDULED_SEQUENCE}_REJECTED`:
       return {
         ...state,
         deleting: false,

@@ -1,0 +1,16 @@
+.add-sequence-modal .drop-zone {
+  padding: 10px;
+  text-align: center;
+  border: 2px dashed #fff;
+  background: #485563;
+}
+
+.add-sequence-modal .drop-zone:hover {
+  cursor: pointer;
+}
+
+.add-sequence-modal .drop-zone:hover,
+.add-sequence-modal .drop-zone-accept,
+.add-sequence-modal .drop-zone-reject {
+  background: #39444e;
+}

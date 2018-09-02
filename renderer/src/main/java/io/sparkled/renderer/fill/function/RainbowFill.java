@@ -20,7 +20,7 @@ public class RainbowFill implements FillFunction {
 
         RenderedFrame frame = ctx.getFrame();
         float ledPosition = (float) led.getLedNumber() / frame.getLedCount() * cycleCount;
-        float progress = (float) frame.getFrameNumber() / ctx.getSong().getFramesPerSecond() * cyclesPerSecond;
+        float progress = (float) frame.getFrameNumber() / ctx.getSequence().getFramesPerSecond() * cyclesPerSecond;
         float hue = ledPosition + progress % 1f;
 
         Color color = Color.getHSBColor(hue, SATURATION, alpha);
