@@ -12,11 +12,7 @@ public class AggregatePlaybackListener extends PlaybackListener {
     private final Set<Consumer<PlaybackEvent>> playbackStartedListeners = new HashSet<>();
     private final Set<Consumer<PlaybackEvent>> playbackFinishedListeners = new HashSet<>();
 
-    public void addPlaybackStartedListener(Consumer<PlaybackEvent> listener) {
-        playbackStartedListeners.add(listener);
-    }
-
-    public void addPlaybackFinishedListener(Consumer<PlaybackEvent> listener) {
+    void addPlaybackFinishedListener(Consumer<PlaybackEvent> listener) {
         playbackFinishedListeners.add(listener);
     }
 

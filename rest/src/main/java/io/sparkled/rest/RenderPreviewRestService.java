@@ -1,11 +1,11 @@
 package io.sparkled.rest;
 
-import io.sparkled.model.entity.Song;
-import io.sparkled.model.entity.SongAnimation;
+import io.sparkled.model.entity.Sequence;
+import io.sparkled.model.entity.SequenceAnimation;
 import io.sparkled.model.render.RenderedStagePropDataMap;
-import io.sparkled.model.validator.SongAnimationValidator;
+import io.sparkled.model.validator.SequenceAnimationValidator;
 import io.sparkled.renderer.Renderer;
-import io.sparkled.persistence.song.SongPersistenceService;
+import io.sparkled.persistence.sequence.SequencePersistenceService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -16,31 +16,31 @@ import java.util.Optional;
 @Path("/renderPreview")
 public class RenderPreviewRestService extends RestService {
 
-    private final SongPersistenceService songPersistenceService;
+    private final SequencePersistenceService sequencePersistenceService;
 
     @Inject
-    public RenderPreviewRestService(SongPersistenceService songPersistenceService) {
-        this.songPersistenceService = songPersistenceService;
+    public RenderPreviewRestService(SequencePersistenceService sequencePersistenceService) {
+        this.sequencePersistenceService = sequencePersistenceService;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRenderedSong(@QueryParam("startFrame") int startFrame,
-                                    @QueryParam("durationFrames") int durationFrames,
-                                    SongAnimation songAnimation) {
+    public Response getRenderedSequence(@QueryParam("startFrame") int startFrame,
+                                        @QueryParam("durationFrames") int durationFrames,
+                                        SequenceAnimation sequenceAnimation) {
 
-        Optional<Song> songOptional = songPersistenceService.getSongById(songAnimation.getSongId());
+        Optional<Sequence> sequenceOptional = sequencePersistenceService.getSequenceById(sequenceAnimation.getSequenceId());
 
-        if (songOptional.isPresent()) {
-            SongAnimationValidator songAnimationValidator = new SongAnimationValidator();
-            songAnimationValidator.validate(songAnimation);
+        if (sequenceOptional.isPresent()) {
+            SequenceAnimationValidator sequenceAnimationValidator = new SequenceAnimationValidator();
+            sequenceAnimationValidator.validate(sequenceAnimation);
 
-            Song song = songOptional.get();
-            RenderedStagePropDataMap renderResult = new Renderer(song, songAnimation, startFrame, durationFrames).render();
+            Sequence sequence = sequenceOptional.get();
+            RenderedStagePropDataMap renderResult = new Renderer(sequence, sequenceAnimation, startFrame, durationFrames).render();
             return getJsonResponse(renderResult);
         } else {
-            return getJsonResponse(Response.Status.NOT_FOUND, "Song not found.");
+            return getJsonResponse(Response.Status.NOT_FOUND, "Sequence not found.");
         }
     }
 }

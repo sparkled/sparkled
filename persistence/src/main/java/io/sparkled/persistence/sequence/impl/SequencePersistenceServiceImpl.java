@@ -1,0 +1,92 @@
+package io.sparkled.persistence.sequence.impl;
+
+import com.google.inject.persist.Transactional;
+import io.sparkled.model.entity.Sequence;
+import io.sparkled.model.entity.SequenceAnimation;
+import io.sparkled.model.entity.SongAudio;
+import io.sparkled.model.render.RenderedStagePropDataMap;
+import io.sparkled.persistence.sequence.impl.query.*;
+import io.sparkled.persistence.sequence.SequencePersistenceService;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
+
+public class SequencePersistenceServiceImpl implements SequencePersistenceService {
+
+    private Provider<EntityManager> entityManagerProvider;
+
+    @Inject
+    public SequencePersistenceServiceImpl(Provider<EntityManager> entityManagerProvider) {
+        this.entityManagerProvider = entityManagerProvider;
+    }
+
+    @Override
+    @Transactional
+    public List<Sequence> getAllSequences() {
+        return new GetAllSequencesQuery().perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Integer deleteSequence(int sequenceId) {
+        return new DeleteSequenceQuery(sequenceId).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Optional<Sequence> getSequenceById(int sequenceId) {
+        return new GetSequenceByIdQuery(sequenceId).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Optional<SongAudio> getSongAudioBySequenceId(int sequenceId) {
+        return new GetSongAudioBySequenceIdQuery(sequenceId).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Optional<SequenceAnimation> getSequenceAnimationBySequenceId(int sequenceId) {
+        return new GetSequenceAnimationBySequenceIdQuery(sequenceId).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Integer saveSequence(Sequence sequence) {
+        return new SaveSequenceQuery(sequence).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Integer saveSongAudio(SongAudio songAudio) {
+        return new SaveSongAudioQuery(songAudio).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Integer saveSequenceAnimation(SequenceAnimation sequenceAnimation) {
+        return new SaveSequenceAnimationQuery(sequenceAnimation).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public RenderedStagePropDataMap getRenderedStageProps(Sequence sequence) {
+        return new GetRenderedStagePropsQuery(sequence).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public void saveRenderedChannels(Sequence sequence, RenderedStagePropDataMap renderedStagePropDataMap) {
+        deleteRenderedStageProps(sequence.getId());
+        new SaveRenderedStagePropQuery(sequence, renderedStagePropDataMap).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public void deleteRenderedStageProps(int sequenceId) {
+        new DeleteRenderedStagePropsQuery(sequenceId).perform(entityManagerProvider.get());
+    }
+}

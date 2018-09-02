@@ -3,9 +3,9 @@ package io.sparkled.persistence.stage.impl.query;
 import io.sparkled.model.entity.Stage;
 import io.sparkled.model.entity.StageProp;
 import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.song.impl.query.DeleteRenderedStagePropsQuery;
-import io.sparkled.persistence.song.impl.query.DeleteSongQuery;
-import io.sparkled.persistence.song.impl.query.GetSongsByStageIdQuery;
+import io.sparkled.persistence.sequence.impl.query.DeleteRenderedStagePropsQuery;
+import io.sparkled.persistence.sequence.impl.query.DeleteSequenceQuery;
+import io.sparkled.persistence.sequence.impl.query.GetSequencesByStageIdQuery;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -24,16 +24,16 @@ public class DeleteStageQuery implements PersistenceQuery<Integer> {
 
     @Override
     public Integer perform(EntityManager entityManager) {
-        removeSongs(entityManager);
+        removeSequences(entityManager);
         removeStageProps(entityManager);
         removeStage(entityManager);
 
         return stageId;
     }
 
-    private void removeSongs(EntityManager entityManager) {
-        new GetSongsByStageIdQuery(stageId).perform(entityManager).forEach(song -> {
-            new DeleteSongQuery(song.getId()).perform(entityManager);
+    private void removeSequences(EntityManager entityManager) {
+        new GetSequencesByStageIdQuery(stageId).perform(entityManager).forEach(sequence -> {
+            new DeleteSequenceQuery(sequence.getId()).perform(entityManager);
         });
     }
 

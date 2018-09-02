@@ -1,11 +1,11 @@
 package io.sparkled.util;
 
 import com.google.gson.Gson;
-import io.sparkled.model.animation.SongAnimationData;
+import io.sparkled.model.animation.SequenceAnimationData;
 import io.sparkled.model.animation.effect.Effect;
 import io.sparkled.model.animation.effect.EffectChannel;
-import io.sparkled.model.entity.Song;
-import io.sparkled.model.entity.SongAnimation;
+import io.sparkled.model.entity.Sequence;
+import io.sparkled.model.entity.SequenceAnimation;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.renderer.Renderer;
@@ -23,7 +23,7 @@ public class RenderUtils {
     public static RenderedStagePropData render(Effect effect, int frameCount, int ledCount) {
         effect.setStartFrame(0);
         effect.setEndFrame(frameCount - 1);
-        SongAnimationData animationData = new SongAnimationData();
+        SequenceAnimationData animationData = new SequenceAnimationData();
 
         EffectChannel channel = new EffectChannel()
                 .setEndLed(ledCount - 1)
@@ -32,10 +32,10 @@ public class RenderUtils {
 
         animationData.getChannels().add(channel);
 
-        Song song = new Song().setDurationFrames(frameCount);
-        SongAnimation songAnimation = new SongAnimation().setAnimationData(gson.toJson(animationData));
+        Sequence sequence = new Sequence().setDurationFrames(frameCount);
+        SequenceAnimation sequenceAnimation = new SequenceAnimation().setAnimationData(gson.toJson(animationData));
 
-        RenderedStagePropDataMap renderedChannels = new Renderer(song, songAnimation, 0, frameCount).render();
+        RenderedStagePropDataMap renderedChannels = new Renderer(sequence, sequenceAnimation, 0, frameCount).render();
         return renderedChannels.get(PROP_CODE);
     }
 }

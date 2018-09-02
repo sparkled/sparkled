@@ -24,7 +24,7 @@ The Sparkled application is used to design and serve the animations, and one or 
 - [ ] Add more effect and fill types
 - [ ] Multithreaded rendering
 - [ ] Support sequences without music (currently requires a mute MP3 file to be uploaded)
-- [ ] Ability to replace MP3 files for existing songs (even with different lengths)
+- [ ] Ability to replace MP3 files for existing sequences (even with different lengths)
 - [ ] More Sparkled Clients (ESP8266, Arduino Ethernet)
 
 ## Getting Started

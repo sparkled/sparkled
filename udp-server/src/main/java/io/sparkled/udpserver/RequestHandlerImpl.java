@@ -1,9 +1,9 @@
 package io.sparkled.udpserver;
 
-import io.sparkled.model.entity.Song;
+import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.render.RenderedFrame;
-import io.sparkled.music.SongPlayerServiceImpl;
+import io.sparkled.music.SequencePlayerServiceImpl;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -16,11 +16,11 @@ public class RequestHandlerImpl implements RequestHandler {
 
     private static final String GET_FRAME_COMMAND = "GF";
 
-    private final SongPlayerServiceImpl songPlayerService;
+    private final SequencePlayerServiceImpl sequencePlayerService;
 
     @Inject
-    public RequestHandlerImpl(SongPlayerServiceImpl songPlayerService) {
-        this.songPlayerService = songPlayerService;
+    public RequestHandlerImpl(SequencePlayerServiceImpl sequencePlayerService) {
+        this.sequencePlayerService = sequencePlayerService;
     }
 
     @Override
@@ -30,14 +30,14 @@ public class RequestHandlerImpl implements RequestHandler {
 
         if (components.length == 2 && GET_FRAME_COMMAND.equals(components[0])) {
             String controller = components[1];
-            double progress = songPlayerService.getSongProgress();
-            Song currentSong = songPlayerService.getCurrentSong();
-            RenderedStagePropDataMap renderedStagePropDataMap = songPlayerService.getRenderedStagePropDataMap();
+            double progress = sequencePlayerService.getSequenceProgress();
+            Sequence currentSequence = sequencePlayerService.getCurrentSequence();
+            RenderedStagePropDataMap renderedStagePropDataMap = sequencePlayerService.getRenderedStagePropDataMap();
 
-            if (currentSong == null || renderedStagePropDataMap == null) {
+            if (currentSequence == null || renderedStagePropDataMap == null) {
                 respond(serverSocket, receivePacket, "ERR".getBytes(StandardCharsets.US_ASCII));
             } else {
-                final int durationFrames = currentSong.getDurationFrames();
+                final int durationFrames = currentSequence.getDurationFrames();
                 final int frameIndex = (int) Math.min(durationFrames - 1, Math.round(progress * durationFrames));
 
                 RenderedFrame renderedFrame = renderedStagePropDataMap.get(controller).getFrames().get(frameIndex);

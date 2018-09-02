@@ -1,16 +1,16 @@
 package io.sparkled.music.inject;
 
 import com.google.inject.AbstractModule;
-import io.sparkled.music.SongSchedulerServiceImpl;
-import io.sparkled.music.SongPlayerService;
-import io.sparkled.music.SongPlayerServiceImpl;
-import io.sparkled.music.SongSchedulerService;
+import io.sparkled.music.SequenceSchedulerServiceImpl;
+import io.sparkled.music.SequencePlayerService;
+import io.sparkled.music.SequencePlayerServiceImpl;
+import io.sparkled.music.SequenceSchedulerService;
 
 public class MusicPlayerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(SongSchedulerService.class).to(SongSchedulerServiceImpl.class);
-        bind(SongPlayerService.class).to(SongPlayerServiceImpl.class);
+        bind(SequenceSchedulerService.class).to(SequenceSchedulerServiceImpl.class);
+        bind(SequencePlayerService.class).to(SequencePlayerServiceImpl.class);
     }
 }

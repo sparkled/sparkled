@@ -19,7 +19,7 @@ class DeleteStageModal extends Component {
           <ModalHeader>Delete stage</ModalHeader>
           <ModalBody>
             <p>Are you sure you want to delete <em>{stageToDelete.name}</em>?</p>
-            <p>If any songs have been created against this stage, they will also be deleted.</p>
+            <p>If any sequences have been created against this stage, they will also be deleted.</p>
             {this.renderDeletionError()}
           </ModalBody>
           <ModalFooter>

@@ -1,12 +1,12 @@
 package io.sparkled.renderer;
 
 import com.google.gson.Gson;
-import io.sparkled.model.animation.SongAnimationData;
+import io.sparkled.model.animation.SequenceAnimationData;
 import io.sparkled.model.animation.effect.Effect;
 import io.sparkled.model.animation.effect.EffectChannel;
 import io.sparkled.model.animation.effect.EffectTypeCode;
-import io.sparkled.model.entity.Song;
-import io.sparkled.model.entity.SongAnimation;
+import io.sparkled.model.entity.Sequence;
+import io.sparkled.model.entity.SequenceAnimation;
 import io.sparkled.model.render.Led;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedStagePropDataMap;
@@ -30,18 +30,18 @@ public class Renderer {
         effectTypeRenderers.put(EffectTypeCode.SPLIT_LINE, new SplitLineEffectRenderer());
     }
 
-    private Song song;
-    private SongAnimationData animationData;
+    private Sequence sequence;
+    private SequenceAnimationData animationData;
     private int startFrame;
     private int durationFrames;
 
-    public Renderer(Song song, SongAnimation songAnimation) {
-        this(song, songAnimation, 0, song.getDurationFrames());
+    public Renderer(Sequence sequence, SequenceAnimation sequenceAnimation) {
+        this(sequence, sequenceAnimation, 0, sequence.getDurationFrames());
     }
 
-    public Renderer(Song song, SongAnimation songAnimation, int startFrame, int durationFrames) {
-        this.song = song;
-        this.animationData = new Gson().fromJson(songAnimation.getAnimationData(), SongAnimationData.class);
+    public Renderer(Sequence sequence, SequenceAnimation sequenceAnimation, int startFrame, int durationFrames) {
+        this.sequence = sequence;
+        this.animationData = new Gson().fromJson(sequenceAnimation.getAnimationData(), SequenceAnimationData.class);
         this.startFrame = startFrame;
         this.durationFrames = durationFrames;
     }
@@ -57,17 +57,17 @@ public class Renderer {
     }
 
     private RenderedStagePropData renderChannel(EffectChannel channel) {
-        final int endFrame = Math.min(song.getDurationFrames() - 1, startFrame + durationFrames - 1);
+        final int endFrame = Math.min(sequence.getDurationFrames() - 1, startFrame + durationFrames - 1);
 
         int frameCount = endFrame - startFrame + 1;
         byte[] data = new byte[frameCount * channel.getLedCount() * Led.BYTES_PER_LED];
         RenderedStagePropData renderedStagePropData = new RenderedStagePropData(startFrame, endFrame, channel.getLedCount(), data);
-        channel.getEffects().forEach(effect -> renderEffect(song, renderedStagePropData, effect));
+        channel.getEffects().forEach(effect -> renderEffect(sequence, renderedStagePropData, effect));
 
         return renderedStagePropData;
     }
 
-    private void renderEffect(Song song, RenderedStagePropData renderedStagePropData, Effect effect) {
+    private void renderEffect(Sequence sequence, RenderedStagePropData renderedStagePropData, Effect effect) {
         EffectTypeCode effectTypeCode = effect.getType();
         EffectRenderer renderer = effectTypeRenderers.get(effectTypeCode);
 
@@ -76,7 +76,7 @@ public class Renderer {
 
         for (int frameNumber = startFrame; frameNumber <= endFrame; frameNumber++) {
             RenderedFrame frame = renderedStagePropData.getFrames().get(frameNumber - this.startFrame);
-            renderer.render(song, renderedStagePropData, frame, effect);
+            renderer.render(sequence, renderedStagePropData, frame, effect);
         }
     }
 }
