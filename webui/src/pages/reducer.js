@@ -5,10 +5,7 @@ import sequenceListReducer from './SequenceList/reducer';
 import stageEditReducer from './StageEdit/reducer';
 import stageListReducer from './StageList/reducer';
 
-const undoableFilter = action => {
-  const { payload } = action;
-  return payload && payload.undoable;
-};
+const undoableFilter = action => action.undoable === true;
 
 export default combineReducers({
   scheduler: schedulerReducer,

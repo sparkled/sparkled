@@ -24,27 +24,31 @@ export const saveStage = stage => {
 export const addStageProp = stageProp => {
   return {
     type: actionTypes.ADD_STAGE_PROP,
-    payload: { undoable: true, stageProp }
+    undoable: true,
+    payload: { stageProp }
   };
 };
 
 export const updateStageProp = stageProp => {
   return {
     type: actionTypes.UPDATE_STAGE_PROP,
-    payload: { undoable: true, stageProp }
+    undoable: true,
+    payload: { stageProp }
   };
 };
 
 export const deleteStageProp = uuid => {
   return {
     type: actionTypes.DELETE_STAGE_PROP,
-    payload: { undoable: true, uuid }
+    undoable: true,
+    payload: { uuid }
   };
 };
 
 export const selectStageProp = uuid => {
   return {
     type: actionTypes.SELECT_STAGE_PROP,
-    payload: { undoable: true, uuid }
+    undoable: true,
+    payload: { uuid }
   };
 };
