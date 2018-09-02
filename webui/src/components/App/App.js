@@ -20,15 +20,16 @@ const App = () => (
     <Provider store={store}>
       <Router>
         <Switch>
-          <Route exact path='/sequences' component={SequenceListPage}/>
-          <Route exact path='/sequences/:sequenceId' component={SequenceEditPage}/>
           <Route exact path='/stages' component={StageListPage}/>
           <Route exact path='/stages/:stageId' component={StageEditPage}/>
+          <Route exact path='/sequences' component={SequenceListPage}/>
+          <Route exact path='/sequences/:sequenceId' component={SequenceEditPage}/>
           <Route exact path='/scheduler' component={SchedulerPage}/>
           <Route component={RedirectInvalidUrlToIndex}/>
         </Switch>
       </Router>
     </Provider>
+
     <Alert position='bottom-right' effect='scale' stack={{ limit: 3 }}/>
   </Fragment>
 );
