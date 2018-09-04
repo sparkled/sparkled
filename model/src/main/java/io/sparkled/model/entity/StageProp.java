@@ -2,15 +2,15 @@ package io.sparkled.model.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "stage_prop")
 public class StageProp {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "uuid", nullable = false)
+    private UUID uuid;
 
     @Basic
     @Column(name = "stage_id", nullable = false)
@@ -56,12 +56,13 @@ public class StageProp {
     @Column(name = "display_order", nullable = false)
     private int displayOrder = 0;
 
-    public Integer getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public StageProp setUuid(UUID uuid) {
+        this.uuid = uuid;
+        return this;
     }
 
     public Integer getStageId() {
@@ -175,7 +176,7 @@ public class StageProp {
                 scaleY == that.scaleY &&
                 rotation == that.rotation &&
                 displayOrder == that.displayOrder &&
-                Objects.equals(id, that.id) &&
+                Objects.equals(uuid, that.uuid) &&
                 Objects.equals(stageId, that.stageId) &&
                 Objects.equals(code, that.code) &&
                 Objects.equals(name, that.name) &&
@@ -184,6 +185,6 @@ public class StageProp {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stageId, code, name, type, leds, positionX, positionY, scaleX, scaleY, rotation, displayOrder);
+        return Objects.hash(uuid, stageId, code, name, type, leds, positionX, positionY, scaleX, scaleY, rotation, displayOrder);
     }
 }
