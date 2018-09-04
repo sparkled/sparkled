@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import uuidv4 from 'uuid/v4';
 import propTypes from '../../propTypes';
 import { addStageProp } from '../../actions';
 
@@ -32,6 +33,8 @@ class PropSelector extends Component {
     const displayOrder = stage.stageProps.length;
 
     addStageProp({
+      uuid: uuidv4(),
+      stageId: stage.id,
       type: typeCode,
       code: `PROP_${displayOrder + 1}`,
       name: `New ${propType.name}`,
@@ -41,8 +44,7 @@ class PropSelector extends Component {
       positionY: 0,
       rotation: 0,
       scaleX: 1,
-      scaleY: 1,
-      stageId: stage.id
+      scaleY: 1
     });
   }
 }

@@ -22,7 +22,7 @@
 
     <changeSet author="chrisparton1991" id="create-table-stage-prop">
         <createTable tableName="stage_prop">
-            <column autoIncrement="true" name="id" type="INT(10)">
+            <column name="uuid" type="UUID">
                 <constraints primaryKey="true" primaryKeyName="pk_stage_prop"/>
             </column>
             <column name="code" type="VARCHAR(8)">

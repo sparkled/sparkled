@@ -56,8 +56,8 @@ class StageProp extends Component {
 
     if (_(eventName).includes(' end')) {
       this.props.updateStageProp({ ...stageProp,
-        scaleX: _.round(freeTransform.attrs.scale.x, 2),
-        scaleY: _.round(freeTransform.attrs.scale.y, 2),
+        scaleX: _.ceil(freeTransform.attrs.scale.x, 2),
+        scaleY: _.ceil(freeTransform.attrs.scale.y, 2),
         positionX: Math.floor(freeTransform.attrs.translate.x),
         positionY: Math.floor(freeTransform.attrs.translate.y),
         rotation: Math.floor(freeTransform.attrs.rotate)
