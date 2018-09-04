@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as actionTypes from './actionTypes';
+import { getResponseError } from '../../utils/reducerUtils';
 
 const initialState = {
   fetching: false,
@@ -35,7 +36,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
-        fetchError: action.payload.response.data
+        fetchError: getResponseError(action)
       };
 
     case `${actionTypes.ADD_SEQUENCE}_PENDING`:
@@ -56,7 +57,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         adding: false,
-        addError: action.payload.response.data
+        addError: getResponseError(action)
       };
 
     case `${actionTypes.DELETE_SEQUENCE}_PENDING`:
@@ -78,7 +79,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         deleting: false,
-        deleteError: action.payload.response.data
+        deleteError: getResponseError(action)
       };
 
     case actionTypes.SHOW_ADD_MODAL:

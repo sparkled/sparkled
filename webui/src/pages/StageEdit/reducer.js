@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import uuidv4 from 'uuid/v4';
 import * as actionTypes from './actionTypes';
+import { getResponseError } from '../../utils/reducerUtils';
 
 const initialState = {
   fetching: false,
@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
-        stage: { ...action.payload.data, stageProps: withUuids(action.payload.data.stageProps) },
+        stage: { ...action.payload.data, stageProps: action.payload.data.stageProps },
         selectedStagePropUuid: null
       };
 
@@ -33,7 +33,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
-        fetchError: action.payload.response.data,
+        fetchError: getResponseError(action)
       };
 
     case `${actionTypes.SAVE_STAGE}_PENDING`:
@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         saving: false,
-        saveError: action.payload.response.data
+        saveError: getResponseError(action)
       };
 
     case actionTypes.SELECT_STAGE_PROP:
@@ -80,7 +80,7 @@ export default (state = initialState, action) => {
         ...state,
         stage: {
           ...state.stage,
-          stageProps: [...state.stage.stageProps, withUuid(action.payload.stageProp)]
+          stageProps: [...state.stage.stageProps, action.payload.stageProp]
         }
       };
 
@@ -101,10 +101,3 @@ export default (state = initialState, action) => {
   }
 };
 
-function withUuids(stageProps) {
-  return _.map(stageProps, withUuid);
-}
-
-function withUuid(stageProp) {
-  return { ...stageProp, uuid: uuidv4() };
-}
