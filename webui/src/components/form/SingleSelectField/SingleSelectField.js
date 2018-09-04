@@ -12,10 +12,12 @@ const SingleSelectField = ({ input, options, className = '', disabled, required,
     <option key={option.id} value={option.id}>{option.name}</option>
   ));
 
+
   return (
     <div className={`${className} ${formGroupClass}`}>
       <label className="form-control-label" htmlFor={name}>{label} {required ? '*' : ''}</label>
       <select {...input} {...attrs} className={fieldClass}>
+        <option/>
         {optionElements}
       </select>
       {errorContent}

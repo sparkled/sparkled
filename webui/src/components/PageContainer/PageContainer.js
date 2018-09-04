@@ -23,13 +23,13 @@ class PageContainer extends Component {
           <Collapse isOpen={this.state.collapsed} navbar>
             <Nav className='mr-auto' navbar>
               <NavItem>
+                <Link className='nav-link' to='/stages'>Stages</Link>
+              </NavItem>
+              <NavItem>
                 <Link className='nav-link' to='/sequences'>Sequences</Link>
               </NavItem>
               <NavItem>
                 <Link className='nav-link' to='/scheduler'>Scheduler</Link>
-              </NavItem>
-              <NavItem>
-                <Link className='nav-link' to='/stages'>Stages</Link>
               </NavItem>
             </Nav>
 

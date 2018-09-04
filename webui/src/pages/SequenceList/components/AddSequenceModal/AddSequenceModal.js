@@ -42,7 +42,7 @@ class AddSequenceModal extends Component {
               <Field name="name" component={InputField} label="Sequence Title" type="text"
                      required={true} validate={required}/>
 
-              <Field name="stageId" component={SingleSelectField} label="Stage ID" type="text" options={stages}
+              <Field name="stageId" component={SingleSelectField} label="Stage" type="text" options={stages}
                      required={true} validate={required}/>
 
               <div className="row">
