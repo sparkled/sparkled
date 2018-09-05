@@ -1,16 +1,15 @@
 package io.sparkled.rest;
 
-import io.sparkled.model.animation.SequenceAnimationData;
-import io.sparkled.model.animation.effect.EffectChannel;
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.SequenceAnimation;
-import io.sparkled.model.entity.SequenceStatus;
-import io.sparkled.model.entity.SongAudio;
+import io.sparkled.model.entity.*;
 import io.sparkled.model.render.RenderedStagePropDataMap;
-import io.sparkled.model.validator.exception.EntityValidationException;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
+import io.sparkled.persistence.stage.StagePersistenceService;
 import io.sparkled.renderer.Renderer;
 import io.sparkled.rest.response.IdResponse;
+import io.sparkled.viewmodel.sequence.SequenceViewModel;
+import io.sparkled.viewmodel.sequence.SequenceViewModelConverter;
+import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel;
+import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverter;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -23,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Path("/sequences")
 public class SequenceRestService extends RestService {
@@ -30,23 +30,55 @@ public class SequenceRestService extends RestService {
     private static final String MP3_MIME_TYPE = "audio/mpeg";
 
     private final SequencePersistenceService sequencePersistenceService;
+    private final StagePersistenceService stagePersistenceService;
+    private final SequenceViewModelConverter sequenceViewModelConverter;
+    private final SequenceChannelViewModelConverter sequenceChannelViewModelConverter;
 
     @Inject
-    public SequenceRestService(SequencePersistenceService sequencePersistenceService) {
+    public SequenceRestService(SequencePersistenceService sequencePersistenceService,
+                               StagePersistenceService stagePersistenceService,
+                               SequenceViewModelConverter sequenceViewModelConverter,
+                               SequenceChannelViewModelConverter sequenceChannelViewModelConverter) {
         this.sequencePersistenceService = sequencePersistenceService;
+        this.stagePersistenceService = stagePersistenceService;
+        this.sequenceViewModelConverter = sequenceViewModelConverter;
+        this.sequenceChannelViewModelConverter = sequenceChannelViewModelConverter;
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSequence(@PathParam("id") int id) {
-        Optional<Sequence> sequence = sequencePersistenceService.getSequenceById(id);
+    public Response getSequence(@PathParam("id") int sequenceId) {
+        Optional<Sequence> sequenceOptional = sequencePersistenceService.getSequenceById(sequenceId);
 
-        if (sequence.isPresent()) {
-            return getJsonResponse(sequence.get());
+        if (sequenceOptional.isPresent()) {
+            Sequence sequence = sequenceOptional.get();
+            SequenceViewModel viewModel = sequenceViewModelConverter.toViewModel(sequence);
+
+            List<SequenceChannelViewModel> channels = sequencePersistenceService
+                    .getSequenceChannelsBySequenceId(sequenceId)
+                    .stream()
+                    .map(sequenceChannelViewModelConverter::toViewModel)
+                    .collect(Collectors.toList());
+            viewModel.setChannels(channels);
+
+            return getJsonResponse(viewModel);
         }
 
-        return getJsonResponse(Response.Status.NOT_FOUND, "Failed to find sequence.");
+        return getJsonResponse(Response.Status.NOT_FOUND, "Sequence with ID of '" + sequenceId + "' not found.");
+    }
+
+    @GET
+    @Path("/{id}/stages")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSequenceStage(@PathParam("id") int sequenceId) {
+        Optional<Stage> stage = sequencePersistenceService.getStageBySequenceId(sequenceId);
+
+        if (stage.isPresent()) {
+            return getJsonResponse(stage.get());
+        } else {
+            return getJsonResponse(Response.Status.NOT_FOUND, "Failed to find stage for sequence.");
+        }
     }
 
     @GET
@@ -64,9 +96,9 @@ public class SequenceRestService extends RestService {
 
         if (songAudio.isPresent()) {
             return getBinaryResponse(songAudio.get().getAudioData(), MP3_MIME_TYPE);
+        } else {
+            return getResponse(Response.Status.NOT_FOUND);
         }
-
-        return getResponse(Response.Status.NOT_FOUND);
     }
 
     @POST
@@ -75,15 +107,10 @@ public class SequenceRestService extends RestService {
     public Response createSequence(@FormDataParam("sequence") String sequenceJson,
                                    @FormDataParam("mp3") InputStream uploadedInputStream,
                                    @FormDataParam("mp3") FormDataContentDisposition fileDetail) throws IOException {
-        try {
-            Sequence sequence = gson.fromJson(sequenceJson, Sequence.class);
-            int sequenceId = persistSequence(sequence);
-            persistSongAudio(uploadedInputStream, sequenceId);
-            persistSequenceAnimation(sequenceId);
-            return getJsonResponse(new IdResponse(sequenceId));
-        } catch (EntityValidationException e) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
-        }
+        Sequence sequence = gson.fromJson(sequenceJson, Sequence.class);
+        int sequenceId = persistSequence(sequence);
+        persistSongAudio(uploadedInputStream, sequenceId);
+        return getJsonResponse(new IdResponse(sequenceId));
     }
 
     @DELETE
@@ -103,114 +130,67 @@ public class SequenceRestService extends RestService {
             return getJsonResponse(Response.Status.BAD_REQUEST, "Sequence ID does not match URL.");
         }
 
-        try {
-            Integer savedId = sequencePersistenceService.saveSequence(sequence);
-            if (savedId == null) {
-                return getJsonResponse(Response.Status.NOT_FOUND, "Sequence not found.");
-            } else {
-                IdResponse idResponse = new IdResponse(savedId);
-                return getJsonResponse(idResponse);
-            }
-        } catch (EntityValidationException e) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
+        Integer savedId = sequencePersistenceService.saveSequence(sequence);
+        if (savedId == null) {
+            return getJsonResponse(Response.Status.NOT_FOUND, "Sequence not found.");
+        } else {
+            IdResponse idResponse = new IdResponse(savedId);
+            return getJsonResponse(idResponse);
         }
-    }
-
-    @GET
-    @Path("/{id}/animation")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSequenceAnimation(@PathParam("id") int id) {
-        Optional<SequenceAnimation> sequenceAnimationOptional = sequencePersistenceService.getSequenceAnimationBySequenceId(id);
-        if (sequenceAnimationOptional.isPresent()) {
-            return getJsonResponse(sequenceAnimationOptional.get());
-        }
-        return getResponse(Response.Status.NOT_FOUND);
     }
 
     @PUT
     @Path("/{id}/animation")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSequenceAnimation(SequenceAnimation sequenceAnimation) {
-        return saveOrSubmitAnimation(sequenceAnimation, SequenceStatus.DRAFT);
+    public Response updateSequenceAnimation(List<SequenceChannel> sequenceChannels) {
+        return saveOrSubmitAnimation(sequenceChannels, SequenceStatus.DRAFT);
     }
 
     @PUT
     @Path("/{id}/render")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateRenderedSequence(SequenceAnimation sequenceAnimation) {
-        return saveOrSubmitAnimation(sequenceAnimation, SequenceStatus.PUBLISHED);
+    public Response updateRenderedSequence(List<SequenceChannel> sequenceChannels) {
+        return saveOrSubmitAnimation(sequenceChannels, SequenceStatus.PUBLISHED);
     }
 
-    private Response saveOrSubmitAnimation(SequenceAnimation sequenceAnimation, SequenceStatus sequenceStatus) {
-        try {
-            Optional<Sequence> sequence = sequencePersistenceService.getSequenceById(sequenceAnimation.getSequenceId());
+    private Response saveOrSubmitAnimation(List<SequenceChannel> sequenceChannels, SequenceStatus sequenceStatus) {
+        Optional<Sequence> sequenceOptional = sequencePersistenceService.getSequenceById(sequenceChannels.get(0).getSequenceId());
 
-            if (sequence.isPresent()) {
-                sequence.get().setStatus(sequenceStatus);
-                sequencePersistenceService.saveSequence(sequence.get());
-            } else {
-                return getJsonResponse(Response.Status.NOT_FOUND, "Sequence not found.");
-            }
+        if (!sequenceOptional.isPresent()) {
+            return getJsonResponse(Response.Status.NOT_FOUND, "Sequence not found.");
+        } else {
+            Sequence sequence = sequenceOptional.get();
+            sequence.setStatus(sequenceStatus);
+            sequencePersistenceService.saveSequence(sequence);
 
             if (sequenceStatus == SequenceStatus.PUBLISHED) {
-                persistRenderedSequence(sequence.get(), sequenceAnimation);
+                Integer stageId = sequence.getStageId();
+                Optional<Stage> stageOptional = stagePersistenceService.getStageById(stageId);
+                if (!stageOptional.isPresent()) {
+                    return getJsonResponse(Response.Status.NOT_FOUND, "Stage with ID of '" + stageId + "' not found.");
+                } else {
+                    Stage stage = stageOptional.get();
+                    persistRenderedSequence(sequence, stage, sequenceChannels);
+                }
             }
 
-            Integer savedId = sequencePersistenceService.saveSequenceAnimation(sequenceAnimation);
-            if (savedId == null) {
-                return getJsonResponse(Response.Status.NOT_FOUND, "Sequence animation not found.");
-            } else {
-                IdResponse idResponse = new IdResponse(savedId);
-                return getJsonResponse(idResponse);
-            }
-        } catch (EntityValidationException e) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
+            sequencePersistenceService.saveSequenceChannels(sequenceChannels);
+            return getJsonResponse(Response.ok());
         }
+    }
+
+    private void persistRenderedSequence(Sequence sequence, Stage stage, List<SequenceChannel> sequenceChannels) {
+        List<StageProp> stageProps = stage.getStageProps();
+        RenderedStagePropDataMap renderedStagePropDataMap = new Renderer(sequence, sequenceChannels, stageProps).render();
+        sequencePersistenceService.saveRenderedChannels(sequence, renderedStagePropDataMap);
     }
 
     private int persistSequence(Sequence sequence) {
         sequence.setId(null);
         sequence.setStatus(SequenceStatus.NEW);
         return sequencePersistenceService.saveSequence(sequence);
-    }
-
-    private String createSequenceAnimationData() {
-        // TODO: Remove hard-coded channels.
-        SequenceAnimationData animationData = new SequenceAnimationData();
-
-        for (int i = 1; i <= 4; i++) {
-            addChannel(animationData, "Roof " + i, "R" + i, 50);
-        }
-
-        for (int i = 1; i <= 4; i++) {
-            addChannel(animationData, "Pillar " + i, "P" + i, 140);
-        }
-
-        return gson.toJson(animationData);
-    }
-
-    private void addChannel(SequenceAnimationData animationData, String channelName, String channelCode, int ledCount) {
-        int startLed = 0;
-        int displayOrder = 0;
-
-        List<EffectChannel> channels = animationData.getChannels();
-        if (!channels.isEmpty()) {
-            EffectChannel lastChannel = channels.get(channels.size() - 1);
-            startLed = lastChannel.getEndLed() + 1;
-            displayOrder = lastChannel.getDisplayOrder() + 1;
-        }
-
-        int endLed = startLed + ledCount - 1;
-        EffectChannel channel = new EffectChannel()
-                .setName(channelName)
-                .setPropCode(channelCode)
-                .setDisplayOrder(displayOrder)
-                .setStartLed(startLed)
-                .setEndLed(endLed);
-        channels.add(channel);
     }
 
     private void persistSongAudio(InputStream uploadedInputStream, int sequenceId) throws IOException {
@@ -221,18 +201,5 @@ public class SequenceRestService extends RestService {
         songAudio.setAudioData(bytes);
 
         sequencePersistenceService.saveSongAudio(songAudio);
-    }
-
-    private void persistSequenceAnimation(int sequenceId) throws IOException {
-        SequenceAnimation sequenceAnimation = new SequenceAnimation();
-        sequenceAnimation.setSequenceId(sequenceId);
-        sequenceAnimation.setAnimationData(createSequenceAnimationData());
-
-        sequencePersistenceService.saveSequenceAnimation(sequenceAnimation);
-    }
-
-    private void persistRenderedSequence(Sequence sequence, SequenceAnimation sequenceAnimation) {
-        RenderedStagePropDataMap renderedStagePropDataMap = new Renderer(sequence, sequenceAnimation).render();
-        sequencePersistenceService.saveRenderedChannels(sequence, renderedStagePropDataMap);
     }
 }

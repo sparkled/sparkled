@@ -9,13 +9,7 @@ public class EffectChannel {
     private List<Effect> effects = new ArrayList<>();
     private String name;
     private String propCode;
-    private int startLed = 0;
-    private int endLed = 0;
     private int displayOrder;
-
-    public int getLedCount() {
-        return endLed - startLed + 1;
-    }
 
     public List<Effect> getEffects() {
         return effects;
@@ -53,32 +47,12 @@ public class EffectChannel {
         return this;
     }
 
-    public int getStartLed() {
-        return startLed;
-    }
-
-    public EffectChannel setStartLed(int startLed) {
-        this.startLed = startLed;
-        return this;
-    }
-
-    public int getEndLed() {
-        return endLed;
-    }
-
-    public EffectChannel setEndLed(int endLed) {
-        this.endLed = endLed;
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof EffectChannel)) return false;
         EffectChannel that = (EffectChannel) o;
-        return startLed == that.startLed &&
-                endLed == that.endLed &&
-                displayOrder == that.displayOrder &&
+        return displayOrder == that.displayOrder &&
                 Objects.equals(effects, that.effects) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(propCode, that.propCode);
@@ -86,7 +60,7 @@ public class EffectChannel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(effects, name, propCode, startLed, endLed, displayOrder);
+        return Objects.hash(effects, name, propCode, displayOrder);
     }
 
     @Override
@@ -95,8 +69,6 @@ public class EffectChannel {
                 "effects=" + effects +
                 ", name='" + name + '\'' +
                 ", stagePropCode='" + propCode + '\'' +
-                ", startLed=" + startLed +
-                ", endLed=" + endLed +
                 ", displayOrder=" + displayOrder +
                 '}';
     }

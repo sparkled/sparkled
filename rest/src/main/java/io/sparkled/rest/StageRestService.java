@@ -27,13 +27,9 @@ public class StageRestService extends RestService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createStage(Stage stage) {
-        try {
-            stage.setId(null);
-            int stageId = stagePersistenceService.saveStage(stage);
-            return getJsonResponse(new IdResponse(stageId));
-        } catch (EntityValidationException e) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
-        }
+        stage.setId(null);
+        int stageId = stagePersistenceService.saveStage(stage);
+        return getJsonResponse(new IdResponse(stageId));
     }
 
     @PUT
@@ -45,16 +41,12 @@ public class StageRestService extends RestService {
             return getJsonResponse(Response.Status.BAD_REQUEST, "Stage ID does not match URL.");
         }
 
-        try {
-            Integer savedId = stagePersistenceService.saveStage(stage);
-            if (savedId == null) {
-                return getJsonResponse(Response.Status.NOT_FOUND, "Stage not found.");
-            } else {
-                IdResponse idResponse = new IdResponse(savedId);
-                return getJsonResponse(idResponse);
-            }
-        } catch (EntityValidationException e) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, e.getMessage());
+        Integer savedId = stagePersistenceService.saveStage(stage);
+        if (savedId == null) {
+            return getJsonResponse(Response.Status.NOT_FOUND, "Stage not found.");
+        } else {
+            IdResponse idResponse = new IdResponse(savedId);
+            return getJsonResponse(idResponse);
         }
     }
 

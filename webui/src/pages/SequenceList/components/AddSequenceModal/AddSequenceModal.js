@@ -39,7 +39,7 @@ class AddSequenceModal extends Component {
                 {dropzoneText}
               </Dropzone>
 
-              <Field name="name" component={InputField} label="Sequence Title" type="text"
+              <Field name="name" component={InputField} label="Sequence Name" type="text"
                      required={true} validate={required}/>
 
               <Field name="stageId" component={SingleSelectField} label="Stage" type="text" options={stages}

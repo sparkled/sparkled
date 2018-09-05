@@ -1,8 +1,7 @@
-package io.sparkled.viewmodel.converter;
+package io.sparkled.viewmodel;
 
 import io.sparkled.model.entity.ScheduledSequence;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
-import io.sparkled.viewmodel.ScheduledSequenceViewModel;
 
 import javax.inject.Inject;
 import java.util.Optional;

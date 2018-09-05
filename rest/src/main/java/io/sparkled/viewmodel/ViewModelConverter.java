@@ -1,4 +1,4 @@
-package io.sparkled.viewmodel.converter;
+package io.sparkled.viewmodel;
 
 /**
  * Handles bidirectional conversion between view models and models.

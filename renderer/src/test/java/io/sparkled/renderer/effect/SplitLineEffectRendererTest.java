@@ -103,8 +103,7 @@ public class SplitLineEffectRendererTest {
                         new Param().setName(ParamName.LENGTH.getName()).setValue(5)
                 )
                 .setEasing(
-                        new Easing()
-                                .setType(EasingTypeCode.LINEAR)
+                        new Easing().setType(EasingTypeCode.LINEAR)
                 )
                 .setFill(
                         new Fill()

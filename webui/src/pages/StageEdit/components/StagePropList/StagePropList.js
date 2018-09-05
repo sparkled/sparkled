@@ -7,7 +7,7 @@ import { selectStageProp } from '../../actions';
 class StagePropList extends Component {
 
   render() {
-    const { className, stageProps } = this.props;
+    const { className = '', stageProps } = this.props;
     const stagePropEntries = _.map(stageProps, this.createStagePropEntry.bind(this));
 
     return (

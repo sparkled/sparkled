@@ -1,0 +1,21 @@
+.time-indicator {
+  height: 20px;
+  display: block;
+}
+
+.time-indicator line {
+  stroke: #000;
+}
+
+.time-indicator text {
+  font-size: 12px;
+  text-anchor: middle;
+}
+
+.time-indicator text:first-of-type {
+  text-anchor: start;
+}
+
+.time-indicator text:last-of-type {
+  text-anchor: end;
+}

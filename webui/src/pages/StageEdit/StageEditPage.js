@@ -1,8 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ActionCreators } from 'redux-undo';
 import Alert from 'react-s-alert';
+import SplitPane from 'react-split-pane';
 import { Nav, NavItem } from 'reactstrap';
+import { setCurrentPage }  from '../actions';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import PropSelector from './components/PropSelector';
@@ -22,7 +24,7 @@ class StageEditPage extends Component {
       </div>
     );
 
-    return <PageContainer body={pageBody} navbar={this.renderNavbar()} className="stage-editor"/>;
+    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,6 +41,7 @@ class StageEditPage extends Component {
 
   componentDidMount() {
     const { stageId } = this.props.match.params;
+    this.props.setCurrentPage({ pageTitle: 'Edit Stage', pageClass: 'stage-edit-page' });
     this.props.fetchStage(stageId);
   }
 
@@ -89,16 +92,14 @@ class StageEditPage extends Component {
 
   renderEditor() {
     return (
-      <Fragment key="editor">
-        <div className="d-flex flex-column flex-grow-1 h-100">
-          <PropSelector className="flex-grow-0"/>
-          <div className="stage-canvas-container d-flex flex-grow-1 align-items-center justify-content-center">
-            <StageCanvas/>
-          </div>
-        </div>
+      <SplitPane split="vertical" defaultSize={300} primary="second" allowResize={false}>
+        <SplitPane split="horizontal" defaultSize={80} allowResize={false} pane2ClassName="stage-canvas-container">
+          <PropSelector/>
+          <StageCanvas stage={this.props.stage} editable={true}/>
+        </SplitPane>
 
         <StagePropList className="flex-shrink-0 h-100"/>
-      </Fragment>
+      </SplitPane>
     );
   }
 
@@ -121,4 +122,4 @@ function mapStateToProps({ page }) {
   };
 }
 
-export default connect(mapStateToProps, { fetchStage, saveStage, undo, redo, clearHistory })(StageEditPage);
+export default connect(mapStateToProps, { setCurrentPage, fetchStage, saveStage, undo, redo, clearHistory })(StageEditPage);

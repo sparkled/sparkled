@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 import { Nav, NavItem } from 'reactstrap';
+import { setCurrentPage } from '../actions';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { fetchSequences, showAddModal } from './actions';
@@ -16,6 +17,7 @@ class SequenceListPage extends Component {
   state = { searchQuery: '' };
 
   componentDidMount() {
+    this.props.setCurrentPage({ pageTitle: 'Sequences', pageClass: 'sequence-list-page' });
     this.props.fetchSequences();
     this.props.fetchStages();
   }
@@ -143,4 +145,4 @@ function mapStateToProps({ page: { sequenceList, stageList } }) {
   };
 }
 
-export default connect(mapStateToProps, { showAddModal, fetchSequences, fetchStages })(SequenceListPage);
+export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchSequences, fetchStages })(SequenceListPage);

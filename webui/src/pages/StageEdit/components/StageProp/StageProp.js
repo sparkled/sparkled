@@ -16,10 +16,10 @@ class StageProp extends Component {
     leds: []
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { paper, stageProp } = this.props;
 
-    const set = this.createStagePropSet(paper, stageProp);
+    const set = this.createStagePropSet(stageProp);
     const ftProperties = this.getFreeTransformProperties(stageProp);
 
     const updateStageProp = this.updateStageProp.bind(this);
@@ -28,7 +28,8 @@ class StageProp extends Component {
     this.setState({ freeTransform });
   }
 
-  createStagePropSet(paper, stageProp) {
+  createStagePropSet(stageProp) {
+    const { paper, editable } = this.props;
     const svgPath = propTypes[stageProp.type].path;
     const path = paper.path(svgPath).attr({
       stroke: '#fff',
@@ -41,9 +42,11 @@ class StageProp extends Component {
       stroke: 'none'
     });
 
-    const selectStageProp = () => this.props.selectStageProp(stageProp.uuid);
-    rect.node.onclick = selectStageProp;
-    path.node.onclick = selectStageProp;
+    if (editable) {
+      const selectStageProp = () => this.props.selectStageProp(stageProp.uuid);
+      rect.node.onclick = selectStageProp;
+      path.node.onclick = selectStageProp;
+    }
 
     return paper.set().push(rect).push(path);
   }
@@ -82,7 +85,11 @@ class StageProp extends Component {
 
   render() {
     const { freeTransform } = this.state;
-    const { selectedStagePropUuid, stageProp } = this.props;
+    if (!freeTransform || !freeTransform.items) {
+      return [];
+    }
+
+    const { editable, selectedStagePropUuid, stageProp } = this.props;
 
     const { uuid, invalid } = stageProp;
     freeTransform.items[1].el.attr({stroke: invalid ? '#f00' : '#fff'});
@@ -90,9 +97,8 @@ class StageProp extends Component {
     if (invalid) {
       freeTransform.hideHandles();
     } else {
-      const isSelected = uuid === selectedStagePropUuid;
+      const isSelected = editable && uuid === selectedStagePropUuid;
       freeTransform.items[0].el.attr({ fill: isSelected ? 'rgba(0, 0, 0, .1)' : 'rgba(0, 0, 0, 0)' });
-
 
       if (isSelected) {
         freeTransform.showHandles();

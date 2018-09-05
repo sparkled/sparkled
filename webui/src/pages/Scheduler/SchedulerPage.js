@@ -5,6 +5,7 @@ import Alert from 'react-s-alert';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
+import { setCurrentPage } from '../actions';
 import FormattedDateTime from '../../components/FormattedDateTime';
 import FormattedTime from '../../components/FormattedTime';
 import LoadingIndicator from '../../components/LoadingIndicator';
@@ -16,6 +17,7 @@ class SchedulerPage extends Component {
   state = { startDate: moment() };
 
   componentDidMount() {
+    this.props.setCurrentPage({ pageTitle: 'Scheduler', pageClass: 'scheduler-page' });
     this.props.fetchScheduledSequences(new Date());
   }
 
@@ -155,4 +157,4 @@ function mapStateToProps({ page: { scheduler } }) {
   };
 }
 
-export default connect(mapStateToProps, { fetchScheduledSequences: fetchScheduledSequences })(SchedulerPage);
+export default connect(mapStateToProps, { setCurrentPage, fetchScheduledSequences })(SchedulerPage);
