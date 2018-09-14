@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import uuidv4 from 'uuid/v4';
-import propTypes from '../../propTypes';
+import stagePropTypes from '../../stagePropTypes';
 import { addStageProp } from '../../actions';
 
 class PropSelector extends Component {
@@ -10,7 +10,7 @@ class PropSelector extends Component {
   render() {
     const { className } = this.props;
 
-    const propButtons = _.map(propTypes, (propType, typeCode) => (
+    const propButtons = _.map(stagePropTypes, (propType, typeCode) => (
       <div key={typeCode} className="prop-selector-item bg-secondary d-flex flex-column align-items-center"
            onClick={this.addStageProp.bind(this, propType, typeCode)}>
         {propType.name}

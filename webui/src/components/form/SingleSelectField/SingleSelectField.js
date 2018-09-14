@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-const SingleSelectField = ({ input, options, className = '', disabled, required, label, name, meta }) => {
+const SingleSelectField = ({ input, options, allowEmpty = true, className = '', disabled, required, label, name, meta }) => {
   const hasError = meta.touched && meta.error;
   const formGroupClass = hasError ? 'form-group has-danger' : 'form-group';
   const fieldClass = hasError ? 'form-control is-invalid' : 'form-control';
@@ -12,12 +12,11 @@ const SingleSelectField = ({ input, options, className = '', disabled, required,
     <option key={option.id} value={option.id}>{option.name}</option>
   ));
 
-
   return (
     <div className={`${className} ${formGroupClass}`}>
       <label className="form-control-label" htmlFor={name}>{label} {required ? '*' : ''}</label>
       <select {...input} {...attrs} className={fieldClass}>
-        <option/>
+        {allowEmpty ? <option/> : []}
         {optionElements}
       </select>
       {errorContent}

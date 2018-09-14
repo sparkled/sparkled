@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import 'raphael';
-import propTypes from '../../propTypes';
+import stagePropTypes from '../../stagePropTypes';
 import { selectStageProp, updateStageProp } from '../../actions';
 import 'Raphael.FreeTransform';
 
@@ -30,7 +30,7 @@ class StageProp extends Component {
 
   createStagePropSet(stageProp) {
     const { paper, editable } = this.props;
-    const svgPath = propTypes[stageProp.type].path;
+    const svgPath = stagePropTypes[stageProp.type].path;
     const path = paper.path(svgPath).attr({
       stroke: '#fff',
       'stroke-width': strokeWidth
@@ -92,7 +92,8 @@ class StageProp extends Component {
     const { editable, selectedStagePropUuid, stageProp } = this.props;
 
     const { uuid, invalid } = stageProp;
-    freeTransform.items[1].el.attr({stroke: invalid ? '#f00' : '#fff'});
+    const path = freeTransform.items[1].el;
+    path.attr({stroke: invalid ? '#f00' : '#fff'});
 
     if (invalid) {
       freeTransform.hideHandles();

@@ -40,9 +40,11 @@ class StageCanvas extends Component {
       return [];
     }
 
-    return _.map(stage.stageProps, stageProp => (
-      <StageProp key={stageProp.uuid} stageProp={stageProp} paper={paper} editable={editable}/>
-    ));
+    return _.map(stage.stageProps, stageProp => {
+      // Keying on the stage prop type will recreate the component with the correct SVG path when the type changes.
+      const key = stageProp.uuid + stageProp.type;
+      return <StageProp key={key} stageProp={stageProp} paper={paper} editable={editable}/>;
+    });
   }
 
   componentWillUnmount() {

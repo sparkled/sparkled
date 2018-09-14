@@ -3,7 +3,9 @@ import { Card, CardBody, CardTitle, Collapse } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { deleteStageProp, selectStageProp, updateStageProp } from '../../actions';
+import stagePropTypes from '../../stagePropTypes';
 import InputField from '../../../../components/form/InputField';
+import SingleSelectField from '../../../../components/form/SingleSelectField';
 import { min, max, required } from '../../../../components/form/validators';
 import trash from '../../../../images/trash.svg';
 
@@ -43,7 +45,7 @@ class StagePropForm extends Component {
             <form>
               <Field type="text" name="code" component={InputField} label="Code" required={true} validate={required} onChange={this.updateStageProp}/>
               <Field type="text" name="name" component={InputField} label="Name" required={true} validate={required} onChange={this.updateStageProp}/>
-              <Field type="text" name="type" component={InputField} label="Type" required={true} validate={required} onChange={this.updateStageProp}/>
+              <Field type="text" name="type" component={SingleSelectField} options={stagePropTypes} allowEmpty={false} label="Type" required={true} validate={required} onChange={this.updateStageProp}/>
 
               <div className="row">
                 <Field className="col-6" type="number" parse={toNumber} name="leds" component={InputField} label="Led Count" validate={[minLeds, required]} onChange={this.updateStageProp}/>
