@@ -1,29 +1,31 @@
-.stage-editor .prop-selector {
-  height: 80px;
-  border-bottom: 2px solid #202d3a;
+.stage-edit-page .prop-selector {
   padding: 5px;
 }
 
-.prop-selector-item {
+.stage-edit-page .prop-selector-item {
   height: 100%;
   padding: 10px;
   margin: 5px;
 }
 
-.stage-editor .stage-prop-list {
-  width: 300px;
+.stage-edit-page .stage-prop-list {
   overflow: auto;
-  border-left: 2px solid #202d3a;
 }
 
-.stage-editor .stage-prop-list-entry {
+.stage-edit-page .stage-prop-list-entry {
   margin: 5px;
 }
 
-.stage-editor .stage-canvas-container {
+.stage-edit-page .stage-canvas-container {
+  display: flex;
   overflow: auto;
+  align-items: center;
 }
 
-.stage-editor .stage-canvas {
+.stage-edit-page .stage-canvas {
+  margin: auto;
+}
+
+.stage-edit-page .stage-canvas svg {
   border: 2px solid #000;
 }

@@ -9,7 +9,7 @@
         <class>io.sparkled.model.entity.RenderedStageProp</class>
         <class>io.sparkled.model.entity.ScheduledSequence</class>
         <class>io.sparkled.model.entity.Sequence</class>
-        <class>io.sparkled.model.entity.SequenceAnimation</class>
+        <class>io.sparkled.model.entity.SequenceChannel</class>
         <class>io.sparkled.model.entity.SongAudio</class>
         <class>io.sparkled.model.entity.Stage</class>
         <class>io.sparkled.model.entity.StageProp</class>

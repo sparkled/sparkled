@@ -21,8 +21,8 @@ public class DeleteSequenceQuery implements PersistenceQuery<Integer> {
         Optional<SongAudio> songAudio = new GetSongAudioBySequenceIdQuery(sequenceId).perform(entityManager);
         songAudio.ifPresent(entityManager::remove);
 
-        Optional<SequenceAnimation> sequenceAnimation = new GetSequenceAnimationBySequenceIdQuery(sequenceId).perform(entityManager);
-        sequenceAnimation.ifPresent(entityManager::remove);
+        List<SequenceChannel> channels = new GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(entityManager);
+        channels.forEach(entityManager::remove);
 
         List<ScheduledSequence> scheduledSequences = new GetScheduledSequencesBySequenceIdQuery(sequenceId).perform(entityManager);
         scheduledSequences.forEach(entityManager::remove);

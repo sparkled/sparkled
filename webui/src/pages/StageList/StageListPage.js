@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
+import { setCurrentPage } from '../actions';
 import { Nav, NavItem } from 'reactstrap';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
@@ -15,6 +16,7 @@ class StageListPage extends Component {
   state = { searchQuery: '' };
 
   componentDidMount() {
+    this.props.setCurrentPage({ pageTitle: 'Stages', pageClass: 'stage-list-page' });
     this.props.fetchStages();
   }
 
@@ -135,4 +137,4 @@ function mapStateToProps({ page: { stageList } }) {
   };
 }
 
-export default connect(mapStateToProps, { showAddModal, fetchStages })(StageListPage);
+export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchStages })(StageListPage);

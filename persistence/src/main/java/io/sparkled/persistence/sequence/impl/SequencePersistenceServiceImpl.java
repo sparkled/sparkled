@@ -2,8 +2,9 @@ package io.sparkled.persistence.sequence.impl;
 
 import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.SequenceAnimation;
+import io.sparkled.model.entity.SequenceChannel;
 import io.sparkled.model.entity.SongAudio;
+import io.sparkled.model.entity.Stage;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.persistence.sequence.impl.query.*;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
@@ -13,6 +14,7 @@ import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class SequencePersistenceServiceImpl implements SequencePersistenceService {
 
@@ -43,14 +45,14 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
 
     @Override
     @Transactional
-    public Optional<SongAudio> getSongAudioBySequenceId(int sequenceId) {
-        return new GetSongAudioBySequenceIdQuery(sequenceId).perform(entityManagerProvider.get());
+    public Optional<Stage> getStageBySequenceId(int sequenceId) {
+        return new GetStageBySequenceIdQuery(sequenceId).perform(entityManagerProvider.get());
     }
 
     @Override
     @Transactional
-    public Optional<SequenceAnimation> getSequenceAnimationBySequenceId(int sequenceId) {
-        return new GetSequenceAnimationBySequenceIdQuery(sequenceId).perform(entityManagerProvider.get());
+    public Optional<SongAudio> getSongAudioBySequenceId(int sequenceId) {
+        return new GetSongAudioBySequenceIdQuery(sequenceId).perform(entityManagerProvider.get());
     }
 
     @Override
@@ -67,8 +69,8 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
 
     @Override
     @Transactional
-    public Integer saveSequenceAnimation(SequenceAnimation sequenceAnimation) {
-        return new SaveSequenceAnimationQuery(sequenceAnimation).perform(entityManagerProvider.get());
+    public void saveSequenceChannels(List<SequenceChannel> sequenceChannels) {
+        new SaveSequenceChannelsQuery(sequenceChannels).perform(entityManagerProvider.get());
     }
 
     @Override
@@ -88,5 +90,16 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     @Transactional
     public void deleteRenderedStageProps(int sequenceId) {
         new DeleteRenderedStagePropsQuery(sequenceId).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    @Transactional
+    public Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID channelUuid) {
+        return new GetSequenceChannelByUuidQuery(sequenceId, channelUuid).perform(entityManagerProvider.get());
+    }
+
+    @Override
+    public List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId) {
+        return new GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(entityManagerProvider.get());
     }
 }

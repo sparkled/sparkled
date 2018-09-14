@@ -5,7 +5,7 @@ import io.sparkled.model.entity.Sequence;
 import io.sparkled.music.SequenceSchedulerService;
 import io.sparkled.persistence.scheduler.ScheduledSequencePersistenceService;
 import io.sparkled.viewmodel.ScheduledSequenceViewModel;
-import io.sparkled.viewmodel.converter.ScheduledSequenceViewModelConverter;
+import io.sparkled.viewmodel.ScheduledSequenceViewModelConverter;
 import org.apache.commons.lang3.time.DateUtils;
 
 import javax.inject.Inject;

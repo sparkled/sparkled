@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
-        stage: { ...action.payload.data, stageProps: action.payload.data.stageProps },
+        stage: { ...action.payload.data },
         selectedStagePropUuid: null
       };
 

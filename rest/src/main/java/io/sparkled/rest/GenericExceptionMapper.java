@@ -1,5 +1,8 @@
 package io.sparkled.rest;
 
+import io.sparkled.model.validator.exception.EntityValidationException;
+import io.sparkled.viewmodel.exception.ViewModelConversionException;
+
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
@@ -24,7 +27,9 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable t) {
-        if (t instanceof NotFoundException) {
+        if (t instanceof EntityValidationException || t instanceof ViewModelConversionException) {
+            return badRequest(t.getMessage());
+        } else if (t instanceof NotFoundException) {
             return notFound();
         } else if (t instanceof NotAllowedException) {
             return notAllowed();
@@ -33,6 +38,13 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
             logger.log(Level.SEVERE, "Unexpected error response for URI '" + absolutePath + "':", t);
             return internalError();
         }
+    }
+
+    private Response badRequest(String error) {
+        return Response.status(Response.Status.BAD_REQUEST)
+                .location(uriInfo.getRequestUri())
+                .entity(error)
+                .build();
     }
 
     private Response notFound() {

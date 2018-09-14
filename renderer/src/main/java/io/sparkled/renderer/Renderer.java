@@ -1,20 +1,21 @@
 package io.sparkled.renderer;
 
-import com.google.gson.Gson;
-import io.sparkled.model.animation.SequenceAnimationData;
+import io.sparkled.model.animation.ChannelPropPair;
 import io.sparkled.model.animation.effect.Effect;
-import io.sparkled.model.animation.effect.EffectChannel;
 import io.sparkled.model.animation.effect.EffectTypeCode;
 import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.SequenceAnimation;
+import io.sparkled.model.entity.SequenceChannel;
+import io.sparkled.model.entity.StageProp;
 import io.sparkled.model.render.Led;
+import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedStagePropDataMap;
-import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.renderer.effect.EffectRenderer;
 import io.sparkled.renderer.effect.FlashEffectRenderer;
 import io.sparkled.renderer.effect.LineEffectRenderer;
 import io.sparkled.renderer.effect.SplitLineEffectRenderer;
+import io.sparkled.renderer.util.ChannelPropPairUtil;
+import io.sparkled.renderer.util.EffectTypeRenderers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,54 +23,53 @@ import java.util.Map;
 
 public class Renderer {
 
-    private static Map<EffectTypeCode, EffectRenderer> effectTypeRenderers = new HashMap<>();
+    private final Sequence sequence;
+    private final List<ChannelPropPair> channelPropPairs;
+    private final int startFrame;
+    private final int durationFrames;
 
-    static {
-        effectTypeRenderers.put(EffectTypeCode.FLASH, new FlashEffectRenderer());
-        effectTypeRenderers.put(EffectTypeCode.LINE, new LineEffectRenderer());
-        effectTypeRenderers.put(EffectTypeCode.SPLIT_LINE, new SplitLineEffectRenderer());
+    public Renderer(Sequence sequence, List<SequenceChannel> sequenceChannels, List<StageProp> stageProps) {
+        this(sequence, sequenceChannels, stageProps, 0, sequence.getDurationFrames());
     }
 
-    private Sequence sequence;
-    private SequenceAnimationData animationData;
-    private int startFrame;
-    private int durationFrames;
-
-    public Renderer(Sequence sequence, SequenceAnimation sequenceAnimation) {
-        this(sequence, sequenceAnimation, 0, sequence.getDurationFrames());
-    }
-
-    public Renderer(Sequence sequence, SequenceAnimation sequenceAnimation, int startFrame, int durationFrames) {
+    public Renderer(Sequence sequence, List<SequenceChannel> sequenceChannels, List<StageProp> stageProps, int startFrame, int durationFrames) {
         this.sequence = sequence;
-        this.animationData = new Gson().fromJson(sequenceAnimation.getAnimationData(), SequenceAnimationData.class);
+        this.channelPropPairs = ChannelPropPairUtil.makePairs(sequenceChannels, stageProps);
         this.startFrame = startFrame;
         this.durationFrames = durationFrames;
     }
 
     public RenderedStagePropDataMap render() {
-        List<EffectChannel> channels = animationData.getChannels();
-        RenderedStagePropDataMap renderedChannels = new RenderedStagePropDataMap();
+        RenderedStagePropDataMap renderedProps = new RenderedStagePropDataMap();
 
-        channels.forEach(channel ->
-                renderedChannels.put(channel.getPropCode(), renderChannel(channel))
+        channelPropPairs.forEach(cpp -> {
+                    String stagePropCode = cpp.getStageProp().getCode();
+                    RenderedStagePropData data = renderedProps.get(stagePropCode);
+                    renderedProps.put(stagePropCode, renderChannel(cpp, data));
+                }
         );
-        return renderedChannels;
+        return renderedProps;
     }
 
-    private RenderedStagePropData renderChannel(EffectChannel channel) {
-        final int endFrame = Math.min(sequence.getDurationFrames() - 1, startFrame + durationFrames - 1);
+    private RenderedStagePropData renderChannel(ChannelPropPair channelPropPair, RenderedStagePropData renderedStagePropData) {
+        if (renderedStagePropData == null) {
+            final int endFrame = Math.min(sequence.getDurationFrames() - 1, startFrame + durationFrames - 1);
 
-        int frameCount = endFrame - startFrame + 1;
-        byte[] data = new byte[frameCount * channel.getLedCount() * Led.BYTES_PER_LED];
-        RenderedStagePropData renderedStagePropData = new RenderedStagePropData(startFrame, endFrame, channel.getLedCount(), data);
-        channel.getEffects().forEach(effect -> renderEffect(sequence, renderedStagePropData, effect));
+            int frameCount = endFrame - startFrame + 1;
+            int leds = channelPropPair.getStageProp().getLeds();
+            byte[] data = new byte[frameCount * leds * Led.BYTES_PER_LED];
+            renderedStagePropData = new RenderedStagePropData(startFrame, endFrame, leds, data);
+        }
+
+        final RenderedStagePropData dataToRender = renderedStagePropData;
+        channelPropPair.getChannel().getEffects().forEach(effect -> renderEffect(sequence, dataToRender, effect));
 
         return renderedStagePropData;
     }
 
     private void renderEffect(Sequence sequence, RenderedStagePropData renderedStagePropData, Effect effect) {
         EffectTypeCode effectTypeCode = effect.getType();
-        EffectRenderer renderer = effectTypeRenderers.get(effectTypeCode);
+        EffectRenderer renderer = EffectTypeRenderers.get(effectTypeCode);
 
         int startFrame = Math.max(this.startFrame, effect.getStartFrame());
         int endFrame = Math.min(this.startFrame + (this.durationFrames - 1), effect.getEndFrame());

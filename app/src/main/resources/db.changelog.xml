@@ -150,17 +150,31 @@
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 
-    <changeSet author="chrisparton1991" id="create-table-sequence-animation">
-        <createTable tableName="sequence_animation">
-            <column name="sequence_id" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="pk_sequence_animation"/>
+    <changeSet author="chrisparton1991" id="create-table-sequence-channel">
+        <createTable tableName="sequence_channel">
+            <column name="uuid" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="pk_sequence_channel"/>
             </column>
-            <column name="animation_data" type="CLOB"/>
+            <column name="sequence_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stage_prop_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_order" type="INT(10)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_json" type="CLOB"/>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="sequence_animation" baseColumnNames="sequence_id"
+        <addForeignKeyConstraint baseTableName="sequence_channel" baseColumnNames="sequence_id"
                                  referencedTableName="sequence" referencedColumnNames="id"
-                                 constraintName="fk_sequence_animation_sequence_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_sequence_channel_sequence_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 deferrable="false" initiallyDeferred="false"/>
+
+        <addForeignKeyConstraint baseTableName="sequence_channel" baseColumnNames="stage_prop_uuid"
+                                 referencedTableName="stage_prop" referencedColumnNames="uuid"
+                                 constraintName="fk_sequence_channel_stage_prop_uuid" onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 

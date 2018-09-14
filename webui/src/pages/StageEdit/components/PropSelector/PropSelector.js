@@ -22,7 +22,7 @@ class PropSelector extends Component {
     ));
 
     return (
-      <div className={"prop-selector d-flex flex-row align-items-center justify-content-center " + className}>
+      <div className={"prop-selector w-100 d-flex flex-row align-items-center justify-content-center " + className}>
         {propButtons}
       </div>
     );
