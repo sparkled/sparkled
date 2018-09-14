@@ -8,6 +8,7 @@
     "bootswatch": "^4.1.2",
     "date-fns": "^1.29.0",
     "jsmediatags": "^3.8.1",
+    "lodash": "^4.17.11",
     "moment": "^2.22.2npm",
     "raphael": "^2.2.7",
     "react": "^16.4.1",
