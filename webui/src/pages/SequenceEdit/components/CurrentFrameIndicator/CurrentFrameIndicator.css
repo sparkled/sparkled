@@ -1,0 +1,7 @@
+.current-frame-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 10px;
+  margin-left: 100px;
+  background: rgba(0, 162, 211, .8);
+}

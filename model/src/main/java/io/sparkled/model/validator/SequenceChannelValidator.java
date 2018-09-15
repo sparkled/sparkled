@@ -48,7 +48,7 @@ public class SequenceChannelValidator {
         }
 
         for (Effect effect : effects) {
-            int effectDuration = effect.getEndFrame() - effect.getStartFrame();
+            int effectDuration = effect.getEndFrame() - effect.getStartFrame() + 1;
 
             if (effect.getType() == null) {
                 String errorMessage = String.format(

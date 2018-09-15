@@ -9,7 +9,7 @@ const SingleSelectField = ({ input, options, allowEmpty = true, className = '', 
   const attrs = { disabled, required };
 
   const optionElements = _.map(options, option => {
-    const id = option.id || option.uuid;
+    const id = option.id || option.uuid || option.code;
     return <option key={id} value={id}>{option.name}</option>;
   });
 

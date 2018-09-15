@@ -20,6 +20,19 @@ export const fetchSequenceStage = sequenceId => {
   };
 };
 
+export const fetchReferenceData = () => {
+  const request = axios.all([
+    axios.get(`${restConfig.ROOT_URL}/effectTypes`),
+    axios.get(`${restConfig.ROOT_URL}/fillTypes`),
+    axios.get(`${restConfig.ROOT_URL}/easingTypes`),
+  ]);
+
+  return {
+    type: actionTypes.FETCH_REFERENCE_DATA,
+    payload: request
+  };
+};
+
 export const saveSequence = sequence => {
   const url = `${restConfig.ROOT_URL}/sequences/${sequence.id}`;
   const request = axios.put(url, sequence);
@@ -33,6 +46,7 @@ export const saveSequence = sequence => {
 export const addChannel = channel => {
   return {
     type: actionTypes.ADD_CHANNEL,
+    undoable: true,
     payload: { channel }
   };
 };
@@ -56,9 +70,33 @@ export const selectEffect = (selectedChannel, selectedEffect) => {
   };
 };
 
-export const updateEffect = (selectedChannel, selectedEffect) => {
+export const addEffect = effect => {
+  return {
+    type: actionTypes.ADD_EFFECT,
+    undoable: true,
+    payload: { effect }
+  };
+};
+
+export const updateEffect = (channel, effect) => {
   return {
     type: actionTypes.UPDATE_EFFECT,
-    payload: { selectedChannel, selectedEffect }
+    undoable: true,
+    payload: { channel, effect }
+  };
+};
+
+export const deleteEffect = (channel, effect) => {
+  return {
+    type: actionTypes.DELETE_EFFECT,
+    undoable: true,
+    payload: { channel, effect }
+  };
+};
+
+export const selectFrame = (frame) => {
+  return {
+    type: actionTypes.SELECT_FRAME,
+    payload: { frame }
   };
 };

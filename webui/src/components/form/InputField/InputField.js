@@ -1,16 +1,20 @@
 import React from 'react';
+import './InputField.css';
 
-const InputField = ({ input, className = '', disabled, required, label, name, type, meta }) => {
+let inputId = 0;
+
+const InputField = ({ input, className = '', disabled, required, label, type, meta }) => {
   const hasError = meta.touched && meta.error;
   const formGroupClass = hasError ? 'form-group has-danger' : 'form-group';
   const fieldClass = hasError ? 'form-control is-invalid' : 'form-control';
   const errorContent = hasError ? <div className="invalid-feedback">{meta.error}</div> : null;
   const attrs = { disabled, required };
 
+  const id = 'InputField-' + (inputId++);
   return (
-    <div className={`${className} ${formGroupClass}`}>
-      <label className="form-control-label" htmlFor={name}>{label} {required ? '*' : ''}</label>
-      <input {...input} {...attrs} className={fieldClass} type={type}/>
+    <div className={`InputField ${className} ${formGroupClass}`}>
+      <label className="form-control-label" htmlFor={id}>{label} {required ? '*' : ''}</label>
+      <input id={id} className={fieldClass} type={type} {...input} {...attrs}/>
       {errorContent}
     </div>
   );

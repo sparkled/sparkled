@@ -6,7 +6,7 @@ import io.sparkled.rest.json.GsonProvider;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-public abstract class RestService {
+abstract class RestService {
 
     final Gson gson = GsonProvider.get();
 

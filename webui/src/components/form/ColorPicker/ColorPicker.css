@@ -1,0 +1,29 @@
+.ColorPicker .color {
+  width: 36px;
+  height: 14px;
+}
+
+.ColorPicker .swatch-container {
+  position: relative;
+}
+
+.ColorPicker .swatch {
+  padding: 5px;
+  background: #fff;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.ColorPicker .popover {
+  position: absolute;
+  top: 25px;
+  z-index: 2;
+}
+
+.ColorPicker .cover {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

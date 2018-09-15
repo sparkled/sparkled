@@ -5,13 +5,11 @@ import io.sparkled.model.animation.fill.Fill;
 import io.sparkled.model.animation.param.HasParams;
 import io.sparkled.model.animation.param.Param;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Effect implements HasParams {
 
+    private UUID uuid;
     private EffectTypeCode type;
     private List<Param> params = new ArrayList<>();
     private Easing easing;
@@ -20,6 +18,15 @@ public class Effect implements HasParams {
     private int endFrame;
     private int repetitions = 1;
     private boolean reverse = false;
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public Effect setUuid(UUID uuid) {
+        this.uuid = uuid;
+        return this;
+    }
 
     public EffectTypeCode getType() {
         return type;
@@ -101,27 +108,29 @@ public class Effect implements HasParams {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Effect)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Effect effect = (Effect) o;
         return startFrame == effect.startFrame &&
                 endFrame == effect.endFrame &&
                 repetitions == effect.repetitions &&
                 reverse == effect.reverse &&
+                Objects.equals(uuid, effect.uuid) &&
                 type == effect.type &&
                 Objects.equals(params, effect.params) &&
-                easing == effect.easing &&
+                Objects.equals(easing, effect.easing) &&
                 Objects.equals(fill, effect.fill);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, params, easing, fill, startFrame, endFrame, repetitions, reverse);
+        return Objects.hash(uuid, type, params, easing, fill, startFrame, endFrame, repetitions, reverse);
     }
 
     @Override
     public String toString() {
         return "Effect{" +
-                "type=" + type +
+                "uuid=" + uuid +
+                ", type=" + type +
                 ", params=" + params +
                 ", easing=" + easing +
                 ", fill=" + fill +

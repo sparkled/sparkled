@@ -16,6 +16,10 @@
   background: #2B3E50;
 }
 
+.timeline .channel-wrapper {
+  position: relative;
+}
+
 .timeline .channels {
   width: 100%;
   height: 100%;
