@@ -41,6 +41,7 @@ public class SequenceChannelViewModelConverterImpl implements SequenceChannelVie
 
         String channelJson = gson.toJson(new SequenceChannelEffects().setEffects(viewModel.getEffects()));
         return model
+                .setUuid(viewModel.getUuid())
                 .setSequenceId(viewModel.getSequenceId())
                 .setStagePropUuid(viewModel.getStagePropUuid())
                 .setName(viewModel.getName())

@@ -17,6 +17,7 @@ public class SaveSequenceChannelsQuery implements PersistenceQuery<Void> {
 
     @Override
     public Void perform(EntityManager entityManager) {
+        // TODO: Delete removed channels from database
         SequenceChannelValidator sequenceChannelValidator = new SequenceChannelValidator();
         sequenceChannels.forEach(sequenceChannelValidator::validate);
         sequenceChannels.forEach(entityManager::merge);

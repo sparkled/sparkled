@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -125,12 +126,18 @@ public class SequenceRestService extends RestService {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSequence(@PathParam("id") int id, Sequence sequence) {
-        if (id != sequence.getId()) {
+    public Response updateSequence(@PathParam("id") int id, SequenceViewModel sequenceViewModel) {
+        if (id != sequenceViewModel.getId()) {
             return getJsonResponse(Response.Status.BAD_REQUEST, "Sequence ID does not match URL.");
         }
 
-        Integer savedId = sequencePersistenceService.saveSequence(sequence);
+        Sequence sequence = sequenceViewModelConverter.fromViewModel(sequenceViewModel);
+        List<SequenceChannel> sequenceChannels = sequenceViewModel.getChannels()
+                .stream()
+                .map(sequenceChannelViewModelConverter::fromViewModel)
+                .collect(Collectors.toList());
+
+        Integer savedId = sequencePersistenceService.saveSequence(sequence, sequenceChannels);
         if (savedId == null) {
             return getJsonResponse(Response.Status.NOT_FOUND, "Sequence not found.");
         } else {
@@ -163,7 +170,7 @@ public class SequenceRestService extends RestService {
         } else {
             Sequence sequence = sequenceOptional.get();
             sequence.setStatus(sequenceStatus);
-            sequencePersistenceService.saveSequence(sequence);
+            sequencePersistenceService.saveSequence(sequence, sequenceChannels);
 
             if (sequenceStatus == SequenceStatus.PUBLISHED) {
                 Integer stageId = sequence.getStageId();
@@ -175,8 +182,6 @@ public class SequenceRestService extends RestService {
                     persistRenderedSequence(sequence, stage, sequenceChannels);
                 }
             }
-
-            sequencePersistenceService.saveSequenceChannels(sequenceChannels);
             return getJsonResponse(Response.ok());
         }
     }
@@ -190,7 +195,7 @@ public class SequenceRestService extends RestService {
     private int persistSequence(Sequence sequence) {
         sequence.setId(null);
         sequence.setStatus(SequenceStatus.NEW);
-        return sequencePersistenceService.saveSequence(sequence);
+        return sequencePersistenceService.saveSequence(sequence, Collections.emptyList());
     }
 
     private void persistSongAudio(InputStream uploadedInputStream, int sequenceId) throws IOException {

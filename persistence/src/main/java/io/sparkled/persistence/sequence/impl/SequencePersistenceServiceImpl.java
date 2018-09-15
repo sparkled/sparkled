@@ -57,7 +57,8 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
 
     @Override
     @Transactional
-    public Integer saveSequence(Sequence sequence) {
+    public Integer saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
+        new SaveSequenceChannelsQuery(sequenceChannels).perform(entityManagerProvider.get());
         return new SaveSequenceQuery(sequence).perform(entityManagerProvider.get());
     }
 
@@ -65,12 +66,6 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     @Transactional
     public Integer saveSongAudio(SongAudio songAudio) {
         return new SaveSongAudioQuery(songAudio).perform(entityManagerProvider.get());
-    }
-
-    @Override
-    @Transactional
-    public void saveSequenceChannels(List<SequenceChannel> sequenceChannels) {
-        new SaveSequenceChannelsQuery(sequenceChannels).perform(entityManagerProvider.get());
     }
 
     @Override

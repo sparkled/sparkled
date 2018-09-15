@@ -54,7 +54,8 @@ class AddChannelModal extends Component {
 
   addChannel(channel) {
     const { sequence } = this.props;
-    this.props.addChannel({ ...channel, uuid: uuidv4(), sequenceUuid: sequence.uuid });
+    const displayOrder = sequence.channels.length;
+    this.props.addChannel({ ...channel, uuid: uuidv4(), sequenceId: sequence.id, displayOrder });
   }
 
   hideModal() {
