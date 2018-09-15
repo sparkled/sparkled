@@ -8,9 +8,10 @@ const SingleSelectField = ({ input, options, allowEmpty = true, className = '', 
   const errorContent = hasError ? <div className="invalid-feedback">{meta.error}</div> : null;
   const attrs = { disabled, required };
 
-  const optionElements = _.map(options, option => (
-    <option key={option.id} value={option.id}>{option.name}</option>
-  ));
+  const optionElements = _.map(options, option => {
+    const id = option.id || option.uuid;
+    return <option key={id} value={id}>{option.name}</option>;
+  });
 
   return (
     <div className={`${className} ${formGroupClass}`}>

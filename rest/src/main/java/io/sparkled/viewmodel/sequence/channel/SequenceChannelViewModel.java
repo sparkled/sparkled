@@ -1,16 +1,17 @@
 package io.sparkled.viewmodel.sequence.channel;
 
-import io.sparkled.model.animation.SequenceChannelEffects;
 import io.sparkled.model.animation.effect.Effect;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class SequenceChannelViewModel {
+
     private UUID uuid;
-    private String name;
     private int sequenceId;
     private UUID stagePropUuid;
+    private String name;
     private Integer displayOrder;
     private List<Effect> effects;
 
@@ -20,15 +21,6 @@ public class SequenceChannelViewModel {
 
     public SequenceChannelViewModel setUuid(UUID uuid) {
         this.uuid = uuid;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public SequenceChannelViewModel setName(String name) {
-        this.name = name;
         return this;
     }
 
@@ -50,6 +42,15 @@ public class SequenceChannelViewModel {
         return this;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public SequenceChannelViewModel setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public Integer getDisplayOrder() {
         return displayOrder;
     }
@@ -66,5 +67,23 @@ public class SequenceChannelViewModel {
     public SequenceChannelViewModel setEffects(List<Effect> effects) {
         this.effects = effects;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SequenceChannelViewModel)) return false;
+        SequenceChannelViewModel that = (SequenceChannelViewModel) o;
+        return sequenceId == that.sequenceId &&
+                Objects.equals(uuid, that.uuid) &&
+                Objects.equals(stagePropUuid, that.stagePropUuid) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(displayOrder, that.displayOrder) &&
+                Objects.equals(effects, that.effects);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, sequenceId, stagePropUuid, name, displayOrder, effects);
     }
 }

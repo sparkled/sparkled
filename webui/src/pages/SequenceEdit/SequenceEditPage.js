@@ -8,7 +8,8 @@ import { setCurrentPage } from '../actions';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import StageCanvas from '../StageEdit/components/StageCanvas';
-import { fetchSequence, fetchSequenceStage, saveSequence } from './actions';
+import { fetchSequence, fetchSequenceStage, showAddChannelModal, saveSequence } from './actions';
+import AddChannelModal from './components/AddChannelModal';
 import Timeline from './components/Timeline';
 import EffectForm from './components/EffectForm';
 import './SequenceEditPage.css';
@@ -59,6 +60,9 @@ class SequenceEditPage extends Component {
           <span className="nav-link" onClick={() => redo()}>Redo</span>
         </NavItem>
         <NavItem className={loaded ? '' : 'd-none'}>
+          <span className="nav-link" onClick={() => this.props.showAddChannelModal()}>Add Channel</span>
+        </NavItem>
+        <NavItem className={loaded ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => this.props.saveSequence(sequence)}>Save</span>
         </NavItem>
       </Nav>
@@ -103,6 +107,8 @@ class SequenceEditPage extends Component {
 
           <Timeline/>
         </SplitPane>
+
+        <AddChannelModal/>
       </Fragment>
     );
   }
@@ -127,4 +133,6 @@ function mapStateToProps({ page }) {
   };
 }
 
-export default connect(mapStateToProps, { setCurrentPage, fetchSequence, fetchSequenceStage, saveSequence, undo, redo, clearHistory })(SequenceEditPage);
+export default connect(mapStateToProps, {
+  setCurrentPage, fetchSequence, fetchSequenceStage, showAddChannelModal, saveSequence, undo, redo, clearHistory
+})(SequenceEditPage);

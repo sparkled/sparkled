@@ -17,7 +17,6 @@ class AddStageModal extends Component {
   render() {
     const { adding, addModalVisible, handleSubmit, valid } = this.props;
     const addButtonText = adding ? 'Adding...' : 'Add stage';
-    const canSubmit = valid;
 
     return (
       <div>
@@ -32,7 +31,7 @@ class AddStageModal extends Component {
               {this.renderAddError()}
             </ModalBody>
             <ModalFooter>
-              <Button type="submit" color="info" disabled={adding || !canSubmit}>{addButtonText}</Button>
+              <Button type="submit" color="info" disabled={adding || !valid}>{addButtonText}</Button>
               <Button type="button" color="secondary" disabled={adding}
                       onClick={this.hideModal.bind(this)}>Cancel</Button>
             </ModalFooter>

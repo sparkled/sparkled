@@ -11,6 +11,7 @@ const initialState = {
   saving: null,
   saveError: null,
   sequence: null,
+  addChannelModalVisible: false,
   selectedChannel: null,
   selectedEffect: null
 };
@@ -83,6 +84,25 @@ export default (state = initialState, action) => {
         ...state,
         saving: false,
         saveError: getResponseError(action)
+      };
+
+    case actionTypes.SHOW_ADD_CHANNEL_MODAL:
+      return {
+        ...state,
+        addChannelModalVisible: true
+      };
+
+    case actionTypes.HIDE_ADD_CHANNEL_MODAL:
+      return {
+        ...state,
+        addChannelModalVisible: false
+      };
+
+    case actionTypes.ADD_CHANNEL:
+      return {
+        ...state,
+        addChannelModalVisible: false,
+        sequence: { ...state.sequence, channels: [...state.sequence.channels, action.payload.channel] }
       };
 
     case actionTypes.SELECT_EFFECT: {

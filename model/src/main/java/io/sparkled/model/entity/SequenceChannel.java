@@ -23,6 +23,10 @@ public class SequenceChannel {
     private UUID stagePropUuid;
 
     @Basic
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Basic
     @Column(name = "display_order", nullable = false)
     private Integer displayOrder;
 
@@ -54,6 +58,15 @@ public class SequenceChannel {
 
     public SequenceChannel setStagePropUuid(UUID stagePropUuid) {
         this.stagePropUuid = stagePropUuid;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public SequenceChannel setName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -89,12 +102,13 @@ public class SequenceChannel {
         return sequenceId == that.sequenceId &&
                 Objects.equals(uuid, that.uuid) &&
                 Objects.equals(stagePropUuid, that.stagePropUuid) &&
+                Objects.equals(name, that.name) &&
                 Objects.equals(displayOrder, that.displayOrder) &&
                 Objects.equals(channelJson, that.channelJson);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, sequenceId, stagePropUuid, displayOrder, channelJson);
+        return Objects.hash(uuid, sequenceId, stagePropUuid, name, displayOrder, channelJson);
     }
 }
