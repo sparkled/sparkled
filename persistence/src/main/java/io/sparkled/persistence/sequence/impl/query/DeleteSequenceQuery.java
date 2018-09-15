@@ -1,6 +1,7 @@
 package io.sparkled.persistence.sequence.impl.query;
 
 import io.sparkled.model.entity.*;
+import io.sparkled.persistence.BulkDeleteQuery;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.scheduler.impl.query.GetScheduledSequencesBySequenceIdQuery;
 
@@ -18,20 +19,33 @@ public class DeleteSequenceQuery implements PersistenceQuery<Integer> {
 
     @Override
     public Integer perform(EntityManager entityManager) {
-        Optional<SongAudio> songAudio = new GetSongAudioBySequenceIdQuery(sequenceId).perform(entityManager);
-        songAudio.ifPresent(entityManager::remove);
-
-        List<SequenceChannel> channels = new GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(entityManager);
-        channels.forEach(entityManager::remove);
-
-        List<ScheduledSequence> scheduledSequences = new GetScheduledSequencesBySequenceIdQuery(sequenceId).perform(entityManager);
-        scheduledSequences.forEach(entityManager::remove);
-
-        new DeleteRenderedStagePropsQuery(sequenceId).perform(entityManager);
-
-        Optional<Sequence> sequence = new GetSequenceByIdQuery(sequenceId).perform(entityManager);
-        sequence.ifPresent(entityManager::remove);
+        deleteSongAudio(entityManager);
+        deleteSequenceChannels(entityManager);
+        deleteScheduledSequences(entityManager);
+        deleteRenderedStageProps(entityManager);
+        deleteSequence(entityManager);
 
         return sequenceId;
+    }
+
+    private void deleteSongAudio(EntityManager entityManager) {
+        BulkDeleteQuery.from(SongAudio.class).where(SongAudio_.sequenceId).is(sequenceId).perform(entityManager);
+    }
+
+    private void deleteSequenceChannels(EntityManager entityManager) {
+        BulkDeleteQuery.from(SequenceChannel.class).where(SequenceChannel_.sequenceId).is(sequenceId).perform(entityManager);
+    }
+
+    private void deleteScheduledSequences(EntityManager entityManager) {
+        List<ScheduledSequence> scheduledSequences = new GetScheduledSequencesBySequenceIdQuery(sequenceId).perform(entityManager);
+        scheduledSequences.forEach(entityManager::remove);
+    }
+
+    private void deleteRenderedStageProps(EntityManager entityManager) {
+        BulkDeleteQuery.from(RenderedStageProp.class).where(RenderedStageProp_.sequenceId).is(sequenceId).perform(entityManager);
+    }
+
+    private void deleteSequence(EntityManager entityManager) {
+        BulkDeleteQuery.from(Sequence.class).where(Sequence_.id).is(sequenceId).perform(entityManager);
     }
 }

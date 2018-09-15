@@ -1,13 +1,11 @@
 package io.sparkled.persistence.sequence.impl;
 
 import com.google.inject.persist.Transactional;
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.SequenceChannel;
-import io.sparkled.model.entity.SongAudio;
-import io.sparkled.model.entity.Stage;
+import io.sparkled.model.entity.*;
 import io.sparkled.model.render.RenderedStagePropDataMap;
-import io.sparkled.persistence.sequence.impl.query.*;
+import io.sparkled.persistence.BulkDeleteQuery;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
+import io.sparkled.persistence.sequence.impl.query.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -84,7 +82,8 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     @Override
     @Transactional
     public void deleteRenderedStageProps(int sequenceId) {
-        new DeleteRenderedStagePropsQuery(sequenceId).perform(entityManagerProvider.get());
+        EntityManager entityManager = entityManagerProvider.get();
+        BulkDeleteQuery.from(RenderedStageProp.class).where(RenderedStageProp_.sequenceId).is(sequenceId).perform(entityManager);
     }
 
     @Override
