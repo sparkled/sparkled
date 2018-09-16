@@ -2,10 +2,8 @@ package io.sparkled.persistence.sequence.impl.query;
 
 import io.sparkled.model.entity.Stage;
 import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.util.PersistenceUtils;
+import io.sparkled.persistence.QueryFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 public class GetStageBySequenceIdQuery implements PersistenceQuery<Optional<Stage>> {
@@ -17,29 +15,13 @@ public class GetStageBySequenceIdQuery implements PersistenceQuery<Optional<Stag
     }
 
     @Override
-    public Optional<Stage> perform(EntityManager entityManager) {
-        Optional<Integer> stageId = getSequenceId(entityManager);
+    public Optional<Stage> perform(QueryFactory queryFactory) {
+        Stage stage = queryFactory
+                .selectFrom(qStage)
+                .innerJoin(qSequence).on(qSequence.stageId.eq(qStage.id))
+                .where(qSequence.id.eq(sequenceId))
+                .fetchFirst();
 
-        if (stageId.isPresent()) {
-            return getStage(entityManager, stageId.get());
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    private Optional<Integer> getSequenceId(EntityManager entityManager) {
-        String hql = "select stageId from Sequence where id = :sequenceId";
-        TypedQuery<Integer> query = entityManager.createQuery(hql, Integer.class);
-
-        query.setParameter("sequenceId", sequenceId);
-        return PersistenceUtils.getSingleResult(query);
-    }
-
-    private Optional<Stage> getStage(EntityManager entityManager, Integer stageId) {
-        String hql = "from Stage where id = :stageId";
-        TypedQuery<Stage> query = entityManager.createQuery(hql, Stage.class);
-
-        query.setParameter("stageId", stageId);
-        return PersistenceUtils.getSingleResult(query);
+        return Optional.ofNullable(stage);
     }
 }

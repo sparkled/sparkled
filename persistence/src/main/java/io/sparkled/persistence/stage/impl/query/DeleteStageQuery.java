@@ -1,15 +1,9 @@
 package io.sparkled.persistence.stage.impl.query;
 
-import io.sparkled.model.entity.Stage;
-import io.sparkled.model.entity.StageProp;
-import io.sparkled.model.entity.StageProp_;
-import io.sparkled.model.entity.Stage_;
-import io.sparkled.persistence.BulkDeleteQuery;
 import io.sparkled.persistence.PersistenceQuery;
+import io.sparkled.persistence.QueryFactory;
 import io.sparkled.persistence.sequence.impl.query.DeleteSequenceQuery;
 import io.sparkled.persistence.sequence.impl.query.GetSequencesByStageIdQuery;
-
-import javax.persistence.EntityManager;
 
 public class DeleteStageQuery implements PersistenceQuery<Integer> {
 
@@ -20,25 +14,31 @@ public class DeleteStageQuery implements PersistenceQuery<Integer> {
     }
 
     @Override
-    public Integer perform(EntityManager entityManager) {
-        removeSequences(entityManager);
-        removeStageProps(entityManager);
-        removeStage(entityManager);
+    public Integer perform(QueryFactory queryFactory) {
+        removeSequences(queryFactory);
+        removeStageProps(queryFactory);
+        removeStage(queryFactory);
 
         return stageId;
     }
 
-    private void removeSequences(EntityManager entityManager) {
-        new GetSequencesByStageIdQuery(stageId).perform(entityManager).forEach(sequence -> {
-            new DeleteSequenceQuery(sequence.getId()).perform(entityManager);
+    private void removeSequences(QueryFactory queryFactory) {
+        new GetSequencesByStageIdQuery(stageId).perform(queryFactory).forEach(sequence -> {
+            new DeleteSequenceQuery(sequence.getId()).perform(queryFactory);
         });
     }
 
-    private void removeStageProps(EntityManager entityManager) {
-        BulkDeleteQuery.from(StageProp.class).where(StageProp_.stageId).is(stageId).perform(entityManager);
+    private void removeStageProps(QueryFactory queryFactory) {
+        queryFactory
+                .delete(qStageProp)
+                .where(qStageProp.stageId.eq(stageId))
+                .execute();
     }
 
-    private void removeStage(EntityManager entityManager) {
-        BulkDeleteQuery.from(Stage.class).where(Stage_.id).is(stageId).perform(entityManager);
+    private void removeStage(QueryFactory queryFactory) {
+        queryFactory
+                .delete(qStage)
+                .where(qStage.id.eq(stageId))
+                .execute();
     }
 }

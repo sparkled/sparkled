@@ -38,6 +38,7 @@
         <liquibase.version>3.5.3</liquibase.version>
         <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
         <mp3spi.version>1.9.5-1</mp3spi.version>
+        <querydsl.version>4.2.1</querydsl.version>
     </properties>
 
     <profiles>
@@ -147,6 +148,18 @@
             </dependency>
 
             <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-apt</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
@@ -185,12 +198,6 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
-                <version>${hibernate.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-jpamodelgen</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
 

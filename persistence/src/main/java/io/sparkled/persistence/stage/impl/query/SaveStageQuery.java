@@ -2,15 +2,13 @@ package io.sparkled.persistence.stage.impl.query;
 
 import io.sparkled.model.entity.Stage;
 import io.sparkled.model.entity.StageProp;
-import io.sparkled.model.entity.StageProp_;
 import io.sparkled.model.validator.StageValidator;
 import io.sparkled.persistence.PersistenceQuery;
+import io.sparkled.persistence.QueryFactory;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -27,15 +25,17 @@ public class SaveStageQuery implements PersistenceQuery<Integer> {
     }
 
     @Override
-    public Integer perform(EntityManager entityManager) {
+    public Integer perform(QueryFactory queryFactory) {
+        EntityManager entityManager = queryFactory.getEntityManager();
+
         new StageValidator(stage).validate();
 
         Stage result = entityManager.merge(stage);
-        removeDeletedStageProps(entityManager, result);
+        removeDeletedStageProps(queryFactory, result);
         return result.getId();
     }
 
-    private void removeDeletedStageProps(EntityManager entityManager, Stage persistedStage) {
+    private void removeDeletedStageProps(QueryFactory queryFactory, Stage persistedStage) {
         List<UUID> propUuids = persistedStage.getStageProps().stream()
                 .map(StageProp::getUuid)
                 .collect(toList());
@@ -44,16 +44,11 @@ public class SaveStageQuery implements PersistenceQuery<Integer> {
             propUuids = Collections.singletonList(new UUID(0, 0)); // Need an item in the list to avoid an empty IN clause.
         }
 
-        String className = StageProp.class.getSimpleName();
-        String stageId = StageProp_.stageId.getName();
-        String uuid = StageProp_.uuid.getName();
-        Query query = entityManager.createQuery(
-                "delete from " + className + " where " + stageId + " = :stageId and " + uuid + " not in (:propUuids)"
-        );
-        query.setParameter("stageId", persistedStage.getId());
-        query.setParameter("propUuids", propUuids);
+        long deleted = queryFactory
+                .delete(qStageProp)
+                .where(qStageProp.stageId.eq(persistedStage.getId()).and(qStageProp.uuid.notIn(propUuids)))
+                .execute();
 
-        int deleted = query.executeUpdate();
-        logger.info("Deleted " + deleted + " " + className + " record(s) for stage " + persistedStage.getId());
+        logger.info("Deleted " + deleted + " record(s) for stage " + persistedStage.getId());
     }
 }

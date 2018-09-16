@@ -1,10 +1,7 @@
 package io.sparkled.persistence.scheduler.impl.query;
 
-import io.sparkled.model.entity.ScheduledSequence;
 import io.sparkled.persistence.PersistenceQuery;
-
-import javax.persistence.EntityManager;
-import java.util.Optional;
+import io.sparkled.persistence.QueryFactory;
 
 public class RemoveScheduledSequenceQuery implements PersistenceQuery<Boolean> {
 
@@ -15,13 +12,10 @@ public class RemoveScheduledSequenceQuery implements PersistenceQuery<Boolean> {
     }
 
     @Override
-    public Boolean perform(EntityManager entityManager) {
-        Optional<ScheduledSequence> scheduledSequence = new GetScheduledSequenceByIdQuery(scheduledSequenceId).perform(entityManager);
-        if (scheduledSequence.isPresent()) {
-            entityManager.remove(scheduledSequence.get());
-            return true;
-        }
-
-        return false;
+    public Boolean perform(QueryFactory queryFactory) {
+        return queryFactory
+                .delete(qScheduledSequence)
+                .where(qScheduledSequence.id.eq(scheduledSequenceId))
+                .execute() > 0;
     }
 }

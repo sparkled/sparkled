@@ -1,15 +1,9 @@
 package io.sparkled.persistence.scheduler.impl.query;
 
 import io.sparkled.model.entity.ScheduledSequence;
-import io.sparkled.model.entity.ScheduledSequence_;
 import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.util.PersistenceUtils;
+import io.sparkled.persistence.QueryFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.Optional;
 
 public class GetScheduledSequenceByIdQuery implements PersistenceQuery<Optional<ScheduledSequence>> {
@@ -21,15 +15,12 @@ public class GetScheduledSequenceByIdQuery implements PersistenceQuery<Optional<
     }
 
     @Override
-    public Optional<ScheduledSequence> perform(EntityManager entityManager) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ScheduledSequence> cq = cb.createQuery(ScheduledSequence.class);
-        Root<ScheduledSequence> scheduledSequence = cq.from(ScheduledSequence.class);
-        cq.where(
-                cb.equal(scheduledSequence.get(ScheduledSequence_.id), scheduledSequenceId)
-        );
+    public Optional<ScheduledSequence> perform(QueryFactory queryFactory) {
+        ScheduledSequence scheduledSequence = queryFactory
+                .selectFrom(qScheduledSequence)
+                .where(qScheduledSequence.id.eq(scheduledSequenceId))
+                .fetchFirst();
 
-        TypedQuery<ScheduledSequence> query = entityManager.createQuery(cq);
-        return PersistenceUtils.getSingleResult(query);
+        return Optional.ofNullable(scheduledSequence);
     }
 }
