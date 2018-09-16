@@ -1,7 +1,6 @@
 package io.sparkled.rest;
 
 import io.sparkled.model.entity.Stage;
-import io.sparkled.model.validator.exception.EntityValidationException;
 import io.sparkled.persistence.stage.StagePersistenceService;
 import io.sparkled.rest.response.IdResponse;
 
@@ -10,7 +9,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Path("/stages")

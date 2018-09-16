@@ -1,8 +1,8 @@
 package io.sparkled.udpserver;
 
 import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.render.RenderedFrame;
+import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.music.SequencePlayerServiceImpl;
 
 import javax.inject.Inject;

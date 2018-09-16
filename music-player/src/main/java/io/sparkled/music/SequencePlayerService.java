@@ -1,9 +1,9 @@
 package io.sparkled.music;
 
 import io.sparkled.model.entity.Sequence;
-import javazoom.jl.player.advanced.PlaybackEvent;
 import io.sparkled.model.entity.SongAudio;
 import io.sparkled.model.render.RenderedStagePropDataMap;
+import javazoom.jl.player.advanced.PlaybackEvent;
 
 import java.util.function.Consumer;
 

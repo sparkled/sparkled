@@ -14,9 +14,6 @@ import io.sparkled.util.matchers.SparkledMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
-import static io.sparkled.util.matchers.SparkledMatchers.hasLeds;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 public class LineEffectRendererTest {
 
     @Test

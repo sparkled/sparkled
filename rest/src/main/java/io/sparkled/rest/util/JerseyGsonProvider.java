@@ -1,7 +1,6 @@
 package io.sparkled.rest.util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import io.sparkled.rest.json.GsonProvider;
 
 import javax.ws.rs.Consumes;
@@ -16,8 +15,6 @@ import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON)

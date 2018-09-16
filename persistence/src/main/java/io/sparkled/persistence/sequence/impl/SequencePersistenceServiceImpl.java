@@ -11,7 +11,6 @@ import io.sparkled.persistence.sequence.SequencePersistenceService;
 import io.sparkled.persistence.sequence.impl.query.*;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

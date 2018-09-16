@@ -1,10 +1,10 @@
 package io.sparkled.model.animation.fill.reference;
 
 import io.sparkled.model.animation.fill.FillType;
-import io.sparkled.model.animation.param.Param;
-import io.sparkled.model.animation.param.ParamType;
 import io.sparkled.model.animation.fill.FillTypeCode;
+import io.sparkled.model.animation.param.Param;
 import io.sparkled.model.animation.param.ParamName;
+import io.sparkled.model.animation.param.ParamType;
 
 import java.util.Arrays;
 import java.util.List;

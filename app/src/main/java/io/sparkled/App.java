@@ -1,9 +1,9 @@
 package io.sparkled;
 
 import com.google.inject.persist.PersistService;
+import io.sparkled.music.SequenceSchedulerService;
 import io.sparkled.schema.SchemaUpdater;
 import io.sparkled.udpserver.UdpServer;
-import io.sparkled.music.SequenceSchedulerService;
 
 import javax.inject.Inject;
 

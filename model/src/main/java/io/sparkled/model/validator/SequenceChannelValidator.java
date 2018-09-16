@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import io.sparkled.model.animation.SequenceChannelEffects;
 import io.sparkled.model.animation.effect.Effect;
-import io.sparkled.model.animation.effect.EffectChannel;
 import io.sparkled.model.animation.param.Param;
 import io.sparkled.model.entity.SequenceChannel;
 import io.sparkled.model.validator.exception.EntityValidationException;

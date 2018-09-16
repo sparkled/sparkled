@@ -8,7 +8,6 @@ import io.sparkled.persistence.scheduler.ScheduledSequencePersistenceService;
 import io.sparkled.persistence.scheduler.impl.query.*;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

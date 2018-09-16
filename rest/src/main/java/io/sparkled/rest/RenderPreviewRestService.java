@@ -5,8 +5,8 @@ import io.sparkled.model.entity.SequenceChannel;
 import io.sparkled.model.entity.StageProp;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.validator.SequenceChannelValidator;
-import io.sparkled.renderer.Renderer;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
+import io.sparkled.renderer.Renderer;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

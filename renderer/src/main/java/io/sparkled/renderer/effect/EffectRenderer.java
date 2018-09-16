@@ -2,8 +2,8 @@ package io.sparkled.renderer.effect;
 
 import io.sparkled.model.animation.effect.Effect;
 import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedFrame;
+import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.renderer.context.RenderContext;
 import io.sparkled.renderer.easing.EasingFunction;
 import io.sparkled.renderer.easing.EasingFunctions;

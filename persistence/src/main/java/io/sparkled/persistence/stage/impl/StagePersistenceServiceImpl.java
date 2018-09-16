@@ -10,7 +10,6 @@ import io.sparkled.persistence.stage.impl.query.GetStageByIdQuery;
 import io.sparkled.persistence.stage.impl.query.SaveStageQuery;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.List;
 import java.util.Optional;
 
