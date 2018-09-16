@@ -36,9 +36,12 @@
         <jetty.version>9.4.7.v20170914</jetty.version>
         <junit.version>4.12</junit.version>
         <liquibase.version>3.5.3</liquibase.version>
+        <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
         <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
         <mp3spi.version>1.9.5-1</mp3spi.version>
         <querydsl.version>4.2.1</querydsl.version>
+        <slf4j.version>1.6.1</slf4j.version>
     </properties>
 
     <profiles>
@@ -160,6 +163,24 @@
             </dependency>
 
             <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
@@ -217,6 +238,12 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-core</artifactId>
                 <version>${liquibase.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mattbertolini</groupId>
+                <artifactId>liquibase-slf4j</artifactId>
+                <version>${liquibase-slf4j.version}</version>
             </dependency>
 
             <dependency>
