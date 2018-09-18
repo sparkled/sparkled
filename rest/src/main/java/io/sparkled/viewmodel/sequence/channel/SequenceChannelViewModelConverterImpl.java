@@ -27,9 +27,10 @@ public class SequenceChannelViewModelConverterImpl implements SequenceChannelVie
 
         return new SequenceChannelViewModel()
                 .setUuid(model.getUuid())
-                .setDisplayOrder(model.getDisplayOrder())
                 .setSequenceId(model.getSequenceId())
                 .setStagePropUuid(model.getStagePropUuid())
+                .setName(model.getName())
+                .setDisplayOrder(model.getDisplayOrder())
                 .setEffects(effects);
     }
 
@@ -39,10 +40,12 @@ public class SequenceChannelViewModelConverterImpl implements SequenceChannelVie
                 .orElseGet(SequenceChannel::new);
 
         String channelJson = gson.toJson(new SequenceChannelEffects().setEffects(viewModel.getEffects()));
-        return model.setUuid(model.getUuid())
-                .setSequenceId(model.getSequenceId())
-                .setStagePropUuid(model.getStagePropUuid())
-                .setDisplayOrder(model.getDisplayOrder())
+        return model
+                .setUuid(viewModel.getUuid())
+                .setSequenceId(viewModel.getSequenceId())
+                .setStagePropUuid(viewModel.getStagePropUuid())
+                .setName(viewModel.getName())
+                .setDisplayOrder(viewModel.getDisplayOrder())
                 .setChannelJson(channelJson);
     }
 }

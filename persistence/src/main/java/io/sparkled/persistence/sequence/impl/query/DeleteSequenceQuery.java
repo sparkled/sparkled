@@ -1,12 +1,7 @@
 package io.sparkled.persistence.sequence.impl.query;
 
-import io.sparkled.model.entity.*;
 import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.scheduler.impl.query.GetScheduledSequencesBySequenceIdQuery;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Optional;
+import io.sparkled.persistence.QueryFactory;
 
 public class DeleteSequenceQuery implements PersistenceQuery<Integer> {
 
@@ -17,21 +12,45 @@ public class DeleteSequenceQuery implements PersistenceQuery<Integer> {
     }
 
     @Override
-    public Integer perform(EntityManager entityManager) {
-        Optional<SongAudio> songAudio = new GetSongAudioBySequenceIdQuery(sequenceId).perform(entityManager);
-        songAudio.ifPresent(entityManager::remove);
-
-        List<SequenceChannel> channels = new GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(entityManager);
-        channels.forEach(entityManager::remove);
-
-        List<ScheduledSequence> scheduledSequences = new GetScheduledSequencesBySequenceIdQuery(sequenceId).perform(entityManager);
-        scheduledSequences.forEach(entityManager::remove);
-
-        new DeleteRenderedStagePropsQuery(sequenceId).perform(entityManager);
-
-        Optional<Sequence> sequence = new GetSequenceByIdQuery(sequenceId).perform(entityManager);
-        sequence.ifPresent(entityManager::remove);
+    public Integer perform(QueryFactory queryFactory) {
+        deleteSongAudio(queryFactory);
+        deleteSequenceChannels(queryFactory);
+        deleteScheduledSequences(queryFactory);
+        deleteRenderedStageProps(queryFactory);
+        deleteSequence(queryFactory);
 
         return sequenceId;
+    }
+
+    private void deleteSongAudio(QueryFactory queryFactory) {
+        queryFactory
+                .delete(qSongAudio)
+                .where(qSongAudio.sequenceId.eq(sequenceId))
+                .execute();
+    }
+
+    private void deleteSequenceChannels(QueryFactory queryFactory) {
+        queryFactory
+                .delete(qSequenceChannel)
+                .where(qSequenceChannel.sequenceId.eq(sequenceId))
+                .execute();
+    }
+
+    private void deleteScheduledSequences(QueryFactory queryFactory) {
+        // TODO: I didn't bother converting this query over, as the scheduler will be rewritten soon.
+    }
+
+    private void deleteRenderedStageProps(QueryFactory queryFactory) {
+        queryFactory
+                .delete(qRenderedStageProp)
+                .where(qRenderedStageProp.sequenceId.eq(sequenceId))
+                .execute();
+    }
+
+    private void deleteSequence(QueryFactory queryFactory) {
+        queryFactory
+                .delete(qSequence)
+                .where(qSequence.id.eq(sequenceId))
+                .execute();
     }
 }

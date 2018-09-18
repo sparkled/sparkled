@@ -1,8 +1,8 @@
 package io.sparkled.util;
 
 import io.sparkled.model.render.Led;
-import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedFrame;
+import io.sparkled.model.render.RenderedStagePropData;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

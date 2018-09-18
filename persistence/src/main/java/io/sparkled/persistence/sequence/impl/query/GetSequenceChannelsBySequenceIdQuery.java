@@ -1,14 +1,9 @@
 package io.sparkled.persistence.sequence.impl.query;
 
 import io.sparkled.model.entity.SequenceChannel;
-import io.sparkled.model.entity.SequenceChannel_;
 import io.sparkled.persistence.PersistenceQuery;
+import io.sparkled.persistence.QueryFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class GetSequenceChannelsBySequenceIdQuery implements PersistenceQuery<List<SequenceChannel>> {
@@ -20,20 +15,11 @@ public class GetSequenceChannelsBySequenceIdQuery implements PersistenceQuery<Li
     }
 
     @Override
-    public List<SequenceChannel> perform(EntityManager entityManager) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<SequenceChannel> cq = cb.createQuery(SequenceChannel.class);
-        Root<SequenceChannel> sequenceChannel = cq.from(SequenceChannel.class);
-
-        cq.where(
-                cb.equal(sequenceChannel.get(SequenceChannel_.sequenceId), sequenceId)
-        );
-
-        cq.orderBy(
-                cb.asc(sequenceChannel.get(SequenceChannel_.displayOrder))
-        );
-
-        TypedQuery<SequenceChannel> query = entityManager.createQuery(cq);
-        return query.getResultList();
+    public List<SequenceChannel> perform(QueryFactory queryFactory) {
+        return queryFactory
+                .selectFrom(qSequenceChannel)
+                .where(qSequenceChannel.sequenceId.eq(sequenceId))
+                .orderBy(qSequenceChannel.displayOrder.asc())
+                .fetch();
     }
 }

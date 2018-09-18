@@ -15,7 +15,7 @@ class TimelineChannel extends Component {
 
     return (
       <div className={'channel ' + activeClass} style={{ width }} onMouseDown={event => selectEffect(channel.uuid, null)}>
-        <div className="label">Label</div>
+        <div className="label">{channel.name}</div>
         {effects}
       </div>
     );

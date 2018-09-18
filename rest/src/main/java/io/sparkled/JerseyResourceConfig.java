@@ -18,12 +18,10 @@ public class JerseyResourceConfig extends ResourceConfig {
         createBiDirectionalGuiceBridge(serviceLocator);
     }
 
-    private Injector createBiDirectionalGuiceBridge(ServiceLocator serviceLocator) {
+    private void createBiDirectionalGuiceBridge(ServiceLocator serviceLocator) {
         GuiceBridge.getGuiceBridge().initializeGuiceBridge(serviceLocator);
         Injector injector = RestApiServerImpl.injector;
         GuiceIntoHK2Bridge g2h = serviceLocator.getService(GuiceIntoHK2Bridge.class);
         g2h.bridgeGuiceInjector(injector);
-
-        return injector;
     }
 }

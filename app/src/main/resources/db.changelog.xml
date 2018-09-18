@@ -161,6 +161,9 @@
             <column name="stage_prop_uuid" type="UUID">
                 <constraints nullable="false"/>
             </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
             <column name="display_order" type="INT(10)" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>

@@ -32,14 +32,14 @@ public class Param {
         return value;
     }
 
-    public Param setValue(Object value) {
-        this.value = new ArrayList<>();
-        this.value.add(String.valueOf(value));
+    public Param setValue(List<String> value) {
+        this.value = value;
         return this;
     }
 
-    public Param setValue(List<String> value) {
-        this.value = value;
+    public Param setValue(Object value) {
+        this.value = new ArrayList<>();
+        this.value.add(String.valueOf(value));
         return this;
     }
 

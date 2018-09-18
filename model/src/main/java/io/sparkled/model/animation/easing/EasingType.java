@@ -1,7 +1,7 @@
 package io.sparkled.model.animation.easing;
 
-import io.sparkled.model.animation.param.Param;
 import io.sparkled.model.animation.param.HasParams;
+import io.sparkled.model.animation.param.Param;
 
 import java.util.List;
 import java.util.Objects;

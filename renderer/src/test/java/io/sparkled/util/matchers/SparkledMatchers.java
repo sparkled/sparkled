@@ -1,7 +1,7 @@
 package io.sparkled.util.matchers;
 
-import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedFrame;
+import io.sparkled.model.render.RenderedStagePropData;
 import org.hamcrest.Matcher;
 
 public class SparkledMatchers {

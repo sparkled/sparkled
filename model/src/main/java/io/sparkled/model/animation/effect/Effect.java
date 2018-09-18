@@ -2,8 +2,8 @@ package io.sparkled.model.animation.effect;
 
 import io.sparkled.model.animation.easing.Easing;
 import io.sparkled.model.animation.fill.Fill;
-import io.sparkled.model.animation.param.Param;
 import io.sparkled.model.animation.param.HasParams;
+import io.sparkled.model.animation.param.Param;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,13 +35,13 @@ public class Effect implements HasParams {
         return params;
     }
 
-    public Effect setParams(Param... params) {
-        return setParams(Arrays.asList(params));
-    }
-
     public Effect setParams(List<Param> params) {
         this.params = params;
         return this;
+    }
+
+    public Effect setParams(Param... params) {
+        return setParams(Arrays.asList(params));
     }
 
     public Easing getEasing() {

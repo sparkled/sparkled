@@ -30,6 +30,25 @@ export const saveSequence = sequence => {
   };
 };
 
+export const addChannel = channel => {
+  return {
+    type: actionTypes.ADD_CHANNEL,
+    payload: { channel }
+  };
+};
+
+export const showAddChannelModal = () => {
+  return {
+    type: actionTypes.SHOW_ADD_CHANNEL_MODAL
+  };
+};
+
+export const hideAddChannelModal = () => {
+  return {
+    type: actionTypes.HIDE_ADD_CHANNEL_MODAL
+  };
+};
+
 export const selectEffect = (selectedChannel, selectedEffect) => {
   return {
     type: actionTypes.SELECT_EFFECT,

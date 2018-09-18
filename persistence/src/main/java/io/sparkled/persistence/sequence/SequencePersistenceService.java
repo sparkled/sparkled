@@ -22,11 +22,9 @@ public interface SequencePersistenceService {
 
     Optional<SongAudio> getSongAudioBySequenceId(int sequenceId);
 
-    Integer saveSequence(Sequence sequence);
+    Integer saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels);
 
     Integer saveSongAudio(SongAudio songAudio);
-
-    void saveSequenceChannels(List<SequenceChannel> sequenceChannels);
 
     RenderedStagePropDataMap getRenderedStageProps(Sequence sequence);
 

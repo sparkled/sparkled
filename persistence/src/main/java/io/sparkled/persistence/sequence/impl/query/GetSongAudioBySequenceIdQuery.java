@@ -1,15 +1,9 @@
 package io.sparkled.persistence.sequence.impl.query;
 
 import io.sparkled.model.entity.SongAudio;
-import io.sparkled.model.entity.SongAudio_;
 import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.util.PersistenceUtils;
+import io.sparkled.persistence.QueryFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.Optional;
 
 public class GetSongAudioBySequenceIdQuery implements PersistenceQuery<Optional<SongAudio>> {
@@ -21,15 +15,12 @@ public class GetSongAudioBySequenceIdQuery implements PersistenceQuery<Optional<
     }
 
     @Override
-    public Optional<SongAudio> perform(EntityManager entityManager) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<SongAudio> cq = cb.createQuery(SongAudio.class);
-        Root<SongAudio> songAudio = cq.from(SongAudio.class);
-        cq.where(
-                cb.equal(songAudio.get(SongAudio_.sequenceId), sequenceId)
-        );
+    public Optional<SongAudio> perform(QueryFactory queryFactory) {
+        SongAudio songAudio = queryFactory
+                .selectFrom(qSongAudio)
+                .where(qSongAudio.sequenceId.eq(sequenceId))
+                .fetchFirst();
 
-        TypedQuery<SongAudio> query = entityManager.createQuery(cq);
-        return PersistenceUtils.getSingleResult(query);
+        return Optional.ofNullable(songAudio);
     }
 }

@@ -1,15 +1,9 @@
 package io.sparkled.persistence.sequence.impl.query;
 
 import io.sparkled.model.entity.SequenceChannel;
-import io.sparkled.model.entity.SequenceChannel_;
 import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.util.PersistenceUtils;
+import io.sparkled.persistence.QueryFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,18 +18,12 @@ public class GetSequenceChannelByUuidQuery implements PersistenceQuery<Optional<
     }
 
     @Override
-    public Optional<SequenceChannel> perform(EntityManager entityManager) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<SequenceChannel> cq = cb.createQuery(SequenceChannel.class);
-        Root<SequenceChannel> sequenceChannel = cq.from(SequenceChannel.class);
-        cq.where(
-                cb.and(
-                        cb.equal(sequenceChannel.get(SequenceChannel_.sequenceId), sequenceId),
-                        cb.equal(sequenceChannel.get(SequenceChannel_.uuid), channelUuid)
-                )
-        );
+    public Optional<SequenceChannel> perform(QueryFactory queryFactory) {
+        SequenceChannel sequenceChannel = queryFactory
+                .selectFrom(qSequenceChannel)
+                .where(qSequenceChannel.uuid.eq(channelUuid).and(qSequenceChannel.sequenceId.eq(sequenceId)))
+                .fetchFirst();
 
-        TypedQuery<SequenceChannel> query = entityManager.createQuery(cq);
-        return PersistenceUtils.getSingleResult(query);
+        return Optional.ofNullable(sequenceChannel);
     }
 }

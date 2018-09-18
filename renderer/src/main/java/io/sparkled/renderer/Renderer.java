@@ -11,15 +11,10 @@ import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.renderer.effect.EffectRenderer;
-import io.sparkled.renderer.effect.FlashEffectRenderer;
-import io.sparkled.renderer.effect.LineEffectRenderer;
-import io.sparkled.renderer.effect.SplitLineEffectRenderer;
 import io.sparkled.renderer.util.ChannelPropPairUtil;
 import io.sparkled.renderer.util.EffectTypeRenderers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Renderer {
 
