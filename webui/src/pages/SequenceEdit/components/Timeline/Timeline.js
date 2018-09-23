@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import CurrentFrameIndicator from '../CurrentFrameIndicator';
 import TimelineChannel from '../TimelineChannel';
 import TimeIndicator from '../TimeIndicator';
 import './Timeline.css';
@@ -14,8 +15,11 @@ class Timeline extends Component {
       <div className="timeline" onScroll={this.handleScroll}>
         <div className="timeline-container">
           <div className="channels">
-            {_.map(sequence.channels, channel => <TimelineChannel key={channel.uuid} channel={channel}/>)}
-            <TimeIndicator/>
+            <div className="channel-wrapper">
+              <CurrentFrameIndicator/>
+              {_.map(sequence.channels, channel => <TimelineChannel key={channel.uuid} channel={channel}/>)}
+              <TimeIndicator/>
+            </div>
           </div>
         </div>
       </div>

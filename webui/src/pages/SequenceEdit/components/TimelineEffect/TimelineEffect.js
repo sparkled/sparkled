@@ -11,6 +11,7 @@ class TimelineEffect extends Component {
     this.onEffectMove = this.onEffectMove.bind(this);
     this.onEffectResize = this.onEffectResize.bind(this);
     this.onEffectClick = this.onEffectClick.bind(this);
+    this.selectEffect = this.selectEffect.bind(this);
     this.rndRef = React.createRef();
   }
 
@@ -31,7 +32,7 @@ class TimelineEffect extends Component {
   }
 
   render() {
-    const { effect, channel, selectedEffect } = this.props;
+    const { effect, selectedEffect } = this.props;
     const dimensions = this.getDimensions(this.props);
     const activeClass = (selectedEffect && effect.uuid === selectedEffect.uuid) ? 'effect-active' : '';
 
@@ -43,9 +44,11 @@ class TimelineEffect extends Component {
            dragAxis="x"
            dragGrid={[1, 0]}
            resizeGrid={[2, 0]}
+           onMouseDown={this.onEffectClick}
+           onDragStart={this.selectEffect}
            onDragStop={this.onEffectMove}
-           onResizeStop={this.onEffectResize}
-           onMouseDown={event => this.onEffectClick(event, channel, effect)}/>
+           onResizeStart={this.selectEffect}
+           onResizeStop={this.onEffectResize}/>
     );
   }
 
@@ -78,9 +81,14 @@ class TimelineEffect extends Component {
     }
   }
 
-  onEffectClick(event, channel, effect) {
-    this.props.selectEffect(channel, effect);
+  onEffectClick(event) {
+    this.selectEffect();
     event.stopPropagation(); // Prevent channel click handler from firing and deselecting the effect.
+  }
+
+  selectEffect() {
+    const { channel, effect } = this.props;
+    this.props.selectEffect(channel, effect);
   }
 }
 

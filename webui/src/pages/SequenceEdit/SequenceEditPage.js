@@ -1,28 +1,45 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { ActionCreators } from 'redux-undo';
 import Alert from 'react-s-alert';
 import SplitPane from 'react-split-pane';
 import { Nav, NavItem } from 'reactstrap';
-import { setCurrentPage } from '../actions';
+import { ActionCreators } from 'redux-undo';
+import uuidv4 from 'uuid/v4';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
+import { setCurrentPage } from '../actions';
 import StageCanvas from '../StageEdit/components/StageCanvas';
-import { fetchSequence, fetchSequenceStage, showAddChannelModal, saveSequence } from './actions';
+import {
+  addEffect,
+  fetchReferenceData,
+  fetchSequence,
+  fetchSequenceStage,
+  saveSequence,
+  showAddChannelModal
+} from './actions';
 import AddChannelModal from './components/AddChannelModal';
-import Timeline from './components/Timeline';
 import EffectForm from './components/EffectForm';
+import Timeline from './components/Timeline';
 import './SequenceEditPage.css';
 
 const { undo, redo, clearHistory } = ActionCreators;
 
+const newEffectFrames = 10;
+
 class SequenceEditPage extends Component {
 
+  constructor(props) {
+    super(props);
+    this.addEffect = this.addEffect.bind(this);
+  }
+
   componentDidMount() {
+    const { setCurrentPage, fetchSequenceStage, fetchSequence, fetchReferenceData } = this.props;
     const { sequenceId } = this.props.match.params;
-    this.props.setCurrentPage({ pageTitle: 'Edit Sequence', pageClass: 'sequence-edit-page' });
-    this.props.fetchSequenceStage(sequenceId);
-    this.props.fetchSequence(sequenceId);
+    setCurrentPage({ pageTitle: 'Edit Sequence', pageClass: 'sequence-edit-page' });
+    fetchSequenceStage(sequenceId);
+    fetchSequence(sequenceId);
+    fetchReferenceData();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,7 +65,7 @@ class SequenceEditPage extends Component {
   }
 
   renderNavbar() {
-    const { canUndo, canRedo, undo, redo, sequence, stage } = this.props;
+    const { canUndo, canRedo, undo, redo, sequence, stage, selectedChannel } = this.props;
     const loaded = sequence && stage;
 
     return (
@@ -60,13 +77,41 @@ class SequenceEditPage extends Component {
           <span className="nav-link" onClick={() => redo()}>Redo</span>
         </NavItem>
         <NavItem className={loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => this.props.showAddChannelModal()}>Add Channel</span>
+          <span className="nav-link" onClick={this.props.showAddChannelModal}>Add Channel</span>
+        </NavItem>
+        <NavItem className={(loaded && selectedChannel) ? '' : 'd-none'}>
+          <span className="nav-link" onClick={this.addEffect}>Add Effect</span>
         </NavItem>
         <NavItem className={loaded ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => this.props.saveSequence(sequence)}>Save</span>
         </NavItem>
       </Nav>
     );
+  }
+
+  addEffect() {
+    const { addEffect, currentFrame, sequence } = this.props;
+    const effect = {
+      uuid: uuidv4(),
+      type: 'FLASH',
+      params: [],
+      easing: {
+        type: 'LINEAR',
+        params: []
+      },
+      fill: {
+        type: 'SOLID',
+        params: [
+          { name: 'COLOR', type: 'COLOR', value: ['#ffffff'] }
+        ]
+      },
+      startFrame: currentFrame,
+      endFrame: Math.min(currentFrame + newEffectFrames, sequence.durationFrames) - 1,
+      repetitions: 1,
+      reverse: false
+    };
+
+    addEffect(effect);
   }
 
   renderContent() {
@@ -100,7 +145,8 @@ class SequenceEditPage extends Component {
     return (
       <Fragment>
         <SplitPane split="horizontal" minSize={100} defaultSize={200} primary="second">
-          <SplitPane split="vertical" primary="second" defaultSize={300} allowResize={false} pane1ClassName="stage-canvas-container">
+          <SplitPane split="vertical" primary="second" defaultSize={300} allowResize={false}
+                     pane1ClassName="stage-canvas-container">
             <StageCanvas stage={this.props.stage} editable={false}/>
             <EffectForm/>
           </SplitPane>
@@ -120,19 +166,26 @@ class SequenceEditPage extends Component {
 
 function mapStateToProps({ page }) {
   const { past, present, future } = page.sequenceEdit;
+  const { saving, saveError, sequence, stage, currentFrame, selectedChannel } = present;
 
   return {
-    fetching: present.fetchingSequence || present.fetchingStage,
-    fetchError: present.fetchSequenceError || present.fetchStageError,
-    saving: present.saving,
-    saveError: present.saveError,
-    sequence: present.sequence,
-    stage: present.stage,
+    saving, saveError, sequence, stage, currentFrame, selectedChannel,
+    fetching: present.fetchingSequence || present.fetchingStage || present.fetchingReferenceData,
+    fetchError: present.fetchSequenceError || present.fetchStageError || present.fetchReferenceDataError,
     canUndo: past.length > 1,
     canRedo: future.length > 0
   };
 }
 
 export default connect(mapStateToProps, {
-  setCurrentPage, fetchSequence, fetchSequenceStage, showAddChannelModal, saveSequence, undo, redo, clearHistory
+  setCurrentPage,
+  fetchSequence,
+  fetchSequenceStage,
+  fetchReferenceData,
+  addEffect,
+  showAddChannelModal,
+  saveSequence,
+  undo,
+  redo,
+  clearHistory
 })(SequenceEditPage);
