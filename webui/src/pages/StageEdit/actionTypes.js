@@ -1,6 +1,16 @@
-export const FETCH_STAGE = 'StageEditPage/FETCH_STAGE';
-export const SAVE_STAGE = 'StageEditPage/SAVE_STAGE';
-export const ADD_STAGE_PROP = 'StageEditPage/ADD_STAGE_PROP';
-export const UPDATE_STAGE_PROP = 'StageEditPage/UPDATE_STAGE_PROP';
-export const DELETE_STAGE_PROP = 'StageEditPage/DELETE_STAGE_PROP';
-export const SELECT_STAGE_PROP = 'StageEditPage/SELECT_STAGE_PROP';
+export const ROOT = 'StageEditPage/';
+
+export const FETCH_STAGE = ROOT + 'FETCH_STAGE';
+export const FETCH_STAGE_PENDING = ROOT + 'FETCH_STAGE_PENDING';
+export const FETCH_STAGE_FULFILLED = ROOT + 'FETCH_STAGE_FULFILLED';
+export const FETCH_STAGE_REJECTED = ROOT + 'FETCH_STAGE_REJECTED';
+
+export const SAVE_STAGE = ROOT + 'SAVE_STAGE';
+export const SAVE_STAGE_PENDING = ROOT + 'SAVE_STAGE_PENDING';
+export const SAVE_STAGE_FULFILLED = ROOT + 'SAVE_STAGE_FULFILLED';
+export const SAVE_STAGE_REJECTED = ROOT + 'SAVE_STAGE_REJECTED';
+
+export const ADD_STAGE_PROP = ROOT + 'ADD_STAGE_PROP';
+export const UPDATE_STAGE_PROP = ROOT + 'UPDATE_STAGE_PROP';
+export const DELETE_STAGE_PROP = ROOT + 'DELETE_STAGE_PROP';
+export const SELECT_STAGE_PROP = ROOT + 'SELECT_STAGE_PROP';

@@ -25,50 +25,54 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  if (!action.type.startsWith(actionTypes.ROOT)) {
+    return state;
+  }
+
   switch (action.type) {
-    case `${actionTypes.FETCH_SEQUENCE}_PENDING`:
+    case actionTypes.FETCH_SEQUENCE_PENDING:
       return {
         ...state,
         fetchingSequence: true, fetchSequenceError: null, selectedChannel: null, selectedEffect: null
       };
 
-    case `${actionTypes.FETCH_SEQUENCE}_FULFILLED`:
+    case actionTypes.FETCH_SEQUENCE_FULFILLED:
       const sequence = action.payload.data;
       const selectedChannel = sequence.channels.length > 0 ? sequence.channels[0] : null;
       return { ...state, sequence, selectedChannel, fetchingSequence: false };
 
-    case `${actionTypes.FETCH_SEQUENCE}_REJECTED`:
+    case actionTypes.FETCH_SEQUENCE_REJECTED:
       return { ...state, fetchingSequence: false, fetchSequenceError: getResponseError(action) };
 
-    case `${actionTypes.FETCH_SEQUENCE_STAGE}_PENDING`:
+    case actionTypes.FETCH_SEQUENCE_STAGE_PENDING:
       return { ...state, fetchingStage: true, fetchStageError: null };
 
-    case `${actionTypes.FETCH_SEQUENCE_STAGE}_FULFILLED`:
+    case actionTypes.FETCH_SEQUENCE_STAGE_FULFILLED:
       return { ...state, fetchingStage: false, stage: action.payload.data };
 
-    case `${actionTypes.FETCH_SEQUENCE_STAGE}_REJECTED`:
+    case actionTypes.FETCH_SEQUENCE_STAGE_REJECTED:
       return { ...state, fetchingStage: false, fetchStageError: getResponseError(action) };
 
-    case `${actionTypes.FETCH_REFERENCE_DATA}_PENDING`:
+    case actionTypes.FETCH_REFERENCE_DATA_PENDING:
       return { ...state, fetchingReferenceData: true, fetchReferenceDataError: null };
 
-    case `${actionTypes.FETCH_REFERENCE_DATA}_FULFILLED`:
+    case actionTypes.FETCH_REFERENCE_DATA_FULFILLED:
       const [effectTypes, fillTypes, easingTypes] = action.payload;
       return {
         ...state, fetchingReferenceData: false,
         effectTypes: effectTypes.data, fillTypes: fillTypes.data, easingTypes: easingTypes.data
       };
 
-    case `${actionTypes.FETCH_REFERENCE_DATA}_REJECTED`:
+    case actionTypes.FETCH_REFERENCE_DATA_REJECTED:
       return { ...state, fetchingReferenceData: false, fetchReferenceDataError: getResponseError(action) };
 
-    case `${actionTypes.SAVE_SEQUENCE}_PENDING`:
+    case actionTypes.SAVE_SEQUENCE_PENDING:
       return { ...state, saving: true, saveError: null };
 
-    case `${actionTypes.SAVE_SEQUENCE}_FULFILLED`:
+    case actionTypes.SAVE_SEQUENCE_FULFILLED:
       return { ...state, saving: false };
 
-    case `${actionTypes.SAVE_SEQUENCE}_REJECTED`:
+    case actionTypes.SAVE_SEQUENCE_REJECTED:
       return { ...state, saving: false, saveError: getResponseError(action) };
 
     case actionTypes.SHOW_ADD_CHANNEL_MODAL:

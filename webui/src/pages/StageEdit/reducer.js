@@ -12,59 +12,34 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  if (!action.type.startsWith(actionTypes.ROOT)) {
+    return state;
+  }
+
   switch (action.type) {
+    case actionTypes.FETCH_STAGE_PENDING:
+      return { ...state, fetching: true, fetchError: null };
 
-    case `${actionTypes.FETCH_STAGE}_PENDING`:
-      return {
-        ...state,
-        fetching: true,
-        fetchError: null
-      };
+    case actionTypes.FETCH_STAGE_FULFILLED:
+      return { ...state, fetching: false, stage: { ...action.payload.data }, selectedStagePropUuid: null };
 
-    case `${actionTypes.FETCH_STAGE}_FULFILLED`:
-      return {
-        ...state,
-        fetching: false,
-        stage: { ...action.payload.data },
-        selectedStagePropUuid: null
-      };
+    case actionTypes.FETCH_STAGE_REJECTED:
+      return { ...state, fetching: false, fetchError: getResponseError(action) };
 
-    case `${actionTypes.FETCH_STAGE}_REJECTED`:
-      return {
-        ...state,
-        fetching: false,
-        fetchError: getResponseError(action)
-      };
+    case actionTypes.SAVE_STAGE_PENDING:
+      return { ...state, saving: true, saveError: null };
 
-    case `${actionTypes.SAVE_STAGE}_PENDING`:
-      return {
-        ...state,
-        saving: true,
-        saveError: null
-      };
+    case actionTypes.SAVE_STAGE_FULFILLED:
+      return { ...state, saving: false };
 
-    case `${actionTypes.SAVE_STAGE}_FULFILLED`:
-      return {
-        ...state,
-        saving: false
-      };
-
-    case `${actionTypes.SAVE_STAGE}_REJECTED`:
-      return {
-        ...state,
-        saving: false,
-        saveError: getResponseError(action)
-      };
+    case actionTypes.SAVE_STAGE_REJECTED:
+      return { ...state, saving: false, saveError: getResponseError(action) };
 
     case actionTypes.SELECT_STAGE_PROP:
-      return {
-        ...state,
-        selectedStagePropUuid: action.payload.uuid
-      };
+      return { ...state, selectedStagePropUuid: action.payload.uuid };
 
     case actionTypes.UPDATE_STAGE_PROP:
       const updatedStageProp = action.payload.stageProp;
-
       return {
         ...state,
         stage: {
@@ -85,6 +60,7 @@ export default (state = initialState, action) => {
       };
 
     case actionTypes.DELETE_STAGE_PROP:
+      // TODO: Update stage prop display orders
       const stage = state.stage;
       const { uuid } = action.payload;
 
