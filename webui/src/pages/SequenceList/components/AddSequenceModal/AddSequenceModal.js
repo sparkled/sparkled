@@ -4,6 +4,7 @@ import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import * as sequenceStatuses from '../../sequenceStatuses';
 import InputField from '../../../../components/form/InputField';
 import SingleSelectField from '../../../../components/form/SingleSelectField';
 import { required } from '../../../../components/form/validators';
@@ -99,7 +100,7 @@ class AddSequenceModal extends Component {
     const audio = document.createElement('audio');
     audio.src = this.state.mp3.preview;
     audio.addEventListener('canplaythrough', () => {
-      change('durationMs', Math.ceil(Math.ceil(audio.duration * 1000)));
+      change('durationMs', Math.ceil(audio.duration * 1000));
     });
 
     change('name', title);
@@ -125,15 +126,15 @@ class AddSequenceModal extends Component {
   }
 
   addSequence(values) {
-    values = { ...values };
     const { addSequence } = this.props;
     const { mp3 } = this.state;
 
+    const status = sequenceStatuses.NEW;
     const durationFrames = Math.ceil(values.durationMs / (1000 / values.framesPerSecond));
-    values.durationFrames = durationFrames;
-    delete values.durationMs;
+    let sequence = { ...values, status, durationFrames };
+    delete sequence.durationMs;
 
-    addSequence({ sequence: { ...values }, mp3 });
+    addSequence({ sequence, mp3 });
   }
 }
 

@@ -21,7 +21,7 @@ public class LineEffectRendererTest {
         Effect effect = new Effect()
                 .setType(EffectTypeCode.LINE)
                 .setParams(
-                        new Param().setName(ParamName.LENGTH.getName()).setValue(1)
+                        new Param().setName(ParamName.LENGTH).setValue(1)
                 )
                 .setEasing(
                         new Easing()
@@ -31,7 +31,7 @@ public class LineEffectRendererTest {
                         new Fill()
                                 .setType(FillTypeCode.SOLID)
                                 .setParams(
-                                        new Param().setName(ParamName.COLOR.getName()).setValue("#ffffff")
+                                        new Param().setName(ParamName.COLOR).setValue("#ffffff")
                                 )
                 );
 
@@ -59,7 +59,7 @@ public class LineEffectRendererTest {
         Effect effect = new Effect()
                 .setType(EffectTypeCode.LINE)
                 .setParams(
-                        new Param().setName(ParamName.LENGTH.getName()).setValue(20)
+                        new Param().setName(ParamName.LENGTH).setValue(20)
                 )
                 .setEasing(
                         new Easing()
@@ -69,7 +69,7 @@ public class LineEffectRendererTest {
                         new Fill()
                                 .setType(FillTypeCode.SOLID)
                                 .setParams(
-                                        new Param().setName(ParamName.COLOR.getName()).setValue("#ffffff")
+                                        new Param().setName(ParamName.COLOR).setValue("#ffffff")
                                 )
                 );
 

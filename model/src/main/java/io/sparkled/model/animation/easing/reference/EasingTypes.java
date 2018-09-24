@@ -26,6 +26,6 @@ public class EasingTypes {
     }
 
     private static Param param(ParamName paramName, ParamType type) {
-        return new Param().setName(paramName.getName()).setType(type);
+        return new Param().setName(paramName).setType(type);
     }
 }

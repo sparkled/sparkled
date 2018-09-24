@@ -62,7 +62,8 @@
 
         <addForeignKeyConstraint baseTableName="stage_prop" baseColumnNames="stage_id"
                                  referencedTableName="stage" referencedColumnNames="id"
-                                 constraintName="fk_stage_prop_stage_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_stage_prop_stage_id"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 
@@ -89,9 +90,6 @@
             <column name="status" type="VARCHAR(16)">
                 <constraints nullable="false"/>
             </column>
-            <column name="auto_schedulable" type="BOOLEAN" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
             <column name="stage_id" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
@@ -99,54 +97,25 @@
 
         <addForeignKeyConstraint baseTableName="sequence" baseColumnNames="stage_id"
                                  referencedTableName="stage" referencedColumnNames="id"
-                                 constraintName="fk_stage_sequence_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_stage_sequence_id"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 
-    <changeSet author="chrisparton1991" id="create-table-rendered-stage-prop">
-        <createTable tableName="rendered_stage_prop">
-            <column autoIncrement="true" name="id" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="pk_rendered_stage_prop"/>
-            </column>
+    <changeSet author="chrisparton1991" id="create-table-song-audio">
+        <createTable tableName="song_audio">
             <column name="sequence_id" type="INT(10)">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="pk_song_audio"/>
             </column>
-            <column name="stage_prop_code" type="VARCHAR(16)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="led_count" type="INT(10)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="data" type="BLOB">
+            <column name="audio_data" type="BLOB">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="rendered_stage_prop" baseColumnNames="sequence_id"
+        <addForeignKeyConstraint baseTableName="song_audio" baseColumnNames="sequence_id"
                                  referencedTableName="sequence" referencedColumnNames="id"
-                                 constraintName="fk_rendered_stage_prop_sequence_id" onDelete="RESTRICT" onUpdate="RESTRICT"
-                                 deferrable="false" initiallyDeferred="false"/>
-    </changeSet>
-
-    <changeSet author="chrisparton1991" id="create-table-scheduled-sequence">
-        <createTable tableName="scheduled_sequence">
-            <column autoIncrement="true" name="id" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="pk_scheduled_sequence"/>
-            </column>
-            <column name="end_time" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="start_time" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="sequence_id" type="INT(10)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addForeignKeyConstraint baseTableName="scheduled_sequence" baseColumnNames="sequence_id"
-                                 referencedColumnNames="id" referencedTableName="sequence"
-                                 constraintName="fk_scheduled_sequence_sequence_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_song_audio_sequence_id"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 
@@ -172,28 +141,80 @@
 
         <addForeignKeyConstraint baseTableName="sequence_channel" baseColumnNames="sequence_id"
                                  referencedTableName="sequence" referencedColumnNames="id"
-                                 constraintName="fk_sequence_channel_sequence_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_sequence_channel_sequence_id"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
 
         <addForeignKeyConstraint baseTableName="sequence_channel" baseColumnNames="stage_prop_uuid"
                                  referencedTableName="stage_prop" referencedColumnNames="uuid"
-                                 constraintName="fk_sequence_channel_stage_prop_uuid" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_sequence_channel_stage_prop_uuid"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 
-    <changeSet author="chrisparton1991" id="create-table-song-audio">
-        <createTable tableName="song_audio">
-            <column name="sequence_id" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="pk_song_audio"/>
+    <changeSet author="chrisparton1991" id="create-table-rendered-stage-prop">
+        <createTable tableName="rendered_stage_prop">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_rendered_stage_prop"/>
             </column>
-            <column name="audio_data" type="BLOB">
+            <column name="sequence_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stage_prop_code" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="led_count" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="BLOB">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="song_audio" baseColumnNames="sequence_id"
+        <addForeignKeyConstraint baseTableName="rendered_stage_prop" baseColumnNames="sequence_id"
                                  referencedTableName="sequence" referencedColumnNames="id"
-                                 constraintName="fk_song_audio_sequence_id" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 constraintName="fk_rendered_stage_prop_sequence_id"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 deferrable="false" initiallyDeferred="false"/>
+    </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-playlist">
+        <createTable tableName="playlist">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_playlist"/>
+            </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-playlist-sequence">
+        <createTable tableName="playlist_sequence">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_playlist_sequence"/>
+            </column>
+            <column name="playlist_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_order" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="playlist_sequence" baseColumnNames="playlist_id"
+                                 referencedTableName="playlist" referencedColumnNames="id"
+                                 constraintName="fk_playlist_sequence_playlist_id"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 deferrable="false" initiallyDeferred="false"/>
+
+        <addForeignKeyConstraint baseTableName="playlist_sequence" baseColumnNames="sequence_id"
+                                 referencedTableName="sequence" referencedColumnNames="id"
+                                 constraintName="fk_playlist_sequence_sequence_id"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"
                                  deferrable="false" initiallyDeferred="false"/>
     </changeSet>
 </databaseChangeLog>

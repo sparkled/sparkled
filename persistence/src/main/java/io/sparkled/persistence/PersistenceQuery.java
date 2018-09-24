@@ -4,8 +4,9 @@ import io.sparkled.model.entity.*;
 
 public interface PersistenceQuery<T> {
 
+    QPlaylist qPlaylist = QPlaylist.playlist;
+    QPlaylistSequence qPlaylistSequence = QPlaylistSequence.playlistSequence;
     QRenderedStageProp qRenderedStageProp = QRenderedStageProp.renderedStageProp;
-    QScheduledSequence qScheduledSequence = QScheduledSequence.scheduledSequence;
     QSequence qSequence = QSequence.sequence;
     QSequenceChannel qSequenceChannel = QSequenceChannel.sequenceChannel;
     QSongAudio qSongAudio = QSongAudio.songAudio;

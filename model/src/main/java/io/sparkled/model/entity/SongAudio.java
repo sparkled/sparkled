@@ -20,16 +20,18 @@ public class SongAudio {
         return sequenceId;
     }
 
-    public void setSequenceId(int sequenceId) {
+    public SongAudio setSequenceId(int sequenceId) {
         this.sequenceId = sequenceId;
+        return this;
     }
 
     public byte[] getAudioData() {
         return audioData;
     }
 
-    public void setAudioData(byte[] audioData) {
+    public SongAudio setAudioData(byte[] audioData) {
         this.audioData = audioData;
+        return this;
     }
 
     @Override
