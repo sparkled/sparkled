@@ -24,7 +24,7 @@ public class FlashEffectRendererTest {
                 .setFill(new Fill()
                         .setType(FillTypeCode.SOLID)
                         .setParams(
-                                new Param().setName(ParamName.COLOR.getName()).setValue("#ffffff")
+                                new Param().setName(ParamName.COLOR).setValue("#ffffff")
                         )
                 );
 

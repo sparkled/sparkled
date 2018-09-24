@@ -21,7 +21,7 @@ public class SplitLineEffectRendererTest {
         Effect effect = new Effect()
                 .setType(EffectTypeCode.SPLIT_LINE)
                 .setParams(
-                        new Param().setName(ParamName.LENGTH.getName()).setValue(5)
+                        new Param().setName(ParamName.LENGTH).setValue(5)
                 )
                 .setEasing(
                         new Easing()
@@ -31,7 +31,7 @@ public class SplitLineEffectRendererTest {
                         new Fill()
                                 .setType(FillTypeCode.SOLID)
                                 .setParams(
-                                        new Param().setName(ParamName.COLOR.getName()).setValue("#ffffff")
+                                        new Param().setName(ParamName.COLOR).setValue("#ffffff")
                                 )
                 );
 
@@ -97,7 +97,7 @@ public class SplitLineEffectRendererTest {
         Effect effect = new Effect()
                 .setType(EffectTypeCode.SPLIT_LINE)
                 .setParams(
-                        new Param().setName(ParamName.LENGTH.getName()).setValue(5)
+                        new Param().setName(ParamName.LENGTH).setValue(5)
                 )
                 .setEasing(
                         new Easing().setType(EasingTypeCode.LINEAR)
@@ -106,7 +106,7 @@ public class SplitLineEffectRendererTest {
                         new Fill()
                                 .setType(FillTypeCode.SOLID)
                                 .setParams(
-                                        new Param().setName(ParamName.COLOR.getName()).setValue("#ffffff")
+                                        new Param().setName(ParamName.COLOR).setValue("#ffffff")
                                 )
                 );
 

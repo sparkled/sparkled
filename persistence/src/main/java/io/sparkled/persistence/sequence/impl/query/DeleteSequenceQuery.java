@@ -15,7 +15,7 @@ public class DeleteSequenceQuery implements PersistenceQuery<Integer> {
     public Integer perform(QueryFactory queryFactory) {
         deleteSongAudio(queryFactory);
         deleteSequenceChannels(queryFactory);
-        deleteScheduledSequences(queryFactory);
+        deletePlaylistSequences(queryFactory);
         deleteRenderedStageProps(queryFactory);
         deleteSequence(queryFactory);
 
@@ -36,8 +36,11 @@ public class DeleteSequenceQuery implements PersistenceQuery<Integer> {
                 .execute();
     }
 
-    private void deleteScheduledSequences(QueryFactory queryFactory) {
-        // TODO: I didn't bother converting this query over, as the scheduler will be rewritten soon.
+    private void deletePlaylistSequences(QueryFactory queryFactory) {
+        queryFactory
+                .delete(qPlaylistSequence)
+                .where(qPlaylistSequence.sequenceId.eq(sequenceId))
+                .execute();
     }
 
     private void deleteRenderedStageProps(QueryFactory queryFactory) {

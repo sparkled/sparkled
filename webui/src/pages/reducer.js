@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import undoable from 'redux-undo';
 import * as actionTypes from './actionTypes';
-import schedulerReducer from './Scheduler/reducer';
 import sequenceEditReducer from './SequenceEdit/reducer';
 import sequenceListReducer from './SequenceList/reducer';
 import stageEditReducer from './StageEdit/reducer';
@@ -22,7 +21,6 @@ const sharedReducer = (state = {}, action) => {
 
 export default combineReducers({
   shared: sharedReducer,
-  scheduler: schedulerReducer,
   sequenceList: sequenceListReducer,
   sequenceEdit: undoable(sequenceEditReducer, { filter: undoableFilter }),
   stageEdit: undoable(stageEditReducer, { filter: undoableFilter }),

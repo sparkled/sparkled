@@ -6,15 +6,15 @@ import java.util.Objects;
 
 public class Param {
 
-    private String name;
+    private ParamName name;
     private ParamType type;
     private List<String> value = new ArrayList<>();
 
-    public String getName() {
+    public ParamName getName() {
         return name;
     }
 
-    public Param setName(String name) {
+    public Param setName(ParamName name) {
         this.name = name;
         return this;
     }

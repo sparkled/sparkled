@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/scale.css';
-import SchedulerPage from '../../pages/Scheduler';
 import SequenceEditPage from '../../pages/SequenceEdit';
 import SequenceListPage from '../../pages/SequenceList';
 import StageEditPage from '../../pages/StageEdit';
@@ -24,7 +23,6 @@ const App = () => (
           <Route exact path='/stages/:stageId' component={StageEditPage}/>
           <Route exact path='/sequences' component={SequenceListPage}/>
           <Route exact path='/sequences/:sequenceId' component={SequenceEditPage}/>
-          <Route exact path='/scheduler' component={SchedulerPage}/>
           <Route component={RedirectInvalidUrlToIndex}/>
         </Switch>
       </Router>

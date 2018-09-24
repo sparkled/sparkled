@@ -19,6 +19,7 @@ public class SequenceViewModelConverterImpl implements SequenceViewModelConverte
     public SequenceViewModel toViewModel(Sequence model) {
         return new SequenceViewModel()
                 .setId(model.getId())
+                .setStatus(model.getStatus())
                 .setName(model.getName())
                 .setDurationFrames(model.getDurationFrames())
                 .setFramesPerSecond(model.getFramesPerSecond());
@@ -30,6 +31,8 @@ public class SequenceViewModelConverterImpl implements SequenceViewModelConverte
         Sequence model = sequencePersistenceService.getSequenceById(sequenceId)
                 .orElseThrow(() -> new ViewModelConversionException("Sequence with ID of '" + sequenceId + "' not found."));
 
-        return model.setName(viewModel.getName());
+        return model
+                .setName(viewModel.getName())
+                .setStatus(viewModel.getStatus());
     }
 }

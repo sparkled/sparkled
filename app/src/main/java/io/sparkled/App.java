@@ -1,7 +1,7 @@
 package io.sparkled;
 
 import com.google.inject.persist.PersistService;
-import io.sparkled.music.SequenceSchedulerService;
+import io.sparkled.music.PlaylistService;
 import io.sparkled.schema.SchemaUpdater;
 import io.sparkled.udpserver.UdpServer;
 
@@ -13,19 +13,19 @@ public class App {
     private final SchemaUpdater schemaUpdater;
     private final RestApiServer restApiServer;
     private final UdpServer udpServer;
-    private final SequenceSchedulerService sequenceSchedulerService;
+    private final PlaylistService playlistService;
 
     @Inject
     public App(PersistService persistService,
                SchemaUpdater schemaUpdater,
                RestApiServer restApiServer,
                UdpServer udpServer,
-               SequenceSchedulerService sequenceSchedulerService) throws Exception {
+               PlaylistService playlistService) throws Exception {
 
         this.persistService = persistService;
         this.restApiServer = restApiServer;
         this.udpServer = udpServer;
-        this.sequenceSchedulerService = sequenceSchedulerService;
+        this.playlistService = playlistService;
         this.schemaUpdater = schemaUpdater;
     }
 
@@ -34,6 +34,6 @@ public class App {
         schemaUpdater.update();
         restApiServer.start(restApiPort);
         udpServer.start(udpPort);
-        sequenceSchedulerService.start();
+        playlistService.play();
     }
 }

@@ -10,14 +10,14 @@ import javax.persistence.EntityManager;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-public class SaveRenderedStagePropQuery implements PersistenceQuery<Void> {
+public class SaveRenderedStagePropsQuery implements PersistenceQuery<Void> {
 
-    private static final Logger logger = Logger.getLogger(SaveRenderedStagePropQuery.class.getName());
+    private static final Logger logger = Logger.getLogger(SaveRenderedStagePropsQuery.class.getName());
 
     private final Sequence sequence;
     private final RenderedStagePropDataMap renderedStagePropDataMap;
 
-    public SaveRenderedStagePropQuery(Sequence sequence, RenderedStagePropDataMap renderedStagePropDataMap) {
+    public SaveRenderedStagePropsQuery(Sequence sequence, RenderedStagePropDataMap renderedStagePropDataMap) {
         this.sequence = sequence;
         this.renderedStagePropDataMap = renderedStagePropDataMap;
     }
@@ -28,8 +28,11 @@ public class SaveRenderedStagePropQuery implements PersistenceQuery<Void> {
         final AtomicInteger recordsSaved = new AtomicInteger(0);
 
         renderedStagePropDataMap.forEach((key, value) -> {
-            RenderedStageProp renderedStageProp = new RenderedStageProp();
-            renderedStageProp.setSequenceId(sequence.getId()).setStagePropCode(key).setLedCount(value.getLedCount()).setData(value.getData());
+            RenderedStageProp renderedStageProp = new RenderedStageProp()
+                    .setSequenceId(sequence.getId())
+                    .setStagePropCode(key)
+                    .setLedCount(value.getLedCount())
+                    .setData(value.getData());
             entityManager.merge(renderedStageProp);
         });
 

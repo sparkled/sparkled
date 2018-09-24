@@ -11,6 +11,7 @@ import io.sparkled.persistence.sequence.SequencePersistenceService;
 import io.sparkled.persistence.sequence.impl.query.*;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,6 +57,15 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
 
     @Override
     @Transactional
+    public Integer createSequence(Sequence sequence, byte[] songAudioData) {
+        int sequenceId = saveSequence(sequence, Collections.emptyList());
+
+        SongAudio songAudio = new SongAudio().setSequenceId(sequenceId).setAudioData(songAudioData);
+        return new SaveSongAudioQuery(songAudio).perform(queryFactory);
+    }
+
+    @Override
+    @Transactional
     public Integer saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
         new SaveSequenceChannelsQuery(sequenceChannels).perform(queryFactory);
         return new SaveSequenceQuery(sequence).perform(queryFactory);
@@ -63,8 +73,11 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
 
     @Override
     @Transactional
-    public Integer saveSongAudio(SongAudio songAudio) {
-        return new SaveSongAudioQuery(songAudio).perform(queryFactory);
+    public Integer publishSequence(Sequence sequence, Stage stage, List<SequenceChannel> sequenceChannels, RenderedStagePropDataMap renderedStageProps) {
+        Integer sequenceId = new SaveSequenceQuery(sequence).perform(queryFactory);
+        new SaveSequenceChannelsQuery(sequenceChannels).perform(queryFactory);
+        new SaveRenderedStagePropsQuery(sequence, renderedStageProps).perform(queryFactory);
+        return sequenceId;
     }
 
     @Override
@@ -77,7 +90,7 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     @Transactional
     public void saveRenderedChannels(Sequence sequence, RenderedStagePropDataMap renderedStagePropDataMap) {
         deleteRenderedStageProps(sequence.getId());
-        new SaveRenderedStagePropQuery(sequence, renderedStagePropDataMap).perform(queryFactory);
+        new SaveRenderedStagePropsQuery(sequence, renderedStagePropDataMap).perform(queryFactory);
     }
 
     @Override

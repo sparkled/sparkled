@@ -36,10 +36,6 @@ public class Sequence {
     @Column(name = "frames_per_second", nullable = false)
     private int framesPerSecond = 60;
 
-    @Basic
-    @Column(name = "auto_schedulable", nullable = false)
-    private boolean autoSchedulable;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 16)
     private SequenceStatus status;
@@ -107,14 +103,6 @@ public class Sequence {
         return this;
     }
 
-    public boolean isAutoSchedulable() {
-        return autoSchedulable;
-    }
-
-    public void setAutoSchedulable(boolean autoSchedulable) {
-        this.autoSchedulable = autoSchedulable;
-    }
-
     public SequenceStatus getStatus() {
         return status;
     }
@@ -133,7 +121,6 @@ public class Sequence {
                 Objects.equals(stageId, sequence.stageId) &&
                 durationFrames == sequence.durationFrames &&
                 framesPerSecond == sequence.framesPerSecond &&
-                autoSchedulable == sequence.autoSchedulable &&
                 Objects.equals(name, sequence.name) &&
                 Objects.equals(artist, sequence.artist) &&
                 Objects.equals(status, sequence.status);
@@ -141,6 +128,6 @@ public class Sequence {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stageId, name, artist, durationFrames, framesPerSecond, autoSchedulable, status);
+        return Objects.hash(id, stageId, name, artist, durationFrames, framesPerSecond, status);
     }
 }

@@ -41,12 +41,12 @@ public class ParamUtils {
     private static Param getParam(HasParams parent, ParamName paramName) {
         return parent.getParams()
                 .stream()
-                .filter(p -> paramName.getName().equals(p.getName()))
+                .filter(p -> paramName == p.getName())
                 .findFirst()
                 .orElse(new Param());
     }
 
     private static Color convertColor(String hexColor) {
-        return Color.decode(hexColor);
+        return Color.decode(hexColor.toLowerCase());
     }
 }

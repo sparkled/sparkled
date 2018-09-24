@@ -5,6 +5,7 @@ import SplitPane from 'react-split-pane';
 import { Nav, NavItem } from 'reactstrap';
 import { ActionCreators } from 'redux-undo';
 import uuidv4 from 'uuid/v4';
+import * as sequenceStatuses from '../SequenceList/sequenceStatuses';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { setCurrentPage } from '../actions';
@@ -30,6 +31,8 @@ class SequenceEditPage extends Component {
 
   constructor(props) {
     super(props);
+    this.saveSequence = this.saveSequence.bind(this);
+    this.publishSequence = this.publishSequence.bind(this);
     this.addEffect = this.addEffect.bind(this);
   }
 
@@ -83,10 +86,23 @@ class SequenceEditPage extends Component {
           <span className="nav-link" onClick={this.addEffect}>Add Effect</span>
         </NavItem>
         <NavItem className={loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => this.props.saveSequence(sequence)}>Save</span>
+          <span className="nav-link" onClick={this.saveSequence}>Save</span>
+        </NavItem>
+        <NavItem className={loaded ? '' : 'd-none'}>
+          <span className="nav-link" onClick={this.publishSequence}>Publish</span>
         </NavItem>
       </Nav>
     );
+  }
+
+  saveSequence() {
+    const { sequence, saveSequence } = this.props;
+    saveSequence({ ...sequence, status: sequenceStatuses.DRAFT });
+  }
+
+  publishSequence() {
+    const { sequence, saveSequence } = this.props;
+    saveSequence({ ...sequence, status: sequenceStatuses.PUBLISHED });
   }
 
   addEffect() {

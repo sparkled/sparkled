@@ -1,18 +1,23 @@
 package io.sparkled.music;
 
+import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.SongAudio;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import javazoom.jl.player.advanced.PlaybackEvent;
 
 import java.util.function.Consumer;
 
-public interface SequencePlayerService {
+public interface PlaylistService {
 
     /**
-     * Plays the provided sequence and provides the associated sequence data for synchronised retrieval.
+     * Plays the first playlist in the app. TODO: Remove this method once scheduling & playlist UI are implemented.
      */
-    void play(Sequence sequence, SongAudio songAudio);
+    void play();
+
+    /**
+     * Plays the provided playlist and provides the associated sequence data for synchronised retrieval.
+     */
+    void play(Playlist playlist);
 
     /**
      * @return The sequence that is currently playing, or null if no sequence is playing.
@@ -22,7 +27,7 @@ public interface SequencePlayerService {
     /**
      * @return The rendered data for the sequence that is currently playing, or null if no sequence is playing.
      */
-    RenderedStagePropDataMap getRenderedStagePropDataMap();
+    RenderedStagePropDataMap getRenderedStageProps();
 
     /**
      * @return A value between 0 and 1 indicating the playback progress of the current sequence.
@@ -30,12 +35,7 @@ public interface SequencePlayerService {
     double getSequenceProgress();
 
     /**
-     * @param playbackListener The playback listener to register.
+     * Stops playback of the current sequence. If no sequence is playing, this is a no-op.
      */
-    void addPlaybackFinishedListener(Consumer<PlaybackEvent> playbackListener);
-
-    /**
-     * Stops playback of the current scheduled sequence. If no sequence is playing, this is a NOOP.
-     */
-    void stopCurrentSequence();
+    void stopPlayback();
 }
