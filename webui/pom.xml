@@ -17,7 +17,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/build</directory>
+                <directory>build</directory>
                 <targetPath>webapp</targetPath>
             </resource>
         </resources>
