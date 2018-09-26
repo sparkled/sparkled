@@ -33,7 +33,7 @@ export default (state = initialState, action) => {
     case actionTypes.FETCH_SEQUENCE_PENDING:
       return {
         ...state,
-        fetchingSequence: true, fetchSequenceError: null, selectedChannel: null, selectedEffect: null
+        fetchingSequence: true, fetchSequenceError: null, selectedChannel: null, selectedEffect: null, currentFrame: 0
       };
 
     case actionTypes.FETCH_SEQUENCE_FULFILLED:
