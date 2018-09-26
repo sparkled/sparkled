@@ -158,6 +158,7 @@ class SequenceEditPage extends Component {
   }
 
   renderEditor() {
+    const { sequence, stage, stageProps } = this.props;
     return (
       <Fragment>
         <SplitPane split="horizontal" minSize={100} defaultSize={200} primary="second">
@@ -167,7 +168,7 @@ class SequenceEditPage extends Component {
             <EffectForm/>
           </SplitPane>
 
-          <Timeline/>
+          <Timeline sequence={sequence} stage={stage} stageProps={stageProps}/>
         </SplitPane>
 
         <AddChannelModal/>
