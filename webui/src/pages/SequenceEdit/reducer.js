@@ -160,8 +160,12 @@ function getChannelAndEffectIndexes(state, action) {
   const { effect } = action.payload;
   const channelIndex = _.findIndex(sequence.channels, { uuid: selectedChannel.uuid });
 
-  // Finding the effect by sorted startFrame index returns the correct deletion index for existing effects and the
-  // correct insertion index for new effects.
-  const effectIndex = _.sortedIndexBy(sequence.channels[channelIndex].effects, effect, 'startFrame');
+  const { effects } = sequence.channels[channelIndex];
+  let effectIndex = _.findIndex(effects, { uuid: effect.uuid });
+  if (effectIndex === -1) {
+    // If effect was not found (i.e. is being added), return the index it should be inserted at.
+    effectIndex = _.sortedIndexBy(effects, effect, 'startFrame');
+  }
+
   return { channelIndex, effectIndex };
 }

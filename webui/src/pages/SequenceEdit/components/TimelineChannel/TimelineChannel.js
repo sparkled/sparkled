@@ -30,6 +30,7 @@ class TimelineChannel extends Component {
     const { channel, pixelsPerFrame, selectEffect, selectFrame } = this.props;
     selectEffect(channel, null);
 
+    // TODO: Remove this hack.
     const scrollLeft = document.querySelector('.channels').scrollLeft;
     const frame = Math.round((event.clientX + scrollLeft  - 100) / pixelsPerFrame);
     selectFrame(frame);

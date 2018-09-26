@@ -4,6 +4,7 @@
   height: 20px;
   background: rgba(0, 0, 0, .2);
   border: 1px solid rgba(255, 255, 255, .2);
+  border-left: none;
 }
 
 .timeline .channel-active .label {

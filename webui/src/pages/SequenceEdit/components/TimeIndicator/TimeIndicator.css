@@ -4,12 +4,13 @@
 }
 
 .time-indicator line {
-  stroke: #000;
+  stroke: #fff;
 }
 
 .time-indicator text {
   font-size: 12px;
   text-anchor: middle;
+  fill: #fff;
 }
 
 .time-indicator text:first-of-type {

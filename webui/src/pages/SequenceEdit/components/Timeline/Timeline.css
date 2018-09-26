@@ -30,18 +30,7 @@
   height: 20px;
 }
 
-.timeline .channel {
-  position: relative;
-  width: 100%;
-  background: rgba(0, 0, 0, .2);
-  border: 1px solid rgba(255, 255, 255, .2);
-}
-
-.timeline .channel-active .label {
-  color: #ff0;
-}
-
-.timeline .channel, .timeline .time-indicator {
+.timeline .time-indicator {
   margin: 1px 0 1px 100px;
 }
 
@@ -53,5 +42,9 @@
 
 .timeline .effect-active {
   background: #ff0;
+}
+
+.timeline .effect-invalid {
+  background: #900;
 }
 
