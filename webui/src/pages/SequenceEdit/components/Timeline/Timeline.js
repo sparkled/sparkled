@@ -3,6 +3,7 @@ import React from 'react';
 import CurrentFrameIndicator from '../CurrentFrameIndicator';
 import TimeIndicator from '../TimeIndicator';
 import TimelineChannel from '../TimelineChannel';
+import Waveform from '../Waveform';
 import './Timeline.css';
 
 const Timeline = ({ sequence, stage }) => {
@@ -13,6 +14,7 @@ const Timeline = ({ sequence, stage }) => {
           <div className="channel-wrapper">
             <CurrentFrameIndicator/>
             {_.map(sequence.channels, channel => <TimelineChannel key={channel.uuid} channel={channel}/>)}
+            <Waveform/>
             <TimeIndicator sequence={sequence}/>
           </div>
         </div>

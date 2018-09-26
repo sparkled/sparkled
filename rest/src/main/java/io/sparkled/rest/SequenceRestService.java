@@ -89,7 +89,7 @@ public class SequenceRestService extends RestService {
     }
 
     @GET
-    @Path("/data/{id}")
+    @Path("/{id}/audio")
     @Produces(MP3_MIME_TYPE)
     public Response getSongAudio(@PathParam("id") int id) {
         Optional<SongAudio> songAudio = sequencePersistenceService.getSongAudioBySequenceId(id);

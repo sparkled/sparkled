@@ -1,0 +1,8 @@
+.WaveformContainer {
+  width: calc(100% - 100px);
+  margin-left: 100px;
+}
+
+.Waveform > wave {
+  width: 100%;
+}
