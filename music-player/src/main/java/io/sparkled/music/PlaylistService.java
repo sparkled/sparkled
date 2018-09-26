@@ -10,11 +10,6 @@ import java.util.function.Consumer;
 public interface PlaylistService {
 
     /**
-     * Plays the first playlist in the app. TODO: Remove this method once scheduling & playlist UI are implemented.
-     */
-    void play();
-
-    /**
      * Plays the provided playlist and provides the associated sequence data for synchronised retrieval.
      */
     void play(Playlist playlist);

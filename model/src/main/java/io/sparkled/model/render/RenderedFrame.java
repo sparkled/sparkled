@@ -27,7 +27,13 @@ public class RenderedFrame {
     }
 
     public byte[] getData() {
-        return data;
+        int bytesPerFrame = ledCount * Led.BYTES_PER_LED;
+        int offset = (frameNumber - startFrame) * bytesPerFrame;
+
+        byte[] frameData = new byte[bytesPerFrame];
+        System.arraycopy(data, offset, frameData, 0, bytesPerFrame);
+
+        return frameData;
     }
 
     public int getLedCount() {

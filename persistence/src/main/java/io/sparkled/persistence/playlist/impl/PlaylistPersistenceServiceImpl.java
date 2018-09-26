@@ -3,12 +3,14 @@ package io.sparkled.persistence.playlist.impl;
 import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.entity.Sequence;
-import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
 import io.sparkled.persistence.playlist.PlaylistPersistenceService;
+import io.sparkled.persistence.playlist.impl.query.GetAllPlaylistsQuery;
+import io.sparkled.persistence.playlist.impl.query.GetPlaylistByIdQuery;
 import io.sparkled.persistence.playlist.impl.query.GetSequenceAtPlaylistIndexQuery;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceService {
@@ -21,9 +23,15 @@ public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceServic
     }
 
     @Override
-    public Optional<Playlist> getFirstPlaylist() {
-        Playlist playlist = queryFactory.selectFrom(PersistenceQuery.qPlaylist).limit(1).fetchFirst();
-        return Optional.ofNullable(playlist);
+    @Transactional
+    public Optional<Playlist> getPlaylistById(int playlistId) {
+        return new GetPlaylistByIdQuery(playlistId).perform(queryFactory);
+    }
+
+    @Override
+    @Transactional
+    public List<Playlist> getAllPlaylists() {
+        return new GetAllPlaylistsQuery().perform(queryFactory);
     }
 
     @Override

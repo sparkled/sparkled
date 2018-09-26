@@ -13,19 +13,16 @@ public class App {
     private final SchemaUpdater schemaUpdater;
     private final RestApiServer restApiServer;
     private final UdpServer udpServer;
-    private final PlaylistService playlistService;
 
     @Inject
     public App(PersistService persistService,
                SchemaUpdater schemaUpdater,
                RestApiServer restApiServer,
-               UdpServer udpServer,
-               PlaylistService playlistService) throws Exception {
+               UdpServer udpServer) throws Exception {
 
         this.persistService = persistService;
         this.restApiServer = restApiServer;
         this.udpServer = udpServer;
-        this.playlistService = playlistService;
         this.schemaUpdater = schemaUpdater;
     }
 
@@ -34,6 +31,5 @@ public class App {
         schemaUpdater.update();
         restApiServer.start(restApiPort);
         udpServer.start(udpPort);
-        playlistService.play();
     }
 }

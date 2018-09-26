@@ -47,16 +47,11 @@ public class PlaylistServiceImpl implements PlaylistService {
         );
 
         this.playbackListener.addPlaybackFinishedListener(event -> {
-            this.playlistIndex.incrementAndGet();
-            playNextSequence();
+            if (playlist != null) {
+                this.playlistIndex.incrementAndGet();
+                playNextSequence();
+            }
         });
-    }
-
-    @Override
-    public void play() {
-        // TODO delete this play() method.
-        Optional<Playlist> playlist = playlistPersistenceService.getFirstPlaylist();
-        playlist.ifPresent(this::play);
     }
 
     @Override
@@ -139,6 +134,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
 
         playlistIndex.set(0);
+        playlist = null;
         currentSequence = null;
         renderedStageProps = null;
         audioDevice = null;
