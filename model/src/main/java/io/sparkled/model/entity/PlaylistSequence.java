@@ -2,15 +2,15 @@ package io.sparkled.model.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "playlist_sequence")
 public class PlaylistSequence {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "uuid", nullable = false)
+    private UUID uuid;
 
     @Basic
     @Column(name = "playlist_id", nullable = false)
@@ -24,12 +24,12 @@ public class PlaylistSequence {
     @Column(name = "display_order", nullable = false)
     private Integer displayOrder;
 
-    public Integer getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public PlaylistSequence setId(Integer id) {
-        this.id = id;
+    public PlaylistSequence setUuid(UUID uuid) {
+        this.uuid = uuid;
         return this;
     }
 
@@ -65,7 +65,7 @@ public class PlaylistSequence {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlaylistSequence that = (PlaylistSequence) o;
-        return Objects.equals(id, that.id) &&
+        return Objects.equals(uuid, that.uuid) &&
                 Objects.equals(playlistId, that.playlistId) &&
                 Objects.equals(sequenceId, that.sequenceId) &&
                 Objects.equals(displayOrder, that.displayOrder);
@@ -73,13 +73,13 @@ public class PlaylistSequence {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, playlistId, sequenceId, displayOrder);
+        return Objects.hash(uuid, playlistId, sequenceId, displayOrder);
     }
 
     @Override
     public String toString() {
         return "PlaylistSequence{" +
-                "id=" + id +
+                "id=" + uuid +
                 ", playlistId=" + playlistId +
                 ", sequenceId=" + sequenceId +
                 ", displayOrder=" + displayOrder +

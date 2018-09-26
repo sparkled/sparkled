@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import undoable from 'redux-undo';
 import * as actionTypes from './actionTypes';
+import playlistEditReducer from './PlaylistEdit/reducer';
 import sequenceEditReducer from './SequenceEdit/reducer';
 import sequenceListReducer from './SequenceList/reducer';
 import stageEditReducer from './StageEdit/reducer';
@@ -24,5 +25,6 @@ export default combineReducers({
   sequenceList: sequenceListReducer,
   sequenceEdit: undoable(sequenceEditReducer, { filter: undoableFilter }),
   stageEdit: undoable(stageEditReducer, { filter: undoableFilter }),
-  stageList: stageListReducer
+  stageList: stageListReducer,
+  playlistEdit: playlistEditReducer,
 });
