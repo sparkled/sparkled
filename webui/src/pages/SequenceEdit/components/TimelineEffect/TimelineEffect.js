@@ -11,6 +11,7 @@ class TimelineEffect extends Component {
     this.onEffectMove = this.onEffectMove.bind(this);
     this.onEffectResize = this.onEffectResize.bind(this);
     this.onEffectClick = this.onEffectClick.bind(this);
+    this.moveEffect = this.moveEffect.bind(this);
     this.selectEffect = this.selectEffect.bind(this);
     this.rndRef = React.createRef();
   }
@@ -32,17 +33,15 @@ class TimelineEffect extends Component {
   }
 
   render() {
-    const { effect, selectedEffect } = this.props;
     const dimensions = this.getDimensions(this.props);
-    const activeClass = (selectedEffect && effect.uuid === selectedEffect.uuid) ? 'effect-active' : '';
 
     return (
-      <Rnd className={'effect ' + activeClass} ref={this.rndRef}
+      <Rnd className={'effect ' + this.getEffectClass()} ref={this.rndRef}
            bounds="parent"
            default={dimensions}
            enableResizing={{ left: true, right: true }}
            dragAxis="x"
-           dragGrid={[1, 0]}
+           dragGrid={[2, 0]}
            resizeGrid={[2, 0]}
            onMouseDown={this.onEffectClick}
            onDragStart={this.selectEffect}
@@ -50,6 +49,17 @@ class TimelineEffect extends Component {
            onResizeStart={this.selectEffect}
            onResizeStop={this.onEffectResize}/>
     );
+  }
+
+  getEffectClass() {
+    const { effect, selectedEffect } = this.props;
+    if (selectedEffect && effect.uuid === selectedEffect.uuid) {
+      return 'effect-active';
+    } else if (effect.invalid) {
+      return 'effect-invalid';
+    } else {
+      return '';
+    }
   }
 
   getDimensions(props) {
@@ -60,21 +70,34 @@ class TimelineEffect extends Component {
   }
 
   onEffectMove(event, data) {
-    const { channel, effect } = this.props;
+    const { effect } = this.props;
     const startFrame = Math.floor(data.x / 2);
     const endFrame = Math.round(startFrame + (effect.endFrame - effect.startFrame));
 
-    if (effect.startFrame !== startFrame || effect.endFrame !== endFrame) {
-      this.props.updateEffect(channel, { ...effect, startFrame, endFrame });
-    }
+    this.moveEffect(startFrame, endFrame);
   }
 
   onEffectResize(event, data, ref, delta, position) {
-    const { channel, effect } = this.props;
+    const { effect } = this.props;
     const isLeft = (data === 'left');
 
-    const startFrame = isLeft ? effect.startFrame - (delta.width / 2) : effect.startFrame;
-    const endFrame = isLeft ? effect.endFrame : effect.endFrame + (delta.width / 2);
+    let startFrame = effect.startFrame;
+    let endFrame = effect.endFrame;
+
+    if (isLeft) {
+      startFrame = Math.floor(effect.startFrame - (delta.width / 2));
+    } else {
+      endFrame = Math.round(effect.endFrame + (delta.width / 2));
+    }
+
+    this.moveEffect(startFrame, endFrame);
+  }
+
+  moveEffect(startFrame, endFrame) {
+    const { channel, effect, sequence } = this.props;
+
+    startFrame = Math.max(startFrame, 0);
+    endFrame = Math.min(endFrame, sequence.durationFrames - 1);
 
     if (effect.startFrame !== startFrame || effect.endFrame !== endFrame) {
       this.props.updateEffect(channel, { ...effect, startFrame, endFrame });
@@ -93,8 +116,8 @@ class TimelineEffect extends Component {
 }
 
 function mapStateToProps({ page }) {
-  const { selectedEffect } = page.sequenceEdit.present;
-  return { selectedEffect };
+  const { sequence, selectedEffect } = page.sequenceEdit.present;
+  return { sequence, selectedEffect };
 }
 
 export default connect(mapStateToProps, { selectEffect, updateEffect })(TimelineEffect);

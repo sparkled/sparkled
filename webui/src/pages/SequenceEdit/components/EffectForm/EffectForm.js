@@ -18,6 +18,7 @@ const minStartFrame = min(0);
 const minRepetitions = min(1);
 const maxStartFrame = (value, effect) => value > effect.endFrame ? 'Start frame cannot be greater than end frame' : null;
 const minEndFrame = (value, effect) => value < effect.startFrame ? 'End frame cannot be less than start frame' : null;
+let maxEndFrame = () => null;
 
 class EffectForm extends Component {
 
@@ -30,10 +31,15 @@ class EffectForm extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { initialize, selectedEffect } = this.props;
+    const { initialize, sequence, selectedEffect } = this.props;
 
     if (selectedEffect !== newProps.selectedEffect) {
       initialize(newProps.selectedEffect);
+    }
+
+    if (sequence !== newProps.sequence) {
+      const max = sequence.durationFrames - 1;
+      maxEndFrame = value => value > max ? 'End frame cannot greater than ' + max : null;
     }
   }
 
@@ -43,7 +49,7 @@ class EffectForm extends Component {
 
   render() {
     const { className = '', selectedEffect } = this.props;
-    const body = !selectedEffect ? this.renderEmpty() : this.renderEffectForm(selectedEffect);
+    const body = !selectedEffect ? this.renderEmpty() : this.renderEffectForm();
 
     return (
       <Card className={'EffectForm ' + className}>
@@ -63,16 +69,18 @@ class EffectForm extends Component {
     return <div>No effect selected.</div>;
   }
 
-  renderEffectForm(effect) {
+  renderEffectForm() {
+    const { sequence, selectedEffect: effect } = this.props;
     return (
       <form>
         <div className="row">
           <Field className="col-6" type="number" parse={toNumber} name="startFrame" component={InputField}
                  label="Start Frame" required={true} validate={[required, minStartFrame, maxStartFrame]}
-                 onChange={this.updateEffect}/>
+                 min="0" max={effect.endFrame - 1} onChange={this.updateEffect}/>
 
           <Field className="col-6" type="number" parse={toNumber} name="endFrame" component={InputField}
-                 label="End Frame" required={true} validate={[required, minEndFrame]} onChange={this.updateEffect}/>
+                 label="End Frame" required={true} validate={[required, minEndFrame, maxEndFrame]}
+                 min={effect.startFrame + 1} max={sequence.durationFrames - 1} onChange={this.updateEffect}/>
         </div>
 
         <div className="row">
