@@ -13,9 +13,10 @@ const SingleSelectField = ({ input, options, allowEmpty = true, className = '', 
     return <option key={id} value={id}>{option.name}</option>;
   });
 
+  const labelElem = label ? <label className="form-control-label" htmlFor={name}>{label} {required ? '*' : ''}</label> : [];
   return (
     <div className={`${className} ${formGroupClass}`}>
-      <label className="form-control-label" htmlFor={name}>{label} {required ? '*' : ''}</label>
+      {labelElem}
       <select {...input} {...attrs} className={fieldClass}>
         {allowEmpty ? <option/> : []}
         {optionElements}

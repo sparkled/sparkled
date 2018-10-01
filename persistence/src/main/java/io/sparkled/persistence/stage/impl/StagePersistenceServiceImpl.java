@@ -4,7 +4,7 @@ import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.Stage;
 import io.sparkled.persistence.QueryFactory;
 import io.sparkled.persistence.stage.StagePersistenceService;
-import io.sparkled.persistence.stage.impl.query.DeleteStageQuery;
+import io.sparkled.persistence.stage.impl.query.DeleteStageByIdQuery;
 import io.sparkled.persistence.stage.impl.query.GetAllStagesQuery;
 import io.sparkled.persistence.stage.impl.query.GetStageByIdQuery;
 import io.sparkled.persistence.stage.impl.query.SaveStageQuery;
@@ -31,7 +31,7 @@ public class StagePersistenceServiceImpl implements StagePersistenceService {
     @Override
     @Transactional
     public Integer deleteStage(int stageId) {
-        return new DeleteStageQuery(stageId).perform(queryFactory);
+        return new DeleteStageByIdQuery(stageId).perform(queryFactory);
     }
 
     @Override

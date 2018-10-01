@@ -1,4 +1,4 @@
-package io.sparkled.viewmodel.playlist.sequence;
+package io.sparkled.viewmodel.playlist;
 
 import io.sparkled.model.entity.Playlist;
 import io.sparkled.viewmodel.ViewModelConverter;

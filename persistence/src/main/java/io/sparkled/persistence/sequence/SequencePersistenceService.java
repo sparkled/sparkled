@@ -30,10 +30,6 @@ public interface SequencePersistenceService {
 
     RenderedStagePropDataMap getRenderedStageProps(Sequence sequence);
 
-    void saveRenderedChannels(Sequence sequence, RenderedStagePropDataMap renderedStagePropDataMap);
-
-    void deleteRenderedStageProps(int sequenceId);
-
     Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID uuid);
 
     List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId);

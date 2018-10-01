@@ -88,4 +88,15 @@ public class Stage {
     public int hashCode() {
         return Objects.hash(id, name, width, height, stageProps);
     }
+
+    @Override
+    public String toString() {
+        return "Stage{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                ", stageProps=" + stageProps +
+                '}';
+    }
 }

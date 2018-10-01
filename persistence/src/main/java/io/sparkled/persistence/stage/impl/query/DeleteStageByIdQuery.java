@@ -2,14 +2,14 @@ package io.sparkled.persistence.stage.impl.query;
 
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
-import io.sparkled.persistence.sequence.impl.query.DeleteSequenceQuery;
+import io.sparkled.persistence.sequence.impl.query.DeleteSequenceByIdQuery;
 import io.sparkled.persistence.sequence.impl.query.GetSequencesByStageIdQuery;
 
-public class DeleteStageQuery implements PersistenceQuery<Integer> {
+public class DeleteStageByIdQuery implements PersistenceQuery<Integer> {
 
     private final int stageId;
 
-    public DeleteStageQuery(int stageId) {
+    public DeleteStageByIdQuery(int stageId) {
         this.stageId = stageId;
     }
 
@@ -24,7 +24,7 @@ public class DeleteStageQuery implements PersistenceQuery<Integer> {
 
     private void removeSequences(QueryFactory queryFactory) {
         new GetSequencesByStageIdQuery(stageId).perform(queryFactory).forEach(sequence -> {
-            new DeleteSequenceQuery(sequence.getId()).perform(queryFactory);
+            new DeleteSequenceByIdQuery(sequence.getId()).perform(queryFactory);
         });
     }
 

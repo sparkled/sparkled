@@ -1,6 +1,6 @@
-package io.sparkled.viewmodel.playlist.sequence;
+package io.sparkled.viewmodel.playlist;
 
-import io.sparkled.viewmodel.playlist.sequence.channel.PlaylistSequenceViewModel;
+import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModel;
 
 import java.util.List;
 import java.util.Objects;

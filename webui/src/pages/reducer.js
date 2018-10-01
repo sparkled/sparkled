@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import undoable from 'redux-undo';
 import * as actionTypes from './actionTypes';
 import playlistEditReducer from './PlaylistEdit/reducer';
+import playlistListReducer from './PlaylistList/reducer';
 import sequenceEditReducer from './SequenceEdit/reducer';
 import sequenceListReducer from './SequenceList/reducer';
 import stageEditReducer from './StageEdit/reducer';
@@ -22,9 +23,10 @@ const sharedReducer = (state = {}, action) => {
 
 export default combineReducers({
   shared: sharedReducer,
-  sequenceList: sequenceListReducer,
   sequenceEdit: undoable(sequenceEditReducer, { filter: undoableFilter }),
+  sequenceList: sequenceListReducer,
   stageEdit: undoable(stageEditReducer, { filter: undoableFilter }),
   stageList: stageListReducer,
-  playlistEdit: playlistEditReducer,
+  playlistEdit: undoable(playlistEditReducer, { filter: undoableFilter }),
+  playlistList: playlistListReducer
 });
