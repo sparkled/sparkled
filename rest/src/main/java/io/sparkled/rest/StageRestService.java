@@ -71,8 +71,8 @@ public class StageRestService extends RestService {
 
         if (stage.isPresent()) {
             return getJsonResponse(stage.get());
+        } else {
+            return getResponse(Response.Status.NOT_FOUND);
         }
-
-        return getResponse(Response.Status.NOT_FOUND);
     }
 }

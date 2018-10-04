@@ -3,11 +3,11 @@ package io.sparkled.persistence.sequence.impl.query;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
 
-public class DeleteSequenceQuery implements PersistenceQuery<Integer> {
+public class DeleteSequenceByIdQuery implements PersistenceQuery<Integer> {
 
     private final int sequenceId;
 
-    public DeleteSequenceQuery(int sequenceId) {
+    public DeleteSequenceByIdQuery(int sequenceId) {
         this.sequenceId = sequenceId;
     }
 

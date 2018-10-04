@@ -19,7 +19,6 @@ class DeleteSequenceModal extends Component {
           <ModalHeader>Delete sequence</ModalHeader>
           <ModalBody>
             <p>Are you sure you want to delete <em>{sequenceToDelete.name}</em>?</p>
-            <p>If this sequence has been scheduled for playback, its schedule entries will also be deleted.</p>
             {this.renderDeletionError()}
           </ModalBody>
           <ModalFooter>

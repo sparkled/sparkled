@@ -34,7 +34,7 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     @Override
     @Transactional
     public Integer deleteSequence(int sequenceId) {
-        return new DeleteSequenceQuery(sequenceId).perform(queryFactory);
+        return new DeleteSequenceByIdQuery(sequenceId).perform(queryFactory);
     }
 
     @Override
@@ -84,19 +84,6 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     @Transactional
     public RenderedStagePropDataMap getRenderedStageProps(Sequence sequence) {
         return new GetRenderedStagePropsQuery(sequence).perform(queryFactory);
-    }
-
-    @Override
-    @Transactional
-    public void saveRenderedChannels(Sequence sequence, RenderedStagePropDataMap renderedStagePropDataMap) {
-        deleteRenderedStageProps(sequence.getId());
-        new SaveRenderedStagePropsQuery(sequence, renderedStagePropDataMap).perform(queryFactory);
-    }
-
-    @Override
-    @Transactional
-    public void deleteRenderedStageProps(int sequenceId) {
-        new DeleteRenderedStagePropsBySequenceIdQuery(sequenceId).perform(queryFactory);
     }
 
     @Override

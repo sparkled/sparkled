@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardTitle, Collapse } from 'reactstrap';
 import { connect } from 'react-redux';
+import { Card, CardBody, CardTitle, Collapse } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
-import { deleteStageProp, selectStageProp, updateStageProp } from '../../actions';
-import stagePropTypes from '../../stagePropTypes';
 import InputField from '../../../../components/form/InputField';
 import SingleSelectField from '../../../../components/form/SingleSelectField';
-import { min, max, required } from '../../../../components/form/validators';
+import { max, min, required } from '../../../../components/form/validators';
 import trash from '../../../../images/trash.svg';
+import { deleteStageProp, selectStageProp, updateStageProp } from '../../actions';
+import stagePropTypes from '../../stagePropTypes';
 
 const toNumber = value => !value ? null : Number(value);
 const minLeds = min(0);
@@ -85,11 +85,11 @@ class StagePropForm extends Component {
   }
 }
 
-function mapStateToProps({ page: { stageEdit } }) {
+function mapStateToProps({ form, page: { stageEdit } }) {
   return {
     selectedStagePropUuid: stageEdit.present.selectedStagePropUuid
   };
 }
 
 StagePropForm = connect(mapStateToProps, { deleteStageProp, selectStageProp, updateStageProp })(StagePropForm);
-export default reduxForm({ form: 'stageProp' })(StagePropForm);
+export default reduxForm({})(StagePropForm);
