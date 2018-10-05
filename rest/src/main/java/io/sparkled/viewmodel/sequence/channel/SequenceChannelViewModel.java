@@ -2,6 +2,7 @@ package io.sparkled.viewmodel.sequence.channel;
 
 import io.sparkled.model.animation.effect.Effect;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -13,7 +14,7 @@ public class SequenceChannelViewModel {
     private UUID stagePropUuid;
     private String name;
     private Integer displayOrder;
-    private List<Effect> effects;
+    private List<Effect> effects = new ArrayList<>();
 
     public UUID getUuid() {
         return uuid;

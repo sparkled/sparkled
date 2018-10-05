@@ -3,6 +3,7 @@ package io.sparkled.viewmodel.sequence;
 import io.sparkled.model.entity.SequenceStatus;
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ public class SequenceViewModel {
     private String name;
     private int durationFrames;
     private int framesPerSecond = 60;
-    private List<SequenceChannelViewModel> channels;
+    private List<SequenceChannelViewModel> channels = new ArrayList<>();
 
     public Integer getId() {
         return id;

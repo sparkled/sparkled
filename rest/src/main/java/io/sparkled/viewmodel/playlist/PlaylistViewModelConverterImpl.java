@@ -24,10 +24,17 @@ public class PlaylistViewModelConverterImpl implements PlaylistViewModelConverte
 
     @Override
     public Playlist fromViewModel(PlaylistViewModel viewModel) {
-        final Integer playlistId = viewModel.getId();
-        Playlist model = playlistPersistenceService.getPlaylistById(playlistId)
-                .orElseThrow(() -> new ViewModelConversionException("Playlist with ID of '" + playlistId + "' not found."));
-
+        Integer playlistId = viewModel.getId();
+        Playlist model = getPlaylist(playlistId);
         return model.setName(viewModel.getName());
+    }
+
+    private Playlist getPlaylist(Integer playlistId) {
+        if (playlistId == null) {
+            return new Playlist();
+        } else {
+            return playlistPersistenceService.getPlaylistById(playlistId)
+                    .orElseThrow(() -> new ViewModelConversionException("Playlist with ID of '" + playlistId + "' not found."));
+        }
     }
 }

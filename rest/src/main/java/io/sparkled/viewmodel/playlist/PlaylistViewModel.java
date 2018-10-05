@@ -2,6 +2,7 @@ package io.sparkled.viewmodel.playlist;
 
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ public class PlaylistViewModel {
 
     private Integer id;
     private String name;
-    private List<PlaylistSequenceViewModel> sequences;
+    private List<PlaylistSequenceViewModel> sequences = new ArrayList<>();
 
     public Integer getId() {
         return id;
