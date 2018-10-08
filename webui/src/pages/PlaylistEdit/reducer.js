@@ -74,7 +74,7 @@ export default (state = initialState, action) => {
         break;
 
       case actionTypes.UPDATE_PLAYLIST_SEQUENCE:
-        const playlistSequence = action.payload.playlistSequence;
+        const { playlistSequence } = action.payload;
         const index = _.findIndex(draft.playlist.sequences, { uuid: playlistSequence.uuid });
         draft.playlist.sequences[index] = playlistSequence;
         break;

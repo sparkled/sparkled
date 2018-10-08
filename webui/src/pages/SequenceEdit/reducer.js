@@ -1,5 +1,5 @@
+import produce from 'immer';
 import _ from 'lodash';
-import immutable from 'object-path-immutable';
 import { getResponseError } from '../../utils/reducerUtils';
 import * as actionTypes from './actionTypes';
 
@@ -29,134 +29,154 @@ export default (state = initialState, action) => {
     return state;
   }
 
-  switch (action.type) {
-    case actionTypes.FETCH_SEQUENCE_PENDING:
-      return {
-        ...state,
-        fetchingSequence: true, fetchSequenceError: null, selectedChannel: null, selectedEffect: null, currentFrame: 0
-      };
+  return produce(state, draft => {
+    switch (action.type) {
+      case actionTypes.FETCH_SEQUENCE_PENDING:
+        draft.fetchingSequence = true;
+        draft.fetchSequenceError = null;
+        draft.selectedChannel = null;
+        draft.selectedEffect = null;
+        draft.currentFrame = 0;
+        break;
 
-    case actionTypes.FETCH_SEQUENCE_FULFILLED:
-      const sequence = action.payload.data;
-      const selectedChannel = sequence.channels.length > 0 ? sequence.channels[0] : null;
-      return { ...state, sequence, selectedChannel, fetchingSequence: false };
+      case actionTypes.FETCH_SEQUENCE_FULFILLED:
+        const sequence = action.payload.data;
+        draft.sequence = sequence;
+        draft.selectedChannel = sequence.channels.length > 0 ? sequence.channels[0] : null;
+        draft.fetchingSequence = false;
+        break;
 
-    case actionTypes.FETCH_SEQUENCE_REJECTED:
-      return { ...state, fetchingSequence: false, fetchSequenceError: getResponseError(action) };
+      case actionTypes.FETCH_SEQUENCE_REJECTED:
+        draft.fetchingSequence = false;
+        draft.fetchSequenceError = getResponseError(action);
+        break;
 
-    case actionTypes.FETCH_SEQUENCE_STAGE_PENDING:
-      return { ...state, fetchingStage: true, fetchStageError: null };
+      case actionTypes.FETCH_SEQUENCE_STAGE_PENDING:
+        draft.fetchingStage = true;
+        draft.fetchStageError = null;
+        break;
 
-    case actionTypes.FETCH_SEQUENCE_STAGE_FULFILLED:
-      return { ...state, fetchingStage: false, stage: action.payload.data };
+      case actionTypes.FETCH_SEQUENCE_STAGE_FULFILLED:
+        draft.fetchingStage = false;
+        draft.stage = action.payload.data;
+        break;
 
-    case actionTypes.FETCH_SEQUENCE_STAGE_REJECTED:
-      return { ...state, fetchingStage: false, fetchStageError: getResponseError(action) };
+      case actionTypes.FETCH_SEQUENCE_STAGE_REJECTED:
+        draft.fetchingStage = false;
+        draft.fetchStageError = getResponseError(action);
+        break;
 
-    case actionTypes.FETCH_REFERENCE_DATA_PENDING:
-      return { ...state, fetchingReferenceData: true, fetchReferenceDataError: null };
+      case actionTypes.FETCH_REFERENCE_DATA_PENDING:
+        draft.fetchingReferenceData = true;
+        draft.fetchReferenceDataError = null;
+        break;
 
-    case actionTypes.FETCH_REFERENCE_DATA_FULFILLED:
-      const [effectTypes, fillTypes, easingTypes] = action.payload;
-      return {
-        ...state, fetchingReferenceData: false,
-        effectTypes: effectTypes.data, fillTypes: fillTypes.data, easingTypes: easingTypes.data
-      };
+      case actionTypes.FETCH_REFERENCE_DATA_FULFILLED:
+        const [effectTypes, fillTypes, easingTypes] = action.payload;
+        draft.fetchingReferenceData = false;
+        draft.effectTypes = effectTypes.data;
+        draft.fillTypes = fillTypes.data;
+        draft.easingTypes = easingTypes.data;
+        break;
 
-    case actionTypes.FETCH_REFERENCE_DATA_REJECTED:
-      return { ...state, fetchingReferenceData: false, fetchReferenceDataError: getResponseError(action) };
+      case actionTypes.FETCH_REFERENCE_DATA_REJECTED:
+        draft.fetchingReferenceData = false;
+        draft.fetchReferenceDataError = getResponseError(action);
+        break;
 
-    case actionTypes.SAVE_SEQUENCE_PENDING:
-      return { ...state, saving: true, saveError: null };
+      case actionTypes.SAVE_SEQUENCE_PENDING:
+        draft.saving = true;
+        draft.saveError = null;
+        break;
 
-    case actionTypes.SAVE_SEQUENCE_FULFILLED:
-      return { ...state, saving: false };
+      case actionTypes.SAVE_SEQUENCE_FULFILLED:
+        draft.saving = false;
+        break;
 
-    case actionTypes.SAVE_SEQUENCE_REJECTED:
-      return { ...state, saving: false, saveError: getResponseError(action) };
+      case actionTypes.SAVE_SEQUENCE_REJECTED:
+        draft.saving = false;
+        draft.saveError = getResponseError(action);
+        break;
 
-    case actionTypes.SHOW_ADD_CHANNEL_MODAL:
-      return { ...state, addChannelModalVisible: true };
+      case actionTypes.SHOW_ADD_CHANNEL_MODAL:
+        draft.addChannelModalVisible = true;
+        break;
 
-    case actionTypes.HIDE_ADD_CHANNEL_MODAL:
-      return { ...state, addChannelModalVisible: false };
+      case actionTypes.HIDE_ADD_CHANNEL_MODAL:
+        draft.addChannelModalVisible = false;
+        break;
 
-    case actionTypes.ADD_CHANNEL:
-      return {
-        ...state, addChannelModalVisible: false,
-        sequence: { ...state.sequence, channels: [...state.sequence.channels, action.payload.channel] }
-      };
+      case actionTypes.ADD_CHANNEL:
+        draft.addChannelModalVisible = false;
+        draft.sequence.channels.push(action.payload.channel);
+        break;
 
-    case actionTypes.SELECT_EFFECT: {
-      const { selectedChannel, selectedEffect } = action.payload;
+      case actionTypes.SELECT_EFFECT:
+        selectEffect(draft, action);
+        break;
 
-      if (hasSameUuid(selectedChannel, state.selectedChannel) && hasSameUuid(selectedEffect, state.selectedEffect)) {
-        return state;
-      } else {
-        return { ...state, selectedChannel, selectedEffect };
-      }
+      case actionTypes.ADD_EFFECT:
+        addEffect(draft, action);
+        break;
+
+      case actionTypes.UPDATE_EFFECT:
+        updateEffect(draft, action);
+        break;
+
+      case actionTypes.DELETE_EFFECT:
+        deleteEffect(draft, action);
+        break;
+
+      case actionTypes.SELECT_FRAME:
+        const { frame } = action.payload;
+        if (frame >= 0 && frame < state.sequence.durationFrames) {
+          draft.currentFrame = action.payload.frame;
+        }
+        break;
+
+      default:
+        return;
     }
-
-    case actionTypes.ADD_EFFECT: {
-      return addEffect(state, action);
-    }
-
-    case actionTypes.UPDATE_EFFECT: {
-      return updateEffect(state, action);
-    }
-
-    case actionTypes.DELETE_EFFECT: {
-      return deleteEffect(state, action);
-    }
-
-    case actionTypes.SELECT_FRAME: {
-      const { frame } = action.payload;
-      if (frame < 0 || frame > state.sequence.durationFrames - 1) {
-        return state; // Frame is out of bounds, ignore.
-      } else {
-        return { ...state, currentFrame: action.payload.frame };
-      }
-    }
-
-    default:
-      return state;
-  }
+  });
 };
 
 function hasSameUuid(a, b) {
   return (a || {}).uuid === (b || {}).uuid;
 }
 
+function selectEffect(draft, action) {
+  const { selectedChannel, selectedEffect } = action.payload;
+  const channelSelected = hasSameUuid(selectedChannel, draft.selectedChannel);
+  const effectSelected = hasSameUuid(selectedEffect, draft.selectedEffect);
+
+  if (!channelSelected || !effectSelected) {
+    draft.selectedChannel = selectedChannel;
+    draft.selectedEffect = selectedEffect;
+  }
+}
+
 // Re-adding the effect has the benefit of automatically moving the effect to the correct array position.
-function updateEffect(state, action) {
-  state = deleteEffect(state, action);
-  return addEffect(state, action);
+function updateEffect(draft, action) {
+  deleteEffect(draft, action);
+  addEffect(draft, action);
 }
 
-function addEffect(state, action) {
+function addEffect(draft, action) {
   const { effect } = action.payload;
-  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(state, action);
-  const effectPath = `channels.${channelIndex}.effects`;
+  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(draft, action);
 
-  return {
-    ...state,
-    sequence: immutable.insert(state.sequence, effectPath, effect, effectIndex),
-    selectedEffect: effect
-  };
+  draft.sequence.channels[channelIndex].effects.splice(effectIndex, 0, effect);
+  draft.selectedEffect = effect;
 }
 
-function deleteEffect(state, action) {
-  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(state, action);
-  const effectPath = `channels.${channelIndex}.effects.${effectIndex}`;
-  return {
-    ...state,
-    sequence: immutable.del(state.sequence, effectPath),
-    selectedEffect: null
-  };
+function deleteEffect(draft, action) {
+  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(draft, action);
+  draft.sequence.channels[channelIndex].effects.splice(effectIndex, 1);
+  draft.selectedEffect = null;
 }
 
-function getChannelAndEffectIndexes(state, action) {
-  const { sequence, selectedChannel } = state;
+function getChannelAndEffectIndexes(draft, action) {
+  const { sequence, selectedChannel } = draft;
   const { effect } = action.payload;
   const channelIndex = _.findIndex(sequence.channels, { uuid: selectedChannel.uuid });
 

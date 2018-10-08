@@ -1,5 +1,5 @@
+import produce from 'immer';
 import _ from 'lodash';
-import immutable from 'object-path-immutable';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Card, CardBody, CardTitle } from 'reactstrap';
@@ -171,20 +171,25 @@ class EffectForm extends Component {
     // Timeout is used to allow form to finish validation so we have the correct "invalid" value in props.
     setTimeout(() => {
       const { selectedChannel, updateEffect, selectedEffect, invalid } = this.props;
-      const effectImmutable = immutable(selectedEffect).set(name, newValue).set('invalid', invalid);
+      const updatedEffect = produce(selectedEffect, draft => {
+        draft.invalid = invalid;
 
-      if (name === 'type') {
-        const newType = _.find(effectTypes, { code: newValue});
-        effectImmutable.set('params', _.cloneDeep(newType.params));
-      } else if (name === 'fill.type') {
-        const newFill = _.find(fillTypes, { code: newValue});
-        effectImmutable.set('fill.params', _.cloneDeep(newFill.params));
-      } else if (name === 'easing.type') {
-        const newEasing = _.find(easingTypes, { code: newValue});
-        effectImmutable.set('easing.params', _.cloneDeep(newEasing.params));
-      }
+        // Convert a name path like "fill.params.1.value.0" to an array for _.set() and assign a value to that path.
+        _.set(draft, name.split('.'), newValue);
 
-      updateEffect(selectedChannel, effectImmutable.value());
+        if (name === 'type') {
+          const newType = _.find(effectTypes, { code: newValue});
+          draft.params = _.cloneDeep(newType.params);
+        } else if (name === 'fill.type') {
+          const newFill = _.find(fillTypes, { code: newValue});
+          draft.fill.params = _.cloneDeep(newFill.params);
+        } else if (name === 'easing.type') {
+          const newEasing = _.find(easingTypes, { code: newValue});
+          draft.easing.params = _.cloneDeep(newEasing.params);
+        }
+      });
+
+      updateEffect(selectedChannel, updatedEffect);
     });
   }
 }

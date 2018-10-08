@@ -1,30 +1,29 @@
 import React from 'react';
 import './TimeIndicator.css';
 
-const PIXELS_PER_FRAME = 2;
 
-const TimeIndicator = ({ sequence }) => {
+const TimeIndicator = ({ sequence, pixelsPerFrame }) => {
   const { durationFrames, framesPerSecond } = sequence;
-  const width = durationFrames * PIXELS_PER_FRAME;
+  const width = durationFrames * pixelsPerFrame;
 
-  const seconds = renderSeconds(durationFrames, framesPerSecond);
+  const seconds = renderSeconds(durationFrames, framesPerSecond, pixelsPerFrame);
   return (
     <svg className="time-indicator" style={{ width }}>
-      <pattern id="frame-pattern" width={PIXELS_PER_FRAME} height="10" patternUnits="userSpaceOnUse">
+      <pattern id="frame-pattern" width={pixelsPerFrame} height="10" patternUnits="userSpaceOnUse">
         <line x1="0" y1="0" x2="0" y2="3"/>
       </pattern>
 
-      <pattern id="quarter-second-pattern" width={PIXELS_PER_FRAME * (framesPerSecond / 4)} height="10"
+      <pattern id="quarter-second-pattern" width={pixelsPerFrame * (framesPerSecond / 4)} height="10"
                patternUnits="userSpaceOnUse">
         <line x1="0" y1="3" x2="0" y2="6"/>
       </pattern>
 
-      <pattern id="half-second-pattern" width={PIXELS_PER_FRAME * (framesPerSecond / 2)} height="10"
+      <pattern id="half-second-pattern" width={pixelsPerFrame * (framesPerSecond / 2)} height="10"
                patternUnits="userSpaceOnUse">
         <line x1="0" y1="3" x2="0" y2="8"/>
       </pattern>
 
-      <pattern id="second-pattern" width={PIXELS_PER_FRAME * framesPerSecond} height="10" patternUnits="userSpaceOnUse">
+      <pattern id="second-pattern" width={pixelsPerFrame * framesPerSecond} height="10" patternUnits="userSpaceOnUse">
         <line x1="0" y1="3" x2="0" y2="10"/>
       </pattern>
 
@@ -38,13 +37,13 @@ const TimeIndicator = ({ sequence }) => {
   );
 };
 
-function renderSeconds(durationFrames, framesPerSecond) {
+function renderSeconds(durationFrames, framesPerSecond, pixelsPerFrame) {
   const seconds = [];
   for (let i = 0; i < Math.ceil(durationFrames / framesPerSecond); i++) {
     // 1970-01-01T00:01:23.000Z
     const hhss = new Date(i * 1000).toISOString().substr(14, 5);
 
-    const left = i * framesPerSecond * PIXELS_PER_FRAME;
+    const left = i * framesPerSecond * pixelsPerFrame;
     seconds.push(<text key={i} x={left} y={20}>{hhss}</text>);
   }
 

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import produce from 'immer';
 import { getResponseError } from '../../utils/reducerUtils';
 import * as actionTypes from './actionTypes';
 
@@ -19,47 +19,73 @@ export default (state = initialState, action) => {
     return state;
   }
 
-  switch (action.type) {
-    case actionTypes.FETCH_STAGES_PENDING:
-      return { ...state, fetching: true, fetchError: null };
+  return produce(state, draft => {
+    switch (action.type) {
+      case actionTypes.FETCH_STAGES_PENDING:
+        draft.fetching = true;
+        draft.fetchError = null;
+        break;
 
-    case actionTypes.FETCH_STAGES_FULFILLED:
-      return { ...state, fetching: false, stages: _.mapKeys(action.payload.data, 'id') };
+      case actionTypes.FETCH_STAGES_FULFILLED:
+        draft.fetching = false;
+        draft.stages = action.payload.data;
+        break;
 
-    case actionTypes.FETCH_STAGES_REJECTED:
-      return { ...state, fetching: false, fetchError: getResponseError(action) };
+      case actionTypes.FETCH_STAGES_REJECTED:
+        draft.fetching = false;
+        draft.fetchError = getResponseError(action);
+        break;
 
-    case actionTypes.ADD_STAGE_PENDING:
-      return { ...state, adding: true, addError: null };
+      case actionTypes.ADD_STAGE_PENDING:
+        draft.adding = true;
+        draft.addError = null;
+        break;
 
-    case actionTypes.ADD_STAGE_FULFILLED:
-      return { ...state, adding: false, addModalVisible: false };
+      case actionTypes.ADD_STAGE_FULFILLED:
+        draft.adding = false;
+        draft.addModalVisible = false;
+        break;
 
-    case actionTypes.ADD_STAGE_REJECTED:
-      return { ...state, adding: false, addError: getResponseError(action) };
+      case actionTypes.ADD_STAGE_REJECTED:
+        draft.adding = false;
+        draft.addError = getResponseError(action);
+        break;
 
-    case actionTypes.DELETE_STAGE_PENDING:
-      return { ...state, deleting: true, deleteError: null };
+      case actionTypes.DELETE_STAGE_PENDING:
+        draft.deleting = true;
+        draft.deleteError = null;
+        break;
 
-    case actionTypes.DELETE_STAGE_FULFILLED:
-      return { ...state, data: _.omit(state.data, action.payload.data.id), deleting: false, stageToDelete: null };
+      case actionTypes.DELETE_STAGE_FULFILLED:
+        draft.deleting = false;
+        draft.stageToDelete = null;
+        break;
 
-    case actionTypes.DELETE_STAGE_REJECTED:
-      return { ...state, deleting: false, deleteError: getResponseError(action) };
+      case actionTypes.DELETE_STAGE_REJECTED:
+        draft.deleting = false;
+        draft.deleteError = getResponseError(action);
+        break;
 
-    case actionTypes.SHOW_ADD_MODAL:
-      return { ...state, addModalVisible: true };
+      case actionTypes.SHOW_ADD_MODAL:
+        draft.addModalVisible = true;
+        break;
 
-    case actionTypes.HIDE_ADD_MODAL:
-      return { ...state, addModalVisible: false, addError: null };
+      case actionTypes.HIDE_ADD_MODAL:
+        draft.addModalVisible = false;
+        draft.addError = null;
+        break;
 
-    case actionTypes.HIDE_DELETE_MODAL:
-      return { ...state, stageToDelete: null, deleteError: null };
+      case actionTypes.HIDE_DELETE_MODAL:
+        draft.stageToDelete = null;
+        draft.deleteError = null;
+        break;
 
-    case actionTypes.SHOW_DELETE_MODAL:
-      return { ...state, stageToDelete: action.payload.stageToDelete };
+      case actionTypes.SHOW_DELETE_MODAL:
+        draft.stageToDelete = action.payload.stageToDelete;
+        break;
 
-    default:
-      return state;
-  }
+      default:
+        return;
+    }
+  });
 };

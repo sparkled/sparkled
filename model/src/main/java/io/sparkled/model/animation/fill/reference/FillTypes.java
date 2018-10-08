@@ -16,7 +16,7 @@ public class FillTypes {
                     param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(1)
             ),
             fill(FillTypeCode.SOLID, "Solid",
-                    param(ParamName.COLOR, ParamType.COLOR)
+                    param(ParamName.COLOR, ParamType.COLOR).setValue("#ff0000")
             )
     );
 

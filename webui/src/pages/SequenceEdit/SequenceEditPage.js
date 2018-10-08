@@ -118,7 +118,7 @@ class SequenceEditPage extends Component {
       fill: {
         type: 'SOLID',
         params: [
-          { name: 'COLOR', type: 'COLOR', value: ['#ffffff'] }
+          { name: 'COLOR', type: 'COLOR', value: ['#ff0000'] }
         ]
       },
       startFrame: currentFrame,
@@ -158,7 +158,7 @@ class SequenceEditPage extends Component {
   }
 
   renderEditor() {
-    const { sequence, stage, stageProps } = this.props;
+    const { sequence, stage, stageProps, pixelsPerFrame } = this.props;
     return (
       <Fragment>
         <SplitPane split="horizontal" minSize={100} defaultSize={200} primary="second">
@@ -168,7 +168,7 @@ class SequenceEditPage extends Component {
             <EffectForm/>
           </SplitPane>
 
-          <Timeline sequence={sequence} stage={stage} stageProps={stageProps}/>
+          <Timeline sequence={sequence} stage={stage} stageProps={stageProps} pixelsPerFrame={pixelsPerFrame}/>
         </SplitPane>
 
         <AddChannelModal/>
@@ -183,10 +183,10 @@ class SequenceEditPage extends Component {
 
 function mapStateToProps({ page }) {
   const { past, present, future } = page.sequenceEdit;
-  const { saving, saveError, sequence, stage, currentFrame, selectedChannel } = present;
+  const { saving, saveError, sequence, stage, currentFrame, selectedChannel, pixelsPerFrame } = present;
 
   return {
-    saving, saveError, sequence, stage, currentFrame, selectedChannel,
+    saving, saveError, sequence, stage, currentFrame, selectedChannel, pixelsPerFrame,
     fetching: present.fetchingSequence || present.fetchingStage || present.fetchingReferenceData,
     fetchError: present.fetchSequenceError || present.fetchStageError || present.fetchReferenceDataError,
     canUndo: past.length > 1,

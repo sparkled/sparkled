@@ -1,3 +1,4 @@
+import produce from 'immer';
 import _ from 'lodash';
 import * as actionTypes from './actionTypes';
 import { getResponseError } from '../../utils/reducerUtils';
@@ -16,64 +17,66 @@ export default (state = initialState, action) => {
     return state;
   }
 
-  switch (action.type) {
-    case actionTypes.FETCH_STAGE_PENDING:
-      return { ...state, fetching: true, fetchError: null };
+  return produce(state, draft => {
+    switch (action.type) {
+      case actionTypes.FETCH_STAGE_PENDING:
+        draft.fetching = true;
+        draft.fetchError = null;
+        break;
 
-    case actionTypes.FETCH_STAGE_FULFILLED:
-      return { ...state, fetching: false, stage: { ...action.payload.data }, selectedStagePropUuid: null };
+      case actionTypes.FETCH_STAGE_FULFILLED:
+        draft.fetching = false;
+        draft.stage = action.payload.data;
+        draft.selectedStagePropUuid = null;
+        break;
 
-    case actionTypes.FETCH_STAGE_REJECTED:
-      return { ...state, fetching: false, fetchError: getResponseError(action) };
+      case actionTypes.FETCH_STAGE_REJECTED:
+        draft.fetching = false;
+        draft.fetchError = getResponseError(action);
+        break;
 
-    case actionTypes.SAVE_STAGE_PENDING:
-      return { ...state, saving: true, saveError: null };
+      case actionTypes.SAVE_STAGE_PENDING:
+        draft.saving = true;
+        draft.saveError = null;
+        break;
 
-    case actionTypes.SAVE_STAGE_FULFILLED:
-      return { ...state, saving: false };
+      case actionTypes.SAVE_STAGE_FULFILLED:
+        draft.saving = false;
+        break;
 
-    case actionTypes.SAVE_STAGE_REJECTED:
-      return { ...state, saving: false, saveError: getResponseError(action) };
+      case actionTypes.SAVE_STAGE_REJECTED:
+        draft.saving = false;
+        draft.saveError = getResponseError(action);
+        break;
 
-    case actionTypes.SELECT_STAGE_PROP:
-      return { ...state, selectedStagePropUuid: action.payload.uuid };
+      case actionTypes.SELECT_STAGE_PROP:
+        draft.selectedStagePropUuid = action.payload.uuid;
+        break;
 
-    case actionTypes.UPDATE_STAGE_PROP:
-      const updatedStageProp = action.payload.stageProp;
-      return {
-        ...state,
-        stage: {
-          ...state.stage,
-          stageProps: _.map(state.stage.stageProps, stageProp => {
-            return updatedStageProp.uuid === stageProp.uuid ? updatedStageProp : stageProp;
-          })
-        }
-      };
+      case actionTypes.UPDATE_STAGE_PROP:
+        const { stageProp } = action.payload;
+        const index = _.findIndex(draft.stage.stageProps, { uuid: stageProp.uuid });
+        draft.stage.stageProps[index] = stageProp;
+        updateDisplayOrders(draft.stage.stageProps);
+        break;
 
-    case actionTypes.ADD_STAGE_PROP:
-      return {
-        ...state,
-        stage: {
-          ...state.stage,
-          stageProps: [...state.stage.stageProps, action.payload.stageProp]
-        }
-      };
+      case actionTypes.ADD_STAGE_PROP:
+        draft.stage.stageProps.push(action.payload.stageProp);
+        updateDisplayOrders(draft.stage.stageProps);
+        break;
 
-    case actionTypes.DELETE_STAGE_PROP:
-      // TODO: Update stage prop display orders
-      const stage = state.stage;
-      const { uuid } = action.payload;
+      case actionTypes.DELETE_STAGE_PROP:
+        draft.stage.stageProps = _.reject(draft.stage.stageProps, { uuid: action.payload.uuid });
+        updateDisplayOrders(draft.stage.stageProps);
+        break;
 
-      return {
-        ...state,
-        stage: {
-          ...stage,
-          stageProps: _.reject(stage.stageProps, { uuid }),
-        }
-      };
+      default:
+        return state;
+    }
+  });
 
-    default:
-      return state;
+  function updateDisplayOrders(stageProps) {
+    _.forEach(stageProps, (stageProp, index) => stageProp.displayOrder = index);
   }
 };
 

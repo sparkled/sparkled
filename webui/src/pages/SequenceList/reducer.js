@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import * as actionTypes from './actionTypes';
 import { getResponseError } from '../../utils/reducerUtils';
 
@@ -24,7 +23,7 @@ export default (state = initialState, action) => {
       return { ...state, fetching: true, fetchError: null, sequences: {} };
 
     case actionTypes.FETCH_SEQUENCES_FULFILLED:
-      return { ...state, fetching: false, sequences: _.mapKeys(action.payload.data, 'id') };
+      return { ...state, fetching: false, sequences: action.payload.data };
 
     case actionTypes.FETCH_SEQUENCES_REJECTED:
       return { ...state, fetching: false, fetchError: getResponseError(action) };
@@ -42,7 +41,7 @@ export default (state = initialState, action) => {
       return { ...state, deleting: true, deleteError: null };
 
     case actionTypes.DELETE_SEQUENCE_FULFILLED:
-      return { ...state, data: _.omit(state.data, action.payload.data.id), deleting: false, sequenceToDelete: null };
+      return { ...state, deleting: false, sequenceToDelete: null };
 
     case actionTypes.DELETE_SEQUENCE_REJECTED:
       return { ...state, deleting: false, deleteError: getResponseError(action) };
