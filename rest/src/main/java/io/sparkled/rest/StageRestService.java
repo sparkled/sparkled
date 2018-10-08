@@ -35,9 +35,7 @@ public class StageRestService extends RestService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateStage(@PathParam("id") int id, Stage stage) {
-        if (id != stage.getId()) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, "Stage ID does not match URL.");
-        }
+        stage.setId(id); // Prevent client-side ID tampering.
 
         Integer savedId = stagePersistenceService.saveStage(stage);
         if (savedId == null) {

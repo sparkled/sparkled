@@ -9,52 +9,52 @@ import java.util.UUID;
 public class StageProp {
 
     @Id
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "uuid")
     private UUID uuid;
 
     @Basic
-    @Column(name = "stage_id", nullable = false)
+    @Column(name = "stage_id")
     private Integer stageId;
 
     @Basic
-    @Column(name = "code", nullable = false, length = 8)
+    @Column(name = "code")
     private String code;
 
     @Basic
-    @Column(name = "name", nullable = false, length = 32)
+    @Column(name = "name")
     private String name;
 
     @Basic
-    @Column(name = "type", nullable = false, length = 32)
+    @Column(name = "type")
     private String type;
 
     @Basic
-    @Column(name = "leds", nullable = false)
-    private int leds = 0;
+    @Column(name = "leds")
+    private Integer leds = 0;
 
     @Basic
-    @Column(name = "position_x", nullable = false)
-    private int positionX = 0;
+    @Column(name = "position_x")
+    private Integer positionX = 0;
 
     @Basic
-    @Column(name = "position_y", nullable = false)
-    private int positionY = 0;
+    @Column(name = "position_y")
+    private Integer positionY = 0;
 
     @Basic
-    @Column(name = "scale_x", nullable = false)
+    @Column(name = "scale_x")
     private float scaleX = 1;
 
     @Basic
-    @Column(name = "scale_y", nullable = false)
+    @Column(name = "scale_y")
     private float scaleY = 1;
 
     @Basic
-    @Column(name = "rotation", nullable = false)
-    private int rotation = 0;
+    @Column(name = "rotation")
+    private Integer rotation = 0;
 
     @Basic
-    @Column(name = "display_order", nullable = false)
-    private int displayOrder = 0;
+    @Column(name = "display_order")
+    private Integer displayOrder = 0;
 
     public UUID getUuid() {
         return uuid;
@@ -101,29 +101,29 @@ public class StageProp {
         return this;
     }
 
-    public int getLeds() {
+    public Integer getLeds() {
         return leds;
     }
 
-    public StageProp setLeds(int leds) {
+    public StageProp setLeds(Integer leds) {
         this.leds = leds;
         return this;
     }
 
-    public int getPositionX() {
+    public Integer getPositionX() {
         return positionX;
     }
 
-    public StageProp setPositionX(int positionX) {
+    public StageProp setPositionX(Integer positionX) {
         this.positionX = positionX;
         return this;
     }
 
-    public int getPositionY() {
+    public Integer getPositionY() {
         return positionY;
     }
 
-    public StageProp setPositionY(int positionY) {
+    public StageProp setPositionY(Integer positionY) {
         this.positionY = positionY;
         return this;
     }
@@ -146,20 +146,20 @@ public class StageProp {
         return this;
     }
 
-    public int getRotation() {
+    public Integer getRotation() {
         return rotation;
     }
 
-    public StageProp setRotation(int rotation) {
+    public StageProp setRotation(Integer rotation) {
         this.rotation = rotation;
         return this;
     }
 
-    public int getDisplayOrder() {
+    public Integer getDisplayOrder() {
         return displayOrder;
     }
 
-    public StageProp setDisplayOrder(int displayOrder) {
+    public StageProp setDisplayOrder(Integer displayOrder) {
         this.displayOrder = displayOrder;
         return this;
     }
@@ -168,23 +168,41 @@ public class StageProp {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StageProp that = (StageProp) o;
-        return leds == that.leds &&
-                positionX == that.positionX &&
-                positionY == that.positionY &&
-                scaleX == that.scaleX &&
-                scaleY == that.scaleY &&
-                rotation == that.rotation &&
-                displayOrder == that.displayOrder &&
-                Objects.equals(uuid, that.uuid) &&
-                Objects.equals(stageId, that.stageId) &&
-                Objects.equals(code, that.code) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(type, that.type);
+        StageProp stageProp = (StageProp) o;
+        return Float.compare(stageProp.scaleX, scaleX) == 0 &&
+                Float.compare(stageProp.scaleY, scaleY) == 0 &&
+                Objects.equals(uuid, stageProp.uuid) &&
+                Objects.equals(stageId, stageProp.stageId) &&
+                Objects.equals(code, stageProp.code) &&
+                Objects.equals(name, stageProp.name) &&
+                Objects.equals(type, stageProp.type) &&
+                Objects.equals(leds, stageProp.leds) &&
+                Objects.equals(positionX, stageProp.positionX) &&
+                Objects.equals(positionY, stageProp.positionY) &&
+                Objects.equals(rotation, stageProp.rotation) &&
+                Objects.equals(displayOrder, stageProp.displayOrder);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(uuid, stageId, code, name, type, leds, positionX, positionY, scaleX, scaleY, rotation, displayOrder);
+    }
+
+    @Override
+    public String toString() {
+        return "StageProp{" +
+                "uuid=" + uuid +
+                ", stageId=" + stageId +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", leds=" + leds +
+                ", positionX=" + positionX +
+                ", positionY=" + positionY +
+                ", scaleX=" + scaleX +
+                ", scaleY=" + scaleY +
+                ", rotation=" + rotation +
+                ", displayOrder=" + displayOrder +
+                '}';
     }
 }

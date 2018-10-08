@@ -9,35 +9,35 @@ public class Sequence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Integer id;
 
     @Basic
-    @Column(name = "stage_id", nullable = false)
+    @Column(name = "stage_id")
     private Integer stageId;
 
     @Basic
-    @Column(name = "name", nullable = false, length = 64)
+    @Column(name = "name")
     private String name;
 
     @Basic
-    @Column(name = "artist", nullable = false, length = 64)
+    @Column(name = "artist")
     private String artist;
 
     @Basic
-    @Column(name = "album", nullable = false, length = 64)
+    @Column(name = "album")
     private String album;
 
     @Basic
-    @Column(name = "duration_frames", nullable = false)
-    private int durationFrames;
+    @Column(name = "duration_frames")
+    private Integer durationFrames;
 
     @Basic
-    @Column(name = "frames_per_second", nullable = false)
-    private int framesPerSecond = 60;
+    @Column(name = "frames_per_second")
+    private Integer framesPerSecond = 60;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 16)
+    @Column(name = "status")
     private SequenceStatus status;
 
     public Integer getId() {
@@ -85,20 +85,20 @@ public class Sequence {
         return this;
     }
 
-    public int getDurationFrames() {
+    public Integer getDurationFrames() {
         return durationFrames;
     }
 
-    public Sequence setDurationFrames(int durationFrames) {
+    public Sequence setDurationFrames(Integer durationFrames) {
         this.durationFrames = durationFrames;
         return this;
     }
 
-    public int getFramesPerSecond() {
+    public Integer getFramesPerSecond() {
         return framesPerSecond;
     }
 
-    public Sequence setFramesPerSecond(int framesPerSecond) {
+    public Sequence setFramesPerSecond(Integer framesPerSecond) {
         this.framesPerSecond = framesPerSecond;
         return this;
     }
@@ -119,15 +119,30 @@ public class Sequence {
         Sequence sequence = (Sequence) o;
         return Objects.equals(id, sequence.id) &&
                 Objects.equals(stageId, sequence.stageId) &&
-                durationFrames == sequence.durationFrames &&
-                framesPerSecond == sequence.framesPerSecond &&
                 Objects.equals(name, sequence.name) &&
                 Objects.equals(artist, sequence.artist) &&
-                Objects.equals(status, sequence.status);
+                Objects.equals(album, sequence.album) &&
+                Objects.equals(durationFrames, sequence.durationFrames) &&
+                Objects.equals(framesPerSecond, sequence.framesPerSecond) &&
+                status == sequence.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stageId, name, artist, durationFrames, framesPerSecond, status);
+        return Objects.hash(id, stageId, name, artist, album, durationFrames, framesPerSecond, status);
+    }
+
+    @Override
+    public String toString() {
+        return "Sequence{" +
+                "id=" + id +
+                ", stageId=" + stageId +
+                ", name='" + name + '\'' +
+                ", artist='" + artist + '\'' +
+                ", album='" + album + '\'' +
+                ", durationFrames=" + durationFrames +
+                ", framesPerSecond=" + framesPerSecond +
+                ", status=" + status +
+                '}';
     }
 }

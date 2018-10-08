@@ -9,18 +9,19 @@ import java.util.Objects;
 public class SongAudio {
 
     @Id
-    @Column(name = "sequence_id", nullable = false)
-    private int sequenceId;
+    @Column(name = "sequence_id")
+    private Integer sequenceId;
 
     @Lob
-    @Column(name = "audio_data", nullable = false)
+    @Column(name = "audio_data")
     private byte[] audioData;
 
-    public int getSequenceId() {
+
+    public Integer getSequenceId() {
         return sequenceId;
     }
 
-    public SongAudio setSequenceId(int sequenceId) {
+    public SongAudio setSequenceId(Integer sequenceId) {
         this.sequenceId = sequenceId;
         return this;
     }
@@ -38,13 +39,21 @@ public class SongAudio {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SongAudio songAudio = (SongAudio) o;
-        return sequenceId == songAudio.sequenceId &&
-                Arrays.equals(audioData, songAudio.audioData);
+        SongAudio audio = (SongAudio) o;
+        return Objects.equals(sequenceId, audio.sequenceId) &&
+                Arrays.equals(audioData, audio.audioData);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(sequenceId, audioData);
+    }
+
+    @Override
+    public String toString() {
+        return "SongAudio{" +
+                "sequenceId=" + sequenceId +
+                ", audioData=" + Arrays.toString(audioData) +
+                '}';
     }
 }

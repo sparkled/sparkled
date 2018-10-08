@@ -126,9 +126,7 @@ public class SequenceRestService extends RestService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateSequence(@PathParam("id") int id, SequenceViewModel sequenceViewModel) {
-        if (id != sequenceViewModel.getId()) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, "Sequence ID does not match URL.");
-        }
+        sequenceViewModel.setId(id); // Prevent client-side ID tampering.
 
         Sequence sequence = sequenceViewModelConverter.fromViewModel(sequenceViewModel);
         List<SequenceChannel> sequenceChannels = sequenceViewModel.getChannels()

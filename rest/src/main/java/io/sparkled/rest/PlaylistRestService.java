@@ -78,9 +78,7 @@ public class PlaylistRestService extends RestService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updatePlaylist(@PathParam("id") int id, PlaylistViewModel playlistViewModel) {
-        if (id != playlistViewModel.getId()) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, "Playlist ID does not match URL.");
-        }
+        playlistViewModel.setId(id); // Prevent client-side ID tampering.
 
         Playlist playlist = playlistViewModelConverter.fromViewModel(playlistViewModel);
         List<PlaylistSequence> playlistSequences = playlistViewModel.getSequences()
@@ -90,7 +88,6 @@ public class PlaylistRestService extends RestService {
                 .collect(Collectors.toList());
 
         Integer savedId = playlistPersistenceService.savePlaylist(playlist, playlistSequences);
-
         if (savedId == null) {
             return getJsonResponse(Response.Status.NOT_FOUND, "Playlist not found.");
         } else {

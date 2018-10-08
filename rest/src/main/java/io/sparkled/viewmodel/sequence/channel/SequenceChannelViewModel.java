@@ -10,7 +10,7 @@ import java.util.UUID;
 public class SequenceChannelViewModel {
 
     private UUID uuid;
-    private int sequenceId;
+    private Integer sequenceId;
     private UUID stagePropUuid;
     private String name;
     private Integer displayOrder;
@@ -25,11 +25,11 @@ public class SequenceChannelViewModel {
         return this;
     }
 
-    public int getSequenceId() {
+    public Integer getSequenceId() {
         return sequenceId;
     }
 
-    public SequenceChannelViewModel setSequenceId(int sequenceId) {
+    public SequenceChannelViewModel setSequenceId(Integer sequenceId) {
         this.sequenceId = sequenceId;
         return this;
     }
@@ -75,7 +75,7 @@ public class SequenceChannelViewModel {
         if (this == o) return true;
         if (!(o instanceof SequenceChannelViewModel)) return false;
         SequenceChannelViewModel that = (SequenceChannelViewModel) o;
-        return sequenceId == that.sequenceId &&
+        return Objects.equals(sequenceId, that.sequenceId) &&
                 Objects.equals(uuid, that.uuid) &&
                 Objects.equals(stagePropUuid, that.stagePropUuid) &&
                 Objects.equals(name, that.name) &&
