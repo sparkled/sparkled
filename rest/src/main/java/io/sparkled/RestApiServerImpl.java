@@ -13,6 +13,8 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.util.resource.Resource;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.DispatcherType;
@@ -23,12 +25,10 @@ import java.net.URL;
 import java.util.EnumSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class RestApiServerImpl implements RestApiServer {
 
-    private static final Logger logger = Logger.getLogger(RestApiServerImpl.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(RestApiServerImpl.class);
     private static final String REST_PATH = "/rest/*";
     private final ExecutorService executor;
     private boolean started;
@@ -45,12 +45,12 @@ public class RestApiServerImpl implements RestApiServer {
     @Override
     public void start(int port) throws Exception {
         if (started) {
-            logger.warning("Attempted to start REST API server, but it is already running.");
+            logger.warn("Attempted to start REST API server, but it is already running.");
             return;
         }
 
         executor.submit(() -> startServer(port));
-        logger.info("Started REST API server at port " + port);
+        logger.info("Started REST API server at port {}.", port);
         started = true;
     }
 
@@ -76,7 +76,7 @@ public class RestApiServerImpl implements RestApiServer {
     private void addStaticResourceConfig(ServletContextHandler context) {
         URL webappLocation = getClass().getResource("/webapp/index.html");
         if (webappLocation == null) {
-            System.err.println("Couldn't get webapp location.");
+            logger.error("Failed to retrieve webapp location, the web UI was likely omitted from this build.");
         } else {
             try {
                 URI webRootUri = URI.create(webappLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
@@ -114,7 +114,7 @@ public class RestApiServerImpl implements RestApiServer {
             jettyServer.start();
             jettyServer.join();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Encountered an unexpected exception.", e);
+            logger.error("Encountered an unexpected exception.", e);
         } finally {
             jettyServer.destroy();
         }

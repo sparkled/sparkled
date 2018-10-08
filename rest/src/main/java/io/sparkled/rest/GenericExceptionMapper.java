@@ -2,6 +2,8 @@ package io.sparkled.rest;
 
 import io.sparkled.model.validator.exception.EntityValidationException;
 import io.sparkled.viewmodel.exception.ViewModelConversionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
@@ -12,13 +14,11 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.net.URI;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Provider
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
-    private static final Logger logger = Logger.getLogger(GenericExceptionMapper.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(GenericExceptionMapper.class);
     private final UriInfo uriInfo;
 
     public GenericExceptionMapper(@Context UriInfo uriInfo) {
@@ -35,7 +35,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
             return notAllowed();
         } else {
             URI absolutePath = uriInfo.getAbsolutePath();
-            logger.log(Level.SEVERE, "Unexpected error response for URI '" + absolutePath + "':", t);
+            logger.error("Unexpected error response for URI '" + absolutePath + "':", t);
             return internalError();
         }
     }

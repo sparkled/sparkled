@@ -1,6 +1,8 @@
 package io.sparkled.udpserver;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -9,12 +11,10 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UdpServerImpl implements UdpServer {
 
-    private static final Logger logger = Logger.getLogger(UdpServerImpl.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(UdpServerImpl.class);
     private static final int THREAD_COUNT = 4;
     private static final int RECEIVE_BUFFER_SIZE = 16;
     private final RequestHandler requestHandler;
@@ -32,7 +32,7 @@ public class UdpServerImpl implements UdpServer {
     @Override
     public void start(int port) throws SocketException {
         if (started) {
-            logger.warning("Attempted to start UDP server, but it is already running.");
+            logger.warn("Attempted to start UDP server, but it is already running.");
             return;
         }
 
@@ -45,13 +45,13 @@ public class UdpServerImpl implements UdpServer {
                 try {
                     handleRequest(serverSocket, receiveData);
                 } catch (Exception e) {
-                    logger.log(Level.SEVERE, "Failed to handle UDP request.", e);
+                    logger.error("Failed to handle UDP request.", e);
                 }
             }
         });
 
         started = true;
-        logger.info("Started UDP server at port " + port);
+        logger.info("Started UDP server at port {}.", port);
     }
 
     private void handleRequest(final DatagramSocket serverSocket, final byte[] receiveData) throws IOException {
