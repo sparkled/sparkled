@@ -6,7 +6,7 @@ import TimelineChannel from '../TimelineChannel';
 import Waveform from '../Waveform';
 import './Timeline.css';
 
-const Timeline = ({ sequence, stage }) => {
+const Timeline = ({ sequence, stage, pixelsPerFrame }) => {
   return (
     <div className="timeline" onScroll={handleScroll}>
       <div className="timeline-container">
@@ -15,7 +15,7 @@ const Timeline = ({ sequence, stage }) => {
             <CurrentFrameIndicator/>
             {_.map(sequence.channels, channel => <TimelineChannel key={channel.uuid} channel={channel}/>)}
             <Waveform/>
-            <TimeIndicator sequence={sequence}/>
+            <TimeIndicator sequence={sequence} pixelsPerFrame={pixelsPerFrame}/>
           </div>
         </div>
       </div>
