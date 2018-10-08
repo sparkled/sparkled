@@ -15,7 +15,7 @@ class DeleteStageModal extends Component {
 
     return (
       <div>
-        <Modal isOpen={!!stageToDelete} wrapClassName='delete-stage-modal' backdrop={true}>
+        <Modal isOpen={!!stageToDelete} wrapClassName="delete-stage-modal" backdrop={true}>
           <ModalHeader>Delete stage</ModalHeader>
           <ModalBody>
             <p>Are you sure you want to delete <em>{stageToDelete.name}</em>?</p>
@@ -23,8 +23,8 @@ class DeleteStageModal extends Component {
             {this.renderDeletionError()}
           </ModalBody>
           <ModalFooter>
-            <Button color='danger' disabled={deleting} onClick={this.deleteStage.bind(this)}>{deleteButtonText}</Button>
-            <Button color='secondary' disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
+            <Button color="danger" disabled={deleting} onClick={this.deleteStage.bind(this)}>{deleteButtonText}</Button>
+            <Button color="secondary" disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -37,8 +37,8 @@ class DeleteStageModal extends Component {
       return null;
     } else {
       return (
-        <div className='card border-danger'>
-          <div className='card-body'>Failed to delete stage: {deleteError}</div>
+        <div className="card border-danger">
+          <div className="card-body">Failed to delete stage: {deleteError}</div>
         </div>
       );
     }

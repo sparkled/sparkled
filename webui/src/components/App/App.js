@@ -14,25 +14,25 @@ import store from '../../store/store';
 import 'bootswatch/dist/superhero/bootstrap.css';
 import './App.css';
 
-const RedirectInvalidUrlToIndex = () => <Redirect to='/sequences'/>;
+const RedirectInvalidUrlToIndex = () => <Redirect to="/sequences"/>;
 
 const App = () => (
   <Fragment>
     <Provider store={store}>
       <Router>
         <Switch>
-          <Route exact path='/stages' component={StageListPage}/>
-          <Route exact path='/stages/:stageId' component={StageEditPage}/>
-          <Route exact path='/sequences' component={SequenceListPage}/>
-          <Route exact path='/sequences/:sequenceId' component={SequenceEditPage}/>
-          <Route exact path='/playlists' component={PlaylistListPage}/>
-          <Route exact path='/playlists/:playlistId' component={PlaylistEditPage}/>
+          <Route exact path="/stages" component={StageListPage}/>
+          <Route exact path="/stages/:stageId" component={StageEditPage}/>
+          <Route exact path="/sequences" component={SequenceListPage}/>
+          <Route exact path="/sequences/:sequenceId" component={SequenceEditPage}/>
+          <Route exact path="/playlists" component={PlaylistListPage}/>
+          <Route exact path="/playlists/:playlistId" component={PlaylistEditPage}/>
           <Route component={RedirectInvalidUrlToIndex}/>
         </Switch>
       </Router>
     </Provider>
 
-    <Alert position='bottom-right' effect='scale' stack={{ limit: 3 }}/>
+    <Alert position="bottom-right" effect="scale" stack={{ limit: 3 }}/>
   </Fragment>
 );
 

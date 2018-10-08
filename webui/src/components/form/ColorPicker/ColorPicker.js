@@ -31,7 +31,7 @@ class ColorPicker extends React.Component {
       <div className={`ColorPicker ${formGroupClass} ${className}`}>
         <label className="form-control-label">{label} {required ? '*' : ''}</label>
         <div className="swatch-container">
-          <div className={'swatch ' + fieldClass} onClick={this.openColorPicker}>
+          <div className={"swatch " + fieldClass} onClick={this.openColorPicker}>
             <div className="color" style={{ background: input.value }}/>
           </div>
           {colorPicker}

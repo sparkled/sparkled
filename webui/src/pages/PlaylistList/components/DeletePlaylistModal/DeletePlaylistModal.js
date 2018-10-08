@@ -15,15 +15,15 @@ class DeletePlaylistModal extends Component {
 
     return (
       <div>
-        <Modal isOpen={!!playlistToDelete} wrapClassName='delete-playlist-modal' backdrop={true}>
+        <Modal isOpen={!!playlistToDelete} wrapClassName="delete-playlist-modal" backdrop={true}>
           <ModalHeader>Delete playlist</ModalHeader>
           <ModalBody>
             <p>Are you sure you want to delete <em>{playlistToDelete.name}</em>?</p>
             {this.renderDeletionError()}
           </ModalBody>
           <ModalFooter>
-            <Button color='danger' disabled={deleting} onClick={this.deletePlaylist.bind(this)}>{deleteButtonText}</Button>
-            <Button color='secondary' disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
+            <Button color="danger" disabled={deleting} onClick={this.deletePlaylist.bind(this)}>{deleteButtonText}</Button>
+            <Button color="secondary" disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -36,8 +36,8 @@ class DeletePlaylistModal extends Component {
       return null;
     } else {
       return (
-        <div className='card border-danger'>
-          <div className='card-body'>Failed to delete playlist: {deleteError}</div>
+        <div className="card border-danger">
+          <div className="card-body">Failed to delete playlist: {deleteError}</div>
         </div>
       );
     }
