@@ -1,7 +1,6 @@
 package io.sparkled;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -12,42 +11,34 @@ import io.sparkled.schema.inject.SchemaModule;
 import io.sparkled.udpserver.inject.UdpServerModule;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
 
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final String ROOT_LOG4J_APPENDER_NAME = "file";
-
-    @Parameter(names = {"-rp", "--restPort"}, description = "The REST server port")
-    private int restApiPort = 8080;
-
-    @Parameter(names = {"-up", "--udpPort"}, description = "The UDP server port")
-    private int udpPort = 12345;
-
-    @Parameter(names = {"-l", "--loglevel"}, description = "Logging level threshold (DEBUG, INFO, WARN, ERROR)")
-    private String logLevel = "INFO";
-
-    @Parameter(names = {"-h", "--help"}, description = "Show help", help = true)
-    private boolean help = false;
 
     public static void main(String[] args) throws Exception {
         new Main().run(args);
     }
 
     private void run(String[] args) throws Exception {
-        JCommander jCommander = buildJCommander();
+        AppSettings settings = new AppSettings();
+        JCommander jCommander = buildJCommander(settings);
+
         if (loadCommandLineArguments(jCommander, args)) {
-            if (help) {
+            if (settings.isHelp()) {
                 jCommander.usage();
             } else {
-                setLoggerThreshold();
-                createApp().start(restApiPort, udpPort);
+                setLoggerThreshold(settings.getLogLevel());
+                createApp().start(settings);
             }
         }
     }
 
-    private JCommander buildJCommander() {
-        return JCommander.newBuilder().addObject(this).build();
+    private JCommander buildJCommander(AppSettings settings) {
+        return JCommander.newBuilder().addObject(settings).build();
     }
 
     private boolean loadCommandLineArguments(JCommander jCommander, String[] args) {
@@ -55,15 +46,16 @@ public class Main {
             jCommander.parse(args);
             return true;
         } catch (ParameterException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
             e.usage();
             return false;
         }
     }
 
-    private void setLoggerThreshold() {
-        Level threshold = Level.toLevel(logLevel);
-        ((AppenderSkeleton) Logger.getRootLogger().getAppender(ROOT_LOG4J_APPENDER_NAME)).setThreshold(threshold);
+    private void setLoggerThreshold(String level) {
+        Level threshold = Level.toLevel(level);
+        org.apache.log4j.Logger rootLogger = org.apache.log4j.Logger.getRootLogger();
+        ((AppenderSkeleton) rootLogger.getAppender(ROOT_LOG4J_APPENDER_NAME)).setThreshold(threshold);
     }
 
     private App createApp() {
