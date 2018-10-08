@@ -15,15 +15,15 @@ class DeleteSequenceModal extends Component {
 
     return (
       <div>
-        <Modal isOpen={!!sequenceToDelete} wrapClassName='delete-sequence-modal' backdrop={true}>
+        <Modal isOpen={!!sequenceToDelete} wrapClassName="delete-sequence-modal" backdrop={true}>
           <ModalHeader>Delete sequence</ModalHeader>
           <ModalBody>
             <p>Are you sure you want to delete <em>{sequenceToDelete.name}</em>?</p>
             {this.renderDeletionError()}
           </ModalBody>
           <ModalFooter>
-            <Button color='danger' disabled={deleting} onClick={this.deleteSequence.bind(this)}>{deleteButtonText}</Button>
-            <Button color='secondary' disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
+            <Button color="danger" disabled={deleting} onClick={this.deleteSequence.bind(this)}>{deleteButtonText}</Button>
+            <Button color="secondary" disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -36,8 +36,8 @@ class DeleteSequenceModal extends Component {
       return null;
     } else {
       return (
-        <div className='card border-danger'>
-          <div className='card-body'>Failed to delete sequence: {deleteError}</div>
+        <div className="card border-danger">
+          <div className="card-body">Failed to delete sequence: {deleteError}</div>
         </div>
       );
     }

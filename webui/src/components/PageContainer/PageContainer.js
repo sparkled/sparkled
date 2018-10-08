@@ -22,23 +22,23 @@ class PageContainer extends Component {
 
     return (
       <div className={className + ' page-container d-flex flex-column h-100'}>
-        <Navbar className='navbar-expand-lg navbar-dark bg-dark flex-grow-0 flex-shrink-0'>
-          <Link to='/' className='navbar-brand mr-3'>
+        <Navbar className="navbar-expand-lg navbar-dark bg-dark flex-grow-0 flex-shrink-0">
+          <Link to="/" className="navbar-brand mr-3">
             <AppLogo/>
           </Link>
 
-          <NavbarToggler onClick={this.toggle.bind(this)} className='navbar-toggler-right'/>
+          <NavbarToggler onClick={this.toggle.bind(this)} className="navbar-toggler-right"/>
 
           <Collapse isOpen={this.state.collapsed} navbar>
-            <Nav className='mr-auto' navbar>
+            <Nav className="mr-auto" navbar>
               <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('stage')} to='/stages'>Stages</Link>
+                <Link className={'nav-link ' + this.getPageClass('stage')} to="/stages">Stages</Link>
               </NavItem>
               <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('sequence')} to='/sequences'>Sequences</Link>
+                <Link className={'nav-link ' + this.getPageClass('sequence')} to="/sequences">Sequences</Link>
               </NavItem>
               <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('playlist')} to='/playlists'>Playlists</Link>
+                <Link className={'nav-link ' + this.getPageClass('playlist')} to="/playlists">Playlists</Link>
               </NavItem>
             </Nav>
 
@@ -46,7 +46,7 @@ class PageContainer extends Component {
           </Collapse>
         </Navbar>
 
-        <div className='page-container-body flex-grow-1 h-100'>
+        <div className="page-container-body flex-grow-1 h-100">
           {body}
         </div>
       </div>
