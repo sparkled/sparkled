@@ -49,7 +49,7 @@ public class RenderPreviewRestService extends RestService {
             RenderedStagePropDataMap renderResult = new Renderer(sequence, sequenceChannels, stageProps, startFrame, durationFrames).render();
             return getJsonResponse(renderResult);
         } else {
-            return getJsonResponse(Response.Status.NOT_FOUND, "Sequence not found.");
+            return getJsonResponse(Response.Status.NOT_FOUND);
         }
     }
 }

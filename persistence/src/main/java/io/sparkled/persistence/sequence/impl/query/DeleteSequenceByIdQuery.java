@@ -3,7 +3,7 @@ package io.sparkled.persistence.sequence.impl.query;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
 
-public class DeleteSequenceByIdQuery implements PersistenceQuery<Integer> {
+public class DeleteSequenceByIdQuery implements PersistenceQuery<Void> {
 
     private final int sequenceId;
 
@@ -12,14 +12,13 @@ public class DeleteSequenceByIdQuery implements PersistenceQuery<Integer> {
     }
 
     @Override
-    public Integer perform(QueryFactory queryFactory) {
+    public Void perform(QueryFactory queryFactory) {
         deleteSongAudio(queryFactory);
         deleteSequenceChannels(queryFactory);
         deletePlaylistSequences(queryFactory);
         deleteRenderedStageProps(queryFactory);
         deleteSequence(queryFactory);
-
-        return sequenceId;
+        return null;
     }
 
     private void deleteSongAudio(QueryFactory queryFactory) {

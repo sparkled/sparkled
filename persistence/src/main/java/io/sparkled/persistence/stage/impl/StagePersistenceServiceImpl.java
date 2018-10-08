@@ -30,12 +30,6 @@ public class StagePersistenceServiceImpl implements StagePersistenceService {
 
     @Override
     @Transactional
-    public Integer deleteStage(int stageId) {
-        return new DeleteStageByIdQuery(stageId).perform(queryFactory);
-    }
-
-    @Override
-    @Transactional
     public Optional<Stage> getStageById(int stageId) {
         return new GetStageByIdQuery(stageId).perform(queryFactory);
     }
@@ -44,5 +38,11 @@ public class StagePersistenceServiceImpl implements StagePersistenceService {
     @Transactional
     public Integer saveStage(Stage stage) {
         return new SaveStageQuery(stage).perform(queryFactory);
+    }
+
+    @Override
+    @Transactional
+    public void deleteStage(int stageId) {
+        new DeleteStageByIdQuery(stageId).perform(queryFactory);
     }
 }

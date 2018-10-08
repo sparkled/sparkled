@@ -5,14 +5,15 @@ import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 public class SaveRenderedStagePropsQuery implements PersistenceQuery<Void> {
 
-    private static final Logger logger = Logger.getLogger(SaveRenderedStagePropsQuery.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(SaveRenderedStagePropsQuery.class);
 
     private final Sequence sequence;
     private final RenderedStagePropDataMap renderedStagePropDataMap;
@@ -36,7 +37,7 @@ public class SaveRenderedStagePropsQuery implements PersistenceQuery<Void> {
             entityManager.merge(renderedStageProp);
         });
 
-        logger.info("Saved " + recordsSaved.get() + " record(s) for sequence " + sequence.getId());
+        logger.info("Saved {} record(s) for sequence {}.", recordsSaved.get(), sequence.getId());
         return null;
     }
 }

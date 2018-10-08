@@ -45,6 +45,27 @@ public class SequenceRestService extends RestService {
         this.sequenceChannelViewModelConverter = sequenceChannelViewModelConverter;
     }
 
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createSequence(@FormDataParam("sequence") String sequenceJson,
+                                   @FormDataParam("mp3") InputStream uploadedInputStream,
+                                   @FormDataParam("mp3") FormDataContentDisposition fileDetail) throws IOException {
+        SequenceViewModel sequenceViewModel = gson.fromJson(sequenceJson, SequenceViewModel.class);
+        Sequence sequence = sequenceViewModelConverter.fromViewModel(sequenceViewModel);
+
+        byte[] songAudioData = IOUtils.toByteArray(uploadedInputStream);
+        int sequenceId = saveNewSequence(sequence, songAudioData);
+        return getJsonResponse(new IdResponse(sequenceId));
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllSequences() {
+        List<Sequence> sequences = sequencePersistenceService.getAllSequences();
+        return getJsonResponse(sequences);
+    }
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,7 +86,7 @@ public class SequenceRestService extends RestService {
             return getJsonResponse(viewModel);
         }
 
-        return getJsonResponse(Response.Status.NOT_FOUND, "Sequence with ID of '" + sequenceId + "' not found.");
+        return getJsonResponse(Response.Status.NOT_FOUND);
     }
 
     @GET
@@ -77,21 +98,14 @@ public class SequenceRestService extends RestService {
         if (stage.isPresent()) {
             return getJsonResponse(stage.get());
         } else {
-            return getJsonResponse(Response.Status.NOT_FOUND, "Failed to find stage for sequence.");
+            return getJsonResponse(Response.Status.NOT_FOUND);
         }
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllSequences() {
-        List<Sequence> sequences = sequencePersistenceService.getAllSequences();
-        return getJsonResponse(sequences);
     }
 
     @GET
     @Path("/{id}/audio")
     @Produces(MP3_MIME_TYPE)
-    public Response getSongAudio(@PathParam("id") int id) {
+    public Response getSequenceSongAudio(@PathParam("id") int id) {
         Optional<SongAudio> songAudio = sequencePersistenceService.getSongAudioBySequenceId(id);
 
         if (songAudio.isPresent()) {
@@ -99,26 +113,6 @@ public class SequenceRestService extends RestService {
         } else {
             return getResponse(Response.Status.NOT_FOUND);
         }
-    }
-
-    @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createSequence(@FormDataParam("sequence") String sequenceJson,
-                                   @FormDataParam("mp3") InputStream uploadedInputStream,
-                                   @FormDataParam("mp3") FormDataContentDisposition fileDetail) throws IOException {
-        Sequence sequence = gson.fromJson(sequenceJson, Sequence.class);
-        byte[] songAudioData = IOUtils.toByteArray(uploadedInputStream);
-        int sequenceId = saveNewSequence(sequence, songAudioData);
-        return getJsonResponse(new IdResponse(sequenceId));
-    }
-
-    @DELETE
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteSequence(@PathParam("id") int id) {
-        int sequenceId = sequencePersistenceService.deleteSequence(id);
-        return getJsonResponse(new IdResponse(sequenceId));
     }
 
     @PUT
@@ -139,7 +133,7 @@ public class SequenceRestService extends RestService {
             Integer stageId = sequence.getStageId();
             Optional<Stage> stageOptional = stagePersistenceService.getStageById(stageId);
             if (!stageOptional.isPresent()) {
-                return getJsonResponse(Response.Status.NOT_FOUND, "Stage with ID of '" + stageId + "' not found.");
+                return getJsonResponse(Response.Status.NOT_FOUND);
             }
 
             Stage stage = stageOptional.get();
@@ -149,11 +143,18 @@ public class SequenceRestService extends RestService {
         }
 
         if (savedId == null) {
-            return getJsonResponse(Response.Status.NOT_FOUND, "Sequence not found.");
+            return getJsonResponse(Response.Status.BAD_REQUEST, "Failed to save sequence.");
         } else {
-            IdResponse idResponse = new IdResponse(savedId);
-            return getJsonResponse(idResponse);
+            return getResponse(Response.Status.OK);
         }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteSequence(@PathParam("id") int id) {
+        sequencePersistenceService.deleteSequence(id);
+        return getResponse(Response.Status.OK);
     }
 
     private Integer saveDraftSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {

@@ -5,7 +5,7 @@ import io.sparkled.persistence.QueryFactory;
 import io.sparkled.persistence.sequence.impl.query.DeleteSequenceByIdQuery;
 import io.sparkled.persistence.sequence.impl.query.GetSequencesByStageIdQuery;
 
-public class DeleteStageByIdQuery implements PersistenceQuery<Integer> {
+public class DeleteStageByIdQuery implements PersistenceQuery<Void> {
 
     private final int stageId;
 
@@ -14,12 +14,11 @@ public class DeleteStageByIdQuery implements PersistenceQuery<Integer> {
     }
 
     @Override
-    public Integer perform(QueryFactory queryFactory) {
+    public Void perform(QueryFactory queryFactory) {
         removeSequences(queryFactory);
         removeStageProps(queryFactory);
         removeStage(queryFactory);
-
-        return stageId;
+        return null;
     }
 
     private void removeSequences(QueryFactory queryFactory) {

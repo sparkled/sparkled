@@ -27,14 +27,17 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
 
     @Override
     @Transactional
-    public List<Sequence> getAllSequences() {
-        return new GetAllSequencesQuery().perform(queryFactory);
+    public Integer createSequence(Sequence sequence, byte[] songAudioData) {
+        int sequenceId = saveSequence(sequence, Collections.emptyList());
+
+        SongAudio songAudio = new SongAudio().setSequenceId(sequenceId).setAudioData(songAudioData);
+        return new SaveSongAudioQuery(songAudio).perform(queryFactory);
     }
 
     @Override
     @Transactional
-    public Integer deleteSequence(int sequenceId) {
-        return new DeleteSequenceByIdQuery(sequenceId).perform(queryFactory);
+    public List<Sequence> getAllSequences() {
+        return new GetAllSequencesQuery().perform(queryFactory);
     }
 
     @Override
@@ -57,11 +60,20 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
 
     @Override
     @Transactional
-    public Integer createSequence(Sequence sequence, byte[] songAudioData) {
-        int sequenceId = saveSequence(sequence, Collections.emptyList());
+    public List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId) {
+        return new GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(queryFactory);
+    }
 
-        SongAudio songAudio = new SongAudio().setSequenceId(sequenceId).setAudioData(songAudioData);
-        return new SaveSongAudioQuery(songAudio).perform(queryFactory);
+    @Override
+    @Transactional
+    public Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID channelUuid) {
+        return new GetSequenceChannelByUuidQuery(sequenceId, channelUuid).perform(queryFactory);
+    }
+
+    @Override
+    @Transactional
+    public RenderedStagePropDataMap getRenderedStageProps(Sequence sequence) {
+        return new GetRenderedStagePropsQuery(sequence).perform(queryFactory);
     }
 
     @Override
@@ -82,18 +94,7 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
 
     @Override
     @Transactional
-    public RenderedStagePropDataMap getRenderedStageProps(Sequence sequence) {
-        return new GetRenderedStagePropsQuery(sequence).perform(queryFactory);
-    }
-
-    @Override
-    @Transactional
-    public Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID channelUuid) {
-        return new GetSequenceChannelByUuidQuery(sequenceId, channelUuid).perform(queryFactory);
-    }
-
-    @Override
-    public List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId) {
-        return new GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(queryFactory);
+    public void deleteSequence(int sequenceId) {
+        new DeleteSequenceByIdQuery(sequenceId).perform(queryFactory);
     }
 }

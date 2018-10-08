@@ -32,9 +32,9 @@ public class PlaylistViewModelConverterImpl implements PlaylistViewModelConverte
     private Playlist getPlaylist(Integer playlistId) {
         if (playlistId == null) {
             return new Playlist();
-        } else {
-            return playlistPersistenceService.getPlaylistById(playlistId)
-                    .orElseThrow(() -> new ViewModelConversionException("Playlist with ID of '" + playlistId + "' not found."));
         }
+
+        return playlistPersistenceService.getPlaylistById(playlistId)
+                .orElseThrow(() -> new ViewModelConversionException("Playlist with ID of '" + playlistId + "' not found."));
     }
 }

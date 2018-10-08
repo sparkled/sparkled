@@ -19,20 +19,37 @@ public class SequenceViewModelConverterImpl implements SequenceViewModelConverte
     public SequenceViewModel toViewModel(Sequence model) {
         return new SequenceViewModel()
                 .setId(model.getId())
-                .setStatus(model.getStatus())
+                .setStageId(model.getStageId())
                 .setName(model.getName())
+                .setArtist(model.getArtist())
+                .setAlbum(model.getAlbum())
                 .setDurationFrames(model.getDurationFrames())
-                .setFramesPerSecond(model.getFramesPerSecond());
+                .setFramesPerSecond(model.getFramesPerSecond())
+                .setStatus(model.getStatus());
     }
 
     @Override
     public Sequence fromViewModel(SequenceViewModel viewModel) {
         final Integer sequenceId = viewModel.getId();
-        Sequence model = sequencePersistenceService.getSequenceById(sequenceId)
-                .orElseThrow(() -> new ViewModelConversionException("Sequence with ID of '" + sequenceId + "' not found."));
+        Sequence model = getSequence(sequenceId);
 
         return model
+                .setId(viewModel.getId())
+                .setStageId(viewModel.getStageId())
                 .setName(viewModel.getName())
+                .setArtist(viewModel.getArtist())
+                .setAlbum(viewModel.getAlbum())
+                .setDurationFrames(viewModel.getDurationFrames())
+                .setFramesPerSecond(viewModel.getFramesPerSecond())
                 .setStatus(viewModel.getStatus());
+    }
+
+    private Sequence getSequence(Integer sequenceId) {
+        if (sequenceId == null) {
+            return new Sequence();
+        }
+
+        return sequencePersistenceService.getSequenceById(sequenceId)
+                .orElseThrow(() -> new ViewModelConversionException("Sequence with ID of '" + sequenceId + "' not found."));
     }
 }
