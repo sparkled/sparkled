@@ -11,8 +11,8 @@ public class SequenceViewModel {
     private Integer id;
     private SequenceStatus status;
     private String name;
-    private int durationFrames;
-    private int framesPerSecond = 60;
+    private Integer durationFrames;
+    private Integer framesPerSecond = 60;
     private List<SequenceChannelViewModel> channels = new ArrayList<>();
 
     public Integer getId() {
@@ -42,20 +42,20 @@ public class SequenceViewModel {
         return this;
     }
 
-    public int getDurationFrames() {
+    public Integer getDurationFrames() {
         return durationFrames;
     }
 
-    public SequenceViewModel setDurationFrames(int durationFrames) {
+    public SequenceViewModel setDurationFrames(Integer durationFrames) {
         this.durationFrames = durationFrames;
         return this;
     }
 
-    public int getFramesPerSecond() {
+    public Integer getFramesPerSecond() {
         return framesPerSecond;
     }
 
-    public SequenceViewModel setFramesPerSecond(int framesPerSecond) {
+    public SequenceViewModel setFramesPerSecond(Integer framesPerSecond) {
         this.framesPerSecond = framesPerSecond;
         return this;
     }
@@ -74,8 +74,8 @@ public class SequenceViewModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SequenceViewModel that = (SequenceViewModel) o;
-        return durationFrames == that.durationFrames &&
-                framesPerSecond == that.framesPerSecond &&
+        return Objects.equals(durationFrames, that.durationFrames) &&
+                Objects.equals(framesPerSecond, that.framesPerSecond) &&
                 Objects.equals(id, that.id) &&
                 status == that.status &&
                 Objects.equals(name, that.name) &&

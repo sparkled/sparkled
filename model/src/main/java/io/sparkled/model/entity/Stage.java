@@ -11,20 +11,20 @@ public class Stage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Integer id;
 
     @Basic
-    @Column(name = "name", nullable = false, length = 64)
+    @Column(name = "name")
     private String name;
 
     @Basic
-    @Column(name = "width", nullable = false)
-    private int width;
+    @Column(name = "width")
+    private Integer width;
 
     @Basic
-    @Column(name = "height", nullable = false)
-    private int height;
+    @Column(name = "height")
+    private Integer height;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "stageId", targetEntity = StageProp.class)
     private List<StageProp> stageProps = new ArrayList<>();
@@ -33,8 +33,9 @@ public class Stage {
         return id;
     }
 
-    public void setId(Integer id) {
+    public Stage setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
@@ -46,20 +47,20 @@ public class Stage {
         return this;
     }
 
-    public int getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public Stage setWidth(int width) {
+    public Stage setWidth(Integer width) {
         this.width = width;
         return this;
     }
 
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public Stage setHeight(int height) {
+    public Stage setHeight(Integer height) {
         this.height = height;
         return this;
     }
@@ -68,8 +69,9 @@ public class Stage {
         return stageProps;
     }
 
-    public void setStageProps(List<StageProp> stageProps) {
+    public Stage setStageProps(List<StageProp> stageProps) {
         this.stageProps = stageProps;
+        return this;
     }
 
     @Override
@@ -77,10 +79,10 @@ public class Stage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Stage stage = (Stage) o;
-        return width == stage.width &&
-                height == stage.height &&
-                Objects.equals(id, stage.id) &&
+        return Objects.equals(id, stage.id) &&
                 Objects.equals(name, stage.name) &&
+                Objects.equals(width, stage.width) &&
+                Objects.equals(height, stage.height) &&
                 Objects.equals(stageProps, stage.stageProps);
     }
 

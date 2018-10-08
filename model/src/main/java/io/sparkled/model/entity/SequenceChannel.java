@@ -11,23 +11,23 @@ import java.util.UUID;
 public class SequenceChannel {
 
     @Id
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "uuid")
     private UUID uuid;
 
     @Basic
-    @Column(name = "sequence_id", nullable = false)
-    private int sequenceId;
+    @Column(name = "sequence_id")
+    private Integer sequenceId;
 
     @Basic
-    @Column(name = "stage_prop_uuid", nullable = false)
+    @Column(name = "stage_prop_uuid")
     private UUID stagePropUuid;
 
     @Basic
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Basic
-    @Column(name = "display_order", nullable = false)
+    @Column(name = "display_order")
     private Integer displayOrder;
 
     @Basic
@@ -43,11 +43,11 @@ public class SequenceChannel {
         return this;
     }
 
-    public int getSequenceId() {
+    public Integer getSequenceId() {
         return sequenceId;
     }
 
-    public SequenceChannel setSequenceId(int sequenceId) {
+    public SequenceChannel setSequenceId(Integer sequenceId) {
         this.sequenceId = sequenceId;
         return this;
     }
@@ -99,8 +99,8 @@ public class SequenceChannel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SequenceChannel that = (SequenceChannel) o;
-        return sequenceId == that.sequenceId &&
-                Objects.equals(uuid, that.uuid) &&
+        return Objects.equals(uuid, that.uuid) &&
+                Objects.equals(sequenceId, that.sequenceId) &&
                 Objects.equals(stagePropUuid, that.stagePropUuid) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(displayOrder, that.displayOrder) &&
@@ -110,5 +110,17 @@ public class SequenceChannel {
     @Override
     public int hashCode() {
         return Objects.hash(uuid, sequenceId, stagePropUuid, name, displayOrder, channelJson);
+    }
+
+    @Override
+    public String toString() {
+        return "SequenceChannel{" +
+                "uuid=" + uuid +
+                ", sequenceId=" + sequenceId +
+                ", stagePropUuid=" + stagePropUuid +
+                ", name='" + name + '\'' +
+                ", displayOrder=" + displayOrder +
+                ", channelJson='" + channelJson + '\'' +
+                '}';
     }
 }

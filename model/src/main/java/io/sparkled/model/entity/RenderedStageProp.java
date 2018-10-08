@@ -10,37 +10,36 @@ public class RenderedStageProp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "sequence_id", nullable = false)
-    private int sequenceId;
+    @Column(name = "sequence_id")
+    private Integer sequenceId;
 
-    @Column(name = "stage_prop_code", nullable = false)
+    @Column(name = "stage_prop_code")
     private String stagePropCode;
 
-    @Column(name = "led_count", nullable = false)
-    private int ledCount;
+    @Column(name = "led_count")
+    private Integer ledCount;
 
     @Lob
     @Column(name = "data")
     private byte[] data;
 
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public RenderedStageProp setId(int id) {
+    public RenderedStageProp setId(Integer id) {
         this.id = id;
         return this;
     }
 
-    public int getSequenceId() {
+    public Integer getSequenceId() {
         return sequenceId;
     }
 
-    public RenderedStageProp setSequenceId(int sequenceId) {
+    public RenderedStageProp setSequenceId(Integer sequenceId) {
         this.sequenceId = sequenceId;
         return this;
     }
@@ -54,11 +53,11 @@ public class RenderedStageProp {
         return this;
     }
 
-    public int getLedCount() {
+    public Integer getLedCount() {
         return ledCount;
     }
 
-    public RenderedStageProp setLedCount(int ledCount) {
+    public RenderedStageProp setLedCount(Integer ledCount) {
         this.ledCount = ledCount;
         return this;
     }
@@ -77,13 +76,24 @@ public class RenderedStageProp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RenderedStageProp that = (RenderedStageProp) o;
-        return sequenceId == that.sequenceId &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(sequenceId, that.sequenceId) &&
                 Objects.equals(stagePropCode, that.stagePropCode) &&
-                Arrays.equals(data, that.data);
+                Objects.equals(ledCount, that.ledCount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sequenceId, stagePropCode, data);
+        return Objects.hash(id, sequenceId, stagePropCode, ledCount);
+    }
+
+    @Override
+    public String toString() {
+        return "RenderedStageProp{" +
+                "id=" + id +
+                ", sequenceId=" + sequenceId +
+                ", stagePropCode='" + stagePropCode + '\'' +
+                ", ledCount=" + ledCount +
+                '}';
     }
 }

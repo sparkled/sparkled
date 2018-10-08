@@ -13,7 +13,11 @@ public class SequenceValidator {
 
     public void validate() {
         if (sequence.getName() == null) {
-            throw new EntityValidationException("Sequence name must not be empty.");
+            throw new EntityValidationException(Errors.NO_NAME);
         }
+    }
+
+    private static class Errors {
+        static final String NO_NAME = "Sequence name must not be empty.";
     }
 }
