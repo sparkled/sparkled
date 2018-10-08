@@ -9,9 +9,9 @@ public interface StagePersistenceService {
 
     List<Stage> getAllStages();
 
-    Integer deleteStage(int stageId);
-
     Optional<Stage> getStageById(int stageId);
 
     Integer saveStage(Stage stage);
+
+    void deleteStage(int stageId);
 }

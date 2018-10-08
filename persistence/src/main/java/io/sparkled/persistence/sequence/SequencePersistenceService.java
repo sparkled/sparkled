@@ -12,9 +12,9 @@ import java.util.UUID;
 
 public interface SequencePersistenceService {
 
-    List<Sequence> getAllSequences();
+    Integer createSequence(Sequence sequence, byte[] songAudioData);
 
-    Integer deleteSequence(int sequenceId);
+    List<Sequence> getAllSequences();
 
     Optional<Sequence> getSequenceById(int sequenceId);
 
@@ -22,15 +22,15 @@ public interface SequencePersistenceService {
 
     Optional<SongAudio> getSongAudioBySequenceId(int sequenceId);
 
-    Integer createSequence(Sequence sequence, byte[] songAudioData);
+    List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId);
+
+    Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID uuid);
+
+    RenderedStagePropDataMap getRenderedStageProps(Sequence sequence);
 
     Integer saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels);
 
     Integer publishSequence(Sequence sequence, Stage stage, List<SequenceChannel> sequenceChannels, RenderedStagePropDataMap renderedStageProps);
 
-    RenderedStagePropDataMap getRenderedStageProps(Sequence sequence);
-
-    Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID uuid);
-
-    List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId);
+    void deleteSequence(int sequenceId);
 }

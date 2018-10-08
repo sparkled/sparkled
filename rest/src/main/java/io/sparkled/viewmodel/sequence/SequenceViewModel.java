@@ -9,10 +9,13 @@ import java.util.Objects;
 
 public class SequenceViewModel {
     private Integer id;
-    private SequenceStatus status;
+    private Integer stageId;
     private String name;
+    private String artist;
+    private String album;
     private Integer durationFrames;
     private Integer framesPerSecond = 60;
+    private SequenceStatus status;
     private List<SequenceChannelViewModel> channels = new ArrayList<>();
 
     public Integer getId() {
@@ -24,21 +27,39 @@ public class SequenceViewModel {
         return this;
     }
 
+    public Integer getStageId() {
+        return stageId;
+    }
+
+    public SequenceViewModel setStageId(Integer stageId) {
+        this.stageId = stageId;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
 
-    public SequenceStatus getStatus() {
-        return status;
-    }
-
-    public SequenceViewModel setStatus(SequenceStatus status) {
-        this.status = status;
+    public SequenceViewModel setName(String name) {
+        this.name = name;
         return this;
     }
 
-    public SequenceViewModel setName(String name) {
-        this.name = name;
+    public String getArtist() {
+        return artist;
+    }
+
+    public SequenceViewModel setArtist(String artist) {
+        this.artist = artist;
+        return this;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public SequenceViewModel setAlbum(String album) {
+        this.album = album;
         return this;
     }
 
@@ -60,6 +81,15 @@ public class SequenceViewModel {
         return this;
     }
 
+    public SequenceStatus getStatus() {
+        return status;
+    }
+
+    public SequenceViewModel setStatus(SequenceStatus status) {
+        this.status = status;
+        return this;
+    }
+
     public List<SequenceChannelViewModel> getChannels() {
         return channels;
     }
@@ -74,27 +104,33 @@ public class SequenceViewModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SequenceViewModel that = (SequenceViewModel) o;
-        return Objects.equals(durationFrames, that.durationFrames) &&
-                Objects.equals(framesPerSecond, that.framesPerSecond) &&
-                Objects.equals(id, that.id) &&
-                status == that.status &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(stageId, that.stageId) &&
                 Objects.equals(name, that.name) &&
+                Objects.equals(artist, that.artist) &&
+                Objects.equals(album, that.album) &&
+                Objects.equals(durationFrames, that.durationFrames) &&
+                Objects.equals(framesPerSecond, that.framesPerSecond) &&
+                status == that.status &&
                 Objects.equals(channels, that.channels);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, status, name, durationFrames, framesPerSecond, channels);
+        return Objects.hash(id, stageId, name, artist, album, durationFrames, framesPerSecond, status, channels);
     }
 
     @Override
     public String toString() {
         return "SequenceViewModel{" +
                 "id=" + id +
-                ", status=" + status +
+                ", stageId=" + stageId +
                 ", name='" + name + '\'' +
+                ", artist='" + artist + '\'' +
+                ", album='" + album + '\'' +
                 ", durationFrames=" + durationFrames +
                 ", framesPerSecond=" + framesPerSecond +
+                ", status=" + status +
                 ", channels=" + channels +
                 '}';
     }

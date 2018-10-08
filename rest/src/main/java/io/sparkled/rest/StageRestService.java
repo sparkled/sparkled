@@ -30,30 +30,6 @@ public class StageRestService extends RestService {
         return getJsonResponse(new IdResponse(stageId));
     }
 
-    @PUT
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateStage(@PathParam("id") int id, Stage stage) {
-        stage.setId(id); // Prevent client-side ID tampering.
-
-        Integer savedId = stagePersistenceService.saveStage(stage);
-        if (savedId == null) {
-            return getJsonResponse(Response.Status.NOT_FOUND, "Stage not found.");
-        } else {
-            IdResponse idResponse = new IdResponse(savedId);
-            return getJsonResponse(idResponse);
-        }
-    }
-
-    @DELETE
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteStage(@PathParam("id") int id) {
-        int stageId = stagePersistenceService.deleteStage(id);
-        return getJsonResponse(new IdResponse(stageId));
-    }
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllStages() {
@@ -72,5 +48,28 @@ public class StageRestService extends RestService {
         } else {
             return getResponse(Response.Status.NOT_FOUND);
         }
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateStage(@PathParam("id") int id, Stage stage) {
+        stage.setId(id); // Prevent client-side ID tampering.
+
+        Integer savedId = stagePersistenceService.saveStage(stage);
+        if (savedId == null) {
+            return getJsonResponse(Response.Status.BAD_REQUEST, "Failed to save stage.");
+        } else {
+            return getResponse(Response.Status.OK);
+        }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteStage(@PathParam("id") int id) {
+        stagePersistenceService.deleteStage(id);
+        return getResponse(Response.Status.OK);
     }
 }

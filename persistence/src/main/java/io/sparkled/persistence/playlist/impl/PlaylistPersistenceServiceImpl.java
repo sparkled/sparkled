@@ -24,6 +24,12 @@ public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceServic
 
     @Override
     @Transactional
+    public Integer createPlaylist(Playlist playlist) {
+        return new SavePlaylistQuery(playlist).perform(queryFactory);
+    }
+
+    @Override
+    @Transactional
     public List<Playlist> getAllPlaylists() {
         return new GetAllPlaylistsQuery().perform(queryFactory);
     }
@@ -50,12 +56,6 @@ public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceServic
     @Transactional
     public Optional<PlaylistSequence> getPlaylistSequenceByUuid(int sequenceId, UUID uuid) {
         return new GetPlaylistSequenceByUuidQuery(sequenceId, uuid).perform(queryFactory);
-    }
-
-    @Override
-    @Transactional
-    public Integer createPlaylist(Playlist playlist) {
-        return new SavePlaylistQuery(playlist).perform(queryFactory);
     }
 
     @Override

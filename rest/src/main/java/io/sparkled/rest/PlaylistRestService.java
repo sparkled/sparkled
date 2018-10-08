@@ -33,6 +33,16 @@ public class PlaylistRestService extends RestService {
         this.playlistSequenceViewModelConverter = playlistSequenceViewModelConverter;
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createPlaylist(PlaylistViewModel playlistViewModel) {
+        Playlist playlist = playlistViewModelConverter.fromViewModel(playlistViewModel);
+        playlistViewModel.setId(null);
+        int playlistId = playlistPersistenceService.createPlaylist(playlist);
+        return getJsonResponse(new IdResponse(playlistId));
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPlaylists() {
@@ -60,17 +70,7 @@ public class PlaylistRestService extends RestService {
             return getJsonResponse(viewModel);
         }
 
-        return getJsonResponse(Response.Status.NOT_FOUND, "Playlist with ID of '" + playlistId + "' not found.");
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createPlaylist(PlaylistViewModel playlistViewModel) {
-        Playlist playlist = playlistViewModelConverter.fromViewModel(playlistViewModel);
-        playlistViewModel.setId(null);
-        int playlistId = playlistPersistenceService.createPlaylist(playlist);
-        return getJsonResponse(new IdResponse(playlistId));
+        return getJsonResponse(Response.Status.NOT_FOUND);
     }
 
     @PUT
@@ -89,10 +89,9 @@ public class PlaylistRestService extends RestService {
 
         Integer savedId = playlistPersistenceService.savePlaylist(playlist, playlistSequences);
         if (savedId == null) {
-            return getJsonResponse(Response.Status.NOT_FOUND, "Playlist not found.");
+            return getJsonResponse(Response.Status.BAD_REQUEST, "Failed to save playlist.");
         } else {
-            IdResponse idResponse = new IdResponse(savedId);
-            return getJsonResponse(idResponse);
+            return getResponse(Response.Status.OK);
         }
     }
 

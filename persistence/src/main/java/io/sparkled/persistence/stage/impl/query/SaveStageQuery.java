@@ -5,18 +5,19 @@ import io.sparkled.model.entity.StageProp;
 import io.sparkled.model.validator.StageValidator;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import static java.util.stream.Collectors.toList;
 
 public class SaveStageQuery implements PersistenceQuery<Integer> {
 
-    private static final Logger logger = Logger.getLogger(SaveStageQuery.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(SaveStageQuery.class);
 
     private final Stage stage;
 
@@ -49,6 +50,6 @@ public class SaveStageQuery implements PersistenceQuery<Integer> {
                 .where(qStageProp.stageId.eq(persistedStage.getId()).and(qStageProp.uuid.notIn(propUuids)))
                 .execute();
 
-        logger.info("Deleted " + deleted + " record(s) for stage " + persistedStage.getId());
+        logger.info("Deleted {} record(s) for stage {}.", deleted, persistedStage.getId());
     }
 }
