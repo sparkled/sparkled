@@ -26,10 +26,10 @@ public class App {
         this.schemaUpdater = schemaUpdater;
     }
 
-    void start(int restApiPort, int udpPort) throws Exception {
+    void start(AppSettings settings) throws Exception {
         persistService.start();
         schemaUpdater.update();
-        restApiServer.start(restApiPort);
-        udpServer.start(udpPort);
+        restApiServer.start(settings.getRestApiPort());
+        udpServer.start(settings.getUdpPort());
     }
 }

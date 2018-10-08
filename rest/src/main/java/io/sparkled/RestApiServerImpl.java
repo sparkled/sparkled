@@ -76,7 +76,7 @@ public class RestApiServerImpl implements RestApiServer {
     private void addStaticResourceConfig(ServletContextHandler context) {
         URL webappLocation = getClass().getResource("/webapp/index.html");
         if (webappLocation == null) {
-            logger.error("Failed to retrieve webapp location, the web UI was likely omitted from this build.");
+            logger.warn("Failed to retrieve webapp location, the web UI was likely omitted from this build.");
         } else {
             try {
                 URI webRootUri = URI.create(webappLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
