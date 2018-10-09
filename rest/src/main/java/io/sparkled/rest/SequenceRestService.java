@@ -52,7 +52,7 @@ public class SequenceRestService extends RestService {
                                    @FormDataParam("mp3") InputStream uploadedInputStream,
                                    @FormDataParam("mp3") FormDataContentDisposition fileDetail) throws IOException {
         SequenceViewModel sequenceViewModel = gson.fromJson(sequenceJson, SequenceViewModel.class);
-        Sequence sequence = sequenceViewModelConverter.fromViewModel(sequenceViewModel);
+        Sequence sequence = sequenceViewModelConverter.toModel(sequenceViewModel);
 
         byte[] songAudioData = IOUtils.toByteArray(uploadedInputStream);
         int sequenceId = saveNewSequence(sequence, songAudioData);
@@ -122,10 +122,10 @@ public class SequenceRestService extends RestService {
     public Response updateSequence(@PathParam("id") int id, SequenceViewModel sequenceViewModel) {
         sequenceViewModel.setId(id); // Prevent client-side ID tampering.
 
-        Sequence sequence = sequenceViewModelConverter.fromViewModel(sequenceViewModel);
+        Sequence sequence = sequenceViewModelConverter.toModel(sequenceViewModel);
         List<SequenceChannel> sequenceChannels = sequenceViewModel.getChannels()
                 .stream()
-                .map(sequenceChannelViewModelConverter::fromViewModel)
+                .map(sequenceChannelViewModelConverter::toModel)
                 .collect(Collectors.toList());
 
         Integer savedId;

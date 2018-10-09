@@ -1,22 +1,16 @@
 package io.sparkled.viewmodel;
 
 /**
- * Handles bidirectional conversion between view models and models.
+ * Handles view model -> model conversion.
  *
  * @param <VM> A ViewModel class
  * @param <M>  A Model class
  */
-public interface ViewModelConverter<VM, M> {
-
-    /**
-     * @param model The model class to be converted
-     * @return The converted view model.
-     */
-    VM toViewModel(M model);
+public interface ViewModelConverter<VM extends ViewModel, M> {
 
     /**
      * @param viewModel The view model class to be converted
      * @return The converted model.
      */
-    M fromViewModel(VM viewModel);
+    M toModel(VM viewModel);
 }

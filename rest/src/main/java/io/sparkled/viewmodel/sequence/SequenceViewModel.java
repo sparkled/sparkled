@@ -1,13 +1,14 @@
 package io.sparkled.viewmodel.sequence;
 
 import io.sparkled.model.entity.SequenceStatus;
+import io.sparkled.viewmodel.ViewModel;
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SequenceViewModel {
+public class SequenceViewModel implements ViewModel {
     private Integer id;
     private Integer stageId;
     private String name;

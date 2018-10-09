@@ -1,12 +1,13 @@
 package io.sparkled.viewmodel.playlist;
 
+import io.sparkled.viewmodel.ViewModel;
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PlaylistViewModel {
+public class PlaylistViewModel implements ViewModel {
 
     private Integer id;
     private String name;

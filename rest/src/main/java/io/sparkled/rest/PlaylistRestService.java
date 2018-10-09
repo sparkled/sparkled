@@ -37,7 +37,7 @@ public class PlaylistRestService extends RestService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPlaylist(PlaylistViewModel playlistViewModel) {
-        Playlist playlist = playlistViewModelConverter.fromViewModel(playlistViewModel);
+        Playlist playlist = playlistViewModelConverter.toModel(playlistViewModel);
         playlistViewModel.setId(null);
         int playlistId = playlistPersistenceService.createPlaylist(playlist);
         return getJsonResponse(new IdResponse(playlistId));
@@ -80,10 +80,10 @@ public class PlaylistRestService extends RestService {
     public Response updatePlaylist(@PathParam("id") int id, PlaylistViewModel playlistViewModel) {
         playlistViewModel.setId(id); // Prevent client-side ID tampering.
 
-        Playlist playlist = playlistViewModelConverter.fromViewModel(playlistViewModel);
+        Playlist playlist = playlistViewModelConverter.toModel(playlistViewModel);
         List<PlaylistSequence> playlistSequences = playlistViewModel.getSequences()
                 .stream()
-                .map(playlistSequenceViewModelConverter::fromViewModel)
+                .map(playlistSequenceViewModelConverter::toModel)
                 .map(ps -> ps.setPlaylistId(id))
                 .collect(Collectors.toList());
 

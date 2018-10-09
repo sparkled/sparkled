@@ -6,7 +6,7 @@ import io.sparkled.viewmodel.exception.ViewModelConversionException;
 
 import javax.inject.Inject;
 
-public class SequenceViewModelConverterImpl implements SequenceViewModelConverter {
+public class SequenceViewModelConverterImpl extends SequenceViewModelConverter {
 
     private SequencePersistenceService sequencePersistenceService;
 
@@ -29,7 +29,7 @@ public class SequenceViewModelConverterImpl implements SequenceViewModelConverte
     }
 
     @Override
-    public Sequence fromViewModel(SequenceViewModel viewModel) {
+    public Sequence toModel(SequenceViewModel viewModel) {
         final Integer sequenceId = viewModel.getId();
         Sequence model = getSequence(sequenceId);
 
