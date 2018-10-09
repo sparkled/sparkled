@@ -5,7 +5,7 @@ import io.sparkled.persistence.playlist.PlaylistPersistenceService;
 
 import javax.inject.Inject;
 
-public class PlaylistSequenceViewModelConverterImpl implements PlaylistSequenceViewModelConverter {
+public class PlaylistSequenceViewModelConverterImpl extends PlaylistSequenceViewModelConverter {
 
     private PlaylistPersistenceService playlistPersistenceService;
 
@@ -23,7 +23,7 @@ public class PlaylistSequenceViewModelConverterImpl implements PlaylistSequenceV
     }
 
     @Override
-    public PlaylistSequence fromViewModel(PlaylistSequenceViewModel viewModel) {
+    public PlaylistSequence toModel(PlaylistSequenceViewModel viewModel) {
         PlaylistSequence model = playlistPersistenceService.getPlaylistSequenceByUuid(viewModel.getSequenceId(), viewModel.getUuid())
                 .orElseGet(PlaylistSequence::new);
 

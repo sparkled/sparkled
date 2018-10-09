@@ -6,6 +6,8 @@ import io.sparkled.persistence.playlist.PlaylistPersistenceService;
 import io.sparkled.rest.response.IdResponse;
 import io.sparkled.viewmodel.playlist.PlaylistViewModel;
 import io.sparkled.viewmodel.playlist.PlaylistViewModelConverter;
+import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModel;
+import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModelConverter;
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModel;
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModelConverter;
 
@@ -22,14 +24,17 @@ public class PlaylistRestService extends RestService {
 
     private final PlaylistPersistenceService playlistPersistenceService;
     private final PlaylistViewModelConverter playlistViewModelConverter;
+    private final PlaylistSearchViewModelConverter playlistSearchViewModelConverter;
     private final PlaylistSequenceViewModelConverter playlistSequenceViewModelConverter;
 
     @Inject
     public PlaylistRestService(PlaylistPersistenceService playlistPersistenceService,
                                PlaylistViewModelConverter playlistViewModelConverter,
+                               PlaylistSearchViewModelConverter playlistSearchViewModelConverter,
                                PlaylistSequenceViewModelConverter playlistSequenceViewModelConverter) {
         this.playlistPersistenceService = playlistPersistenceService;
         this.playlistViewModelConverter = playlistViewModelConverter;
+        this.playlistSearchViewModelConverter = playlistSearchViewModelConverter;
         this.playlistSequenceViewModelConverter = playlistSequenceViewModelConverter;
     }
 
@@ -37,7 +42,7 @@ public class PlaylistRestService extends RestService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPlaylist(PlaylistViewModel playlistViewModel) {
-        Playlist playlist = playlistViewModelConverter.fromViewModel(playlistViewModel);
+        Playlist playlist = playlistViewModelConverter.toModel(playlistViewModel);
         playlistViewModel.setId(null);
         int playlistId = playlistPersistenceService.createPlaylist(playlist);
         return getJsonResponse(new IdResponse(playlistId));
@@ -47,7 +52,11 @@ public class PlaylistRestService extends RestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPlaylists() {
         List<Playlist> playlists = playlistPersistenceService.getAllPlaylists();
-        return getJsonResponse(playlists);
+        List<PlaylistSearchViewModel> results = playlists.stream()
+                .map(playlistSearchViewModelConverter::toViewModel)
+                .collect(Collectors.toList());
+
+        return getJsonResponse(results);
     }
 
     @GET
@@ -80,10 +89,10 @@ public class PlaylistRestService extends RestService {
     public Response updatePlaylist(@PathParam("id") int id, PlaylistViewModel playlistViewModel) {
         playlistViewModel.setId(id); // Prevent client-side ID tampering.
 
-        Playlist playlist = playlistViewModelConverter.fromViewModel(playlistViewModel);
+        Playlist playlist = playlistViewModelConverter.toModel(playlistViewModel);
         List<PlaylistSequence> playlistSequences = playlistViewModel.getSequences()
                 .stream()
-                .map(playlistSequenceViewModelConverter::fromViewModel)
+                .map(playlistSequenceViewModelConverter::toModel)
                 .map(ps -> ps.setPlaylistId(id))
                 .collect(Collectors.toList());
 

@@ -1,13 +1,14 @@
 package io.sparkled.viewmodel.sequence.channel;
 
 import io.sparkled.model.animation.effect.Effect;
+import io.sparkled.viewmodel.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class SequenceChannelViewModel {
+public class SequenceChannelViewModel implements ViewModel {
 
     private UUID uuid;
     private Integer sequenceId;

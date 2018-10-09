@@ -1,39 +1,25 @@
-package io.sparkled.viewmodel.sequence;
+package io.sparkled.viewmodel.sequence.search;
 
 import io.sparkled.model.entity.SequenceStatus;
 import io.sparkled.viewmodel.ViewModel;
-import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-public class SequenceViewModel implements ViewModel {
+public class SequenceSearchViewModel implements ViewModel {
     private Integer id;
-    private Integer stageId;
     private String name;
     private String artist;
     private String album;
     private Integer durationFrames;
-    private Integer framesPerSecond = 60;
+    private Integer framesPerSecond;
     private SequenceStatus status;
-    private List<SequenceChannelViewModel> channels = new ArrayList<>();
 
     public Integer getId() {
         return id;
     }
 
-    public SequenceViewModel setId(Integer id) {
+    public SequenceSearchViewModel setId(Integer id) {
         this.id = id;
-        return this;
-    }
-
-    public Integer getStageId() {
-        return stageId;
-    }
-
-    public SequenceViewModel setStageId(Integer stageId) {
-        this.stageId = stageId;
         return this;
     }
 
@@ -41,7 +27,7 @@ public class SequenceViewModel implements ViewModel {
         return name;
     }
 
-    public SequenceViewModel setName(String name) {
+    public SequenceSearchViewModel setName(String name) {
         this.name = name;
         return this;
     }
@@ -50,7 +36,7 @@ public class SequenceViewModel implements ViewModel {
         return artist;
     }
 
-    public SequenceViewModel setArtist(String artist) {
+    public SequenceSearchViewModel setArtist(String artist) {
         this.artist = artist;
         return this;
     }
@@ -59,7 +45,7 @@ public class SequenceViewModel implements ViewModel {
         return album;
     }
 
-    public SequenceViewModel setAlbum(String album) {
+    public SequenceSearchViewModel setAlbum(String album) {
         this.album = album;
         return this;
     }
@@ -68,7 +54,7 @@ public class SequenceViewModel implements ViewModel {
         return durationFrames;
     }
 
-    public SequenceViewModel setDurationFrames(Integer durationFrames) {
+    public SequenceSearchViewModel setDurationFrames(Integer durationFrames) {
         this.durationFrames = durationFrames;
         return this;
     }
@@ -77,7 +63,7 @@ public class SequenceViewModel implements ViewModel {
         return framesPerSecond;
     }
 
-    public SequenceViewModel setFramesPerSecond(Integer framesPerSecond) {
+    public SequenceSearchViewModel setFramesPerSecond(Integer framesPerSecond) {
         this.framesPerSecond = framesPerSecond;
         return this;
     }
@@ -86,17 +72,8 @@ public class SequenceViewModel implements ViewModel {
         return status;
     }
 
-    public SequenceViewModel setStatus(SequenceStatus status) {
+    public SequenceSearchViewModel setStatus(SequenceStatus status) {
         this.status = status;
-        return this;
-    }
-
-    public List<SequenceChannelViewModel> getChannels() {
-        return channels;
-    }
-
-    public SequenceViewModel setChannels(List<SequenceChannelViewModel> channels) {
-        this.channels = channels;
         return this;
     }
 
@@ -104,35 +81,31 @@ public class SequenceViewModel implements ViewModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SequenceViewModel that = (SequenceViewModel) o;
+        SequenceSearchViewModel that = (SequenceSearchViewModel) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(stageId, that.stageId) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(artist, that.artist) &&
                 Objects.equals(album, that.album) &&
                 Objects.equals(durationFrames, that.durationFrames) &&
                 Objects.equals(framesPerSecond, that.framesPerSecond) &&
-                status == that.status &&
-                Objects.equals(channels, that.channels);
+                status == that.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stageId, name, artist, album, durationFrames, framesPerSecond, status, channels);
+        return Objects.hash(id, name, artist, album, durationFrames, framesPerSecond, status);
     }
 
     @Override
     public String toString() {
-        return "SequenceViewModel{" +
+        return "SequenceSearchViewModel{" +
                 "id=" + id +
-                ", stageId=" + stageId +
                 ", name='" + name + '\'' +
                 ", artist='" + artist + '\'' +
                 ", album='" + album + '\'' +
                 ", durationFrames=" + durationFrames +
                 ", framesPerSecond=" + framesPerSecond +
                 ", status=" + status +
-                ", channels=" + channels +
                 '}';
     }
 }

@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
 
-public class SequenceChannelViewModelConverterImpl implements SequenceChannelViewModelConverter {
+public class SequenceChannelViewModelConverterImpl extends SequenceChannelViewModelConverter {
 
     private SequencePersistenceService sequencePersistenceService;
     private Gson gson = new Gson();
@@ -35,7 +35,7 @@ public class SequenceChannelViewModelConverterImpl implements SequenceChannelVie
     }
 
     @Override
-    public SequenceChannel fromViewModel(SequenceChannelViewModel viewModel) {
+    public SequenceChannel toModel(SequenceChannelViewModel viewModel) {
         SequenceChannel model = sequencePersistenceService.getSequenceChannelByUuid(viewModel.getSequenceId(), viewModel.getUuid())
                 .orElseGet(SequenceChannel::new);
 

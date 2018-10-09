@@ -1,9 +1,11 @@
 package io.sparkled.viewmodel.playlist.sequence;
 
+import io.sparkled.viewmodel.ViewModel;
+
 import java.util.Objects;
 import java.util.UUID;
 
-public class PlaylistSequenceViewModel {
+public class PlaylistSequenceViewModel implements ViewModel {
 
     private UUID uuid;
     private Integer sequenceId;

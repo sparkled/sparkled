@@ -6,7 +6,7 @@ import io.sparkled.viewmodel.exception.ViewModelConversionException;
 
 import javax.inject.Inject;
 
-public class PlaylistViewModelConverterImpl implements PlaylistViewModelConverter {
+public class PlaylistViewModelConverterImpl extends PlaylistViewModelConverter {
 
     private PlaylistPersistenceService playlistPersistenceService;
 
@@ -23,7 +23,7 @@ public class PlaylistViewModelConverterImpl implements PlaylistViewModelConverte
     }
 
     @Override
-    public Playlist fromViewModel(PlaylistViewModel viewModel) {
+    public Playlist toModel(PlaylistViewModel viewModel) {
         Integer playlistId = viewModel.getId();
         Playlist model = getPlaylist(playlistId);
         return model.setName(viewModel.getName());
