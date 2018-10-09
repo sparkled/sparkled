@@ -57,7 +57,7 @@ class SequenceEntry extends Component {
 
   getFormattedDuration(sequence) {
     const date = new Date(null);
-    date.setSeconds(Math.round(sequence.durationFrames / sequence.framesPerSecond));
+    date.setSeconds(Math.floor(sequence.durationFrames / sequence.framesPerSecond));
 
     // 1970-01-01T00:01:23.000Z
     //               ^^^^^

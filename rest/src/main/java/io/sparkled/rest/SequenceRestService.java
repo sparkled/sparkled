@@ -10,6 +10,8 @@ import io.sparkled.viewmodel.sequence.SequenceViewModel;
 import io.sparkled.viewmodel.sequence.SequenceViewModelConverter;
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel;
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverter;
+import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModel;
+import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModelConverter;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -32,16 +34,19 @@ public class SequenceRestService extends RestService {
     private final SequencePersistenceService sequencePersistenceService;
     private final StagePersistenceService stagePersistenceService;
     private final SequenceViewModelConverter sequenceViewModelConverter;
+    private final SequenceSearchViewModelConverter sequenceSearchViewModelConverter;
     private final SequenceChannelViewModelConverter sequenceChannelViewModelConverter;
 
     @Inject
     public SequenceRestService(SequencePersistenceService sequencePersistenceService,
                                StagePersistenceService stagePersistenceService,
                                SequenceViewModelConverter sequenceViewModelConverter,
+                               SequenceSearchViewModelConverter sequenceSearchViewModelConverter,
                                SequenceChannelViewModelConverter sequenceChannelViewModelConverter) {
         this.sequencePersistenceService = sequencePersistenceService;
         this.stagePersistenceService = stagePersistenceService;
         this.sequenceViewModelConverter = sequenceViewModelConverter;
+        this.sequenceSearchViewModelConverter = sequenceSearchViewModelConverter;
         this.sequenceChannelViewModelConverter = sequenceChannelViewModelConverter;
     }
 
@@ -63,7 +68,11 @@ public class SequenceRestService extends RestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSequences() {
         List<Sequence> sequences = sequencePersistenceService.getAllSequences();
-        return getJsonResponse(sequences);
+        List<SequenceSearchViewModel> results = sequences.stream()
+                .map(sequenceSearchViewModelConverter::toViewModel)
+                .collect(Collectors.toList());
+
+        return getJsonResponse(results);
     }
 
     @GET
