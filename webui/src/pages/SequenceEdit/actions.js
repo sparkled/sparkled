@@ -12,7 +12,7 @@ export const fetchSequence = sequenceId => {
 };
 
 export const fetchSequenceStage = sequenceId => {
-  const request = axios.get(`${restConfig.ROOT_URL}/sequences/${sequenceId}/stages`);
+  const request = axios.get(`${restConfig.ROOT_URL}/sequences/${sequenceId}/stage`);
 
   return {
     type: actionTypes.FETCH_SEQUENCE_STAGE,

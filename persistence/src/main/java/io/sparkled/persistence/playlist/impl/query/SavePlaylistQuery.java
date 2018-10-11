@@ -4,11 +4,14 @@ import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.validator.PlaylistValidator;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 
-public class SavePlaylistQuery implements PersistenceQuery<Integer> {
+public class SavePlaylistQuery implements PersistenceQuery<Playlist> {
 
+    private static final Logger logger = LoggerFactory.getLogger(SavePlaylistQuery.class);
     private final Playlist playlist;
 
     public SavePlaylistQuery(Playlist playlist) {
@@ -16,13 +19,13 @@ public class SavePlaylistQuery implements PersistenceQuery<Integer> {
     }
 
     @Override
-    public Integer perform(QueryFactory queryFactory) {
+    public Playlist perform(QueryFactory queryFactory) {
+        new PlaylistValidator().validate(playlist);
+
         EntityManager entityManager = queryFactory.getEntityManager();
-
-        new PlaylistValidator(playlist).validate();
-
         Playlist result = entityManager.merge(playlist);
-        // TODO: Handle playlist sequences.
-        return result.getId();
+
+        logger.info("Saved playlist {} ({}).", playlist.getId(), playlist.getName());
+        return result;
     }
 }

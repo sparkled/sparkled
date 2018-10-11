@@ -26,6 +26,7 @@ public class PlaylistViewModelConverterImpl extends PlaylistViewModelConverter {
     public Playlist toModel(PlaylistViewModel viewModel) {
         Integer playlistId = viewModel.getId();
         Playlist model = getPlaylist(playlistId);
+
         return model.setName(viewModel.getName());
     }
 

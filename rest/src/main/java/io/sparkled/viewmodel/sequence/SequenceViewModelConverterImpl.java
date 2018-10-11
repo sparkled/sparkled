@@ -34,7 +34,6 @@ public class SequenceViewModelConverterImpl extends SequenceViewModelConverter {
         Sequence model = getSequence(sequenceId);
 
         return model
-                .setId(viewModel.getId())
                 .setStageId(viewModel.getStageId())
                 .setName(viewModel.getName())
                 .setArtist(viewModel.getArtist())

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface PlaylistPersistenceService {
 
-    Integer createPlaylist(Playlist playlist);
+    Playlist createPlaylist(Playlist playlist);
 
     List<Playlist> getAllPlaylists();
 
@@ -22,7 +22,7 @@ public interface PlaylistPersistenceService {
 
     Optional<PlaylistSequence> getPlaylistSequenceByUuid(int sequenceId, UUID uuid);
 
-    Integer savePlaylist(Playlist playlist, List<PlaylistSequence> playlistSequences);
+    void savePlaylist(Playlist playlist, List<PlaylistSequence> playlistSequences);
 
     void deletePlaylist(int playlistId);
 }

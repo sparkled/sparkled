@@ -15,6 +15,7 @@ import io.sparkled.renderer.util.ChannelPropPairUtil;
 import io.sparkled.renderer.util.EffectTypeRenderers;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Renderer {
 
@@ -38,9 +39,9 @@ public class Renderer {
         RenderedStagePropDataMap renderedProps = new RenderedStagePropDataMap();
 
         channelPropPairs.forEach(cpp -> {
-                    String stagePropCode = cpp.getStageProp().getCode();
-                    RenderedStagePropData data = renderedProps.get(stagePropCode);
-                    renderedProps.put(stagePropCode, renderChannel(cpp, data));
+                    UUID stagePropUuid = cpp.getStageProp().getUuid();
+                    RenderedStagePropData data = renderedProps.get(stagePropUuid);
+                    renderedProps.put(stagePropUuid, renderChannel(cpp, data));
                 }
         );
         return renderedProps;
@@ -51,7 +52,7 @@ public class Renderer {
             final int endFrame = Math.min(sequence.getDurationFrames() - 1, startFrame + durationFrames - 1);
 
             int frameCount = endFrame - startFrame + 1;
-            int leds = channelPropPair.getStageProp().getLeds();
+            int leds = channelPropPair.getStageProp().getLedCount();
             byte[] data = new byte[frameCount * leds * Led.BYTES_PER_LED];
             renderedStagePropData = new RenderedStagePropData(startFrame, endFrame, leds, data);
         }

@@ -4,11 +4,14 @@ import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.validator.SequenceValidator;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 
-public class SaveSequenceQuery implements PersistenceQuery<Integer> {
+public class SaveSequenceQuery implements PersistenceQuery<Sequence> {
 
+    private static final Logger logger = LoggerFactory.getLogger(SaveSequenceQuery.class);
     private final Sequence sequence;
 
     public SaveSequenceQuery(Sequence sequence) {
@@ -16,11 +19,13 @@ public class SaveSequenceQuery implements PersistenceQuery<Integer> {
     }
 
     @Override
-    public Integer perform(QueryFactory queryFactory) {
-        final EntityManager entityManager = queryFactory.getEntityManager();
+    public Sequence perform(QueryFactory queryFactory) {
+        new SequenceValidator().validate(sequence);
 
-        new SequenceValidator(sequence).validate();
+        final EntityManager entityManager = queryFactory.getEntityManager();
         Sequence result = entityManager.merge(sequence);
-        return result.getId();
+
+        logger.info("Saved sequence {} ({}).", sequence.getId(), sequence.getName());
+        return result;
     }
 }

@@ -45,7 +45,7 @@ public class RenderPreviewRestService extends RestService {
 
             Sequence sequence = sequenceOptional.get();
 
-            List<StageProp> stageProps = Collections.singletonList(new StageProp().setLeds(10)); // TODO: Get from DB.
+            List<StageProp> stageProps = Collections.singletonList(new StageProp().setLedCount(10)); // TODO: Get from DB.
             RenderedStagePropDataMap renderResult = new Renderer(sequence, sequenceChannels, stageProps, startFrame, durationFrames).render();
             return getJsonResponse(renderResult);
         } else {

@@ -13,6 +13,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 
 public class RequestHandlerImpl implements RequestHandler {
 
@@ -32,7 +33,7 @@ public class RequestHandlerImpl implements RequestHandler {
         String[] components = message.split(":");
 
         if (components.length == 2 && GET_FRAME_COMMAND.equals(components[0])) {
-            String controller = components[1];
+            String stagePropCode = components[1];
             double progress = sequencePlayerService.getSequenceProgress();
             Sequence currentSequence = sequencePlayerService.getCurrentSequence();
             RenderedStagePropDataMap renderedStagePropDataMap = sequencePlayerService.getRenderedStageProps();
@@ -43,7 +44,7 @@ public class RequestHandlerImpl implements RequestHandler {
                 final int durationFrames = currentSequence.getDurationFrames();
                 final int frameIndex = (int) Math.min(durationFrames - 1, Math.round(progress * durationFrames));
 
-                RenderedFrame renderedFrame = getRenderedFrame(controller, renderedStagePropDataMap, frameIndex);
+                RenderedFrame renderedFrame = getRenderedFrame(stagePropCode, frameIndex);
                 if (renderedFrame == null) {
                     sendErrorResponse(serverSocket, receivePacket);
                 } else {
@@ -59,8 +60,10 @@ public class RequestHandlerImpl implements RequestHandler {
         respond(serverSocket, receivePacket, ERROR_CODE_BYTES);
     }
 
-    private RenderedFrame getRenderedFrame(String controller, RenderedStagePropDataMap renderedStagePropDataMap, int frameIndex) {
-        RenderedStagePropData renderedStagePropData = renderedStagePropDataMap.get(controller);
+    private RenderedFrame getRenderedFrame(String stagePropCode, int frameIndex) {
+        RenderedStagePropDataMap renderedStagePropDataMap = sequencePlayerService.getRenderedStageProps();
+        UUID stagePropUuid = sequencePlayerService.getStagePropUuid(stagePropCode);
+        RenderedStagePropData renderedStagePropData = renderedStagePropDataMap.get(stagePropUuid);
         RenderedFrame frame = null;
 
         if (renderedStagePropData != null) {

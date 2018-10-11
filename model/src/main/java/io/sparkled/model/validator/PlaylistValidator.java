@@ -5,19 +5,13 @@ import io.sparkled.model.validator.exception.EntityValidationException;
 
 public class PlaylistValidator {
 
-    private Playlist playlist;
-
-    public PlaylistValidator(Playlist playlist) {
-        this.playlist = playlist;
-    }
-
-    public void validate() {
+    public void validate(Playlist playlist) {
         if (playlist.getName() == null) {
-            throw new EntityValidationException(Errors.NO_NAME);
+            throw new EntityValidationException(Errors.NAME_MISSING);
         }
     }
 
     private static class Errors {
-        static final String NO_NAME = "Playlist name must not be empty.";
+        static final String NAME_MISSING = "Playlist name must not be empty.";
     }
 }

@@ -9,11 +9,11 @@ import io.sparkled.persistence.QueryFactory;
 
 import java.util.List;
 
-public class GetRenderedStagePropsQuery implements PersistenceQuery<RenderedStagePropDataMap> {
+public class GetRenderedStagePropsBySequenceQuery implements PersistenceQuery<RenderedStagePropDataMap> {
 
     private final Sequence sequence;
 
-    public GetRenderedStagePropsQuery(Sequence sequence) {
+    public GetRenderedStagePropsBySequenceQuery(Sequence sequence) {
         this.sequence = sequence;
     }
 
@@ -37,6 +37,6 @@ public class GetRenderedStagePropsQuery implements PersistenceQuery<RenderedStag
                 stagePropData.getData()
         );
 
-        renderedStagePropDataMap.put(stagePropData.getStagePropCode(), renderedStagePropData);
+        renderedStagePropDataMap.put(stagePropData.getStagePropUuid(), renderedStagePropData);
     }
 }

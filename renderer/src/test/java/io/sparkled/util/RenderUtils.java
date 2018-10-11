@@ -15,8 +15,7 @@ import java.util.UUID;
 
 public class RenderUtils {
 
-    private static final UUID UUID = new UUID(0, 0);
-
+    private static final UUID PROP_UUID = new UUID(0, 0);
     private static final String PROP_CODE = "TEST_PROP";
     private static final Gson gson = new Gson();
 
@@ -31,9 +30,9 @@ public class RenderUtils {
         animationData.getEffects().add(effect);
 
         Sequence sequence = new Sequence().setDurationFrames(frameCount);
-        SequenceChannel sequenceChannel = new SequenceChannel().setStagePropUuid(UUID).setChannelJson(gson.toJson(animationData));
+        SequenceChannel sequenceChannel = new SequenceChannel().setStagePropUuid(PROP_UUID).setChannelJson(gson.toJson(animationData));
 
-        StageProp stageProp = new StageProp().setCode(PROP_CODE).setUuid(UUID).setLeds(ledCount);
+        StageProp stageProp = new StageProp().setCode(PROP_CODE).setUuid(PROP_UUID).setLedCount(ledCount);
 
         RenderedStagePropDataMap renderedChannels = new Renderer(
                 sequence,
@@ -41,6 +40,6 @@ public class RenderUtils {
                 Collections.singletonList(stageProp),
                 0,
                 frameCount).render();
-        return renderedChannels.get(PROP_CODE);
+        return renderedChannels.get(PROP_UUID);
     }
 }

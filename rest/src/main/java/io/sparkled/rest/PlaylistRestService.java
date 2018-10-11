@@ -43,9 +43,8 @@ public class PlaylistRestService extends RestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPlaylist(PlaylistViewModel playlistViewModel) {
         Playlist playlist = playlistViewModelConverter.toModel(playlistViewModel);
-        playlistViewModel.setId(null);
-        int playlistId = playlistPersistenceService.createPlaylist(playlist);
-        return getJsonResponse(new IdResponse(playlistId));
+        playlist = playlistPersistenceService.createPlaylist(playlist);
+        return getJsonResponse(new IdResponse(playlist.getId()));
     }
 
     @GET
@@ -96,12 +95,8 @@ public class PlaylistRestService extends RestService {
                 .map(ps -> ps.setPlaylistId(id))
                 .collect(Collectors.toList());
 
-        Integer savedId = playlistPersistenceService.savePlaylist(playlist, playlistSequences);
-        if (savedId == null) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, "Failed to save playlist.");
-        } else {
-            return getResponse(Response.Status.OK);
-        }
+        playlistPersistenceService.savePlaylist(playlist, playlistSequences);
+        return getResponse(Response.Status.OK);
     }
 
     @DELETE

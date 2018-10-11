@@ -26,9 +26,6 @@ public class Stage {
     @Column(name = "height")
     private Integer height;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "stageId", targetEntity = StageProp.class)
-    private List<StageProp> stageProps = new ArrayList<>();
-
     public Integer getId() {
         return id;
     }
@@ -65,15 +62,6 @@ public class Stage {
         return this;
     }
 
-    public List<StageProp> getStageProps() {
-        return stageProps;
-    }
-
-    public Stage setStageProps(List<StageProp> stageProps) {
-        this.stageProps = stageProps;
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,13 +70,12 @@ public class Stage {
         return Objects.equals(id, stage.id) &&
                 Objects.equals(name, stage.name) &&
                 Objects.equals(width, stage.width) &&
-                Objects.equals(height, stage.height) &&
-                Objects.equals(stageProps, stage.stageProps);
+                Objects.equals(height, stage.height);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, width, height, stageProps);
+        return Objects.hash(id, name, width, height);
     }
 
     @Override
@@ -98,7 +85,6 @@ public class Stage {
                 ", name='" + name + '\'' +
                 ", width=" + width +
                 ", height=" + height +
-                ", stageProps=" + stageProps +
                 '}';
     }
 }
