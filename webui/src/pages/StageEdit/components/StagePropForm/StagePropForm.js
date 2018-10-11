@@ -10,7 +10,7 @@ import { deleteStageProp, selectStageProp, updateStageProp } from '../../actions
 import stagePropTypes from '../../stagePropTypes';
 
 const toNumber = value => !value ? null : Number(value);
-const minLeds = min(0);
+const minLedCount = min(0);
 const minScale = min(.25);
 const maxScale = max(20);
 const minRotation = min(-180);
@@ -48,7 +48,7 @@ class StagePropForm extends Component {
               <Field type="text" name="type" component={SingleSelectField} options={stagePropTypes} allowEmpty={false} label="Type" required={true} validate={required} onChange={this.updateStageProp}/>
 
               <div className="row">
-                <Field className="col-6" type="number" parse={toNumber} name="leds" component={InputField} label="Led Count" validate={[minLeds, required]} onChange={this.updateStageProp}/>
+                <Field className="col-6" type="number" parse={toNumber} name="ledCount" component={InputField} label="Led Count" validate={[minLedCount, required]} onChange={this.updateStageProp}/>
               </div>
 
               <div className="row">

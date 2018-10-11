@@ -24,7 +24,7 @@ public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceServic
 
     @Override
     @Transactional
-    public Integer createPlaylist(Playlist playlist) {
+    public Playlist createPlaylist(Playlist playlist) {
         return new SavePlaylistQuery(playlist).perform(queryFactory);
     }
 
@@ -60,14 +60,14 @@ public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceServic
 
     @Override
     @Transactional
-    public Integer savePlaylist(Playlist playlist, List<PlaylistSequence> playlistSequences) {
-        new SavePlaylistSequencesQuery(playlistSequences).perform(queryFactory);
-        return new SavePlaylistQuery(playlist).perform(queryFactory);
+    public void savePlaylist(Playlist playlist, List<PlaylistSequence> playlistSequences) {
+        playlist = new SavePlaylistQuery(playlist).perform(queryFactory);
+        new SavePlaylistSequencesQuery(playlist, playlistSequences).perform(queryFactory);
     }
 
     @Override
     @Transactional
     public void deletePlaylist(int playlistId) {
-        new DeletePlaylistByIdQuery(playlistId).perform(queryFactory);
+        new DeletePlaylistQuery(playlistId).perform(queryFactory);
     }
 }

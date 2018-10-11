@@ -18,9 +18,9 @@ public class SequenceChannelValidator {
         String channelJson = channel.getChannelJson();
 
         if (channel.getUuid() == null) {
-            throw new EntityValidationException(Errors.NO_UUID);
+            throw new EntityValidationException(Errors.UUID_MISSING);
         } else if (channelJson == null) {
-            throw new EntityValidationException(Errors.NO_CHANNEL_JSON);
+            throw new EntityValidationException(Errors.CHANNEL_JSON_MISSING);
         }
 
         SequenceChannelEffects effects = getEffectsFromJson(channelJson);
@@ -32,7 +32,7 @@ public class SequenceChannelValidator {
         try {
             animationData = gson.fromJson(rawAnimationData, SequenceChannelEffects.class);
         } catch (JsonSyntaxException e) {
-            throw new EntityValidationException(Errors.MALFORMED_CHANNEL_JSON, e);
+            throw new EntityValidationException(Errors.CHANNEL_JSON_MALFORMED, e);
         }
 
         return animationData;
@@ -43,7 +43,7 @@ public class SequenceChannelValidator {
 
         List<Effect> effects = channelEffects.getEffects();
         if (effects == null) {
-            throw new EntityValidationException(Errors.NO_EFFECTS);
+            throw new EntityValidationException(Errors.EFFECTS_MISSING);
         }
 
         for (Effect effect : effects) {
@@ -55,11 +55,11 @@ public class SequenceChannelValidator {
         int effectDuration = effect.getEndFrame() - effect.getStartFrame() + 1;
 
         if (effect.getType() == null) {
-            throw new EntityValidationException(String.format(Errors.EFFECT_NO_TYPE, effect.getStartFrame()));
+            throw new EntityValidationException(String.format(Errors.EFFECT_TYPE_MISSING, effect.getStartFrame()));
         }
 
         if (effect.getEasing() == null) {
-            throw new EntityValidationException(String.format(Errors.EFFECT_EASING_NO_TYPE, effect.getStartFrame()));
+            throw new EntityValidationException(String.format(Errors.EFFECT_EASING_TYPE_MISSING, effect.getStartFrame()));
         }
 
         if (effect.getStartFrame() > effect.getEndFrame()) {
@@ -71,20 +71,20 @@ public class SequenceChannelValidator {
         }
 
         if (effect.getRepetitions() <= 0) {
-            throw new EntityValidationException(String.format(Errors.EFFECT_INVALID_REPETITIONS, effect.getStartFrame()));
+            throw new EntityValidationException(String.format(Errors.EFFECT_REPETITIONS_INVALID, effect.getStartFrame()));
         }
 
         if (effect.getRepetitions() > effectDuration) {
-            throw new EntityValidationException(String.format(Errors.EFFECT_TOO_MANY_REPETITIONS, effect.getStartFrame()));
+            throw new EntityValidationException(String.format(Errors.EFFECT_REPETITIONS_TOO_MANY, effect.getStartFrame()));
         }
 
         if (effectDuration % effect.getRepetitions() > 0) {
-            throw new EntityValidationException(String.format(Errors.EFFECT_INDIVISIBLE_DURATION, effect.getStartFrame()));
+            throw new EntityValidationException(String.format(Errors.EFFECT_DURATION_INDIVISIBLE, effect.getStartFrame()));
         }
 
         List<Param> params = effect.getParams();
         if (params == null) {
-            throw new EntityValidationException(String.format(Errors.EFFECT_NO_PARAMS, effect.getStartFrame()));
+            throw new EntityValidationException(String.format(Errors.EFFECT_PARAMS_MISSING, effect.getStartFrame()));
         }
 
         for (Param param : params) {
@@ -97,24 +97,24 @@ public class SequenceChannelValidator {
 
     private void validateEffectParam(Effect effect, Param param) {
         if (param.getType() == null) {
-            throw new EntityValidationException(String.format(Errors.EFFECT_PARAM_NO_TYPE, effect.getStartFrame()));
+            throw new EntityValidationException(String.format(Errors.EFFECT_PARAM_TYPE_MISSING, effect.getStartFrame()));
         }
     }
 
     private static class Errors {
-        static final String NO_UUID = "Sequence channel has no unique identifier.";
-        static final String NO_CHANNEL_JSON = "Sequence has no animation data.";
-        static final String MALFORMED_CHANNEL_JSON = "Sequence channel data is malformed.";
-        static final String NO_EFFECTS = "Effects list must be populated for sequence effect channel.";
+        static final String UUID_MISSING = "Sequence channel has no unique identifier.";
+        static final String CHANNEL_JSON_MISSING = "Sequence has no animation data.";
+        static final String CHANNEL_JSON_MALFORMED = "Sequence channel data is malformed.";
+        static final String EFFECTS_MISSING = "Effects list must be populated for sequence effect channel.";
 
-        static final String EFFECT_NO_TYPE = "Effect type cannot be empty for effect at frame %d in channel.";
-        static final String EFFECT_EASING_NO_TYPE = "EasingFunction type cannot be empty for effect at frame %d in channel.";
+        static final String EFFECT_TYPE_MISSING = "Effect type cannot be empty for effect at frame %d in channel.";
+        static final String EFFECT_EASING_TYPE_MISSING = "EasingFunction type cannot be empty for effect at frame %d in channel.";
         static final String EFFECT_BACK_TO_FRONT = "Effect start frame cannot be after end frame for effect at frame %d in channel.";
         static final String EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d for channel.";
-        static final String EFFECT_INVALID_REPETITIONS = "Effect repetitions cannot be less than 1 for effect at frame %d in channel.";
-        static final String EFFECT_TOO_MANY_REPETITIONS = "Effect repetitions cannot be greater than the frame count at frame %d in channel.";
-        static final String EFFECT_INDIVISIBLE_DURATION = "Duration must be evenly divisible by number of repetitions for effect at frame %d in channel.";
-        static final String EFFECT_NO_PARAMS = "Effect parameters list is not populated for effect at frame %d in channel.";
-        static final String EFFECT_PARAM_NO_TYPE = "Effect parameter type cannot be empty for effect at frame %d in channel.";
+        static final String EFFECT_REPETITIONS_INVALID = "Effect repetitions cannot be less than 1 for effect at frame %d in channel.";
+        static final String EFFECT_REPETITIONS_TOO_MANY = "Effect repetitions cannot be greater than the frame count at frame %d in channel.";
+        static final String EFFECT_DURATION_INDIVISIBLE = "Duration must be evenly divisible by number of repetitions for effect at frame %d in channel.";
+        static final String EFFECT_PARAMS_MISSING = "Effect parameters list is not populated for effect at frame %d in channel.";
+        static final String EFFECT_PARAM_TYPE_MISSING = "Effect parameter type cannot be empty for effect at frame %d in channel.";
     }
 }

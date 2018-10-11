@@ -1,66 +1,30 @@
-package io.sparkled.model.entity;
+package io.sparkled.viewmodel.stage.prop;
 
-import javax.persistence.*;
+import io.sparkled.viewmodel.ViewModel;
+
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
-@Table(name = "stage_prop")
-public class StageProp {
+public class StagePropViewModel implements ViewModel {
 
-    @Id
-    @Column(name = "uuid")
     private UUID uuid;
-
-    @Basic
-    @Column(name = "stage_id")
     private Integer stageId;
-
-    @Basic
-    @Column(name = "code")
     private String code;
-
-    @Basic
-    @Column(name = "name")
     private String name;
-
-    @Basic
-    @Column(name = "type")
     private String type;
-
-    @Basic
-    @Column(name = "led_count")
     private Integer ledCount = 0;
-
-    @Basic
-    @Column(name = "position_x")
     private Integer positionX = 0;
-
-    @Basic
-    @Column(name = "position_y")
     private Integer positionY = 0;
-
-    @Basic
-    @Column(name = "scale_x")
     private float scaleX = 1;
-
-    @Basic
-    @Column(name = "scale_y")
     private float scaleY = 1;
-
-    @Basic
-    @Column(name = "rotation")
     private Integer rotation = 0;
-
-    @Basic
-    @Column(name = "display_order")
     private Integer displayOrder = 0;
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public StageProp setUuid(UUID uuid) {
+    public StagePropViewModel setUuid(UUID uuid) {
         this.uuid = uuid;
         return this;
     }
@@ -69,7 +33,7 @@ public class StageProp {
         return stageId;
     }
 
-    public StageProp setStageId(Integer stageId) {
+    public StagePropViewModel setStageId(Integer stageId) {
         this.stageId = stageId;
         return this;
     }
@@ -78,7 +42,7 @@ public class StageProp {
         return code;
     }
 
-    public StageProp setCode(String code) {
+    public StagePropViewModel setCode(String code) {
         this.code = code;
         return this;
     }
@@ -87,7 +51,7 @@ public class StageProp {
         return name;
     }
 
-    public StageProp setName(String name) {
+    public StagePropViewModel setName(String name) {
         this.name = name;
         return this;
     }
@@ -96,7 +60,7 @@ public class StageProp {
         return type;
     }
 
-    public StageProp setType(String type) {
+    public StagePropViewModel setType(String type) {
         this.type = type;
         return this;
     }
@@ -105,7 +69,7 @@ public class StageProp {
         return ledCount;
     }
 
-    public StageProp setLedCount(Integer ledCount) {
+    public StagePropViewModel setLedCount(Integer ledCount) {
         this.ledCount = ledCount;
         return this;
     }
@@ -114,7 +78,7 @@ public class StageProp {
         return positionX;
     }
 
-    public StageProp setPositionX(Integer positionX) {
+    public StagePropViewModel setPositionX(Integer positionX) {
         this.positionX = positionX;
         return this;
     }
@@ -123,7 +87,7 @@ public class StageProp {
         return positionY;
     }
 
-    public StageProp setPositionY(Integer positionY) {
+    public StagePropViewModel setPositionY(Integer positionY) {
         this.positionY = positionY;
         return this;
     }
@@ -132,7 +96,7 @@ public class StageProp {
         return scaleX;
     }
 
-    public StageProp setScaleX(float scaleX) {
+    public StagePropViewModel setScaleX(float scaleX) {
         this.scaleX = scaleX;
         return this;
     }
@@ -141,7 +105,7 @@ public class StageProp {
         return scaleY;
     }
 
-    public StageProp setScaleY(float scaleY) {
+    public StagePropViewModel setScaleY(float scaleY) {
         this.scaleY = scaleY;
         return this;
     }
@@ -150,7 +114,7 @@ public class StageProp {
         return rotation;
     }
 
-    public StageProp setRotation(Integer rotation) {
+    public StagePropViewModel setRotation(Integer rotation) {
         this.rotation = rotation;
         return this;
     }
@@ -159,7 +123,7 @@ public class StageProp {
         return displayOrder;
     }
 
-    public StageProp setDisplayOrder(Integer displayOrder) {
+    public StagePropViewModel setDisplayOrder(Integer displayOrder) {
         this.displayOrder = displayOrder;
         return this;
     }
@@ -168,19 +132,19 @@ public class StageProp {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StageProp stageProp = (StageProp) o;
-        return Float.compare(stageProp.scaleX, scaleX) == 0 &&
-                Float.compare(stageProp.scaleY, scaleY) == 0 &&
-                Objects.equals(uuid, stageProp.uuid) &&
-                Objects.equals(stageId, stageProp.stageId) &&
-                Objects.equals(code, stageProp.code) &&
-                Objects.equals(name, stageProp.name) &&
-                Objects.equals(type, stageProp.type) &&
-                Objects.equals(ledCount, stageProp.ledCount) &&
-                Objects.equals(positionX, stageProp.positionX) &&
-                Objects.equals(positionY, stageProp.positionY) &&
-                Objects.equals(rotation, stageProp.rotation) &&
-                Objects.equals(displayOrder, stageProp.displayOrder);
+        StagePropViewModel that = (StagePropViewModel) o;
+        return Float.compare(that.scaleX, scaleX) == 0 &&
+                Float.compare(that.scaleY, scaleY) == 0 &&
+                Objects.equals(uuid, that.uuid) &&
+                Objects.equals(stageId, that.stageId) &&
+                Objects.equals(code, that.code) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(ledCount, that.ledCount) &&
+                Objects.equals(positionX, that.positionX) &&
+                Objects.equals(positionY, that.positionY) &&
+                Objects.equals(rotation, that.rotation) &&
+                Objects.equals(displayOrder, that.displayOrder);
     }
 
     @Override
@@ -190,7 +154,7 @@ public class StageProp {
 
     @Override
     public String toString() {
-        return "StageProp{" +
+        return "StagePropViewModel{" +
                 "uuid=" + uuid +
                 ", stageId=" + stageId +
                 ", code='" + code + '\'' +

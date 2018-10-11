@@ -1,7 +1,6 @@
 package io.sparkled.persistence.playlist.impl.query;
 
 import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.Stage;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
 

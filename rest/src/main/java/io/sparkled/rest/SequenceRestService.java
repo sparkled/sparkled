@@ -12,6 +12,10 @@ import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel;
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverter;
 import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModel;
 import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModelConverter;
+import io.sparkled.viewmodel.stage.StageViewModel;
+import io.sparkled.viewmodel.stage.StageViewModelConverter;
+import io.sparkled.viewmodel.stage.prop.StagePropViewModel;
+import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -36,18 +40,24 @@ public class SequenceRestService extends RestService {
     private final SequenceViewModelConverter sequenceViewModelConverter;
     private final SequenceSearchViewModelConverter sequenceSearchViewModelConverter;
     private final SequenceChannelViewModelConverter sequenceChannelViewModelConverter;
+    private final StageViewModelConverter stageViewModelConverter;
+    private final StagePropViewModelConverter stagePropViewModelConverter;
 
     @Inject
     public SequenceRestService(SequencePersistenceService sequencePersistenceService,
                                StagePersistenceService stagePersistenceService,
                                SequenceViewModelConverter sequenceViewModelConverter,
                                SequenceSearchViewModelConverter sequenceSearchViewModelConverter,
-                               SequenceChannelViewModelConverter sequenceChannelViewModelConverter) {
+                               SequenceChannelViewModelConverter sequenceChannelViewModelConverter,
+                               StageViewModelConverter stageViewModelConverter,
+                               StagePropViewModelConverter stagePropViewModelConverter) {
         this.sequencePersistenceService = sequencePersistenceService;
         this.stagePersistenceService = stagePersistenceService;
         this.sequenceViewModelConverter = sequenceViewModelConverter;
         this.sequenceSearchViewModelConverter = sequenceSearchViewModelConverter;
         this.sequenceChannelViewModelConverter = sequenceChannelViewModelConverter;
+        this.stageViewModelConverter = stageViewModelConverter;
+        this.stagePropViewModelConverter = stagePropViewModelConverter;
     }
 
     @POST
@@ -99,13 +109,22 @@ public class SequenceRestService extends RestService {
     }
 
     @GET
-    @Path("/{id}/stages")
+    @Path("/{id}/stage")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSequenceStage(@PathParam("id") int sequenceId) {
-        Optional<Stage> stage = sequencePersistenceService.getStageBySequenceId(sequenceId);
+        Optional<Stage> stageOptional = sequencePersistenceService.getStageBySequenceId(sequenceId);
 
-        if (stage.isPresent()) {
-            return getJsonResponse(stage.get());
+        if (stageOptional.isPresent()) {
+            Stage stage = stageOptional.get();
+
+            StageViewModel viewModel = stageViewModelConverter.toViewModel(stage);
+            List<StagePropViewModel> stageProps = stagePersistenceService
+                    .getStagePropsByStageId(stage.getId())
+                    .stream()
+                    .map(stagePropViewModelConverter::toViewModel)
+                    .collect(Collectors.toList());
+            viewModel.setStageProps(stageProps);
+            return getJsonResponse(viewModel);
         } else {
             return getJsonResponse(Response.Status.NOT_FOUND);
         }
@@ -137,25 +156,12 @@ public class SequenceRestService extends RestService {
                 .map(sequenceChannelViewModelConverter::toModel)
                 .collect(Collectors.toList());
 
-        Integer savedId;
         if (sequence.getStatus() == SequenceStatus.PUBLISHED) {
-            Integer stageId = sequence.getStageId();
-            Optional<Stage> stageOptional = stagePersistenceService.getStageById(stageId);
-            if (!stageOptional.isPresent()) {
-                return getJsonResponse(Response.Status.NOT_FOUND);
-            }
-
-            Stage stage = stageOptional.get();
-            savedId = publishSequence(sequence, stage, sequenceChannels);
+            publishSequence(sequence, sequenceChannels);
         } else {
-            savedId = saveDraftSequence(sequence, sequenceChannels);
+            saveDraftSequence(sequence, sequenceChannels);
         }
-
-        if (savedId == null) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, "Failed to save sequence.");
-        } else {
-            return getResponse(Response.Status.OK);
-        }
+        return getResponse(Response.Status.OK);
     }
 
     @DELETE
@@ -166,14 +172,14 @@ public class SequenceRestService extends RestService {
         return getResponse(Response.Status.OK);
     }
 
-    private Integer saveDraftSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
-        return sequencePersistenceService.saveSequence(sequence, sequenceChannels);
+    private void saveDraftSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
+        sequencePersistenceService.saveSequence(sequence, sequenceChannels);
     }
 
-    private Integer publishSequence(Sequence sequence, Stage stage, List<SequenceChannel> sequenceChannels) {
-        List<StageProp> stageProps = stage.getStageProps();
+    private void publishSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
+        List<StageProp> stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId());
         RenderedStagePropDataMap renderedStageProps = new Renderer(sequence, sequenceChannels, stageProps).render();
-        return sequencePersistenceService.publishSequence(sequence, stage, sequenceChannels, renderedStageProps);
+        sequencePersistenceService.publishSequence(sequence, sequenceChannels, renderedStageProps);
     }
 
     private int saveNewSequence(Sequence sequence, byte[] songAudioData) {

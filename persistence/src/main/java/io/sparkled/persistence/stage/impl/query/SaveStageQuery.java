@@ -1,7 +1,6 @@
 package io.sparkled.persistence.stage.impl.query;
 
 import io.sparkled.model.entity.Stage;
-import io.sparkled.model.entity.StageProp;
 import io.sparkled.model.validator.StageValidator;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
@@ -9,13 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
-
-public class SaveStageQuery implements PersistenceQuery<Integer> {
+public class SaveStageQuery implements PersistenceQuery<Stage> {
 
     private static final Logger logger = LoggerFactory.getLogger(SaveStageQuery.class);
 
@@ -26,30 +20,13 @@ public class SaveStageQuery implements PersistenceQuery<Integer> {
     }
 
     @Override
-    public Integer perform(QueryFactory queryFactory) {
+    public Stage perform(QueryFactory queryFactory) {
+        new StageValidator().validate(stage);
+
         EntityManager entityManager = queryFactory.getEntityManager();
-
-        new StageValidator(stage).validate();
-
         Stage result = entityManager.merge(stage);
-        removeDeletedStageProps(queryFactory, result);
-        return result.getId();
-    }
 
-    private void removeDeletedStageProps(QueryFactory queryFactory, Stage persistedStage) {
-        List<UUID> propUuids = persistedStage.getStageProps().stream()
-                .map(StageProp::getUuid)
-                .collect(toList());
-
-        if (propUuids.isEmpty()) {
-            propUuids = Collections.singletonList(new UUID(0, 0)); // Need an item in the list to avoid an empty IN clause.
-        }
-
-        long deleted = queryFactory
-                .delete(qStageProp)
-                .where(qStageProp.stageId.eq(persistedStage.getId()).and(qStageProp.uuid.notIn(propUuids)))
-                .execute();
-
-        logger.info("Deleted {} record(s) for stage {}.", deleted, persistedStage.getId());
+        logger.info("Saved stage {} ({}).", stage.getId(), stage.getName());
+        return result;
     }
 }

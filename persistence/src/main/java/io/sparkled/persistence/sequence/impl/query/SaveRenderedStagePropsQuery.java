@@ -5,11 +5,13 @@ import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
+import io.sparkled.persistence.stage.impl.query.DeleteRenderedStagePropsQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SaveRenderedStagePropsQuery implements PersistenceQuery<Void> {
 
@@ -26,18 +28,48 @@ public class SaveRenderedStagePropsQuery implements PersistenceQuery<Void> {
     @Override
     public Void perform(QueryFactory queryFactory) {
         final EntityManager entityManager = queryFactory.getEntityManager();
-        final AtomicInteger recordsSaved = new AtomicInteger(0);
+
+        // The stage prop IDs must be set, or new records will be created instead of updating existing records.
+        Map<UUID, Integer> renderedStagePropIds = getRenderedStagePropIds(queryFactory);
 
         renderedStagePropDataMap.forEach((key, value) -> {
             RenderedStageProp renderedStageProp = new RenderedStageProp()
+                    .setId(renderedStagePropIds.get(key))
                     .setSequenceId(sequence.getId())
-                    .setStagePropCode(key)
+                    .setStagePropUuid(key)
                     .setLedCount(value.getLedCount())
                     .setData(value.getData());
             entityManager.merge(renderedStageProp);
         });
 
-        logger.info("Saved {} record(s) for sequence {}.", recordsSaved.get(), sequence.getId());
+        logger.info("Saved {} rendered stage prop(s) for sequence {}.", renderedStagePropDataMap.size(), sequence.getId());
+
+        deleteRemovedRenderedStageProps(queryFactory, sequence, renderedStagePropDataMap.keySet());
         return null;
+    }
+
+    private Map<UUID, Integer> getRenderedStagePropIds(QueryFactory queryFactory) {
+        Set<UUID> stagePropUuids = renderedStagePropDataMap.keySet();
+        return queryFactory
+                .select(qRenderedStageProp.stagePropUuid, qRenderedStageProp.id)
+                .from(qRenderedStageProp)
+                .where(qRenderedStageProp.stagePropUuid.in(stagePropUuids))
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(0, UUID.class),
+                        tuple -> tuple.get(1, Integer.class))
+                );
+    }
+
+    private void deleteRemovedRenderedStageProps(QueryFactory queryFactory, Sequence sequence, Collection<UUID> uuidsToKeep) {
+        uuidsToKeep = uuidsToKeep.isEmpty() ? noUuids : uuidsToKeep;
+        List<Integer> idsToDelete = queryFactory
+                .select(qRenderedStageProp.id)
+                .from(qRenderedStageProp)
+                .where(qRenderedStageProp.sequenceId.eq(sequence.getId()).and(qRenderedStageProp.stagePropUuid.notIn(uuidsToKeep)))
+                .fetch();
+
+        new DeleteRenderedStagePropsQuery(idsToDelete).perform(queryFactory);
     }
 }

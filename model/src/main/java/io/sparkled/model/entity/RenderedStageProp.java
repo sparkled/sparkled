@@ -1,8 +1,8 @@
 package io.sparkled.model.entity;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "rendered_stage_prop")
@@ -16,8 +16,8 @@ public class RenderedStageProp {
     @Column(name = "sequence_id")
     private Integer sequenceId;
 
-    @Column(name = "stage_prop_code")
-    private String stagePropCode;
+    @Column(name = "stage_prop_uuid")
+    private UUID stagePropUuid;
 
     @Column(name = "led_count")
     private Integer ledCount;
@@ -44,12 +44,12 @@ public class RenderedStageProp {
         return this;
     }
 
-    public String getStagePropCode() {
-        return stagePropCode;
+    public UUID getStagePropUuid() {
+        return stagePropUuid;
     }
 
-    public RenderedStageProp setStagePropCode(String stagePropCode) {
-        this.stagePropCode = stagePropCode;
+    public RenderedStageProp setStagePropUuid(UUID stagePropUuid) {
+        this.stagePropUuid = stagePropUuid;
         return this;
     }
 
@@ -78,13 +78,13 @@ public class RenderedStageProp {
         RenderedStageProp that = (RenderedStageProp) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(sequenceId, that.sequenceId) &&
-                Objects.equals(stagePropCode, that.stagePropCode) &&
+                Objects.equals(stagePropUuid, that.stagePropUuid) &&
                 Objects.equals(ledCount, that.ledCount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, sequenceId, stagePropCode, ledCount);
+        return Objects.hash(id, sequenceId, stagePropUuid, ledCount);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class RenderedStageProp {
         return "RenderedStageProp{" +
                 "id=" + id +
                 ", sequenceId=" + sequenceId +
-                ", stagePropCode='" + stagePropCode + '\'' +
+                ", stagePropUuid='" + stagePropUuid + '\'' +
                 ", ledCount=" + ledCount +
                 '}';
     }

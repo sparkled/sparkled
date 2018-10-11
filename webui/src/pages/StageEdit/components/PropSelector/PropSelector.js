@@ -38,7 +38,7 @@ class PropSelector extends Component {
       type: typeCode,
       code: `PROP_${displayOrder + 1}`,
       name: `New ${propType.name}`,
-      leds: 10,
+      ledCount: 10,
       displayOrder,
       positionX: 0,
       positionY: 0,

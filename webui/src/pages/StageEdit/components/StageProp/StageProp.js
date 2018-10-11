@@ -125,7 +125,7 @@ class StageProp extends Component {
     const { freeTransform } = this.state;
     const { paper, stageProp } = this.props;
 
-    if (stageProp.leds >= 0) {
+    if (stageProp.ledCount >= 0) {
       this.removeExcessLeds(stageProp);
       this.addMissingLeds(stageProp);
 
@@ -138,7 +138,7 @@ class StageProp extends Component {
   removeExcessLeds(stageProp) {
     const { leds } = this.state;
 
-    while (leds.length > stageProp.leds) {
+    while (leds.length > stageProp.ledCount) {
       leds.pop().remove();
     }
   }
@@ -147,7 +147,7 @@ class StageProp extends Component {
     const { leds } = this.state;
     const { paper } = this.props;
 
-    while (leds.length < stageProp.leds) {
+    while (leds.length < stageProp.ledCount) {
       const led = paper.circle(-100, -100, ledRadius).attr({ fill: '#000' });
       leds.push(led);
     }
@@ -156,8 +156,8 @@ class StageProp extends Component {
   updateLedPositions(stageProp, path, transform) {
     const { leds } = this.state;
 
-    for (let i = 0; i < stageProp.leds; i++) {
-      const { x, y } = this.getLedPosition(path, transform, i, stageProp.leds);
+    for (let i = 0; i < stageProp.ledCount; i++) {
+      const { x, y } = this.getLedPosition(path, transform, i, stageProp.ledCount);
       leds[i].attr({ cx: x, cy: y });
     }
   }

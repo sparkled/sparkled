@@ -7,20 +7,20 @@ public class PlaylistSequenceValidator {
 
     public void validate(PlaylistSequence playlistSequence) throws EntityValidationException {
         if (playlistSequence.getUuid() == null) {
-            throw new EntityValidationException(Errors.NO_UUID);
+            throw new EntityValidationException(Errors.UUID_MISSING);
         } else if (playlistSequence.getPlaylistId() == null) {
-            throw new EntityValidationException(Errors.NO_PLAYLIST_ID);
+            throw new EntityValidationException(Errors.PLAYLIST_ID_MISSING);
         } else if (playlistSequence.getSequenceId() == null) {
-            throw new EntityValidationException(Errors.NO_SEQUENCE_ID);
+            throw new EntityValidationException(Errors.SEQUENCE_ID_MISSING);
         } else if (playlistSequence.getDisplayOrder() == null) {
-            throw new EntityValidationException(Errors.NO_DISPLAY_ORDER);
+            throw new EntityValidationException(Errors.DISPLAY_ORDER_MISSING);
         }
     }
 
     private static class Errors {
-        static final String NO_UUID = "Playlist sequence has no unique identifier.";
-        static final String NO_PLAYLIST_ID = "Playlist sequence has no playlist identifier.";
-        static final String NO_SEQUENCE_ID = "Playlist sequence has no sequence identifier.";
-        static final String NO_DISPLAY_ORDER = "Playlist sequence has no display order.";
+        static final String UUID_MISSING = "Playlist sequence has no unique identifier.";
+        static final String PLAYLIST_ID_MISSING = "Playlist sequence has no playlist identifier.";
+        static final String SEQUENCE_ID_MISSING = "Playlist sequence has no sequence identifier.";
+        static final String DISPLAY_ORDER_MISSING = "Playlist sequence has no display order.";
     }
 }

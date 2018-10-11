@@ -17,7 +17,10 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.ByteArrayInputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,6 +36,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     private AudioDevice audioDevice;
     private Sequence currentSequence;
     private RenderedStagePropDataMap renderedStageProps;
+    private Map<String, UUID> stagePropUuidMap = new HashMap<>();
     private Playlist playlist;
     private AtomicInteger playlistIndex = new AtomicInteger(0);
 
@@ -86,7 +90,8 @@ public class PlaylistServiceImpl implements PlaylistService {
         logger.info("Playing sequence {}.", sequence.getId());
 
         currentSequence = sequence;
-        renderedStageProps = sequencePersistenceService.getRenderedStageProps(currentSequence);
+        renderedStageProps = sequencePersistenceService.getRenderedStagePropsBySequence(currentSequence);
+        stagePropUuidMap = sequencePersistenceService.getSequenceStagePropUuidMapBySequenceId(currentSequence.getId());
         Optional<SongAudio> audio = sequencePersistenceService.getSongAudioBySequenceId(currentSequence.getId());
 
         try {
@@ -114,6 +119,11 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public RenderedStagePropDataMap getRenderedStageProps() {
         return renderedStageProps;
+    }
+
+    @Override
+    public UUID getStagePropUuid(String stagePropCode) {
+        return stagePropUuidMap.get(stagePropCode);
     }
 
     @Override
