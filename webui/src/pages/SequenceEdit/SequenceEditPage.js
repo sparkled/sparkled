@@ -68,27 +68,27 @@ class SequenceEditPage extends Component {
   }
 
   renderNavbar() {
-    const { canUndo, canRedo, undo, redo, sequence, stage, selectedChannel } = this.props;
+    const { canUndo, canRedo, undo, redo, sequence, stage, selectedChannel, saving } = this.props;
     const loaded = sequence && stage;
 
     return (
       <Nav className="ml-auto" navbar>
-        <NavItem className={(loaded && canUndo) ? '' : 'd-none'}>
+        <NavItem className={(!saving && loaded && canUndo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => undo()}>Undo</span>
         </NavItem>
-        <NavItem className={(loaded && canRedo) ? '' : 'd-none'}>
+        <NavItem className={(!saving && loaded && canRedo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => redo()}>Redo</span>
         </NavItem>
-        <NavItem className={loaded ? '' : 'd-none'}>
+        <NavItem className={!saving && loaded ? '' : 'd-none'}>
           <span className="nav-link" onClick={this.props.showAddChannelModal}>Add Channel</span>
         </NavItem>
-        <NavItem className={(loaded && selectedChannel) ? '' : 'd-none'}>
+        <NavItem className={(!saving && loaded && selectedChannel) ? '' : 'd-none'}>
           <span className="nav-link" onClick={this.addEffect}>Add Effect</span>
         </NavItem>
-        <NavItem className={loaded ? '' : 'd-none'}>
+        <NavItem className={!saving && loaded ? '' : 'd-none'}>
           <span className="nav-link" onClick={this.saveSequence}>Save</span>
         </NavItem>
-        <NavItem className={loaded ? '' : 'd-none'}>
+        <NavItem className={!saving && loaded ? '' : 'd-none'}>
           <span className="nav-link" onClick={this.publishSequence}>Publish</span>
         </NavItem>
       </Nav>

@@ -46,17 +46,17 @@ class StageEditPage extends Component {
   }
 
   renderNavbar() {
-    const { canUndo, canRedo, undo, redo, stage } = this.props;
+    const { canUndo, canRedo, undo, redo, stage, saving } = this.props;
 
     return (
       <Nav className="ml-auto" navbar>
-        <NavItem className={(stage && canUndo) ? '' : 'd-none'}>
+        <NavItem className={(!saving && stage && canUndo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => undo()}>Undo</span>
         </NavItem>
-        <NavItem className={(stage && canRedo) ? '' : 'd-none'}>
+        <NavItem className={(!saving && stage && canRedo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => redo()}>Redo</span>
         </NavItem>
-        <NavItem className={stage ? '' : 'd-none'}>
+        <NavItem className={!saving && stage ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => this.props.saveStage(stage)}>Save</span>
         </NavItem>
       </Nav>

@@ -45,17 +45,17 @@ class PlaylistEditPage extends Component {
   }
 
   renderNavbar() {
-    const { canUndo, canRedo, undo, redo, playlist, savePlaylist } = this.props;
+    const { canUndo, canRedo, undo, redo, playlist, savePlaylist, saving } = this.props;
 
     return (
       <Nav className="ml-auto" navbar>
-        <NavItem className={(playlist && canUndo) ? '' : 'd-none'}>
+        <NavItem className={(!saving && playlist && canUndo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => undo()}>Undo</span>
         </NavItem>
-        <NavItem className={(playlist && canRedo) ? '' : 'd-none'}>
+        <NavItem className={(!saving && playlist && canRedo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => redo()}>Redo</span>
         </NavItem>
-        <NavItem className={playlist ? '' : 'd-none'}>
+        <NavItem className={!saving && playlist ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => savePlaylist(playlist)}>Save</span>
         </NavItem>
       </Nav>
