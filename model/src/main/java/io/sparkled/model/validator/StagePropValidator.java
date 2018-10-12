@@ -3,9 +3,30 @@ package io.sparkled.model.validator;
 import io.sparkled.model.entity.StageProp;
 import io.sparkled.model.validator.exception.EntityValidationException;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
+
 public class StagePropValidator {
 
-    public void validate(StageProp stageProp) {
+    public void validate(List<StageProp> stageProps) {
+        checkForDuplicates(stageProps);
+        stageProps.forEach(this::validateStageProp);
+    }
+
+    private void checkForDuplicates(List<StageProp> stageProps) {
+        List<String> stagePropCodes = stageProps.stream().map(StageProp::getCode).collect(toList());
+        Set<String> duplicateCodes = ValidatorUtils.findDuplicates(stagePropCodes);
+
+        if (!duplicateCodes.isEmpty()) {
+            String duplicateCodeList = duplicateCodes.stream().collect(Collectors.joining(", "));
+            throw new EntityValidationException(String.format(Errors.DUPLICATES_FOUND, duplicateCodeList));
+        }
+    }
+
+    private void validateStageProp(StageProp stageProp) {
         if (stageProp.getUuid() == null) {
             throw new EntityValidationException(Errors.UUID_MISSING);
         } else if (stageProp.getStageId() == null) {
@@ -34,6 +55,7 @@ public class StagePropValidator {
     }
 
     private static class Errors {
+        static final String DUPLICATES_FOUND = "Duplicate stage prop code(s) (%s) are not allowed.";
         static final String UUID_MISSING = "Stage prop has no unique identifier.";
         static final String STAGE_ID_MISSING = "Stage prop has no stage identifier.";
         static final String CODE_MISSING = "Stage prop code must not be empty.";

@@ -31,7 +31,7 @@ public class SaveStagePropsQuery implements PersistenceQuery<Void> {
     public Void perform(QueryFactory queryFactory) {
         StagePropValidator stagePropValidator = new StagePropValidator();
         stageProps.forEach(sp -> sp.setStageId(stage.getId()));
-        stageProps.forEach(stagePropValidator::validate);
+        stagePropValidator.validate(stageProps);
 
         if (uuidAlreadyInUse(queryFactory)) {
             throw new EntityValidationException("Stage prop already exists on another stage.");

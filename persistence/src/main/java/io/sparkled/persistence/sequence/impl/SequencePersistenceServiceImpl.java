@@ -1,6 +1,5 @@
 package io.sparkled.persistence.sequence.impl;
 
-import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.entity.SequenceChannel;
 import io.sparkled.model.entity.SongAudio;
@@ -23,7 +22,6 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     }
 
     @Override
-    @Transactional
     public Integer createSequence(Sequence sequence, byte[] songAudioData) {
         sequence = saveSequence(sequence, Collections.emptyList());
 
@@ -32,43 +30,36 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     }
 
     @Override
-    @Transactional
     public List<Sequence> getAllSequences() {
         return new GetAllSequencesQuery().perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public Optional<Sequence> getSequenceById(int sequenceId) {
         return new GetSequenceByIdQuery(sequenceId).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public Optional<Stage> getStageBySequenceId(int sequenceId) {
         return new GetStageBySequenceIdQuery(sequenceId).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public Optional<SongAudio> getSongAudioBySequenceId(int sequenceId) {
         return new GetSongAudioBySequenceIdQuery(sequenceId).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId) {
         return new GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID uuid) {
         return new GetSequenceChannelByUuidQuery(sequenceId, uuid).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public RenderedStagePropDataMap getRenderedStagePropsBySequence(Sequence sequence) {
         return new GetRenderedStagePropsBySequenceQuery(sequence).perform(queryFactory);
     }
@@ -79,7 +70,6 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     }
 
     @Override
-    @Transactional
     public Sequence saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
         sequence = new SaveSequenceQuery(sequence).perform(queryFactory);
         new SaveSequenceChannelsQuery(sequence, sequenceChannels).perform(queryFactory);
@@ -87,7 +77,6 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     }
 
     @Override
-    @Transactional
     public void publishSequence(Sequence sequence, List<SequenceChannel> sequenceChannels, RenderedStagePropDataMap renderedStageProps) {
         sequence = new SaveSequenceQuery(sequence).perform(queryFactory);
         new SaveSequenceChannelsQuery(sequence, sequenceChannels).perform(queryFactory);
@@ -95,7 +84,6 @@ public class SequencePersistenceServiceImpl implements SequencePersistenceServic
     }
 
     @Override
-    @Transactional
     public void deleteSequence(int sequenceId) {
         new DeleteSequencesQuery(Collections.singletonList(sequenceId)).perform(queryFactory);
     }

@@ -1,6 +1,5 @@
 package io.sparkled.persistence.playlist.impl;
 
-import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.entity.PlaylistSequence;
 import io.sparkled.model.entity.Sequence;
@@ -23,50 +22,42 @@ public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceServic
     }
 
     @Override
-    @Transactional
     public Playlist createPlaylist(Playlist playlist) {
         return new SavePlaylistQuery(playlist).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public List<Playlist> getAllPlaylists() {
         return new GetAllPlaylistsQuery().perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public Optional<Playlist> getPlaylistById(int playlistId) {
         return new GetPlaylistByIdQuery(playlistId).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public Optional<Sequence> getSequenceAtPlaylistIndex(int playlistId, int index) {
         return new GetSequenceAtPlaylistIndexQuery(playlistId, index).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public List<PlaylistSequence> getPlaylistSequencesByPlaylistId(int playlistId) {
         return new GetPlaylistSequencesByPlaylistIdQuery(playlistId).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public Optional<PlaylistSequence> getPlaylistSequenceByUuid(int sequenceId, UUID uuid) {
         return new GetPlaylistSequenceByUuidQuery(sequenceId, uuid).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public void savePlaylist(Playlist playlist, List<PlaylistSequence> playlistSequences) {
         playlist = new SavePlaylistQuery(playlist).perform(queryFactory);
         new SavePlaylistSequencesQuery(playlist, playlistSequences).perform(queryFactory);
     }
 
     @Override
-    @Transactional
     public void deletePlaylist(int playlistId) {
         new DeletePlaylistQuery(playlistId).perform(queryFactory);
     }

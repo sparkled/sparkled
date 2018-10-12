@@ -1,5 +1,6 @@
 package io.sparkled.schema;
 
+import com.google.inject.persist.Transactional;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -13,7 +14,12 @@ import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import java.sql.Connection;
 
+/**
+ * Performs an automated database schema upgrade.
+ */
 public class SchemaUpdaterImpl implements SchemaUpdater {
+
+    private static final String CHANGELOG_FILE = "db.changelog.xml";
 
     private Provider<EntityManager> entityManagerProvider;
 
@@ -22,11 +28,12 @@ public class SchemaUpdaterImpl implements SchemaUpdater {
         this.entityManagerProvider = entityManagerProvider;
     }
 
+    @Transactional
     @Override
     public void update() throws Exception {
         JdbcConnection jdbcConnection = getJdbcConnection();
         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);
-        Liquibase liquibase = new Liquibase("db.changelog.xml", new ClassLoaderResourceAccessor(), database);
+        Liquibase liquibase = new Liquibase(CHANGELOG_FILE, new ClassLoaderResourceAccessor(), database);
         liquibase.update("");
     }
 
