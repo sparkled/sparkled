@@ -1,4 +1,4 @@
-package io.sparkled.rest.json;
+package io.sparkled.model.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -1,16 +1,15 @@
 package io.sparkled.viewmodel.playlist.search;
 
 import io.sparkled.viewmodel.ViewModel;
-import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class PlaylistSearchViewModel implements ViewModel {
 
     private Integer id;
     private String name;
+    private Integer sequenceCount;
+    private Integer durationSeconds;
 
     public Integer getId() {
         return id;
@@ -30,18 +29,38 @@ public class PlaylistSearchViewModel implements ViewModel {
         return this;
     }
 
+    public Integer getSequenceCount() {
+        return sequenceCount;
+    }
+
+    public PlaylistSearchViewModel setSequenceCount(Integer sequenceCount) {
+        this.sequenceCount = sequenceCount;
+        return this;
+    }
+
+    public Integer getDurationSeconds() {
+        return durationSeconds;
+    }
+
+    public PlaylistSearchViewModel setDurationSeconds(Integer durationSeconds) {
+        this.durationSeconds = durationSeconds;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlaylistSearchViewModel that = (PlaylistSearchViewModel) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name);
+                Objects.equals(name, that.name) &&
+                Objects.equals(sequenceCount, that.sequenceCount) &&
+                Objects.equals(durationSeconds, that.durationSeconds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, sequenceCount, durationSeconds);
     }
 
     @Override
@@ -49,6 +68,8 @@ public class PlaylistSearchViewModel implements ViewModel {
         return "PlaylistSearchViewModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", sequenceCount=" + sequenceCount +
+                ", durationSeconds=" + durationSeconds +
                 '}';
     }
 }

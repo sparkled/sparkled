@@ -13,6 +13,10 @@ public class Sequence {
     private Integer id;
 
     @Basic
+    @Column(name = "song_id")
+    private Integer songId;
+
+    @Basic
     @Column(name = "stage_id")
     private Integer stageId;
 
@@ -21,20 +25,8 @@ public class Sequence {
     private String name;
 
     @Basic
-    @Column(name = "artist")
-    private String artist;
-
-    @Basic
-    @Column(name = "album")
-    private String album;
-
-    @Basic
-    @Column(name = "duration_frames")
-    private Integer durationFrames;
-
-    @Basic
     @Column(name = "frames_per_second")
-    private Integer framesPerSecond = 60;
+    private Integer framesPerSecond;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -46,6 +38,15 @@ public class Sequence {
 
     public Sequence setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public Integer getSongId() {
+        return songId;
+    }
+
+    public Sequence setSongId(Integer songId) {
+        this.songId = songId;
         return this;
     }
 
@@ -64,33 +65,6 @@ public class Sequence {
 
     public Sequence setName(String name) {
         this.name = name;
-        return this;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    public Sequence setArtist(String artist) {
-        this.artist = artist;
-        return this;
-    }
-
-    public String getAlbum() {
-        return album;
-    }
-
-    public Sequence setAlbum(String album) {
-        this.album = album;
-        return this;
-    }
-
-    public Integer getDurationFrames() {
-        return durationFrames;
-    }
-
-    public Sequence setDurationFrames(Integer durationFrames) {
-        this.durationFrames = durationFrames;
         return this;
     }
 
@@ -118,29 +92,25 @@ public class Sequence {
         if (o == null || getClass() != o.getClass()) return false;
         Sequence sequence = (Sequence) o;
         return Objects.equals(id, sequence.id) &&
+                Objects.equals(songId, sequence.songId) &&
                 Objects.equals(stageId, sequence.stageId) &&
                 Objects.equals(name, sequence.name) &&
-                Objects.equals(artist, sequence.artist) &&
-                Objects.equals(album, sequence.album) &&
-                Objects.equals(durationFrames, sequence.durationFrames) &&
                 Objects.equals(framesPerSecond, sequence.framesPerSecond) &&
                 status == sequence.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stageId, name, artist, album, durationFrames, framesPerSecond, status);
+        return Objects.hash(id, songId, stageId, name, framesPerSecond, status);
     }
 
     @Override
     public String toString() {
         return "Sequence{" +
                 "id=" + id +
+                ", songId=" + songId +
                 ", stageId=" + stageId +
                 ", name='" + name + '\'' +
-                ", artist='" + artist + '\'' +
-                ", album='" + album + '\'' +
-                ", durationFrames=" + durationFrames +
                 ", framesPerSecond=" + framesPerSecond +
                 ", status=" + status +
                 '}';

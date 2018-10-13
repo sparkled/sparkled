@@ -1,6 +1,5 @@
 package io.sparkled.util;
 
-import com.google.gson.Gson;
 import io.sparkled.model.animation.SequenceChannelEffects;
 import io.sparkled.model.animation.effect.Effect;
 import io.sparkled.model.entity.Sequence;
@@ -8,6 +7,7 @@ import io.sparkled.model.entity.SequenceChannel;
 import io.sparkled.model.entity.StageProp;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedStagePropDataMap;
+import io.sparkled.model.util.GsonProvider;
 import io.sparkled.renderer.Renderer;
 
 import java.util.Collections;
@@ -17,7 +17,6 @@ public class RenderUtils {
 
     private static final UUID PROP_UUID = new UUID(0, 0);
     private static final String PROP_CODE = "TEST_PROP";
-    private static final Gson gson = new Gson();
 
     private RenderUtils() {
     }
@@ -29,8 +28,9 @@ public class RenderUtils {
         SequenceChannelEffects animationData = new SequenceChannelEffects();
         animationData.getEffects().add(effect);
 
-        Sequence sequence = new Sequence().setDurationFrames(frameCount);
-        SequenceChannel sequenceChannel = new SequenceChannel().setStagePropUuid(PROP_UUID).setChannelJson(gson.toJson(animationData));
+        Sequence sequence = new Sequence().setFramesPerSecond(60);
+        String channelJson = GsonProvider.get().toJson(animationData);
+        SequenceChannel sequenceChannel = new SequenceChannel().setStagePropUuid(PROP_UUID).setChannelJson(channelJson);
 
         StageProp stageProp = new StageProp().setCode(PROP_CODE).setUuid(PROP_UUID).setLedCount(ledCount);
 
@@ -39,7 +39,7 @@ public class RenderUtils {
                 Collections.singletonList(sequenceChannel),
                 Collections.singletonList(stageProp),
                 0,
-                frameCount).render();
+                effect.getEndFrame()).render();
         return renderedChannels.get(PROP_UUID);
     }
 }

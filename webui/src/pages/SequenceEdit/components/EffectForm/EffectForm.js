@@ -38,7 +38,7 @@ class EffectForm extends Component {
     }
 
     if (sequence !== newProps.sequence) {
-      const max = sequence.durationFrames - 1;
+      const max = sequence.frameCount - 1;
       maxEndFrame = value => value > max ? 'End frame cannot greater than ' + max : null;
     }
   }
@@ -80,7 +80,7 @@ class EffectForm extends Component {
 
           <Field className="col-6" type="number" parse={toNumber} name="endFrame" component={InputField}
                  label="End Frame" required={true} validate={[required, minEndFrame, maxEndFrame]}
-                 min={effect.startFrame + 1} max={sequence.durationFrames - 1} onChange={this.updateEffect}/>
+                 min={effect.startFrame + 1} max={sequence.frameCount - 1} onChange={this.updateEffect}/>
         </div>
 
         <div className="row">

@@ -3,7 +3,10 @@ package io.sparkled.rest.service.sequence;
 import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.*;
 import io.sparkled.model.render.RenderedStagePropDataMap;
+import io.sparkled.model.util.SequenceUtils;
+import io.sparkled.model.validator.exception.EntityNotFoundException;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
+import io.sparkled.persistence.song.SongPersistenceService;
 import io.sparkled.persistence.stage.StagePersistenceService;
 import io.sparkled.renderer.Renderer;
 import io.sparkled.rest.response.IdResponse;
@@ -21,16 +24,17 @@ import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 class SequenceRestServiceHandler extends RestServiceHandler {
 
+    private static final String MP3_MIME_TYPE = "audio/mpeg";
+
     private final SequencePersistenceService sequencePersistenceService;
+    private final SongPersistenceService songPersistenceService;
     private final StagePersistenceService stagePersistenceService;
     private final SequenceViewModelConverter sequenceViewModelConverter;
     private final SequenceSearchViewModelConverter sequenceSearchViewModelConverter;
@@ -40,6 +44,7 @@ class SequenceRestServiceHandler extends RestServiceHandler {
 
     @Inject
     SequenceRestServiceHandler(SequencePersistenceService sequencePersistenceService,
+                               SongPersistenceService songPersistenceService,
                                StagePersistenceService stagePersistenceService,
                                SequenceViewModelConverter sequenceViewModelConverter,
                                SequenceSearchViewModelConverter sequenceSearchViewModelConverter,
@@ -47,6 +52,7 @@ class SequenceRestServiceHandler extends RestServiceHandler {
                                StageViewModelConverter stageViewModelConverter,
                                StagePropViewModelConverter stagePropViewModelConverter) {
         this.sequencePersistenceService = sequencePersistenceService;
+        this.songPersistenceService = songPersistenceService;
         this.stagePersistenceService = stagePersistenceService;
         this.sequenceViewModelConverter = sequenceViewModelConverter;
         this.sequenceSearchViewModelConverter = sequenceSearchViewModelConverter;
@@ -56,34 +62,19 @@ class SequenceRestServiceHandler extends RestServiceHandler {
     }
 
     @Transactional
-    Response createSequence(String sequenceJson, InputStream uploadedInputStream) throws IOException {
-        SequenceViewModel sequenceViewModel = gson.fromJson(sequenceJson, SequenceViewModel.class);
+    Response createSequence(SequenceViewModel sequenceViewModel) {
+        sequenceViewModel.setId(null);
+        sequenceViewModel.setStatus(SequenceStatus.NEW);
+
         Sequence sequence = sequenceViewModelConverter.toModel(sequenceViewModel);
-
-        byte[] songAudioData = loadSongData(uploadedInputStream);
-        int sequenceId = saveNewSequence(sequence, songAudioData);
-        return respondOk(new IdResponse(sequenceId));
-    }
-
-    // TODO: Use IOUtils.toByteArray() after moving to Java 9.
-    private byte[] loadSongData(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        int offset;
-        byte[] buffer = new byte[4096];
-        while (-1 != (offset = inputStream.read(buffer))) {
-            outputStream.write(buffer, 0, offset);
-        }
-
-        return outputStream.toByteArray();
+        sequence = sequencePersistenceService.createSequence(sequence);
+        return respondOk(new IdResponse(sequence.getId()));
     }
 
     Response getAllSequences() {
         List<Sequence> sequences = sequencePersistenceService.getAllSequences();
-        List<SequenceSearchViewModel> results = sequences.stream()
-                .map(sequenceSearchViewModelConverter::toViewModel)
-                .collect(Collectors.toList());
-
-        return respondOk(results);
+        List<SequenceSearchViewModel> viewModels = sequenceSearchViewModelConverter.toViewModels(sequences);
+        return respondOk(viewModels);
     }
 
     Response getSequence(int sequenceId) {
@@ -97,7 +88,7 @@ class SequenceRestServiceHandler extends RestServiceHandler {
                     .getSequenceChannelsBySequenceId(sequenceId)
                     .stream()
                     .map(sequenceChannelViewModelConverter::toViewModel)
-                    .collect(Collectors.toList());
+                    .collect(toList());
             viewModel.setChannels(channels);
 
             return respondOk(viewModel);
@@ -117,7 +108,7 @@ class SequenceRestServiceHandler extends RestServiceHandler {
                     .getStagePropsByStageId(stage.getId())
                     .stream()
                     .map(stagePropViewModelConverter::toViewModel)
-                    .collect(Collectors.toList());
+                    .collect(toList());
             viewModel.setStageProps(stageProps);
             return respondOk(viewModel);
         } else {
@@ -125,11 +116,10 @@ class SequenceRestServiceHandler extends RestServiceHandler {
         }
     }
 
-    Response getSequenceSongAudio(int id) {
-        Optional<SongAudio> songAudio = sequencePersistenceService.getSongAudioBySequenceId(id);
-
-        if (songAudio.isPresent()) {
-            return respondMedia(songAudio.get().getAudioData(), SequenceRestService.MP3_MIME_TYPE);
+    Response getSequenceSongAudio(int sequenceId) {
+        Optional<SongAudio> songAudioOptional = sequencePersistenceService.getSongAudioBySequenceId(sequenceId);
+        if (songAudioOptional.isPresent()) {
+            return respondMedia(songAudioOptional.get().getAudioData(), MP3_MIME_TYPE);
         } else {
             return respond(Response.Status.NOT_FOUND, "Song audio not found.");
         }
@@ -143,13 +133,14 @@ class SequenceRestServiceHandler extends RestServiceHandler {
         List<SequenceChannel> sequenceChannels = sequenceViewModel.getChannels()
                 .stream()
                 .map(sequenceChannelViewModelConverter::toModel)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         if (sequence.getStatus() == SequenceStatus.PUBLISHED) {
             publishSequence(sequence, sequenceChannels);
         } else {
             saveDraftSequence(sequence, sequenceChannels);
         }
+
         return respondOk();
     }
 
@@ -164,14 +155,13 @@ class SequenceRestServiceHandler extends RestServiceHandler {
     }
 
     private void publishSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
-        List<StageProp> stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId());
-        RenderedStagePropDataMap renderedStageProps = new Renderer(sequence, sequenceChannels, stageProps).render();
-        sequencePersistenceService.publishSequence(sequence, sequenceChannels, renderedStageProps);
-    }
+        Song song = songPersistenceService.getSongBySequenceId(sequence.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Song not found."));
 
-    private int saveNewSequence(Sequence sequence, byte[] songAudioData) {
-        sequence.setId(null);
-        sequence.setStatus(SequenceStatus.NEW);
-        return sequencePersistenceService.createSequence(sequence, songAudioData);
+        List<StageProp> stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId());
+        int endFrame = SequenceUtils.getFrameCount(song, sequence) - 1;
+
+        RenderedStagePropDataMap renderedStageProps = new Renderer(sequence, sequenceChannels, stageProps, 0, endFrame).render();
+        sequencePersistenceService.publishSequence(sequence, sequenceChannels, renderedStageProps);
     }
 }

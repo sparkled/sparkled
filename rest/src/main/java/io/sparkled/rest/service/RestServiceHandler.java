@@ -2,7 +2,7 @@ package io.sparkled.rest.service;
 
 import com.google.gson.Gson;
 import com.google.inject.persist.Transactional;
-import io.sparkled.rest.json.GsonProvider;
+import io.sparkled.model.util.GsonProvider;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 
 import javax.ws.rs.core.MediaType;

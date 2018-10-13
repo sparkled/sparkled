@@ -97,7 +97,7 @@ class TimelineEffect extends Component {
     const { channel, effect, sequence } = this.props;
 
     startFrame = Math.max(startFrame, 0);
-    endFrame = Math.min(endFrame, sequence.durationFrames - 1);
+    endFrame = Math.min(endFrame, sequence.frameCount - 1);
 
     if (effect.startFrame !== startFrame || effect.endFrame !== endFrame) {
       this.props.updateEffect(channel, { ...effect, startFrame, endFrame });

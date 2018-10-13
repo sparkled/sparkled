@@ -122,7 +122,7 @@ class SequenceEditPage extends Component {
         ]
       },
       startFrame: currentFrame,
-      endFrame: Math.min(currentFrame + newEffectFrames, sequence.durationFrames) - 1,
+      endFrame: Math.min(currentFrame + newEffectFrames, sequence.frameCount) - 1,
       repetitions: 1,
       reverse: false
     };

@@ -6,9 +6,12 @@
     <persistence-unit name="sparkled">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+        <class>io.sparkled.model.entity.Playlist</class>
+        <class>io.sparkled.model.entity.PlaylistSequence</class>
         <class>io.sparkled.model.entity.RenderedStageProp</class>
         <class>io.sparkled.model.entity.Sequence</class>
         <class>io.sparkled.model.entity.SequenceChannel</class>
+        <class>io.sparkled.model.entity.Song</class>
         <class>io.sparkled.model.entity.SongAudio</class>
         <class>io.sparkled.model.entity.Stage</class>
         <class>io.sparkled.model.entity.StageProp</class>

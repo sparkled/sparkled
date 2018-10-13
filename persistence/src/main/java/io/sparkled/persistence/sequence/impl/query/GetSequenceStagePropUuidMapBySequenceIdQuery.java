@@ -7,7 +7,8 @@ import io.sparkled.persistence.QueryFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toMap;
 
 public class GetSequenceStagePropUuidMapBySequenceIdQuery implements PersistenceQuery<Map<String, UUID>> {
 
@@ -27,7 +28,6 @@ public class GetSequenceStagePropUuidMapBySequenceIdQuery implements Persistence
                 .where(qSequence.id.eq(sequenceId))
                 .fetch();
 
-        return stageProps.stream()
-                .collect(Collectors.toMap(StageProp::getCode, StageProp::getUuid));
+        return stageProps.stream().collect(toMap(StageProp::getCode, StageProp::getUuid));
     }
 }

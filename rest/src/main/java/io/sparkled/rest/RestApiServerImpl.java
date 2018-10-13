@@ -78,7 +78,7 @@ public class RestApiServerImpl implements RestApiServer {
     private void addStaticResourceConfig(ServletContextHandler context) {
         URL webappLocation = getClass().getResource("/webapp/index.html");
         if (webappLocation == null) {
-            logger.warn("Failed to retrieve webapp location, the web UI was likely omitted from this build.");
+            logger.warn("Failed to retrieve webapp location, the webapp was likely omitted from this build.");
         } else {
             try {
                 URI webRootUri = URI.create(webappLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
@@ -97,7 +97,7 @@ public class RestApiServerImpl implements RestApiServer {
 
     private void addJerseyServlet(ServletContextHandler context) {
         ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, REST_PATH);
-        jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "io.sparkled.rest");
+        jerseyServlet.setInitParameter("jersey.config.server.provider.packages", getClass().getPackage().getName());
         jerseyServlet.setInitParameter("jersey.config.server.provider.classnames", MultiPartFeature.class.getName());
         jerseyServlet.setInitParameter("javax.ws.rs.Application", JerseyResourceConfig.class.getName());
         jerseyServlet.setInitOrder(0);

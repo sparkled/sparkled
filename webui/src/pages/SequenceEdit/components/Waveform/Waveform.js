@@ -18,7 +18,7 @@ class Waveform extends Component {
 
   render() {
     const { sequence, pixelsPerFrame } = this.props;
-    const width = sequence.durationFrames * pixelsPerFrame;
+    const width = sequence.frameCount * pixelsPerFrame;
 
     return (
       <div className="WaveformContainer">
@@ -33,7 +33,7 @@ class Waveform extends Component {
       const waveSurfer = new WaveSurfer(this.getWaveSurferProperties(sequence));
       waveSurfer.init();
 
-      const url = `${restConfig.ROOT_URL}/sequences/${sequence.id}/audio`;
+      const url = `${restConfig.ROOT_URL}/sequences/${sequence.id}/songAudio`;
       waveSurfer.load(url);
       waveSurfer.on('audioprocess', progress => this.selectFrame(progress / waveSurfer.getDuration()));
       waveSurfer.on('seek', this.selectFrame);
@@ -52,7 +52,7 @@ class Waveform extends Component {
 
   selectFrame(progressNormalised) {
     const { sequence, selectFrame } = this.props;
-    const frameNumber = Math.floor(sequence.durationFrames * progressNormalised);
+    const frameNumber = Math.floor(sequence.frameCount * progressNormalised);
     selectFrame(frameNumber);
   }
 }

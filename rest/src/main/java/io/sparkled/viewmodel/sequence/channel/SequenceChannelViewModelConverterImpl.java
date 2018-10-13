@@ -1,9 +1,9 @@
 package io.sparkled.viewmodel.sequence.channel;
 
-import com.google.gson.Gson;
 import io.sparkled.model.animation.SequenceChannelEffects;
 import io.sparkled.model.animation.effect.Effect;
 import io.sparkled.model.entity.SequenceChannel;
+import io.sparkled.model.util.GsonProvider;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
 
 import javax.inject.Inject;
@@ -13,7 +13,6 @@ import java.util.List;
 public class SequenceChannelViewModelConverterImpl extends SequenceChannelViewModelConverter {
 
     private SequencePersistenceService sequencePersistenceService;
-    private Gson gson = new Gson();
 
     @Inject
     public SequenceChannelViewModelConverterImpl(SequencePersistenceService sequencePersistenceService) {
@@ -22,7 +21,7 @@ public class SequenceChannelViewModelConverterImpl extends SequenceChannelViewMo
 
     @Override
     public SequenceChannelViewModel toViewModel(SequenceChannel model) {
-        SequenceChannelEffects sequenceChannelEffects = gson.fromJson(model.getChannelJson(), SequenceChannelEffects.class);
+        SequenceChannelEffects sequenceChannelEffects = GsonProvider.get().fromJson(model.getChannelJson(), SequenceChannelEffects.class);
         List<Effect> effects = sequenceChannelEffects == null ? Collections.emptyList() : sequenceChannelEffects.getEffects();
 
         return new SequenceChannelViewModel()
@@ -39,7 +38,7 @@ public class SequenceChannelViewModelConverterImpl extends SequenceChannelViewMo
         SequenceChannel model = sequencePersistenceService.getSequenceChannelByUuid(viewModel.getSequenceId(), viewModel.getUuid())
                 .orElseGet(SequenceChannel::new);
 
-        String channelJson = gson.toJson(new SequenceChannelEffects().setEffects(viewModel.getEffects()));
+        String channelJson = GsonProvider.get().toJson(new SequenceChannelEffects().setEffects(viewModel.getEffects()));
         return model
                 .setUuid(viewModel.getUuid())
                 .setSequenceId(viewModel.getSequenceId())

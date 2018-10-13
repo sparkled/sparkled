@@ -1,7 +1,6 @@
 package io.sparkled.model.entity;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
@@ -9,20 +8,19 @@ import java.util.Objects;
 public class SongAudio {
 
     @Id
-    @Column(name = "sequence_id")
-    private Integer sequenceId;
+    @Column(name = "song_id")
+    private Integer songId;
 
     @Lob
     @Column(name = "audio_data")
     private byte[] audioData;
 
-
-    public Integer getSequenceId() {
-        return sequenceId;
+    public Integer getSongId() {
+        return songId;
     }
 
-    public SongAudio setSequenceId(Integer sequenceId) {
-        this.sequenceId = sequenceId;
+    public SongAudio setSongId(Integer songId) {
+        this.songId = songId;
         return this;
     }
 
@@ -40,20 +38,18 @@ public class SongAudio {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SongAudio audio = (SongAudio) o;
-        return Objects.equals(sequenceId, audio.sequenceId) &&
-                Arrays.equals(audioData, audio.audioData);
+        return Objects.equals(songId, audio.songId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sequenceId, audioData);
+        return Objects.hash(songId);
     }
 
     @Override
     public String toString() {
         return "SongAudio{" +
-                "sequenceId=" + sequenceId +
-                ", audioData=" + Arrays.toString(audioData) +
+                "songId=" + songId +
                 '}';
     }
 }

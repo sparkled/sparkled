@@ -1,12 +1,13 @@
 import React from 'react';
 import './TimeIndicator.css';
+import { getFormattedDuration } from '../../../../utils/dateUtils';
 
 
 const TimeIndicator = ({ sequence, pixelsPerFrame }) => {
-  const { durationFrames, framesPerSecond } = sequence;
-  const width = durationFrames * pixelsPerFrame;
+  const { frameCount, framesPerSecond } = sequence;
+  const width = frameCount * pixelsPerFrame;
 
-  const seconds = renderSeconds(durationFrames, framesPerSecond, pixelsPerFrame);
+  const seconds = renderSeconds(frameCount, framesPerSecond, pixelsPerFrame);
   return (
     <svg className="time-indicator" style={{ width }}>
       <pattern id="frame-pattern" width={pixelsPerFrame} height="10" patternUnits="userSpaceOnUse">
@@ -37,14 +38,13 @@ const TimeIndicator = ({ sequence, pixelsPerFrame }) => {
   );
 };
 
-function renderSeconds(durationFrames, framesPerSecond, pixelsPerFrame) {
+function renderSeconds(frameCount, framesPerSecond, pixelsPerFrame) {
   const seconds = [];
-  for (let i = 0; i < Math.ceil(durationFrames / framesPerSecond); i++) {
-    // 1970-01-01T00:01:23.000Z
-    const hhss = new Date(i * 1000).toISOString().substr(14, 5);
+  for (let i = 0; i < Math.ceil(frameCount / framesPerSecond); i++) {
 
     const left = i * framesPerSecond * pixelsPerFrame;
-    seconds.push(<text key={i} x={left} y={20}>{hhss}</text>);
+    const secondText = getFormattedDuration(i * 1000);
+    seconds.push(<text key={i} x={left} y={20}>{secondText}</text>);
   }
 
   return seconds;
