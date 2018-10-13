@@ -41,7 +41,7 @@ public class PlaylistRestServiceHandler extends RestServiceHandler {
     Response createPlaylist(PlaylistViewModel playlistViewModel) {
         Playlist playlist = playlistViewModelConverter.toModel(playlistViewModel);
         playlist = playlistPersistenceService.createPlaylist(playlist);
-        return getJsonResponse(new IdResponse(playlist.getId()));
+        return respondOk(new IdResponse(playlist.getId()));
     }
 
     Response getAllPlaylists() {
@@ -50,7 +50,7 @@ public class PlaylistRestServiceHandler extends RestServiceHandler {
                 .map(playlistSearchViewModelConverter::toViewModel)
                 .collect(Collectors.toList());
 
-        return getJsonResponse(results);
+        return respondOk(results);
     }
 
     Response getPlaylist(int playlistId) {
@@ -67,10 +67,10 @@ public class PlaylistRestServiceHandler extends RestServiceHandler {
                     .collect(Collectors.toList());
             viewModel.setSequences(playlistSequences);
 
-            return getJsonResponse(viewModel);
+            return respondOk(viewModel);
         }
 
-        return getResponse(Response.Status.NOT_FOUND);
+        return respond(Response.Status.NOT_FOUND, "Playlist not found.");
     }
 
     @Transactional
@@ -85,12 +85,12 @@ public class PlaylistRestServiceHandler extends RestServiceHandler {
                 .collect(Collectors.toList());
 
         playlistPersistenceService.savePlaylist(playlist, playlistSequences);
-        return getResponse(Response.Status.OK);
+        return respondOk();
     }
 
     @Transactional
     Response deletePlaylist(int id) {
         playlistPersistenceService.deletePlaylist(id);
-        return getResponse(Response.Status.OK);
+        return respondOk();
     }
 }

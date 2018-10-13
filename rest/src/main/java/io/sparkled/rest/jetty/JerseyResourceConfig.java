@@ -1,4 +1,4 @@
-package io.sparkled;
+package io.sparkled.rest.jetty;
 
 import com.google.inject.Injector;
 import org.glassfish.hk2.api.ServiceLocator;
@@ -18,7 +18,7 @@ public class JerseyResourceConfig extends ResourceConfig {
     private static Logger logger = LoggerFactory.getLogger(JerseyResourceConfig.class);
     private static Injector injector;
 
-    static void setInjector(Injector injector) {
+    public static void setInjector(Injector injector) {
         JerseyResourceConfig.injector = injector;
     }
 

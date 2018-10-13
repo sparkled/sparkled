@@ -1,4 +1,4 @@
-package io.sparkled.rest;
+package io.sparkled.rest.jetty;
 
 import io.sparkled.model.validator.exception.EntityValidationException;
 import io.sparkled.viewmodel.exception.ViewModelConversionException;

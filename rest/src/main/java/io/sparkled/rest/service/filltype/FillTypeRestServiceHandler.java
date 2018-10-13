@@ -8,6 +8,6 @@ import javax.ws.rs.core.Response;
 public class FillTypeRestServiceHandler extends RestServiceHandler {
 
     public Response get() {
-        return getJsonResponse(FillTypes.get());
+        return respondOk(FillTypes.get());
     }
 }
