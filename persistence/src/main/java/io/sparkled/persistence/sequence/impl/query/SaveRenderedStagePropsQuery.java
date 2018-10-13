@@ -3,6 +3,7 @@ package io.sparkled.persistence.sequence.impl.query;
 import io.sparkled.model.entity.RenderedStageProp;
 import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.render.RenderedStagePropDataMap;
+import io.sparkled.model.util.TupleUtils;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;
 import io.sparkled.persistence.stage.impl.query.DeleteRenderedStagePropsQuery;
@@ -11,7 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toMap;
 
 public class SaveRenderedStagePropsQuery implements PersistenceQuery<Void> {
 
@@ -56,9 +58,9 @@ public class SaveRenderedStagePropsQuery implements PersistenceQuery<Void> {
                 .where(qRenderedStageProp.stagePropUuid.in(stagePropUuids))
                 .fetch()
                 .stream()
-                .collect(Collectors.toMap(
+                .collect(toMap(
                         tuple -> tuple.get(0, UUID.class),
-                        tuple -> tuple.get(1, Integer.class))
+                        tuple -> TupleUtils.getInt(tuple, 1))
                 );
     }
 

@@ -36,12 +36,12 @@ public class StagePersistenceServiceImpl implements StagePersistenceService {
     }
 
     @Override
-    public List<StageProp> getStagePropsByStageId(Integer stageId) {
+    public List<StageProp> getStagePropsByStageId(int stageId) {
         return new GetStagePropsByStageIdQuery(stageId).perform(queryFactory);
     }
 
     @Override
-    public Optional<StageProp> getStagePropByUuid(Integer stageId, UUID uuid) {
+    public Optional<StageProp> getStagePropByUuid(int stageId, UUID uuid) {
         return new GetStagePropByUuidQuery(stageId, uuid).perform(queryFactory);
     }
 

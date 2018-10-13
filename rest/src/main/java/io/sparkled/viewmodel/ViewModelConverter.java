@@ -9,7 +9,7 @@ package io.sparkled.viewmodel;
 public interface ViewModelConverter<VM extends ViewModel, M> {
 
     /**
-     * @param viewModel The view model class to be converted
+     * @param viewModel The view model to be converted
      * @return The converted model.
      */
     M toModel(VM viewModel);

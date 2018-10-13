@@ -1,29 +1,28 @@
 package io.sparkled.renderer.util;
 
-import com.google.gson.Gson;
 import io.sparkled.model.animation.ChannelPropPair;
 import io.sparkled.model.animation.SequenceChannelEffects;
 import io.sparkled.model.entity.SequenceChannel;
 import io.sparkled.model.entity.StageProp;
+import io.sparkled.model.util.GsonProvider;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Pairs up sequence channels with their associated stage prop.
  */
-public class ChannelPropPairUtil {
+public class ChannelPropPairUtils {
 
-    private static final Gson gson = new Gson();
-
-    private ChannelPropPairUtil() {
+    private ChannelPropPairUtils() {
     }
 
     public static List<ChannelPropPair> makePairs(List<SequenceChannel> sequenceChannels, List<StageProp> stageProps) {
         return sequenceChannels.stream()
                 .map(sc -> getPair(sc, stageProps))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private static ChannelPropPair getPair(SequenceChannel sequenceChannel, List<StageProp> stageProps) {
@@ -31,7 +30,7 @@ public class ChannelPropPairUtil {
     }
 
     private static SequenceChannelEffects convertChannelData(SequenceChannel sequenceChannel) {
-        return gson.fromJson(sequenceChannel.getChannelJson(), SequenceChannelEffects.class);
+        return GsonProvider.get().fromJson(sequenceChannel.getChannelJson(), SequenceChannelEffects.class);
     }
 
     private static StageProp findStagePropByUuid(List<StageProp> stageProps, UUID uuid) {

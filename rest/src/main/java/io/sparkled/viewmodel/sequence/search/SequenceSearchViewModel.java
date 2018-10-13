@@ -8,10 +8,10 @@ import java.util.Objects;
 public class SequenceSearchViewModel implements ViewModel {
     private Integer id;
     private String name;
-    private String artist;
-    private String album;
-    private Integer durationFrames;
+    private String songName;
+    private String stageName;
     private Integer framesPerSecond;
+    private Integer durationSeconds;
     private SequenceStatus status;
 
     public Integer getId() {
@@ -32,30 +32,21 @@ public class SequenceSearchViewModel implements ViewModel {
         return this;
     }
 
-    public String getArtist() {
-        return artist;
+    public String getSongName() {
+        return songName;
     }
 
-    public SequenceSearchViewModel setArtist(String artist) {
-        this.artist = artist;
+    public SequenceSearchViewModel setSongName(String songName) {
+        this.songName = songName;
         return this;
     }
 
-    public String getAlbum() {
-        return album;
+    public String getStageName() {
+        return stageName;
     }
 
-    public SequenceSearchViewModel setAlbum(String album) {
-        this.album = album;
-        return this;
-    }
-
-    public Integer getDurationFrames() {
-        return durationFrames;
-    }
-
-    public SequenceSearchViewModel setDurationFrames(Integer durationFrames) {
-        this.durationFrames = durationFrames;
+    public SequenceSearchViewModel setStageName(String stageName) {
+        this.stageName = stageName;
         return this;
     }
 
@@ -65,6 +56,15 @@ public class SequenceSearchViewModel implements ViewModel {
 
     public SequenceSearchViewModel setFramesPerSecond(Integer framesPerSecond) {
         this.framesPerSecond = framesPerSecond;
+        return this;
+    }
+
+    public Integer getDurationSeconds() {
+        return durationSeconds;
+    }
+
+    public SequenceSearchViewModel setDurationSeconds(Integer durationSeconds) {
+        this.durationSeconds = durationSeconds;
         return this;
     }
 
@@ -84,16 +84,16 @@ public class SequenceSearchViewModel implements ViewModel {
         SequenceSearchViewModel that = (SequenceSearchViewModel) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(artist, that.artist) &&
-                Objects.equals(album, that.album) &&
-                Objects.equals(durationFrames, that.durationFrames) &&
+                Objects.equals(songName, that.songName) &&
+                Objects.equals(stageName, that.stageName) &&
                 Objects.equals(framesPerSecond, that.framesPerSecond) &&
+                Objects.equals(durationSeconds, that.durationSeconds) &&
                 status == that.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, artist, album, durationFrames, framesPerSecond, status);
+        return Objects.hash(id, name, songName, stageName, framesPerSecond, durationSeconds, status);
     }
 
     @Override
@@ -101,10 +101,10 @@ public class SequenceSearchViewModel implements ViewModel {
         return "SequenceSearchViewModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", artist='" + artist + '\'' +
-                ", album='" + album + '\'' +
-                ", durationFrames=" + durationFrames +
+                ", songName='" + songName + '\'' +
+                ", stageName='" + stageName + '\'' +
                 ", framesPerSecond=" + framesPerSecond +
+                ", durationSeconds=" + durationSeconds +
                 ", status=" + status +
                 '}';
     }

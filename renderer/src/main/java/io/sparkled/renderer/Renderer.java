@@ -11,7 +11,7 @@ import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.renderer.effect.EffectRenderer;
-import io.sparkled.renderer.util.ChannelPropPairUtil;
+import io.sparkled.renderer.util.ChannelPropPairUtils;
 import io.sparkled.renderer.util.EffectTypeRenderers;
 
 import java.util.List;
@@ -22,17 +22,13 @@ public class Renderer {
     private final Sequence sequence;
     private final List<ChannelPropPair> channelPropPairs;
     private final int startFrame;
-    private final int durationFrames;
+    private final int endFrame;
 
-    public Renderer(Sequence sequence, List<SequenceChannel> sequenceChannels, List<StageProp> stageProps) {
-        this(sequence, sequenceChannels, stageProps, 0, sequence.getDurationFrames());
-    }
-
-    public Renderer(Sequence sequence, List<SequenceChannel> sequenceChannels, List<StageProp> stageProps, int startFrame, int durationFrames) {
+    public Renderer(Sequence sequence, List<SequenceChannel> sequenceChannels, List<StageProp> stageProps, int startFrame, int endFrame) {
         this.sequence = sequence;
-        this.channelPropPairs = ChannelPropPairUtil.makePairs(sequenceChannels, stageProps);
+        this.channelPropPairs = ChannelPropPairUtils.makePairs(sequenceChannels, stageProps);
         this.startFrame = startFrame;
-        this.durationFrames = durationFrames;
+        this.endFrame = endFrame;
     }
 
     public RenderedStagePropDataMap render() {
@@ -49,8 +45,6 @@ public class Renderer {
 
     private RenderedStagePropData renderChannel(ChannelPropPair channelPropPair, RenderedStagePropData renderedStagePropData) {
         if (renderedStagePropData == null) {
-            final int endFrame = Math.min(sequence.getDurationFrames() - 1, startFrame + durationFrames - 1);
-
             int frameCount = endFrame - startFrame + 1;
             int leds = channelPropPair.getStageProp().getLedCount();
             byte[] data = new byte[frameCount * leds * Led.BYTES_PER_LED];
@@ -68,7 +62,7 @@ public class Renderer {
         EffectRenderer renderer = EffectTypeRenderers.get(effectTypeCode);
 
         int startFrame = Math.max(this.startFrame, effect.getStartFrame());
-        int endFrame = Math.min(this.startFrame + (this.durationFrames - 1), effect.getEndFrame());
+        int endFrame = Math.min(this.endFrame, effect.getEndFrame());
 
         for (int frameNumber = startFrame; frameNumber <= endFrame; frameNumber++) {
             RenderedFrame frame = renderedStagePropData.getFrames().get(frameNumber - this.startFrame);

@@ -7,7 +7,7 @@ import io.sparkled.renderer.util.ParamUtils;
 
 public class ConstantEasing implements EasingFunction {
     @Override
-    public float getProgress(Easing easing, float currentFrame, float durationFrames) {
+    public float getProgress(Easing easing, float currentFrame, float frameCount) {
         return ParamUtils.getDecimalValue(easing, ParamName.PERCENT) / 100f;
     }
 }

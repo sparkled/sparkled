@@ -1,18 +1,16 @@
 package io.sparkled.model.validator;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import io.sparkled.model.animation.SequenceChannelEffects;
 import io.sparkled.model.animation.effect.Effect;
 import io.sparkled.model.animation.param.Param;
 import io.sparkled.model.entity.SequenceChannel;
+import io.sparkled.model.util.GsonProvider;
 import io.sparkled.model.validator.exception.EntityValidationException;
 
 import java.util.List;
 
 public class SequenceChannelValidator {
-
-    private static final Gson gson = new Gson();
 
     public void validate(SequenceChannel channel) throws EntityValidationException {
         String channelJson = channel.getChannelJson();
@@ -30,7 +28,7 @@ public class SequenceChannelValidator {
     private SequenceChannelEffects getEffectsFromJson(String rawAnimationData) {
         SequenceChannelEffects animationData;
         try {
-            animationData = gson.fromJson(rawAnimationData, SequenceChannelEffects.class);
+            animationData = GsonProvider.get().fromJson(rawAnimationData, SequenceChannelEffects.class);
         } catch (JsonSyntaxException e) {
             throw new EntityValidationException(Errors.CHANNEL_JSON_MALFORMED, e);
         }

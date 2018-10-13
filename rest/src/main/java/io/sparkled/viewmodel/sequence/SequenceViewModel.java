@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class SequenceViewModel implements ViewModel {
+
     private Integer id;
+    private Integer songId;
     private Integer stageId;
     private String name;
-    private String artist;
-    private String album;
-    private Integer durationFrames;
-    private Integer framesPerSecond = 60;
+    private Integer framesPerSecond;
+    private Integer frameCount;
     private SequenceStatus status;
     private List<SequenceChannelViewModel> channels = new ArrayList<>();
 
@@ -25,6 +25,15 @@ public class SequenceViewModel implements ViewModel {
 
     public SequenceViewModel setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public Integer getSongId() {
+        return songId;
+    }
+
+    public SequenceViewModel setSongId(Integer songId) {
+        this.songId = songId;
         return this;
     }
 
@@ -46,39 +55,21 @@ public class SequenceViewModel implements ViewModel {
         return this;
     }
 
-    public String getArtist() {
-        return artist;
-    }
-
-    public SequenceViewModel setArtist(String artist) {
-        this.artist = artist;
-        return this;
-    }
-
-    public String getAlbum() {
-        return album;
-    }
-
-    public SequenceViewModel setAlbum(String album) {
-        this.album = album;
-        return this;
-    }
-
-    public Integer getDurationFrames() {
-        return durationFrames;
-    }
-
-    public SequenceViewModel setDurationFrames(Integer durationFrames) {
-        this.durationFrames = durationFrames;
-        return this;
-    }
-
     public Integer getFramesPerSecond() {
         return framesPerSecond;
     }
 
     public SequenceViewModel setFramesPerSecond(Integer framesPerSecond) {
         this.framesPerSecond = framesPerSecond;
+        return this;
+    }
+
+    public Integer getFrameCount() {
+        return frameCount;
+    }
+
+    public SequenceViewModel setFrameCount(Integer frameCount) {
+        this.frameCount = frameCount;
         return this;
     }
 
@@ -106,31 +97,29 @@ public class SequenceViewModel implements ViewModel {
         if (o == null || getClass() != o.getClass()) return false;
         SequenceViewModel that = (SequenceViewModel) o;
         return Objects.equals(id, that.id) &&
+                Objects.equals(songId, that.songId) &&
                 Objects.equals(stageId, that.stageId) &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(artist, that.artist) &&
-                Objects.equals(album, that.album) &&
-                Objects.equals(durationFrames, that.durationFrames) &&
                 Objects.equals(framesPerSecond, that.framesPerSecond) &&
+                Objects.equals(frameCount, that.frameCount) &&
                 status == that.status &&
                 Objects.equals(channels, that.channels);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stageId, name, artist, album, durationFrames, framesPerSecond, status, channels);
+        return Objects.hash(id, songId, stageId, name, framesPerSecond, frameCount, status, channels);
     }
 
     @Override
     public String toString() {
-        return "SequenceViewModel{" +
+        return "SongViewModel{" +
                 "id=" + id +
+                ", songId=" + songId +
                 ", stageId=" + stageId +
                 ", name='" + name + '\'' +
-                ", artist='" + artist + '\'' +
-                ", album='" + album + '\'' +
-                ", durationFrames=" + durationFrames +
                 ", framesPerSecond=" + framesPerSecond +
+                ", frameCount=" + frameCount +
                 ", status=" + status +
                 ", channels=" + channels +
                 '}';

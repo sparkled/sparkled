@@ -7,6 +7,7 @@ import { setCurrentPage } from '../actions';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { fetchSequences, showAddModal } from './actions';
+import { fetchSongs } from '../SongList/actions';
 import { fetchStages } from '../StageList/actions';
 import AddSequenceModal from './components/AddSequenceModal';
 import DeleteSequenceModal from './components/DeleteSequenceModal';
@@ -17,8 +18,9 @@ class SequenceListPage extends Component {
   state = { searchQuery: '' };
 
   componentDidMount() {
-    this.props.setCurrentPage({ pageTitle: 'Sequences', pageClass: 'sequence-list-page' });
+    this.props.setCurrentPage({ pageTitle: 'Sequences', pageClass: 'SequenceListPage' });
     this.props.fetchSequences();
+    this.props.fetchSongs();
     this.props.fetchStages();
   }
 
@@ -47,7 +49,7 @@ class SequenceListPage extends Component {
           <div className="col-lg-12">{this.renderContent()}</div>
         </div>
 
-        <AddSequenceModal stages={this.props.stages}/>
+        <AddSequenceModal songs={this.props.songs} stages={this.props.stages}/>
         <DeleteSequenceModal/>
       </div>
     );
@@ -56,7 +58,7 @@ class SequenceListPage extends Component {
   }
 
   renderNavbar() {
-    const canAdd = this.props.sequences && this.props.stages;
+    const canAdd = this.props.sequences && this.props.songs && this.props.stages;
     return (
       <Nav className="ml-auto" navbar>
         <NavItem className={canAdd ? '' : 'd-none'}>
@@ -67,12 +69,14 @@ class SequenceListPage extends Component {
   }
 
   renderContent() {
-    const { fetching, fetchingStages, fetchError, fetchStagesError } = this.props;
+    const { fetching, fetchingSongs, fetchingStages, fetchError, fetchSongsError, fetchStagesError } = this.props;
 
-    if (fetching || fetchingStages) {
+    if (fetching || fetchingSongs || fetchingStages) {
       return this.renderLoading();
     } else if (fetchError) {
       return this.renderError(`Failed to load sequences: ${fetchError}`);
+    } else if (fetchSongsError) {
+      return this.renderError(`Failed to load songs: ${fetchSongsError}`);
     } else if (fetchStagesError) {
       return this.renderError(`Failed to load stages: ${fetchStagesError}`);
     } else {
@@ -130,7 +134,7 @@ class SequenceListPage extends Component {
   }
 }
 
-function mapStateToProps({ page: { sequenceList, stageList } }) {
+function mapStateToProps({ page: { sequenceList, songList, stageList } }) {
   return {
     sequences: sequenceList.sequences,
     fetching: sequenceList.fetching,
@@ -138,6 +142,9 @@ function mapStateToProps({ page: { sequenceList, stageList } }) {
     stages: stageList.stages,
     fetchingStages: stageList.fetching,
     fetchStagesError: stageList.fetchError,
+    songs: songList.songs,
+    fetchingSongs: songList.fetching,
+    fetchSongsError: songList.fetchError,
     adding: sequenceList.adding,
     addError: sequenceList.addError,
     deleting: sequenceList.deleting,
@@ -145,4 +152,4 @@ function mapStateToProps({ page: { sequenceList, stageList } }) {
   };
 }
 
-export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchSequences, fetchStages })(SequenceListPage);
+export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchSequences, fetchSongs, fetchStages })(SequenceListPage);

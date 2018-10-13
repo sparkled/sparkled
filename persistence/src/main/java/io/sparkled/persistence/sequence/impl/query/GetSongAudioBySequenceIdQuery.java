@@ -17,8 +17,10 @@ public class GetSongAudioBySequenceIdQuery implements PersistenceQuery<Optional<
     @Override
     public Optional<SongAudio> perform(QueryFactory queryFactory) {
         SongAudio songAudio = queryFactory
-                .selectFrom(qSongAudio)
-                .where(qSongAudio.sequenceId.eq(sequenceId))
+                .select(qSongAudio)
+                .from(qSequence)
+                .innerJoin(qSongAudio).on(qSequence.songId.eq(qSongAudio.songId))
+                .where(qSequence.id.eq(sequenceId))
                 .fetchFirst();
 
         return Optional.ofNullable(songAudio);

@@ -2,6 +2,7 @@ package io.sparkled.persistence.playlist.impl;
 
 import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.entity.PlaylistSequence;
+import io.sparkled.model.entity.PlaylistSummary;
 import io.sparkled.model.entity.Sequence;
 import io.sparkled.persistence.QueryFactory;
 import io.sparkled.persistence.playlist.PlaylistPersistenceService;
@@ -9,6 +10,7 @@ import io.sparkled.persistence.playlist.impl.query.*;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +31,11 @@ public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceServic
     @Override
     public List<Playlist> getAllPlaylists() {
         return new GetAllPlaylistsQuery().perform(queryFactory);
+    }
+
+    @Override
+    public Map<Integer, PlaylistSummary> getPlaylistSummaries() {
+        return new GetPlaylistSummariesQuery().perform(queryFactory);
     }
 
     @Override

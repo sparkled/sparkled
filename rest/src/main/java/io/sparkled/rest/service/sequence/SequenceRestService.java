@@ -1,20 +1,14 @@
 package io.sparkled.rest.service.sequence;
 
 import io.sparkled.viewmodel.sequence.SequenceViewModel;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
 
 @Path("/sequences")
 public class SequenceRestService {
-
-    static final String MP3_MIME_TYPE = "audio/mpeg";
 
     private final SequenceRestServiceHandler handler;
 
@@ -24,12 +18,10 @@ public class SequenceRestService {
     }
 
     @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createSequence(@FormDataParam("sequence") String sequenceJson,
-                                   @FormDataParam("mp3") InputStream uploadedInputStream,
-                                   @FormDataParam("mp3") FormDataContentDisposition fileDetail) throws IOException {
-        return handler.createSequence(sequenceJson, uploadedInputStream);
+    public Response createSequence(SequenceViewModel sequenceViewModel) {
+        return handler.createSequence(sequenceViewModel);
     }
 
     @GET
@@ -53,10 +45,10 @@ public class SequenceRestService {
     }
 
     @GET
-    @Path("/{id}/audio")
-    @Produces(MP3_MIME_TYPE)
-    public Response getSequenceSongAudio(@PathParam("id") int id) {
-        return handler.getSequenceSongAudio(id);
+    @Path("/{id}/songAudio")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSequenceSongAudio(@PathParam("id") int sequenceId) {
+        return handler.getSequenceSongAudio(sequenceId);
     }
 
     @PUT

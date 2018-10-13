@@ -37,7 +37,7 @@ class StageListPage extends Component {
         <div className="row">
           <div className="col-lg-12 input-group input-group-lg my-4">
             <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
-                   onChange={e => this.setState({ searchQuery: e.target.value })}/>
+                   onChange={(e, newValue) => this.setState({ searchQuery: newValue })}/>
           </div>
         </div>
 

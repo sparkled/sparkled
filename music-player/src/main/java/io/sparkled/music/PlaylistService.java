@@ -2,11 +2,10 @@ package io.sparkled.music;
 
 import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.entity.Sequence;
+import io.sparkled.model.entity.Song;
 import io.sparkled.model.render.RenderedStagePropDataMap;
-import javazoom.jl.player.advanced.PlaybackEvent;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public interface PlaylistService {
 
@@ -14,6 +13,11 @@ public interface PlaylistService {
      * Plays the provided playlist and provides the associated sequence data for synchronised retrieval.
      */
     void play(Playlist playlist);
+
+    /**
+     * @return The song related to the sequence that is currently playing, or null if no sequence is playing.
+     */
+    Song getCurrentSong();
 
     /**
      * @return The sequence that is currently playing, or null if no sequence is playing.

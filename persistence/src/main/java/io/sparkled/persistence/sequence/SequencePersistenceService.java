@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface SequencePersistenceService {
 
-    Integer createSequence(Sequence sequence, byte[] songAudioData);
+    Sequence createSequence(Sequence sequence);
 
     List<Sequence> getAllSequences();
 
@@ -24,11 +24,11 @@ public interface SequencePersistenceService {
 
     Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID uuid);
 
-    RenderedStagePropDataMap getRenderedStagePropsBySequence(Sequence sequence);
+    RenderedStagePropDataMap getRenderedStagePropsBySequenceAndSong(Sequence sequence, Song song);
 
-    Map<String, UUID> getSequenceStagePropUuidMapBySequenceId(Integer sequenceId);
+    Map<String, UUID> getSequenceStagePropUuidMapBySequenceId(int sequenceId);
 
-    Sequence saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels);
+    void saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels);
 
     void publishSequence(Sequence sequence, List<SequenceChannel> sequenceChannels, RenderedStagePropDataMap renderedStageProps);
 

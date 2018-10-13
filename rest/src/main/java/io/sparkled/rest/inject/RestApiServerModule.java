@@ -15,6 +15,8 @@ import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverter;
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverterImpl;
 import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModelConverter;
 import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModelConverterImpl;
+import io.sparkled.viewmodel.song.SongViewModelConverter;
+import io.sparkled.viewmodel.song.SongViewModelConverterImpl;
 import io.sparkled.viewmodel.stage.StageViewModelConverter;
 import io.sparkled.viewmodel.stage.StageViewModelConverterImpl;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter;
@@ -27,6 +29,8 @@ public class RestApiServerModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(RestApiServer.class).to(RestApiServerImpl.class).asEagerSingleton();
+
+        bind(SongViewModelConverter.class).to(SongViewModelConverterImpl.class).asEagerSingleton();
 
         bind(StageViewModelConverter.class).to(StageViewModelConverterImpl.class).asEagerSingleton();
         bind(StageSearchViewModelConverter.class).to(StageSearchViewModelConverterImpl.class).asEagerSingleton();

@@ -5,9 +5,9 @@ import io.sparkled.model.validator.exception.EntityValidationException;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class StagePropValidator {
 
@@ -21,7 +21,7 @@ public class StagePropValidator {
         Set<String> duplicateCodes = ValidatorUtils.findDuplicates(stagePropCodes);
 
         if (!duplicateCodes.isEmpty()) {
-            String duplicateCodeList = duplicateCodes.stream().collect(Collectors.joining(", "));
+            String duplicateCodeList = duplicateCodes.stream().collect(joining(", "));
             throw new EntityValidationException(String.format(Errors.DUPLICATES_FOUND, duplicateCodeList));
         }
     }

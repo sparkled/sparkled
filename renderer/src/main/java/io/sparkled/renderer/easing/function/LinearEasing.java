@@ -8,7 +8,7 @@ import io.sparkled.renderer.easing.EasingFunction;
  */
 public class LinearEasing implements EasingFunction {
     @Override
-    public float getProgress(Easing easing, float currentFrame, float durationFrames) {
-        return currentFrame / (durationFrames - 1);
+    public float getProgress(Easing easing, float currentFrame, float frameCount) {
+        return currentFrame / (frameCount - 1);
     }
 }

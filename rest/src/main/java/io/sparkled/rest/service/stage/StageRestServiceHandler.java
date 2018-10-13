@@ -10,25 +10,31 @@ import io.sparkled.viewmodel.stage.StageViewModel;
 import io.sparkled.viewmodel.stage.StageViewModelConverter;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModel;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter;
+import io.sparkled.viewmodel.stage.search.StageSearchViewModel;
+import io.sparkled.viewmodel.stage.search.StageSearchViewModelConverter;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 class StageRestServiceHandler extends RestServiceHandler {
 
     private final StagePersistenceService stagePersistenceService;
     private final StageViewModelConverter stageViewModelConverter;
+    private final StageSearchViewModelConverter stageSearchViewModelConverter;
     private final StagePropViewModelConverter stagePropViewModelConverter;
 
     @Inject
     public StageRestServiceHandler(StagePersistenceService stagePersistenceService,
                                    StageViewModelConverter stageViewModelConverter,
+                                   StageSearchViewModelConverter stageSearchViewModelConverter,
                                    StagePropViewModelConverter stagePropViewModelConverter) {
         this.stagePersistenceService = stagePersistenceService;
         this.stageViewModelConverter = stageViewModelConverter;
+        this.stageSearchViewModelConverter = stageSearchViewModelConverter;
         this.stagePropViewModelConverter = stagePropViewModelConverter;
     }
 
@@ -41,7 +47,8 @@ class StageRestServiceHandler extends RestServiceHandler {
 
     Response getAllStages() {
         List<Stage> stages = stagePersistenceService.getAllStages();
-        return respondOk(stages);
+        List<StageSearchViewModel> viewModels = stageSearchViewModelConverter.toViewModels(stages);
+        return respondOk(viewModels);
     }
 
     Response getStage(int stageId) {
@@ -55,7 +62,7 @@ class StageRestServiceHandler extends RestServiceHandler {
                     .getStagePropsByStageId(stageId)
                     .stream()
                     .map(stagePropViewModelConverter::toViewModel)
-                    .collect(Collectors.toList());
+                    .collect(toList());
             viewModel.setStageProps(stageProps);
 
             return respondOk(viewModel);
@@ -73,7 +80,7 @@ class StageRestServiceHandler extends RestServiceHandler {
                 .stream()
                 .map(stagePropViewModelConverter::toModel)
                 .map(ps -> ps.setStageId(id))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         stagePersistenceService.saveStage(stage, stageProps);
         return respondOk();
