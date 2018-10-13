@@ -1,11 +1,13 @@
-package io.sparkled.rest;
+package io.sparkled.rest.service.sequence;
 
+import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.*;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
 import io.sparkled.persistence.stage.StagePersistenceService;
 import io.sparkled.renderer.Renderer;
 import io.sparkled.rest.response.IdResponse;
+import io.sparkled.rest.service.RestServiceHandler;
 import io.sparkled.viewmodel.sequence.SequenceViewModel;
 import io.sparkled.viewmodel.sequence.SequenceViewModelConverter;
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel;
@@ -17,12 +19,8 @@ import io.sparkled.viewmodel.stage.StageViewModelConverter;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModel;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter;
 import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,10 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Path("/sequences")
-public class SequenceRestService extends RestService {
-
-    private static final String MP3_MIME_TYPE = "audio/mpeg";
+class SequenceRestServiceHandler extends RestServiceHandler {
 
     private final SequencePersistenceService sequencePersistenceService;
     private final StagePersistenceService stagePersistenceService;
@@ -44,7 +39,7 @@ public class SequenceRestService extends RestService {
     private final StagePropViewModelConverter stagePropViewModelConverter;
 
     @Inject
-    public SequenceRestService(SequencePersistenceService sequencePersistenceService,
+    SequenceRestServiceHandler(SequencePersistenceService sequencePersistenceService,
                                StagePersistenceService stagePersistenceService,
                                SequenceViewModelConverter sequenceViewModelConverter,
                                SequenceSearchViewModelConverter sequenceSearchViewModelConverter,
@@ -60,12 +55,8 @@ public class SequenceRestService extends RestService {
         this.stagePropViewModelConverter = stagePropViewModelConverter;
     }
 
-    @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createSequence(@FormDataParam("sequence") String sequenceJson,
-                                   @FormDataParam("mp3") InputStream uploadedInputStream,
-                                   @FormDataParam("mp3") FormDataContentDisposition fileDetail) throws IOException {
+    @Transactional
+    Response createSequence(String sequenceJson, InputStream uploadedInputStream) throws IOException {
         SequenceViewModel sequenceViewModel = gson.fromJson(sequenceJson, SequenceViewModel.class);
         Sequence sequence = sequenceViewModelConverter.toModel(sequenceViewModel);
 
@@ -74,9 +65,7 @@ public class SequenceRestService extends RestService {
         return getJsonResponse(new IdResponse(sequenceId));
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllSequences() {
+    Response getAllSequences() {
         List<Sequence> sequences = sequencePersistenceService.getAllSequences();
         List<SequenceSearchViewModel> results = sequences.stream()
                 .map(sequenceSearchViewModelConverter::toViewModel)
@@ -85,10 +74,7 @@ public class SequenceRestService extends RestService {
         return getJsonResponse(results);
     }
 
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSequence(@PathParam("id") int sequenceId) {
+    Response getSequence(int sequenceId) {
         Optional<Sequence> sequenceOptional = sequencePersistenceService.getSequenceById(sequenceId);
 
         if (sequenceOptional.isPresent()) {
@@ -105,13 +91,10 @@ public class SequenceRestService extends RestService {
             return getJsonResponse(viewModel);
         }
 
-        return getJsonResponse(Response.Status.NOT_FOUND);
+        return getResponse(Response.Status.NOT_FOUND);
     }
 
-    @GET
-    @Path("/{id}/stage")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSequenceStage(@PathParam("id") int sequenceId) {
+    Response getSequenceStage(int sequenceId) {
         Optional<Stage> stageOptional = sequencePersistenceService.getStageBySequenceId(sequenceId);
 
         if (stageOptional.isPresent()) {
@@ -126,28 +109,22 @@ public class SequenceRestService extends RestService {
             viewModel.setStageProps(stageProps);
             return getJsonResponse(viewModel);
         } else {
-            return getJsonResponse(Response.Status.NOT_FOUND);
+            return getResponse(Response.Status.NOT_FOUND);
         }
     }
 
-    @GET
-    @Path("/{id}/audio")
-    @Produces(MP3_MIME_TYPE)
-    public Response getSequenceSongAudio(@PathParam("id") int id) {
+    Response getSequenceSongAudio(int id) {
         Optional<SongAudio> songAudio = sequencePersistenceService.getSongAudioBySequenceId(id);
 
         if (songAudio.isPresent()) {
-            return getBinaryResponse(songAudio.get().getAudioData(), MP3_MIME_TYPE);
+            return getBinaryResponse(songAudio.get().getAudioData(), SequenceRestService.MP3_MIME_TYPE);
         } else {
             return getResponse(Response.Status.NOT_FOUND);
         }
     }
 
-    @PUT
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSequence(@PathParam("id") int id, SequenceViewModel sequenceViewModel) {
+    @Transactional
+    Response updateSequence(int id, SequenceViewModel sequenceViewModel) {
         sequenceViewModel.setId(id); // Prevent client-side ID tampering.
 
         Sequence sequence = sequenceViewModelConverter.toModel(sequenceViewModel);
@@ -164,10 +141,8 @@ public class SequenceRestService extends RestService {
         return getResponse(Response.Status.OK);
     }
 
-    @DELETE
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteSequence(@PathParam("id") int id) {
+    @Transactional
+    Response deleteSequence(int id) {
         sequencePersistenceService.deleteSequence(id);
         return getResponse(Response.Status.OK);
     }

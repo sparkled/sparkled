@@ -1,6 +1,5 @@
 package io.sparkled.persistence.sequence.impl.query;
 
-import com.querydsl.core.BooleanBuilder;
 import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.entity.SequenceChannel;
 import io.sparkled.model.validator.SequenceChannelValidator;

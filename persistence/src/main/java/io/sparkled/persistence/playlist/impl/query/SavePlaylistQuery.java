@@ -23,9 +23,9 @@ public class SavePlaylistQuery implements PersistenceQuery<Playlist> {
         new PlaylistValidator().validate(playlist);
 
         EntityManager entityManager = queryFactory.getEntityManager();
-        Playlist result = entityManager.merge(playlist);
+        Playlist savedPlaylist = entityManager.merge(playlist);
 
-        logger.info("Saved playlist {} ({}).", playlist.getId(), playlist.getName());
-        return result;
+        logger.info("Saved playlist {} ({}).", savedPlaylist.getId(), savedPlaylist.getName());
+        return savedPlaylist;
     }
 }

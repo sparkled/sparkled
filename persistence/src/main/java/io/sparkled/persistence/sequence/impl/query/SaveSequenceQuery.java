@@ -23,9 +23,9 @@ public class SaveSequenceQuery implements PersistenceQuery<Sequence> {
         new SequenceValidator().validate(sequence);
 
         final EntityManager entityManager = queryFactory.getEntityManager();
-        Sequence result = entityManager.merge(sequence);
+        Sequence savedSequence = entityManager.merge(sequence);
 
-        logger.info("Saved sequence {} ({}).", sequence.getId(), sequence.getName());
-        return result;
+        logger.info("Saved sequence {} ({}).", savedSequence.getId(), savedSequence.getName());
+        return savedSequence;
     }
 }

@@ -1,58 +1,50 @@
-package io.sparkled.rest;
+package io.sparkled.rest.service.stage;
 
+import com.google.inject.persist.Transactional;
 import io.sparkled.model.entity.Stage;
 import io.sparkled.model.entity.StageProp;
 import io.sparkled.persistence.stage.StagePersistenceService;
 import io.sparkled.rest.response.IdResponse;
+import io.sparkled.rest.service.RestServiceHandler;
 import io.sparkled.viewmodel.stage.StageViewModel;
 import io.sparkled.viewmodel.stage.StageViewModelConverter;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModel;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Path("/stages")
-public class StageRestService extends RestService {
+class StageRestServiceHandler extends RestServiceHandler {
 
     private final StagePersistenceService stagePersistenceService;
     private final StageViewModelConverter stageViewModelConverter;
     private final StagePropViewModelConverter stagePropViewModelConverter;
 
     @Inject
-    public StageRestService(StagePersistenceService stagePersistenceService,
-                            StageViewModelConverter stageViewModelConverter,
-                            StagePropViewModelConverter stagePropViewModelConverter) {
+    public StageRestServiceHandler(StagePersistenceService stagePersistenceService,
+                                   StageViewModelConverter stageViewModelConverter,
+                                   StagePropViewModelConverter stagePropViewModelConverter) {
         this.stagePersistenceService = stagePersistenceService;
         this.stageViewModelConverter = stageViewModelConverter;
         this.stagePropViewModelConverter = stagePropViewModelConverter;
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createStage(StageViewModel stageViewModel) {
+    @Transactional
+    Response createStage(StageViewModel stageViewModel) {
         Stage stage = stageViewModelConverter.toModel(stageViewModel);
         stage = stagePersistenceService.createStage(stage);
         return getJsonResponse(new IdResponse(stage.getId()));
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllStages() {
+    Response getAllStages() {
         List<Stage> stages = stagePersistenceService.getAllStages();
         return getJsonResponse(stages);
     }
 
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getStage(@PathParam("id") int stageId) {
+    Response getStage(int stageId) {
         Optional<Stage> stageOptional = stagePersistenceService.getStageById(stageId);
 
         if (stageOptional.isPresent()) {
@@ -69,14 +61,11 @@ public class StageRestService extends RestService {
             return getJsonResponse(viewModel);
         }
 
-        return getJsonResponse(Response.Status.NOT_FOUND);
+        return getResponse(Response.Status.NOT_FOUND);
     }
 
-    @PUT
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateStage(@PathParam("id") int id, StageViewModel stageViewModel) {
+    @Transactional
+    Response updateStage(int id, StageViewModel stageViewModel) {
         stageViewModel.setId(id); // Prevent client-side ID tampering.
 
         Stage stage = stageViewModelConverter.toModel(stageViewModel);
@@ -90,10 +79,8 @@ public class StageRestService extends RestService {
         return getResponse(Response.Status.OK);
     }
 
-    @DELETE
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteStage(@PathParam("id") int id) {
+    @Transactional
+    Response deleteStage(int id) {
         stagePersistenceService.deleteStage(id);
         return getResponse(Response.Status.OK);
     }

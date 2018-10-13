@@ -24,9 +24,9 @@ public class SaveStageQuery implements PersistenceQuery<Stage> {
         new StageValidator().validate(stage);
 
         EntityManager entityManager = queryFactory.getEntityManager();
-        Stage result = entityManager.merge(stage);
+        Stage savedStage = entityManager.merge(stage);
 
-        logger.info("Saved stage {} ({}).", stage.getId(), stage.getName());
-        return result;
+        logger.info("Saved stage {} ({}).", savedStage.getId(), savedStage.getName());
+        return savedStage;
     }
 }
