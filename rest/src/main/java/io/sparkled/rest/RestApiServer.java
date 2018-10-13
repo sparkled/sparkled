@@ -1,4 +1,4 @@
-package io.sparkled;
+package io.sparkled.rest;
 
 /**
  * A REST API Server that listens on the given port.

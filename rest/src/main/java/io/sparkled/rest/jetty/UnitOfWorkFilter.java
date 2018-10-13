@@ -1,4 +1,4 @@
-package io.sparkled.rest;
+package io.sparkled.rest.jetty;
 
 import com.google.inject.persist.UnitOfWork;
 

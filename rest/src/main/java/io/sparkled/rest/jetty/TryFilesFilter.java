@@ -1,4 +1,4 @@
-package io.sparkled;
+package io.sparkled.rest.jetty;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

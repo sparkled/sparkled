@@ -8,6 +8,6 @@ import javax.ws.rs.core.Response;
 public class EffectTypeRestServiceHandler extends RestServiceHandler {
 
     public Response get() {
-        return getJsonResponse(EffectTypes.get());
+        return respondOk(EffectTypes.get());
     }
 }

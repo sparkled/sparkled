@@ -1,6 +1,7 @@
 package io.sparkled;
 
 import com.google.inject.persist.PersistService;
+import io.sparkled.rest.RestApiServer;
 import io.sparkled.schema.SchemaUpdater;
 import io.sparkled.udpserver.UdpServer;
 

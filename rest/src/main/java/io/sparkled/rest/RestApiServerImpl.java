@@ -1,7 +1,9 @@
-package io.sparkled;
+package io.sparkled.rest;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Injector;
+import io.sparkled.rest.jetty.JerseyResourceConfig;
+import io.sparkled.rest.jetty.TryFilesFilter;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
@@ -60,7 +62,7 @@ public class RestApiServerImpl implements RestApiServer {
         ServletContextHandler context = createContextHandler();
         addStaticResourceConfig(context);
         addJerseyServlet(context);
-        initCorsFilter(context);
+        addCorsFilter(context);
 
         jettyServer.setHandler(context);
         startJetty(jettyServer);
@@ -101,7 +103,7 @@ public class RestApiServerImpl implements RestApiServer {
         jerseyServlet.setInitOrder(0);
     }
 
-    private void initCorsFilter(ServletContextHandler context) {
+    private void addCorsFilter(ServletContextHandler context) {
         FilterHolder corsFilter = context.addFilter(CrossOriginFilter.class, REST_PATH, EnumSet.of(DispatcherType.REQUEST));
         corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
         corsFilter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");

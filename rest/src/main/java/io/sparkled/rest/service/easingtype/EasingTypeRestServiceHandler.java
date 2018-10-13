@@ -8,6 +8,6 @@ import javax.ws.rs.core.Response;
 public class EasingTypeRestServiceHandler extends RestServiceHandler {
 
     public Response get() {
-        return getJsonResponse(EasingTypes.get());
+        return respondOk(EasingTypes.get());
     }
 }
