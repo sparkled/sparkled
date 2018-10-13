@@ -26,7 +26,7 @@ public class RenderPreviewRestServiceHandler extends RestServiceHandler {
 
     Response getRenderedSequence(int startFrame, int durationFrames, List<SequenceChannel> sequenceChannels) {
         if (sequenceChannels == null || sequenceChannels.isEmpty()) {
-            return getJsonResponse(Response.Status.BAD_REQUEST, "Nothing to render.");
+            return respond(Response.Status.BAD_REQUEST, "Nothing to render.");
         }
 
         Optional<Sequence> sequenceOptional = sequencePersistenceService.getSequenceById(sequenceChannels.get(0).getSequenceId());
@@ -39,9 +39,9 @@ public class RenderPreviewRestServiceHandler extends RestServiceHandler {
 
             List<StageProp> stageProps = Collections.singletonList(new StageProp().setLedCount(10)); // TODO: Get from DB.
             RenderedStagePropDataMap renderResult = new Renderer(sequence, sequenceChannels, stageProps, startFrame, durationFrames).render();
-            return getJsonResponse(renderResult);
+            return respondOk(renderResult);
         } else {
-            return getResponse(Response.Status.NOT_FOUND);
+            return respond(Response.Status.NOT_FOUND, "Sequence not found.");
         }
     }
 }

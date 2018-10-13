@@ -36,12 +36,12 @@ class StageRestServiceHandler extends RestServiceHandler {
     Response createStage(StageViewModel stageViewModel) {
         Stage stage = stageViewModelConverter.toModel(stageViewModel);
         stage = stagePersistenceService.createStage(stage);
-        return getJsonResponse(new IdResponse(stage.getId()));
+        return respondOk(new IdResponse(stage.getId()));
     }
 
     Response getAllStages() {
         List<Stage> stages = stagePersistenceService.getAllStages();
-        return getJsonResponse(stages);
+        return respondOk(stages);
     }
 
     Response getStage(int stageId) {
@@ -58,10 +58,10 @@ class StageRestServiceHandler extends RestServiceHandler {
                     .collect(Collectors.toList());
             viewModel.setStageProps(stageProps);
 
-            return getJsonResponse(viewModel);
+            return respondOk(viewModel);
         }
 
-        return getResponse(Response.Status.NOT_FOUND);
+        return respond(Response.Status.NOT_FOUND, "Stage not found.");
     }
 
     @Transactional
@@ -76,12 +76,12 @@ class StageRestServiceHandler extends RestServiceHandler {
                 .collect(Collectors.toList());
 
         stagePersistenceService.saveStage(stage, stageProps);
-        return getResponse(Response.Status.OK);
+        return respondOk();
     }
 
     @Transactional
     Response deleteStage(int id) {
         stagePersistenceService.deleteStage(id);
-        return getResponse(Response.Status.OK);
+        return respondOk();
     }
 }

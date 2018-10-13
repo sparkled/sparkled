@@ -20,12 +20,28 @@ public abstract class RestServiceHandler {
 
     protected final Gson gson = GsonProvider.get();
 
-    protected Response getJsonResponse(Object responseObject) {
-        return getJsonResponse(Response.Status.OK, responseObject);
+    /**
+     * @return A 200 HTTP response with no attached entity.
+     */
+    protected Response respondOk() {
+        return Response.status(Response.Status.OK).build();
     }
 
-    protected Response getJsonResponse(Response.Status status, Object responseObject) {
-        String responseJson = gson.toJson(responseObject);
+    /**
+     * @param entity The payload to be returned as JSON.
+     * @return A 200 HTTP response an attached JSON entity.
+     */
+    protected Response respondOk(Object entity) {
+        return respond(Response.Status.OK, entity);
+    }
+
+    /**
+     * @param status The status of the HTTP response.
+     * @param entity The payload to be returned as JSON.
+     * @return An HTTP response with the specified status and an attached JSON entity.
+     */
+    protected Response respond(Response.Status status, Object entity) {
+        String responseJson = gson.toJson(entity);
 
         return Response.status(status)
                 .type(MediaType.APPLICATION_JSON_TYPE)
@@ -33,14 +49,15 @@ public abstract class RestServiceHandler {
                 .build();
     }
 
-    protected Response getBinaryResponse(Object responseObject, String mediaType) {
+    /**
+     * @param entity    The payload to be returned.
+     * @param mediaType The type of payload to be returned.
+     * @return A 200 HTTP response with the specified status and media type.
+     */
+    protected Response respondMedia(byte[] entity, String mediaType) {
         return Response.status(Response.Status.OK)
                 .type(mediaType)
-                .entity(responseObject)
+                .entity(entity)
                 .build();
-    }
-
-    protected Response getResponse(Response.Status status) {
-        return Response.status(status).build();
     }
 }

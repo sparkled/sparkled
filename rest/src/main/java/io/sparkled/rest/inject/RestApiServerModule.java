@@ -1,8 +1,8 @@
-package io.sparkled.inject;
+package io.sparkled.rest.inject;
 
 import com.google.inject.AbstractModule;
-import io.sparkled.RestApiServer;
-import io.sparkled.RestApiServerImpl;
+import io.sparkled.rest.RestApiServer;
+import io.sparkled.rest.RestApiServerImpl;
 import io.sparkled.viewmodel.playlist.PlaylistViewModelConverter;
 import io.sparkled.viewmodel.playlist.PlaylistViewModelConverterImpl;
 import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModelConverter;

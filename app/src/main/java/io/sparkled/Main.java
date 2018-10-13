@@ -4,7 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import io.sparkled.inject.RestApiServerModule;
+import io.sparkled.rest.inject.RestApiServerModule;
 import io.sparkled.music.inject.MusicPlayerModule;
 import io.sparkled.persistence.inject.PersistenceModule;
 import io.sparkled.schema.inject.SchemaModule;

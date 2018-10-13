@@ -62,7 +62,7 @@ class SequenceRestServiceHandler extends RestServiceHandler {
 
         byte[] songAudioData = loadSongData(uploadedInputStream);
         int sequenceId = saveNewSequence(sequence, songAudioData);
-        return getJsonResponse(new IdResponse(sequenceId));
+        return respondOk(new IdResponse(sequenceId));
     }
 
     // TODO: Use IOUtils.toByteArray() after moving to Java 9.
@@ -83,7 +83,7 @@ class SequenceRestServiceHandler extends RestServiceHandler {
                 .map(sequenceSearchViewModelConverter::toViewModel)
                 .collect(Collectors.toList());
 
-        return getJsonResponse(results);
+        return respondOk(results);
     }
 
     Response getSequence(int sequenceId) {
@@ -100,10 +100,10 @@ class SequenceRestServiceHandler extends RestServiceHandler {
                     .collect(Collectors.toList());
             viewModel.setChannels(channels);
 
-            return getJsonResponse(viewModel);
+            return respondOk(viewModel);
         }
 
-        return getResponse(Response.Status.NOT_FOUND);
+        return respond(Response.Status.NOT_FOUND, "Sequence not found.");
     }
 
     Response getSequenceStage(int sequenceId) {
@@ -119,9 +119,9 @@ class SequenceRestServiceHandler extends RestServiceHandler {
                     .map(stagePropViewModelConverter::toViewModel)
                     .collect(Collectors.toList());
             viewModel.setStageProps(stageProps);
-            return getJsonResponse(viewModel);
+            return respondOk(viewModel);
         } else {
-            return getResponse(Response.Status.NOT_FOUND);
+            return respond(Response.Status.NOT_FOUND, "Stage not found.");
         }
     }
 
@@ -129,9 +129,9 @@ class SequenceRestServiceHandler extends RestServiceHandler {
         Optional<SongAudio> songAudio = sequencePersistenceService.getSongAudioBySequenceId(id);
 
         if (songAudio.isPresent()) {
-            return getBinaryResponse(songAudio.get().getAudioData(), SequenceRestService.MP3_MIME_TYPE);
+            return respondMedia(songAudio.get().getAudioData(), SequenceRestService.MP3_MIME_TYPE);
         } else {
-            return getResponse(Response.Status.NOT_FOUND);
+            return respond(Response.Status.NOT_FOUND, "Song audio not found.");
         }
     }
 
@@ -150,13 +150,13 @@ class SequenceRestServiceHandler extends RestServiceHandler {
         } else {
             saveDraftSequence(sequence, sequenceChannels);
         }
-        return getResponse(Response.Status.OK);
+        return respondOk();
     }
 
     @Transactional
     Response deleteSequence(int id) {
         sequencePersistenceService.deleteSequence(id);
-        return getResponse(Response.Status.OK);
+        return respondOk();
     }
 
     private void saveDraftSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
