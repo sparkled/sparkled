@@ -18,10 +18,10 @@ import io.sparkled.viewmodel.stage.StageViewModel;
 import io.sparkled.viewmodel.stage.StageViewModelConverter;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModel;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter;
-import org.apache.commons.io.IOUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -60,9 +60,21 @@ class SequenceRestServiceHandler extends RestServiceHandler {
         SequenceViewModel sequenceViewModel = gson.fromJson(sequenceJson, SequenceViewModel.class);
         Sequence sequence = sequenceViewModelConverter.toModel(sequenceViewModel);
 
-        byte[] songAudioData = IOUtils.toByteArray(uploadedInputStream);
+        byte[] songAudioData = loadSongData(uploadedInputStream);
         int sequenceId = saveNewSequence(sequence, songAudioData);
         return getJsonResponse(new IdResponse(sequenceId));
+    }
+
+    // TODO: Use IOUtils.toByteArray() after moving to Java 9.
+    private byte[] loadSongData(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        int offset;
+        byte[] buffer = new byte[4096];
+        while (-1 != (offset = inputStream.read(buffer))) {
+            outputStream.write(buffer, 0, offset);
+        }
+
+        return outputStream.toByteArray();
     }
 
     Response getAllSequences() {
