@@ -1,7 +1,5 @@
 package io.sparkled;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +19,7 @@ public class TryFilesFilter implements Filter {
     private static final String FALLBACK = "/index.html";
     private static final String REST_PATH = "/rest";
     private static final String JAR_RESOURCE_FILE_SEPARATOR = "!";
+    private static final String LEADING_SLASH = "/";
 
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -50,14 +49,14 @@ public class TryFilesFilter implements Filter {
         fallback(httpRequest, httpResponse);
     }
 
-    protected void fallback(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void fallback(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String resolved = resolve(request, FALLBACK);
         request.getServletContext().getRequestDispatcher(resolved).forward(request, response);
     }
 
     private String resolve(HttpServletRequest request, String value) {
         String path = request.getServletPath();
-        path = StringUtils.prependIfMissing(path, "/");
+        path = path.startsWith(LEADING_SLASH) ? path : LEADING_SLASH + path;
         return value.replaceAll(Pattern.quote(PATH), path);
     }
 
