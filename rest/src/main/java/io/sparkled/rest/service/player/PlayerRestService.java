@@ -20,12 +20,6 @@ public class PlayerRestService {
         this.handler = handler;
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllSequences() {
-        return handler.getAllSequences();
-    }
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response adjustPlayback(PlaylistAction action) {

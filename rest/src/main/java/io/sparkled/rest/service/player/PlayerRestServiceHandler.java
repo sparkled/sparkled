@@ -24,11 +24,6 @@ public class PlayerRestServiceHandler extends RestServiceHandler {
         this.playlistService = playlistService;
     }
 
-    Response getAllSequences() {
-        List<Playlist> playlists = playlistPersistenceService.getAllPlaylists();
-        return respondOk(playlists);
-    }
-
     Response adjustPlayback(PlaylistAction action) {
         PlaylistActionType type = action.getType();
         if (type == null) {
