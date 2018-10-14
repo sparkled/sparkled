@@ -6,7 +6,7 @@ import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.util.SequenceUtils;
-import io.sparkled.music.PlaylistServiceImpl;
+import io.sparkled.music.PlaylistService;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -22,10 +22,10 @@ public class RequestHandlerImpl implements RequestHandler {
     private static final String GET_FRAME_COMMAND = "GF";
     private static final byte[] ERROR_CODE_BYTES = "ERR".getBytes(StandardCharsets.US_ASCII);
 
-    private final PlaylistServiceImpl sequencePlayerService;
+    private final PlaylistService sequencePlayerService;
 
     @Inject
-    public RequestHandlerImpl(PlaylistServiceImpl sequencePlayerService) {
+    public RequestHandlerImpl(PlaylistService sequencePlayerService) {
         this.sequencePlayerService = sequencePlayerService;
     }
 
