@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 import { connect } from 'react-redux';
