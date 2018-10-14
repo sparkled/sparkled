@@ -3,25 +3,24 @@ package io.sparkled.rest.service.player;
 import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.playlist.PlaylistAction;
 import io.sparkled.model.playlist.PlaylistActionType;
-import io.sparkled.music.PlaylistService;
+import io.sparkled.music.MusicPlayerService;
 import io.sparkled.persistence.playlist.PlaylistPersistenceService;
 import io.sparkled.rest.service.RestServiceHandler;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
-import java.util.List;
 import java.util.Optional;
 
 public class PlayerRestServiceHandler extends RestServiceHandler {
 
     private final PlaylistPersistenceService playlistPersistenceService;
-    private final PlaylistService playlistService;
+    private final MusicPlayerService musicPlayerService;
 
     @Inject
     public PlayerRestServiceHandler(PlaylistPersistenceService playlistPersistenceService,
-                                    PlaylistService playlistService) {
+                                    MusicPlayerService musicPlayerService) {
         this.playlistPersistenceService = playlistPersistenceService;
-        this.playlistService = playlistService;
+        this.musicPlayerService = musicPlayerService;
     }
 
     Response adjustPlayback(PlaylistAction action) {
@@ -33,9 +32,9 @@ public class PlayerRestServiceHandler extends RestServiceHandler {
             if (!playlist.isPresent()) {
                 return respond(Response.Status.NOT_FOUND, "Playlist not found.");
             }
-            playlistService.play(playlist.get());
+            musicPlayerService.play(playlist.get());
         } else if (type == PlaylistActionType.STOP) {
-            playlistService.stopPlayback();
+            musicPlayerService.stopPlayback();
         }
 
         return respondOk();

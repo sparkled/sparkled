@@ -7,7 +7,7 @@ import io.sparkled.model.render.RenderedStagePropDataMap;
 
 import java.util.UUID;
 
-public interface PlaylistService {
+public interface MusicPlayerService {
 
     /**
      * Plays the provided playlist and provides the associated sequence data for synchronised retrieval.

@@ -1,4 +1,4 @@
-package io.sparkled.music;
+package io.sparkled.music.impl;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.persist.UnitOfWork;
@@ -7,6 +7,7 @@ import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.entity.Song;
 import io.sparkled.model.entity.SongAudio;
 import io.sparkled.model.render.RenderedStagePropDataMap;
+import io.sparkled.music.MusicPlayerService;
 import io.sparkled.persistence.playlist.PlaylistPersistenceService;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
 import io.sparkled.persistence.song.SongPersistenceService;
@@ -27,9 +28,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class PlaylistServiceImpl implements PlaylistService {
+public class MusicPlayerServiceImpl implements MusicPlayerService {
 
-    private static final Logger logger = LoggerFactory.getLogger(PlaylistServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MusicPlayerServiceImpl.class);
 
     private final SongPersistenceService songPersistenceService;
     private final SequencePersistenceService sequencePersistenceService;
@@ -46,17 +47,17 @@ public class PlaylistServiceImpl implements PlaylistService {
     private AtomicInteger playlistIndex = new AtomicInteger(0);
 
     @Inject
-    public PlaylistServiceImpl(SongPersistenceService songPersistenceService,
-                               SequencePersistenceService sequencePersistenceService,
-                               PlaylistPersistenceService playlistPersistenceService,
-                               UnitOfWork unitOfWork) {
+    public MusicPlayerServiceImpl(SongPersistenceService songPersistenceService,
+                                  SequencePersistenceService sequencePersistenceService,
+                                  PlaylistPersistenceService playlistPersistenceService,
+                                  UnitOfWork unitOfWork) {
         this.songPersistenceService = songPersistenceService;
         this.sequencePersistenceService = sequencePersistenceService;
         this.playlistPersistenceService = playlistPersistenceService;
         this.unitOfWork = unitOfWork;
 
         this.executor = Executors.newSingleThreadScheduledExecutor(
-                new ThreadFactoryBuilder().setNameFormat("playlist-service-%d").build()
+                new ThreadFactoryBuilder().setNameFormat("music-player-service-%d").build()
         );
 
         this.playbackListener.addPlaybackFinishedListener(event -> {

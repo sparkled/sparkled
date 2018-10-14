@@ -1,4 +1,4 @@
-package io.sparkled.music;
+package io.sparkled.music.impl;
 
 import javazoom.jl.player.advanced.PlaybackEvent;
 import javazoom.jl.player.advanced.PlaybackListener;
