@@ -3,8 +3,8 @@
   display: block;
 }
 
-.time-indicator line {
-  stroke: #fff;
+.time-indicator pattern rect {
+  fill: #fff;
 }
 
 .time-indicator text {
