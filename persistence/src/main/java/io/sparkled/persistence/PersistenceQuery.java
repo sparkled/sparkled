@@ -23,6 +23,7 @@ public interface PersistenceQuery<T> {
     QRenderedStageProp qRenderedStageProp = QRenderedStageProp.renderedStageProp;
     QSequence qSequence = QSequence.sequence;
     QSequenceChannel qSequenceChannel = QSequenceChannel.sequenceChannel;
+    QSong qSong = QSong.song;
     QSongAudio qSongAudio = QSongAudio.songAudio;
     QStage qStage = QStage.stage;
     QStageProp qStageProp = QStageProp.stageProp;

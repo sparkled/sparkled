@@ -6,7 +6,8 @@ import io.sparkled.model.animation.param.ParamName;
 
 import java.awt.*;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class ParamUtils {
 
@@ -35,7 +36,7 @@ public class ParamUtils {
 
         return values.stream()
                 .map(ParamUtils::convertColor)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private static Param getParam(HasParams parent, ParamName paramName) {

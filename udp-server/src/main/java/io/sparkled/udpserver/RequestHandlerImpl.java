@@ -1,9 +1,11 @@
 package io.sparkled.udpserver;
 
 import io.sparkled.model.entity.Sequence;
+import io.sparkled.model.entity.Song;
 import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.model.render.RenderedStagePropDataMap;
+import io.sparkled.model.util.SequenceUtils;
 import io.sparkled.music.PlaylistServiceImpl;
 
 import javax.inject.Inject;
@@ -35,14 +37,15 @@ public class RequestHandlerImpl implements RequestHandler {
         if (components.length == 2 && GET_FRAME_COMMAND.equals(components[0])) {
             String stagePropCode = components[1];
             double progress = sequencePlayerService.getSequenceProgress();
+            Song currentSong = sequencePlayerService.getCurrentSong();
             Sequence currentSequence = sequencePlayerService.getCurrentSequence();
             RenderedStagePropDataMap renderedStagePropDataMap = sequencePlayerService.getRenderedStageProps();
 
-            if (currentSequence == null || renderedStagePropDataMap == null) {
+            if (currentSequence == null || currentSong == null || renderedStagePropDataMap == null) {
                 sendErrorResponse(serverSocket, receivePacket);
             } else {
-                final int durationFrames = currentSequence.getDurationFrames();
-                final int frameIndex = (int) Math.min(durationFrames - 1, Math.round(progress * durationFrames));
+                final int frameCount = SequenceUtils.getFrameCount(currentSong, currentSequence);
+                final int frameIndex = (int) Math.min(frameCount - 1, Math.round(progress * frameCount));
 
                 RenderedFrame renderedFrame = getRenderedFrame(stagePropCode, frameIndex);
                 if (renderedFrame == null) {

@@ -8,6 +8,7 @@ import PlaylistEditPage from '../../pages/PlaylistEdit';
 import PlaylistListPage from '../../pages/PlaylistList';
 import SequenceEditPage from '../../pages/SequenceEdit';
 import SequenceListPage from '../../pages/SequenceList';
+import SongListPage from '../../pages/SongList';
 import StageEditPage from '../../pages/StageEdit';
 import StageListPage from '../../pages/StageList';
 import store from '../../store/store';
@@ -21,6 +22,7 @@ const App = () => (
     <Provider store={store}>
       <Router>
         <Switch>
+          <Route exact path="/songs" component={SongListPage}/>
           <Route exact path="/stages" component={StageListPage}/>
           <Route exact path="/stages/:stageId" component={StageEditPage}/>
           <Route exact path="/sequences" component={SequenceListPage}/>

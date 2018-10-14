@@ -14,7 +14,7 @@ class TimelineChannel extends Component {
 
   render() {
     const { channel, sequence, selectedChannel } = this.props;
-    const width = sequence.durationFrames * 2;
+    const width = sequence.frameCount * 2;
     const activeClass = (selectedChannel && channel.uuid === selectedChannel.uuid) ? 'channel-active' : '';
     const effects = _.map(channel.effects, effect => <TimelineEffect key={effect.uuid} channel={channel} effect={effect}/>);
 
@@ -32,14 +32,14 @@ class TimelineChannel extends Component {
 
     // TODO: Remove this hack.
     const scrollLeft = document.querySelector('.channels').scrollLeft;
-    const frame = Math.round((event.clientX + scrollLeft  - 100) / pixelsPerFrame);
+    const frame = Math.round((event.clientX + scrollLeft - 100) / pixelsPerFrame);
     selectFrame(frame);
   }
 }
 
 function mapStateToProps({ page }) {
-  const { currentFrame, pixelsPerFrame, sequence, selectedChannel } = page.sequenceEdit.present;
-  return { currentFrame, pixelsPerFrame, sequence, selectedChannel };
+  const { currentFrame, pixelsPerFrame, sequence, song, selectedChannel } = page.sequenceEdit.present;
+  return { currentFrame, pixelsPerFrame, sequence, song, selectedChannel };
 }
 
 export default connect(mapStateToProps, { selectEffect, selectFrame })(TimelineChannel);

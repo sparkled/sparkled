@@ -22,8 +22,8 @@ public class RenderPreviewRestService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRenderedSequence(@QueryParam("startFrame") int startFrame,
-                                        @QueryParam("durationFrames") int durationFrames,
+                                        @QueryParam("frameCount") int frameCount,
                                         List<SequenceChannel> sequenceChannels) {
-        return handler.getRenderedSequence(startFrame, durationFrames, sequenceChannels);
+        return handler.getRenderedSequence(startFrame, frameCount, sequenceChannels);
     }
 }

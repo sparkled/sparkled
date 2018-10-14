@@ -129,7 +129,7 @@ export default (state = initialState, action) => {
 
       case actionTypes.SELECT_FRAME:
         const { frame } = action.payload;
-        if (frame >= 0 && frame < state.sequence.durationFrames) {
+        if (frame >= 0 && frame < state.sequence.frameCount) {
           draft.currentFrame = action.payload.frame;
         }
         break;

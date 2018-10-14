@@ -26,7 +26,6 @@ public class DeleteSequencesQuery implements PersistenceQuery<Void> {
         deletePlaylistSequences(queryFactory);
         deleteRenderedStageProps(queryFactory);
         deleteSequenceChannels(queryFactory);
-        deleteSongAudios(queryFactory);
         deleteSequences(queryFactory);
         return null;
     }
@@ -56,15 +55,6 @@ public class DeleteSequencesQuery implements PersistenceQuery<Void> {
                 .where(qSequenceChannel.sequenceId.in(sequenceIds))
                 .fetch();
         new DeleteSequenceChannelsQuery(sequenceChannelUuids).perform(queryFactory);
-    }
-
-    private void deleteSongAudios(QueryFactory queryFactory) {
-        long deleted = queryFactory
-                .delete(qSongAudio)
-                .where(qSongAudio.sequenceId.in(sequenceIds))
-                .execute();
-
-        logger.info("Deleted {} song audio(s).", deleted);
     }
 
     private void deleteSequences(QueryFactory queryFactory) {

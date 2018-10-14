@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { showDeleteModal } from '../../actions';
+import { getFormattedDuration } from '../../../../utils/dateUtils';
 import './PlaylistEntry.css';
 
 class PlaylistEntry extends Component {
@@ -30,7 +31,14 @@ class PlaylistEntry extends Component {
         </div>
 
         <div className="card-body">
-          <h6>Name: {playlist.name}</h6>
+          <div className="d-flex justify-content-between">
+            <h6>Name: {playlist.name}</h6>
+          </div>
+
+          <div className="d-flex justify-content-between">
+            <h6>Sequences: {playlist.sequenceCount}</h6>
+            <h6>Duration: {getFormattedDuration(playlist.durationSeconds)}</h6>
+          </div>
         </div>
       </div>
     );

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { showDeleteModal } from '../../actions';
+import { getFormattedDuration } from '../../../../utils/dateUtils';
 import './SequenceEntry.css';
 
 class SequenceEntry extends Component {
@@ -31,12 +32,12 @@ class SequenceEntry extends Component {
 
         <div className="card-body">
           <div className="d-flex justify-content-between">
-            <h6>Album: {sequence.album}</h6>
-            <h6 className="ml-3">{this.getFormattedDuration(sequence)}</h6>
+            <h6>Song: {sequence.songName}</h6>
+            <h6 className="ml-3">{getFormattedDuration(sequence.durationSeconds)}</h6>
           </div>
 
           <div className="d-flex justify-content-between">
-            <h6>Artist: {sequence.artist}</h6>
+            <h6>Stage: {sequence.stageName}</h6>
             <div className="ml-3">
               <span className="badge badge-primary">{sequence.status}</span>
             </div>
@@ -53,15 +54,6 @@ class SequenceEntry extends Component {
   showDeleteModal() {
     const { showDeleteModal, sequence } = this.props;
     showDeleteModal(sequence);
-  }
-
-  getFormattedDuration(sequence) {
-    const date = new Date(null);
-    date.setSeconds(Math.floor(sequence.durationFrames / sequence.framesPerSecond));
-
-    // 1970-01-01T00:01:23.000Z
-    //               ^^^^^
-    return date.toISOString().substr(14, 5);
   }
 }
 

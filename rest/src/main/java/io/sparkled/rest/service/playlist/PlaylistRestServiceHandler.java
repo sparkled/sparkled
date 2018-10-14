@@ -17,7 +17,8 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlaylistRestServiceHandler extends RestServiceHandler {
 
@@ -46,9 +47,7 @@ public class PlaylistRestServiceHandler extends RestServiceHandler {
 
     Response getAllPlaylists() {
         List<Playlist> playlists = playlistPersistenceService.getAllPlaylists();
-        List<PlaylistSearchViewModel> results = playlists.stream()
-                .map(playlistSearchViewModelConverter::toViewModel)
-                .collect(Collectors.toList());
+        List<PlaylistSearchViewModel> results = playlistSearchViewModelConverter.toViewModels(playlists);
 
         return respondOk(results);
     }
@@ -64,7 +63,7 @@ public class PlaylistRestServiceHandler extends RestServiceHandler {
                     .getPlaylistSequencesByPlaylistId(playlistId)
                     .stream()
                     .map(playlistSequenceViewModelConverter::toViewModel)
-                    .collect(Collectors.toList());
+                    .collect(toList());
             viewModel.setSequences(playlistSequences);
 
             return respondOk(viewModel);
@@ -82,7 +81,7 @@ public class PlaylistRestServiceHandler extends RestServiceHandler {
                 .stream()
                 .map(playlistSequenceViewModelConverter::toModel)
                 .map(ps -> ps.setPlaylistId(id))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         playlistPersistenceService.savePlaylist(playlist, playlistSequences);
         return respondOk();

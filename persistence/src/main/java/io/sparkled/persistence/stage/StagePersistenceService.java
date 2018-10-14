@@ -15,9 +15,9 @@ public interface StagePersistenceService {
 
     Optional<Stage> getStageById(int stageId);
 
-    List<StageProp> getStagePropsByStageId(Integer stageId);
+    List<StageProp> getStagePropsByStageId(int stageId);
 
-    Optional<StageProp> getStagePropByUuid(Integer stageId, UUID uuid);
+    Optional<StageProp> getStagePropByUuid(int stageId, UUID uuid);
 
     void saveStage(Stage stage, List<StageProp> stageProps);
 

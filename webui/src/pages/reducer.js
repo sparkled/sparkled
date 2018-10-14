@@ -5,6 +5,7 @@ import playlistEditReducer from './PlaylistEdit/reducer';
 import playlistListReducer from './PlaylistList/reducer';
 import sequenceEditReducer from './SequenceEdit/reducer';
 import sequenceListReducer from './SequenceList/reducer';
+import songListReducer from './SongList/reducer';
 import stageEditReducer from './StageEdit/reducer';
 import stageListReducer from './StageList/reducer';
 
@@ -23,10 +24,11 @@ const sharedReducer = (state = {}, action) => {
 
 export default combineReducers({
   shared: sharedReducer,
-  sequenceEdit: undoable(sequenceEditReducer, { filter: undoableFilter }),
-  sequenceList: sequenceListReducer,
   stageEdit: undoable(stageEditReducer, { filter: undoableFilter }),
   stageList: stageListReducer,
+  songList: songListReducer,
+  sequenceEdit: undoable(sequenceEditReducer, { filter: undoableFilter }),
+  sequenceList: sequenceListReducer,
   playlistEdit: undoable(playlistEditReducer, { filter: undoableFilter }),
   playlistList: playlistListReducer
 });

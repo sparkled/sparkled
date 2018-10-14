@@ -7,16 +7,14 @@ export const fetchSequences = () => {
   return { type: actionTypes.FETCH_SEQUENCES, payload: request };
 };
 
-export const addSequence = sequenceData => {
+export const addSequence = sequence => {
   const url = `${restConfig.ROOT_URL}/sequences`;
+  const request = axios.post(url, sequence);
 
-  const formData = new FormData();
-  formData.append('sequence', JSON.stringify(sequenceData.sequence));
-  formData.append('mp3', sequenceData.mp3);
-
-  const config = { headers: { 'content-type': 'multipart/form-data' }};
-  const request = axios.post(url, formData, config);
-  return { type: actionTypes.ADD_SEQUENCE, payload: request };
+  return {
+    type: actionTypes.ADD_SEQUENCE,
+    payload: request
+  };
 };
 
 export const deleteSequence = sequenceId => {

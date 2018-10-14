@@ -5,8 +5,9 @@ import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.model.render.RenderedStagePropData;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.joining;
 
 /**
  * Convenience methods for working with LEDs in tests.
@@ -19,27 +20,27 @@ public class LedTestUtils {
         return channel.getFrames()
                 .stream()
                 .map(LedTestUtils::toLedString)
-                .collect(Collectors.joining("\n"));
+                .collect(joining("\n"));
     }
 
     public static String toLedString(int[][] leds) {
         return Arrays.stream(leds)
                 .map(LedTestUtils::toLedString)
-                .collect(Collectors.joining("\n"));
+                .collect(joining("\n"));
     }
 
     public static String toLedString(RenderedFrame frame) {
         return IntStream.range(0, frame.getLedCount())
                 .mapToObj(frame::getLed)
                 .map(Led::toString)
-                .collect(Collectors.joining(", "));
+                .collect(joining(", "));
     }
 
     public static String toLedString(int[] leds) {
         return Arrays.stream(leds)
                 .mapToObj(LedTestUtils::getLedFromRgb)
                 .map(Led::toString)
-                .collect(Collectors.joining(", "));
+                .collect(joining(", "));
     }
 
     private static Led getLedFromRgb(int rgb) {

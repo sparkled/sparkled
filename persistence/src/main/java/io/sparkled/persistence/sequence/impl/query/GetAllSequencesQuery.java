@@ -12,10 +12,7 @@ public class GetAllSequencesQuery implements PersistenceQuery<List<Sequence>> {
     public List<Sequence> perform(QueryFactory queryFactory) {
         return queryFactory
                 .selectFrom(qSequence)
-                .orderBy(
-                        qSequence.artist.asc(),
-                        qSequence.album.asc(),
-                        qSequence.name.asc()
-                ).fetch();
+                .orderBy(qSequence.name.asc())
+                .fetch();
     }
 }
