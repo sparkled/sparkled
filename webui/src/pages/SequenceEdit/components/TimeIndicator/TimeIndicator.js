@@ -11,21 +11,21 @@ const TimeIndicator = ({ sequence, pixelsPerFrame }) => {
   return (
     <svg className="time-indicator" style={{ width }}>
       <pattern id="frame-pattern" width={pixelsPerFrame} height="10" patternUnits="userSpaceOnUse">
-        <line x1="0" y1="0" x2="0" y2="3"/>
+        <rect width="1" height="3"/>
       </pattern>
 
       <pattern id="quarter-second-pattern" width={pixelsPerFrame * (framesPerSecond / 4)} height="10"
                patternUnits="userSpaceOnUse">
-        <line x1="0" y1="3" x2="0" y2="6"/>
+        <rect width="1" height="6"/>
       </pattern>
 
       <pattern id="half-second-pattern" width={pixelsPerFrame * (framesPerSecond / 2)} height="10"
                patternUnits="userSpaceOnUse">
-        <line x1="0" y1="3" x2="0" y2="8"/>
+        <rect width="1" height="8"/>
       </pattern>
 
       <pattern id="second-pattern" width={pixelsPerFrame * framesPerSecond} height="10" patternUnits="userSpaceOnUse">
-        <line x1="0" y1="3" x2="0" y2="10"/>
+        <rect width="1" height="10"/>
       </pattern>
 
       <rect fill="url(#frame-pattern)" height="10" width={width} x="0" y="0"/>
@@ -39,12 +39,16 @@ const TimeIndicator = ({ sequence, pixelsPerFrame }) => {
 };
 
 function renderSeconds(frameCount, framesPerSecond, pixelsPerFrame) {
+  const pixelsPerSecond = framesPerSecond * pixelsPerFrame;
+
   const seconds = [];
   for (let i = 0; i < Math.ceil(frameCount / framesPerSecond); i++) {
+    const left = i * pixelsPerSecond;
+    const secondText = getFormattedDuration(i);
 
-    const left = i * framesPerSecond * pixelsPerFrame;
-    const secondText = getFormattedDuration(i * 1000);
-    seconds.push(<text key={i} x={left} y={20}>{secondText}</text>);
+    if (framesPerSecond >= 30 || (i % 2 === 0)) {
+      seconds.push(<text key={i} x={left} y={20}>{secondText}</text>);
+    }
   }
 
   return seconds;
