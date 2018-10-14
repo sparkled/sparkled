@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import { ActionCreators } from 'redux-undo';
 import Alert from 'react-s-alert';
 import { Nav, NavItem, Table } from 'reactstrap';
+import AddSequenceModal from './components/AddSequenceModal';
 import PlaylistSequenceRow from './components/PlaylistSequenceRow';
 import { setCurrentPage }  from '../actions';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import { fetchPlaylist, fetchSequences, savePlaylist } from './actions';
+import { fetchPlaylist, fetchSequences, savePlaylist, showAddSequenceModal } from './actions';
 import './PlaylistEditPage.css';
 
 const { undo, redo, clearHistory } = ActionCreators;
@@ -45,17 +46,21 @@ class PlaylistEditPage extends Component {
   }
 
   renderNavbar() {
-    const { canUndo, canRedo, undo, redo, playlist, savePlaylist, saving } = this.props;
+    const { canUndo, canRedo, undo, redo, playlist, sequences, savePlaylist, saving } = this.props;
+    const loaded = playlist && sequences;
 
     return (
       <Nav className="ml-auto" navbar>
-        <NavItem className={(!saving && playlist && canUndo) ? '' : 'd-none'}>
+        <NavItem className={(!saving && loaded && canUndo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => undo()}>Undo</span>
         </NavItem>
-        <NavItem className={(!saving && playlist && canRedo) ? '' : 'd-none'}>
+        <NavItem className={(!saving && loaded && canRedo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => redo()}>Redo</span>
         </NavItem>
-        <NavItem className={!saving && playlist ? '' : 'd-none'}>
+        <NavItem className={!saving && loaded ? '' : 'd-none'}>
+          <span className="nav-link" onClick={this.props.showAddSequenceModal}>Add Sequence</span>
+        </NavItem>
+        <NavItem className={!saving && loaded ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => savePlaylist(playlist)}>Save</span>
         </NavItem>
       </Nav>
@@ -104,6 +109,8 @@ class PlaylistEditPage extends Component {
             </Table>
           </div>
         </div>
+
+        <AddSequenceModal/>
       </div>
     );
   }
@@ -137,5 +144,5 @@ function mapStateToProps({ page }) {
 }
 
 export default connect(mapStateToProps, {
-  setCurrentPage, fetchPlaylist, fetchSequences, savePlaylist, undo, redo, clearHistory
+  setCurrentPage, fetchPlaylist, fetchSequences, showAddSequenceModal, savePlaylist, undo, redo, clearHistory
 })(PlaylistEditPage);

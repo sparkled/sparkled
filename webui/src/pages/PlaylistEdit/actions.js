@@ -17,6 +17,26 @@ export const savePlaylist = playlist => {
   return { type: actionTypes.SAVE_PLAYLIST, payload: request };
 };
 
+export const addSequence = sequence => {
+  return {
+    type: actionTypes.ADD_SEQUENCE,
+    undoable: true,
+    payload: { sequence }
+  };
+};
+
+export const showAddSequenceModal = () => {
+  return {
+    type: actionTypes.SHOW_ADD_SEQUENCE_MODAL
+  };
+};
+
+export const hideAddSequenceModal = () => {
+  return {
+    type: actionTypes.HIDE_ADD_SEQUENCE_MODAL
+  };
+};
+
 export const deletePlaylistSequence = uuid => {
   return { type: actionTypes.DELETE_PLAYLIST_SEQUENCE, undoable: true, payload: { uuid } };
 };
