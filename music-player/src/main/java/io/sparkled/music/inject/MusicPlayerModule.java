@@ -8,6 +8,6 @@ public class MusicPlayerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(PlaylistService.class).to(PlaylistServiceImpl.class);
+        bind(PlaylistService.class).to(PlaylistServiceImpl.class).asEagerSingleton();
     }
 }
