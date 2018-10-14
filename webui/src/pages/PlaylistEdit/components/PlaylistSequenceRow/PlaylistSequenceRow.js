@@ -6,6 +6,8 @@ import { deletePlaylistSequence, updatePlaylistSequence } from '../../actions';
 import SingleSelectField from '../../../../components/form/SingleSelectField';
 import { required } from '../../../../components/form/validators';
 
+const toNumber = value => !value ? null : Number(value);
+
 class PlaylistSequenceRow extends Component {
 
   constructor(props) {
@@ -26,7 +28,7 @@ class PlaylistSequenceRow extends Component {
         <td width="66%">
           <form>
             <Field name="sequenceId" className="m-0" component={SingleSelectField} options={sequences}
-                   required={true} validate={required}
+                   parse={toNumber} required={true} validate={required}
                    onChange={this.updatePlaylistSequence}/>
           </form>
         </td>

@@ -11,7 +11,8 @@ const initialState = {
   saving: false,
   savingError: null,
   playlist: null,
-  sequences: []
+  sequences: [],
+  addSequenceModalVisible: false
 };
 
 export default (state = initialState, action) => {
@@ -77,6 +78,19 @@ export default (state = initialState, action) => {
         const { playlistSequence } = action.payload;
         const index = _.findIndex(draft.playlist.sequences, { uuid: playlistSequence.uuid });
         draft.playlist.sequences[index] = playlistSequence;
+        break;
+
+      case actionTypes.SHOW_ADD_SEQUENCE_MODAL:
+        draft.addSequenceModalVisible = true;
+        break;
+
+      case actionTypes.HIDE_ADD_SEQUENCE_MODAL:
+        draft.addSequenceModalVisible = false;
+        break;
+
+      case actionTypes.ADD_SEQUENCE:
+        draft.addSequenceModalVisible = false;
+        draft.playlist.sequences.push(action.payload.sequence);
         break;
 
       default:
