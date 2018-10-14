@@ -18,6 +18,12 @@ export const deletePlaylist = playlistId => {
   return { type: actionTypes.DELETE_PLAYLIST, payload: request };
 };
 
+export const playPlaylist = playlistId => {
+  const playlistAction = { type: 'PLAY', playlistId };
+  const request = axios.post(`${restConfig.ROOT_URL}/player`, playlistAction);
+  return { type: actionTypes.PLAY_PLAYLIST, payload: request };
+};
+
 export const showAddModal = () => ({ type: actionTypes.SHOW_ADD_MODAL });
 
 export const hideAddModal = () => ({ type: actionTypes.HIDE_ADD_MODAL });
