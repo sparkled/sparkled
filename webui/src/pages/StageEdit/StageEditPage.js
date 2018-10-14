@@ -41,7 +41,7 @@ class StageEditPage extends Component {
 
   componentDidMount() {
     const { stageId } = this.props.match.params;
-    this.props.setCurrentPage({ pageTitle: 'Edit Stage', pageClass: 'stage-edit-page' });
+    this.props.setCurrentPage({ pageTitle: 'Edit Stage', pageClass: 'StageEditPage' });
     this.props.fetchStage(stageId);
   }
 
