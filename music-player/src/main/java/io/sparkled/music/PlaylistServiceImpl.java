@@ -67,6 +67,8 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public void play(Playlist playlist) {
+        stopPlayback();
+
         logger.info("Playing playlist {}.", playlist.getName());
         this.playlist = playlist;
         beginPlaylist();
