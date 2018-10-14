@@ -1,6 +1,7 @@
 package io.sparkled.music;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.inject.persist.UnitOfWork;
 import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.entity.Sequence;
 import io.sparkled.model.entity.Song;
@@ -33,6 +34,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final SongPersistenceService songPersistenceService;
     private final SequencePersistenceService sequencePersistenceService;
     private final PlaylistPersistenceService playlistPersistenceService;
+    private final UnitOfWork unitOfWork;
     private final AggregatePlaybackListener playbackListener = new AggregatePlaybackListener();
     private final ExecutorService executor;
     private AudioDevice audioDevice;
@@ -46,10 +48,12 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Inject
     public PlaylistServiceImpl(SongPersistenceService songPersistenceService,
                                SequencePersistenceService sequencePersistenceService,
-                               PlaylistPersistenceService playlistPersistenceService) {
+                               PlaylistPersistenceService playlistPersistenceService,
+                               UnitOfWork unitOfWork) {
         this.songPersistenceService = songPersistenceService;
         this.sequencePersistenceService = sequencePersistenceService;
         this.playlistPersistenceService = playlistPersistenceService;
+        this.unitOfWork = unitOfWork;
 
         this.executor = Executors.newSingleThreadScheduledExecutor(
                 new ThreadFactoryBuilder().setNameFormat("playlist-service-%d").build()
@@ -58,7 +62,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         this.playbackListener.addPlaybackFinishedListener(event -> {
             if (playlist != null) {
                 this.playlistIndex.incrementAndGet();
-                playNextSequence();
+                executor.submit(this::playNextSequence);
             }
         });
     }
@@ -78,33 +82,46 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     private void playNextSequence() {
-        int index = this.playlistIndex.get();
-        Optional<Sequence> sequenceOptional = playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId(), index);
+        try {
+            unitOfWork.begin();
+            int index = this.playlistIndex.get();
+            Optional<Sequence> sequenceOptional = playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId(), index);
 
-        if (!sequenceOptional.isPresent()) {
-            if (index > 0) {
-                logger.info("Finished playlist {}, restarting.", playlist.getId());
-                beginPlaylist();
+            if (!sequenceOptional.isPresent()) {
+                restartPlaylist(index);
             } else {
-                logger.error("Failed to play playlist {}: playlist is empty.", playlist.getId());
+                playSequence(sequenceOptional.get());
             }
-        } else {
-            try {
-                currentSequence = sequenceOptional.get();
-                currentSong = songPersistenceService.getSongBySequenceId(currentSequence.getId()).orElse(null);
-                if (currentSong == null) {
-                    logger.error("Failed to play sequence {}: Song not found.", currentSequence.getId());
-                } else {
-                    playSequence(currentSequence);
-                }
-            } catch (Exception e) {
-                logger.error("Failed to play sequence {}: {}.", currentSequence.getId(), e.getMessage());
-            }
+        } finally {
+            unitOfWork.end();
         }
     }
 
-    private void playSequence(Sequence sequence) throws JavaLayerException {
-        logger.info("Playing sequence {}.", sequence.getId());
+    private void restartPlaylist(int index) {
+        if (index > 0) {
+            logger.info("Finished playlist {}, restarting.", playlist.getId());
+            beginPlaylist();
+        } else {
+            logger.error("Failed to play playlist {}: playlist is empty.", playlist.getId());
+        }
+    }
+
+    private void playSequence(Sequence sequence) {
+        try {
+            currentSequence = sequence;
+            currentSong = songPersistenceService.getSongBySequenceId(currentSequence.getId()).orElse(null);
+            if (currentSong == null) {
+                logger.error("Failed to play sequence {}: Song not found.", currentSequence.getId());
+            } else {
+                playCurrentSequence();
+            }
+        } catch (Exception e) {
+            logger.error("Failed to play sequence {}: {}.", currentSequence.getId(), e.getMessage());
+        }
+    }
+
+    private void playCurrentSequence() throws JavaLayerException {
+        logger.info("Playing sequence {}.", currentSequence.getId());
 
         renderedStageProps = sequencePersistenceService.getRenderedStagePropsBySequenceAndSong(currentSequence, currentSong);
         stagePropUuidMap = sequencePersistenceService.getSequenceStagePropUuidMapBySequenceId(currentSequence.getId());
