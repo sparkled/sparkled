@@ -1,31 +1,31 @@
-.stage-edit-page .prop-selector {
+.StageEditPage .prop-selector {
   padding: 5px;
 }
 
-.stage-edit-page .prop-selector-item {
+.StageEditPage .prop-selector-item {
   height: 100%;
   padding: 10px;
   margin: 5px;
 }
 
-.stage-edit-page .stage-prop-list {
+.StageEditPage .stage-prop-list {
   overflow: auto;
 }
 
-.stage-edit-page .stage-prop-list-entry {
+.StageEditPage .stage-prop-list-entry {
   margin: 5px;
 }
 
-.stage-edit-page .stage-canvas-container {
+.StageEditPage .stage-canvas-container {
   display: flex;
   overflow: auto;
   align-items: center;
 }
 
-.stage-edit-page .stage-canvas {
+.StageEditPage .stage-canvas {
   margin: auto;
 }
 
-.stage-edit-page .stage-canvas svg {
+.StageEditPage .stage-canvas svg {
   border: 2px solid #000;
 }

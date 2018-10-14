@@ -10,7 +10,6 @@ import { setCurrentPage }  from '../actions';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { fetchPlaylist, fetchSequences, savePlaylist, showAddSequenceModal } from './actions';
-import './PlaylistEditPage.css';
 
 const { undo, redo, clearHistory } = ActionCreators;
 
@@ -40,7 +39,7 @@ class PlaylistEditPage extends Component {
 
   componentDidMount() {
     const { playlistId } = this.props.match.params;
-    this.props.setCurrentPage({ pageTitle: 'Edit Playlist', pageClass: 'playlist-edit-page' });
+    this.props.setCurrentPage({ pageTitle: 'Edit Playlist', pageClass: 'PlaylistEditPage' });
     this.props.fetchPlaylist(playlistId);
     this.props.fetchSequences();
   }

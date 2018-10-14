@@ -39,7 +39,7 @@ class SequenceEditPage extends Component {
   componentDidMount() {
     const { setCurrentPage, fetchSequenceStage, fetchSequence, fetchReferenceData } = this.props;
     const { sequenceId } = this.props.match.params;
-    setCurrentPage({ pageTitle: 'Edit Sequence', pageClass: 'sequence-edit-page' });
+    setCurrentPage({ pageTitle: 'Edit Sequence', pageClass: 'SequenceEditPage' });
     fetchSequenceStage(sequenceId);
     fetchSequence(sequenceId);
     fetchReferenceData();

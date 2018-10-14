@@ -15,8 +15,13 @@ class StageListPage extends Component {
 
   state = { searchQuery: '' };
 
+  constructor(props) {
+    super(props);
+    this.stageMatchesSearch = this.stageMatchesSearch.bind(this);
+  }
+
   componentDidMount() {
-    this.props.setCurrentPage({ pageTitle: 'Stages', pageClass: 'stage-list-page' });
+    this.props.setCurrentPage({ pageTitle: 'Stages', pageClass: 'StageListPage' });
     this.props.fetchStages();
   }
 
@@ -37,7 +42,7 @@ class StageListPage extends Component {
         <div className="row">
           <div className="col-lg-12 input-group input-group-lg my-4">
             <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
-                   onChange={(e, newValue) => this.setState({ searchQuery: newValue })}/>
+                   onChange={e => this.setState({ searchQuery: e.target.value })}/>
           </div>
         </div>
 
@@ -102,7 +107,7 @@ class StageListPage extends Component {
     }
 
     const stages = _(this.props.stages)
-      .filter(this.stageMatchesSearch.bind(this))
+      .filter(this.stageMatchesSearch)
       .map(stage => (
         <div key={stage.id} className="col-md-6 col-lg-4 mb-4">
           <StageEntry stage={stage}/>
@@ -115,13 +120,7 @@ class StageListPage extends Component {
 
   stageMatchesSearch(stage) {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
-
-    if (!searchQuery) {
-      return true;
-    }
-
-    const { name } = stage;
-    return _.filter([name], field => _.includes(field.toLowerCase(), searchQuery)).length > 0;
+    return !searchQuery || _.includes(stage.name.toLowerCase(), searchQuery);
   }
 }
 

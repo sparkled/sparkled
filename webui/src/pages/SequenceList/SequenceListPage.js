@@ -17,6 +17,11 @@ class SequenceListPage extends Component {
 
   state = { searchQuery: '' };
 
+  constructor(props) {
+    super(props);
+    this.sequenceMatchesSearch = this.sequenceMatchesSearch.bind(this);
+  }
+
   componentDidMount() {
     this.props.setCurrentPage({ pageTitle: 'Sequences', pageClass: 'SequenceListPage' });
     this.props.fetchSequences();
@@ -111,7 +116,7 @@ class SequenceListPage extends Component {
     }
 
     const sequences = _(this.props.sequences)
-      .filter(this.sequenceMatchesSearch.bind(this))
+      .filter(this.sequenceMatchesSearch)
       .map(sequence => (
         <div key={sequence.id} className="col-md-6 col-lg-4 mb-4">
           <SequenceEntry sequence={sequence}/>
@@ -124,13 +129,7 @@ class SequenceListPage extends Component {
 
   sequenceMatchesSearch(sequence) {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
-
-    if (!searchQuery) {
-      return true;
-    }
-
-    const { name, album, artist } = sequence;
-    return _.filter([name, album, artist], field => _.includes(field.toLowerCase(), searchQuery)).length > 0;
+    return !searchQuery || _.includes(sequence.name.toLowerCase(), searchQuery);
   }
 }
 
@@ -152,4 +151,6 @@ function mapStateToProps({ page: { sequenceList, songList, stageList } }) {
   };
 }
 
-export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchSequences, fetchSongs, fetchStages })(SequenceListPage);
+export default connect(mapStateToProps, {
+  setCurrentPage, showAddModal, fetchSequences, fetchSongs, fetchStages
+})(SequenceListPage);

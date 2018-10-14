@@ -32,16 +32,16 @@ class PageContainer extends Component {
           <Collapse isOpen={this.state.collapsed} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('song')} to="/songs">Songs</Link>
+                <Link className={'nav-link ' + this.getPageClass('Song')} to="/songs">Songs</Link>
               </NavItem>
               <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('stage')} to="/stages">Stages</Link>
+                <Link className={'nav-link ' + this.getPageClass('Stage')} to="/stages">Stages</Link>
               </NavItem>
               <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('sequence')} to="/sequences">Sequences</Link>
+                <Link className={'nav-link ' + this.getPageClass('Sequence')} to="/sequences">Sequences</Link>
               </NavItem>
               <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('playlist')} to="/playlists">Playlists</Link>
+                <Link className={'nav-link ' + this.getPageClass('Playlist')} to="/playlists">Playlists</Link>
               </NavItem>
             </Nav>
 

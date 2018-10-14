@@ -15,8 +15,13 @@ class PlaylistListPage extends Component {
 
   state = { searchQuery: '' };
 
+  constructor(props) {
+    super(props);
+    this.playlistMatchesSearch = this.playlistMatchesSearch.bind(this);
+  }
+
   componentDidMount() {
-    this.props.setCurrentPage({ pageTitle: 'Playlists', pageClass: 'playlist-list-page' });
+    this.props.setCurrentPage({ pageTitle: 'Playlists', pageClass: 'PlaylistListPage' });
     this.props.fetchPlaylists();
   }
 
@@ -103,7 +108,7 @@ class PlaylistListPage extends Component {
     }
 
     const playlists = _(this.props.playlists)
-      .filter(this.playlistMatchesSearch.bind(this))
+      .filter(this.playlistMatchesSearch)
       .map(playlist => (
         <div key={playlist.id} className="col-md-6 col-lg-4 mb-4">
           <PlaylistEntry playlist={playlist}/>
