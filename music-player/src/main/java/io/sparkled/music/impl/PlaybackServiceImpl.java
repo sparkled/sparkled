@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.sound.sampled.LineEvent;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -52,14 +53,18 @@ public class PlaybackServiceImpl implements PlaybackService, PlaybackStateServic
                 new ThreadFactoryBuilder().setNameFormat("playback-service-%d").build()
         );
 
-        musicPlayerService.addSequenceFinishListener(event -> {
+        musicPlayerService.addLineListener(this::onLineEvent);
+    }
+
+    private void onLineEvent(LineEvent event) {
+        if (event.getType() == LineEvent.Type.STOP) {
             PlaybackState state = this.playbackState.get();
             if (!state.isEmpty()) {
                 Playlist playlist = state.getPlaylist();
                 int playlistIndex = state.getPlaylistIndex();
                 submitSequencePlayback(playlist, playlistIndex + 1);
             }
-        });
+        }
     }
 
     @Override

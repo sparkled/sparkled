@@ -9,7 +9,7 @@ import io.sparkled.model.render.RenderedStagePropDataMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A container object holding all of the information pertaining to the current state of playback, in terms of audio
@@ -19,7 +19,7 @@ public class PlaybackState {
 
     private final Playlist playlist;
     private final int playlistIndex;
-    private final Function<PlaybackState, Double> progressFunction;
+    private final Supplier<Double> progressFunction;
     private final Sequence sequence;
     private final Song song;
     private final SongAudio songAudio;
@@ -30,7 +30,7 @@ public class PlaybackState {
         this(null, 0, null, null, null, null, null, null);
     }
 
-    public PlaybackState(Playlist playlist, int playlistIndex, Function<PlaybackState, Double> progressFunction, Sequence sequence, Song song, SongAudio songAudio, RenderedStagePropDataMap renderedStageProps, Map<String, UUID> stagePropUuids) {
+    public PlaybackState(Playlist playlist, int playlistIndex, Supplier<Double> progressFunction, Sequence sequence, Song song, SongAudio songAudio, RenderedStagePropDataMap renderedStageProps, Map<String, UUID> stagePropUuids) {
         this.playlist = playlist;
         this.playlistIndex = playlistIndex;
         this.progressFunction = progressFunction;
@@ -54,7 +54,7 @@ public class PlaybackState {
     }
 
     public double getProgress() {
-        return progressFunction.apply(this);
+        return progressFunction.get();
     }
 
     public Sequence getSequence() {
