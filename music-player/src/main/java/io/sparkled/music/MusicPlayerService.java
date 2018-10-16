@@ -1,44 +1,35 @@
 package io.sparkled.music;
 
-import io.sparkled.model.entity.Playlist;
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.Song;
-import io.sparkled.model.render.RenderedStagePropDataMap;
+import io.sparkled.model.entity.SongAudio;
+import javazoom.jl.player.advanced.PlaybackEvent;
 
-import java.util.UUID;
+import java.util.function.Consumer;
 
+/**
+ * Plays {@link SongAudio} data and provides a means of determining song progress.
+ */
 public interface MusicPlayerService {
 
     /**
-     * Plays the provided playlist and provides the associated sequence data for synchronised retrieval.
+     * Attaches a listener that will be notified when a sequence is finished playing or is stopped by a call to
+     * {@link #stopPlayback()}.
+     *
+     * @param listener The listener to attach
      */
-    void play(Playlist playlist);
+    void addSequenceFinishListener(Consumer<PlaybackEvent> listener);
 
     /**
-     * @return The song related to the sequence that is currently playing, or null if no sequence is playing.
+     * Plays the provided audio data. Calls to this method will block until playback has completed. Therefore, it is the
+     * requirement of the caller to run this method in a new thread.
+     *
+     * @param playbackState A playback state containing the {@link SongAudio} data to be played.
      */
-    Song getCurrentSong();
+    void play(PlaybackState playbackState);
 
     /**
-     * @return The sequence that is currently playing, or null if no sequence is playing.
+     * @return A normalised value between 0 and 1 indicating the playback progress of the current sequence.
      */
-    Sequence getCurrentSequence();
-
-    /**
-     * @return The rendered data for the sequence that is currently playing, or null if no sequence is playing.
-     */
-    RenderedStagePropDataMap getRenderedStageProps();
-
-    /**
-     * @param stagePropCode The code of the stage prop being searched for.
-     * @return The stage prop UUID.
-     */
-    UUID getStagePropUuid(String stagePropCode);
-
-    /**
-     * @return A value between 0 and 1 indicating the playback progress of the current sequence.
-     */
-    double getSequenceProgress();
+    double getSequenceProgress(PlaybackState playbackState);
 
     /**
      * Stops playback of the current sequence. If no sequence is playing, this is a no-op.
