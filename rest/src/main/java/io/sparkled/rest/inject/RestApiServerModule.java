@@ -23,11 +23,17 @@ import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter;
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverterImpl;
 import io.sparkled.viewmodel.stage.search.StageSearchViewModelConverter;
 import io.sparkled.viewmodel.stage.search.StageSearchViewModelConverterImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RestApiServerModule extends AbstractModule {
 
+    private static final Logger logger = LoggerFactory.getLogger(RestApiServerModule.class);
+
     @Override
     protected void configure() {
+        logger.info("Configuring Guice module.");
+
         bind(RestApiServer.class).to(RestApiServerImpl.class).asEagerSingleton();
 
         bind(SongViewModelConverter.class).to(SongViewModelConverterImpl.class).asEagerSingleton();
