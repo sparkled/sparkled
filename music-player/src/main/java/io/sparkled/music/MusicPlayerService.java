@@ -3,6 +3,7 @@ package io.sparkled.music;
 import io.sparkled.model.entity.SongAudio;
 import javazoom.jl.player.advanced.PlaybackEvent;
 
+import javax.sound.sampled.LineListener;
 import java.util.function.Consumer;
 
 /**
@@ -16,7 +17,7 @@ public interface MusicPlayerService {
      *
      * @param listener The listener to attach
      */
-    void addSequenceFinishListener(Consumer<PlaybackEvent> listener);
+    void addLineListener(LineListener listener);
 
     /**
      * Plays the provided audio data. Calls to this method will block until playback has completed. Therefore, it is the
@@ -29,7 +30,7 @@ public interface MusicPlayerService {
     /**
      * @return A normalised value between 0 and 1 indicating the playback progress of the current sequence.
      */
-    double getSequenceProgress(PlaybackState playbackState);
+    double getSequenceProgress();
 
     /**
      * Stops playback of the current sequence. If no sequence is playing, this is a no-op.

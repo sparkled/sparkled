@@ -9,6 +9,8 @@ import io.sparkled.music.impl.PlaybackServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Singleton;
+
 public class MusicPlayerModule extends AbstractModule {
 
     private static final Logger logger = LoggerFactory.getLogger(MusicPlayerModule.class);
@@ -17,8 +19,11 @@ public class MusicPlayerModule extends AbstractModule {
     protected void configure() {
         logger.info("Configuring Guice module.");
 
+        // PlaybackServiceImpl is bound to two interfaces. This scope binding ensures they both get the same singleton instance.
+        bind(PlaybackServiceImpl.class).in(Singleton.class);
         bind(PlaybackService.class).to(PlaybackServiceImpl.class).asEagerSingleton();
         bind(PlaybackStateService.class).to(PlaybackServiceImpl.class).asEagerSingleton();
+
         bind(MusicPlayerService.class).to(MusicPlayerServiceImpl.class).asEagerSingleton();
     }
 }
