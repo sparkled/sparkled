@@ -2,9 +2,9 @@ package io.sparkled.udpserver.inject;
 
 import com.google.inject.AbstractModule;
 import io.sparkled.udpserver.RequestHandler;
-import io.sparkled.udpserver.RequestHandlerImpl;
+import io.sparkled.udpserver.impl.RequestHandlerImpl;
 import io.sparkled.udpserver.UdpServer;
-import io.sparkled.udpserver.UdpServerImpl;
+import io.sparkled.udpserver.impl.UdpServerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

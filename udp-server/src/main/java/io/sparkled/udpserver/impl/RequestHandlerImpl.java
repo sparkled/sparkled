@@ -1,4 +1,4 @@
-package io.sparkled.udpserver;
+package io.sparkled.udpserver.impl;
 
 import io.sparkled.model.render.RenderedFrame;
 import io.sparkled.model.render.RenderedStagePropData;
@@ -6,6 +6,7 @@ import io.sparkled.model.render.RenderedStagePropDataMap;
 import io.sparkled.model.util.SequenceUtils;
 import io.sparkled.music.PlaybackState;
 import io.sparkled.music.PlaybackStateService;
+import io.sparkled.udpserver.RequestHandler;
 
 import javax.inject.Inject;
 import java.io.IOException;
