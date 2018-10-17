@@ -1,12 +1,12 @@
 package io.sparkled.udpserver.impl;
 
-import io.sparkled.model.render.RenderedFrame;
-import io.sparkled.model.render.RenderedStagePropData;
-import io.sparkled.model.render.RenderedStagePropDataMap;
-import io.sparkled.model.util.SequenceUtils;
 import io.sparkled.music.PlaybackState;
 import io.sparkled.music.PlaybackStateService;
 import io.sparkled.udpserver.RequestHandler;
+import io.sparkled.udpserver.impl.command.GetFrameCommand;
+import io.sparkled.udpserver.impl.command.RequestCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -14,70 +14,51 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestHandlerImpl implements RequestHandler {
 
-    private static final String GET_FRAME_COMMAND = "GF";
-    private static final byte[] ERROR_CODE_BYTES = "ERR".getBytes(StandardCharsets.US_ASCII);
+    public static final byte[] ERROR_CODE_BYTES = "ERR".getBytes(StandardCharsets.US_ASCII);
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandlerImpl.class);
 
+    // TODO Use Map.ofEntries() after moving to Java 11.
+    private final Map<String, RequestCommand> commands = new HashMap<>();
     private final PlaybackStateService playbackStateService;
 
     @Inject
     public RequestHandlerImpl(PlaybackStateService playbackStateService) {
         this.playbackStateService = playbackStateService;
+        commands.put(GetFrameCommand.KEY, new GetFrameCommand());
     }
 
     @Override
-    public void handle(DatagramSocket serverSocket, DatagramPacket receivePacket) throws IOException {
-        String message = new String(receivePacket.getData()).substring(0, receivePacket.getLength());
-        String[] components = message.split(":");
+    public void handle(DatagramSocket serverSocket, DatagramPacket receivePacket) {
+        try {
+            String message = new String(receivePacket.getData()).substring(0, receivePacket.getLength());
+            String[] args = message.split(":");
+            byte[] response = getResponse(args);
+            respond(serverSocket, receivePacket, response);
+        } catch (IOException e) {
+            logger.error("Failed to handle response.", e);
+        }
+    }
 
-        if (components.length == 2 && GET_FRAME_COMMAND.equals(components[0])) {
-            String stagePropCode = components[1];
+    private byte[] getResponse(String[] args) {
+        PlaybackState playbackState = playbackStateService.getPlaybackState();
+        String command = args[0];
+        RequestCommand requestCommand = commands.get(command);
 
-            PlaybackState playbackState = playbackStateService.getPlaybackState();
-            if (playbackState.isEmpty()) {
-                sendErrorResponse(serverSocket, receivePacket);
-            } else {
-                final int frameCount = SequenceUtils.getFrameCount(playbackState.getSong(), playbackState.getSequence());
-                final int frameIndex = (int) Math.min(frameCount - 1, Math.round(playbackState.getProgress() * frameCount));
-
-                RenderedFrame renderedFrame = getRenderedFrame(playbackState, stagePropCode, frameIndex);
-                if (renderedFrame == null) {
-                    sendErrorResponse(serverSocket, receivePacket);
-                } else {
-                    respond(serverSocket, receivePacket, renderedFrame.getData());
-                }
-            }
+        if (playbackState.isEmpty() || requestCommand == null) {
+            return ERROR_CODE_BYTES;
         } else {
-            sendErrorResponse(serverSocket, receivePacket);
+            return requestCommand.getResponse(args, playbackState);
         }
-    }
-
-    private void sendErrorResponse(DatagramSocket serverSocket, DatagramPacket receivePacket) throws IOException {
-        respond(serverSocket, receivePacket, ERROR_CODE_BYTES);
-    }
-
-    private RenderedFrame getRenderedFrame(PlaybackState playbackState, String stagePropCode, int frameIndex) {
-        RenderedStagePropDataMap renderedStagePropDataMap = playbackState.getRenderedStageProps();
-        UUID stagePropUuid = playbackState.getStagePropUuids().get(stagePropCode);
-        RenderedStagePropData renderedStagePropData = renderedStagePropDataMap.get(stagePropUuid);
-        RenderedFrame frame = null;
-
-        if (renderedStagePropData != null) {
-            List<RenderedFrame> frames = renderedStagePropData.getFrames();
-            frame = frames == null ? null : frames.get(frameIndex);
-        }
-
-        return frame;
     }
 
     private void respond(DatagramSocket serverSocket, DatagramPacket receivePacket, byte[] data) throws IOException {
         InetAddress IPAddress = receivePacket.getAddress();
-        int port = receivePacket.getPort();
-        DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, port);
+        DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, receivePacket.getPort());
         serverSocket.send(sendPacket);
     }
 }
