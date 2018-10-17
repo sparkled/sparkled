@@ -1,10 +1,10 @@
 package io.sparkled.renderer.easing.function;
 
 import io.sparkled.model.animation.easing.Easing;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.IsCloseTo.closeTo;
-import static org.junit.Assert.assertThat;
 
 public class LinearEasingTest {
 
