@@ -11,8 +11,9 @@ import io.sparkled.model.animation.param.ParamName;
 import io.sparkled.model.render.RenderedStagePropData;
 import io.sparkled.util.RenderUtils;
 import io.sparkled.util.matchers.SparkledMatchers;
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LineEffectRendererTest {
 
@@ -38,7 +39,7 @@ public class LineEffectRendererTest {
         RenderedStagePropData renderedStagePropData = RenderUtils.render(effect, 12, 10);
 
         final int[] c = new int[]{0x000000, 0xFFFFFF};
-        MatcherAssert.assertThat(renderedStagePropData, SparkledMatchers.hasLeds(new int[][]{
+        assertThat(renderedStagePropData, SparkledMatchers.hasLeds(new int[][]{
                 {c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]},
                 {c[1], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]},
                 {c[0], c[1], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]},
@@ -76,7 +77,7 @@ public class LineEffectRendererTest {
         RenderedStagePropData renderedStagePropData = RenderUtils.render(effect, 20, 10);
 
         final int[] c = new int[]{0x000000, 0xFFFFFF};
-        MatcherAssert.assertThat(renderedStagePropData, SparkledMatchers.hasLeds(new int[][]{
+        assertThat(renderedStagePropData, SparkledMatchers.hasLeds(new int[][]{
                 {c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]},
                 {c[1], c[1], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]},
                 {c[1], c[1], c[1], c[0], c[0], c[0], c[0], c[0], c[0], c[0]},
