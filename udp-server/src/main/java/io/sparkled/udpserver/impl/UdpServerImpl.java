@@ -1,6 +1,8 @@
-package io.sparkled.udpserver;
+package io.sparkled.udpserver.impl;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import io.sparkled.udpserver.RequestHandler;
+import io.sparkled.udpserver.UdpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,8 +17,7 @@ import java.util.concurrent.Executors;
 public class UdpServerImpl implements UdpServer {
 
     private static final Logger logger = LoggerFactory.getLogger(UdpServerImpl.class);
-    private static final int THREAD_COUNT = 4;
-    private static final int RECEIVE_BUFFER_SIZE = 16;
+    private static final int RECEIVE_BUFFER_SIZE = 20;
     private final RequestHandler requestHandler;
     private final ExecutorService executor;
     private boolean started;
@@ -24,7 +25,7 @@ public class UdpServerImpl implements UdpServer {
     @Inject
     public UdpServerImpl(RequestHandler requestHandler) {
         this.requestHandler = requestHandler;
-        this.executor = Executors.newFixedThreadPool(THREAD_COUNT,
+        this.executor = Executors.newSingleThreadExecutor(
                 new ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
         );
     }
@@ -37,21 +38,22 @@ public class UdpServerImpl implements UdpServer {
         }
 
         DatagramSocket serverSocket = new DatagramSocket(port);
-
-        executor.submit(() -> {
-            byte[] receiveData = new byte[RECEIVE_BUFFER_SIZE];
-
-            while (true) {
-                try {
-                    handleRequest(serverSocket, receiveData);
-                } catch (Exception e) {
-                    logger.error("Failed to handle UDP request.", e);
-                }
-            }
-        });
+        executor.submit(() -> listen(serverSocket));
 
         started = true;
         logger.info("Started UDP server at port {}.", port);
+    }
+
+    private Object listen(DatagramSocket serverSocket) {
+        byte[] receiveData = new byte[RECEIVE_BUFFER_SIZE];
+
+        while (true) {
+            try {
+                handleRequest(serverSocket, receiveData);
+            } catch (Exception e) {
+                logger.error("Failed to handle UDP request.", e);
+            }
+        }
     }
 
     private void handleRequest(final DatagramSocket serverSocket, final byte[] receiveData) throws IOException {

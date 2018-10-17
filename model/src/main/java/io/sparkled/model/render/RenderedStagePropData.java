@@ -5,6 +5,8 @@ import java.util.List;
 
 public class RenderedStagePropData {
 
+    public static final RenderedStagePropData EMPTY = new RenderedStagePropData();
+
     private final int ledCount;
     private final byte[] data;
 

@@ -42,7 +42,7 @@ class SongRestServiceHandler extends RestServiceHandler {
         return respondOk(new IdResponse(song.getId()));
     }
 
-    // TODO Use IOUtils.toByteArray() after moving to Java 9.
+    // TODO Use IOUtils.toByteArray() after moving to Java 11.
     private byte[] loadAudioData(InputStream inputStream) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         int offset;
