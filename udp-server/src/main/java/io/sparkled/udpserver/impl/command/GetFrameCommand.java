@@ -20,7 +20,7 @@ public class GetFrameCommand extends RequestCommand {
 
     @Override
     public byte[] getResponse(String[] args, PlaybackState playbackState) {
-        if (args.length != 2) {
+        if (args.length != 2 || playbackState.isEmpty()) {
             return getErrorResponse();
         }
 
