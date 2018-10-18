@@ -4,6 +4,8 @@ import io.sparkled.music.PlaybackState;
 import io.sparkled.music.PlaybackStateService;
 import io.sparkled.udpserver.RequestHandler;
 import io.sparkled.udpserver.impl.command.GetFrameCommand;
+import io.sparkled.udpserver.impl.command.GetStagePropCodesCommand;
+import io.sparkled.udpserver.impl.command.GetVersionCommand;
 import io.sparkled.udpserver.impl.command.RequestCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,8 @@ public class RequestHandlerImpl implements RequestHandler {
     public RequestHandlerImpl(PlaybackStateService playbackStateService) {
         this.playbackStateService = playbackStateService;
         commands.put(GetFrameCommand.KEY, new GetFrameCommand());
+        commands.put(GetStagePropCodesCommand.KEY, new GetStagePropCodesCommand());
+        commands.put(GetVersionCommand.KEY, new GetVersionCommand());
     }
 
     @Override
@@ -49,7 +53,7 @@ public class RequestHandlerImpl implements RequestHandler {
         String command = args[0];
         RequestCommand requestCommand = commands.get(command);
 
-        if (playbackState.isEmpty() || requestCommand == null) {
+        if (requestCommand == null) {
             return ERROR_CODE_BYTES;
         } else {
             return requestCommand.getResponse(args, playbackState);
