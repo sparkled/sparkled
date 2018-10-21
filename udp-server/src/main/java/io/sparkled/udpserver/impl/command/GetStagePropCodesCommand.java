@@ -1,5 +1,6 @@
 package io.sparkled.udpserver.impl.command;
 
+import io.sparkled.model.setting.SettingsCache;
 import io.sparkled.music.PlaybackState;
 
 import java.nio.charset.StandardCharsets;
@@ -16,7 +17,7 @@ public class GetStagePropCodesCommand extends RequestCommand {
     public static final String KEY = "GP";
 
     @Override
-    public byte[] getResponse(String[] args, PlaybackState playbackState) {
+    public byte[] getResponse(String[] args, SettingsCache settings, PlaybackState playbackState) {
         if (playbackState.isEmpty()) {
             return getErrorResponse();
         }

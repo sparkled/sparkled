@@ -1,7 +1,7 @@
 package io.sparkled.viewmodel.playlist.search;
 
 import io.sparkled.model.entity.Playlist;
-import io.sparkled.model.entity.PlaylistSummary;
+import io.sparkled.model.playlist.PlaylistSummary;
 import io.sparkled.persistence.playlist.PlaylistPersistenceService;
 
 import javax.inject.Inject;

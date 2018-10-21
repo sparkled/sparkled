@@ -1,7 +1,7 @@
 package io.sparkled.persistence.playlist.impl.query;
 
 import com.querydsl.core.Tuple;
-import io.sparkled.model.entity.PlaylistSummary;
+import io.sparkled.model.playlist.PlaylistSummary;
 import io.sparkled.model.util.TupleUtils;
 import io.sparkled.persistence.PersistenceQuery;
 import io.sparkled.persistence.QueryFactory;

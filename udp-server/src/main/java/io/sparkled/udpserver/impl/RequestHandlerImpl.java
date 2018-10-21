@@ -1,7 +1,9 @@
 package io.sparkled.udpserver.impl;
 
+import io.sparkled.model.setting.SettingsCache;
 import io.sparkled.music.PlaybackState;
 import io.sparkled.music.PlaybackStateService;
+import io.sparkled.persistence.setting.SettingPersistenceService;
 import io.sparkled.udpserver.RequestHandler;
 import io.sparkled.udpserver.impl.command.GetFrameCommand;
 import io.sparkled.udpserver.impl.command.GetStagePropCodesCommand;
@@ -27,10 +29,14 @@ public class RequestHandlerImpl implements RequestHandler {
     // TODO Use Map.ofEntries() after moving to Java 11.
     private final Map<String, RequestCommand> commands = new HashMap<>();
     private final PlaybackStateService playbackStateService;
+    private final SettingPersistenceService settingPersistenceService;
 
     @Inject
-    public RequestHandlerImpl(PlaybackStateService playbackStateService) {
+    public RequestHandlerImpl(PlaybackStateService playbackStateService,
+                              SettingPersistenceService settingPersistenceService) {
         this.playbackStateService = playbackStateService;
+        this.settingPersistenceService = settingPersistenceService;
+
         commands.put(GetFrameCommand.KEY, new GetFrameCommand());
         commands.put(GetStagePropCodesCommand.KEY, new GetStagePropCodesCommand());
         commands.put(GetVersionCommand.KEY, new GetVersionCommand());
@@ -50,13 +56,15 @@ public class RequestHandlerImpl implements RequestHandler {
 
     private byte[] getResponse(String[] args) {
         PlaybackState playbackState = playbackStateService.getPlaybackState();
+        SettingsCache settings = settingPersistenceService.getSettings();
+
         String command = args[0];
         RequestCommand requestCommand = commands.get(command);
 
         if (requestCommand == null) {
             return ERROR_CODE_BYTES;
         } else {
-            return requestCommand.getResponse(args, playbackState);
+            return requestCommand.getResponse(args, settings, playbackState);
         }
     }
 

@@ -233,4 +233,20 @@
                                  constraintName="fk_playlist_sequence_sequence_id"
                                  onDelete="RESTRICT" onUpdate="RESTRICT"/>
     </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-setting">
+        <createTable tableName="setting">
+            <column name="code" type="VARCHAR(32)">
+                <constraints primaryKey="true" primaryKeyName="pk_table_setting"/>
+            </column>
+            <column name="value" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert tableName="setting">
+            <column name="code" value="BRIGHTNESS"/>
+            <column name="value" value="15"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

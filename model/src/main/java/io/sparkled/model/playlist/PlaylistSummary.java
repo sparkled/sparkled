@@ -1,4 +1,4 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.playlist;
 
 import java.util.Objects;
 

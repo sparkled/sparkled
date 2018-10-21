@@ -7,6 +7,8 @@ import io.sparkled.persistence.playlist.PlaylistPersistenceService;
 import io.sparkled.persistence.playlist.impl.PlaylistPersistenceServiceImpl;
 import io.sparkled.persistence.sequence.SequencePersistenceService;
 import io.sparkled.persistence.sequence.impl.SequencePersistenceServiceImpl;
+import io.sparkled.persistence.setting.SettingPersistenceService;
+import io.sparkled.persistence.setting.impl.SettingPersistenceServiceImpl;
 import io.sparkled.persistence.song.SongPersistenceService;
 import io.sparkled.persistence.song.impl.SongPersistenceServiceImpl;
 import io.sparkled.persistence.stage.StagePersistenceService;
@@ -29,5 +31,6 @@ public class PersistenceModule extends AbstractModule {
         bind(SongPersistenceService.class).to(SongPersistenceServiceImpl.class).asEagerSingleton();
         bind(SequencePersistenceService.class).to(SequencePersistenceServiceImpl.class).asEagerSingleton();
         bind(PlaylistPersistenceService.class).to(PlaylistPersistenceServiceImpl.class).asEagerSingleton();
+        bind(SettingPersistenceService.class).to(SettingPersistenceServiceImpl.class).asEagerSingleton();
     }
 }
