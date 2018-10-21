@@ -2,7 +2,7 @@ package io.sparkled.persistence.playlist;
 
 import io.sparkled.model.entity.Playlist;
 import io.sparkled.model.entity.PlaylistSequence;
-import io.sparkled.model.entity.PlaylistSummary;
+import io.sparkled.model.playlist.PlaylistSummary;
 import io.sparkled.model.entity.Sequence;
 
 import java.util.List;

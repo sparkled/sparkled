@@ -1,5 +1,6 @@
 package io.sparkled.udpserver.impl.command;
 
+import io.sparkled.model.setting.SettingsCache;
 import io.sparkled.music.PlaybackState;
 
 /**
@@ -10,9 +11,10 @@ import io.sparkled.music.PlaybackState;
 public class GetVersionCommand extends RequestCommand {
 
     public static final String KEY = "GV";
+    private static final int UDP_PROTOCOL_VERSION = 1;
 
     @Override
-    public byte[] getResponse(String[] args, PlaybackState playbackState) {
-        return new byte[]{1};
+    public byte[] getResponse(String[] args, SettingsCache settings, PlaybackState playbackState) {
+        return new byte[]{UDP_PROTOCOL_VERSION};
     }
 }
