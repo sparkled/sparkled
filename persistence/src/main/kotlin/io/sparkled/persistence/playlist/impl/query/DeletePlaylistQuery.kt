@@ -1,18 +1,16 @@
 package io.sparkled.persistence.playlist.impl.query
 
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylist
+import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylistSequence
 import io.sparkled.persistence.QueryFactory
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.UUID
 
-class DeletePlaylistQuery(private val playlistId: Int) : PersistenceQuery<Void> {
+class DeletePlaylistQuery(private val playlistId: Int) : PersistenceQuery<Unit> {
 
-    @Override
-    fun perform(queryFactory: QueryFactory): Void? {
+    override fun perform(queryFactory: QueryFactory) {
         deletePlaylistSequences(queryFactory)
         deletePlaylist(queryFactory)
-        return null
     }
 
     private fun deletePlaylistSequences(queryFactory: QueryFactory) {
@@ -34,7 +32,6 @@ class DeletePlaylistQuery(private val playlistId: Int) : PersistenceQuery<Void> 
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(DeletePlaylistQuery::class.java)
     }
 }

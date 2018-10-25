@@ -1,13 +1,16 @@
 package io.sparkled.persistence.stage.impl.query
 
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
+import io.sparkled.persistence.PersistenceQuery.Companion.qRenderedStageProp
+import io.sparkled.persistence.PersistenceQuery.Companion.qSequenceChannel
+import io.sparkled.persistence.PersistenceQuery.Companion.qStageProp
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.sequence.impl.query.DeleteSequenceChannelsQuery
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.UUID
+import java.util.*
 
-class DeleteStagePropsQuery internal constructor(stagePropUuids: Collection<UUID>) : PersistenceQuery<Void> {
+class DeleteStagePropsQuery internal constructor(stagePropUuids: Collection<UUID>) : PersistenceQuery<Unit> {
 
     private val stagePropUuids: Collection<UUID>
 
@@ -15,12 +18,10 @@ class DeleteStagePropsQuery internal constructor(stagePropUuids: Collection<UUID
         this.stagePropUuids = if (stagePropUuids.isEmpty()) noUuids else stagePropUuids
     }
 
-    @Override
-    fun perform(queryFactory: QueryFactory): Void? {
+    override fun perform(queryFactory: QueryFactory) {
         deleteRenderedStageProps(queryFactory)
         deleteSequenceChannels(queryFactory)
         deleteStageProps(queryFactory)
-        return null
     }
 
     private fun deleteRenderedStageProps(queryFactory: QueryFactory) {
@@ -51,7 +52,6 @@ class DeleteStagePropsQuery internal constructor(stagePropUuids: Collection<UUID
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(DeleteStagePropsQuery::class.java)
     }
 }

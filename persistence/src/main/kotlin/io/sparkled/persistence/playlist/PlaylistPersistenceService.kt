@@ -2,18 +2,17 @@ package io.sparkled.persistence.playlist
 
 import io.sparkled.model.entity.Playlist
 import io.sparkled.model.entity.PlaylistSequence
-import io.sparkled.model.playlist.PlaylistSummary
 import io.sparkled.model.entity.Sequence
-import java.util.Optional
-import java.util.UUID
+import io.sparkled.model.playlist.PlaylistSummary
+import java.util.*
 
 interface PlaylistPersistenceService {
 
     fun createPlaylist(playlist: Playlist): Playlist
 
-    val allPlaylists: List<Playlist>
+    fun getAllPlaylists(): List<Playlist>
 
-    val playlistSummaries: Map<Integer, PlaylistSummary>
+    fun getPlaylistSummaries(): Map<Int, PlaylistSummary>
 
     fun getPlaylistById(playlistId: Int): Optional<Playlist>
 

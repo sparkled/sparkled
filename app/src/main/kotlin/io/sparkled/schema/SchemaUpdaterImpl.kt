@@ -1,33 +1,30 @@
 package io.sparkled.schema
 
-import com.google.inject.persist.Transactional
+import io.sparkled.persistence.transaction.Transaction
 import liquibase.Liquibase
-import liquibase.database.Database
 import liquibase.database.DatabaseFactory
 import liquibase.database.jvm.JdbcConnection
 import liquibase.resource.ClassLoaderResourceAccessor
 import org.hibernate.Session
 import org.hibernate.internal.SessionImpl
-
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.persistence.EntityManager
-import java.sql.Connection
 
 /**
  * Performs an automated database schema upgrade.
  */
-class SchemaUpdaterImpl @Inject
+open class SchemaUpdaterImpl @Inject
 constructor(private val entityManagerProvider: Provider<EntityManager>) : SchemaUpdater {
 
-    @Transactional
-    @Override
     @Throws(Exception::class)
-    fun update() {
-        val jdbcConnection = jdbcConnection
-        val database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection)
-        val liquibase = Liquibase(CHANGELOG_FILE, ClassLoaderResourceAccessor(), database)
-        liquibase.update("")
+    override fun update() {
+        Transaction(entityManagerProvider).of {
+            val jdbcConnection = jdbcConnection
+            val database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection)
+            val liquibase = Liquibase(CHANGELOG_FILE, ClassLoaderResourceAccessor(), database)
+            liquibase.update("")
+        }
     }
 
     private val jdbcConnection: JdbcConnection
@@ -38,7 +35,6 @@ constructor(private val entityManagerProvider: Provider<EntityManager>) : Schema
         }
 
     companion object {
-
-        private val CHANGELOG_FILE = "db.changelog.xml"
+        private const val CHANGELOG_FILE = "db.changelog.xml"
     }
 }

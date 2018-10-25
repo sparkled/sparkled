@@ -5,7 +5,7 @@ import io.sparkled.rest.service.RestServiceHandler
 
 import javax.ws.rs.core.Response
 
-class FillTypeRestServiceHandler : RestServiceHandler() {
+open class FillTypeRestServiceHandler : RestServiceHandler() {
 
     fun get(): Response {
         return respondOk(FillTypes.get())

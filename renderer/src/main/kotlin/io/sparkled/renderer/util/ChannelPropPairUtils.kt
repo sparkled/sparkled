@@ -5,9 +5,7 @@ import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.StageProp
 import io.sparkled.model.util.GsonProvider
-import java.util.UUID
-
-import java.util.stream.Collectors.toList
+import java.util.*
 
 /**
  * Pairs up sequence channels with their associated stage prop.
@@ -15,13 +13,11 @@ import java.util.stream.Collectors.toList
 object ChannelPropPairUtils {
 
     fun makePairs(sequenceChannels: List<SequenceChannel>, stageProps: List<StageProp>): List<ChannelPropPair> {
-        return sequenceChannels.stream()
-                .map({ sc -> getPair(sc, stageProps) })
-                .collect(toList())
+        return sequenceChannels.asSequence().map { sc -> getPair(sc, stageProps) }.toList()
     }
 
     private fun getPair(sequenceChannel: SequenceChannel, stageProps: List<StageProp>): ChannelPropPair {
-        return ChannelPropPair(convertChannelData(sequenceChannel), findStagePropByUuid(stageProps, sequenceChannel.getStagePropUuid()))
+        return ChannelPropPair(convertChannelData(sequenceChannel), findStagePropByUuid(stageProps, sequenceChannel.getStagePropUuid()!!))
     }
 
     private fun convertChannelData(sequenceChannel: SequenceChannel): SequenceChannelEffects {
@@ -29,9 +25,9 @@ object ChannelPropPairUtils {
     }
 
     private fun findStagePropByUuid(stageProps: List<StageProp>, uuid: UUID): StageProp {
-        return stageProps.stream()
-                .filter({ sp -> sp.getUuid().equals(uuid) })
-                .findFirst()
-                .orElse(null)
+        return stageProps
+                .asSequence()
+                .filter { sp -> sp.getUuid()!! == uuid }
+                .firstOrNull()!!
     }
 }

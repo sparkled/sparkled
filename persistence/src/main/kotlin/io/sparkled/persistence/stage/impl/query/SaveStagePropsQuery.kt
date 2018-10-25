@@ -5,37 +5,32 @@ import io.sparkled.model.entity.StageProp
 import io.sparkled.model.validator.StagePropValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
+import io.sparkled.persistence.PersistenceQuery.Companion.qStageProp
 import io.sparkled.persistence.QueryFactory
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.*
 
-import javax.persistence.EntityManager
-import java.util.UUID
+class SaveStagePropsQuery(private val stage: Stage, private val stageProps: List<StageProp>) : PersistenceQuery<Unit> {
 
-import java.util.stream.Collectors.toList
-
-class SaveStagePropsQuery(private val stage: Stage, private val stageProps: List<StageProp>) : PersistenceQuery<Void> {
-
-    @Override
-    fun perform(queryFactory: QueryFactory): Void? {
+    override fun perform(queryFactory: QueryFactory) {
         val stagePropValidator = StagePropValidator()
-        stageProps.forEach { sp -> sp.setStageId(stage.getId()) }
+        stageProps.forEach { sp -> sp.setStageId(stage.getId()!!) }
         stagePropValidator.validate(stageProps)
 
         if (uuidAlreadyInUse(queryFactory)) {
             throw EntityValidationException("Stage prop already exists on another stage.")
         } else {
-            val entityManager = queryFactory.getEntityManager()
-            stageProps.forEach(???({ entityManager.merge() }))
-            logger.info("Saved {} stage prop(s) for stage {}.", stageProps.size(), stage.getId())
+            val entityManager = queryFactory.entityManager
+            stageProps.forEach { entityManager.merge(it) }
+            logger.info("Saved {} stage prop(s) for stage {}.", stageProps.size, stage.getId())
 
             deleteRemovedStageProps(queryFactory)
-            return null
         }
     }
 
     private fun uuidAlreadyInUse(queryFactory: QueryFactory): Boolean {
-        var uuidsToCheck = stageProps.stream().map(???({ StageProp.getUuid() })).collect(toList())
+        var uuidsToCheck = stageProps.asSequence().map(StageProp::getUuid).toList()
         uuidsToCheck = if (uuidsToCheck.isEmpty()) noUuids else uuidsToCheck
 
         val uuidsInUse = queryFactory.select(qStageProp)
@@ -51,7 +46,7 @@ class SaveStagePropsQuery(private val stage: Stage, private val stageProps: List
     }
 
     private fun getStagePropUuidsToDelete(queryFactory: QueryFactory): List<UUID> {
-        var uuidsToKeep = stageProps.stream().map(???({ StageProp.getUuid() })).collect(toList())
+        var uuidsToKeep = stageProps.asSequence().map(StageProp::getUuid).toList()
         uuidsToKeep = if (uuidsToKeep.isEmpty()) noUuids else uuidsToKeep
 
         return queryFactory
@@ -62,7 +57,6 @@ class SaveStagePropsQuery(private val stage: Stage, private val stageProps: List
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(SaveStagePropsQuery::class.java)
     }
 }

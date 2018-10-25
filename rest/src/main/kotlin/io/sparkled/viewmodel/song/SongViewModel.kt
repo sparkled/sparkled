@@ -2,86 +2,84 @@ package io.sparkled.viewmodel.song
 
 import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects
-
 class SongViewModel : ViewModel {
 
-    private var id: Integer? = null
+    private var id: Int? = null
     private var name: String? = null
     private var artist: String? = null
     private var album: String? = null
-    private var durationMs: Integer? = null
+    private var durationMs: Int? = null
 
-    fun getId(): Integer {
+    fun getId(): Int? {
         return id
     }
 
-    fun setId(id: Integer): SongViewModel {
+    fun setId(id: Int?): SongViewModel {
         this.id = id
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
-    fun setName(name: String): SongViewModel {
+    fun setName(name: String?): SongViewModel {
         this.name = name
         return this
     }
 
-    fun getArtist(): String {
+    fun getArtist(): String? {
         return artist
     }
 
-    fun setArtist(artist: String): SongViewModel {
+    fun setArtist(artist: String?): SongViewModel {
         this.artist = artist
         return this
     }
 
-    fun getAlbum(): String {
+    fun getAlbum(): String? {
         return album
     }
 
-    fun setAlbum(album: String): SongViewModel {
+    fun setAlbum(album: String?): SongViewModel {
         this.album = album
         return this
     }
 
-    fun getDurationMs(): Integer {
+    fun getDurationMs(): Int? {
         return durationMs
     }
 
-    fun setDurationMs(durationMs: Integer): SongViewModel {
+    fun setDurationMs(durationMs: Int?): SongViewModel {
         this.durationMs = durationMs
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val that = o
-        return Objects.equals(id, that!!.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(artist, that.artist) &&
-                Objects.equals(album, that.album) &&
-                Objects.equals(durationMs, that.durationMs)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SongViewModel
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (artist != other.artist) return false
+        if (album != other.album) return false
+        if (durationMs != other.durationMs) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(id, name, artist, album, durationMs)
+    override fun hashCode(): Int {
+        var result = id ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (artist?.hashCode() ?: 0)
+        result = 31 * result + (album?.hashCode() ?: 0)
+        result = 31 * result + (durationMs ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "SongViewModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", artist='" + artist + '\'' +
-                ", album='" + album + '\'' +
-                ", durationMs=" + durationMs +
-                '}'
+    override fun toString(): String {
+        return "SongViewModel(id=$id, name=$name, artist=$artist, album=$album, durationMs=$durationMs)"
     }
 }

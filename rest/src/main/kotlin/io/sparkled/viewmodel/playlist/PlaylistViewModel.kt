@@ -2,30 +2,28 @@ package io.sparkled.viewmodel.playlist
 
 import io.sparkled.viewmodel.ViewModel
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModel
-
-import java.util.ArrayList
-import java.util.Objects
+import java.util.*
 
 class PlaylistViewModel : ViewModel {
 
-    private var id: Integer? = null
+    private var id: Int? = null
     private var name: String? = null
     private var sequences: List<PlaylistSequenceViewModel> = ArrayList()
 
-    fun getId(): Integer {
+    fun getId(): Int? {
         return id
     }
 
-    fun setId(id: Integer): PlaylistViewModel {
+    fun setId(id: Int?): PlaylistViewModel {
         this.id = id
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
-    fun setName(name: String): PlaylistViewModel {
+    fun setName(name: String?): PlaylistViewModel {
         this.name = name
         return this
     }
@@ -39,27 +37,27 @@ class PlaylistViewModel : ViewModel {
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val that = o
-        return Objects.equals(id, that!!.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(sequences, that.sequences)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PlaylistViewModel
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (sequences != other.sequences) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(id, name, sequences)
+    override fun hashCode(): Int {
+        var result = id ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + sequences.hashCode()
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "PlaylistViewModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", sequences=" + sequences +
-                '}'
+    override fun toString(): String {
+        return "PlaylistViewModel(id=$id, name=$name, sequences=$sequences)"
     }
 }

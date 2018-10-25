@@ -7,6 +7,6 @@ import io.sparkled.renderer.fill.FillFunctions
 object FillUtils {
 
     fun fill(ctx: RenderContext, led: Led, alpha: Float) {
-        FillFunctions.get(ctx.getEffect().getFill().getType()).fill(ctx, led, alpha)
+        FillFunctions[ctx.effect.getFill()!!.getType()!!].fill(ctx, led, alpha)
     }
 }

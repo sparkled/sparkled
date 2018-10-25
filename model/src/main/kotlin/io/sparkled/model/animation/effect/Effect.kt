@@ -4,7 +4,6 @@ import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
-
 import java.util.*
 
 class Effect : HasParams {
@@ -19,7 +18,7 @@ class Effect : HasParams {
     private var repetitions = 1
     private var reverse = false
 
-    fun getUuid(): UUID {
+    fun getUuid(): UUID? {
         return uuid
     }
 
@@ -28,7 +27,7 @@ class Effect : HasParams {
         return this
     }
 
-    fun getType(): EffectTypeCode {
+    fun getType(): EffectTypeCode? {
         return type
     }
 
@@ -37,9 +36,8 @@ class Effect : HasParams {
         return this
     }
 
-    @Override
-    fun getParams(): List<Param> {
-        return params
+    override fun getParams(): List<Param> {
+        return this.params
     }
 
     fun setParams(params: List<Param>): Effect {
@@ -47,11 +45,7 @@ class Effect : HasParams {
         return this
     }
 
-    fun setParams(vararg params: Param): Effect {
-        return setParams(Arrays.asList(params))
-    }
-
-    fun getEasing(): Easing {
+    fun getEasing(): Easing? {
         return easing
     }
 
@@ -60,7 +54,7 @@ class Effect : HasParams {
         return this
     }
 
-    fun getFill(): Fill {
+    fun getFill(): Fill? {
         return fill
     }
 
@@ -105,39 +99,39 @@ class Effect : HasParams {
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val effect = o
-        return startFrame == effect!!.startFrame &&
-                endFrame == effect.endFrame &&
-                repetitions == effect.repetitions &&
-                reverse == effect.reverse &&
-                Objects.equals(uuid, effect.uuid) &&
-                type === effect.type &&
-                Objects.equals(params, effect.params) &&
-                Objects.equals(easing, effect.easing) &&
-                Objects.equals(fill, effect.fill)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Effect
+
+        if (uuid != other.uuid) return false
+        if (type != other.type) return false
+        if (params != other.params) return false
+        if (easing != other.easing) return false
+        if (fill != other.fill) return false
+        if (startFrame != other.startFrame) return false
+        if (endFrame != other.endFrame) return false
+        if (repetitions != other.repetitions) return false
+        if (reverse != other.reverse) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(uuid, type, params, easing, fill, startFrame, endFrame, repetitions, reverse)
+    override fun hashCode(): Int {
+        var result = uuid?.hashCode() ?: 0
+        result = 31 * result + (type?.hashCode() ?: 0)
+        result = 31 * result + params.hashCode()
+        result = 31 * result + (easing?.hashCode() ?: 0)
+        result = 31 * result + fill.hashCode()
+        result = 31 * result + startFrame
+        result = 31 * result + endFrame
+        result = 31 * result + repetitions
+        result = 31 * result + reverse.hashCode()
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "Effect{" +
-                "uuid=" + uuid +
-                ", type=" + type +
-                ", params=" + params +
-                ", easing=" + easing +
-                ", fill=" + fill +
-                ", startFrame=" + startFrame +
-                ", endFrame=" + endFrame +
-                ", repetitions=" + repetitions +
-                ", reverse=" + reverse +
-                '}'
+    override fun toString(): String {
+        return "Effect(uuid=$uuid, type=$type, params=$params, easing=$easing, fill=$fill, startFrame=$startFrame, endFrame=$endFrame, repetitions=$repetitions, reverse=$reverse)"
     }
 }

@@ -1,20 +1,19 @@
 package io.sparkled.persistence.stage.impl.query
 
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
+import io.sparkled.persistence.PersistenceQuery.Companion.qStage
+import io.sparkled.persistence.PersistenceQuery.Companion.qStageProp
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.UUID
 
-class DeleteStageQuery(private val stageId: Int) : PersistenceQuery<Void> {
+class DeleteStageQuery(private val stageId: Int) : PersistenceQuery<Unit> {
 
-    @Override
-    fun perform(queryFactory: QueryFactory): Void? {
+    override fun perform(queryFactory: QueryFactory) {
         deleteSequences(queryFactory)
         deleteStageProps(queryFactory)
         deleteStage(queryFactory)
-        return null
     }
 
     private fun deleteSequences(queryFactory: QueryFactory) {

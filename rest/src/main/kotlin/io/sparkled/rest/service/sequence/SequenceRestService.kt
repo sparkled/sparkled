@@ -18,10 +18,11 @@ constructor(private val handler: SequenceRestServiceHandler) {
         return handler.createSequence(sequenceViewModel)
     }
 
-    val allSequences: Response
-        @GET
-        @Produces(MediaType.APPLICATION_JSON)
-        get() = handler.getAllSequences()
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getAllSequences(): Response {
+        return handler.getAllSequences()
+    }
 
     @GET
     @Path("/{id}")

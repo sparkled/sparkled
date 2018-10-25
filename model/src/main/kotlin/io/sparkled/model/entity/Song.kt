@@ -1,7 +1,6 @@
 package io.sparkled.model.entity
 
 import javax.persistence.*
-import java.util.Objects
 
 @Entity
 @Table(name = "song")
@@ -10,7 +9,7 @@ class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private var id: Integer? = null
+    private var id: Int? = null
 
     @Basic
     @Column(name = "name")
@@ -26,78 +25,78 @@ class Song {
 
     @Basic
     @Column(name = "duration_ms")
-    private var durationMs: Integer? = null
+    private var durationMs: Int? = null
 
-    fun getId(): Integer {
+    fun getId(): Int? {
         return id
     }
 
-    fun setId(id: Integer): Song {
+    fun setId(id: Int?): Song {
         this.id = id
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
-    fun setName(name: String): Song {
+    fun setName(name: String?): Song {
         this.name = name
         return this
     }
 
-    fun getArtist(): String {
+    fun getArtist(): String? {
         return artist
     }
 
-    fun setArtist(artist: String): Song {
+    fun setArtist(artist: String?): Song {
         this.artist = artist
         return this
     }
 
-    fun getAlbum(): String {
+    fun getAlbum(): String? {
         return album
     }
 
-    fun setAlbum(album: String): Song {
+    fun setAlbum(album: String?): Song {
         this.album = album
         return this
     }
 
-    fun getDurationMs(): Integer {
+    fun getDurationMs(): Int? {
         return durationMs
     }
 
-    fun setDurationMs(durationMs: Integer): Song {
+    fun setDurationMs(durationMs: Int?): Song {
         this.durationMs = durationMs
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val song = o
-        return Objects.equals(id, song!!.id) &&
-                Objects.equals(name, song.name) &&
-                Objects.equals(artist, song.artist) &&
-                Objects.equals(album, song.album) &&
-                Objects.equals(durationMs, song.durationMs)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Song
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (artist != other.artist) return false
+        if (album != other.album) return false
+        if (durationMs != other.durationMs) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(id, name, artist, album, durationMs)
+    override fun hashCode(): Int {
+        var result = id ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (artist?.hashCode() ?: 0)
+        result = 31 * result + (album?.hashCode() ?: 0)
+        result = 31 * result + (durationMs ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "Song{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", artist='" + artist + '\'' +
-                ", album='" + album + '\'' +
-                ", durationMs=" + durationMs +
-                '}'
+    override fun toString(): String {
+        return "Song(id=$id, name=$name, artist=$artist, album=$album, durationMs=$durationMs)"
     }
 }

@@ -7,15 +7,15 @@ import com.beust.jcommander.Parameter
  */
 internal class AppSettings {
 
-    @Parameter(names = { "-h", "--help" }, description = "Show help", help = true)
-    val isHelp = false
+    @Parameter(names = ["-h", "--help"], description = "Show help", help = true)
+    var isHelp = false
 
-    @Parameter(names = { "-rp", "--restPort" }, description = "The REST server port")
-    val restApiPort = 8080
+    @Parameter(names = ["-rp", "--restPort"], description = "The REST server port")
+    var restApiPort = 8080
 
-    @Parameter(names = { "-up", "--udpPort" }, description = "The UDP server port")
-    val udpPort = 12345
+    @Parameter(names = ["-up", "--udpPort"], description = "The UDP server port")
+    var udpPort = 12345
 
-    @Parameter(names = { "-l", "--loglevel" }, description = "Logging level threshold (DEBUG, INFO, WARN, ERROR)")
-    val logLevel = "INFO"
+    @Parameter(names = ["-l", "--logLevel"], description = "Logging level threshold (DEBUG, INFO, WARN, ERROR)")
+    var logLevel = "INFO"
 }

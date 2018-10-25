@@ -12,6 +12,6 @@ class SongAudioValidator {
     }
 
     private object Errors {
-        internal val SONG_ID_MISSING = "Song audio has no song identifier."
+        internal const val SONG_ID_MISSING = "Song audio has no song identifier."
     }
 }

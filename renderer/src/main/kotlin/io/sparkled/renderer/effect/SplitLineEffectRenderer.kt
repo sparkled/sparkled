@@ -4,10 +4,9 @@ import io.sparkled.renderer.context.RenderContext
 
 class SplitLineEffectRenderer : EffectRenderer() {
 
-    @Override
-    fun render(ctx: RenderContext) {
+    override fun render(ctx: RenderContext) {
         val start = 0
-        val end = ctx.getChannel().getLedCount() - 1
+        val end = ctx.channel.ledCount - 1
         val middle = end / 2
 
         val lineRenderer = LineEffectRenderer()

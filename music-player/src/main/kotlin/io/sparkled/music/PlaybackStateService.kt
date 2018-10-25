@@ -7,9 +7,9 @@ interface PlaybackStateService {
 
     /**
      * @return Information pertaining to the sequence that is currently playing, or an empty object if no sequence is
-     * * playing.
-     * *
+     * playing.
+     *
      * @see PlaybackState.isEmpty
      */
-    val playbackState: PlaybackState
+    fun getPlaybackState(): PlaybackState
 }

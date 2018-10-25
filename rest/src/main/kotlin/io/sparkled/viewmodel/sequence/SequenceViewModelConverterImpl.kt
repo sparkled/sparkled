@@ -13,8 +13,7 @@ class SequenceViewModelConverterImpl @Inject
 constructor(private val sequencePersistenceService: SequencePersistenceService,
             private val songPersistenceService: SongPersistenceService) : SequenceViewModelConverter() {
 
-    @Override
-    fun toViewModel(model: Sequence): SequenceViewModel {
+    override fun toViewModel(model: Sequence): SequenceViewModel {
         return SequenceViewModel()
                 .setId(model.getId())
                 .setSongId(model.getSongId())
@@ -25,13 +24,12 @@ constructor(private val sequencePersistenceService: SequencePersistenceService,
                 .setStatus(model.getStatus())
     }
 
-    private fun getFrameCount(sequence: Sequence): Integer {
-        val song = songPersistenceService.getSongBySequenceId(sequence.getId()).orElse(Song())
+    private fun getFrameCount(sequence: Sequence): Int {
+        val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!).orElse(Song())
         return SequenceUtils.getFrameCount(song, sequence)
     }
 
-    @Override
-    fun toModel(viewModel: SequenceViewModel): Sequence {
+    override fun toModel(viewModel: SequenceViewModel): Sequence {
         val sequenceId = viewModel.getId()
         val model = getSequence(sequenceId)
 
@@ -43,12 +41,12 @@ constructor(private val sequencePersistenceService: SequencePersistenceService,
                 .setStatus(viewModel.getStatus())
     }
 
-    private fun getSequence(sequenceId: Integer?): Sequence {
+    private fun getSequence(sequenceId: Int?): Sequence {
         if (sequenceId == null) {
             return Sequence()
         }
 
         return sequencePersistenceService.getSequenceById(sequenceId)
-                .orElseThrow({ ViewModelConversionException("Sequence with ID of '$sequenceId' not found.") })
+                .orElseThrow { ViewModelConversionException("Sequence with ID of '$sequenceId' not found.") }
     }
 }

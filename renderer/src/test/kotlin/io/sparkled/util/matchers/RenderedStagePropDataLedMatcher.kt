@@ -1,6 +1,5 @@
 package io.sparkled.util.matchers
 
-import io.sparkled.model.render.RenderedFrame
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.util.LedTestUtils
 import org.hamcrest.Description
@@ -11,27 +10,24 @@ import org.hamcrest.TypeSafeMatcher
  */
 class RenderedStagePropDataLedMatcher internal constructor(private val ledFrames: Array<IntArray>) : TypeSafeMatcher<RenderedStagePropData>() {
 
-    @Override
-    fun describeTo(description: Description) {
+    override fun describeTo(description: Description) {
         val value = LedTestUtils.toLedString(ledFrames)
         description.appendText("is ").appendValue(value)
     }
 
-    @Override
-    protected fun describeMismatchSafely(channel: RenderedStagePropData, mismatchDescription: Description) {
+    override fun describeMismatchSafely(channel: RenderedStagePropData, mismatchDescription: Description) {
         val value = LedTestUtils.toLedString(channel)
         mismatchDescription.appendText("was ").appendValue(value)
     }
 
-    @Override
-    protected fun matchesSafely(channel: RenderedStagePropData): Boolean {
-        val frames = channel.getFrames()
-        if (frames.size() !== ledFrames.size) {
+    override fun matchesSafely(channel: RenderedStagePropData): Boolean {
+        val frames = channel.frames
+        if (frames.size != ledFrames.size) {
             return false
         }
 
-        for (i in 0..frames.size() - 1) {
-            val renderedFrame = frames.get(i)
+        for (i in 0 until frames.size) {
+            val renderedFrame = frames[i]
 
             if (!RenderedFrameLedMatcher(ledFrames[i]).matchesSafely(renderedFrame)) {
                 return false

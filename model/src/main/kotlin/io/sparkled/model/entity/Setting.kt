@@ -1,7 +1,6 @@
 package io.sparkled.model.entity
 
 import javax.persistence.*
-import java.util.Objects
 
 @Entity
 @Table(name = "setting")
@@ -15,42 +14,43 @@ class Setting {
     @Column(name = "value")
     private var value: String? = null
 
-    fun getCode(): String {
+    fun getCode(): String? {
         return code
     }
 
-    fun setCode(code: String): Setting {
+    fun setCode(code: String?): Setting {
         this.code = code
         return this
     }
 
-    fun getValue(): String {
+    fun getValue(): String? {
         return value
     }
 
-    fun setValue(value: String): Setting {
+    fun setValue(value: String?): Setting {
         this.value = value
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val setting = o
-        return Objects.equals(code, setting!!.code) && Objects.equals(value, setting.value)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Setting
+
+        if (code != other.code) return false
+        if (value != other.value) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(code, value)
+    override fun hashCode(): Int {
+        var result = code?.hashCode() ?: 0
+        result = 31 * result + (value?.hashCode() ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "Setting{" +
-                "code='" + code + '\'' +
-                ", value='" + value + '\'' +
-                '}'
+    override fun toString(): String {
+        return "Setting(code=$code, value=$value)"
     }
 }

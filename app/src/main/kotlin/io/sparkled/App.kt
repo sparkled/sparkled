@@ -18,7 +18,7 @@ constructor(private val persistService: PersistService,
     internal fun start(settings: AppSettings) {
         persistService.start()
         schemaUpdater.update()
-        restApiServer.start(settings.getRestApiPort())
-        udpServer.start(settings.getUdpPort())
+        restApiServer.start(settings.restApiPort)
+        udpServer.start(settings.udpPort)
     }
 }

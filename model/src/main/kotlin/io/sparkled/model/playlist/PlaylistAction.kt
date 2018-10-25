@@ -1,13 +1,11 @@
 package io.sparkled.model.playlist
 
-import java.util.Objects
-
 class PlaylistAction {
 
     private var type: PlaylistActionType? = null
-    private var playlistId: Integer? = null
+    private var playlistId: Int? = null
 
-    fun getType(): PlaylistActionType {
+    fun getType(): PlaylistActionType? {
         return type
     }
 
@@ -16,33 +14,34 @@ class PlaylistAction {
         return this
     }
 
-    fun getPlaylistId(): Integer {
+    fun getPlaylistId(): Int? {
         return playlistId
     }
 
-    fun setPlaylistId(playlistId: Integer): PlaylistAction {
+    fun setPlaylistId(playlistId: Int): PlaylistAction {
         this.playlistId = playlistId
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val that = o
-        return type === that!!.type && Objects.equals(playlistId, that!!.playlistId)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PlaylistAction
+
+        if (type != other.type) return false
+        if (playlistId != other.playlistId) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(type, playlistId)
+    override fun hashCode(): Int {
+        var result = type?.hashCode() ?: 0
+        result = 31 * result + (playlistId?.hashCode() ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "PlaylistAction{" +
-                "type=" + type +
-                ", playlistId=" + playlistId +
-                '}'
+    override fun toString(): String {
+        return "PlaylistAction(type=$type, playlistId=$playlistId)"
     }
 }

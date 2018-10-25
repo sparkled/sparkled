@@ -12,6 +12,6 @@ class PlaylistValidator {
     }
 
     private object Errors {
-        internal val NAME_MISSING = "Playlist name must not be empty."
+        internal const val NAME_MISSING = "Playlist name must not be empty."
     }
 }

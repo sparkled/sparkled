@@ -1,9 +1,7 @@
 package io.sparkled.model.animation
 
 import io.sparkled.model.animation.effect.Effect
-
-import java.util.ArrayList
-import java.util.Objects
+import java.util.*
 
 class SequenceChannelEffects {
 
@@ -18,22 +16,22 @@ class SequenceChannelEffects {
         return this
     }
 
-    @Override
-    fun equals(o: Object): Boolean {
-        if (this === o) return true
-        if (o !is SequenceChannelEffects) return false
-        return Objects.equals(effects, o.effects)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SequenceChannelEffects
+
+        if (effects != other.effects) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(effects)
+    override fun hashCode(): Int {
+        return effects.hashCode()
     }
 
-    @Override
-    fun toString(): String {
-        return "SequenceChannelEffects{" +
-                "effects=" + effects +
-                '}'
+    override fun toString(): String {
+        return "SequenceChannelEffects(effects=$effects)"
     }
 }

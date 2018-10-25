@@ -1,11 +1,10 @@
 package io.sparkled.rest.jetty
 
+import java.io.IOException
+import java.util.regex.Pattern
 import javax.servlet.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import java.io.IOException
-import java.net.URL
-import java.util.regex.Pattern
 
 /**
  * Redirects nonexistent paths to index.html to support Single Page App refreshing. For example,
@@ -15,18 +14,16 @@ import java.util.regex.Pattern
  */
 class TryFilesFilter : Filter {
 
-    @Override
     @Throws(ServletException::class)
-    fun init(config: FilterConfig) {
+    override fun init(config: FilterConfig) {
     }
 
-    @Override
     @Throws(IOException::class, ServletException::class)
-    fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
+    override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest
         val httpResponse = response as HttpServletResponse
 
-        if (httpRequest.getRequestURI().startsWith(REST_PATH)) {
+        if (httpRequest.requestURI.startsWith(REST_PATH)) {
             chain.doFilter(httpRequest, httpResponse)
             return
         }
@@ -35,8 +32,8 @@ class TryFilesFilter : Filter {
         val url = request.getServletContext().getResource(resolved)
 
         if (url != null) {
-            val resourcePath = url!!.toString().split(JAR_RESOURCE_FILE_SEPARATOR)
-            if (resourcePath.size == 2 && getClass().getResource(resourcePath[1]) != null) {
+            val resourcePath = url.toString().split(JAR_RESOURCE_FILE_SEPARATOR)
+            if (resourcePath.size == 2 && javaClass.getResource(resourcePath[1]) != null) {
                 chain.doFilter(httpRequest, httpResponse)
                 return
             }
@@ -48,25 +45,23 @@ class TryFilesFilter : Filter {
     @Throws(IOException::class, ServletException::class)
     private fun fallback(request: HttpServletRequest, response: HttpServletResponse) {
         val resolved = resolve(request, FALLBACK)
-        request.getServletContext().getRequestDispatcher(resolved).forward(request, response)
+        request.servletContext.getRequestDispatcher(resolved).forward(request, response)
     }
 
     private fun resolve(request: HttpServletRequest, value: String): String {
-        var path = request.getServletPath()
+        var path = request.servletPath
         path = if (path.startsWith(LEADING_SLASH)) path else LEADING_SLASH + path
-        return value.replaceAll(Pattern.quote(PATH), path)
+        return value.replace(PATH, path)
     }
 
-    @Override
-    fun destroy() {
+    override fun destroy() {
     }
 
     companion object {
-
-        private val PATH = "\$path"
-        private val FALLBACK = "/index.html"
-        private val REST_PATH = "/rest"
-        private val JAR_RESOURCE_FILE_SEPARATOR = "!"
-        private val LEADING_SLASH = "/"
+        private const val PATH = "\$path"
+        private const val FALLBACK = "/index.html"
+        private const val REST_PATH = "/rest"
+        private const val JAR_RESOURCE_FILE_SEPARATOR = "!"
+        private const val LEADING_SLASH = "/"
     }
 }

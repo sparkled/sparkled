@@ -5,8 +5,7 @@ import io.sparkled.model.animation.fill.FillTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
 import io.sparkled.model.animation.param.ParamType
-
-import java.util.Arrays
+import java.util.*
 
 object FillTypes {
     private val TYPES = Arrays.asList(
@@ -24,7 +23,7 @@ object FillTypes {
     }
 
     private fun fill(fillType: FillTypeCode, name: String, vararg params: Param): FillType {
-        return FillType().setCode(fillType).setName(name).setParams(Arrays.asList(params))
+        return FillType().setCode(fillType).setName(name).setParams(arrayListOf(*params))
     }
 
     private fun param(paramName: ParamName, type: ParamType): Param {

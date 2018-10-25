@@ -2,61 +2,58 @@ package io.sparkled.viewmodel.sequence.channel
 
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.viewmodel.ViewModel
-
-import java.util.ArrayList
-import java.util.Objects
-import java.util.UUID
+import java.util.*
 
 class SequenceChannelViewModel : ViewModel {
 
     private var uuid: UUID? = null
-    private var sequenceId: Integer? = null
+    private var sequenceId: Int? = null
     private var stagePropUuid: UUID? = null
     private var name: String? = null
-    private var displayOrder: Integer? = null
+    private var displayOrder: Int? = null
     private var effects: List<Effect> = ArrayList()
 
-    fun getUuid(): UUID {
+    fun getUuid(): UUID? {
         return uuid
     }
 
-    fun setUuid(uuid: UUID): SequenceChannelViewModel {
+    fun setUuid(uuid: UUID?): SequenceChannelViewModel {
         this.uuid = uuid
         return this
     }
 
-    fun getSequenceId(): Integer {
+    fun getSequenceId(): Int? {
         return sequenceId
     }
 
-    fun setSequenceId(sequenceId: Integer): SequenceChannelViewModel {
+    fun setSequenceId(sequenceId: Int?): SequenceChannelViewModel {
         this.sequenceId = sequenceId
         return this
     }
 
-    fun getStagePropUuid(): UUID {
+    fun getStagePropUuid(): UUID? {
         return stagePropUuid
     }
 
-    fun setStagePropUuid(stagePropUuid: UUID): SequenceChannelViewModel {
+    fun setStagePropUuid(stagePropUuid: UUID?): SequenceChannelViewModel {
         this.stagePropUuid = stagePropUuid
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
-    fun setName(name: String): SequenceChannelViewModel {
+    fun setName(name: String?): SequenceChannelViewModel {
         this.name = name
         return this
     }
 
-    fun getDisplayOrder(): Integer {
+    fun getDisplayOrder(): Int? {
         return displayOrder
     }
 
-    fun setDisplayOrder(displayOrder: Integer): SequenceChannelViewModel {
+    fun setDisplayOrder(displayOrder: Int?): SequenceChannelViewModel {
         this.displayOrder = displayOrder
         return this
     }
@@ -70,21 +67,33 @@ class SequenceChannelViewModel : ViewModel {
         return this
     }
 
-    @Override
-    fun equals(o: Object): Boolean {
-        if (this === o) return true
-        if (o !is SequenceChannelViewModel) return false
-        val that = o
-        return Objects.equals(sequenceId, that.sequenceId) &&
-                Objects.equals(uuid, that.uuid) &&
-                Objects.equals(stagePropUuid, that.stagePropUuid) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(displayOrder, that.displayOrder) &&
-                Objects.equals(effects, that.effects)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SequenceChannelViewModel
+
+        if (uuid != other.uuid) return false
+        if (sequenceId != other.sequenceId) return false
+        if (stagePropUuid != other.stagePropUuid) return false
+        if (name != other.name) return false
+        if (displayOrder != other.displayOrder) return false
+        if (effects != other.effects) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(uuid, sequenceId, stagePropUuid, name, displayOrder, effects)
+    override fun hashCode(): Int {
+        var result = uuid?.hashCode() ?: 0
+        result = 31 * result + (sequenceId?.hashCode() ?: 0)
+        result = 31 * result + (stagePropUuid?.hashCode() ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (displayOrder?.hashCode() ?: 0)
+        result = 31 * result + effects.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "SequenceChannelViewModel(uuid=$uuid, sequenceId=$sequenceId, stagePropUuid=$stagePropUuid, name=$name, displayOrder=$displayOrder, effects=$effects)"
     }
 }

@@ -8,12 +8,10 @@ import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
-import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.util.RenderUtils
-import io.sparkled.util.matchers.SparkledMatchers
-import org.junit.jupiter.api.Test
-
+import io.sparkled.util.matchers.SparkledMatchers.hasLeds
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Test
 
 class FlashEffectRendererTest {
 
@@ -24,14 +22,26 @@ class FlashEffectRendererTest {
                 .setEasing(Easing().setType(EasingTypeCode.LINEAR))
                 .setFill(Fill()
                         .setType(FillTypeCode.SOLID)
-                        .setParams(
+                        .setParams(arrayListOf(
                                 Param().setName(ParamName.COLOR).setValue("#ffffff")
-                        )
+                        ))
                 )
 
         val renderedStagePropData = RenderUtils.render(effect, 11, 10)
 
         val c = intArrayOf(0x000000, 0x333333, 0x666666, 0x999999, 0xCCCCCC, 0xFFFFFF)
-        assertThat(renderedStagePropData, SparkledMatchers.hasLeds(arrayOf(intArrayOf(c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]), intArrayOf(c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1]), intArrayOf(c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2]), intArrayOf(c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3]), intArrayOf(c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4]), intArrayOf(c[5], c[5], c[5], c[5], c[5], c[5], c[5], c[5], c[5], c[5]), intArrayOf(c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4]), intArrayOf(c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3]), intArrayOf(c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2]), intArrayOf(c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1]), intArrayOf(c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]))))
+        assertThat(renderedStagePropData, hasLeds(arrayOf(
+                intArrayOf(c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]),
+                intArrayOf(c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1]),
+                intArrayOf(c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2]),
+                intArrayOf(c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3]),
+                intArrayOf(c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4]),
+                intArrayOf(c[5], c[5], c[5], c[5], c[5], c[5], c[5], c[5], c[5], c[5]),
+                intArrayOf(c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4], c[4]),
+                intArrayOf(c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3], c[3]),
+                intArrayOf(c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2], c[2]),
+                intArrayOf(c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1], c[1]),
+                intArrayOf(c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0], c[0]))
+        ))
     }
 }

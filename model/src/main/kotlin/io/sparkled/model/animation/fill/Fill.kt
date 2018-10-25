@@ -3,15 +3,12 @@ package io.sparkled.model.animation.fill
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
 
-import java.util.Arrays
-import java.util.Objects
-
 class Fill : HasParams {
 
     private var type: FillTypeCode? = null
-    private var params: List<Param>? = null
+    private var params: List<Param> = ArrayList()
 
-    fun getType(): FillTypeCode {
+    fun getType(): FillTypeCode? {
         return type
     }
 
@@ -20,13 +17,8 @@ class Fill : HasParams {
         return this
     }
 
-    @Override
-    fun getParams(): List<Param> {
+    override fun getParams(): List<Param> {
         return params
-    }
-
-    fun setParams(vararg params: Param): Fill {
-        return setParams(Arrays.asList(params))
     }
 
     fun setParams(params: List<Param>): Fill {
@@ -34,24 +26,25 @@ class Fill : HasParams {
         return this
     }
 
-    @Override
-    fun equals(o: Object): Boolean {
-        if (this === o) return true
-        if (o !is Fill) return false
-        val fill = o
-        return type === fill.type && Objects.equals(params, fill.params)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Fill
+
+        if (type != other.type) return false
+        if (params != other.params) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(type, params)
+    override fun hashCode(): Int {
+        var result = type?.hashCode() ?: 0
+        result = 31 * result + params.hashCode()
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "Fill{" +
-                "type=" + type +
-                ", params=" + params +
-                '}'
+    override fun toString(): String {
+        return "Fill(type=$type, params=$params)"
     }
 }

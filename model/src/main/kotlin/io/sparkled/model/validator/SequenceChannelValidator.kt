@@ -36,17 +36,17 @@ class SequenceChannelValidator {
     }
 
     private fun validateChannelEffects(channelEffects: SequenceChannelEffects) {
-        var previousEndFrame = -1
+        var previousEndFrame: Int = -1
 
-        val effects = channelEffects.getEffects() ?: throw EntityValidationException(Errors.EFFECTS_MISSING)
+        val effects = channelEffects.getEffects()
 
         for (effect in effects) {
-            previousEndFrame = validateEffect(effect, previousEndFrame)
+            validateEffect(effect, previousEndFrame)
+            previousEndFrame = effect.getEndFrame()
         }
     }
 
-    private fun validateEffect(effect: Effect, previousEndFrame: Int): Int {
-        var previousEndFrame = previousEndFrame
+    private fun validateEffect(effect: Effect, previousEndFrame: Int) {
         val effectDuration = effect.getEndFrame() - effect.getStartFrame() + 1
 
         if (effect.getType() == null) {
@@ -77,14 +77,10 @@ class SequenceChannelValidator {
             throw EntityValidationException(String.format(Errors.EFFECT_DURATION_INDIVISIBLE, effect.getStartFrame()))
         }
 
-        val params = effect.getParams() ?: throw EntityValidationException(String.format(Errors.EFFECT_PARAMS_MISSING, effect.getStartFrame()))
-
+        val params = effect.getParams()
         for (param in params) {
             validateEffectParam(effect, param)
         }
-
-        previousEndFrame = effect.getEndFrame()
-        return previousEndFrame
     }
 
     private fun validateEffectParam(effect: Effect, param: Param) {
@@ -94,19 +90,17 @@ class SequenceChannelValidator {
     }
 
     private object Errors {
-        internal val UUID_MISSING = "Sequence channel has no unique identifier."
-        internal val CHANNEL_JSON_MISSING = "Sequence has no animation data."
-        internal val CHANNEL_JSON_MALFORMED = "Sequence channel data is malformed."
-        internal val EFFECTS_MISSING = "Effects list must be populated for sequence effect channel."
+        internal const val UUID_MISSING = "Sequence channel has no unique identifier."
+        internal const val CHANNEL_JSON_MISSING = "Sequence has no animation data."
+        internal const val CHANNEL_JSON_MALFORMED = "Sequence channel data is malformed."
 
-        internal val EFFECT_TYPE_MISSING = "Effect type cannot be empty for effect at frame %d in channel."
-        internal val EFFECT_EASING_TYPE_MISSING = "EasingFunction type cannot be empty for effect at frame %d in channel."
-        internal val EFFECT_BACK_TO_FRONT = "Effect start frame cannot be after end frame for effect at frame %d in channel."
-        internal val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d for channel."
-        internal val EFFECT_REPETITIONS_INVALID = "Effect repetitions cannot be less than 1 for effect at frame %d in channel."
-        internal val EFFECT_REPETITIONS_TOO_MANY = "Effect repetitions cannot be greater than the frame count at frame %d in channel."
-        internal val EFFECT_DURATION_INDIVISIBLE = "Duration must be evenly divisible by number of repetitions for effect at frame %d in channel."
-        internal val EFFECT_PARAMS_MISSING = "Effect parameters list is not populated for effect at frame %d in channel."
-        internal val EFFECT_PARAM_TYPE_MISSING = "Effect parameter type cannot be empty for effect at frame %d in channel."
+        internal const val EFFECT_TYPE_MISSING = "Effect type cannot be empty for effect at frame %d in channel."
+        internal const val EFFECT_EASING_TYPE_MISSING = "EasingFunction type cannot be empty for effect at frame %d in channel."
+        internal const val EFFECT_BACK_TO_FRONT = "Effect start frame cannot be after end frame for effect at frame %d in channel."
+        internal const val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d for channel."
+        internal const val EFFECT_REPETITIONS_INVALID = "Effect repetitions cannot be less than 1 for effect at frame %d in channel."
+        internal const val EFFECT_REPETITIONS_TOO_MANY = "Effect repetitions cannot be greater than the frame count at frame %d in channel."
+        internal const val EFFECT_DURATION_INDIVISIBLE = "Duration must be evenly divisible by number of repetitions for effect at frame %d in channel."
+        internal const val EFFECT_PARAM_TYPE_MISSING = "Effect parameter type cannot be empty for effect at frame %d in channel."
     }
 }

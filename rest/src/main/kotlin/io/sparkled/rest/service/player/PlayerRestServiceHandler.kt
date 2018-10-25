@@ -1,17 +1,14 @@
 package io.sparkled.rest.service.player
 
-import io.sparkled.model.entity.Playlist
 import io.sparkled.model.playlist.PlaylistAction
 import io.sparkled.model.playlist.PlaylistActionType
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import io.sparkled.rest.service.RestServiceHandler
-
 import javax.inject.Inject
 import javax.ws.rs.core.Response
-import java.util.Optional
 
-class PlayerRestServiceHandler @Inject
+open class PlayerRestServiceHandler @Inject
 constructor(private val playlistPersistenceService: PlaylistPersistenceService,
             private val playbackService: PlaybackService) : RestServiceHandler() {
 
@@ -31,9 +28,9 @@ constructor(private val playlistPersistenceService: PlaylistPersistenceService,
     }
 
     private fun play(action: PlaylistAction): Boolean {
-        val playlist = playlistPersistenceService.getPlaylistById(action.getPlaylistId())
-        playlist.ifPresent(???({ playbackService.play() }))
-        return playlist.isPresent()
+        val playlist = playlistPersistenceService.getPlaylistById(action.getPlaylistId()!!)
+        playlist.ifPresent(playbackService::play)
+        return playlist.isPresent
     }
 
     private fun stop() {

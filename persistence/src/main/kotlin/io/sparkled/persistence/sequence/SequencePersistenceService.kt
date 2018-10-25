@@ -2,14 +2,13 @@ package io.sparkled.persistence.sequence
 
 import io.sparkled.model.entity.*
 import io.sparkled.model.render.RenderedStagePropDataMap
-import java.util.Optional
-import java.util.UUID
+import java.util.*
 
 interface SequencePersistenceService {
 
     fun createSequence(sequence: Sequence): Sequence
 
-    val allSequences: List<Sequence>
+    fun getAllSequences(): List<Sequence>
 
     fun getSequenceById(sequenceId: Int): Optional<Sequence>
 

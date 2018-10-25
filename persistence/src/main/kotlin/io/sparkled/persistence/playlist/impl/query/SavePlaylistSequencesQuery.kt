@@ -5,44 +5,37 @@ import io.sparkled.model.entity.PlaylistSequence
 import io.sparkled.model.validator.PlaylistSequenceValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
+import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylistSequence
 import io.sparkled.persistence.QueryFactory
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.*
 
-import javax.persistence.EntityManager
-import java.util.UUID
+class SavePlaylistSequencesQuery(private val playlist: Playlist, private val playlistSequences: List<PlaylistSequence>) : PersistenceQuery<Unit> {
 
-import java.util.stream.Collectors.toList
-
-class SavePlaylistSequencesQuery(private val playlist: Playlist, private val playlistSequences: List<PlaylistSequence>) : PersistenceQuery<Void> {
-
-    @Override
-    fun perform(queryFactory: QueryFactory): Void? {
+    override fun perform(queryFactory: QueryFactory) {
         val playlistSequenceValidator = PlaylistSequenceValidator()
-        playlistSequences.forEach { ps -> ps.setPlaylistId(playlist.getId()) }
-        playlistSequences.forEach(???({ playlistSequenceValidator.validate() }))
+        playlistSequences.forEach { ps -> ps.setPlaylistId(playlist.getId()!!) }
+        playlistSequences.forEach(playlistSequenceValidator::validate)
 
         if (uuidAlreadyInUse(queryFactory)) {
             throw EntityValidationException("Playlist sequence already exists on another playlist.")
         } else {
-            val entityManager = queryFactory.getEntityManager()
-            playlistSequences.forEach(???({ entityManager.merge() }))
-            logger.info("Saved {} playlist sequence(s) for playlist {}.", playlistSequences.size(), playlist.getId())
+            val entityManager = queryFactory.entityManager
+            playlistSequences.forEach { entityManager.merge(it) }
+            logger.info("Saved {} playlist sequence(s) for playlist {}.", playlistSequences.size, playlist.getId())
 
             deleteRemovedPlaylistSequences(queryFactory)
-            return null
         }
     }
 
     private fun uuidAlreadyInUse(queryFactory: QueryFactory): Boolean {
-        var uuidsToCheck = playlistSequences.stream().map(???({ PlaylistSequence.getUuid() })).collect(toList())
+        var uuidsToCheck = playlistSequences.asSequence().map(PlaylistSequence::getUuid).toList()
         uuidsToCheck = if (uuidsToCheck.isEmpty()) noUuids else uuidsToCheck
 
         val uuidsInUse = queryFactory.select(qPlaylistSequence)
                 .from(qPlaylistSequence)
-                .where(
-                        qPlaylistSequence.playlistId.ne(playlist.getId()).and(qPlaylistSequence.uuid.`in`(uuidsToCheck))
-                )
+                .where(qPlaylistSequence.playlistId.ne(playlist.getId()).and(qPlaylistSequence.uuid.`in`(uuidsToCheck)))
                 .fetchCount()
         return uuidsInUse > 0
     }
@@ -53,7 +46,7 @@ class SavePlaylistSequencesQuery(private val playlist: Playlist, private val pla
     }
 
     private fun getPlaylistSequenceUuidsToDelete(queryFactory: QueryFactory): List<UUID> {
-        var uuidsToKeep = playlistSequences.stream().map(???({ PlaylistSequence.getUuid() })).collect(toList())
+        var uuidsToKeep = playlistSequences.asSequence().map(PlaylistSequence::getUuid).toList()
         uuidsToKeep = if (uuidsToKeep.isEmpty()) noUuids else uuidsToKeep
 
         return queryFactory
@@ -64,7 +57,6 @@ class SavePlaylistSequencesQuery(private val playlist: Playlist, private val pla
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(SavePlaylistSequencesQuery::class.java)
     }
 }

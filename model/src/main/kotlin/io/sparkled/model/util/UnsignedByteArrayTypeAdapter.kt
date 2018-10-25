@@ -4,7 +4,6 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
-
 import java.lang.reflect.Type
 
 /**
@@ -13,10 +12,10 @@ import java.lang.reflect.Type
  */
 class UnsignedByteArrayTypeAdapter : JsonSerializer<ByteArray> {
 
-    fun serialize(src: ByteArray, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(src: ByteArray, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         val array = JsonArray()
         for (b in src) {
-            array.add(b and 0xFF)
+            array.add(b.toInt() and 0xFF)
         }
         return array
     }

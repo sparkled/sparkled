@@ -7,8 +7,8 @@ import io.sparkled.renderer.easing.EasingFunction
  * An easing function that interpolates uniformly between 0 and 1.
  */
 class LinearEasing : EasingFunction {
-    @Override
-    fun getProgress(easing: Easing, currentFrame: Float, frameCount: Float): Float {
-        return currentFrame / (frameCount - 1)
+
+    override fun getProgress(easing: Easing, currentFrame: Int, frameCount: Int): Float {
+        return currentFrame / (frameCount.toFloat() - 1)
     }
 }

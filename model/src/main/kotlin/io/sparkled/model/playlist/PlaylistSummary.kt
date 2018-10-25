@@ -1,48 +1,47 @@
 package io.sparkled.model.playlist
 
-import java.util.Objects
-
 class PlaylistSummary {
 
-    private var sequenceCount: Integer? = null
-    private var durationSeconds: Integer? = null
+    private var sequenceCount: Int? = null
+    private var durationSeconds: Int? = null
 
-    fun getSequenceCount(): Integer {
+    fun getSequenceCount(): Int? {
         return sequenceCount
     }
 
-    fun setSequenceCount(sequenceCount: Integer): PlaylistSummary {
+    fun setSequenceCount(sequenceCount: Int): PlaylistSummary {
         this.sequenceCount = sequenceCount
         return this
     }
 
-    fun getDurationSeconds(): Integer {
+    fun getDurationSeconds(): Int? {
         return durationSeconds
     }
 
-    fun setDurationSeconds(durationSeconds: Integer): PlaylistSummary {
+    fun setDurationSeconds(durationSeconds: Int): PlaylistSummary {
         this.durationSeconds = durationSeconds
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val that = o
-        return Objects.equals(sequenceCount, that!!.sequenceCount) && Objects.equals(durationSeconds, that.durationSeconds)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PlaylistSummary
+
+        if (sequenceCount != other.sequenceCount) return false
+        if (durationSeconds != other.durationSeconds) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(sequenceCount, durationSeconds)
+    override fun hashCode(): Int {
+        var result = sequenceCount?.hashCode() ?: 0
+        result = 31 * result + (durationSeconds?.hashCode() ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "PlaylistSummary{" +
-                "sequenceCount=" + sequenceCount +
-                ", durationSeconds=" + durationSeconds +
-                '}'
+    override fun toString(): String {
+        return "PlaylistSummary(sequenceCount=$sequenceCount, durationSeconds=$durationSeconds)"
     }
 }

@@ -2,8 +2,6 @@ package io.sparkled.rest.service.renderpreview
 
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
-import io.sparkled.model.entity.Song
-import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.model.validator.SequenceChannelValidator
@@ -12,12 +10,10 @@ import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.persistence.stage.StagePersistenceService
 import io.sparkled.renderer.Renderer
 import io.sparkled.rest.service.RestServiceHandler
-
 import javax.inject.Inject
 import javax.ws.rs.core.Response
-import java.util.Optional
 
-class RenderPreviewRestServiceHandler @Inject
+open class RenderPreviewRestServiceHandler @Inject
 constructor(private val sequencePersistenceService: SequencePersistenceService,
             private val songPersistenceService: SongPersistenceService,
             private val stagePersistenceService: StagePersistenceService) : RestServiceHandler() {
@@ -27,12 +23,12 @@ constructor(private val sequencePersistenceService: SequencePersistenceService,
             return respond(Response.Status.BAD_REQUEST, "Nothing to render.")
         }
 
-        val sequenceOptional = sequencePersistenceService.getSequenceById(sequenceChannels[0].getSequenceId())
-        val songOptional = songPersistenceService.getSongBySequenceId(sequenceChannels[0].getSequenceId())
+        val sequenceOptional = sequencePersistenceService.getSequenceById(sequenceChannels[0].getSequenceId()!!)
+        val songOptional = songPersistenceService.getSongBySequenceId(sequenceChannels[0].getSequenceId()!!)
 
-        if (!sequenceOptional.isPresent()) {
+        if (!sequenceOptional.isPresent) {
             return respond(Response.Status.NOT_FOUND, "Sequence not found.")
-        } else if (!songOptional.isPresent()) {
+        } else if (!songOptional.isPresent) {
             return respond(Response.Status.NOT_FOUND, "Song not found.")
         }
 
@@ -50,9 +46,9 @@ constructor(private val sequencePersistenceService: SequencePersistenceService,
 
     private fun getRenderResult(sequence: Sequence, startFrame: Int, endFrame: Int, sequenceChannels: List<SequenceChannel>): RenderedStagePropDataMap {
         val validator = SequenceChannelValidator()
-        sequenceChannels.forEach(???({ validator.validate() }))
+        sequenceChannels.forEach(validator::validate)
 
-        val stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId())
+        val stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId()!!)
         return Renderer(sequence, sequenceChannels, stageProps, startFrame, endFrame).render()
     }
 }

@@ -5,7 +5,7 @@ import io.sparkled.rest.service.RestServiceHandler
 
 import javax.ws.rs.core.Response
 
-class EasingTypeRestServiceHandler : RestServiceHandler() {
+open class EasingTypeRestServiceHandler : RestServiceHandler() {
 
     fun get(): Response {
         return respondOk(EasingTypes.get())

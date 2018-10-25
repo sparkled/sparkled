@@ -18,10 +18,11 @@ constructor(private val handler: PlaylistRestServiceHandler) {
         return handler.createPlaylist(playlistViewModel)
     }
 
-    val allPlaylists: Response
-        @GET
-        @Produces(MediaType.APPLICATION_JSON)
-        get() = handler.getAllPlaylists()
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getAllPlaylists(): Response {
+        return handler.getAllPlaylists()
+    }
 
     @GET
     @Path("/{id}")

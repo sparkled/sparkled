@@ -7,19 +7,19 @@ import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.qRenderedStageProp
 import io.sparkled.persistence.QueryFactory
 
 class GetRenderedStagePropsBySequenceQuery(private val sequence: Sequence, private val song: Song) : PersistenceQuery<RenderedStagePropDataMap> {
 
-    @Override
-    fun perform(queryFactory: QueryFactory): RenderedStagePropDataMap {
+    override fun perform(queryFactory: QueryFactory): RenderedStagePropDataMap {
         val renderedStageProps = queryFactory
                 .selectFrom(qRenderedStageProp)
                 .where(qRenderedStageProp.sequenceId.eq(sequence.getId()))
                 .fetch()
 
         val renderedStagePropDataMap = RenderedStagePropDataMap()
-        renderedStageProps.forEach({ stagePropData -> addToMap(renderedStagePropDataMap, stagePropData) })
+        renderedStageProps.forEach { stagePropData -> addToMap(renderedStagePropDataMap, stagePropData) }
         return renderedStagePropDataMap
     }
 
@@ -27,10 +27,10 @@ class GetRenderedStagePropsBySequenceQuery(private val sequence: Sequence, priva
         val renderedStagePropData = RenderedStagePropData(
                 0,
                 SequenceUtils.getFrameCount(song, sequence) - 1,
-                stagePropData.getLedCount(),
-                stagePropData.getData()
+                stagePropData.getLedCount()!!,
+                stagePropData.getData()!!
         )
 
-        renderedStagePropDataMap.put(stagePropData.getStagePropUuid(), renderedStagePropData)
+        renderedStagePropDataMap[stagePropData.getStagePropUuid()!!] = renderedStagePropData
     }
 }

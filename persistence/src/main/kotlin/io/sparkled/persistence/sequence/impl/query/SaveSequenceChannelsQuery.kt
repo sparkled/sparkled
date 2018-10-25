@@ -5,37 +5,32 @@ import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.validator.SequenceChannelValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
+import io.sparkled.persistence.PersistenceQuery.Companion.qSequenceChannel
 import io.sparkled.persistence.QueryFactory
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.*
 
-import javax.persistence.EntityManager
-import java.util.UUID
+class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequenceChannels: List<SequenceChannel>) : PersistenceQuery<Unit> {
 
-import java.util.stream.Collectors.toList
-
-class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequenceChannels: List<SequenceChannel>) : PersistenceQuery<Void> {
-
-    @Override
-    fun perform(queryFactory: QueryFactory): Void? {
+    override fun perform(queryFactory: QueryFactory) {
         val sequenceChannelValidator = SequenceChannelValidator()
-        sequenceChannels.forEach { sc -> sc.setSequenceId(sequence.getId()) }
-        sequenceChannels.forEach(???({ sequenceChannelValidator.validate() }))
+        sequenceChannels.forEach { sc -> sc.setSequenceId(sequence.getId()!!) }
+        sequenceChannels.forEach(sequenceChannelValidator::validate)
 
         if (uuidAlreadyInUse(queryFactory)) {
             throw EntityValidationException("Sequence channel already exists on another sequence.")
         } else {
-            val entityManager = queryFactory.getEntityManager()
-            sequenceChannels.forEach(???({ entityManager.merge() }))
-            logger.info("Saved {} sequence channel(s) for sequence {}.", sequenceChannels.size(), sequence.getId())
+            val entityManager = queryFactory.entityManager
+            sequenceChannels.forEach { entityManager.merge(it) }
+            logger.info("Saved {} sequence channel(s) for sequence {}.", sequenceChannels.size, sequence.getId())
 
             deleteRemovedSequenceChannels(queryFactory)
-            return null
         }
     }
 
     private fun uuidAlreadyInUse(queryFactory: QueryFactory): Boolean {
-        var uuidsToCheck = sequenceChannels.stream().map(???({ SequenceChannel.getUuid() })).collect(toList())
+        var uuidsToCheck = sequenceChannels.asSequence().map(SequenceChannel::getUuid).toList()
         uuidsToCheck = if (uuidsToCheck.isEmpty()) noUuids else uuidsToCheck
 
         val uuidsInUse = queryFactory.select(qSequenceChannel)
@@ -51,7 +46,7 @@ class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequ
     }
 
     private fun getSequenceChannelUuidsToDelete(queryFactory: QueryFactory): List<UUID> {
-        var uuidsToKeep = sequenceChannels.stream().map(???({ SequenceChannel.getUuid() })).collect(toList())
+        var uuidsToKeep = sequenceChannels.asSequence().map(SequenceChannel::getUuid).toList()
         uuidsToKeep = if (uuidsToKeep.isEmpty()) noUuids else uuidsToKeep
 
         return queryFactory
@@ -62,7 +57,6 @@ class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequ
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(SaveSequenceChannelsQuery::class.java)
     }
 }

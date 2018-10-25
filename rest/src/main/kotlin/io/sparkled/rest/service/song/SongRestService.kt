@@ -2,13 +2,12 @@ package io.sparkled.rest.service.song
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition
 import org.glassfish.jersey.media.multipart.FormDataParam
-
+import java.io.IOException
+import java.io.InputStream
 import javax.inject.Inject
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
-import java.io.IOException
-import java.io.InputStream
 
 @Path("/songs")
 class SongRestService @Inject
@@ -24,10 +23,11 @@ constructor(private val handler: SongRestServiceHandler) {
         return handler.createSong(songViewModelJson, inputStream)
     }
 
-    val allSongs: Response
-        @GET
-        @Produces(MediaType.APPLICATION_JSON)
-        get() = handler.getAllSongs()
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getAllSongs(): Response {
+        return handler.getAllSongs()
+    }
 
     @GET
     @Path("/{id}")

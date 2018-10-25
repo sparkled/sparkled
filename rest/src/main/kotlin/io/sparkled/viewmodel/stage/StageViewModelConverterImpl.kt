@@ -9,8 +9,7 @@ import javax.inject.Inject
 class StageViewModelConverterImpl @Inject
 constructor(private val stagePersistenceService: StagePersistenceService) : StageViewModelConverter() {
 
-    @Override
-    fun toViewModel(model: Stage): StageViewModel {
+    override fun toViewModel(model: Stage): StageViewModel {
         return StageViewModel()
                 .setId(model.getId())
                 .setName(model.getName())
@@ -18,8 +17,7 @@ constructor(private val stagePersistenceService: StagePersistenceService) : Stag
                 .setHeight(model.getHeight())
     }
 
-    @Override
-    fun toModel(viewModel: StageViewModel): Stage {
+    override fun toModel(viewModel: StageViewModel): Stage {
         val stageId = viewModel.getId()
         val model = getStage(stageId)
 
@@ -29,12 +27,12 @@ constructor(private val stagePersistenceService: StagePersistenceService) : Stag
                 .setHeight(viewModel.getHeight())
     }
 
-    private fun getStage(stageId: Integer?): Stage {
+    private fun getStage(stageId: Int?): Stage {
         if (stageId == null) {
             return Stage()
         }
 
         return stagePersistenceService.getStageById(stageId)
-                .orElseThrow({ ViewModelConversionException("Stage with ID of '$stageId' not found.") })
+                .orElseThrow { ViewModelConversionException("Stage with ID of '$stageId' not found.") }
     }
 }

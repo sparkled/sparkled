@@ -2,14 +2,14 @@ package io.sparkled.persistence.song.impl.query
 
 import io.sparkled.model.entity.Song
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
+import io.sparkled.persistence.PersistenceQuery.Companion.qSong
 import io.sparkled.persistence.QueryFactory
-
-import java.util.Optional
+import java.util.*
 
 class GetSongBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Optional<Song>> {
 
-    @Override
-    fun perform(queryFactory: QueryFactory): Optional<Song> {
+    override fun perform(queryFactory: QueryFactory): Optional<Song> {
         val song = queryFactory
                 .select(qSong)
                 .from(qSequence)

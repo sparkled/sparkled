@@ -8,8 +8,7 @@ import javax.inject.Inject
 class StagePropViewModelConverterImpl @Inject
 constructor(private val stagePersistenceService: StagePersistenceService) : StagePropViewModelConverter() {
 
-    @Override
-    fun toViewModel(model: StageProp): StagePropViewModel {
+    override fun toViewModel(model: StageProp): StagePropViewModel {
         return StagePropViewModel()
                 .setUuid(model.getUuid())
                 .setStageId(model.getStageId())
@@ -25,10 +24,9 @@ constructor(private val stagePersistenceService: StagePersistenceService) : Stag
                 .setDisplayOrder(model.getDisplayOrder())
     }
 
-    @Override
-    fun toModel(viewModel: StagePropViewModel): StageProp {
-        val model = stagePersistenceService.getStagePropByUuid(viewModel.getStageId(), viewModel.getUuid())
-                .orElseGet(???({ StageProp() }))
+    override fun toModel(viewModel: StagePropViewModel): StageProp {
+        val model = stagePersistenceService.getStagePropByUuid(viewModel.getStageId()!!, viewModel.getUuid()!!)
+                .orElseGet { StageProp() }
 
         return model
                 .setUuid(viewModel.getUuid())

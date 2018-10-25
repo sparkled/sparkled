@@ -3,10 +3,6 @@ package io.sparkled.music.impl
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import com.google.inject.persist.UnitOfWork
 import io.sparkled.model.entity.Playlist
-import io.sparkled.model.entity.Sequence
-import io.sparkled.model.entity.Song
-import io.sparkled.model.entity.SongAudio
-import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackService
 import io.sparkled.music.PlaybackState
@@ -14,15 +10,14 @@ import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import io.sparkled.persistence.sequence.SequencePersistenceService
 import io.sparkled.persistence.song.SongPersistenceService
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import javax.inject.Inject
-import javax.sound.sampled.LineEvent
-import java.util.UUID
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
+import java.util.function.Supplier
+import javax.inject.Inject
+import javax.sound.sampled.LineEvent
+import javax.sound.sampled.LineListener
 
 class PlaybackServiceImpl @Inject
 constructor(private val songPersistenceService: SongPersistenceService,
@@ -35,7 +30,6 @@ constructor(private val songPersistenceService: SongPersistenceService,
     private val playbackState = AtomicReference<PlaybackState>(PlaybackState())
 
     init {
-
         this.executor = Executors.newSingleThreadScheduledExecutor(
                 ThreadFactoryBuilder().setNameFormat("playback-service-%d").build()
         )
@@ -47,7 +41,7 @@ constructor(private val songPersistenceService: SongPersistenceService,
         if (event.type === LineEvent.Type.STOP) {
             val state = this.playbackState.get()
             if (!state.isEmpty) {
-                val playlist = state.playlist
+                val playlist = state.playlist!!
                 val playlistIndex = state.playlistIndex
                 submitSequencePlayback(playlist, playlistIndex + 1)
             }
@@ -86,17 +80,17 @@ constructor(private val songPersistenceService: SongPersistenceService,
     private fun loadPlaybackState(playlist: Playlist, playlistIndex: Int): PlaybackState {
         try {
             unitOfWork.begin()
-            val sequence = playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId(), playlistIndex).orElse(null)
+            val sequence = playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId()!!, playlistIndex).orElse(null)
 
-            if (sequence == null) {
-                return PlaybackState()
+            return if (sequence == null) {
+                PlaybackState()
             } else {
-                val song = songPersistenceService.getSongBySequenceId(sequence!!.getId()).orElse(null)
+                val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!).orElse(null)
                 val stagePropData = sequencePersistenceService.getRenderedStagePropsBySequenceAndSong(sequence, song)
-                val stagePropUuids = sequencePersistenceService.getSequenceStagePropUuidMapBySequenceId(sequence!!.getId())
-                val songAudio = sequencePersistenceService.getSongAudioBySequenceId(sequence!!.getId()).orElse(null)
+                val stagePropUuids = sequencePersistenceService.getSequenceStagePropUuidMapBySequenceId(sequence.getId()!!)
+                val songAudio = sequencePersistenceService.getSongAudioBySequenceId(sequence.getId()!!).orElse(null)
 
-                return PlaybackState(playlist, playlistIndex, Supplier<Double> { musicPlayerService.getSequenceProgress() }, sequence, song, songAudio, stagePropData, stagePropUuids)
+                PlaybackState(playlist, playlistIndex, Supplier { musicPlayerService.sequenceProgress }, sequence, song, songAudio, stagePropData, stagePropUuids)
             }
         } finally {
             unitOfWork.end()
@@ -110,7 +104,6 @@ constructor(private val songPersistenceService: SongPersistenceService,
     }
 
     companion object {
-
-        private val logger = LoggerFactory.getLogger(PlaybackServiceImpl::class.java!!)
+        private val logger = LoggerFactory.getLogger(PlaybackServiceImpl::class.java)
     }
 }

@@ -10,14 +10,12 @@ import io.sparkled.music.PlaybackState
  */
 class GetVersionCommand : RequestCommand() {
 
-    @Override
-    fun getResponse(args: Array<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
+    override fun getResponse(args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
         return byteArrayOf(UDP_PROTOCOL_VERSION.toByte())
     }
 
     companion object {
-
-        val KEY = "GV"
-        private val UDP_PROTOCOL_VERSION = 1
+        const val KEY = "GV"
+        private const val UDP_PROTOCOL_VERSION = 1
     }
 }

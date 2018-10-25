@@ -1,25 +1,26 @@
 package io.sparkled.persistence.song.impl.query
 
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.noIds
+import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
+import io.sparkled.persistence.PersistenceQuery.Companion.qSong
+import io.sparkled.persistence.PersistenceQuery.Companion.qSongAudio
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class DeleteSongsQuery(songIds: Collection<Integer>) : PersistenceQuery<Void> {
+class DeleteSongsQuery(songIds: Collection<Int>) : PersistenceQuery<Unit> {
 
-    private val songIds: Collection<Integer>
+    private val songIds: Collection<Int>
 
     init {
         this.songIds = if (songIds.isEmpty()) noIds else songIds
     }
 
-    @Override
-    fun perform(queryFactory: QueryFactory): Void? {
+    override fun perform(queryFactory: QueryFactory) {
         deleteSequences(queryFactory)
         deleteSongAudios(queryFactory)
         deleteSongs(queryFactory)
-        return null
     }
 
     private fun deleteSequences(queryFactory: QueryFactory) {
@@ -50,7 +51,6 @@ class DeleteSongsQuery(songIds: Collection<Integer>) : PersistenceQuery<Void> {
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(DeleteSongsQuery::class.java)
     }
 }

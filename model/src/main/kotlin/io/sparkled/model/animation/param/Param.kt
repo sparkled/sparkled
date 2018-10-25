@@ -1,15 +1,14 @@
 package io.sparkled.model.animation.param
 
-import java.util.ArrayList
-import java.util.Objects
+import java.util.*
 
 class Param {
 
     private var name: ParamName? = null
     private var type: ParamType? = null
-    private var value: List<String> = ArrayList()
+    private var value: List<String?> = ArrayList()
 
-    fun getName(): ParamName {
+    fun getName(): ParamName? {
         return name
     }
 
@@ -18,7 +17,7 @@ class Param {
         return this
     }
 
-    fun getType(): ParamType {
+    fun getType(): ParamType? {
         return type
     }
 
@@ -27,7 +26,7 @@ class Param {
         return this
     }
 
-    fun getValue(): List<String> {
+    fun getValue(): List<String?> {
         return value
     }
 
@@ -36,33 +35,32 @@ class Param {
         return this
     }
 
-    fun setValue(value: Object): Param {
-        this.value = ArrayList()
-        this.value.add(String.valueOf(value))
+    fun setValue(value: Any): Param {
+        this.value = listOf(value.toString())
         return this
     }
 
-    @Override
-    fun equals(o: Object): Boolean {
-        if (this === o) return true
-        if (o !is Param) return false
-        val that = o
-        return Objects.equals(name, that.name) &&
-                type === that.type &&
-                Objects.equals(value, that.value)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Param
+
+        if (name != other.name) return false
+        if (type != other.type) return false
+        if (value != other.value) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(name, type, value)
+    override fun hashCode(): Int {
+        var result = name?.hashCode() ?: 0
+        result = 31 * result + (type?.hashCode() ?: 0)
+        result = 31 * result + value.hashCode()
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "Param{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", value=" + value +
-                '}'
+    override fun toString(): String {
+        return "Param(name=$name, type=$type, value=$value)"
     }
 }

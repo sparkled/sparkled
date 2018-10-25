@@ -5,19 +5,18 @@ import io.sparkled.renderer.util.FillUtils
 
 class FlashEffectRenderer : EffectRenderer() {
 
-    @Override
-    fun render(ctx: RenderContext) {
-        val alpha = getAlpha(ctx.getProgress())
+    override fun render(ctx: RenderContext) {
+        val alpha = getAlpha(ctx.progress)
 
-        for (i in 0..ctx.getChannel().getLedCount() - 1) {
-            FillUtils.fill(ctx, ctx.getFrame().getLed(i), alpha)
+        for (i in 0 until ctx.channel.ledCount) {
+            FillUtils.fill(ctx, ctx.frame.getLed(i), alpha)
         }
     }
 
     /**
-     * @param progress The 0 > 1 progress
-     * *
-     * @return The progress, transformed into 0 > 1 > 0
+     * @param progress The normalised progress.
+     *
+     * @return The progress, transformed into 0 > 1 > 0.
      */
     private fun getAlpha(progress: Float): Float {
         var alpha = progress * 2

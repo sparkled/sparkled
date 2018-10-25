@@ -1,7 +1,7 @@
 package io.sparkled.model.render
 
-import java.awt.*
-import java.util.Objects
+import java.awt.Color
+import java.util.*
 
 class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset: Int) {
     private val index: Int
@@ -10,62 +10,65 @@ class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset
         this.index = ledNumber * BYTES_PER_LED
     }
 
-    fun addColor(color: Color) {
-        addRgb(color.getRed(), color.getGreen(), color.getBlue())
-    }
+    fun addColor(color: Color) = addRgb(color.red, color.green, color.blue)
 
     fun addRgb(r: Int, g: Int, b: Int) {
-        r = Math.min(r + r, 255)
-        g = Math.min(g + g, 255)
-        b = Math.min(b + b, 255)
+        this.r = Math.min(r + r, 255)
+        this.g = Math.min(g + g, 255)
+        this.b = Math.min(b + b, 255)
     }
 
     var r: Int
-        get() = ledData[offset + index + R] and 0xFF
+        get() = (ledData[offset + index + R]).toInt() and 0xFF
         private set(r) {
             ledData[offset + index + R] = r.toByte()
         }
 
     var g: Int
-        get() = ledData[offset + index + G] and 0xFF
+        get() = (ledData[offset + index + G]).toInt() and 0xFF
         private set(g) {
             ledData[offset + index + G] = g.toByte()
         }
 
     var b: Int
-        get() = ledData[offset + index + B] and 0xFF
+        get() = (ledData[offset + index + B]).toInt() and 0xFF
         private set(b) {
             ledData[offset + index + B] = b.toByte()
         }
 
-    @Override
-    fun equals(o: Object): Boolean {
-        if (this === o) {
-            return true
-        } else if (o !is Led) {
-            return false
-        }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-        val led = o
-        return r == led.r && g == led.g && b == led.b
+        other as Led
+
+        if (!Arrays.equals(ledData, other.ledData)) return false
+        if (ledNumber != other.ledNumber) return false
+        if (offset != other.offset) return false
+        if (index != other.index) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(r, g, b)
+    override fun hashCode(): Int {
+        var result = Arrays.hashCode(ledData)
+        result = 31 * result + ledNumber
+        result = 31 * result + offset
+        result = 31 * result + index
+        return result
     }
 
-    @Override
-    fun toString(): String {
+    override fun toString(): String {
         return String.format("#%02X%02X%02X", r, g, b)
     }
 
+
     companion object {
 
-        val BYTES_PER_LED = 3
+        const val BYTES_PER_LED = 3
 
-        private val R = 0
-        private val G = 1
-        private val B = 2
+        private const val R = 0
+        private const val G = 1
+        private const val B = 2
     }
 }

@@ -2,15 +2,14 @@ package io.sparkled.model.animation.easing
 
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
-import java.util.Objects
 
 class EasingType : HasParams {
 
     private var code: EasingTypeCode? = null
     private var name: String? = null
-    private var params: List<Param>? = null
+    private var params: List<Param> = ArrayList()
 
-    fun getCode(): EasingTypeCode {
+    fun getCode(): EasingTypeCode? {
         return code
     }
 
@@ -19,7 +18,7 @@ class EasingType : HasParams {
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
@@ -28,8 +27,7 @@ class EasingType : HasParams {
         return this
     }
 
-    @Override
-    fun getParams(): List<Param> {
+    override fun getParams(): List<Param> {
         return params
     }
 
@@ -38,27 +36,27 @@ class EasingType : HasParams {
         return this
     }
 
-    @Override
-    fun equals(o: Object): Boolean {
-        if (this === o) return true
-        if (o !is EasingType) return false
-        val easingType = o
-        return code === easingType.code &&
-                Objects.equals(name, easingType.name) &&
-                Objects.equals(params, easingType.params)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as EasingType
+
+        if (code != other.code) return false
+        if (name != other.name) return false
+        if (params != other.params) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(code, name, params)
+    override fun hashCode(): Int {
+        var result = code?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + params.hashCode()
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "EasingType{" +
-                "code=" + code +
-                ", name='" + name + '\'' +
-                ", params=" + params +
-                '}'
+    override fun toString(): String {
+        return "EasingType(code=$code, name=$name, params=$params)"
     }
 }

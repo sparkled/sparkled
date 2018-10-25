@@ -12,6 +12,6 @@ class StageValidator {
     }
 
     private object Errors {
-        internal val NAME_MISSING = "Stage name must not be empty."
+        internal const val NAME_MISSING = "Stage name must not be empty."
     }
 }

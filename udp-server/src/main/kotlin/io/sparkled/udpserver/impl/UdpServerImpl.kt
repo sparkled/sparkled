@@ -3,44 +3,37 @@ package io.sparkled.udpserver.impl
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.UdpServer
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import javax.inject.Inject
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.SocketException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
 class UdpServerImpl @Inject
 constructor(private val requestHandler: RequestHandler) : UdpServer {
-    private val executor: ExecutorService
+    private val executor: ExecutorService = Executors.newSingleThreadExecutor(
+            ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
+    )
     private var started: Boolean = false
 
-    init {
-        this.executor = Executors.newSingleThreadExecutor(
-                ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
-        )
-    }
-
-    @Override
     @Throws(SocketException::class)
-    fun start(port: Int) {
+    override fun start(port: Int) {
         if (started) {
             logger.warn("Attempted to start UDP server, but it is already running.")
             return
         }
 
         val serverSocket = DatagramSocket(port)
-        executor.submit({ listen(serverSocket) })
+        executor.submit { listen(serverSocket) }
 
         started = true
         logger.info("Started UDP server at port {}.", port)
     }
 
-    private fun listen(serverSocket: DatagramSocket): Object {
+    private fun listen(serverSocket: DatagramSocket): Any {
         val receiveData = ByteArray(RECEIVE_BUFFER_SIZE)
 
         while (true) {
@@ -61,8 +54,7 @@ constructor(private val requestHandler: RequestHandler) : UdpServer {
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(UdpServerImpl::class.java)
-        private val RECEIVE_BUFFER_SIZE = 20
+        private const val RECEIVE_BUFFER_SIZE = 20
     }
 }

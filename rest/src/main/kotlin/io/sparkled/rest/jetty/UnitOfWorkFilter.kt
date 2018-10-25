@@ -1,7 +1,6 @@
 package io.sparkled.rest.jetty
 
 import com.google.inject.persist.UnitOfWork
-
 import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.ws.rs.container.ContainerRequestContext
@@ -9,7 +8,6 @@ import javax.ws.rs.container.ContainerRequestFilter
 import javax.ws.rs.container.ContainerResponseContext
 import javax.ws.rs.container.ContainerResponseFilter
 import javax.ws.rs.ext.Provider
-import java.io.IOException
 
 /**
  * Integrates the Guice [UnitOfWork] into the REST API, which automatically creates and destroys an
@@ -19,14 +17,11 @@ import java.io.IOException
 class UnitOfWorkFilter @Inject
 constructor(private val unitOfWork: UnitOfWork) : ContainerRequestFilter, ContainerResponseFilter {
 
-    @Override
-    @Throws(IOException::class)
-    fun filter(requestContext: ContainerRequestContext) {
+    override fun filter(requestContext: ContainerRequestContext) {
         unitOfWork.begin()
     }
 
-    @Override
-    fun filter(request: ContainerRequestContext, response: ContainerResponseContext) {
+    override fun filter(request: ContainerRequestContext, response: ContainerResponseContext) {
         unitOfWork.end()
     }
 }

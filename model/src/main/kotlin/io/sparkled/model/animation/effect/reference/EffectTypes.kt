@@ -5,8 +5,7 @@ import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
 import io.sparkled.model.animation.param.ParamType
-
-import java.util.Arrays
+import java.util.*
 
 object EffectTypes {
     private val TYPES = Arrays.asList(
@@ -24,7 +23,7 @@ object EffectTypes {
     }
 
     private fun effectType(effectType: EffectTypeCode, name: String, vararg params: Param): EffectType {
-        return EffectType().setCode(effectType).setName(name).setParams(Arrays.asList(params))
+        return EffectType().setCode(effectType).setName(name).setParams(arrayListOf(*params))
     }
 
     private fun param(paramName: ParamName, type: ParamType): Param {

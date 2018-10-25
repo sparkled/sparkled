@@ -1,8 +1,10 @@
 package io.sparkled.rest.inject
 
 import com.google.inject.AbstractModule
+import com.google.inject.Singleton
 import io.sparkled.rest.RestApiServer
 import io.sparkled.rest.RestApiServerImpl
+import io.sparkled.rest.service.playlist.PlaylistRestServiceHandler
 import io.sparkled.viewmodel.playlist.PlaylistViewModelConverter
 import io.sparkled.viewmodel.playlist.PlaylistViewModelConverterImpl
 import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModelConverter
@@ -23,16 +25,15 @@ import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverterImpl
 import io.sparkled.viewmodel.stage.search.StageSearchViewModelConverter
 import io.sparkled.viewmodel.stage.search.StageSearchViewModelConverterImpl
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class RestApiServerModule : AbstractModule() {
 
-    @Override
-    protected fun configure() {
+    override fun configure() {
         logger.info("Configuring Guice module.")
 
         bind(RestApiServer::class.java).to(RestApiServerImpl::class.java).asEagerSingleton()
+        bind(PlaylistRestServiceHandler::class.java).`in`(Singleton::class.java)
 
         bind(SongViewModelConverter::class.java).to(SongViewModelConverterImpl::class.java).asEagerSingleton()
 
@@ -50,7 +51,6 @@ class RestApiServerModule : AbstractModule() {
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(RestApiServerModule::class.java)
     }
 }

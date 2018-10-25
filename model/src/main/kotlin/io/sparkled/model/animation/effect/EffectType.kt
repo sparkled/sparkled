@@ -2,9 +2,7 @@ package io.sparkled.model.animation.effect
 
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
-
-import java.util.ArrayList
-import java.util.Objects
+import java.util.*
 
 class EffectType : HasParams {
 
@@ -12,7 +10,7 @@ class EffectType : HasParams {
     private var name: String? = null
     private var params: List<Param> = ArrayList()
 
-    fun getCode(): EffectTypeCode {
+    fun getCode(): EffectTypeCode? {
         return code
     }
 
@@ -21,7 +19,7 @@ class EffectType : HasParams {
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
@@ -30,8 +28,7 @@ class EffectType : HasParams {
         return this
     }
 
-    @Override
-    fun getParams(): List<Param> {
+    override fun getParams(): List<Param> {
         return params
     }
 
@@ -40,27 +37,27 @@ class EffectType : HasParams {
         return this
     }
 
-    @Override
-    fun equals(o: Object): Boolean {
-        if (this === o) return true
-        if (o !is EffectType) return false
-        val that = o
-        return code === that.code &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(params, that.params)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as EffectType
+
+        if (code != other.code) return false
+        if (name != other.name) return false
+        if (params != other.params) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(code, name, params)
+    override fun hashCode(): Int {
+        var result = code?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + params.hashCode()
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "EffectType{" +
-                "code=" + code +
-                ", name='" + name + '\'' +
-                ", params=" + params +
-                '}'
+    override fun toString(): String {
+        return "EffectType(code=$code, name=$name, params=$params)"
     }
 }

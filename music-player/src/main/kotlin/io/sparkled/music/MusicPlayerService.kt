@@ -1,10 +1,7 @@
 package io.sparkled.music
 
 import io.sparkled.model.entity.SongAudio
-import javazoom.jl.player.advanced.PlaybackEvent
-
 import javax.sound.sampled.LineListener
-import java.util.function.Consumer
 
 /**
  * Plays [SongAudio] data and provides a means of determining song progress.

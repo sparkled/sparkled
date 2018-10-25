@@ -2,22 +2,20 @@ package io.sparkled.viewmodel.stage.search
 
 import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects
-
 class StageSearchViewModel : ViewModel {
-    private var id: Integer? = null
+    private var id: Int? = null
     private var name: String? = null
 
-    fun getId(): Integer {
+    fun getId(): Int? {
         return id
     }
 
-    fun setId(id: Integer): StageSearchViewModel {
+    fun setId(id: Int): StageSearchViewModel {
         this.id = id
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
@@ -26,25 +24,25 @@ class StageSearchViewModel : ViewModel {
         return this
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val that = o
-        return Objects.equals(id, that!!.id) && Objects.equals(name, that.name)
+        other as StageSearchViewModel
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(id, name)
+    override fun hashCode(): Int {
+        var result = id ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "StageSearchViewModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}'
+    override fun toString(): String {
+        return "StageSearchViewModel(id=$id, name=$name)"
     }
 }

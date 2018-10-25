@@ -1,18 +1,12 @@
 package io.sparkled.model.render
 
-import java.util.ArrayList
+import java.util.*
 
 class RenderedStagePropData(startFrame: Int, endFrame: Int, val ledCount: Int, val data: ByteArray) {
 
     // Don't serialise frames to JSON, as each frame contains a reference to the (very large) data array
-    @Transient val frames: List<RenderedFrame>
-
-    /**
-     * Default constructor required for Gson.
-     */
-    @SuppressWarnings("unused")
-    constructor() : this(0, 0, 0, byteArrayOf()) {
-    }
+    @Transient
+    val frames: List<RenderedFrame>
 
     init {
 
@@ -22,10 +16,5 @@ class RenderedStagePropData(startFrame: Int, endFrame: Int, val ledCount: Int, v
         for (frameIndex in startFrame..endFrame) {
             this.frames.add(RenderedFrame(startFrame, frameIndex, ledCount, data))
         }
-    }
-
-    companion object {
-
-        val EMPTY = RenderedStagePropData()
     }
 }

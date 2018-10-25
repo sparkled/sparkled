@@ -4,41 +4,25 @@ import io.sparkled.model.render.Led
 import io.sparkled.model.render.RenderedFrame
 import io.sparkled.model.render.RenderedStagePropData
 
-import java.util.Arrays
-import java.util.stream.IntStream
-
-import java.util.stream.Collectors.joining
-
 /**
  * Convenience methods for working with LEDs in tests.
  */
 object LedTestUtils {
 
     fun toLedString(channel: RenderedStagePropData): String {
-        return channel.getFrames()
-                .stream()
-                .map(???({ toLedString() }))
-        .collect(joining("\n"))
+        return channel.frames.asSequence().map { toLedString(it) }.joinToString("\n")
     }
 
     fun toLedString(leds: Array<IntArray>): String {
-        return Arrays.stream(leds)
-                .map(???({ toLedString() }))
-        .collect(joining("\n"))
+        return leds.asSequence().map { toLedString(it) }.joinToString("\n")
     }
 
     fun toLedString(frame: RenderedFrame): String {
-        return IntStream.range(0, frame.getLedCount())
-                .mapToObj(???({ frame.getLed() }))
-        .map(???({ Led.toString() }))
-        .collect(joining(", "))
+        return (0 until frame.ledCount).map { frame.getLed(it) }.joinToString(", ", transform = Led::toString)
     }
 
     fun toLedString(leds: IntArray): String {
-        return Arrays.stream(leds)
-                .mapToObj(???({ getLedFromRgb(it) }))
-        .map(???({ Led.toString() }))
-        .collect(joining(", "))
+        return leds.map(this::getLedFromRgb).joinToString(", ", transform = Led::toString)
     }
 
     private fun getLedFromRgb(rgb: Int): Led {

@@ -1,8 +1,7 @@
 package io.sparkled.model.entity
 
+import java.util.*
 import javax.persistence.*
-import java.util.Objects
-import java.util.UUID
 
 @Entity
 @Table(name = "rendered_stage_prop")
@@ -11,89 +10,90 @@ class RenderedStageProp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private var id: Integer? = null
+    private var id: Int? = null
 
     @Column(name = "sequence_id")
-    private var sequenceId: Integer? = null
+    private var sequenceId: Int? = null
 
     @Column(name = "stage_prop_uuid")
     private var stagePropUuid: UUID? = null
 
     @Column(name = "led_count")
-    private var ledCount: Integer? = null
+    private var ledCount: Int? = null
 
     @Lob
     @Column(name = "data")
     private var data: ByteArray? = null
 
-    fun getId(): Integer {
+    fun getId(): Int? {
         return id
     }
 
-    fun setId(id: Integer): RenderedStageProp {
+    fun setId(id: Int?): RenderedStageProp {
         this.id = id
         return this
     }
 
-    fun getSequenceId(): Integer {
+    fun getSequenceId(): Int? {
         return sequenceId
     }
 
-    fun setSequenceId(sequenceId: Integer): RenderedStageProp {
+    fun setSequenceId(sequenceId: Int?): RenderedStageProp {
         this.sequenceId = sequenceId
         return this
     }
 
-    fun getStagePropUuid(): UUID {
+    fun getStagePropUuid(): UUID? {
         return stagePropUuid
     }
 
-    fun setStagePropUuid(stagePropUuid: UUID): RenderedStageProp {
+    fun setStagePropUuid(stagePropUuid: UUID?): RenderedStageProp {
         this.stagePropUuid = stagePropUuid
         return this
     }
 
-    fun getLedCount(): Integer {
+    fun getLedCount(): Int? {
         return ledCount
     }
 
-    fun setLedCount(ledCount: Integer): RenderedStageProp {
+    fun setLedCount(ledCount: Int?): RenderedStageProp {
         this.ledCount = ledCount
         return this
     }
 
-    fun getData(): ByteArray {
+    fun getData(): ByteArray? {
         return data
     }
 
-    fun setData(data: ByteArray): RenderedStageProp {
+    fun setData(data: ByteArray?): RenderedStageProp {
         this.data = data
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val that = o
-        return Objects.equals(id, that!!.id) &&
-                Objects.equals(sequenceId, that.sequenceId) &&
-                Objects.equals(stagePropUuid, that.stagePropUuid) &&
-                Objects.equals(ledCount, that.ledCount)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RenderedStageProp
+
+        if (id != other.id) return false
+        if (sequenceId != other.sequenceId) return false
+        if (stagePropUuid != other.stagePropUuid) return false
+        if (ledCount != other.ledCount) return false
+        if (!Arrays.equals(data, other.data)) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(id, sequenceId, stagePropUuid, ledCount)
+    override fun hashCode(): Int {
+        var result = id ?: 0
+        result = 31 * result + (sequenceId ?: 0)
+        result = 31 * result + (stagePropUuid?.hashCode() ?: 0)
+        result = 31 * result + (ledCount ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "RenderedStageProp{" +
-                "id=" + id +
-                ", sequenceId=" + sequenceId +
-                ", stagePropUuid='" + stagePropUuid + '\'' +
-                ", ledCount=" + ledCount +
-                '}'
+    override fun toString(): String {
+        return "RenderedStageProp(id=$id, sequenceId=$sequenceId, stagePropUuid=$stagePropUuid, ledCount=$ledCount)"
     }
 }

@@ -13,13 +13,11 @@ import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.persistence.song.impl.SongPersistenceServiceImpl
 import io.sparkled.persistence.stage.StagePersistenceService
 import io.sparkled.persistence.stage.impl.StagePersistenceServiceImpl
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class PersistenceModule : AbstractModule() {
 
-    @Override
-    protected fun configure() {
+    override fun configure() {
         logger.info("Configuring Guice module.")
 
         install(JpaPersistModule("sparkled"))
@@ -33,7 +31,6 @@ class PersistenceModule : AbstractModule() {
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(PersistenceModule::class.java)
     }
 }

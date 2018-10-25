@@ -3,19 +3,18 @@ package io.sparkled.renderer.fill
 import io.sparkled.model.animation.fill.FillTypeCode
 import io.sparkled.renderer.fill.function.RainbowFill
 import io.sparkled.renderer.fill.function.SolidFill
-
-import java.util.HashMap
+import java.util.*
 
 object FillFunctions {
 
-    private val functions = HashMap()
+    private val functions = HashMap<FillTypeCode, FillFunction>()
 
     init {
-        functions.put(FillTypeCode.RAINBOW, RainbowFill())
-        functions.put(FillTypeCode.SOLID, SolidFill())
+        functions[FillTypeCode.RAINBOW] = RainbowFill()
+        functions[FillTypeCode.SOLID] = SolidFill()
     }
 
     operator fun get(fillType: FillTypeCode): FillFunction {
-        return functions.get(fillType)
+        return functions[fillType]!!
     }
 }

@@ -2,9 +2,7 @@ package io.sparkled.udpserver.impl.command
 
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.music.PlaybackState
-
 import java.nio.charset.StandardCharsets
-import java.util.stream.Collectors
 
 /**
  * Retrieves the stage prop codes that contain rendered data for the sequence that is currently playing.
@@ -14,21 +12,18 @@ import java.util.stream.Collectors
  */
 class GetStagePropCodesCommand : RequestCommand() {
 
-    @Override
-    fun getResponse(args: Array<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
-        if (playbackState.isEmpty()) {
-            return getErrorResponse()
+    override fun getResponse(args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
+        if (playbackState.isEmpty) {
+            return errorResponse
         }
 
-        return playbackState.getStagePropUuids()
-                .keySet()
-                .stream()
-                .collect(Collectors.joining(":"))
-                .getBytes(StandardCharsets.UTF_8)
+        val bytes = playbackState.stagePropUuids.keys
+                .joinToString(":")
+                .toByteArray(StandardCharsets.UTF_8)
+        return if (bytes.isEmpty()) ByteArray(0) else bytes
     }
 
     companion object {
-
-        val KEY = "GP"
+        const val KEY = "GP"
     }
 }

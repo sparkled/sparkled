@@ -8,12 +8,10 @@ import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
-import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers
-import org.junit.jupiter.api.Test
-
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Test
 
 class SplitLineEffectRendererTest {
 
@@ -21,9 +19,9 @@ class SplitLineEffectRendererTest {
     fun can_render_5_led_line_on_10_led_channel() {
         val effect = Effect()
                 .setType(EffectTypeCode.SPLIT_LINE)
-                .setParams(
+                .setParams(arrayListOf(
                         Param().setName(ParamName.LENGTH).setValue(5)
-                )
+                ))
                 .setEasing(
                         Easing()
                                 .setType(EasingTypeCode.LINEAR)
@@ -31,9 +29,9 @@ class SplitLineEffectRendererTest {
                 .setFill(
                         Fill()
                                 .setType(FillTypeCode.SOLID)
-                                .setParams(
+                                .setParams(arrayListOf(
                                         Param().setName(ParamName.COLOR).setValue("#ffffff")
-                                )
+                                ))
                 )
 
         val renderedStagePropData = RenderUtils.render(effect, 50, 10)
@@ -46,18 +44,18 @@ class SplitLineEffectRendererTest {
     fun can_render_5_led_line_on_11_led_channel() {
         val effect = Effect()
                 .setType(EffectTypeCode.SPLIT_LINE)
-                .setParams(
+                .setParams(arrayListOf(
                         Param().setName(ParamName.LENGTH).setValue(5)
-                )
+                ))
                 .setEasing(
                         Easing().setType(EasingTypeCode.LINEAR)
                 )
                 .setFill(
                         Fill()
                                 .setType(FillTypeCode.SOLID)
-                                .setParams(
+                                .setParams(arrayListOf(
                                         Param().setName(ParamName.COLOR).setValue("#ffffff")
-                                )
+                                ))
                 )
 
         val renderedStagePropData = RenderUtils.render(effect, 50, 11)

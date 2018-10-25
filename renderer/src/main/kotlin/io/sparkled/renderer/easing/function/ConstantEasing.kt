@@ -6,8 +6,8 @@ import io.sparkled.renderer.easing.EasingFunction
 import io.sparkled.renderer.util.ParamUtils
 
 class ConstantEasing : EasingFunction {
-    @Override
-    fun getProgress(easing: Easing, currentFrame: Float, frameCount: Float): Float {
+
+    override fun getProgress(easing: Easing, currentFrame: Int, frameCount: Int): Float {
         return ParamUtils.getDecimalValue(easing, ParamName.PERCENT) / 100f
     }
 }

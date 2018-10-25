@@ -6,9 +6,7 @@ import io.sparkled.music.PlaybackService
 import io.sparkled.music.PlaybackStateService
 import io.sparkled.music.impl.MusicPlayerServiceImpl
 import io.sparkled.music.impl.PlaybackServiceImpl
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
 import javax.inject.Singleton
 
 class MusicPlayerModule : AbstractModule() {
@@ -25,7 +23,6 @@ class MusicPlayerModule : AbstractModule() {
     }
 
     companion object {
-
-        private val logger = LoggerFactory.getLogger(MusicPlayerModule::class.java!!)
+        private val logger = LoggerFactory.getLogger(MusicPlayerModule::class.java)
     }
 }

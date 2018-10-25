@@ -1,9 +1,7 @@
 package io.sparkled.rest.service.player
 
 import io.sparkled.model.playlist.PlaylistAction
-
 import javax.inject.Inject
-import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.Produces

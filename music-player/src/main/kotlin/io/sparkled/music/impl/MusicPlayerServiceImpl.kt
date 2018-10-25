@@ -2,17 +2,12 @@ package io.sparkled.music.impl
 
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackState
-import javazoom.jl.player.advanced.PlaybackEvent
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.util.*
 import javax.inject.Inject
 import javax.sound.sampled.*
-import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.io.InputStream
-import java.util.HashSet
-import java.util.function.Consumer
 
 class MusicPlayerServiceImpl @Inject
 constructor() : MusicPlayerService, LineListener {
@@ -20,7 +15,7 @@ constructor() : MusicPlayerService, LineListener {
     private val listeners = HashSet<LineListener>()
     private var clip: Clip? = null
 
-    fun play(playbackState: PlaybackState) {
+    override fun play(playbackState: PlaybackState) {
         stopPlayback()
 
         var byteStream: InputStream? = null
@@ -28,9 +23,9 @@ constructor() : MusicPlayerService, LineListener {
         var convertedStream: AudioInputStream? = null
 
         try {
-            logger.info("Playing sequence {}.", playbackState.sequence.getName())
+            logger.info("Playing sequence {}.", playbackState.sequence?.getName())
 
-            byteStream = ByteArrayInputStream(playbackState.songAudio.getAudioData())
+            byteStream = ByteArrayInputStream(playbackState.songAudio?.getAudioData())
             mp3Stream = AudioSystem.getAudioInputStream(byteStream)
 
             val baseFormat = mp3Stream!!.format
@@ -38,29 +33,19 @@ constructor() : MusicPlayerService, LineListener {
                     baseFormat.channels * 2, baseFormat.sampleRate, false)
             convertedStream = AudioSystem.getAudioInputStream(decodedFormat, mp3Stream)
 
-            clip = AudioSystem.getClip()
-            clip!!.open(convertedStream)
-            clip!!.addLineListener(this)
-            clip!!.start()
+            val clip = AudioSystem.getClip()
+            this.clip = clip
+
+            clip.open(convertedStream)
+            clip.addLineListener(this)
+            clip.start()
             logger.info("Sequence finished playing.")
         } catch (e: Exception) {
-            logger.error("Failed to play sequence {}: {}.", playbackState.sequence.getName(), e.message)
+            logger.error("Failed to play sequence {}: {}.", playbackState.sequence?.getName(), e.message)
         } finally {
-            close(byteStream, mp3Stream, convertedStream)
-        }
-    }
-
-    private fun close(vararg streams: InputStream) {
-        for (i in streams.indices) {
-            val stream = streams[i]
-            if (stream != null) {
-                try {
-                    stream.close()
-                } catch (e: IOException) {
-                    logger.error("Failed to close stream #{}: {}.", i, e.message)
-                }
-
-            }
+            byteStream?.close()
+            mp3Stream?.close()
+            convertedStream?.close()
         }
     }
 
@@ -71,10 +56,10 @@ constructor() : MusicPlayerService, LineListener {
 
     override val sequenceProgress: Double
         get() {
-            if (clip == null) {
-                return 0.0
+            return if (clip == null) {
+                0.0
             } else {
-                return Math.min(1.0, clip!!.framePosition / clip!!.frameLength.toDouble())
+                Math.min(1.0, clip!!.framePosition / clip!!.frameLength.toDouble())
             }
         }
 
@@ -99,7 +84,6 @@ constructor() : MusicPlayerService, LineListener {
     }
 
     companion object {
-
-        private val logger = LoggerFactory.getLogger(MusicPlayerServiceImpl::class.java!!)
+        private val logger = LoggerFactory.getLogger(MusicPlayerServiceImpl::class.java)
     }
 }

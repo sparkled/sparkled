@@ -1,28 +1,29 @@
 package io.sparkled.persistence.sequence.impl.query
 
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.noIds
+import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylistSequence
+import io.sparkled.persistence.PersistenceQuery.Companion.qRenderedStageProp
+import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
+import io.sparkled.persistence.PersistenceQuery.Companion.qSequenceChannel
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.playlist.impl.query.DeletePlaylistSequencesQuery
 import io.sparkled.persistence.stage.impl.query.DeleteRenderedStagePropsQuery
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.UUID
 
-class DeleteSequencesQuery(sequenceIds: Collection<Integer>) : PersistenceQuery<Void> {
+class DeleteSequencesQuery(sequenceIds: Collection<Int>) : PersistenceQuery<Unit> {
 
-    private val sequenceIds: Collection<Integer>
+    private val sequenceIds: Collection<Int>
 
     init {
         this.sequenceIds = if (sequenceIds.isEmpty()) noIds else sequenceIds
     }
 
-    @Override
-    fun perform(queryFactory: QueryFactory): Void? {
+    override fun perform(queryFactory: QueryFactory) {
         deletePlaylistSequences(queryFactory)
         deleteRenderedStageProps(queryFactory)
         deleteSequenceChannels(queryFactory)
         deleteSequences(queryFactory)
-        return null
     }
 
     private fun deletePlaylistSequences(queryFactory: QueryFactory) {

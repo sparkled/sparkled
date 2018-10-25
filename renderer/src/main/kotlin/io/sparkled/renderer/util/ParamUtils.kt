@@ -3,23 +3,20 @@ package io.sparkled.renderer.util
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
-
-import java.awt.*
-
-import java.util.stream.Collectors.toList
+import java.awt.Color
 
 object ParamUtils {
 
     fun getIntegerValue(parent: HasParams, paramName: ParamName): Int {
         val param = getParam(parent, paramName)
         val value = param.getValue()
-        return Integer.parseInt(value.get(0))
+        return Integer.parseInt(value[0])
     }
 
     fun getDecimalValue(parent: HasParams, paramName: ParamName): Float {
         val param = getParam(parent, paramName)
         val value = param.getValue()
-        return Float.parseFloat(value.get(0))
+        return value[0]!!.toFloat()
     }
 
     fun getColorValue(parent: HasParams, paramName: ParamName): Color {
@@ -30,17 +27,14 @@ object ParamUtils {
         val param = getParam(parent, paramName)
         val values = param.getValue()
 
-        return values.stream()
-                .map(???({ convertColor(it) }))
-        .collect(toList())
+        return values.asSequence().map { convertColor(it!!) }.toList()
     }
 
     private fun getParam(parent: HasParams, paramName: ParamName): Param {
         return parent.getParams()
-                .stream()
-                .filter({ p -> paramName === p.getName() })
-                .findFirst()
-                .orElse(Param())
+                .asSequence()
+                .filter { p -> paramName === p.getName() }
+                .firstOrNull() ?: Param()
     }
 
     private fun convertColor(hexColor: String): Color {

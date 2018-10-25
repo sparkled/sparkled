@@ -9,8 +9,7 @@ import javax.inject.Inject
 class SongViewModelConverterImpl @Inject
 constructor(private val songPersistenceService: SongPersistenceService) : SongViewModelConverter() {
 
-    @Override
-    fun toViewModel(model: Song): SongViewModel {
+    override fun toViewModel(model: Song): SongViewModel {
         return SongViewModel()
                 .setId(model.getId())
                 .setName(model.getName())
@@ -19,8 +18,7 @@ constructor(private val songPersistenceService: SongPersistenceService) : SongVi
                 .setDurationMs(model.getDurationMs())
     }
 
-    @Override
-    fun toModel(viewModel: SongViewModel): Song {
+    override fun toModel(viewModel: SongViewModel): Song {
         val songId = viewModel.getId()
         val model = getSong(songId)
 
@@ -32,12 +30,12 @@ constructor(private val songPersistenceService: SongPersistenceService) : SongVi
                 .setDurationMs(viewModel.getDurationMs())
     }
 
-    private fun getSong(songId: Integer?): Song {
+    private fun getSong(songId: Int?): Song {
         if (songId == null) {
             return Song()
         }
 
         return songPersistenceService.getSongById(songId)
-                .orElseThrow({ ViewModelConversionException("Song with ID of '$songId' not found.") })
+                .orElseThrow { ViewModelConversionException("Song with ID of '$songId' not found.") }
     }
 }

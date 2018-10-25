@@ -1,8 +1,7 @@
 package io.sparkled.model.entity
 
+import java.util.*
 import javax.persistence.*
-import java.util.Objects
-import java.util.UUID
 
 @Entity
 @Table(name = "stage_prop")
@@ -14,7 +13,7 @@ class StageProp {
 
     @Basic
     @Column(name = "stage_id")
-    private var stageId: Integer? = null
+    private var stageId: Int? = null
 
     @Basic
     @Column(name = "code")
@@ -30,179 +29,179 @@ class StageProp {
 
     @Basic
     @Column(name = "led_count")
-    private var ledCount: Integer = 0
+    private var ledCount: Int? = null
 
     @Basic
     @Column(name = "position_x")
-    private var positionX: Integer = 0
+    private var positionX: Int? = null
 
     @Basic
     @Column(name = "position_y")
-    private var positionY: Integer = 0
+    private var positionY: Int? = null
 
     @Basic
     @Column(name = "scale_x")
-    private var scaleX = 1f
+    private var scaleX: Float? = null
 
     @Basic
     @Column(name = "scale_y")
-    private var scaleY = 1f
+    private var scaleY: Float? = null
 
     @Basic
     @Column(name = "rotation")
-    private var rotation: Integer = 0
+    private var rotation: Int? = null
 
     @Basic
     @Column(name = "display_order")
-    private var displayOrder: Integer = 0
+    private var displayOrder: Int? = null
 
-    fun getUuid(): UUID {
+    fun getUuid(): UUID? {
         return uuid
     }
 
-    fun setUuid(uuid: UUID): StageProp {
+    fun setUuid(uuid: UUID?): StageProp {
         this.uuid = uuid
         return this
     }
 
-    fun getStageId(): Integer {
+    fun getStageId(): Int? {
         return stageId
     }
 
-    fun setStageId(stageId: Integer): StageProp {
+    fun setStageId(stageId: Int?): StageProp {
         this.stageId = stageId
         return this
     }
 
-    fun getCode(): String {
+    fun getCode(): String? {
         return code
     }
 
-    fun setCode(code: String): StageProp {
+    fun setCode(code: String?): StageProp {
         this.code = code
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
-    fun setName(name: String): StageProp {
+    fun setName(name: String?): StageProp {
         this.name = name
         return this
     }
 
-    fun getType(): String {
+    fun getType(): String? {
         return type
     }
 
-    fun setType(type: String): StageProp {
+    fun setType(type: String?): StageProp {
         this.type = type
         return this
     }
 
-    fun getLedCount(): Integer {
+    fun getLedCount(): Int? {
         return ledCount
     }
 
-    fun setLedCount(ledCount: Integer): StageProp {
+    fun setLedCount(ledCount: Int?): StageProp {
         this.ledCount = ledCount
         return this
     }
 
-    fun getPositionX(): Integer {
+    fun getPositionX(): Int? {
         return positionX
     }
 
-    fun setPositionX(positionX: Integer): StageProp {
+    fun setPositionX(positionX: Int?): StageProp {
         this.positionX = positionX
         return this
     }
 
-    fun getPositionY(): Integer {
+    fun getPositionY(): Int? {
         return positionY
     }
 
-    fun setPositionY(positionY: Integer): StageProp {
+    fun setPositionY(positionY: Int?): StageProp {
         this.positionY = positionY
         return this
     }
 
-    fun getScaleX(): Float {
+    fun getScaleX(): Float? {
         return scaleX
     }
 
-    fun setScaleX(scaleX: Float): StageProp {
+    fun setScaleX(scaleX: Float?): StageProp {
         this.scaleX = scaleX
         return this
     }
 
-    fun getScaleY(): Float {
+    fun getScaleY(): Float? {
         return scaleY
     }
 
-    fun setScaleY(scaleY: Float): StageProp {
+    fun setScaleY(scaleY: Float?): StageProp {
         this.scaleY = scaleY
         return this
     }
 
-    fun getRotation(): Integer {
+    fun getRotation(): Int? {
         return rotation
     }
 
-    fun setRotation(rotation: Integer): StageProp {
+    fun setRotation(rotation: Int?): StageProp {
         this.rotation = rotation
         return this
     }
 
-    fun getDisplayOrder(): Integer {
+    fun getDisplayOrder(): Int? {
         return displayOrder
     }
 
-    fun setDisplayOrder(displayOrder: Integer): StageProp {
+    fun setDisplayOrder(displayOrder: Int?): StageProp {
         this.displayOrder = displayOrder
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val stageProp = o
-        return Float.compare(stageProp!!.scaleX, scaleX) === 0 &&
-                Float.compare(stageProp!!.scaleY, scaleY) === 0 &&
-                Objects.equals(uuid, stageProp!!.uuid) &&
-                Objects.equals(stageId, stageProp.stageId) &&
-                Objects.equals(code, stageProp.code) &&
-                Objects.equals(name, stageProp.name) &&
-                Objects.equals(type, stageProp.type) &&
-                Objects.equals(ledCount, stageProp.ledCount) &&
-                Objects.equals(positionX, stageProp.positionX) &&
-                Objects.equals(positionY, stageProp.positionY) &&
-                Objects.equals(rotation, stageProp.rotation) &&
-                Objects.equals(displayOrder, stageProp.displayOrder)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as StageProp
+
+        if (uuid != other.uuid) return false
+        if (stageId != other.stageId) return false
+        if (code != other.code) return false
+        if (name != other.name) return false
+        if (type != other.type) return false
+        if (ledCount != other.ledCount) return false
+        if (positionX != other.positionX) return false
+        if (positionY != other.positionY) return false
+        if (scaleX != other.scaleX) return false
+        if (scaleY != other.scaleY) return false
+        if (rotation != other.rotation) return false
+        if (displayOrder != other.displayOrder) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(uuid, stageId, code, name, type, ledCount, positionX, positionY, scaleX, scaleY, rotation, displayOrder)
+    override fun hashCode(): Int {
+        var result = uuid?.hashCode() ?: 0
+        result = 31 * result + (stageId ?: 0)
+        result = 31 * result + (code?.hashCode() ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (type?.hashCode() ?: 0)
+        result = 31 * result + (ledCount ?: 0)
+        result = 31 * result + (positionX ?: 0)
+        result = 31 * result + (positionY ?: 0)
+        result = 31 * result + (scaleX?.hashCode() ?: 0)
+        result = 31 * result + (scaleY?.hashCode() ?: 0)
+        result = 31 * result + (rotation ?: 0)
+        result = 31 * result + (displayOrder ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "StageProp{" +
-                "uuid=" + uuid +
-                ", stageId=" + stageId +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", ledCount=" + ledCount +
-                ", positionX=" + positionX +
-                ", positionY=" + positionY +
-                ", scaleX=" + scaleX +
-                ", scaleY=" + scaleY +
-                ", rotation=" + rotation +
-                ", displayOrder=" + displayOrder +
-                '}'
+    override fun toString(): String {
+        return "StageProp(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, displayOrder=$displayOrder)"
     }
 }

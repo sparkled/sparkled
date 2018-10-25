@@ -2,74 +2,72 @@ package io.sparkled.viewmodel.playlist.search
 
 import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects
-
 class PlaylistSearchViewModel : ViewModel {
 
-    private var id: Integer? = null
+    private var id: Int? = null
     private var name: String? = null
-    private var sequenceCount: Integer? = null
-    private var durationSeconds: Integer? = null
+    private var sequenceCount: Int? = null
+    private var durationSeconds: Int? = null
 
-    fun getId(): Integer {
+    fun getId(): Int? {
         return id
     }
 
-    fun setId(id: Integer): PlaylistSearchViewModel {
+    fun setId(id: Int?): PlaylistSearchViewModel {
         this.id = id
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
-    fun setName(name: String): PlaylistSearchViewModel {
+    fun setName(name: String?): PlaylistSearchViewModel {
         this.name = name
         return this
     }
 
-    fun getSequenceCount(): Integer {
+    fun getSequenceCount(): Int? {
         return sequenceCount
     }
 
-    fun setSequenceCount(sequenceCount: Integer): PlaylistSearchViewModel {
+    fun setSequenceCount(sequenceCount: Int?): PlaylistSearchViewModel {
         this.sequenceCount = sequenceCount
         return this
     }
 
-    fun getDurationSeconds(): Integer {
+    fun getDurationSeconds(): Int? {
         return durationSeconds
     }
 
-    fun setDurationSeconds(durationSeconds: Integer): PlaylistSearchViewModel {
+    fun setDurationSeconds(durationSeconds: Int?): PlaylistSearchViewModel {
         this.durationSeconds = durationSeconds
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val that = o
-        return Objects.equals(id, that!!.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(sequenceCount, that.sequenceCount) &&
-                Objects.equals(durationSeconds, that.durationSeconds)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PlaylistSearchViewModel
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (sequenceCount != other.sequenceCount) return false
+        if (durationSeconds != other.durationSeconds) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(id, name, sequenceCount, durationSeconds)
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (sequenceCount?.hashCode() ?: 0)
+        result = 31 * result + (durationSeconds?.hashCode() ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "PlaylistSearchViewModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", sequenceCount=" + sequenceCount +
-                ", durationSeconds=" + durationSeconds +
-                '}'
+    override fun toString(): String {
+        return "PlaylistSearchViewModel(id=$id, name=$name, sequenceCount=$sequenceCount, durationSeconds=$durationSeconds)"
     }
 }

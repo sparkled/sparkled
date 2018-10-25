@@ -5,22 +5,19 @@ import io.sparkled.renderer.effect.EffectRenderer
 import io.sparkled.renderer.effect.FlashEffectRenderer
 import io.sparkled.renderer.effect.LineEffectRenderer
 import io.sparkled.renderer.effect.SplitLineEffectRenderer
-
-import java.util.HashMap
-import java.util.function.Supplier
+import java.util.*
 
 object EffectTypeRenderers {
 
-    private val RENDERERS = HashMap()
+    private val RENDERERS = HashMap<EffectTypeCode, EffectRenderer>()
 
     init {
-        RENDERERS.put(EffectTypeCode.FLASH, ???({ FlashEffectRenderer() }))
-        RENDERERS.put(EffectTypeCode.LINE, ???({ LineEffectRenderer() }))
-        RENDERERS.put(EffectTypeCode.SPLIT_LINE, ???({ SplitLineEffectRenderer() }))
+        RENDERERS[EffectTypeCode.FLASH] = FlashEffectRenderer()
+        RENDERERS[EffectTypeCode.LINE] = LineEffectRenderer()
+        RENDERERS[EffectTypeCode.SPLIT_LINE] = SplitLineEffectRenderer()
     }
 
     operator fun get(code: EffectTypeCode): EffectRenderer {
-        val supplier = RENDERERS.get(code)
-        return supplier.get()
+        return RENDERERS[code]!!
     }
 }

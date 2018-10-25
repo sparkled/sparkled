@@ -18,10 +18,11 @@ constructor(private val handler: StageRestServiceHandler) {
         return handler.createStage(stageViewModel)
     }
 
-    val allStages: Response
-        @GET
-        @Produces(MediaType.APPLICATION_JSON)
-        get() = handler.getAllStages()
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    fun allStages(): Response {
+        return handler.getAllStages()
+    }
 
     @GET
     @Path("/{id}")

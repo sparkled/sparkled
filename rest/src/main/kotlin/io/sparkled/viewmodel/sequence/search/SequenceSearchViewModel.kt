@@ -3,109 +3,107 @@ package io.sparkled.viewmodel.sequence.search
 import io.sparkled.model.entity.SequenceStatus
 import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects
-
 class SequenceSearchViewModel : ViewModel {
-    private var id: Integer? = null
+    private var id: Int? = null
     private var name: String? = null
     private var songName: String? = null
     private var stageName: String? = null
-    private var framesPerSecond: Integer? = null
-    private var durationSeconds: Integer? = null
+    private var framesPerSecond: Int? = null
+    private var durationSeconds: Int? = null
     private var status: SequenceStatus? = null
 
-    fun getId(): Integer {
+    fun getId(): Int? {
         return id
     }
 
-    fun setId(id: Integer): SequenceSearchViewModel {
+    fun setId(id: Int?): SequenceSearchViewModel {
         this.id = id
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
-    fun setName(name: String): SequenceSearchViewModel {
+    fun setName(name: String?): SequenceSearchViewModel {
         this.name = name
         return this
     }
 
-    fun getSongName(): String {
+    fun getSongName(): String? {
         return songName
     }
 
-    fun setSongName(songName: String): SequenceSearchViewModel {
+    fun setSongName(songName: String?): SequenceSearchViewModel {
         this.songName = songName
         return this
     }
 
-    fun getStageName(): String {
+    fun getStageName(): String? {
         return stageName
     }
 
-    fun setStageName(stageName: String): SequenceSearchViewModel {
+    fun setStageName(stageName: String?): SequenceSearchViewModel {
         this.stageName = stageName
         return this
     }
 
-    fun getFramesPerSecond(): Integer {
+    fun getFramesPerSecond(): Int? {
         return framesPerSecond
     }
 
-    fun setFramesPerSecond(framesPerSecond: Integer): SequenceSearchViewModel {
+    fun setFramesPerSecond(framesPerSecond: Int?): SequenceSearchViewModel {
         this.framesPerSecond = framesPerSecond
         return this
     }
 
-    fun getDurationSeconds(): Integer {
+    fun getDurationSeconds(): Int? {
         return durationSeconds
     }
 
-    fun setDurationSeconds(durationSeconds: Integer): SequenceSearchViewModel {
+    fun setDurationSeconds(durationSeconds: Int?): SequenceSearchViewModel {
         this.durationSeconds = durationSeconds
         return this
     }
 
-    fun getStatus(): SequenceStatus {
+    fun getStatus(): SequenceStatus? {
         return status
     }
 
-    fun setStatus(status: SequenceStatus): SequenceSearchViewModel {
+    fun setStatus(status: SequenceStatus?): SequenceSearchViewModel {
         this.status = status
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val that = o
-        return Objects.equals(id, that!!.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(songName, that.songName) &&
-                Objects.equals(stageName, that.stageName) &&
-                Objects.equals(framesPerSecond, that.framesPerSecond) &&
-                Objects.equals(durationSeconds, that.durationSeconds) &&
-                status === that.status
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SequenceSearchViewModel
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (songName != other.songName) return false
+        if (stageName != other.stageName) return false
+        if (framesPerSecond != other.framesPerSecond) return false
+        if (durationSeconds != other.durationSeconds) return false
+        if (status != other.status) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(id, name, songName, stageName, framesPerSecond, durationSeconds, status)
+    override fun hashCode(): Int {
+        var result = id ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (songName?.hashCode() ?: 0)
+        result = 31 * result + (stageName?.hashCode() ?: 0)
+        result = 31 * result + (framesPerSecond ?: 0)
+        result = 31 * result + (durationSeconds ?: 0)
+        result = 31 * result + (status?.hashCode() ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "SequenceSearchViewModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", songName='" + songName + '\'' +
-                ", stageName='" + stageName + '\'' +
-                ", framesPerSecond=" + framesPerSecond +
-                ", durationSeconds=" + durationSeconds +
-                ", status=" + status +
-                '}'
+    override fun toString(): String {
+        return "SequenceSearchViewModel(id=$id, name=$name, songName=$songName, stageName=$stageName, framesPerSecond=$framesPerSecond, durationSeconds=$durationSeconds, status=$status)"
     }
 }

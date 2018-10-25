@@ -1,7 +1,6 @@
 package io.sparkled.model.entity
 
 import javax.persistence.*
-import java.util.Objects
 
 @Entity
 @Table(name = "sequence")
@@ -10,15 +9,15 @@ class Sequence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private var id: Integer? = null
+    private var id: Int? = null
 
     @Basic
     @Column(name = "song_id")
-    private var songId: Integer? = null
+    private var songId: Int? = null
 
     @Basic
     @Column(name = "stage_id")
-    private var stageId: Integer? = null
+    private var stageId: Int? = null
 
     @Basic
     @Column(name = "name")
@@ -26,93 +25,93 @@ class Sequence {
 
     @Basic
     @Column(name = "frames_per_second")
-    private var framesPerSecond: Integer? = null
+    private var framesPerSecond: Int? = null
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private var status: SequenceStatus? = null
 
-    fun getId(): Integer {
+    fun getId(): Int? {
         return id
     }
 
-    fun setId(id: Integer): Sequence {
+    fun setId(id: Int?): Sequence {
         this.id = id
         return this
     }
 
-    fun getSongId(): Integer {
+    fun getSongId(): Int? {
         return songId
     }
 
-    fun setSongId(songId: Integer): Sequence {
+    fun setSongId(songId: Int?): Sequence {
         this.songId = songId
         return this
     }
 
-    fun getStageId(): Integer {
+    fun getStageId(): Int? {
         return stageId
     }
 
-    fun setStageId(stageId: Integer): Sequence {
+    fun setStageId(stageId: Int?): Sequence {
         this.stageId = stageId
         return this
     }
 
-    fun getName(): String {
+    fun getName(): String? {
         return name
     }
 
-    fun setName(name: String): Sequence {
+    fun setName(name: String?): Sequence {
         this.name = name
         return this
     }
 
-    fun getFramesPerSecond(): Integer {
+    fun getFramesPerSecond(): Int? {
         return framesPerSecond
     }
 
-    fun setFramesPerSecond(framesPerSecond: Integer): Sequence {
+    fun setFramesPerSecond(framesPerSecond: Int?): Sequence {
         this.framesPerSecond = framesPerSecond
         return this
     }
 
-    fun getStatus(): SequenceStatus {
+    fun getStatus(): SequenceStatus? {
         return status
     }
 
-    fun setStatus(status: SequenceStatus): Sequence {
+    fun setStatus(status: SequenceStatus?): Sequence {
         this.status = status
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        val sequence = o
-        return Objects.equals(id, sequence!!.id) &&
-                Objects.equals(songId, sequence.songId) &&
-                Objects.equals(stageId, sequence.stageId) &&
-                Objects.equals(name, sequence.name) &&
-                Objects.equals(framesPerSecond, sequence.framesPerSecond) &&
-                status === sequence.status
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Sequence
+
+        if (id != other.id) return false
+        if (songId != other.songId) return false
+        if (stageId != other.stageId) return false
+        if (name != other.name) return false
+        if (framesPerSecond != other.framesPerSecond) return false
+        if (status != other.status) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(id, songId, stageId, name, framesPerSecond, status)
+    override fun hashCode(): Int {
+        var result = id ?: 0
+        result = 31 * result + (songId ?: 0)
+        result = 31 * result + (stageId ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (framesPerSecond ?: 0)
+        result = 31 * result + (status?.hashCode() ?: 0)
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "Sequence{" +
-                "id=" + id +
-                ", songId=" + songId +
-                ", stageId=" + stageId +
-                ", name='" + name + '\'' +
-                ", framesPerSecond=" + framesPerSecond +
-                ", status=" + status +
-                '}'
+    override fun toString(): String {
+        return "Sequence(id=$id, songId=$songId, stageId=$stageId, name=$name, framesPerSecond=$framesPerSecond, status=$status)"
     }
 }

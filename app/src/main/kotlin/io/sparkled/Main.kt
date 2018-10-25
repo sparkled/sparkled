@@ -3,7 +3,6 @@ package io.sparkled
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
 import com.google.inject.Guice
-import com.google.inject.Injector
 import io.sparkled.music.inject.MusicPlayerModule
 import io.sparkled.persistence.inject.PersistenceModule
 import io.sparkled.rest.inject.RestApiServerModule
@@ -11,7 +10,6 @@ import io.sparkled.schema.inject.SchemaModule
 import io.sparkled.udpserver.inject.UdpServerModule
 import org.apache.log4j.AppenderSkeleton
 import org.apache.log4j.Level
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class Main {
@@ -22,10 +20,10 @@ class Main {
         val jCommander = buildJCommander(settings)
 
         if (loadCommandLineArguments(jCommander, args)) {
-            if (settings.isHelp()) {
+            if (settings.isHelp) {
                 jCommander.usage()
             } else {
-                setLoggerThreshold(settings.getLogLevel())
+                setLoggerThreshold(settings.logLevel)
                 createApp().start(settings)
             }
         }
@@ -36,21 +34,20 @@ class Main {
     }
 
     private fun loadCommandLineArguments(jCommander: JCommander, args: Array<String>): Boolean {
-        try {
-            jCommander.parse(args)
-            return true
+        return try {
+            jCommander.parse(*args)
+            true
         } catch (e: ParameterException) {
-            logger.error(e.getMessage())
+            logger.error(e.message)
             e.usage()
-            return false
+            false
         }
-
     }
 
     private fun setLoggerThreshold(level: String) {
         val threshold = Level.toLevel(level)
         val rootLogger = org.apache.log4j.Logger.getRootLogger()
-        (rootLogger.getAppender(ROOT_LOG4J_APPENDER_NAME) as AppenderSkeleton).setThreshold(threshold)
+        (rootLogger.getAppender(ROOT_LOG4J_APPENDER_NAME) as AppenderSkeleton).threshold = threshold
     }
 
     private fun createApp(): App {
@@ -66,11 +63,10 @@ class Main {
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(Main::class.java)
-        private val ROOT_LOG4J_APPENDER_NAME = "file"
+        private const val ROOT_LOG4J_APPENDER_NAME = "file"
 
-        @Throws(Exception::class)
+        @JvmStatic
         fun main(args: Array<String>) {
             Main().run(args)
         }

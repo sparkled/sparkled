@@ -1,18 +1,19 @@
 package io.sparkled.persistence.playlist.impl.query
 
 import com.querydsl.core.Tuple
+import io.sparkled.model.constant.ModelConstants.Companion.MS_PER_SECOND
 import io.sparkled.model.playlist.PlaylistSummary
 import io.sparkled.model.util.TupleUtils
 import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylist
+import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylistSequence
+import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
+import io.sparkled.persistence.PersistenceQuery.Companion.qSong
 import io.sparkled.persistence.QueryFactory
 
-import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
-import java.util.stream.Collectors.toMap
+class GetPlaylistSummariesQuery : PersistenceQuery<Map<Int, PlaylistSummary>> {
 
-class GetPlaylistSummariesQuery : PersistenceQuery<Map<Integer, PlaylistSummary>> {
-
-    @Override
-    fun perform(queryFactory: QueryFactory): Map<Integer, PlaylistSummary> {
+    override fun perform(queryFactory: QueryFactory): Map<Int, PlaylistSummary> {
         return queryFactory
                 .select(qPlaylist.id, qSequence.count(), qSong.durationMs.sum())
                 .from(qPlaylist)
@@ -21,11 +22,10 @@ class GetPlaylistSummariesQuery : PersistenceQuery<Map<Integer, PlaylistSummary>
                 .leftJoin(qSong).on(qSong.id.eq(qSequence.songId))
                 .groupBy(qPlaylist.id)
                 .fetch()
-                .stream()
-                .collect(toMap(???({ this.toKey(it) }), ???({ this.toSummary(it) })))
+                .associateBy(this::toKey, this::toSummary)
     }
 
-    private fun toKey(tuple: Tuple): Integer {
+    private fun toKey(tuple: Tuple): Int {
         return TupleUtils.getInt(tuple, 0)
     }
 

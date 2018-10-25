@@ -5,8 +5,7 @@ import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
 import io.sparkled.model.animation.param.ParamType
-
-import java.util.Arrays
+import java.util.*
 
 object EasingTypes {
     private val TYPES = Arrays.asList(
@@ -21,7 +20,7 @@ object EasingTypes {
     }
 
     private fun easingType(easingType: EasingTypeCode, name: String, vararg params: Param): EasingType {
-        return EasingType().setCode(easingType).setName(name).setParams(Arrays.asList(params))
+        return EasingType().setCode(easingType).setName(name).setParams(arrayListOf(*params))
     }
 
     private fun param(paramName: ParamName, type: ParamType): Param {

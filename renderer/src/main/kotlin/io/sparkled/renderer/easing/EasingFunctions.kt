@@ -3,19 +3,18 @@ package io.sparkled.renderer.easing
 import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.renderer.easing.function.ConstantEasing
 import io.sparkled.renderer.easing.function.LinearEasing
-
-import java.util.HashMap
+import java.util.*
 
 object EasingFunctions {
 
-    private val functions = HashMap()
+    private val functions = HashMap<EasingTypeCode, EasingFunction>()
 
     init {
-        functions.put(EasingTypeCode.LINEAR, LinearEasing())
-        functions.put(EasingTypeCode.CONSTANT, ConstantEasing())
+        functions[EasingTypeCode.LINEAR] = LinearEasing()
+        functions[EasingTypeCode.CONSTANT] = ConstantEasing()
     }
 
     operator fun get(easingType: EasingTypeCode): EasingFunction {
-        return functions.get(easingType)
+        return functions[easingType]!!
     }
 }

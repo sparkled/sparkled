@@ -4,9 +4,9 @@ interface SettingsConstants {
 
     interface BRIGHTNESS {
         companion object {
-            val CODE = "BRIGHTNESS"
-            val MIN = 0
-            val MAX = 15
+            const val CODE = "BRIGHTNESS"
+            const val MIN = 0
+            const val MAX = 15
         }
     }
 }

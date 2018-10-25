@@ -2,17 +2,15 @@ package io.sparkled.model.animation.easing
 
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
-
-import java.util.Arrays
-import java.util.Objects
+import java.util.*
 
 class Easing : HasParams {
 
     private var type: EasingTypeCode? = null
-    private var params: List<Param>? = null
+    private var params: List<Param> = ArrayList()
 
     fun getType(): EasingTypeCode {
-        return type
+        return type!!
     }
 
     fun setType(type: EasingTypeCode): Easing {
@@ -20,13 +18,8 @@ class Easing : HasParams {
         return this
     }
 
-    @Override
-    fun getParams(): List<Param> {
-        return params
-    }
-
-    fun setParams(vararg params: Param): Easing {
-        return setParams(Arrays.asList(params))
+    override fun getParams(): List<Param> {
+        return this.params
     }
 
     fun setParams(params: List<Param>): Easing {
@@ -34,24 +27,25 @@ class Easing : HasParams {
         return this
     }
 
-    @Override
-    fun equals(o: Object): Boolean {
-        if (this === o) return true
-        if (o !is Easing) return false
-        val easing = o
-        return type === easing.type && Objects.equals(params, easing.params)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Easing
+
+        if (type != other.type) return false
+        if (params != other.params) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(type, params)
+    override fun hashCode(): Int {
+        var result = type?.hashCode() ?: 0
+        result = 31 * result + params.hashCode()
+        return result
     }
 
-    @Override
-    fun toString(): String {
-        return "Easing{" +
-                "type=" + type +
-                ", params=" + params +
-                '}'
+    override fun toString(): String {
+        return "Easing(type=$type, params=$params)"
     }
 }

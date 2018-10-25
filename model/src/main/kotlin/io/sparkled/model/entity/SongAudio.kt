@@ -1,7 +1,6 @@
 package io.sparkled.model.entity
 
 import javax.persistence.*
-import java.util.Objects
 
 @Entity
 @Table(name = "song_audio")
@@ -9,22 +8,22 @@ class SongAudio {
 
     @Id
     @Column(name = "song_id")
-    private var songId: Integer? = null
+    private var songId: Int? = null
 
     @Lob
     @Column(name = "audio_data")
     private var audioData: ByteArray? = null
 
-    fun getSongId(): Integer {
+    fun getSongId(): Int? {
         return songId
     }
 
-    fun setSongId(songId: Integer): SongAudio {
+    fun setSongId(songId: Int?): SongAudio {
         this.songId = songId
         return this
     }
 
-    fun getAudioData(): ByteArray {
+    fun getAudioData(): ByteArray? {
         return audioData
     }
 
@@ -33,22 +32,22 @@ class SongAudio {
         return this
     }
 
-    @Override
-    fun equals(o: Object?): Boolean {
-        if (this === o) return true
-        if (o == null || getClass() !== o!!.getClass()) return false
-        return Objects.equals(songId, o!!.songId)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SongAudio
+
+        if (songId != other.songId) return false
+
+        return true
     }
 
-    @Override
-    fun hashCode(): Int {
-        return Objects.hash(songId)
+    override fun hashCode(): Int {
+        return songId ?: 0
     }
 
-    @Override
-    fun toString(): String {
-        return "SongAudio{" +
-                "songId=" + songId +
-                '}'
+    override fun toString(): String {
+        return "SongAudio(songId=$songId)"
     }
 }
