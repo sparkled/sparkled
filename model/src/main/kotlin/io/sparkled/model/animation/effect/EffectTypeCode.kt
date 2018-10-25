@@ -1,6 +1,6 @@
-package io.sparkled.model.animation.effect;
+package io.sparkled.model.animation.effect
 
-public enum EffectTypeCode {
+enum class EffectTypeCode {
     FLASH,
     LINE,
     SPLIT_LINE

@@ -1,32 +1,29 @@
-package io.sparkled.persistence.stage.impl.query;
+package io.sparkled.persistence.stage.impl.query
 
-import io.sparkled.model.entity.Stage;
-import io.sparkled.model.validator.StageValidator;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.sparkled.model.entity.Stage
+import io.sparkled.model.validator.StageValidator
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManager
 
-public class SaveStageQuery implements PersistenceQuery<Stage> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SaveStageQuery.class);
-
-    private final Stage stage;
-
-    public SaveStageQuery(Stage stage) {
-        this.stage = stage;
-    }
+class SaveStageQuery(private val stage: Stage) : PersistenceQuery<Stage> {
 
     @Override
-    public Stage perform(QueryFactory queryFactory) {
-        new StageValidator().validate(stage);
+    fun perform(queryFactory: QueryFactory): Stage {
+        StageValidator().validate(stage)
 
-        EntityManager entityManager = queryFactory.getEntityManager();
-        Stage savedStage = entityManager.merge(stage);
+        val entityManager = queryFactory.getEntityManager()
+        val savedStage = entityManager.merge(stage)
 
-        logger.info("Saved stage {} ({}).", savedStage.getId(), savedStage.getName());
-        return savedStage;
+        logger.info("Saved stage {} ({}).", savedStage.getId(), savedStage.getName())
+        return savedStage
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(SaveStageQuery::class.java)
     }
 }

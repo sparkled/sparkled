@@ -1,20 +1,20 @@
-package io.sparkled.model.validator;
+package io.sparkled.model.validator
 
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.validator.exception.EntityValidationException;
+import io.sparkled.model.entity.Sequence
+import io.sparkled.model.validator.exception.EntityValidationException
 
-public class SequenceValidator {
+class SequenceValidator {
 
-    public void validate(Sequence sequence) {
+    fun validate(sequence: Sequence) {
         if (sequence.getName() == null) {
-            throw new EntityValidationException(Errors.NAME_MISSING);
+            throw EntityValidationException(Errors.NAME_MISSING)
         } else if (sequence.getFramesPerSecond() <= 0) {
-            throw new EntityValidationException(Errors.FRAMES_PER_SECOND_NOT_POSITIVE);
+            throw EntityValidationException(Errors.FRAMES_PER_SECOND_NOT_POSITIVE)
         }
     }
 
-    private static class Errors {
-        static final String NAME_MISSING = "Sequence name must not be empty.";
-        static final String FRAMES_PER_SECOND_NOT_POSITIVE = "Sequence frames per second must be greater than 0.";
+    private object Errors {
+        internal val NAME_MISSING = "Sequence name must not be empty."
+        internal val FRAMES_PER_SECOND_NOT_POSITIVE = "Sequence frames per second must be greater than 0."
     }
 }

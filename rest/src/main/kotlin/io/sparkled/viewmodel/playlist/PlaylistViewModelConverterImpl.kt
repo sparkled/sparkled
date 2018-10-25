@@ -1,41 +1,35 @@
-package io.sparkled.viewmodel.playlist;
+package io.sparkled.viewmodel.playlist
 
-import io.sparkled.model.entity.Playlist;
-import io.sparkled.persistence.playlist.PlaylistPersistenceService;
-import io.sparkled.viewmodel.exception.ViewModelConversionException;
+import io.sparkled.model.entity.Playlist
+import io.sparkled.persistence.playlist.PlaylistPersistenceService
+import io.sparkled.viewmodel.exception.ViewModelConversionException
 
-import javax.inject.Inject;
+import javax.inject.Inject
 
-public class PlaylistViewModelConverterImpl extends PlaylistViewModelConverter {
-
-    private PlaylistPersistenceService playlistPersistenceService;
-
-    @Inject
-    public PlaylistViewModelConverterImpl(PlaylistPersistenceService playlistPersistenceService) {
-        this.playlistPersistenceService = playlistPersistenceService;
-    }
+class PlaylistViewModelConverterImpl @Inject
+constructor(private val playlistPersistenceService: PlaylistPersistenceService) : PlaylistViewModelConverter() {
 
     @Override
-    public PlaylistViewModel toViewModel(Playlist model) {
-        return new PlaylistViewModel()
+    fun toViewModel(model: Playlist): PlaylistViewModel {
+        return PlaylistViewModel()
                 .setId(model.getId())
-                .setName(model.getName());
+                .setName(model.getName())
     }
 
     @Override
-    public Playlist toModel(PlaylistViewModel viewModel) {
-        Integer playlistId = viewModel.getId();
-        Playlist model = getPlaylist(playlistId);
+    fun toModel(viewModel: PlaylistViewModel): Playlist {
+        val playlistId = viewModel.getId()
+        val model = getPlaylist(playlistId)
 
-        return model.setName(viewModel.getName());
+        return model.setName(viewModel.getName())
     }
 
-    private Playlist getPlaylist(Integer playlistId) {
+    private fun getPlaylist(playlistId: Integer?): Playlist {
         if (playlistId == null) {
-            return new Playlist();
+            return Playlist()
         }
 
         return playlistPersistenceService.getPlaylistById(playlistId)
-                .orElseThrow(() -> new ViewModelConversionException("Playlist with ID of '" + playlistId + "' not found."));
+                .orElseThrow({ ViewModelConversionException("Playlist with ID of '$playlistId' not found.") })
     }
 }

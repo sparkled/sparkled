@@ -1,32 +1,29 @@
-package io.sparkled.persistence.playlist;
+package io.sparkled.persistence.playlist
 
-import io.sparkled.model.entity.Playlist;
-import io.sparkled.model.entity.PlaylistSequence;
-import io.sparkled.model.playlist.PlaylistSummary;
-import io.sparkled.model.entity.Sequence;
+import io.sparkled.model.entity.Playlist
+import io.sparkled.model.entity.PlaylistSequence
+import io.sparkled.model.playlist.PlaylistSummary
+import io.sparkled.model.entity.Sequence
+import java.util.Optional
+import java.util.UUID
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+interface PlaylistPersistenceService {
 
-public interface PlaylistPersistenceService {
+    fun createPlaylist(playlist: Playlist): Playlist
 
-    Playlist createPlaylist(Playlist playlist);
+    val allPlaylists: List<Playlist>
 
-    List<Playlist> getAllPlaylists();
+    val playlistSummaries: Map<Integer, PlaylistSummary>
 
-    Map<Integer, PlaylistSummary> getPlaylistSummaries();
+    fun getPlaylistById(playlistId: Int): Optional<Playlist>
 
-    Optional<Playlist> getPlaylistById(int playlistId);
+    fun getSequenceAtPlaylistIndex(playlistId: Int, index: Int): Optional<Sequence>
 
-    Optional<Sequence> getSequenceAtPlaylistIndex(int playlistId, int index);
+    fun getPlaylistSequencesByPlaylistId(playlistId: Int): List<PlaylistSequence>
 
-    List<PlaylistSequence> getPlaylistSequencesByPlaylistId(int playlistId);
+    fun getPlaylistSequenceByUuid(sequenceId: Int, uuid: UUID): Optional<PlaylistSequence>
 
-    Optional<PlaylistSequence> getPlaylistSequenceByUuid(int sequenceId, UUID uuid);
+    fun savePlaylist(playlist: Playlist, playlistSequences: List<PlaylistSequence>)
 
-    void savePlaylist(Playlist playlist, List<PlaylistSequence> playlistSequences);
-
-    void deletePlaylist(int playlistId);
+    fun deletePlaylist(playlistId: Int)
 }

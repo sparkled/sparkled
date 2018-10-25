@@ -1,26 +1,20 @@
-package io.sparkled.persistence.sequence.impl.query;
+package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import io.sparkled.model.entity.Sequence
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
 
-import java.util.Optional;
+import java.util.Optional
 
-public class GetSequenceByIdQuery implements PersistenceQuery<Optional<Sequence>> {
-
-    private final int sequenceId;
-
-    public GetSequenceByIdQuery(int sequenceId) {
-        this.sequenceId = sequenceId;
-    }
+class GetSequenceByIdQuery(private val sequenceId: Int) : PersistenceQuery<Optional<Sequence>> {
 
     @Override
-    public Optional<Sequence> perform(QueryFactory queryFactory) {
-        Sequence sequence = queryFactory
+    fun perform(queryFactory: QueryFactory): Optional<Sequence> {
+        val sequence = queryFactory
                 .selectFrom(qSequence)
                 .where(qSequence.id.eq(sequenceId))
-                .fetchFirst();
+                .fetchFirst()
 
-        return Optional.ofNullable(sequence);
+        return Optional.ofNullable(sequence)
     }
 }

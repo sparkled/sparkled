@@ -1,36 +1,33 @@
-package io.sparkled.persistence.sequence;
+package io.sparkled.persistence.sequence
 
-import io.sparkled.model.entity.*;
-import io.sparkled.model.render.RenderedStagePropDataMap;
+import io.sparkled.model.entity.*
+import io.sparkled.model.render.RenderedStagePropDataMap
+import java.util.Optional
+import java.util.UUID
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+interface SequencePersistenceService {
 
-public interface SequencePersistenceService {
+    fun createSequence(sequence: Sequence): Sequence
 
-    Sequence createSequence(Sequence sequence);
+    val allSequences: List<Sequence>
 
-    List<Sequence> getAllSequences();
+    fun getSequenceById(sequenceId: Int): Optional<Sequence>
 
-    Optional<Sequence> getSequenceById(int sequenceId);
+    fun getStageBySequenceId(sequenceId: Int): Optional<Stage>
 
-    Optional<Stage> getStageBySequenceId(int sequenceId);
+    fun getSongAudioBySequenceId(sequenceId: Int): Optional<SongAudio>
 
-    Optional<SongAudio> getSongAudioBySequenceId(int sequenceId);
+    fun getSequenceChannelsBySequenceId(sequenceId: Int): List<SequenceChannel>
 
-    List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId);
+    fun getSequenceChannelByUuid(sequenceId: Int, uuid: UUID): Optional<SequenceChannel>
 
-    Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID uuid);
+    fun getRenderedStagePropsBySequenceAndSong(sequence: Sequence, song: Song): RenderedStagePropDataMap
 
-    RenderedStagePropDataMap getRenderedStagePropsBySequenceAndSong(Sequence sequence, Song song);
+    fun getSequenceStagePropUuidMapBySequenceId(sequenceId: Int): Map<String, UUID>
 
-    Map<String, UUID> getSequenceStagePropUuidMapBySequenceId(int sequenceId);
+    fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>)
 
-    void saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels);
+    fun publishSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>, renderedStageProps: RenderedStagePropDataMap)
 
-    void publishSequence(Sequence sequence, List<SequenceChannel> sequenceChannels, RenderedStagePropDataMap renderedStageProps);
-
-    void deleteSequence(int sequenceId);
+    fun deleteSequence(sequenceId: Int)
 }

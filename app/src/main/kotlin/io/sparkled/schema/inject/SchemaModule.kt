@@ -1,19 +1,22 @@
-package io.sparkled.schema.inject;
+package io.sparkled.schema.inject
 
-import com.google.inject.AbstractModule;
-import io.sparkled.schema.SchemaUpdater;
-import io.sparkled.schema.SchemaUpdaterImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.inject.AbstractModule
+import io.sparkled.schema.SchemaUpdater
+import io.sparkled.schema.SchemaUpdaterImpl
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-public class SchemaModule extends AbstractModule {
-
-    private static final Logger logger = LoggerFactory.getLogger(SchemaModule.class);
+class SchemaModule : AbstractModule() {
 
     @Override
-    protected void configure() {
-        logger.info("Configuring Guice module.");
+    protected fun configure() {
+        logger.info("Configuring Guice module.")
 
-        bind(SchemaUpdater.class).to(SchemaUpdaterImpl.class).asEagerSingleton();
+        bind(SchemaUpdater::class.java).to(SchemaUpdaterImpl::class.java).asEagerSingleton()
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(SchemaModule::class.java)
     }
 }

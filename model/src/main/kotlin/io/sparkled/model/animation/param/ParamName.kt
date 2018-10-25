@@ -1,19 +1,9 @@
-package io.sparkled.model.animation.param;
+package io.sparkled.model.animation.param
 
-public enum ParamName {
+enum class ParamName private constructor(val name: String) {
     COLOR("Color"),
     CYCLE_COUNT("Cycle Count"),
     CYCLES_PER_SECOND("Cycles Per Second"),
     LENGTH("Length"),
-    PERCENT("Percent");
-
-    private String name;
-
-    ParamName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
+    PERCENT("Percent")
 }

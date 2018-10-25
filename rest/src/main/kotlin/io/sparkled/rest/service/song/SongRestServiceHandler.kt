@@ -1,83 +1,77 @@
-package io.sparkled.rest.service.song;
+package io.sparkled.rest.service.song
 
-import com.google.inject.persist.Transactional;
-import io.sparkled.model.entity.Song;
-import io.sparkled.persistence.song.SongPersistenceService;
-import io.sparkled.rest.response.IdResponse;
-import io.sparkled.rest.service.RestServiceHandler;
-import io.sparkled.viewmodel.song.SongViewModel;
-import io.sparkled.viewmodel.song.SongViewModelConverter;
+import com.google.inject.persist.Transactional
+import io.sparkled.model.entity.Song
+import io.sparkled.persistence.song.SongPersistenceService
+import io.sparkled.rest.response.IdResponse
+import io.sparkled.rest.service.RestServiceHandler
+import io.sparkled.viewmodel.song.SongViewModel
+import io.sparkled.viewmodel.song.SongViewModelConverter
 
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Optional;
+import javax.inject.Inject
+import javax.ws.rs.core.Response
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.util.Optional
 
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors.toList
 
-class SongRestServiceHandler extends RestServiceHandler {
-
-    private final SongPersistenceService songPersistenceService;
-    private final SongViewModelConverter songViewModelConverter;
-
-    @Inject
-    SongRestServiceHandler(SongPersistenceService songPersistenceService,
-                           SongViewModelConverter songViewModelConverter) {
-        this.songPersistenceService = songPersistenceService;
-        this.songViewModelConverter = songViewModelConverter;
-    }
+internal class SongRestServiceHandler @Inject
+constructor(private val songPersistenceService: SongPersistenceService,
+            private val songViewModelConverter: SongViewModelConverter) : RestServiceHandler() {
 
     @Transactional
-    Response createSong(String songViewModelJson, InputStream inputStream) throws IOException {
-        SongViewModel songViewModel = gson.fromJson(songViewModelJson, SongViewModel.class);
-        songViewModel.setId(null);
+    @Throws(IOException::class)
+    fun createSong(songViewModelJson: String, inputStream: InputStream): Response {
+        val songViewModel = gson.fromJson(songViewModelJson, SongViewModel::class.java)
+        songViewModel.setId(null)
 
-        Song song = songViewModelConverter.toModel(songViewModel);
-        byte[] audioData = loadAudioData(inputStream);
-        song = songPersistenceService.createSong(song, audioData);
+        var song = songViewModelConverter.toModel(songViewModel)
+        val audioData = loadAudioData(inputStream)
+        song = songPersistenceService.createSong(song, audioData)
 
-        return respondOk(new IdResponse(song.getId()));
+        return respondOk(IdResponse(song.getId()))
     }
 
     // TODO Use IOUtils.toByteArray() after moving to Java 11.
-    private byte[] loadAudioData(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        int offset;
-        byte[] buffer = new byte[4096];
+    @Throws(IOException::class)
+    private fun loadAudioData(inputStream: InputStream): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        var offset: Int
+        val buffer = ByteArray(4096)
         while (-1 != (offset = inputStream.read(buffer))) {
-            outputStream.write(buffer, 0, offset);
+            outputStream.write(buffer, 0, offset)
         }
 
-        return outputStream.toByteArray();
+        return outputStream.toByteArray()
     }
 
-    Response getAllSongs() {
-        List<Song> songs = songPersistenceService.getAllSongs();
-        List<SongViewModel> results = songs.stream()
-                .map(songViewModelConverter::toViewModel)
-                .collect(toList());
+    val allSongs: Response
+        get() {
+            val songs = songPersistenceService.getAllSongs()
+            val results = songs.stream()
+                    .map(???({ songViewModelConverter.toViewModel() }))
+            .collect(toList())
 
-        return respondOk(results);
-    }
+            return respondOk(results)
+        }
 
-    Response getSong(int songId) {
-        Optional<Song> songOptional = songPersistenceService.getSongById(songId);
+    fun getSong(songId: Int): Response {
+        val songOptional = songPersistenceService.getSongById(songId)
 
         if (songOptional.isPresent()) {
-            Song song = songOptional.get();
-            SongViewModel viewModel = songViewModelConverter.toViewModel(song);
-            return respondOk(viewModel);
+            val song = songOptional.get()
+            val viewModel = songViewModelConverter.toViewModel(song)
+            return respondOk(viewModel)
         }
 
-        return respond(Response.Status.NOT_FOUND, "Song not found.");
+        return respond(Response.Status.NOT_FOUND, "Song not found.")
     }
 
     @Transactional
-    Response deleteSong(int id) {
-        songPersistenceService.deleteSong(id);
-        return respondOk();
+    fun deleteSong(id: Int): Response {
+        songPersistenceService.deleteSong(id)
+        return respondOk()
     }
 }

@@ -1,141 +1,141 @@
-package io.sparkled.viewmodel.stage.prop;
+package io.sparkled.viewmodel.stage.prop
 
-import io.sparkled.viewmodel.ViewModel;
+import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.Objects
+import java.util.UUID
 
-public class StagePropViewModel implements ViewModel {
+class StagePropViewModel : ViewModel {
 
-    private UUID uuid;
-    private Integer stageId;
-    private String code;
-    private String name;
-    private String type;
-    private Integer ledCount = 0;
-    private Integer positionX = 0;
-    private Integer positionY = 0;
-    private float scaleX = 1;
-    private float scaleY = 1;
-    private Integer rotation = 0;
-    private Integer displayOrder = 0;
+    private var uuid: UUID? = null
+    private var stageId: Integer? = null
+    private var code: String? = null
+    private var name: String? = null
+    private var type: String? = null
+    private var ledCount: Integer = 0
+    private var positionX: Integer = 0
+    private var positionY: Integer = 0
+    private var scaleX = 1f
+    private var scaleY = 1f
+    private var rotation: Integer = 0
+    private var displayOrder: Integer = 0
 
-    public UUID getUuid() {
-        return uuid;
+    fun getUuid(): UUID {
+        return uuid
     }
 
-    public StagePropViewModel setUuid(UUID uuid) {
-        this.uuid = uuid;
-        return this;
+    fun setUuid(uuid: UUID): StagePropViewModel {
+        this.uuid = uuid
+        return this
     }
 
-    public Integer getStageId() {
-        return stageId;
+    fun getStageId(): Integer {
+        return stageId
     }
 
-    public StagePropViewModel setStageId(Integer stageId) {
-        this.stageId = stageId;
-        return this;
+    fun setStageId(stageId: Integer): StagePropViewModel {
+        this.stageId = stageId
+        return this
     }
 
-    public String getCode() {
-        return code;
+    fun getCode(): String {
+        return code
     }
 
-    public StagePropViewModel setCode(String code) {
-        this.code = code;
-        return this;
+    fun setCode(code: String): StagePropViewModel {
+        this.code = code
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public StagePropViewModel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): StagePropViewModel {
+        this.name = name
+        return this
     }
 
-    public String getType() {
-        return type;
+    fun getType(): String {
+        return type
     }
 
-    public StagePropViewModel setType(String type) {
-        this.type = type;
-        return this;
+    fun setType(type: String): StagePropViewModel {
+        this.type = type
+        return this
     }
 
-    public Integer getLedCount() {
-        return ledCount;
+    fun getLedCount(): Integer {
+        return ledCount
     }
 
-    public StagePropViewModel setLedCount(Integer ledCount) {
-        this.ledCount = ledCount;
-        return this;
+    fun setLedCount(ledCount: Integer): StagePropViewModel {
+        this.ledCount = ledCount
+        return this
     }
 
-    public Integer getPositionX() {
-        return positionX;
+    fun getPositionX(): Integer {
+        return positionX
     }
 
-    public StagePropViewModel setPositionX(Integer positionX) {
-        this.positionX = positionX;
-        return this;
+    fun setPositionX(positionX: Integer): StagePropViewModel {
+        this.positionX = positionX
+        return this
     }
 
-    public Integer getPositionY() {
-        return positionY;
+    fun getPositionY(): Integer {
+        return positionY
     }
 
-    public StagePropViewModel setPositionY(Integer positionY) {
-        this.positionY = positionY;
-        return this;
+    fun setPositionY(positionY: Integer): StagePropViewModel {
+        this.positionY = positionY
+        return this
     }
 
-    public float getScaleX() {
-        return scaleX;
+    fun getScaleX(): Float {
+        return scaleX
     }
 
-    public StagePropViewModel setScaleX(float scaleX) {
-        this.scaleX = scaleX;
-        return this;
+    fun setScaleX(scaleX: Float): StagePropViewModel {
+        this.scaleX = scaleX
+        return this
     }
 
-    public float getScaleY() {
-        return scaleY;
+    fun getScaleY(): Float {
+        return scaleY
     }
 
-    public StagePropViewModel setScaleY(float scaleY) {
-        this.scaleY = scaleY;
-        return this;
+    fun setScaleY(scaleY: Float): StagePropViewModel {
+        this.scaleY = scaleY
+        return this
     }
 
-    public Integer getRotation() {
-        return rotation;
+    fun getRotation(): Integer {
+        return rotation
     }
 
-    public StagePropViewModel setRotation(Integer rotation) {
-        this.rotation = rotation;
-        return this;
+    fun setRotation(rotation: Integer): StagePropViewModel {
+        this.rotation = rotation
+        return this
     }
 
-    public Integer getDisplayOrder() {
-        return displayOrder;
+    fun getDisplayOrder(): Integer {
+        return displayOrder
     }
 
-    public StagePropViewModel setDisplayOrder(Integer displayOrder) {
-        this.displayOrder = displayOrder;
-        return this;
+    fun setDisplayOrder(displayOrder: Integer): StagePropViewModel {
+        this.displayOrder = displayOrder
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StagePropViewModel that = (StagePropViewModel) o;
-        return Float.compare(that.scaleX, scaleX) == 0 &&
-                Float.compare(that.scaleY, scaleY) == 0 &&
-                Objects.equals(uuid, that.uuid) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Float.compare(that!!.scaleX, scaleX) === 0 &&
+                Float.compare(that!!.scaleY, scaleY) === 0 &&
+                Objects.equals(uuid, that!!.uuid) &&
                 Objects.equals(stageId, that.stageId) &&
                 Objects.equals(code, that.code) &&
                 Objects.equals(name, that.name) &&
@@ -144,16 +144,16 @@ public class StagePropViewModel implements ViewModel {
                 Objects.equals(positionX, that.positionX) &&
                 Objects.equals(positionY, that.positionY) &&
                 Objects.equals(rotation, that.rotation) &&
-                Objects.equals(displayOrder, that.displayOrder);
+                Objects.equals(displayOrder, that.displayOrder)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(uuid, stageId, code, name, type, ledCount, positionX, positionY, scaleX, scaleY, rotation, displayOrder);
+    fun hashCode(): Int {
+        return Objects.hash(uuid, stageId, code, name, type, ledCount, positionX, positionY, scaleX, scaleY, rotation, displayOrder)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "StagePropViewModel{" +
                 "uuid=" + uuid +
                 ", stageId=" + stageId +
@@ -167,6 +167,6 @@ public class StagePropViewModel implements ViewModel {
                 ", scaleY=" + scaleY +
                 ", rotation=" + rotation +
                 ", displayOrder=" + displayOrder +
-                '}';
+                '}'
     }
 }

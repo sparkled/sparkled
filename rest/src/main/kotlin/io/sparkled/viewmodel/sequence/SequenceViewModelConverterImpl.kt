@@ -1,62 +1,54 @@
-package io.sparkled.viewmodel.sequence;
+package io.sparkled.viewmodel.sequence
 
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.Song;
-import io.sparkled.model.util.SequenceUtils;
-import io.sparkled.persistence.sequence.SequencePersistenceService;
-import io.sparkled.persistence.song.SongPersistenceService;
-import io.sparkled.viewmodel.exception.ViewModelConversionException;
+import io.sparkled.model.entity.Sequence
+import io.sparkled.model.entity.Song
+import io.sparkled.model.util.SequenceUtils
+import io.sparkled.persistence.sequence.SequencePersistenceService
+import io.sparkled.persistence.song.SongPersistenceService
+import io.sparkled.viewmodel.exception.ViewModelConversionException
 
-import javax.inject.Inject;
+import javax.inject.Inject
 
-public class SequenceViewModelConverterImpl extends SequenceViewModelConverter {
-
-    private SequencePersistenceService sequencePersistenceService;
-    private final SongPersistenceService songPersistenceService;
-
-    @Inject
-    public SequenceViewModelConverterImpl(SequencePersistenceService sequencePersistenceService,
-                                          SongPersistenceService songPersistenceService) {
-        this.sequencePersistenceService = sequencePersistenceService;
-        this.songPersistenceService = songPersistenceService;
-    }
+class SequenceViewModelConverterImpl @Inject
+constructor(private val sequencePersistenceService: SequencePersistenceService,
+            private val songPersistenceService: SongPersistenceService) : SequenceViewModelConverter() {
 
     @Override
-    public SequenceViewModel toViewModel(Sequence model) {
-        return new SequenceViewModel()
+    fun toViewModel(model: Sequence): SequenceViewModel {
+        return SequenceViewModel()
                 .setId(model.getId())
                 .setSongId(model.getSongId())
                 .setStageId(model.getStageId())
                 .setName(model.getName())
                 .setFramesPerSecond(model.getFramesPerSecond())
                 .setFrameCount(getFrameCount(model))
-                .setStatus(model.getStatus());
+                .setStatus(model.getStatus())
     }
 
-    private Integer getFrameCount(Sequence sequence) {
-        Song song = songPersistenceService.getSongBySequenceId(sequence.getId()).orElse(new Song());
-        return SequenceUtils.getFrameCount(song, sequence);
+    private fun getFrameCount(sequence: Sequence): Integer {
+        val song = songPersistenceService.getSongBySequenceId(sequence.getId()).orElse(Song())
+        return SequenceUtils.getFrameCount(song, sequence)
     }
 
     @Override
-    public Sequence toModel(SequenceViewModel viewModel) {
-        final Integer sequenceId = viewModel.getId();
-        Sequence model = getSequence(sequenceId);
+    fun toModel(viewModel: SequenceViewModel): Sequence {
+        val sequenceId = viewModel.getId()
+        val model = getSequence(sequenceId)
 
         return model
                 .setSongId(viewModel.getSongId())
                 .setStageId(viewModel.getStageId())
                 .setName(viewModel.getName())
                 .setFramesPerSecond(viewModel.getFramesPerSecond())
-                .setStatus(viewModel.getStatus());
+                .setStatus(viewModel.getStatus())
     }
 
-    private Sequence getSequence(Integer sequenceId) {
+    private fun getSequence(sequenceId: Integer?): Sequence {
         if (sequenceId == null) {
-            return new Sequence();
+            return Sequence()
         }
 
         return sequencePersistenceService.getSequenceById(sequenceId)
-                .orElseThrow(() -> new ViewModelConversionException("Sequence with ID of '" + sequenceId + "' not found."));
+                .orElseThrow({ ViewModelConversionException("Sequence with ID of '$sequenceId' not found.") })
     }
 }

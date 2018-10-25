@@ -1,25 +1,17 @@
-package io.sparkled.persistence.sequence.impl.query;
+package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import io.sparkled.model.entity.Sequence
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
 
-import java.util.List;
-
-public class GetSequencesByStageIdQuery implements PersistenceQuery<List<Sequence>> {
-
-    private final int stageId;
-
-    public GetSequencesByStageIdQuery(int stageId) {
-        this.stageId = stageId;
-    }
+class GetSequencesByStageIdQuery(private val stageId: Int) : PersistenceQuery<List<Sequence>> {
 
     @Override
-    public List<Sequence> perform(QueryFactory queryFactory) {
+    fun perform(queryFactory: QueryFactory): List<Sequence> {
         return queryFactory
                 .selectFrom(qSequence)
                 .where(qSequence.stageId.eq(stageId))
                 .orderBy(qSequence.id.asc())
-                .fetch();
+                .fetch()
     }
 }

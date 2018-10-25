@@ -1,41 +1,39 @@
-package io.sparkled.model.animation;
+package io.sparkled.model.animation
 
-import io.sparkled.model.animation.effect.Effect;
+import io.sparkled.model.animation.effect.Effect
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList
+import java.util.Objects
 
-public class SequenceChannelEffects {
+class SequenceChannelEffects {
 
-    private List<Effect> effects = new ArrayList<>();
+    private var effects: List<Effect> = ArrayList()
 
-    public List<Effect> getEffects() {
-        return effects;
+    fun getEffects(): List<Effect> {
+        return effects
     }
 
-    public SequenceChannelEffects setEffects(List<Effect> effects) {
-        this.effects = effects;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SequenceChannelEffects)) return false;
-        SequenceChannelEffects that = (SequenceChannelEffects) o;
-        return Objects.equals(effects, that.effects);
+    fun setEffects(effects: List<Effect>): SequenceChannelEffects {
+        this.effects = effects
+        return this
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(effects);
+    fun equals(o: Object): Boolean {
+        if (this === o) return true
+        if (o !is SequenceChannelEffects) return false
+        return Objects.equals(effects, o.effects)
     }
 
     @Override
-    public String toString() {
+    fun hashCode(): Int {
+        return Objects.hash(effects)
+    }
+
+    @Override
+    fun toString(): String {
         return "SequenceChannelEffects{" +
                 "effects=" + effects +
-                '}';
+                '}'
     }
 }

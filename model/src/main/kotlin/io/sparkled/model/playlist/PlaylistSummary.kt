@@ -1,49 +1,48 @@
-package io.sparkled.model.playlist;
+package io.sparkled.model.playlist
 
-import java.util.Objects;
+import java.util.Objects
 
-public class PlaylistSummary {
+class PlaylistSummary {
 
-    private Integer sequenceCount;
-    private Integer durationSeconds;
+    private var sequenceCount: Integer? = null
+    private var durationSeconds: Integer? = null
 
-    public Integer getSequenceCount() {
-        return sequenceCount;
+    fun getSequenceCount(): Integer {
+        return sequenceCount
     }
 
-    public PlaylistSummary setSequenceCount(Integer sequenceCount) {
-        this.sequenceCount = sequenceCount;
-        return this;
+    fun setSequenceCount(sequenceCount: Integer): PlaylistSummary {
+        this.sequenceCount = sequenceCount
+        return this
     }
 
-    public Integer getDurationSeconds() {
-        return durationSeconds;
+    fun getDurationSeconds(): Integer {
+        return durationSeconds
     }
 
-    public PlaylistSummary setDurationSeconds(Integer durationSeconds) {
-        this.durationSeconds = durationSeconds;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlaylistSummary that = (PlaylistSummary) o;
-        return Objects.equals(sequenceCount, that.sequenceCount) &&
-                Objects.equals(durationSeconds, that.durationSeconds);
+    fun setDurationSeconds(durationSeconds: Integer): PlaylistSummary {
+        this.durationSeconds = durationSeconds
+        return this
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(sequenceCount, durationSeconds);
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(sequenceCount, that!!.sequenceCount) && Objects.equals(durationSeconds, that.durationSeconds)
     }
 
     @Override
-    public String toString() {
+    fun hashCode(): Int {
+        return Objects.hash(sequenceCount, durationSeconds)
+    }
+
+    @Override
+    fun toString(): String {
         return "PlaylistSummary{" +
                 "sequenceCount=" + sequenceCount +
                 ", durationSeconds=" + durationSeconds +
-                '}';
+                '}'
     }
 }

@@ -1,71 +1,62 @@
-package io.sparkled.persistence.playlist.impl;
+package io.sparkled.persistence.playlist.impl
 
-import io.sparkled.model.entity.Playlist;
-import io.sparkled.model.entity.PlaylistSequence;
-import io.sparkled.model.playlist.PlaylistSummary;
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.persistence.QueryFactory;
-import io.sparkled.persistence.playlist.PlaylistPersistenceService;
-import io.sparkled.persistence.playlist.impl.query.*;
+import io.sparkled.model.entity.Playlist
+import io.sparkled.model.entity.PlaylistSequence
+import io.sparkled.model.playlist.PlaylistSummary
+import io.sparkled.model.entity.Sequence
+import io.sparkled.persistence.QueryFactory
+import io.sparkled.persistence.playlist.PlaylistPersistenceService
+import io.sparkled.persistence.playlist.impl.query.*
 
-import javax.inject.Inject;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import javax.inject.Inject
+import java.util.Optional
+import java.util.UUID
 
-public class PlaylistPersistenceServiceImpl implements PlaylistPersistenceService {
+class PlaylistPersistenceServiceImpl @Inject
+constructor(private val queryFactory: QueryFactory) : PlaylistPersistenceService {
 
-    private QueryFactory queryFactory;
+    @Override
+    fun createPlaylist(playlist: Playlist): Playlist {
+        return SavePlaylistQuery(playlist).perform(queryFactory)
+    }
 
-    @Inject
-    public PlaylistPersistenceServiceImpl(QueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
+    val allPlaylists: List<Playlist>
+        @Override
+        get() = GetAllPlaylistsQuery().perform(queryFactory)
+
+    val playlistSummaries: Map<Integer, PlaylistSummary>
+        @Override
+        get() = GetPlaylistSummariesQuery().perform(queryFactory)
+
+    @Override
+    fun getPlaylistById(playlistId: Int): Optional<Playlist> {
+        return GetPlaylistByIdQuery(playlistId).perform(queryFactory)
     }
 
     @Override
-    public Playlist createPlaylist(Playlist playlist) {
-        return new SavePlaylistQuery(playlist).perform(queryFactory);
+    fun getSequenceAtPlaylistIndex(playlistId: Int, index: Int): Optional<Sequence> {
+        return GetSequenceAtPlaylistIndexQuery(playlistId, index).perform(queryFactory)
     }
 
     @Override
-    public List<Playlist> getAllPlaylists() {
-        return new GetAllPlaylistsQuery().perform(queryFactory);
+    fun getPlaylistSequencesByPlaylistId(playlistId: Int): List<PlaylistSequence> {
+        return GetPlaylistSequencesByPlaylistIdQuery(playlistId).perform(queryFactory)
     }
 
     @Override
-    public Map<Integer, PlaylistSummary> getPlaylistSummaries() {
-        return new GetPlaylistSummariesQuery().perform(queryFactory);
+    fun getPlaylistSequenceByUuid(sequenceId: Int, uuid: UUID): Optional<PlaylistSequence> {
+        return GetPlaylistSequenceByUuidQuery(sequenceId, uuid).perform(queryFactory)
     }
 
     @Override
-    public Optional<Playlist> getPlaylistById(int playlistId) {
-        return new GetPlaylistByIdQuery(playlistId).perform(queryFactory);
+    fun savePlaylist(playlist: Playlist, playlistSequences: List<PlaylistSequence>) {
+        var playlist = playlist
+        playlist = SavePlaylistQuery(playlist).perform(queryFactory)
+        SavePlaylistSequencesQuery(playlist, playlistSequences).perform(queryFactory)
     }
 
     @Override
-    public Optional<Sequence> getSequenceAtPlaylistIndex(int playlistId, int index) {
-        return new GetSequenceAtPlaylistIndexQuery(playlistId, index).perform(queryFactory);
-    }
-
-    @Override
-    public List<PlaylistSequence> getPlaylistSequencesByPlaylistId(int playlistId) {
-        return new GetPlaylistSequencesByPlaylistIdQuery(playlistId).perform(queryFactory);
-    }
-
-    @Override
-    public Optional<PlaylistSequence> getPlaylistSequenceByUuid(int sequenceId, UUID uuid) {
-        return new GetPlaylistSequenceByUuidQuery(sequenceId, uuid).perform(queryFactory);
-    }
-
-    @Override
-    public void savePlaylist(Playlist playlist, List<PlaylistSequence> playlistSequences) {
-        playlist = new SavePlaylistQuery(playlist).perform(queryFactory);
-        new SavePlaylistSequencesQuery(playlist, playlistSequences).perform(queryFactory);
-    }
-
-    @Override
-    public void deletePlaylist(int playlistId) {
-        new DeletePlaylistQuery(playlistId).perform(queryFactory);
+    fun deletePlaylist(playlistId: Int) {
+        DeletePlaylistQuery(playlistId).perform(queryFactory)
     }
 }

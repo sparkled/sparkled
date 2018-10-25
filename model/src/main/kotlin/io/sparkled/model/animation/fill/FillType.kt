@@ -1,66 +1,64 @@
-package io.sparkled.model.animation.fill;
+package io.sparkled.model.animation.fill
 
-import io.sparkled.model.animation.param.HasParams;
-import io.sparkled.model.animation.param.Param;
+import io.sparkled.model.animation.param.HasParams
+import io.sparkled.model.animation.param.Param
+import java.util.Objects
 
-import java.util.List;
-import java.util.Objects;
+class FillType : HasParams {
 
-public class FillType implements HasParams {
+    private var code: FillTypeCode? = null
+    private var name: String? = null
+    private var params: List<Param>? = null
 
-    private FillTypeCode code;
-    private String name;
-    private List<Param> params;
-
-    public FillTypeCode getCode() {
-        return code;
+    fun getCode(): FillTypeCode {
+        return code
     }
 
-    public FillType setCode(FillTypeCode code) {
-        this.code = code;
-        return this;
+    fun setCode(code: FillTypeCode): FillType {
+        this.code = code
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public FillType setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    @Override
-    public List<Param> getParams() {
-        return params;
-    }
-
-    public FillType setParams(List<Param> params) {
-        this.params = params;
-        return this;
+    fun setName(name: String): FillType {
+        this.name = name
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FillType)) return false;
-        FillType fillType = (FillType) o;
-        return code == fillType.code &&
+    fun getParams(): List<Param> {
+        return params
+    }
+
+    fun setParams(params: List<Param>): FillType {
+        this.params = params
+        return this
+    }
+
+    @Override
+    fun equals(o: Object): Boolean {
+        if (this === o) return true
+        if (o !is FillType) return false
+        val fillType = o
+        return code === fillType.code &&
                 Objects.equals(name, fillType.name) &&
-                Objects.equals(params, fillType.params);
+                Objects.equals(params, fillType.params)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(code, name, params);
+    fun hashCode(): Int {
+        return Objects.hash(code, name, params)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "FillType{" +
                 "code=" + code +
                 ", name='" + name + '\'' +
                 ", params=" + params +
-                '}';
+                '}'
     }
 }

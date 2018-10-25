@@ -1,23 +1,18 @@
-package io.sparkled.model.validator;
+package io.sparkled.model.validator
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashSet
 
-public class ValidatorUtils {
+object ValidatorUtils {
 
-    private ValidatorUtils() {
-    }
+    fun <T> findDuplicates(objects: Collection<T>): Set<T> {
+        val uniques = HashSet()
+        val duplicates = HashSet()
 
-    public static <T> Set<T> findDuplicates(Collection<T> objects) {
-        final Set<T> uniques = new HashSet<>();
-        final Set<T> duplicates = new HashSet<>();
-
-        for (T object : objects) {
-            if (!uniques.add(object)) {
-                duplicates.add(object);
+        for (`object` in objects) {
+            if (!uniques.add(`object`)) {
+                duplicates.add(`object`)
             }
         }
-        return duplicates;
+        return duplicates
     }
 }

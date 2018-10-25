@@ -1,83 +1,78 @@
-package io.sparkled.persistence.sequence.impl;
+package io.sparkled.persistence.sequence.impl
 
-import io.sparkled.model.entity.*;
-import io.sparkled.model.render.RenderedStagePropDataMap;
-import io.sparkled.persistence.QueryFactory;
-import io.sparkled.persistence.sequence.SequencePersistenceService;
-import io.sparkled.persistence.sequence.impl.query.*;
+import io.sparkled.model.entity.*
+import io.sparkled.model.render.RenderedStagePropDataMap
+import io.sparkled.persistence.QueryFactory
+import io.sparkled.persistence.sequence.SequencePersistenceService
+import io.sparkled.persistence.sequence.impl.query.*
 
-import javax.inject.Inject;
-import java.util.*;
+import javax.inject.Inject
+import java.util.*
 
-public class SequencePersistenceServiceImpl implements SequencePersistenceService {
+class SequencePersistenceServiceImpl @Inject
+constructor(private val queryFactory: QueryFactory) : SequencePersistenceService {
 
-    private QueryFactory queryFactory;
+    @Override
+    fun createSequence(sequence: Sequence): Sequence {
+        return SaveSequenceQuery(sequence).perform(queryFactory)
+    }
 
-    @Inject
-    public SequencePersistenceServiceImpl(QueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
+    val allSequences: List<Sequence>
+        @Override
+        get() = GetAllSequencesQuery().perform(queryFactory)
+
+    @Override
+    fun getSequenceById(sequenceId: Int): Optional<Sequence> {
+        return GetSequenceByIdQuery(sequenceId).perform(queryFactory)
     }
 
     @Override
-    public Sequence createSequence(Sequence sequence) {
-        return new SaveSequenceQuery(sequence).perform(queryFactory);
+    fun getStageBySequenceId(sequenceId: Int): Optional<Stage> {
+        return GetStageBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
     @Override
-    public List<Sequence> getAllSequences() {
-        return new GetAllSequencesQuery().perform(queryFactory);
+    fun getSongAudioBySequenceId(sequenceId: Int): Optional<SongAudio> {
+        return GetSongAudioBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
     @Override
-    public Optional<Sequence> getSequenceById(int sequenceId) {
-        return new GetSequenceByIdQuery(sequenceId).perform(queryFactory);
+    fun getSequenceChannelsBySequenceId(sequenceId: Int): List<SequenceChannel> {
+        return GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
     @Override
-    public Optional<Stage> getStageBySequenceId(int sequenceId) {
-        return new GetStageBySequenceIdQuery(sequenceId).perform(queryFactory);
+    fun getSequenceChannelByUuid(sequenceId: Int, uuid: UUID): Optional<SequenceChannel> {
+        return GetSequenceChannelByUuidQuery(sequenceId, uuid).perform(queryFactory)
     }
 
     @Override
-    public Optional<SongAudio> getSongAudioBySequenceId(int sequenceId) {
-        return new GetSongAudioBySequenceIdQuery(sequenceId).perform(queryFactory);
+    fun getRenderedStagePropsBySequenceAndSong(sequence: Sequence, song: Song): RenderedStagePropDataMap {
+        return GetRenderedStagePropsBySequenceQuery(sequence, song).perform(queryFactory)
     }
 
     @Override
-    public List<SequenceChannel> getSequenceChannelsBySequenceId(int sequenceId) {
-        return new GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(queryFactory);
+    fun getSequenceStagePropUuidMapBySequenceId(sequenceId: Int): Map<String, UUID> {
+        return GetSequenceStagePropUuidMapBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
     @Override
-    public Optional<SequenceChannel> getSequenceChannelByUuid(int sequenceId, UUID uuid) {
-        return new GetSequenceChannelByUuidQuery(sequenceId, uuid).perform(queryFactory);
+    fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>) {
+        var sequence = sequence
+        sequence = SaveSequenceQuery(sequence).perform(queryFactory)
+        SaveSequenceChannelsQuery(sequence, sequenceChannels).perform(queryFactory)
     }
 
     @Override
-    public RenderedStagePropDataMap getRenderedStagePropsBySequenceAndSong(Sequence sequence, Song song) {
-        return new GetRenderedStagePropsBySequenceQuery(sequence, song).perform(queryFactory);
+    fun publishSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>, renderedStageProps: RenderedStagePropDataMap) {
+        var sequence = sequence
+        sequence = SaveSequenceQuery(sequence).perform(queryFactory)
+        SaveSequenceChannelsQuery(sequence, sequenceChannels).perform(queryFactory)
+        SaveRenderedStagePropsQuery(sequence, renderedStageProps).perform(queryFactory)
     }
 
     @Override
-    public Map<String, UUID> getSequenceStagePropUuidMapBySequenceId(int sequenceId) {
-        return new GetSequenceStagePropUuidMapBySequenceIdQuery(sequenceId).perform(queryFactory);
-    }
-
-    @Override
-    public void saveSequence(Sequence sequence, List<SequenceChannel> sequenceChannels) {
-        sequence = new SaveSequenceQuery(sequence).perform(queryFactory);
-        new SaveSequenceChannelsQuery(sequence, sequenceChannels).perform(queryFactory);
-    }
-
-    @Override
-    public void publishSequence(Sequence sequence, List<SequenceChannel> sequenceChannels, RenderedStagePropDataMap renderedStageProps) {
-        sequence = new SaveSequenceQuery(sequence).perform(queryFactory);
-        new SaveSequenceChannelsQuery(sequence, sequenceChannels).perform(queryFactory);
-        new SaveRenderedStagePropsQuery(sequence, renderedStageProps).perform(queryFactory);
-    }
-
-    @Override
-    public void deleteSequence(int sequenceId) {
-        new DeleteSequencesQuery(Collections.singletonList(sequenceId)).perform(queryFactory);
+    fun deleteSequence(sequenceId: Int) {
+        DeleteSequencesQuery(Collections.singletonList(sequenceId)).perform(queryFactory)
     }
 }

@@ -1,54 +1,47 @@
-package io.sparkled.rest.service.stage;
+package io.sparkled.rest.service.stage
 
-import io.sparkled.viewmodel.stage.StageViewModel;
+import io.sparkled.viewmodel.stage.StageViewModel
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.inject.Inject
+import javax.ws.rs.*
+import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
 
 @Path("/stages")
-public class StageRestService {
-
-    private final StageRestServiceHandler handler;
-
-    @Inject
-    public StageRestService(StageRestServiceHandler handler) {
-        this.handler = handler;
-    }
+class StageRestService @Inject
+constructor(private val handler: StageRestServiceHandler) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createStage(StageViewModel stageViewModel) {
-        return handler.createStage(stageViewModel);
+    fun createStage(stageViewModel: StageViewModel): Response {
+        return handler.createStage(stageViewModel)
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllStages() {
-        return handler.getAllStages();
-    }
+    val allStages: Response
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        get() = handler.getAllStages()
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStage(@PathParam("id") int stageId) {
-        return handler.getStage(stageId);
+    fun getStage(@PathParam("id") stageId: Int): Response {
+        return handler.getStage(stageId)
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateStage(@PathParam("id") int id, StageViewModel stageViewModel) {
-        return handler.updateStage(id, stageViewModel);
+    fun updateStage(@PathParam("id") id: Int, stageViewModel: StageViewModel): Response {
+        return handler.updateStage(id, stageViewModel)
     }
 
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteStage(@PathParam("id") int id) {
-        return handler.deleteStage(id);
+    fun deleteStage(@PathParam("id") id: Int): Response {
+        return handler.deleteStage(id)
     }
 }

@@ -1,14 +1,15 @@
-package io.sparkled.rest;
+package io.sparkled.rest
 
 /**
  * A REST API Server that listens on the given port.
  */
-public interface RestApiServer {
+interface RestApiServer {
 
     /**
      * Start the REST API server on the provided port. This method is idempotent.
-     *
+
      * @param port The port to listen on.
      */
-    void start(int port) throws Exception;
+    @Throws(Exception::class)
+    fun start(port: Int)
 }

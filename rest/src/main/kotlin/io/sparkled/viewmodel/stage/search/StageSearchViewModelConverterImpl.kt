@@ -1,22 +1,19 @@
-package io.sparkled.viewmodel.stage.search;
+package io.sparkled.viewmodel.stage.search
 
-import io.sparkled.model.entity.Stage;
+import io.sparkled.model.entity.Stage
 
-import java.util.Collection;
-import java.util.List;
+import java.util.stream.Collectors.toList
 
-import static java.util.stream.Collectors.toList;
-
-public class StageSearchViewModelConverterImpl extends StageSearchViewModelConverter {
+class StageSearchViewModelConverterImpl : StageSearchViewModelConverter() {
 
     @Override
-    public List<StageSearchViewModel> toViewModels(Collection<Stage> models) {
-        return models.stream().map(this::toViewModel).collect(toList());
+    fun toViewModels(models: Collection<Stage>): List<StageSearchViewModel> {
+        return models.stream().map(???({ this.toViewModel(it) })).collect(toList())
     }
 
-    private StageSearchViewModel toViewModel(Stage model) {
-        return new StageSearchViewModel()
+    private fun toViewModel(model: Stage): StageSearchViewModel {
+        return StageSearchViewModel()
                 .setId(model.getId())
-                .setName(model.getName());
+                .setName(model.getName())
     }
 }

@@ -1,13 +1,13 @@
-package io.sparkled.rest.service.filltype;
+package io.sparkled.rest.service.filltype
 
-import io.sparkled.model.animation.fill.reference.FillTypes;
-import io.sparkled.rest.service.RestServiceHandler;
+import io.sparkled.model.animation.fill.reference.FillTypes
+import io.sparkled.rest.service.RestServiceHandler
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response
 
-public class FillTypeRestServiceHandler extends RestServiceHandler {
+class FillTypeRestServiceHandler : RestServiceHandler() {
 
-    public Response get() {
-        return respondOk(FillTypes.get());
+    fun get(): Response {
+        return respondOk(FillTypes.get())
     }
 }

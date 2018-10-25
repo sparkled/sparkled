@@ -1,56 +1,51 @@
-package io.sparkled.persistence.stage.impl.query;
+package io.sparkled.persistence.stage.impl.query
 
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
-import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
+import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.util.UUID
 
-import java.util.List;
-import java.util.UUID;
-
-public class DeleteStageQuery implements PersistenceQuery<Void> {
-
-    private static final Logger logger = LoggerFactory.getLogger(DeleteStageQuery.class);
-
-    private final int stageId;
-
-    public DeleteStageQuery(int stageId) {
-        this.stageId = stageId;
-    }
+class DeleteStageQuery(private val stageId: Int) : PersistenceQuery<Void> {
 
     @Override
-    public Void perform(QueryFactory queryFactory) {
-        deleteSequences(queryFactory);
-        deleteStageProps(queryFactory);
-        deleteStage(queryFactory);
-        return null;
+    fun perform(queryFactory: QueryFactory): Void? {
+        deleteSequences(queryFactory)
+        deleteStageProps(queryFactory)
+        deleteStage(queryFactory)
+        return null
     }
 
-    private void deleteSequences(QueryFactory queryFactory) {
-        List<Integer> sequenceIds = queryFactory
+    private fun deleteSequences(queryFactory: QueryFactory) {
+        val sequenceIds = queryFactory
                 .select(qSequence.id)
                 .from(qSequence)
                 .where(qSequence.stageId.eq(stageId))
-                .fetch();
-        new DeleteSequencesQuery(sequenceIds).perform(queryFactory);
+                .fetch()
+        DeleteSequencesQuery(sequenceIds).perform(queryFactory)
     }
 
-    private void deleteStageProps(QueryFactory queryFactory) {
-        List<UUID> stagePropUuids = queryFactory
+    private fun deleteStageProps(queryFactory: QueryFactory) {
+        val stagePropUuids = queryFactory
                 .select(qStageProp.uuid)
                 .from(qStageProp)
                 .where(qStageProp.stageId.eq(stageId))
-                .fetch();
-        new DeleteStagePropsQuery(stagePropUuids).perform(queryFactory);
+                .fetch()
+        DeleteStagePropsQuery(stagePropUuids).perform(queryFactory)
     }
 
-    private void deleteStage(QueryFactory queryFactory) {
-        long deleted = queryFactory
+    private fun deleteStage(queryFactory: QueryFactory) {
+        val deleted = queryFactory
                 .delete(qStage)
                 .where(qStage.id.eq(stageId))
-                .execute();
+                .execute()
 
-        logger.info("Deleted {} stage(s).", deleted);
+        logger.info("Deleted {} stage(s).", deleted)
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(DeleteStageQuery::class.java)
     }
 }

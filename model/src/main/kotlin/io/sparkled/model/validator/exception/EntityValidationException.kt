@@ -1,16 +1,12 @@
-package io.sparkled.model.validator.exception;
+package io.sparkled.model.validator.exception
 
 /**
  * Thrown when an entity validation failure occurs. The message contained in the exception is
  * guaranteed to be user friendly.
  */
-public class EntityValidationException extends RuntimeException {
+class EntityValidationException : RuntimeException {
 
-    public EntityValidationException(String message) {
-        super(message);
-    }
+    constructor(message: String) : super(message) {}
 
-    public EntityValidationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    constructor(message: String, cause: Throwable) : super(message, cause) {}
 }

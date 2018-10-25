@@ -1,88 +1,88 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import javax.persistence.*;
-import java.util.Objects;
-import java.util.UUID;
+import javax.persistence.*
+import java.util.Objects
+import java.util.UUID
 
 @Entity
 @Table(name = "playlist_sequence")
-public class PlaylistSequence {
+class PlaylistSequence {
 
     @Id
     @Column(name = "uuid", nullable = false)
-    private UUID uuid;
+    private var uuid: UUID? = null
 
     @Basic
     @Column(name = "playlist_id", nullable = false)
-    private Integer playlistId;
+    private var playlistId: Integer? = null
 
     @Basic
     @Column(name = "sequence_id", nullable = false)
-    private Integer sequenceId;
+    private var sequenceId: Integer? = null
 
     @Basic
     @Column(name = "display_order", nullable = false)
-    private Integer displayOrder;
+    private var displayOrder: Integer? = null
 
-    public UUID getUuid() {
-        return uuid;
+    fun getUuid(): UUID {
+        return uuid
     }
 
-    public PlaylistSequence setUuid(UUID uuid) {
-        this.uuid = uuid;
-        return this;
+    fun setUuid(uuid: UUID): PlaylistSequence {
+        this.uuid = uuid
+        return this
     }
 
-    public Integer getPlaylistId() {
-        return playlistId;
+    fun getPlaylistId(): Integer {
+        return playlistId
     }
 
-    public PlaylistSequence setPlaylistId(Integer playlistId) {
-        this.playlistId = playlistId;
-        return this;
+    fun setPlaylistId(playlistId: Integer): PlaylistSequence {
+        this.playlistId = playlistId
+        return this
     }
 
-    public Integer getSequenceId() {
-        return sequenceId;
+    fun getSequenceId(): Integer {
+        return sequenceId
     }
 
-    public PlaylistSequence setSequenceId(Integer sequenceId) {
-        this.sequenceId = sequenceId;
-        return this;
+    fun setSequenceId(sequenceId: Integer): PlaylistSequence {
+        this.sequenceId = sequenceId
+        return this
     }
 
-    public Integer getDisplayOrder() {
-        return displayOrder;
+    fun getDisplayOrder(): Integer {
+        return displayOrder
     }
 
-    public PlaylistSequence setDisplayOrder(Integer displayOrder) {
-        this.displayOrder = displayOrder;
-        return this;
+    fun setDisplayOrder(displayOrder: Integer): PlaylistSequence {
+        this.displayOrder = displayOrder
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlaylistSequence that = (PlaylistSequence) o;
-        return Objects.equals(uuid, that.uuid) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(uuid, that!!.uuid) &&
                 Objects.equals(playlistId, that.playlistId) &&
                 Objects.equals(sequenceId, that.sequenceId) &&
-                Objects.equals(displayOrder, that.displayOrder);
+                Objects.equals(displayOrder, that.displayOrder)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(uuid, playlistId, sequenceId, displayOrder);
+    fun hashCode(): Int {
+        return Objects.hash(uuid, playlistId, sequenceId, displayOrder)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "PlaylistSequence{" +
                 "id=" + uuid +
                 ", playlistId=" + playlistId +
                 ", sequenceId=" + sequenceId +
                 ", displayOrder=" + displayOrder +
-                '}';
+                '}'
     }
 }

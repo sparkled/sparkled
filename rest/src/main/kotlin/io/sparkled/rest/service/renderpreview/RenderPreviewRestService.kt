@@ -1,29 +1,22 @@
-package io.sparkled.rest.service.renderpreview;
+package io.sparkled.rest.service.renderpreview
 
-import io.sparkled.model.entity.SequenceChannel;
+import io.sparkled.model.entity.SequenceChannel
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.List;
+import javax.inject.Inject
+import javax.ws.rs.*
+import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
 
 @Path("/renderPreview")
-public class RenderPreviewRestService {
-
-    private final RenderPreviewRestServiceHandler handler;
-
-    @Inject
-    public RenderPreviewRestService(RenderPreviewRestServiceHandler handler) {
-        this.handler = handler;
-    }
+class RenderPreviewRestService @Inject
+constructor(private val handler: RenderPreviewRestServiceHandler) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRenderedSequence(@QueryParam("startFrame") int startFrame,
-                                        @QueryParam("frameCount") int frameCount,
-                                        List<SequenceChannel> sequenceChannels) {
-        return handler.getRenderedSequence(startFrame, frameCount, sequenceChannels);
+    fun getRenderedSequence(@QueryParam("startFrame") startFrame: Int,
+                            @QueryParam("frameCount") frameCount: Int,
+                            sequenceChannels: List<SequenceChannel>): Response {
+        return handler.getRenderedSequence(startFrame, frameCount, sequenceChannels)
     }
 }

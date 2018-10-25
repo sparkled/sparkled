@@ -1,47 +1,31 @@
-package io.sparkled.model.render;
+package io.sparkled.model.render
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayList
 
-public class RenderedStagePropData {
-
-    public static final RenderedStagePropData EMPTY = new RenderedStagePropData();
-
-    private final int ledCount;
-    private final byte[] data;
+class RenderedStagePropData(startFrame: Int, endFrame: Int, val ledCount: Int, val data: ByteArray) {
 
     // Don't serialise frames to JSON, as each frame contains a reference to the (very large) data array
-    private transient final List<RenderedFrame> frames;
+    @Transient val frames: List<RenderedFrame>
 
     /**
      * Default constructor required for Gson.
      */
     @SuppressWarnings("unused")
-    public RenderedStagePropData() {
-        this(0, 0, 0, new byte[]{});
+    constructor() : this(0, 0, 0, byteArrayOf()) {
     }
 
-    public RenderedStagePropData(int startFrame, int endFrame, int ledCount, byte[] data) {
-        this.ledCount = ledCount;
-        this.data = data;
+    init {
 
-        int frameCount = endFrame - startFrame + 1;
-        this.frames = new ArrayList<>(frameCount);
+        val frameCount = endFrame - startFrame + 1
+        this.frames = ArrayList(frameCount)
 
-        for (int frameIndex = startFrame; frameIndex <= endFrame; ++frameIndex) {
-            this.frames.add(new RenderedFrame(startFrame, frameIndex, ledCount, data));
+        for (frameIndex in startFrame..endFrame) {
+            this.frames.add(RenderedFrame(startFrame, frameIndex, ledCount, data))
         }
     }
 
-    public byte[] getData() {
-        return data;
-    }
+    companion object {
 
-    public List<RenderedFrame> getFrames() {
-        return frames;
-    }
-
-    public int getLedCount() {
-        return ledCount;
+        val EMPTY = RenderedStagePropData()
     }
 }

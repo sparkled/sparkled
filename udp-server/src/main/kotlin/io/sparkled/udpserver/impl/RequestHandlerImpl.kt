@@ -1,76 +1,76 @@
-package io.sparkled.udpserver.impl;
+package io.sparkled.udpserver.impl
 
-import io.sparkled.model.setting.SettingsCache;
-import io.sparkled.music.PlaybackState;
-import io.sparkled.music.PlaybackStateService;
-import io.sparkled.persistence.setting.SettingPersistenceService;
-import io.sparkled.udpserver.RequestHandler;
-import io.sparkled.udpserver.impl.command.GetFrameCommand;
-import io.sparkled.udpserver.impl.command.GetStagePropCodesCommand;
-import io.sparkled.udpserver.impl.command.GetVersionCommand;
-import io.sparkled.udpserver.impl.command.RequestCommand;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.sparkled.model.setting.SettingsCache
+import io.sparkled.music.PlaybackState
+import io.sparkled.music.PlaybackStateService
+import io.sparkled.persistence.setting.SettingPersistenceService
+import io.sparkled.udpserver.RequestHandler
+import io.sparkled.udpserver.impl.command.GetFrameCommand
+import io.sparkled.udpserver.impl.command.GetStagePropCodesCommand
+import io.sparkled.udpserver.impl.command.GetVersionCommand
+import io.sparkled.udpserver.impl.command.RequestCommand
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import javax.inject.Inject;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import javax.inject.Inject
+import java.io.IOException
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
+import java.nio.charset.StandardCharsets
+import java.util.HashMap
 
-public class RequestHandlerImpl implements RequestHandler {
-
-    public static final byte[] ERROR_CODE_BYTES = "ERR".getBytes(StandardCharsets.US_ASCII);
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandlerImpl.class);
+class RequestHandlerImpl @Inject
+constructor(private val playbackStateService: PlaybackStateService,
+            private val settingPersistenceService: SettingPersistenceService) : RequestHandler {
 
     // TODO Use Map.ofEntries() after moving to Java 11.
-    private final Map<String, RequestCommand> commands = new HashMap<>();
-    private final PlaybackStateService playbackStateService;
-    private final SettingPersistenceService settingPersistenceService;
+    private val commands = HashMap()
 
-    @Inject
-    public RequestHandlerImpl(PlaybackStateService playbackStateService,
-                              SettingPersistenceService settingPersistenceService) {
-        this.playbackStateService = playbackStateService;
-        this.settingPersistenceService = settingPersistenceService;
+    init {
 
-        commands.put(GetFrameCommand.KEY, new GetFrameCommand());
-        commands.put(GetStagePropCodesCommand.KEY, new GetStagePropCodesCommand());
-        commands.put(GetVersionCommand.KEY, new GetVersionCommand());
+        commands.put(GetFrameCommand.KEY, GetFrameCommand())
+        commands.put(GetStagePropCodesCommand.KEY, GetStagePropCodesCommand())
+        commands.put(GetVersionCommand.KEY, GetVersionCommand())
     }
 
     @Override
-    public void handle(DatagramSocket serverSocket, DatagramPacket receivePacket) {
+    fun handle(serverSocket: DatagramSocket, receivePacket: DatagramPacket) {
         try {
-            String message = new String(receivePacket.getData()).substring(0, receivePacket.getLength());
-            String[] args = message.split(":");
-            byte[] response = getResponse(args);
-            respond(serverSocket, receivePacket, response);
-        } catch (IOException e) {
-            logger.error("Failed to handle response.", e);
+            val message = String(receivePacket.getData()).substring(0, receivePacket.getLength())
+            val args = message.split(":")
+            val response = getResponse(args)
+            respond(serverSocket, receivePacket, response)
+        } catch (e: IOException) {
+            logger.error("Failed to handle response.", e)
         }
+
     }
 
-    private byte[] getResponse(String[] args) {
-        PlaybackState playbackState = playbackStateService.getPlaybackState();
-        SettingsCache settings = settingPersistenceService.getSettings();
+    private fun getResponse(args: Array<String>): ByteArray {
+        val playbackState = playbackStateService.getPlaybackState()
+        val settings = settingPersistenceService.getSettings()
 
-        String command = args[0];
-        RequestCommand requestCommand = commands.get(command);
+        val command = args[0]
+        val requestCommand = commands.get(command)
 
         if (requestCommand == null) {
-            return ERROR_CODE_BYTES;
+            return ERROR_CODE_BYTES
         } else {
-            return requestCommand.getResponse(args, settings, playbackState);
+            return requestCommand!!.getResponse(args, settings, playbackState)
         }
     }
 
-    private void respond(DatagramSocket serverSocket, DatagramPacket receivePacket, byte[] data) throws IOException {
-        InetAddress IPAddress = receivePacket.getAddress();
-        DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, receivePacket.getPort());
-        serverSocket.send(sendPacket);
+    @Throws(IOException::class)
+    private fun respond(serverSocket: DatagramSocket, receivePacket: DatagramPacket, data: ByteArray) {
+        val IPAddress = receivePacket.getAddress()
+        val sendPacket = DatagramPacket(data, data.size, IPAddress, receivePacket.getPort())
+        serverSocket.send(sendPacket)
+    }
+
+    companion object {
+
+        val ERROR_CODE_BYTES = "ERR".getBytes(StandardCharsets.US_ASCII)
+        private val logger = LoggerFactory.getLogger(RequestHandlerImpl::class.java)
     }
 }

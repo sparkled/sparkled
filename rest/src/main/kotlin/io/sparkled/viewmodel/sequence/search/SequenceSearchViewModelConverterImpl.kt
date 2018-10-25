@@ -1,65 +1,56 @@
-package io.sparkled.viewmodel.sequence.search;
+package io.sparkled.viewmodel.sequence.search
 
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.entity.Song;
-import io.sparkled.model.entity.Stage;
-import io.sparkled.persistence.song.SongPersistenceService;
-import io.sparkled.persistence.stage.StagePersistenceService;
+import io.sparkled.model.entity.Sequence
+import io.sparkled.model.entity.Song
+import io.sparkled.model.entity.Stage
+import io.sparkled.persistence.song.SongPersistenceService
+import io.sparkled.persistence.stage.StagePersistenceService
 
-import javax.inject.Inject;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import javax.inject.Inject
 
-import static io.sparkled.model.constant.ModelConstants.MS_PER_SECOND;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
+import java.util.stream.Collectors.toList
+import java.util.stream.Collectors.toMap
 
-public class SequenceSearchViewModelConverterImpl extends SequenceSearchViewModelConverter {
-
-    private final SongPersistenceService songPersistenceService;
-    private final StagePersistenceService stagePersistenceService;
-
-    @Inject
-    public SequenceSearchViewModelConverterImpl(SongPersistenceService songPersistenceService,
-                                                StagePersistenceService stagePersistenceService) {
-        this.songPersistenceService = songPersistenceService;
-        this.stagePersistenceService = stagePersistenceService;
-    }
+class SequenceSearchViewModelConverterImpl @Inject
+constructor(private val songPersistenceService: SongPersistenceService,
+            private val stagePersistenceService: StagePersistenceService) : SequenceSearchViewModelConverter() {
 
     @Override
-    public List<SequenceSearchViewModel> toViewModels(Collection<Sequence> models) {
-        Map<Integer, Song> songs = getSongMap();
-        Map<Integer, Stage> stages = getStageMap();
+    fun toViewModels(models: Collection<Sequence>): List<SequenceSearchViewModel> {
+        val songs = songMap
+        val stages = stageMap
 
         return models.stream()
-                .map(model -> toViewModel(model, songs, stages))
-                .collect(toList());
+                .map({ model -> toViewModel(model, songs, stages) })
+                .collect(toList())
     }
 
-    private Map<Integer, Stage> getStageMap() {
-        return stagePersistenceService.getAllStages()
-                .stream()
-                .collect(toMap(Stage::getId, s -> s));
-    }
+    private val stageMap: Map<Integer, Stage>
+        get() {
+            return stagePersistenceService.getAllStages()
+                    .stream()
+                    .collect(toMap(???({ Stage.getId() }), { s -> s }))
+        }
 
-    private Map<Integer, Song> getSongMap() {
-        return songPersistenceService.getAllSongs()
-                .stream()
-                .collect(toMap(Song::getId, s -> s));
-    }
+    private val songMap: Map<Integer, Song>
+        get() {
+            return songPersistenceService.getAllSongs()
+                    .stream()
+                    .collect(toMap(???({ Song.getId() }), { s -> s }))
+        }
 
-    private SequenceSearchViewModel toViewModel(Sequence model, Map<Integer, Song> songs, Map<Integer, Stage> stages) {
-        Song song = songs.get(model.getSongId());
-        Stage stage = stages.get(model.getStageId());
+    private fun toViewModel(model: Sequence, songs: Map<Integer, Song>, stages: Map<Integer, Stage>): SequenceSearchViewModel {
+        val song = songs[model.getSongId()]
+        val stage = stages[model.getStageId()]
 
-        return new SequenceSearchViewModel()
+        return SequenceSearchViewModel()
                 .setId(model.getId())
                 .setName(model.getName())
                 .setSongName(song.getName())
                 .setStageName(stage.getName())
                 .setFramesPerSecond(model.getFramesPerSecond())
                 .setDurationSeconds(song.getDurationMs() / MS_PER_SECOND)
-                .setStatus(model.getStatus());
+                .setStatus(model.getStatus())
     }
 }

@@ -1,53 +1,49 @@
-package io.sparkled.renderer.util;
+package io.sparkled.renderer.util
 
-import io.sparkled.model.animation.param.HasParams;
-import io.sparkled.model.animation.param.Param;
-import io.sparkled.model.animation.param.ParamName;
+import io.sparkled.model.animation.param.HasParams
+import io.sparkled.model.animation.param.Param
+import io.sparkled.model.animation.param.ParamName
 
-import java.awt.*;
-import java.util.List;
+import java.awt.*
 
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors.toList
 
-public class ParamUtils {
+object ParamUtils {
 
-    private ParamUtils() {
+    fun getIntegerValue(parent: HasParams, paramName: ParamName): Int {
+        val param = getParam(parent, paramName)
+        val value = param.getValue()
+        return Integer.parseInt(value.get(0))
     }
 
-    public static int getIntegerValue(HasParams parent, ParamName paramName) {
-        Param param = getParam(parent, paramName);
-        List<String> value = param.getValue();
-        return Integer.parseInt(value.get(0));
+    fun getDecimalValue(parent: HasParams, paramName: ParamName): Float {
+        val param = getParam(parent, paramName)
+        val value = param.getValue()
+        return Float.parseFloat(value.get(0))
     }
 
-    public static float getDecimalValue(HasParams parent, ParamName paramName) {
-        Param param = getParam(parent, paramName);
-        List<String> value = param.getValue();
-        return Float.parseFloat(value.get(0));
+    fun getColorValue(parent: HasParams, paramName: ParamName): Color {
+        return getColorsValue(parent, paramName)[0]
     }
 
-    public static Color getColorValue(HasParams parent, ParamName paramName) {
-        return getColorsValue(parent, paramName).get(0);
-    }
-
-    private static List<Color> getColorsValue(HasParams parent, ParamName paramName) {
-        Param param = getParam(parent, paramName);
-        List<String> values = param.getValue();
+    private fun getColorsValue(parent: HasParams, paramName: ParamName): List<Color> {
+        val param = getParam(parent, paramName)
+        val values = param.getValue()
 
         return values.stream()
-                .map(ParamUtils::convertColor)
-                .collect(toList());
+                .map(???({ convertColor(it) }))
+        .collect(toList())
     }
 
-    private static Param getParam(HasParams parent, ParamName paramName) {
+    private fun getParam(parent: HasParams, paramName: ParamName): Param {
         return parent.getParams()
                 .stream()
-                .filter(p -> paramName == p.getName())
+                .filter({ p -> paramName === p.getName() })
                 .findFirst()
-                .orElse(new Param());
+                .orElse(Param())
     }
 
-    private static Color convertColor(String hexColor) {
-        return Color.decode(hexColor.toLowerCase());
+    private fun convertColor(hexColor: String): Color {
+        return Color.decode(hexColor.toLowerCase())
     }
 }

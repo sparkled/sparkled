@@ -1,32 +1,24 @@
-package io.sparkled.persistence.playlist.impl.query;
+package io.sparkled.persistence.playlist.impl.query
 
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import io.sparkled.model.entity.Sequence
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
 
-import java.util.Optional;
+import java.util.Optional
 
-public class GetSequenceAtPlaylistIndexQuery implements PersistenceQuery<Optional<Sequence>> {
-
-    private final int playlistId;
-    private final int index;
-
-    public GetSequenceAtPlaylistIndexQuery(int playlistId, int index) {
-        this.playlistId = playlistId;
-        this.index = index;
-    }
+class GetSequenceAtPlaylistIndexQuery(private val playlistId: Int, private val index: Int) : PersistenceQuery<Optional<Sequence>> {
 
     @Override
-    public Optional<Sequence> perform(QueryFactory queryFactory) {
-        final Sequence sequence = queryFactory
+    fun perform(queryFactory: QueryFactory): Optional<Sequence> {
+        val sequence = queryFactory
                 .selectFrom(qSequence)
                 .innerJoin(qPlaylistSequence).on(qSequence.id.eq(qPlaylistSequence.sequenceId))
                 .where(qPlaylistSequence.playlistId.eq(playlistId))
                 .orderBy(qPlaylistSequence.displayOrder.asc())
                 .offset(index)
                 .limit(1)
-                .fetchFirst();
+                .fetchFirst()
 
-        return Optional.ofNullable(sequence);
+        return Optional.ofNullable(sequence)
     }
 }

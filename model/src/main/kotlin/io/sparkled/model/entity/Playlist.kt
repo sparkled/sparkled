@@ -1,58 +1,57 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.*
+import java.util.Objects
 
 @Entity
 @Table(name = "playlist")
-public class Playlist {
+class Playlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private var id: Integer? = null
 
     @Basic
     @Column(name = "name", nullable = false, length = 64)
-    private String name;
+    private var name: String? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public Playlist setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): Playlist {
+        this.id = id
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public Playlist setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Playlist playlist = (Playlist) o;
-        return Objects.equals(id, playlist.id) &&
-                Objects.equals(name, playlist.name);
+    fun setName(name: String): Playlist {
+        this.name = name
+        return this
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val playlist = o
+        return Objects.equals(id, playlist!!.id) && Objects.equals(name, playlist.name)
     }
 
     @Override
-    public String toString() {
+    fun hashCode(): Int {
+        return Objects.hash(id, name)
+    }
+
+    @Override
+    fun toString(): String {
         return "Playlist{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                '}';
+                '}'
     }
 }

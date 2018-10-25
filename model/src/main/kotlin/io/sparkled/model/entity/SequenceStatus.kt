@@ -1,6 +1,6 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-public enum SequenceStatus {
+enum class SequenceStatus {
     /**
      * Has no animation data whatsoever, cannot be played.
      */

@@ -1,17 +1,17 @@
-package io.sparkled.model.validator;
+package io.sparkled.model.validator
 
-import io.sparkled.model.entity.SongAudio;
-import io.sparkled.model.validator.exception.EntityValidationException;
+import io.sparkled.model.entity.SongAudio
+import io.sparkled.model.validator.exception.EntityValidationException
 
-public class SongAudioValidator {
+class SongAudioValidator {
 
-    public void validate(SongAudio songAudio) {
+    fun validate(songAudio: SongAudio) {
         if (songAudio.getSongId() == null) {
-            throw new EntityValidationException(Errors.SONG_ID_MISSING);
+            throw EntityValidationException(Errors.SONG_ID_MISSING)
         }
     }
 
-    private static class Errors {
-        static final String SONG_ID_MISSING = "Song audio has no song identifier.";
+    private object Errors {
+        internal val SONG_ID_MISSING = "Song audio has no song identifier."
     }
 }

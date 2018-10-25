@@ -1,31 +1,29 @@
-package io.sparkled.persistence.sequence.impl.query;
+package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.model.validator.SequenceValidator;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.sparkled.model.entity.Sequence
+import io.sparkled.model.validator.SequenceValidator
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManager
 
-public class SaveSequenceQuery implements PersistenceQuery<Sequence> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SaveSequenceQuery.class);
-    private final Sequence sequence;
-
-    public SaveSequenceQuery(Sequence sequence) {
-        this.sequence = sequence;
-    }
+class SaveSequenceQuery(private val sequence: Sequence) : PersistenceQuery<Sequence> {
 
     @Override
-    public Sequence perform(QueryFactory queryFactory) {
-        new SequenceValidator().validate(sequence);
+    fun perform(queryFactory: QueryFactory): Sequence {
+        SequenceValidator().validate(sequence)
 
-        final EntityManager entityManager = queryFactory.getEntityManager();
-        Sequence savedSequence = entityManager.merge(sequence);
+        val entityManager = queryFactory.getEntityManager()
+        val savedSequence = entityManager.merge(sequence)
 
-        logger.info("Saved sequence {} ({}).", savedSequence.getId(), savedSequence.getName());
-        return savedSequence;
+        logger.info("Saved sequence {} ({}).", savedSequence.getId(), savedSequence.getName())
+        return savedSequence
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(SaveSequenceQuery::class.java)
     }
 }

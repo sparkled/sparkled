@@ -1,68 +1,61 @@
-package io.sparkled.rest.service.sequence;
+package io.sparkled.rest.service.sequence
 
-import io.sparkled.viewmodel.sequence.SequenceViewModel;
+import io.sparkled.viewmodel.sequence.SequenceViewModel
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.inject.Inject
+import javax.ws.rs.*
+import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
 
 @Path("/sequences")
-public class SequenceRestService {
-
-    private final SequenceRestServiceHandler handler;
-
-    @Inject
-    public SequenceRestService(SequenceRestServiceHandler handler) {
-        this.handler = handler;
-    }
+class SequenceRestService @Inject
+constructor(private val handler: SequenceRestServiceHandler) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createSequence(SequenceViewModel sequenceViewModel) {
-        return handler.createSequence(sequenceViewModel);
+    fun createSequence(sequenceViewModel: SequenceViewModel): Response {
+        return handler.createSequence(sequenceViewModel)
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllSequences() {
-        return handler.getAllSequences();
-    }
+    val allSequences: Response
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        get() = handler.getAllSequences()
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSequence(@PathParam("id") int sequenceId) {
-        return handler.getSequence(sequenceId);
+    fun getSequence(@PathParam("id") sequenceId: Int): Response {
+        return handler.getSequence(sequenceId)
     }
 
     @GET
     @Path("/{id}/stage")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSequenceStage(@PathParam("id") int sequenceId) {
-        return handler.getSequenceStage(sequenceId);
+    fun getSequenceStage(@PathParam("id") sequenceId: Int): Response {
+        return handler.getSequenceStage(sequenceId)
     }
 
     @GET
     @Path("/{id}/songAudio")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSequenceSongAudio(@PathParam("id") int sequenceId) {
-        return handler.getSequenceSongAudio(sequenceId);
+    fun getSequenceSongAudio(@PathParam("id") sequenceId: Int): Response {
+        return handler.getSequenceSongAudio(sequenceId)
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSequence(@PathParam("id") int id, SequenceViewModel sequenceViewModel) {
-        return handler.updateSequence(id, sequenceViewModel);
+    fun updateSequence(@PathParam("id") id: Int, sequenceViewModel: SequenceViewModel): Response {
+        return handler.updateSequence(id, sequenceViewModel)
     }
 
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteSequence(@PathParam("id") int id) {
-        return handler.deleteSequence(id);
+    fun deleteSequence(@PathParam("id") id: Int): Response {
+        return handler.deleteSequence(id)
     }
 }

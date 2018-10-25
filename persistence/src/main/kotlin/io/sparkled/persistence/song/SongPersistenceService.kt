@@ -1,20 +1,18 @@
-package io.sparkled.persistence.song;
+package io.sparkled.persistence.song
 
-import io.sparkled.model.entity.Song;
-import io.sparkled.model.entity.SongAudio;
+import io.sparkled.model.entity.Song
+import io.sparkled.model.entity.SongAudio
+import java.util.Optional
 
-import java.util.List;
-import java.util.Optional;
+interface SongPersistenceService {
 
-public interface SongPersistenceService {
+    fun createSong(song: Song, audioData: ByteArray): Song
 
-    Song createSong(Song song, byte[] audioData);
+    val allSongs: List<Song>
 
-    List<Song> getAllSongs();
+    fun getSongById(songId: Int): Optional<Song>
 
-    Optional<Song> getSongById(int songId);
+    fun getSongBySequenceId(sequenceId: Int): Optional<Song>
 
-    Optional<Song> getSongBySequenceId(int sequenceId);
-
-    void deleteSong(int songId);
+    fun deleteSong(songId: Int)
 }

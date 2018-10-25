@@ -1,66 +1,64 @@
-package io.sparkled.model.animation.easing;
+package io.sparkled.model.animation.easing
 
-import io.sparkled.model.animation.param.HasParams;
-import io.sparkled.model.animation.param.Param;
+import io.sparkled.model.animation.param.HasParams
+import io.sparkled.model.animation.param.Param
+import java.util.Objects
 
-import java.util.List;
-import java.util.Objects;
+class EasingType : HasParams {
 
-public class EasingType implements HasParams {
+    private var code: EasingTypeCode? = null
+    private var name: String? = null
+    private var params: List<Param>? = null
 
-    private EasingTypeCode code;
-    private String name;
-    private List<Param> params;
-
-    public EasingTypeCode getCode() {
-        return code;
+    fun getCode(): EasingTypeCode {
+        return code
     }
 
-    public EasingType setCode(EasingTypeCode code) {
-        this.code = code;
-        return this;
+    fun setCode(code: EasingTypeCode): EasingType {
+        this.code = code
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public EasingType setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    @Override
-    public List<Param> getParams() {
-        return params;
-    }
-
-    public EasingType setParams(List<Param> params) {
-        this.params = params;
-        return this;
+    fun setName(name: String): EasingType {
+        this.name = name
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EasingType)) return false;
-        EasingType easingType = (EasingType) o;
-        return code == easingType.code &&
+    fun getParams(): List<Param> {
+        return params
+    }
+
+    fun setParams(params: List<Param>): EasingType {
+        this.params = params
+        return this
+    }
+
+    @Override
+    fun equals(o: Object): Boolean {
+        if (this === o) return true
+        if (o !is EasingType) return false
+        val easingType = o
+        return code === easingType.code &&
                 Objects.equals(name, easingType.name) &&
-                Objects.equals(params, easingType.params);
+                Objects.equals(params, easingType.params)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(code, name, params);
+    fun hashCode(): Int {
+        return Objects.hash(code, name, params)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "EasingType{" +
                 "code=" + code +
                 ", name='" + name + '\'' +
                 ", params=" + params +
-                '}';
+                '}'
     }
 }

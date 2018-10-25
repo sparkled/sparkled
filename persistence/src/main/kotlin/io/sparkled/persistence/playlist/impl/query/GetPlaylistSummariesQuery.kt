@@ -1,20 +1,18 @@
-package io.sparkled.persistence.playlist.impl.query;
+package io.sparkled.persistence.playlist.impl.query
 
-import com.querydsl.core.Tuple;
-import io.sparkled.model.playlist.PlaylistSummary;
-import io.sparkled.model.util.TupleUtils;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import com.querydsl.core.Tuple
+import io.sparkled.model.playlist.PlaylistSummary
+import io.sparkled.model.util.TupleUtils
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
 
-import java.util.Map;
+import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
+import java.util.stream.Collectors.toMap
 
-import static io.sparkled.model.constant.ModelConstants.MS_PER_SECOND;
-import static java.util.stream.Collectors.toMap;
-
-public class GetPlaylistSummariesQuery implements PersistenceQuery<Map<Integer, PlaylistSummary>> {
+class GetPlaylistSummariesQuery : PersistenceQuery<Map<Integer, PlaylistSummary>> {
 
     @Override
-    public Map<Integer, PlaylistSummary> perform(QueryFactory queryFactory) {
+    fun perform(queryFactory: QueryFactory): Map<Integer, PlaylistSummary> {
         return queryFactory
                 .select(qPlaylist.id, qSequence.count(), qSong.durationMs.sum())
                 .from(qPlaylist)
@@ -24,16 +22,16 @@ public class GetPlaylistSummariesQuery implements PersistenceQuery<Map<Integer, 
                 .groupBy(qPlaylist.id)
                 .fetch()
                 .stream()
-                .collect(toMap(this::toKey, this::toSummary));
+                .collect(toMap(???({ this.toKey(it) }), ???({ this.toSummary(it) })))
     }
 
-    private Integer toKey(Tuple tuple) {
-        return TupleUtils.getInt(tuple, 0);
+    private fun toKey(tuple: Tuple): Integer {
+        return TupleUtils.getInt(tuple, 0)
     }
 
-    private PlaylistSummary toSummary(Tuple tuple) {
-        return new PlaylistSummary()
+    private fun toSummary(tuple: Tuple): PlaylistSummary {
+        return PlaylistSummary()
                 .setSequenceCount(TupleUtils.getInt(tuple, 1))
-                .setDurationSeconds(TupleUtils.getInt(tuple, 2) / MS_PER_SECOND);
+                .setDurationSeconds(TupleUtils.getInt(tuple, 2) / MS_PER_SECOND)
     }
 }

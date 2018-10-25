@@ -1,17 +1,17 @@
-package io.sparkled.model.validator;
+package io.sparkled.model.validator
 
-import io.sparkled.model.entity.Playlist;
-import io.sparkled.model.validator.exception.EntityValidationException;
+import io.sparkled.model.entity.Playlist
+import io.sparkled.model.validator.exception.EntityValidationException
 
-public class PlaylistValidator {
+class PlaylistValidator {
 
-    public void validate(Playlist playlist) {
+    fun validate(playlist: Playlist) {
         if (playlist.getName() == null) {
-            throw new EntityValidationException(Errors.NAME_MISSING);
+            throw EntityValidationException(Errors.NAME_MISSING)
         }
     }
 
-    private static class Errors {
-        static final String NAME_MISSING = "Playlist name must not be empty.";
+    private object Errors {
+        internal val NAME_MISSING = "Playlist name must not be empty."
     }
 }

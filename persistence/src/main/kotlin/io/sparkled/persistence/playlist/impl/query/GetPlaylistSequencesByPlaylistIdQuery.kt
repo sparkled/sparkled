@@ -1,25 +1,17 @@
-package io.sparkled.persistence.playlist.impl.query;
+package io.sparkled.persistence.playlist.impl.query
 
-import io.sparkled.model.entity.PlaylistSequence;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import io.sparkled.model.entity.PlaylistSequence
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
 
-import java.util.List;
-
-public class GetPlaylistSequencesByPlaylistIdQuery implements PersistenceQuery<List<PlaylistSequence>> {
-
-    private final int playlistId;
-
-    public GetPlaylistSequencesByPlaylistIdQuery(int playlistId) {
-        this.playlistId = playlistId;
-    }
+class GetPlaylistSequencesByPlaylistIdQuery(private val playlistId: Int) : PersistenceQuery<List<PlaylistSequence>> {
 
     @Override
-    public List<PlaylistSequence> perform(QueryFactory queryFactory) {
+    fun perform(queryFactory: QueryFactory): List<PlaylistSequence> {
         return queryFactory
                 .selectFrom(qPlaylistSequence)
                 .where(qPlaylistSequence.playlistId.eq(playlistId))
                 .orderBy(qPlaylistSequence.displayOrder.asc())
-                .fetch();
+                .fetch()
     }
 }

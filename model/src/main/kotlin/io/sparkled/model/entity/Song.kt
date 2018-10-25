@@ -1,103 +1,103 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.*
+import java.util.Objects
 
 @Entity
 @Table(name = "song")
-public class Song {
+class Song {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private var id: Integer? = null
 
     @Basic
     @Column(name = "name")
-    private String name;
+    private var name: String? = null
 
     @Basic
     @Column(name = "artist")
-    private String artist;
+    private var artist: String? = null
 
     @Basic
     @Column(name = "album")
-    private String album;
+    private var album: String? = null
 
     @Basic
     @Column(name = "duration_ms")
-    private Integer durationMs;
+    private var durationMs: Integer? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public Song setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): Song {
+        this.id = id
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public Song setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): Song {
+        this.name = name
+        return this
     }
 
-    public String getArtist() {
-        return artist;
+    fun getArtist(): String {
+        return artist
     }
 
-    public Song setArtist(String artist) {
-        this.artist = artist;
-        return this;
+    fun setArtist(artist: String): Song {
+        this.artist = artist
+        return this
     }
 
-    public String getAlbum() {
-        return album;
+    fun getAlbum(): String {
+        return album
     }
 
-    public Song setAlbum(String album) {
-        this.album = album;
-        return this;
+    fun setAlbum(album: String): Song {
+        this.album = album
+        return this
     }
 
-    public Integer getDurationMs() {
-        return durationMs;
+    fun getDurationMs(): Integer {
+        return durationMs
     }
 
-    public Song setDurationMs(Integer durationMs) {
-        this.durationMs = durationMs;
-        return this;
+    fun setDurationMs(durationMs: Integer): Song {
+        this.durationMs = durationMs
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Song song = (Song) o;
-        return Objects.equals(id, song.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val song = o
+        return Objects.equals(id, song!!.id) &&
                 Objects.equals(name, song.name) &&
                 Objects.equals(artist, song.artist) &&
                 Objects.equals(album, song.album) &&
-                Objects.equals(durationMs, song.durationMs);
+                Objects.equals(durationMs, song.durationMs)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, artist, album, durationMs);
+    fun hashCode(): Int {
+        return Objects.hash(id, name, artist, album, durationMs)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "Song{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", artist='" + artist + '\'' +
                 ", album='" + album + '\'' +
                 ", durationMs=" + durationMs +
-                '}';
+                '}'
     }
 }

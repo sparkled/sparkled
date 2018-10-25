@@ -1,55 +1,54 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.*
+import java.util.Objects
 
 @Entity
 @Table(name = "song_audio")
-public class SongAudio {
+class SongAudio {
 
     @Id
     @Column(name = "song_id")
-    private Integer songId;
+    private var songId: Integer? = null
 
     @Lob
     @Column(name = "audio_data")
-    private byte[] audioData;
+    private var audioData: ByteArray? = null
 
-    public Integer getSongId() {
-        return songId;
+    fun getSongId(): Integer {
+        return songId
     }
 
-    public SongAudio setSongId(Integer songId) {
-        this.songId = songId;
-        return this;
+    fun setSongId(songId: Integer): SongAudio {
+        this.songId = songId
+        return this
     }
 
-    public byte[] getAudioData() {
-        return audioData;
+    fun getAudioData(): ByteArray {
+        return audioData
     }
 
-    public SongAudio setAudioData(byte[] audioData) {
-        this.audioData = audioData;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SongAudio audio = (SongAudio) o;
-        return Objects.equals(songId, audio.songId);
+    fun setAudioData(audioData: ByteArray): SongAudio {
+        this.audioData = audioData
+        return this
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(songId);
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        return Objects.equals(songId, o!!.songId)
     }
 
     @Override
-    public String toString() {
+    fun hashCode(): Int {
+        return Objects.hash(songId)
+    }
+
+    @Override
+    fun toString(): String {
         return "SongAudio{" +
                 "songId=" + songId +
-                '}';
+                '}'
     }
 }

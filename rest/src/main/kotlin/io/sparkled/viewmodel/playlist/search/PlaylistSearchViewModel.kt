@@ -1,75 +1,75 @@
-package io.sparkled.viewmodel.playlist.search;
+package io.sparkled.viewmodel.playlist.search
 
-import io.sparkled.viewmodel.ViewModel;
+import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects;
+import java.util.Objects
 
-public class PlaylistSearchViewModel implements ViewModel {
+class PlaylistSearchViewModel : ViewModel {
 
-    private Integer id;
-    private String name;
-    private Integer sequenceCount;
-    private Integer durationSeconds;
+    private var id: Integer? = null
+    private var name: String? = null
+    private var sequenceCount: Integer? = null
+    private var durationSeconds: Integer? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public PlaylistSearchViewModel setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): PlaylistSearchViewModel {
+        this.id = id
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public PlaylistSearchViewModel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): PlaylistSearchViewModel {
+        this.name = name
+        return this
     }
 
-    public Integer getSequenceCount() {
-        return sequenceCount;
+    fun getSequenceCount(): Integer {
+        return sequenceCount
     }
 
-    public PlaylistSearchViewModel setSequenceCount(Integer sequenceCount) {
-        this.sequenceCount = sequenceCount;
-        return this;
+    fun setSequenceCount(sequenceCount: Integer): PlaylistSearchViewModel {
+        this.sequenceCount = sequenceCount
+        return this
     }
 
-    public Integer getDurationSeconds() {
-        return durationSeconds;
+    fun getDurationSeconds(): Integer {
+        return durationSeconds
     }
 
-    public PlaylistSearchViewModel setDurationSeconds(Integer durationSeconds) {
-        this.durationSeconds = durationSeconds;
-        return this;
+    fun setDurationSeconds(durationSeconds: Integer): PlaylistSearchViewModel {
+        this.durationSeconds = durationSeconds
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlaylistSearchViewModel that = (PlaylistSearchViewModel) o;
-        return Objects.equals(id, that.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(id, that!!.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(sequenceCount, that.sequenceCount) &&
-                Objects.equals(durationSeconds, that.durationSeconds);
+                Objects.equals(durationSeconds, that.durationSeconds)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, sequenceCount, durationSeconds);
+    fun hashCode(): Int {
+        return Objects.hash(id, name, sequenceCount, durationSeconds)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "PlaylistSearchViewModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", sequenceCount=" + sequenceCount +
                 ", durationSeconds=" + durationSeconds +
-                '}';
+                '}'
     }
 }

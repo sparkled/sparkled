@@ -1,6 +1,6 @@
-package io.sparkled.model.animation.param;
+package io.sparkled.model.animation.param
 
-public enum ParamType {
+enum class ParamType {
     COLOR,
     DECIMAL,
     INTEGER

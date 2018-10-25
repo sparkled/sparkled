@@ -1,99 +1,99 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import javax.persistence.*;
-import java.util.Objects;
-import java.util.UUID;
+import javax.persistence.*
+import java.util.Objects
+import java.util.UUID
 
 @Entity
 @Table(name = "rendered_stage_prop")
-public class RenderedStageProp {
+class RenderedStageProp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private var id: Integer? = null
 
     @Column(name = "sequence_id")
-    private Integer sequenceId;
+    private var sequenceId: Integer? = null
 
     @Column(name = "stage_prop_uuid")
-    private UUID stagePropUuid;
+    private var stagePropUuid: UUID? = null
 
     @Column(name = "led_count")
-    private Integer ledCount;
+    private var ledCount: Integer? = null
 
     @Lob
     @Column(name = "data")
-    private byte[] data;
+    private var data: ByteArray? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public RenderedStageProp setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): RenderedStageProp {
+        this.id = id
+        return this
     }
 
-    public Integer getSequenceId() {
-        return sequenceId;
+    fun getSequenceId(): Integer {
+        return sequenceId
     }
 
-    public RenderedStageProp setSequenceId(Integer sequenceId) {
-        this.sequenceId = sequenceId;
-        return this;
+    fun setSequenceId(sequenceId: Integer): RenderedStageProp {
+        this.sequenceId = sequenceId
+        return this
     }
 
-    public UUID getStagePropUuid() {
-        return stagePropUuid;
+    fun getStagePropUuid(): UUID {
+        return stagePropUuid
     }
 
-    public RenderedStageProp setStagePropUuid(UUID stagePropUuid) {
-        this.stagePropUuid = stagePropUuid;
-        return this;
+    fun setStagePropUuid(stagePropUuid: UUID): RenderedStageProp {
+        this.stagePropUuid = stagePropUuid
+        return this
     }
 
-    public Integer getLedCount() {
-        return ledCount;
+    fun getLedCount(): Integer {
+        return ledCount
     }
 
-    public RenderedStageProp setLedCount(Integer ledCount) {
-        this.ledCount = ledCount;
-        return this;
+    fun setLedCount(ledCount: Integer): RenderedStageProp {
+        this.ledCount = ledCount
+        return this
     }
 
-    public byte[] getData() {
-        return data;
+    fun getData(): ByteArray {
+        return data
     }
 
-    public RenderedStageProp setData(byte[] data) {
-        this.data = data;
-        return this;
+    fun setData(data: ByteArray): RenderedStageProp {
+        this.data = data
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RenderedStageProp that = (RenderedStageProp) o;
-        return Objects.equals(id, that.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(id, that!!.id) &&
                 Objects.equals(sequenceId, that.sequenceId) &&
                 Objects.equals(stagePropUuid, that.stagePropUuid) &&
-                Objects.equals(ledCount, that.ledCount);
+                Objects.equals(ledCount, that.ledCount)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, sequenceId, stagePropUuid, ledCount);
+    fun hashCode(): Int {
+        return Objects.hash(id, sequenceId, stagePropUuid, ledCount)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "RenderedStageProp{" +
                 "id=" + id +
                 ", sequenceId=" + sequenceId +
                 ", stagePropUuid='" + stagePropUuid + '\'' +
                 ", ledCount=" + ledCount +
-                '}';
+                '}'
     }
 }

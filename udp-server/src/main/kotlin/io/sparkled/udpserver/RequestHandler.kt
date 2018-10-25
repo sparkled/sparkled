@@ -1,12 +1,12 @@
-package io.sparkled.udpserver;
+package io.sparkled.udpserver
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.DatagramPacket
+import java.net.DatagramSocket
 
 /**
  * Returns appropriate responses to UDP requests.
  */
-public interface RequestHandler {
+interface RequestHandler {
 
-    void handle(DatagramSocket serverSocket, DatagramPacket receivePacket);
+    fun handle(serverSocket: DatagramSocket, receivePacket: DatagramPacket)
 }

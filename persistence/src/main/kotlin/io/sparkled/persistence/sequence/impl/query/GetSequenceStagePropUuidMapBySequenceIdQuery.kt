@@ -1,33 +1,24 @@
-package io.sparkled.persistence.sequence.impl.query;
+package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.StageProp;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import io.sparkled.model.entity.StageProp
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
+import java.util.UUID
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.stream.Collectors.toMap
 
-import static java.util.stream.Collectors.toMap;
-
-public class GetSequenceStagePropUuidMapBySequenceIdQuery implements PersistenceQuery<Map<String, UUID>> {
-
-    private final int sequenceId;
-
-    public GetSequenceStagePropUuidMapBySequenceIdQuery(int sequenceId) {
-        this.sequenceId = sequenceId;
-    }
+class GetSequenceStagePropUuidMapBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Map<String, UUID>> {
 
     @Override
-    public Map<String, UUID> perform(QueryFactory queryFactory) {
-        List<StageProp> stageProps = queryFactory
+    fun perform(queryFactory: QueryFactory): Map<String, UUID> {
+        val stageProps = queryFactory
                 .select(qStageProp)
                 .from(qSequence)
                 .innerJoin(qStage).on(qSequence.stageId.eq(qStage.id))
                 .innerJoin(qStageProp).on(qStage.id.eq(qStageProp.stageId))
                 .where(qSequence.id.eq(sequenceId))
-                .fetch();
+                .fetch()
 
-        return stageProps.stream().collect(toMap(StageProp::getCode, StageProp::getUuid));
+        return stageProps.stream().collect(toMap(???({ StageProp.getCode() }), ???({ StageProp.getUuid() })))
     }
 }

@@ -1,48 +1,27 @@
-package io.sparkled.model.render;
+package io.sparkled.model.render
 
-public class RenderedFrame {
-
-    private final int startFrame;
-    private final int frameNumber;
-    private final int ledCount;
-    private final byte[] data;
+class RenderedFrame(private val startFrame: Int, val frameNumber: Int, val ledCount: Int, private val data: ByteArray) {
 
     /**
      * Default constructor required for Gson.
      */
     @SuppressWarnings("unused")
-    public RenderedFrame() {
-        this(0, 0, 0, new byte[]{});
+    constructor() : this(0, 0, 0, byteArrayOf()) {
     }
 
-    public RenderedFrame(int startFrame, int frameNumber, int ledCount, byte[] data) {
-        this.startFrame = startFrame;
-        this.frameNumber = frameNumber;
-        this.ledCount = ledCount;
-        this.data = data;
+    fun getData(): ByteArray {
+        val bytesPerFrame = ledCount * Led.BYTES_PER_LED
+        val offset = (frameNumber - startFrame) * bytesPerFrame
+
+        val frameData = ByteArray(bytesPerFrame)
+        System.arraycopy(data, offset, frameData, 0, bytesPerFrame)
+
+        return frameData
     }
 
-    public int getFrameNumber() {
-        return frameNumber;
-    }
-
-    public byte[] getData() {
-        int bytesPerFrame = ledCount * Led.BYTES_PER_LED;
-        int offset = (frameNumber - startFrame) * bytesPerFrame;
-
-        byte[] frameData = new byte[bytesPerFrame];
-        System.arraycopy(data, offset, frameData, 0, bytesPerFrame);
-
-        return frameData;
-    }
-
-    public int getLedCount() {
-        return ledCount;
-    }
-
-    public Led getLed(int ledIndex) {
-        int bytesPerFrame = ledCount * Led.BYTES_PER_LED;
-        int offset = (frameNumber - startFrame) * bytesPerFrame;
-        return new Led(data, ledIndex, offset);
+    fun getLed(ledIndex: Int): Led {
+        val bytesPerFrame = ledCount * Led.BYTES_PER_LED
+        val offset = (frameNumber - startFrame) * bytesPerFrame
+        return Led(data, ledIndex, offset)
     }
 }

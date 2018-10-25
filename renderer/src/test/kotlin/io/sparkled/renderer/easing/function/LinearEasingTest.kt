@@ -1,22 +1,22 @@
-package io.sparkled.renderer.easing.function;
+package io.sparkled.renderer.easing.function
 
-import io.sparkled.model.animation.easing.Easing;
-import org.junit.jupiter.api.Test;
+import io.sparkled.model.animation.easing.Easing
+import org.junit.jupiter.api.Test
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.number.IsCloseTo.closeTo;
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.number.IsCloseTo.closeTo
 
-public class LinearEasingTest {
+class LinearEasingTest {
 
     @Test
-    public void can_render() {
-        LinearEasing linearEasing = new LinearEasing();
-        float[] expectedResults = new float[]{0f, .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f};
-        int testCount = expectedResults.length;
+    fun can_render() {
+        val linearEasing = LinearEasing()
+        val expectedResults = floatArrayOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .7f, .8f, .9f, 1f)
+        val testCount = expectedResults.size
 
-        for (int i = 0; i < testCount; i++) {
-            double progress = linearEasing.getProgress(new Easing(), i, testCount);
-            assertThat(progress, closeTo(expectedResults[i], 0.01d));
+        for (i in 0..testCount - 1) {
+            val progress = linearEasing.getProgress(Easing(), i, testCount)
+            assertThat(progress, closeTo(expectedResults[i], 0.01))
         }
     }
 }

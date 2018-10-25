@@ -1,91 +1,90 @@
-package io.sparkled.viewmodel.sequence.channel;
+package io.sparkled.viewmodel.sequence.channel
 
-import io.sparkled.model.animation.effect.Effect;
-import io.sparkled.viewmodel.ViewModel;
+import io.sparkled.model.animation.effect.Effect
+import io.sparkled.viewmodel.ViewModel
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.ArrayList
+import java.util.Objects
+import java.util.UUID
 
-public class SequenceChannelViewModel implements ViewModel {
+class SequenceChannelViewModel : ViewModel {
 
-    private UUID uuid;
-    private Integer sequenceId;
-    private UUID stagePropUuid;
-    private String name;
-    private Integer displayOrder;
-    private List<Effect> effects = new ArrayList<>();
+    private var uuid: UUID? = null
+    private var sequenceId: Integer? = null
+    private var stagePropUuid: UUID? = null
+    private var name: String? = null
+    private var displayOrder: Integer? = null
+    private var effects: List<Effect> = ArrayList()
 
-    public UUID getUuid() {
-        return uuid;
+    fun getUuid(): UUID {
+        return uuid
     }
 
-    public SequenceChannelViewModel setUuid(UUID uuid) {
-        this.uuid = uuid;
-        return this;
+    fun setUuid(uuid: UUID): SequenceChannelViewModel {
+        this.uuid = uuid
+        return this
     }
 
-    public Integer getSequenceId() {
-        return sequenceId;
+    fun getSequenceId(): Integer {
+        return sequenceId
     }
 
-    public SequenceChannelViewModel setSequenceId(Integer sequenceId) {
-        this.sequenceId = sequenceId;
-        return this;
+    fun setSequenceId(sequenceId: Integer): SequenceChannelViewModel {
+        this.sequenceId = sequenceId
+        return this
     }
 
-    public UUID getStagePropUuid() {
-        return stagePropUuid;
+    fun getStagePropUuid(): UUID {
+        return stagePropUuid
     }
 
-    public SequenceChannelViewModel setStagePropUuid(UUID stagePropUuid) {
-        this.stagePropUuid = stagePropUuid;
-        return this;
+    fun setStagePropUuid(stagePropUuid: UUID): SequenceChannelViewModel {
+        this.stagePropUuid = stagePropUuid
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public SequenceChannelViewModel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): SequenceChannelViewModel {
+        this.name = name
+        return this
     }
 
-    public Integer getDisplayOrder() {
-        return displayOrder;
+    fun getDisplayOrder(): Integer {
+        return displayOrder
     }
 
-    public SequenceChannelViewModel setDisplayOrder(Integer displayOrder) {
-        this.displayOrder = displayOrder;
-        return this;
+    fun setDisplayOrder(displayOrder: Integer): SequenceChannelViewModel {
+        this.displayOrder = displayOrder
+        return this
     }
 
-    public List<Effect> getEffects() {
-        return effects;
+    fun getEffects(): List<Effect> {
+        return effects
     }
 
-    public SequenceChannelViewModel setEffects(List<Effect> effects) {
-        this.effects = effects;
-        return this;
+    fun setEffects(effects: List<Effect>): SequenceChannelViewModel {
+        this.effects = effects
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SequenceChannelViewModel)) return false;
-        SequenceChannelViewModel that = (SequenceChannelViewModel) o;
+    fun equals(o: Object): Boolean {
+        if (this === o) return true
+        if (o !is SequenceChannelViewModel) return false
+        val that = o
         return Objects.equals(sequenceId, that.sequenceId) &&
                 Objects.equals(uuid, that.uuid) &&
                 Objects.equals(stagePropUuid, that.stagePropUuid) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(displayOrder, that.displayOrder) &&
-                Objects.equals(effects, that.effects);
+                Objects.equals(effects, that.effects)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(uuid, sequenceId, stagePropUuid, name, displayOrder, effects);
+    fun hashCode(): Int {
+        return Objects.hash(uuid, sequenceId, stagePropUuid, name, displayOrder, effects)
     }
 }

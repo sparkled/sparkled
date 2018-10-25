@@ -1,10 +1,12 @@
-package io.sparkled.model.setting;
+package io.sparkled.model.setting
 
-public interface SettingsConstants {
+interface SettingsConstants {
 
     interface BRIGHTNESS {
-        String CODE = "BRIGHTNESS";
-        int MIN = 0;
-        int MAX = 15;
+        companion object {
+            val CODE = "BRIGHTNESS"
+            val MIN = 0
+            val MAX = 15
+        }
     }
 }

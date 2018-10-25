@@ -1,42 +1,37 @@
-package io.sparkled.renderer.util;
+package io.sparkled.renderer.util
 
-import io.sparkled.model.animation.ChannelPropPair;
-import io.sparkled.model.animation.SequenceChannelEffects;
-import io.sparkled.model.entity.SequenceChannel;
-import io.sparkled.model.entity.StageProp;
-import io.sparkled.model.util.GsonProvider;
+import io.sparkled.model.animation.ChannelPropPair
+import io.sparkled.model.animation.SequenceChannelEffects
+import io.sparkled.model.entity.SequenceChannel
+import io.sparkled.model.entity.StageProp
+import io.sparkled.model.util.GsonProvider
+import java.util.UUID
 
-import java.util.List;
-import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors.toList
 
 /**
  * Pairs up sequence channels with their associated stage prop.
  */
-public class ChannelPropPairUtils {
+object ChannelPropPairUtils {
 
-    private ChannelPropPairUtils() {
-    }
-
-    public static List<ChannelPropPair> makePairs(List<SequenceChannel> sequenceChannels, List<StageProp> stageProps) {
+    fun makePairs(sequenceChannels: List<SequenceChannel>, stageProps: List<StageProp>): List<ChannelPropPair> {
         return sequenceChannels.stream()
-                .map(sc -> getPair(sc, stageProps))
-                .collect(toList());
+                .map({ sc -> getPair(sc, stageProps) })
+                .collect(toList())
     }
 
-    private static ChannelPropPair getPair(SequenceChannel sequenceChannel, List<StageProp> stageProps) {
-        return new ChannelPropPair(convertChannelData(sequenceChannel), findStagePropByUuid(stageProps, sequenceChannel.getStagePropUuid()));
+    private fun getPair(sequenceChannel: SequenceChannel, stageProps: List<StageProp>): ChannelPropPair {
+        return ChannelPropPair(convertChannelData(sequenceChannel), findStagePropByUuid(stageProps, sequenceChannel.getStagePropUuid()))
     }
 
-    private static SequenceChannelEffects convertChannelData(SequenceChannel sequenceChannel) {
-        return GsonProvider.get().fromJson(sequenceChannel.getChannelJson(), SequenceChannelEffects.class);
+    private fun convertChannelData(sequenceChannel: SequenceChannel): SequenceChannelEffects {
+        return GsonProvider.get().fromJson(sequenceChannel.getChannelJson(), SequenceChannelEffects::class.java)
     }
 
-    private static StageProp findStagePropByUuid(List<StageProp> stageProps, UUID uuid) {
+    private fun findStagePropByUuid(stageProps: List<StageProp>, uuid: UUID): StageProp {
         return stageProps.stream()
-                .filter(sp -> sp.getUuid().equals(uuid))
+                .filter({ sp -> sp.getUuid().equals(uuid) })
                 .findFirst()
-                .orElse(null);
+                .orElse(null)
     }
 }

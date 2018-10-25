@@ -1,88 +1,88 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.*
+import java.util.Objects
 
 @Entity
 @Table(name = "stage")
-public class Stage {
+class Stage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private var id: Integer? = null
 
     @Basic
     @Column(name = "name")
-    private String name;
+    private var name: String? = null
 
     @Basic
     @Column(name = "width")
-    private Integer width;
+    private var width: Integer? = null
 
     @Basic
     @Column(name = "height")
-    private Integer height;
+    private var height: Integer? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public Stage setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): Stage {
+        this.id = id
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public Stage setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): Stage {
+        this.name = name
+        return this
     }
 
-    public Integer getWidth() {
-        return width;
+    fun getWidth(): Integer {
+        return width
     }
 
-    public Stage setWidth(Integer width) {
-        this.width = width;
-        return this;
+    fun setWidth(width: Integer): Stage {
+        this.width = width
+        return this
     }
 
-    public Integer getHeight() {
-        return height;
+    fun getHeight(): Integer {
+        return height
     }
 
-    public Stage setHeight(Integer height) {
-        this.height = height;
-        return this;
+    fun setHeight(height: Integer): Stage {
+        this.height = height
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Stage stage = (Stage) o;
-        return Objects.equals(id, stage.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val stage = o
+        return Objects.equals(id, stage!!.id) &&
                 Objects.equals(name, stage.name) &&
                 Objects.equals(width, stage.width) &&
-                Objects.equals(height, stage.height);
+                Objects.equals(height, stage.height)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, width, height);
+    fun hashCode(): Int {
+        return Objects.hash(id, name, width, height)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "Stage{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", width=" + width +
                 ", height=" + height +
-                '}';
+                '}'
     }
 }

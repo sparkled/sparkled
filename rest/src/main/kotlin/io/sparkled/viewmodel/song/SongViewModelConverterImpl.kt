@@ -1,49 +1,43 @@
-package io.sparkled.viewmodel.song;
+package io.sparkled.viewmodel.song
 
-import io.sparkled.model.entity.Song;
-import io.sparkled.persistence.song.SongPersistenceService;
-import io.sparkled.viewmodel.exception.ViewModelConversionException;
+import io.sparkled.model.entity.Song
+import io.sparkled.persistence.song.SongPersistenceService
+import io.sparkled.viewmodel.exception.ViewModelConversionException
 
-import javax.inject.Inject;
+import javax.inject.Inject
 
-public class SongViewModelConverterImpl extends SongViewModelConverter {
-
-    private SongPersistenceService songPersistenceService;
-
-    @Inject
-    public SongViewModelConverterImpl(SongPersistenceService songPersistenceService) {
-        this.songPersistenceService = songPersistenceService;
-    }
+class SongViewModelConverterImpl @Inject
+constructor(private val songPersistenceService: SongPersistenceService) : SongViewModelConverter() {
 
     @Override
-    public SongViewModel toViewModel(Song model) {
-        return new SongViewModel()
+    fun toViewModel(model: Song): SongViewModel {
+        return SongViewModel()
                 .setId(model.getId())
                 .setName(model.getName())
                 .setArtist(model.getArtist())
                 .setAlbum(model.getAlbum())
-                .setDurationMs(model.getDurationMs());
+                .setDurationMs(model.getDurationMs())
     }
 
     @Override
-    public Song toModel(SongViewModel viewModel) {
-        final Integer songId = viewModel.getId();
-        Song model = getSong(songId);
+    fun toModel(viewModel: SongViewModel): Song {
+        val songId = viewModel.getId()
+        val model = getSong(songId)
 
         return model
                 .setId(viewModel.getId())
                 .setName(viewModel.getName())
                 .setArtist(viewModel.getArtist())
                 .setAlbum(viewModel.getAlbum())
-                .setDurationMs(viewModel.getDurationMs());
+                .setDurationMs(viewModel.getDurationMs())
     }
 
-    private Song getSong(Integer songId) {
+    private fun getSong(songId: Integer?): Song {
         if (songId == null) {
-            return new Song();
+            return Song()
         }
 
         return songPersistenceService.getSongById(songId)
-                .orElseThrow(() -> new ViewModelConversionException("Song with ID of '" + songId + "' not found."));
+                .orElseThrow({ ViewModelConversionException("Song with ID of '$songId' not found.") })
     }
 }

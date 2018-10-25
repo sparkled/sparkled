@@ -1,67 +1,66 @@
-package io.sparkled.model.animation.effect;
+package io.sparkled.model.animation.effect
 
-import io.sparkled.model.animation.param.HasParams;
-import io.sparkled.model.animation.param.Param;
+import io.sparkled.model.animation.param.HasParams
+import io.sparkled.model.animation.param.Param
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList
+import java.util.Objects
 
-public class EffectType implements HasParams {
+class EffectType : HasParams {
 
-    private EffectTypeCode code;
-    private String name;
-    private List<Param> params = new ArrayList<>();
+    private var code: EffectTypeCode? = null
+    private var name: String? = null
+    private var params: List<Param> = ArrayList()
 
-    public EffectTypeCode getCode() {
-        return code;
+    fun getCode(): EffectTypeCode {
+        return code
     }
 
-    public EffectType setCode(EffectTypeCode code) {
-        this.code = code;
-        return this;
+    fun setCode(code: EffectTypeCode): EffectType {
+        this.code = code
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public EffectType setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    @Override
-    public List<Param> getParams() {
-        return params;
-    }
-
-    public EffectType setParams(List<Param> params) {
-        this.params = params;
-        return this;
+    fun setName(name: String): EffectType {
+        this.name = name
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EffectType)) return false;
-        EffectType that = (EffectType) o;
-        return code == that.code &&
+    fun getParams(): List<Param> {
+        return params
+    }
+
+    fun setParams(params: List<Param>): EffectType {
+        this.params = params
+        return this
+    }
+
+    @Override
+    fun equals(o: Object): Boolean {
+        if (this === o) return true
+        if (o !is EffectType) return false
+        val that = o
+        return code === that.code &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(params, that.params);
+                Objects.equals(params, that.params)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(code, name, params);
+    fun hashCode(): Int {
+        return Objects.hash(code, name, params)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "EffectType{" +
                 "code=" + code +
                 ", name='" + name + '\'' +
                 ", params=" + params +
-                '}';
+                '}'
     }
 }

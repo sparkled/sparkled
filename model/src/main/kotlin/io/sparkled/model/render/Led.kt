@@ -1,85 +1,71 @@
-package io.sparkled.model.render;
+package io.sparkled.model.render
 
-import java.awt.*;
-import java.util.Objects;
+import java.awt.*
+import java.util.Objects
 
-public class Led {
+class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset: Int) {
+    private val index: Int
 
-    public static final int BYTES_PER_LED = 3;
-
-    private static final int R = 0;
-    private static final int G = 1;
-    private static final int B = 2;
-
-    private final byte[] ledData;
-    private final int ledNumber;
-    private final int index;
-    private final int offset;
-
-    public Led(byte[] ledData, int ledNumber, int offset) {
-        this.ledData = ledData;
-        this.ledNumber = ledNumber;
-        this.index = ledNumber * BYTES_PER_LED;
-        this.offset = offset;
+    init {
+        this.index = ledNumber * BYTES_PER_LED
     }
 
-    public void addColor(Color color) {
-        addRgb(color.getRed(), color.getGreen(), color.getBlue());
+    fun addColor(color: Color) {
+        addRgb(color.getRed(), color.getGreen(), color.getBlue())
     }
 
-    public void addRgb(int r, int g, int b) {
-        setR(Math.min(getR() + r, 255));
-        setG(Math.min(getG() + g, 255));
-        setB(Math.min(getB() + b, 255));
+    fun addRgb(r: Int, g: Int, b: Int) {
+        r = Math.min(r + r, 255)
+        g = Math.min(g + g, 255)
+        b = Math.min(b + b, 255)
     }
 
-    public int getLedNumber() {
-        return ledNumber;
-    }
-
-    public int getR() {
-        return ledData[offset + index + R] & 0xFF;
-    }
-
-    private void setR(int r) {
-        ledData[offset + index + R] = (byte) r;
-    }
-
-    public int getG() {
-        return ledData[offset + index + G] & 0xFF;
-    }
-
-    private void setG(int g) {
-        ledData[offset + index + G] = (byte) g;
-    }
-
-    public int getB() {
-        return ledData[offset + index + B] & 0xFF;
-    }
-
-    private void setB(int b) {
-        ledData[offset + index + B] = (byte) b;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (!(o instanceof Led)) {
-            return false;
+    var r: Int
+        get() = ledData[offset + index + R] and 0xFF
+        private set(r) {
+            ledData[offset + index + R] = r.toByte()
         }
 
-        Led led = (Led) o;
-        return getR() == led.getR() && getG() == led.getG() && getB() == led.getB();
+    var g: Int
+        get() = ledData[offset + index + G] and 0xFF
+        private set(g) {
+            ledData[offset + index + G] = g.toByte()
+        }
+
+    var b: Int
+        get() = ledData[offset + index + B] and 0xFF
+        private set(b) {
+            ledData[offset + index + B] = b.toByte()
+        }
+
+    @Override
+    fun equals(o: Object): Boolean {
+        if (this === o) {
+            return true
+        } else if (o !is Led) {
+            return false
+        }
+
+        val led = o
+        return r == led.r && g == led.g && b == led.b
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getR(), getG(), getB());
+    fun hashCode(): Int {
+        return Objects.hash(r, g, b)
     }
 
     @Override
-    public String toString() {
-        return String.format("#%02X%02X%02X", getR(), getG(), getB());
+    fun toString(): String {
+        return String.format("#%02X%02X%02X", r, g, b)
+    }
+
+    companion object {
+
+        val BYTES_PER_LED = 3
+
+        private val R = 0
+        private val G = 1
+        private val B = 2
     }
 }

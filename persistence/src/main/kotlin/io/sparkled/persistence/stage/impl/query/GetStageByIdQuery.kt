@@ -1,26 +1,20 @@
-package io.sparkled.persistence.stage.impl.query;
+package io.sparkled.persistence.stage.impl.query
 
-import io.sparkled.model.entity.Stage;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import io.sparkled.model.entity.Stage
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
 
-import java.util.Optional;
+import java.util.Optional
 
-public class GetStageByIdQuery implements PersistenceQuery<Optional<Stage>> {
-
-    private final int stageId;
-
-    public GetStageByIdQuery(int stageId) {
-        this.stageId = stageId;
-    }
+class GetStageByIdQuery(private val stageId: Int) : PersistenceQuery<Optional<Stage>> {
 
     @Override
-    public Optional<Stage> perform(QueryFactory queryFactory) {
-        final Stage stage = queryFactory
+    fun perform(queryFactory: QueryFactory): Optional<Stage> {
+        val stage = queryFactory
                 .selectFrom(qStage)
                 .where(qStage.id.eq(stageId))
-                .fetchFirst();
+                .fetchFirst()
 
-        return Optional.ofNullable(stage);
+        return Optional.ofNullable(stage)
     }
 }

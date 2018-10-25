@@ -1,69 +1,68 @@
-package io.sparkled.model.animation.param;
+package io.sparkled.model.animation.param
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList
+import java.util.Objects
 
-public class Param {
+class Param {
 
-    private ParamName name;
-    private ParamType type;
-    private List<String> value = new ArrayList<>();
+    private var name: ParamName? = null
+    private var type: ParamType? = null
+    private var value: List<String> = ArrayList()
 
-    public ParamName getName() {
-        return name;
+    fun getName(): ParamName {
+        return name
     }
 
-    public Param setName(ParamName name) {
-        this.name = name;
-        return this;
+    fun setName(name: ParamName): Param {
+        this.name = name
+        return this
     }
 
-    public ParamType getType() {
-        return type;
+    fun getType(): ParamType {
+        return type
     }
 
-    public Param setType(ParamType type) {
-        this.type = type;
-        return this;
+    fun setType(type: ParamType): Param {
+        this.type = type
+        return this
     }
 
-    public List<String> getValue() {
-        return value;
+    fun getValue(): List<String> {
+        return value
     }
 
-    public Param setValue(List<String> value) {
-        this.value = value;
-        return this;
+    fun setValue(value: List<String>): Param {
+        this.value = value
+        return this
     }
 
-    public Param setValue(Object value) {
-        this.value = new ArrayList<>();
-        this.value.add(String.valueOf(value));
-        return this;
+    fun setValue(value: Object): Param {
+        this.value = ArrayList()
+        this.value.add(String.valueOf(value))
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Param)) return false;
-        Param that = (Param) o;
+    fun equals(o: Object): Boolean {
+        if (this === o) return true
+        if (o !is Param) return false
+        val that = o
         return Objects.equals(name, that.name) &&
-                type == that.type &&
-                Objects.equals(value, that.value);
+                type === that.type &&
+                Objects.equals(value, that.value)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, type, value);
+    fun hashCode(): Int {
+        return Objects.hash(name, type, value)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "Param{" +
                 "name='" + name + '\'' +
                 ", type=" + type +
                 ", value=" + value +
-                '}';
+                '}'
     }
 }

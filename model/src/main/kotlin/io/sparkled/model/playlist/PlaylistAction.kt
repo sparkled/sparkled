@@ -1,49 +1,48 @@
-package io.sparkled.model.playlist;
+package io.sparkled.model.playlist
 
-import java.util.Objects;
+import java.util.Objects
 
-public class PlaylistAction {
+class PlaylistAction {
 
-    private PlaylistActionType type;
-    private Integer playlistId;
+    private var type: PlaylistActionType? = null
+    private var playlistId: Integer? = null
 
-    public PlaylistActionType getType() {
-        return type;
+    fun getType(): PlaylistActionType {
+        return type
     }
 
-    public PlaylistAction setType(PlaylistActionType type) {
-        this.type = type;
-        return this;
+    fun setType(type: PlaylistActionType): PlaylistAction {
+        this.type = type
+        return this
     }
 
-    public Integer getPlaylistId() {
-        return playlistId;
+    fun getPlaylistId(): Integer {
+        return playlistId
     }
 
-    public PlaylistAction setPlaylistId(Integer playlistId) {
-        this.playlistId = playlistId;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlaylistAction that = (PlaylistAction) o;
-        return type == that.type &&
-                Objects.equals(playlistId, that.playlistId);
+    fun setPlaylistId(playlistId: Integer): PlaylistAction {
+        this.playlistId = playlistId
+        return this
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(type, playlistId);
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return type === that!!.type && Objects.equals(playlistId, that!!.playlistId)
     }
 
     @Override
-    public String toString() {
+    fun hashCode(): Int {
+        return Objects.hash(type, playlistId)
+    }
+
+    @Override
+    fun toString(): String {
         return "PlaylistAction{" +
                 "type=" + type +
                 ", playlistId=" + playlistId +
-                '}';
+                '}'
     }
 }

@@ -1,5 +1,5 @@
-package io.sparkled.model.animation.fill;
+package io.sparkled.model.animation.fill
 
-public enum FillTypeCode {
+enum class FillTypeCode {
     RAINBOW, SOLID
 }

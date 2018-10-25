@@ -1,124 +1,131 @@
-package io.sparkled.rest;
+package io.sparkled.rest
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.inject.Injector;
-import io.sparkled.rest.jetty.JerseyResourceConfig;
-import io.sparkled.rest.jetty.TryFilesFilter;
-import org.eclipse.jetty.http.HttpMethod;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.gzip.GzipHandler;
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.eclipse.jetty.util.resource.Resource;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.servlet.ServletContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.util.concurrent.ThreadFactoryBuilder
+import com.google.inject.Injector
+import io.sparkled.rest.jetty.JerseyResourceConfig
+import io.sparkled.rest.jetty.TryFilesFilter
+import org.eclipse.jetty.http.HttpMethod
+import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.handler.gzip.GzipHandler
+import org.eclipse.jetty.servlet.DefaultServlet
+import org.eclipse.jetty.servlet.FilterHolder
+import org.eclipse.jetty.servlet.ServletContextHandler
+import org.eclipse.jetty.servlet.ServletHolder
+import org.eclipse.jetty.servlets.CrossOriginFilter
+import org.eclipse.jetty.util.resource.Resource
+import org.glassfish.jersey.media.multipart.MultiPartFeature
+import org.glassfish.jersey.servlet.ServletContainer
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import javax.inject.Inject;
-import javax.servlet.DispatcherType;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.EnumSet;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import javax.inject.Inject
+import javax.servlet.DispatcherType
+import java.net.MalformedURLException
+import java.net.URI
+import java.net.URISyntaxException
+import java.net.URL
+import java.util.EnumSet
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-public class RestApiServerImpl implements RestApiServer {
+class RestApiServerImpl @Inject
+constructor(injector: Injector) : RestApiServer {
+    private val executor: ExecutorService
+    private var started: Boolean = false
 
-    private static final Logger logger = LoggerFactory.getLogger(RestApiServerImpl.class);
-    private static final String REST_PATH = "/rest/*";
-    private final ExecutorService executor;
-    private boolean started;
-
-    @Inject
-    public RestApiServerImpl(Injector injector) {
-        JerseyResourceConfig.setInjector(injector);
+    init {
+        JerseyResourceConfig.setInjector(injector)
 
         this.executor = Executors.newSingleThreadExecutor(
-                new ThreadFactoryBuilder().setNameFormat("rest-api-server-%d").build()
-        );
+                ThreadFactoryBuilder().setNameFormat("rest-api-server-%d").build()
+        )
     }
 
     @Override
-    public void start(int port) throws Exception {
+    @Throws(Exception::class)
+    fun start(port: Int) {
         if (started) {
-            logger.warn("Attempted to start REST API server, but it is already running.");
-            return;
+            logger.warn("Attempted to start REST API server, but it is already running.")
+            return
         }
 
-        executor.submit(() -> startServer(port));
-        logger.info("Started REST API server at port {}.", port);
-        started = true;
+        executor.submit({ startServer(port) })
+        logger.info("Started REST API server at port {}.", port)
+        started = true
     }
 
-    private void startServer(int port) {
-        Server jettyServer = new Server(port);
+    private fun startServer(port: Int) {
+        val jettyServer = Server(port)
 
-        ServletContextHandler context = createContextHandler();
-        addStaticResourceConfig(context);
-        addJerseyServlet(context);
-        addCorsFilter(context);
+        val context = createContextHandler()
+        addStaticResourceConfig(context)
+        addJerseyServlet(context)
+        addCorsFilter(context)
 
-        jettyServer.setHandler(context);
-        startJetty(jettyServer);
+        jettyServer.setHandler(context)
+        startJetty(jettyServer)
     }
 
-    private ServletContextHandler createContextHandler() {
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-        context.addServlet(DefaultServlet.class, "/");
-        return context;
+    private fun createContextHandler(): ServletContextHandler {
+        val context = ServletContextHandler(ServletContextHandler.SESSIONS)
+        context.setContextPath("/")
+        context.addServlet(DefaultServlet::class.java, "/")
+        return context
     }
 
-    private void addStaticResourceConfig(ServletContextHandler context) {
-        URL webappLocation = getClass().getResource("/webapp/index.html");
+    private fun addStaticResourceConfig(context: ServletContextHandler) {
+        val webappLocation = getClass().getResource("/webapp/index.html")
         if (webappLocation == null) {
-            logger.warn("Failed to retrieve webapp location, the webapp was likely omitted from this build.");
+            logger.warn("Failed to retrieve webapp location, the webapp was likely omitted from this build.")
         } else {
             try {
-                URI webRootUri = URI.create(webappLocation.toURI().toASCIIString().replaceFirst("/index.html$", "/"));
-                context.setBaseResource(Resource.newResource(webRootUri));
-                context.setWelcomeFiles(new String[]{"index.html"});
+                val webRootUri = URI.create(webappLocation!!.toURI().toASCIIString().replaceFirst("/index.html$", "/"))
+                context.setBaseResource(Resource.newResource(webRootUri))
+                context.setWelcomeFiles(arrayOf("index.html"))
 
-                GzipHandler gzipHandler = new GzipHandler();
-                gzipHandler.setIncludedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name());
-                context.setGzipHandler(gzipHandler);
-                context.addFilter(TryFilesFilter.class, "*", EnumSet.of(DispatcherType.REQUEST));
-            } catch (URISyntaxException | MalformedURLException e) {
-                e.printStackTrace();
+                val gzipHandler = GzipHandler()
+                gzipHandler.setIncludedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name())
+                context.setGzipHandler(gzipHandler)
+                context.addFilter(TryFilesFilter::class.java, "*", EnumSet.of(DispatcherType.REQUEST))
+            } catch (e: URISyntaxException) {
+                e.printStackTrace()
+            } catch (e: MalformedURLException) {
+                e.printStackTrace()
             }
+
         }
     }
 
-    private void addJerseyServlet(ServletContextHandler context) {
-        ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, REST_PATH);
-        jerseyServlet.setInitParameter("jersey.config.server.provider.packages", getClass().getPackage().getName());
-        jerseyServlet.setInitParameter("jersey.config.server.provider.classnames", MultiPartFeature.class.getName());
-        jerseyServlet.setInitParameter("javax.ws.rs.Application", JerseyResourceConfig.class.getName());
-        jerseyServlet.setInitOrder(0);
+    private fun addJerseyServlet(context: ServletContextHandler) {
+        val jerseyServlet = context.addServlet(ServletContainer::class.java, REST_PATH)
+        jerseyServlet.setInitParameter("jersey.config.server.provider.packages", getClass().getPackage().getName())
+        jerseyServlet.setInitParameter("jersey.config.server.provider.classnames", MultiPartFeature::class.java!!.getName())
+        jerseyServlet.setInitParameter("javax.ws.rs.Application", JerseyResourceConfig::class.java!!.getName())
+        jerseyServlet.setInitOrder(0)
     }
 
-    private void addCorsFilter(ServletContextHandler context) {
-        FilterHolder corsFilter = context.addFilter(CrossOriginFilter.class, REST_PATH, EnumSet.of(DispatcherType.REQUEST));
-        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
-        corsFilter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
-        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "DELETE,GET,POST,PUT");
-        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin");
+    private fun addCorsFilter(context: ServletContextHandler) {
+        val corsFilter = context.addFilter(CrossOriginFilter::class.java, REST_PATH, EnumSet.of(DispatcherType.REQUEST))
+        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*")
+        corsFilter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*")
+        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "DELETE,GET,POST,PUT")
+        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin")
     }
 
-    private void startJetty(Server jettyServer) {
+    private fun startJetty(jettyServer: Server) {
         try {
-            jettyServer.start();
-            jettyServer.join();
-        } catch (Exception e) {
-            logger.error("Encountered an unexpected exception.", e);
+            jettyServer.start()
+            jettyServer.join()
+        } catch (e: Exception) {
+            logger.error("Encountered an unexpected exception.", e)
         } finally {
-            jettyServer.destroy();
+            jettyServer.destroy()
         }
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(RestApiServerImpl::class.java)
+        private val REST_PATH = "/rest/*"
     }
 }

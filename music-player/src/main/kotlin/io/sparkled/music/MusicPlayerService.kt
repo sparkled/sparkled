@@ -1,39 +1,39 @@
-package io.sparkled.music;
+package io.sparkled.music
 
-import io.sparkled.model.entity.SongAudio;
-import javazoom.jl.player.advanced.PlaybackEvent;
+import io.sparkled.model.entity.SongAudio
+import javazoom.jl.player.advanced.PlaybackEvent
 
-import javax.sound.sampled.LineListener;
-import java.util.function.Consumer;
+import javax.sound.sampled.LineListener
+import java.util.function.Consumer
 
 /**
- * Plays {@link SongAudio} data and provides a means of determining song progress.
+ * Plays [SongAudio] data and provides a means of determining song progress.
  */
-public interface MusicPlayerService {
+interface MusicPlayerService {
 
     /**
      * Attaches a listener that will be notified when a sequence is finished playing or is stopped by a call to
-     * {@link #stopPlayback()}.
-     *
+     * [.stopPlayback].
+
      * @param listener The listener to attach
      */
-    void addLineListener(LineListener listener);
+    fun addLineListener(listener: LineListener)
 
     /**
      * Plays the provided audio data. Calls to this method will block until playback has completed. Therefore, it is the
      * requirement of the caller to run this method in a new thread.
-     *
-     * @param playbackState A playback state containing the {@link SongAudio} data to be played.
+
+     * @param playbackState A playback state containing the [SongAudio] data to be played.
      */
-    void play(PlaybackState playbackState);
+    fun play(playbackState: PlaybackState)
 
     /**
      * @return A normalised value between 0 and 1 indicating the playback progress of the current sequence.
      */
-    double getSequenceProgress();
+    val sequenceProgress: Double
 
     /**
      * Stops playback of the current sequence. If no sequence is playing, this is a no-op.
      */
-    void stopPlayback();
+    fun stopPlayback()
 }

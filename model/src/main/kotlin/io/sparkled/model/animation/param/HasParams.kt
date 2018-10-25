@@ -1,7 +1,5 @@
-package io.sparkled.model.animation.param;
+package io.sparkled.model.animation.param
 
-import java.util.List;
-
-public interface HasParams {
-    List<Param> getParams();
+interface HasParams {
+    val params: List<Param>
 }

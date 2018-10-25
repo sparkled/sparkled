@@ -1,22 +1,16 @@
-package io.sparkled.viewmodel.stage.prop;
+package io.sparkled.viewmodel.stage.prop
 
-import io.sparkled.model.entity.StageProp;
-import io.sparkled.persistence.stage.StagePersistenceService;
+import io.sparkled.model.entity.StageProp
+import io.sparkled.persistence.stage.StagePersistenceService
 
-import javax.inject.Inject;
+import javax.inject.Inject
 
-public class StagePropViewModelConverterImpl extends StagePropViewModelConverter {
-
-    private StagePersistenceService stagePersistenceService;
-
-    @Inject
-    public StagePropViewModelConverterImpl(StagePersistenceService stagePersistenceService) {
-        this.stagePersistenceService = stagePersistenceService;
-    }
+class StagePropViewModelConverterImpl @Inject
+constructor(private val stagePersistenceService: StagePersistenceService) : StagePropViewModelConverter() {
 
     @Override
-    public StagePropViewModel toViewModel(StageProp model) {
-        return new StagePropViewModel()
+    fun toViewModel(model: StageProp): StagePropViewModel {
+        return StagePropViewModel()
                 .setUuid(model.getUuid())
                 .setStageId(model.getStageId())
                 .setCode(model.getCode())
@@ -28,13 +22,13 @@ public class StagePropViewModelConverterImpl extends StagePropViewModelConverter
                 .setScaleX(model.getScaleX())
                 .setScaleY(model.getScaleY())
                 .setRotation(model.getRotation())
-                .setDisplayOrder(model.getDisplayOrder());
+                .setDisplayOrder(model.getDisplayOrder())
     }
 
     @Override
-    public StageProp toModel(StagePropViewModel viewModel) {
-        StageProp model = stagePersistenceService.getStagePropByUuid(viewModel.getStageId(), viewModel.getUuid())
-                .orElseGet(StageProp::new);
+    fun toModel(viewModel: StagePropViewModel): StageProp {
+        val model = stagePersistenceService.getStagePropByUuid(viewModel.getStageId(), viewModel.getUuid())
+                .orElseGet(???({ StageProp() }))
 
         return model
                 .setUuid(viewModel.getUuid())
@@ -48,6 +42,6 @@ public class StagePropViewModelConverterImpl extends StagePropViewModelConverter
                 .setScaleX(viewModel.getScaleX())
                 .setScaleY(viewModel.getScaleY())
                 .setRotation(viewModel.getRotation())
-                .setDisplayOrder(viewModel.getDisplayOrder());
+                .setDisplayOrder(viewModel.getDisplayOrder())
     }
 }

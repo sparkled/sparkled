@@ -1,103 +1,103 @@
-package io.sparkled.viewmodel.sequence.search;
+package io.sparkled.viewmodel.sequence.search
 
-import io.sparkled.model.entity.SequenceStatus;
-import io.sparkled.viewmodel.ViewModel;
+import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects;
+import java.util.Objects
 
-public class SequenceSearchViewModel implements ViewModel {
-    private Integer id;
-    private String name;
-    private String songName;
-    private String stageName;
-    private Integer framesPerSecond;
-    private Integer durationSeconds;
-    private SequenceStatus status;
+class SequenceSearchViewModel : ViewModel {
+    private var id: Integer? = null
+    private var name: String? = null
+    private var songName: String? = null
+    private var stageName: String? = null
+    private var framesPerSecond: Integer? = null
+    private var durationSeconds: Integer? = null
+    private var status: SequenceStatus? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public SequenceSearchViewModel setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): SequenceSearchViewModel {
+        this.id = id
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public SequenceSearchViewModel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): SequenceSearchViewModel {
+        this.name = name
+        return this
     }
 
-    public String getSongName() {
-        return songName;
+    fun getSongName(): String {
+        return songName
     }
 
-    public SequenceSearchViewModel setSongName(String songName) {
-        this.songName = songName;
-        return this;
+    fun setSongName(songName: String): SequenceSearchViewModel {
+        this.songName = songName
+        return this
     }
 
-    public String getStageName() {
-        return stageName;
+    fun getStageName(): String {
+        return stageName
     }
 
-    public SequenceSearchViewModel setStageName(String stageName) {
-        this.stageName = stageName;
-        return this;
+    fun setStageName(stageName: String): SequenceSearchViewModel {
+        this.stageName = stageName
+        return this
     }
 
-    public Integer getFramesPerSecond() {
-        return framesPerSecond;
+    fun getFramesPerSecond(): Integer {
+        return framesPerSecond
     }
 
-    public SequenceSearchViewModel setFramesPerSecond(Integer framesPerSecond) {
-        this.framesPerSecond = framesPerSecond;
-        return this;
+    fun setFramesPerSecond(framesPerSecond: Integer): SequenceSearchViewModel {
+        this.framesPerSecond = framesPerSecond
+        return this
     }
 
-    public Integer getDurationSeconds() {
-        return durationSeconds;
+    fun getDurationSeconds(): Integer {
+        return durationSeconds
     }
 
-    public SequenceSearchViewModel setDurationSeconds(Integer durationSeconds) {
-        this.durationSeconds = durationSeconds;
-        return this;
+    fun setDurationSeconds(durationSeconds: Integer): SequenceSearchViewModel {
+        this.durationSeconds = durationSeconds
+        return this
     }
 
-    public SequenceStatus getStatus() {
-        return status;
+    fun getStatus(): SequenceStatus {
+        return status
     }
 
-    public SequenceSearchViewModel setStatus(SequenceStatus status) {
-        this.status = status;
-        return this;
+    fun setStatus(status: SequenceStatus): SequenceSearchViewModel {
+        this.status = status
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SequenceSearchViewModel that = (SequenceSearchViewModel) o;
-        return Objects.equals(id, that.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(id, that!!.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(songName, that.songName) &&
                 Objects.equals(stageName, that.stageName) &&
                 Objects.equals(framesPerSecond, that.framesPerSecond) &&
                 Objects.equals(durationSeconds, that.durationSeconds) &&
-                status == that.status;
+                status === that.status
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, songName, stageName, framesPerSecond, durationSeconds, status);
+    fun hashCode(): Int {
+        return Objects.hash(id, name, songName, stageName, framesPerSecond, durationSeconds, status)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "SequenceSearchViewModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
@@ -106,6 +106,6 @@ public class SequenceSearchViewModel implements ViewModel {
                 ", framesPerSecond=" + framesPerSecond +
                 ", durationSeconds=" + durationSeconds +
                 ", status=" + status +
-                '}';
+                '}'
     }
 }

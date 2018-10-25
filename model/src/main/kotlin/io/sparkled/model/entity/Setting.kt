@@ -1,57 +1,56 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.*
+import java.util.Objects
 
 @Entity
 @Table(name = "setting")
-public class Setting {
+class Setting {
 
     @Id
     @Column(name = "code")
-    private String code;
+    private var code: String? = null
 
     @Basic
     @Column(name = "value")
-    private String value;
+    private var value: String? = null
 
-    public String getCode() {
-        return code;
+    fun getCode(): String {
+        return code
     }
 
-    public Setting setCode(String code) {
-        this.code = code;
-        return this;
+    fun setCode(code: String): Setting {
+        this.code = code
+        return this
     }
 
-    public String getValue() {
-        return value;
+    fun getValue(): String {
+        return value
     }
 
-    public Setting setValue(String value) {
-        this.value = value;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Setting setting = (Setting) o;
-        return Objects.equals(code, setting.code) &&
-                Objects.equals(value, setting.value);
+    fun setValue(value: String): Setting {
+        this.value = value
+        return this
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(code, value);
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val setting = o
+        return Objects.equals(code, setting!!.code) && Objects.equals(value, setting.value)
     }
 
     @Override
-    public String toString() {
+    fun hashCode(): Int {
+        return Objects.hash(code, value)
+    }
+
+    @Override
+    fun toString(): String {
         return "Setting{" +
                 "code='" + code + '\'' +
                 ", value='" + value + '\'' +
-                '}';
+                '}'
     }
 }

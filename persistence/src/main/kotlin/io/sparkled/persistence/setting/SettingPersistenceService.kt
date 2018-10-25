@@ -1,8 +1,8 @@
-package io.sparkled.persistence.setting;
+package io.sparkled.persistence.setting
 
-import io.sparkled.model.setting.SettingsCache;
+import io.sparkled.model.setting.SettingsCache
 
-public interface SettingPersistenceService {
+interface SettingPersistenceService {
 
-    SettingsCache getSettings();
+    val settings: SettingsCache
 }

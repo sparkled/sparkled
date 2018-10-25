@@ -1,9 +1,7 @@
-package io.sparkled.viewmodel.sequence;
+package io.sparkled.viewmodel.sequence
 
-import io.sparkled.model.entity.Sequence;
-import io.sparkled.viewmodel.ModelConverter;
-import io.sparkled.viewmodel.ViewModelConverter;
+import io.sparkled.model.entity.Sequence
+import io.sparkled.viewmodel.ModelConverter
+import io.sparkled.viewmodel.ViewModelConverter
 
-public abstract class SequenceViewModelConverter implements ModelConverter<Sequence, SequenceViewModel>,
-        ViewModelConverter<SequenceViewModel, Sequence> {
-}
+abstract class SequenceViewModelConverter : ModelConverter<Sequence, SequenceViewModel>, ViewModelConverter<SequenceViewModel, Sequence>

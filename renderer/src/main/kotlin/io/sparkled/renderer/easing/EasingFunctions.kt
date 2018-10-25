@@ -1,22 +1,21 @@
-package io.sparkled.renderer.easing;
+package io.sparkled.renderer.easing
 
-import io.sparkled.model.animation.easing.EasingTypeCode;
-import io.sparkled.renderer.easing.function.ConstantEasing;
-import io.sparkled.renderer.easing.function.LinearEasing;
+import io.sparkled.model.animation.easing.EasingTypeCode
+import io.sparkled.renderer.easing.function.ConstantEasing
+import io.sparkled.renderer.easing.function.LinearEasing
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashMap
 
-public class EasingFunctions {
+object EasingFunctions {
 
-    private static Map<EasingTypeCode, EasingFunction> functions = new HashMap<>();
+    private val functions = HashMap()
 
-    static {
-        functions.put(EasingTypeCode.LINEAR, new LinearEasing());
-        functions.put(EasingTypeCode.CONSTANT, new ConstantEasing());
+    init {
+        functions.put(EasingTypeCode.LINEAR, LinearEasing())
+        functions.put(EasingTypeCode.CONSTANT, ConstantEasing())
     }
 
-    public static EasingFunction get(EasingTypeCode easingType) {
-        return functions.get(easingType);
+    operator fun get(easingType: EasingTypeCode): EasingFunction {
+        return functions.get(easingType)
     }
 }

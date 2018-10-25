@@ -1,51 +1,45 @@
-package io.sparkled.util.matchers;
+package io.sparkled.util.matchers
 
-import io.sparkled.model.render.Led;
-import io.sparkled.model.render.RenderedFrame;
-import io.sparkled.util.LedTestUtils;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
+import io.sparkled.model.render.Led
+import io.sparkled.model.render.RenderedFrame
+import io.sparkled.util.LedTestUtils
+import org.hamcrest.Description
+import org.hamcrest.TypeSafeMatcher
 
 /**
  * Convenience matcher for verifying the LEDs in a rendered frame.
  */
-public class RenderedFrameLedMatcher extends TypeSafeMatcher<RenderedFrame> {
+class RenderedFrameLedMatcher internal constructor(private val leds: IntArray) : TypeSafeMatcher<RenderedFrame>() {
 
-    private int[] leds;
-
-    RenderedFrameLedMatcher(int[] leds) {
-        this.leds = leds;
+    @Override
+    fun describeTo(description: Description) {
+        val value = LedTestUtils.toLedString(leds)
+        description.appendText("is ").appendValue(value)
     }
 
     @Override
-    public void describeTo(final Description description) {
-        String value = LedTestUtils.toLedString(leds);
-        description.appendText("is ").appendValue(value);
+    protected fun describeMismatchSafely(frame: RenderedFrame, mismatchDescription: Description) {
+        val value = LedTestUtils.toLedString(frame)
+        mismatchDescription.appendText("was ").appendValue(value)
     }
 
     @Override
-    protected void describeMismatchSafely(final RenderedFrame frame, final Description mismatchDescription) {
-        String value = LedTestUtils.toLedString(frame);
-        mismatchDescription.appendText("was ").appendValue(value);
-    }
-
-    @Override
-    protected boolean matchesSafely(final RenderedFrame frame) {
-        if (frame.getLedCount() != leds.length) {
-            return false;
+    protected fun matchesSafely(frame: RenderedFrame): Boolean {
+        if (frame.getLedCount() !== leds.size) {
+            return false
         }
 
-        for (int i = 0; i < frame.getLedCount(); i++) {
-            Led led = frame.getLed(i);
-            boolean rMatches = led.getR() == (leds[i] & 0xFF0000) >> 16;
-            boolean gMatches = led.getG() == (leds[i] & 0x00FF00) >> 8;
-            boolean bMatches = led.getB() == (leds[i] & 0x0000FF);
+        for (i in 0..frame.getLedCount() - 1) {
+            val led = frame.getLed(i)
+            val rMatches = led.getR() === leds[i] and 0xFF0000 shr 16
+            val gMatches = led.getG() === leds[i] and 0x00FF00 shr 8
+            val bMatches = led.getB() === leds[i] and 0x0000FF
 
             if (!rMatches || !gMatches || !bMatches) {
-                return false;
+                return false
             }
         }
 
-        return true;
+        return true
     }
 }

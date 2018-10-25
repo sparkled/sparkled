@@ -1,51 +1,50 @@
-package io.sparkled.viewmodel.stage.search;
+package io.sparkled.viewmodel.stage.search
 
-import io.sparkled.viewmodel.ViewModel;
+import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects;
+import java.util.Objects
 
-public class StageSearchViewModel implements ViewModel {
-    private Integer id;
-    private String name;
+class StageSearchViewModel : ViewModel {
+    private var id: Integer? = null
+    private var name: String? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public StageSearchViewModel setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): StageSearchViewModel {
+        this.id = id
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public StageSearchViewModel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): StageSearchViewModel {
+        this.name = name
+        return this
     }
 
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StageSearchViewModel that = (StageSearchViewModel) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name);
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(id, that!!.id) && Objects.equals(name, that.name)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    fun hashCode(): Int {
+        return Objects.hash(id, name)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "StageSearchViewModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                '}';
+                '}'
     }
 }

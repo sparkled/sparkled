@@ -1,111 +1,111 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.*
+import java.util.Objects
 
 @Entity
 @Table(name = "sequence")
-public class Sequence {
+class Sequence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private var id: Integer? = null
 
     @Basic
     @Column(name = "song_id")
-    private Integer songId;
+    private var songId: Integer? = null
 
     @Basic
     @Column(name = "stage_id")
-    private Integer stageId;
+    private var stageId: Integer? = null
 
     @Basic
     @Column(name = "name")
-    private String name;
+    private var name: String? = null
 
     @Basic
     @Column(name = "frames_per_second")
-    private Integer framesPerSecond;
+    private var framesPerSecond: Integer? = null
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private SequenceStatus status;
+    private var status: SequenceStatus? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public Sequence setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): Sequence {
+        this.id = id
+        return this
     }
 
-    public Integer getSongId() {
-        return songId;
+    fun getSongId(): Integer {
+        return songId
     }
 
-    public Sequence setSongId(Integer songId) {
-        this.songId = songId;
-        return this;
+    fun setSongId(songId: Integer): Sequence {
+        this.songId = songId
+        return this
     }
 
-    public Integer getStageId() {
-        return stageId;
+    fun getStageId(): Integer {
+        return stageId
     }
 
-    public Sequence setStageId(Integer stageId) {
-        this.stageId = stageId;
-        return this;
+    fun setStageId(stageId: Integer): Sequence {
+        this.stageId = stageId
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public Sequence setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): Sequence {
+        this.name = name
+        return this
     }
 
-    public Integer getFramesPerSecond() {
-        return framesPerSecond;
+    fun getFramesPerSecond(): Integer {
+        return framesPerSecond
     }
 
-    public Sequence setFramesPerSecond(Integer framesPerSecond) {
-        this.framesPerSecond = framesPerSecond;
-        return this;
+    fun setFramesPerSecond(framesPerSecond: Integer): Sequence {
+        this.framesPerSecond = framesPerSecond
+        return this
     }
 
-    public SequenceStatus getStatus() {
-        return status;
+    fun getStatus(): SequenceStatus {
+        return status
     }
 
-    public Sequence setStatus(SequenceStatus status) {
-        this.status = status;
-        return this;
+    fun setStatus(status: SequenceStatus): Sequence {
+        this.status = status
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Sequence sequence = (Sequence) o;
-        return Objects.equals(id, sequence.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val sequence = o
+        return Objects.equals(id, sequence!!.id) &&
                 Objects.equals(songId, sequence.songId) &&
                 Objects.equals(stageId, sequence.stageId) &&
                 Objects.equals(name, sequence.name) &&
                 Objects.equals(framesPerSecond, sequence.framesPerSecond) &&
-                status == sequence.status;
+                status === sequence.status
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, songId, stageId, name, framesPerSecond, status);
+    fun hashCode(): Int {
+        return Objects.hash(id, songId, stageId, name, framesPerSecond, status)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "Sequence{" +
                 "id=" + id +
                 ", songId=" + songId +
@@ -113,6 +113,6 @@ public class Sequence {
                 ", name='" + name + '\'' +
                 ", framesPerSecond=" + framesPerSecond +
                 ", status=" + status +
-                '}';
+                '}'
     }
 }

@@ -1,89 +1,88 @@
-package io.sparkled.viewmodel.stage;
+package io.sparkled.viewmodel.stage
 
-import io.sparkled.viewmodel.ViewModel;
-import io.sparkled.viewmodel.stage.prop.StagePropViewModel;
+import io.sparkled.viewmodel.ViewModel
+import io.sparkled.viewmodel.stage.prop.StagePropViewModel
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList
+import java.util.Objects
 
-public class StageViewModel implements ViewModel {
-    private Integer id;
-    private String name;
-    private Integer width;
-    private Integer height;
-    private List<StagePropViewModel> stageProps = new ArrayList<>();
+class StageViewModel : ViewModel {
+    private var id: Integer? = null
+    private var name: String? = null
+    private var width: Integer? = null
+    private var height: Integer? = null
+    private var stageProps: List<StagePropViewModel> = ArrayList()
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public StageViewModel setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): StageViewModel {
+        this.id = id
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public StageViewModel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): StageViewModel {
+        this.name = name
+        return this
     }
 
-    public Integer getWidth() {
-        return width;
+    fun getWidth(): Integer {
+        return width
     }
 
-    public StageViewModel setWidth(Integer width) {
-        this.width = width;
-        return this;
+    fun setWidth(width: Integer): StageViewModel {
+        this.width = width
+        return this
     }
 
-    public Integer getHeight() {
-        return height;
+    fun getHeight(): Integer {
+        return height
     }
 
-    public StageViewModel setHeight(Integer height) {
-        this.height = height;
-        return this;
+    fun setHeight(height: Integer): StageViewModel {
+        this.height = height
+        return this
     }
 
-    public List<StagePropViewModel> getStageProps() {
-        return stageProps;
+    fun getStageProps(): List<StagePropViewModel> {
+        return stageProps
     }
 
-    public StageViewModel setStageProps(List<StagePropViewModel> stageProps) {
-        this.stageProps = stageProps;
-        return this;
+    fun setStageProps(stageProps: List<StagePropViewModel>): StageViewModel {
+        this.stageProps = stageProps
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StageViewModel that = (StageViewModel) o;
-        return Objects.equals(id, that.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(id, that!!.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(width, that.width) &&
                 Objects.equals(height, that.height) &&
-                Objects.equals(stageProps, that.stageProps);
+                Objects.equals(stageProps, that.stageProps)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, width, height, stageProps);
+    fun hashCode(): Int {
+        return Objects.hash(id, name, width, height, stageProps)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "StageViewModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", width=" + width +
                 ", height=" + height +
                 ", stageProps=" + stageProps +
-                '}';
+                '}'
     }
 }

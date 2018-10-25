@@ -1,64 +1,64 @@
-package io.sparkled.viewmodel.playlist.sequence;
+package io.sparkled.viewmodel.playlist.sequence
 
-import io.sparkled.viewmodel.ViewModel;
+import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.Objects
+import java.util.UUID
 
-public class PlaylistSequenceViewModel implements ViewModel {
+class PlaylistSequenceViewModel : ViewModel {
 
-    private UUID uuid;
-    private Integer sequenceId;
-    private Integer displayOrder;
+    private var uuid: UUID? = null
+    private var sequenceId: Integer? = null
+    private var displayOrder: Integer? = null
 
-    public UUID getUuid() {
-        return uuid;
+    fun getUuid(): UUID {
+        return uuid
     }
 
-    public PlaylistSequenceViewModel setUuid(UUID uuid) {
-        this.uuid = uuid;
-        return this;
+    fun setUuid(uuid: UUID): PlaylistSequenceViewModel {
+        this.uuid = uuid
+        return this
     }
 
-    public Integer getSequenceId() {
-        return sequenceId;
+    fun getSequenceId(): Integer {
+        return sequenceId
     }
 
-    public PlaylistSequenceViewModel setSequenceId(Integer sequenceId) {
-        this.sequenceId = sequenceId;
-        return this;
+    fun setSequenceId(sequenceId: Integer): PlaylistSequenceViewModel {
+        this.sequenceId = sequenceId
+        return this
     }
 
-    public Integer getDisplayOrder() {
-        return displayOrder;
+    fun getDisplayOrder(): Integer {
+        return displayOrder
     }
 
-    public PlaylistSequenceViewModel setDisplayOrder(Integer displayOrder) {
-        this.displayOrder = displayOrder;
-        return this;
+    fun setDisplayOrder(displayOrder: Integer): PlaylistSequenceViewModel {
+        this.displayOrder = displayOrder
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlaylistSequenceViewModel that = (PlaylistSequenceViewModel) o;
-        return Objects.equals(uuid, that.uuid) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(uuid, that!!.uuid) &&
                 Objects.equals(sequenceId, that.sequenceId) &&
-                Objects.equals(displayOrder, that.displayOrder);
+                Objects.equals(displayOrder, that.displayOrder)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(uuid, sequenceId, displayOrder);
+    fun hashCode(): Int {
+        return Objects.hash(uuid, sequenceId, displayOrder)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "PlaylistSequenceViewModel{" +
                 "uuid=" + uuid +
                 ", sequenceId=" + sequenceId +
                 ", displayOrder=" + displayOrder +
-                '}';
+                '}'
     }
 }

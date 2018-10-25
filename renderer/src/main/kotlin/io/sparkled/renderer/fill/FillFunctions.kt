@@ -1,22 +1,21 @@
-package io.sparkled.renderer.fill;
+package io.sparkled.renderer.fill
 
-import io.sparkled.model.animation.fill.FillTypeCode;
-import io.sparkled.renderer.fill.function.RainbowFill;
-import io.sparkled.renderer.fill.function.SolidFill;
+import io.sparkled.model.animation.fill.FillTypeCode
+import io.sparkled.renderer.fill.function.RainbowFill
+import io.sparkled.renderer.fill.function.SolidFill
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashMap
 
-public class FillFunctions {
+object FillFunctions {
 
-    private static Map<FillTypeCode, FillFunction> functions = new HashMap<>();
+    private val functions = HashMap()
 
-    static {
-        functions.put(FillTypeCode.RAINBOW, new RainbowFill());
-        functions.put(FillTypeCode.SOLID, new SolidFill());
+    init {
+        functions.put(FillTypeCode.RAINBOW, RainbowFill())
+        functions.put(FillTypeCode.SOLID, SolidFill())
     }
 
-    public static FillFunction get(FillTypeCode fillType) {
-        return functions.get(fillType);
+    operator fun get(fillType: FillTypeCode): FillFunction {
+        return functions.get(fillType)
     }
 }

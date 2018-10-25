@@ -1,58 +1,51 @@
-package io.sparkled.persistence.stage.impl;
+package io.sparkled.persistence.stage.impl
 
-import io.sparkled.model.entity.Stage;
-import io.sparkled.model.entity.StageProp;
-import io.sparkled.persistence.QueryFactory;
-import io.sparkled.persistence.stage.StagePersistenceService;
-import io.sparkled.persistence.stage.impl.query.*;
+import io.sparkled.model.entity.Stage
+import io.sparkled.model.entity.StageProp
+import io.sparkled.persistence.QueryFactory
+import io.sparkled.persistence.stage.StagePersistenceService
+import io.sparkled.persistence.stage.impl.query.*
 
-import javax.inject.Inject;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import javax.inject.Inject
+import java.util.Optional
+import java.util.UUID
 
-public class StagePersistenceServiceImpl implements StagePersistenceService {
+class StagePersistenceServiceImpl @Inject
+constructor(private val queryFactory: QueryFactory) : StagePersistenceService {
 
-    private QueryFactory queryFactory;
+    @Override
+    fun createStage(stage: Stage): Stage {
+        return SaveStageQuery(stage).perform(queryFactory)
+    }
 
-    @Inject
-    public StagePersistenceServiceImpl(QueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
+    val allStages: List<Stage>
+        @Override
+        get() = GetAllStagesQuery().perform(queryFactory)
+
+    @Override
+    fun getStageById(stageId: Int): Optional<Stage> {
+        return GetStageByIdQuery(stageId).perform(queryFactory)
     }
 
     @Override
-    public Stage createStage(Stage stage) {
-        return new SaveStageQuery(stage).perform(queryFactory);
+    fun getStagePropsByStageId(stageId: Int): List<StageProp> {
+        return GetStagePropsByStageIdQuery(stageId).perform(queryFactory)
     }
 
     @Override
-    public List<Stage> getAllStages() {
-        return new GetAllStagesQuery().perform(queryFactory);
+    fun getStagePropByUuid(stageId: Int, uuid: UUID): Optional<StageProp> {
+        return GetStagePropByUuidQuery(stageId, uuid).perform(queryFactory)
     }
 
     @Override
-    public Optional<Stage> getStageById(int stageId) {
-        return new GetStageByIdQuery(stageId).perform(queryFactory);
+    fun saveStage(stage: Stage, stageProps: List<StageProp>) {
+        var stage = stage
+        stage = SaveStageQuery(stage).perform(queryFactory)
+        SaveStagePropsQuery(stage, stageProps).perform(queryFactory)
     }
 
     @Override
-    public List<StageProp> getStagePropsByStageId(int stageId) {
-        return new GetStagePropsByStageIdQuery(stageId).perform(queryFactory);
-    }
-
-    @Override
-    public Optional<StageProp> getStagePropByUuid(int stageId, UUID uuid) {
-        return new GetStagePropByUuidQuery(stageId, uuid).perform(queryFactory);
-    }
-
-    @Override
-    public void saveStage(Stage stage, List<StageProp> stageProps) {
-        stage = new SaveStageQuery(stage).perform(queryFactory);
-        new SaveStagePropsQuery(stage, stageProps).perform(queryFactory);
-    }
-
-    @Override
-    public void deleteStage(int stageId) {
-        new DeleteStageQuery(stageId).perform(queryFactory);
+    fun deleteStage(stageId: Int) {
+        DeleteStageQuery(stageId).perform(queryFactory)
     }
 }

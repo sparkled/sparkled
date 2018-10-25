@@ -1,118 +1,117 @@
-package io.sparkled.viewmodel.sequence;
+package io.sparkled.viewmodel.sequence
 
-import io.sparkled.model.entity.SequenceStatus;
-import io.sparkled.viewmodel.ViewModel;
-import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel;
+import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.viewmodel.ViewModel
+import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList
+import java.util.Objects
 
-public class SequenceViewModel implements ViewModel {
+class SequenceViewModel : ViewModel {
 
-    private Integer id;
-    private Integer songId;
-    private Integer stageId;
-    private String name;
-    private Integer framesPerSecond;
-    private Integer frameCount;
-    private SequenceStatus status;
-    private List<SequenceChannelViewModel> channels = new ArrayList<>();
+    private var id: Integer? = null
+    private var songId: Integer? = null
+    private var stageId: Integer? = null
+    private var name: String? = null
+    private var framesPerSecond: Integer? = null
+    private var frameCount: Integer? = null
+    private var status: SequenceStatus? = null
+    private var channels: List<SequenceChannelViewModel> = ArrayList()
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public SequenceViewModel setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): SequenceViewModel {
+        this.id = id
+        return this
     }
 
-    public Integer getSongId() {
-        return songId;
+    fun getSongId(): Integer {
+        return songId
     }
 
-    public SequenceViewModel setSongId(Integer songId) {
-        this.songId = songId;
-        return this;
+    fun setSongId(songId: Integer): SequenceViewModel {
+        this.songId = songId
+        return this
     }
 
-    public Integer getStageId() {
-        return stageId;
+    fun getStageId(): Integer {
+        return stageId
     }
 
-    public SequenceViewModel setStageId(Integer stageId) {
-        this.stageId = stageId;
-        return this;
+    fun setStageId(stageId: Integer): SequenceViewModel {
+        this.stageId = stageId
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public SequenceViewModel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): SequenceViewModel {
+        this.name = name
+        return this
     }
 
-    public Integer getFramesPerSecond() {
-        return framesPerSecond;
+    fun getFramesPerSecond(): Integer {
+        return framesPerSecond
     }
 
-    public SequenceViewModel setFramesPerSecond(Integer framesPerSecond) {
-        this.framesPerSecond = framesPerSecond;
-        return this;
+    fun setFramesPerSecond(framesPerSecond: Integer): SequenceViewModel {
+        this.framesPerSecond = framesPerSecond
+        return this
     }
 
-    public Integer getFrameCount() {
-        return frameCount;
+    fun getFrameCount(): Integer {
+        return frameCount
     }
 
-    public SequenceViewModel setFrameCount(Integer frameCount) {
-        this.frameCount = frameCount;
-        return this;
+    fun setFrameCount(frameCount: Integer): SequenceViewModel {
+        this.frameCount = frameCount
+        return this
     }
 
-    public SequenceStatus getStatus() {
-        return status;
+    fun getStatus(): SequenceStatus {
+        return status
     }
 
-    public SequenceViewModel setStatus(SequenceStatus status) {
-        this.status = status;
-        return this;
+    fun setStatus(status: SequenceStatus): SequenceViewModel {
+        this.status = status
+        return this
     }
 
-    public List<SequenceChannelViewModel> getChannels() {
-        return channels;
+    fun getChannels(): List<SequenceChannelViewModel> {
+        return channels
     }
 
-    public SequenceViewModel setChannels(List<SequenceChannelViewModel> channels) {
-        this.channels = channels;
-        return this;
+    fun setChannels(channels: List<SequenceChannelViewModel>): SequenceViewModel {
+        this.channels = channels
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SequenceViewModel that = (SequenceViewModel) o;
-        return Objects.equals(id, that.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(id, that!!.id) &&
                 Objects.equals(songId, that.songId) &&
                 Objects.equals(stageId, that.stageId) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(framesPerSecond, that.framesPerSecond) &&
                 Objects.equals(frameCount, that.frameCount) &&
-                status == that.status &&
-                Objects.equals(channels, that.channels);
+                status === that.status &&
+                Objects.equals(channels, that.channels)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, songId, stageId, name, framesPerSecond, frameCount, status, channels);
+    fun hashCode(): Int {
+        return Objects.hash(id, songId, stageId, name, framesPerSecond, frameCount, status, channels)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "SongViewModel{" +
                 "id=" + id +
                 ", songId=" + songId +
@@ -122,6 +121,6 @@ public class SequenceViewModel implements ViewModel {
                 ", frameCount=" + frameCount +
                 ", status=" + status +
                 ", channels=" + channels +
-                '}';
+                '}'
     }
 }

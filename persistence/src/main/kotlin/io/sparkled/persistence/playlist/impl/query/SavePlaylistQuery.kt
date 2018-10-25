@@ -1,31 +1,29 @@
-package io.sparkled.persistence.playlist.impl.query;
+package io.sparkled.persistence.playlist.impl.query
 
-import io.sparkled.model.entity.Playlist;
-import io.sparkled.model.validator.PlaylistValidator;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.sparkled.model.entity.Playlist
+import io.sparkled.model.validator.PlaylistValidator
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManager
 
-public class SavePlaylistQuery implements PersistenceQuery<Playlist> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SavePlaylistQuery.class);
-    private final Playlist playlist;
-
-    public SavePlaylistQuery(Playlist playlist) {
-        this.playlist = playlist;
-    }
+class SavePlaylistQuery(private val playlist: Playlist) : PersistenceQuery<Playlist> {
 
     @Override
-    public Playlist perform(QueryFactory queryFactory) {
-        new PlaylistValidator().validate(playlist);
+    fun perform(queryFactory: QueryFactory): Playlist {
+        PlaylistValidator().validate(playlist)
 
-        EntityManager entityManager = queryFactory.getEntityManager();
-        Playlist savedPlaylist = entityManager.merge(playlist);
+        val entityManager = queryFactory.getEntityManager()
+        val savedPlaylist = entityManager.merge(playlist)
 
-        logger.info("Saved playlist {} ({}).", savedPlaylist.getId(), savedPlaylist.getName());
-        return savedPlaylist;
+        logger.info("Saved playlist {} ({}).", savedPlaylist.getId(), savedPlaylist.getName())
+        return savedPlaylist
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(SavePlaylistQuery::class.java)
     }
 }

@@ -1,26 +1,20 @@
-package io.sparkled.persistence.song.impl.query;
+package io.sparkled.persistence.song.impl.query
 
-import io.sparkled.model.entity.Song;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import io.sparkled.model.entity.Song
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
 
-import java.util.Optional;
+import java.util.Optional
 
-public class GetSongByIdQuery implements PersistenceQuery<Optional<Song>> {
-
-    private final int songId;
-
-    public GetSongByIdQuery(int songId) {
-        this.songId = songId;
-    }
+class GetSongByIdQuery(private val songId: Int) : PersistenceQuery<Optional<Song>> {
 
     @Override
-    public Optional<Song> perform(QueryFactory queryFactory) {
-        Song song = queryFactory
+    fun perform(queryFactory: QueryFactory): Optional<Song> {
+        val song = queryFactory
                 .selectFrom(qSong)
                 .where(qSong.id.eq(songId))
-                .fetchFirst();
+                .fetchFirst()
 
-        return Optional.ofNullable(song);
+        return Optional.ofNullable(song)
     }
 }

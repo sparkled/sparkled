@@ -1,33 +1,35 @@
-package io.sparkled.persistence;
+package io.sparkled.persistence
 
-import io.sparkled.model.entity.*;
+import io.sparkled.model.entity.*
 
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.Collections
+import java.util.UUID
 
-public interface PersistenceQuery<T> {
+interface PersistenceQuery<T> {
 
-    /**
-     * Useful for IN queries where no UUIDs will match.
-     */
-    List<UUID> noUuids = Collections.singletonList(new UUID(0, 0));
+    fun perform(queryFactory: QueryFactory): T
 
-    /**
-     * Useful for IN queries where no IDs will match.
-     */
-    List<Integer> noIds = Collections.singletonList(-1);
+    companion object {
 
-    QPlaylist qPlaylist = QPlaylist.playlist;
-    QPlaylistSequence qPlaylistSequence = QPlaylistSequence.playlistSequence;
-    QRenderedStageProp qRenderedStageProp = QRenderedStageProp.renderedStageProp;
-    QSequence qSequence = QSequence.sequence;
-    QSequenceChannel qSequenceChannel = QSequenceChannel.sequenceChannel;
-    QSetting qSetting = QSetting.setting;
-    QSong qSong = QSong.song;
-    QSongAudio qSongAudio = QSongAudio.songAudio;
-    QStage qStage = QStage.stage;
-    QStageProp qStageProp = QStageProp.stageProp;
+        /**
+         * Useful for IN queries where no UUIDs will match.
+         */
+        val noUuids = Collections.singletonList(UUID(0, 0))
 
-    T perform(QueryFactory queryFactory);
+        /**
+         * Useful for IN queries where no IDs will match.
+         */
+        val noIds = Collections.singletonList(-1)
+
+        val qPlaylist = QPlaylist.playlist
+        val qPlaylistSequence = QPlaylistSequence.playlistSequence
+        val qRenderedStageProp = QRenderedStageProp.renderedStageProp
+        val qSequence = QSequence.sequence
+        val qSequenceChannel = QSequenceChannel.sequenceChannel
+        val qSetting = QSetting.setting
+        val qSong = QSong.song
+        val qSongAudio = QSongAudio.songAudio
+        val qStage = QStage.stage
+        val qStageProp = QStageProp.stageProp
+    }
 }

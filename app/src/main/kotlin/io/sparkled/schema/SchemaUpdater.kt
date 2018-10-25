@@ -1,9 +1,10 @@
-package io.sparkled.schema;
+package io.sparkled.schema
 
-public interface SchemaUpdater {
+interface SchemaUpdater {
 
     /**
      * Applies changes to the database schema.
      */
-    void update() throws Exception;
+    @Throws(Exception::class)
+    fun update()
 }

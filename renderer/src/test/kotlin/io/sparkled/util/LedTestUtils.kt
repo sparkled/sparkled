@@ -1,52 +1,50 @@
-package io.sparkled.util;
+package io.sparkled.util
 
-import io.sparkled.model.render.Led;
-import io.sparkled.model.render.RenderedFrame;
-import io.sparkled.model.render.RenderedStagePropData;
+import io.sparkled.model.render.Led
+import io.sparkled.model.render.RenderedFrame
+import io.sparkled.model.render.RenderedStagePropData
 
-import java.util.Arrays;
-import java.util.stream.IntStream;
+import java.util.Arrays
+import java.util.stream.IntStream
 
-import static java.util.stream.Collectors.joining;
+import java.util.stream.Collectors.joining
 
 /**
  * Convenience methods for working with LEDs in tests.
  */
-public class LedTestUtils {
-    private LedTestUtils() {
-    }
+object LedTestUtils {
 
-    public static String toLedString(RenderedStagePropData channel) {
+    fun toLedString(channel: RenderedStagePropData): String {
         return channel.getFrames()
                 .stream()
-                .map(LedTestUtils::toLedString)
-                .collect(joining("\n"));
+                .map(???({ toLedString() }))
+        .collect(joining("\n"))
     }
 
-    public static String toLedString(int[][] leds) {
+    fun toLedString(leds: Array<IntArray>): String {
         return Arrays.stream(leds)
-                .map(LedTestUtils::toLedString)
-                .collect(joining("\n"));
+                .map(???({ toLedString() }))
+        .collect(joining("\n"))
     }
 
-    public static String toLedString(RenderedFrame frame) {
+    fun toLedString(frame: RenderedFrame): String {
         return IntStream.range(0, frame.getLedCount())
-                .mapToObj(frame::getLed)
-                .map(Led::toString)
-                .collect(joining(", "));
+                .mapToObj(???({ frame.getLed() }))
+        .map(???({ Led.toString() }))
+        .collect(joining(", "))
     }
 
-    public static String toLedString(int[] leds) {
+    fun toLedString(leds: IntArray): String {
         return Arrays.stream(leds)
-                .mapToObj(LedTestUtils::getLedFromRgb)
-                .map(Led::toString)
-                .collect(joining(", "));
+                .mapToObj(???({ getLedFromRgb(it) }))
+        .map(???({ Led.toString() }))
+        .collect(joining(", "))
     }
 
-    private static Led getLedFromRgb(int rgb) {
-        byte[] ledData = new byte[3];
-        Led led = new Led(ledData, 0, 0);
-        led.addRgb((rgb & 0xFF0000) >> 16, (rgb & 0x00FF00) >> 8, (rgb & 0x0000FF));
-        return led;
+    private fun getLedFromRgb(rgb: Int): Led {
+        val ledData = ByteArray(3)
+        val led = Led(ledData, 0, 0)
+        led.addRgb(rgb and 0xFF0000 shr 16, rgb and 0x00FF00 shr 8, rgb and 0x0000FF)
+        return led
     }
 }

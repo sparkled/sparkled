@@ -1,14 +1,13 @@
-package io.sparkled.udpserver.impl.command;
+package io.sparkled.udpserver.impl.command
 
-import io.sparkled.model.setting.SettingsCache;
-import io.sparkled.music.PlaybackState;
-import io.sparkled.udpserver.impl.RequestHandlerImpl;
+import io.sparkled.model.setting.SettingsCache
+import io.sparkled.music.PlaybackState
+import io.sparkled.udpserver.impl.RequestHandlerImpl
 
-public abstract class RequestCommand {
+abstract class RequestCommand {
 
-    public abstract byte[] getResponse(String[] args, SettingsCache settings, PlaybackState playbackState);
+    abstract fun getResponse(args: Array<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray
 
-    byte[] getErrorResponse() {
-        return RequestHandlerImpl.ERROR_CODE_BYTES;
-    }
+    internal val errorResponse: ByteArray
+        get() = RequestHandlerImpl.ERROR_CODE_BYTES
 }

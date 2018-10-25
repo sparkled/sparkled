@@ -1,29 +1,31 @@
-package io.sparkled.music.inject;
+package io.sparkled.music.inject
 
-import com.google.inject.AbstractModule;
-import io.sparkled.music.MusicPlayerService;
-import io.sparkled.music.PlaybackService;
-import io.sparkled.music.PlaybackStateService;
-import io.sparkled.music.impl.MusicPlayerServiceImpl;
-import io.sparkled.music.impl.PlaybackServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.inject.AbstractModule
+import io.sparkled.music.MusicPlayerService
+import io.sparkled.music.PlaybackService
+import io.sparkled.music.PlaybackStateService
+import io.sparkled.music.impl.MusicPlayerServiceImpl
+import io.sparkled.music.impl.PlaybackServiceImpl
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import javax.inject.Singleton;
+import javax.inject.Singleton
 
-public class MusicPlayerModule extends AbstractModule {
+class MusicPlayerModule : AbstractModule() {
 
-    private static final Logger logger = LoggerFactory.getLogger(MusicPlayerModule.class);
-
-    @Override
-    protected void configure() {
-        logger.info("Configuring Guice module.");
+    override fun configure() {
+        logger.info("Configuring Guice module.")
 
         // PlaybackServiceImpl is bound to two interfaces. This scope binding ensures they both get the same singleton instance.
-        bind(PlaybackServiceImpl.class).in(Singleton.class);
-        bind(PlaybackService.class).to(PlaybackServiceImpl.class).asEagerSingleton();
-        bind(PlaybackStateService.class).to(PlaybackServiceImpl.class).asEagerSingleton();
+        bind<PlaybackServiceImpl>(PlaybackServiceImpl::class.java).`in`(Singleton::class.java)
+        bind<PlaybackService>(PlaybackService::class.java).to(PlaybackServiceImpl::class.java).asEagerSingleton()
+        bind<PlaybackStateService>(PlaybackStateService::class.java).to(PlaybackServiceImpl::class.java).asEagerSingleton()
 
-        bind(MusicPlayerService.class).to(MusicPlayerServiceImpl.class).asEagerSingleton();
+        bind<MusicPlayerService>(MusicPlayerService::class.java).to(MusicPlayerServiceImpl::class.java).asEagerSingleton()
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(MusicPlayerModule::class.java!!)
     }
 }

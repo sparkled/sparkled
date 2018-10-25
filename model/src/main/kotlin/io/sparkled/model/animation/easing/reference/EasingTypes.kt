@@ -1,31 +1,30 @@
-package io.sparkled.model.animation.easing.reference;
+package io.sparkled.model.animation.easing.reference
 
-import io.sparkled.model.animation.easing.EasingType;
-import io.sparkled.model.animation.easing.EasingTypeCode;
-import io.sparkled.model.animation.param.Param;
-import io.sparkled.model.animation.param.ParamName;
-import io.sparkled.model.animation.param.ParamType;
+import io.sparkled.model.animation.easing.EasingType
+import io.sparkled.model.animation.easing.EasingTypeCode
+import io.sparkled.model.animation.param.Param
+import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.ParamType
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Arrays
 
-public class EasingTypes {
-    private static final List<EasingType> TYPES = Arrays.asList(
+object EasingTypes {
+    private val TYPES = Arrays.asList(
             easingType(EasingTypeCode.CONSTANT, "Constant",
                     param(ParamName.PERCENT, ParamType.DECIMAL).setValue(50f)
             ),
             easingType(EasingTypeCode.LINEAR, "Linear")
-    );
+    )
 
-    public static List<EasingType> get() {
-        return TYPES;
+    fun get(): List<EasingType> {
+        return TYPES
     }
 
-    private static EasingType easingType(EasingTypeCode easingType, String name, Param... params) {
-        return new EasingType().setCode(easingType).setName(name).setParams(Arrays.asList(params));
+    private fun easingType(easingType: EasingTypeCode, name: String, vararg params: Param): EasingType {
+        return EasingType().setCode(easingType).setName(name).setParams(Arrays.asList(params))
     }
 
-    private static Param param(ParamName paramName, ParamType type) {
-        return new Param().setName(paramName).setType(type);
+    private fun param(paramName: ParamName, type: ParamType): Param {
+        return Param().setName(paramName).setType(type)
     }
 }

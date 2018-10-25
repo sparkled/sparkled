@@ -1,31 +1,32 @@
-package io.sparkled.persistence.playlist.impl.query;
+package io.sparkled.persistence.playlist.impl.query
 
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.util.UUID
 
-import java.util.Collection;
-import java.util.UUID;
+class DeletePlaylistSequencesQuery(playlistSequenceUuids: Collection<UUID>) : PersistenceQuery<Void> {
 
-public class DeletePlaylistSequencesQuery implements PersistenceQuery<Void> {
+    private val playlistSequenceUuids: Collection<UUID>
 
-    private static final Logger logger = LoggerFactory.getLogger(DeletePlaylistSequencesQuery.class);
-
-    private final Collection<UUID> playlistSequenceUuids;
-
-    public DeletePlaylistSequencesQuery(Collection<UUID> playlistSequenceUuids) {
-        this.playlistSequenceUuids = playlistSequenceUuids.isEmpty() ? noUuids : playlistSequenceUuids;
+    init {
+        this.playlistSequenceUuids = if (playlistSequenceUuids.isEmpty()) noUuids else playlistSequenceUuids
     }
 
     @Override
-    public Void perform(QueryFactory queryFactory) {
-        long deleted = queryFactory
+    fun perform(queryFactory: QueryFactory): Void? {
+        val deleted = queryFactory
                 .delete(qPlaylistSequence)
-                .where(qPlaylistSequence.uuid.in(playlistSequenceUuids))
-                .execute();
+                .where(qPlaylistSequence.uuid.`in`(playlistSequenceUuids))
+                .execute()
 
-        logger.info("Deleted {} playlist sequence(s).", deleted);
-        return null;
+        logger.info("Deleted {} playlist sequence(s).", deleted)
+        return null
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(DeletePlaylistSequencesQuery::class.java)
     }
 }

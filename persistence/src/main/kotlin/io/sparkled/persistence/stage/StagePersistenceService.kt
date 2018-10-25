@@ -1,25 +1,23 @@
-package io.sparkled.persistence.stage;
+package io.sparkled.persistence.stage
 
-import io.sparkled.model.entity.Stage;
-import io.sparkled.model.entity.StageProp;
+import io.sparkled.model.entity.Stage
+import io.sparkled.model.entity.StageProp
+import java.util.Optional
+import java.util.UUID
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+interface StagePersistenceService {
 
-public interface StagePersistenceService {
+    fun createStage(stage: Stage): Stage
 
-    Stage createStage(Stage stage);
+    val allStages: List<Stage>
 
-    List<Stage> getAllStages();
+    fun getStageById(stageId: Int): Optional<Stage>
 
-    Optional<Stage> getStageById(int stageId);
+    fun getStagePropsByStageId(stageId: Int): List<StageProp>
 
-    List<StageProp> getStagePropsByStageId(int stageId);
+    fun getStagePropByUuid(stageId: Int, uuid: UUID): Optional<StageProp>
 
-    Optional<StageProp> getStagePropByUuid(int stageId, UUID uuid);
+    fun saveStage(stage: Stage, stageProps: List<StageProp>)
 
-    void saveStage(Stage stage, List<StageProp> stageProps);
-
-    void deleteStage(int stageId);
+    fun deleteStage(stageId: Int)
 }

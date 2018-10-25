@@ -1,59 +1,57 @@
-package io.sparkled.model.animation.fill;
+package io.sparkled.model.animation.fill
 
-import io.sparkled.model.animation.param.HasParams;
-import io.sparkled.model.animation.param.Param;
+import io.sparkled.model.animation.param.HasParams
+import io.sparkled.model.animation.param.Param
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.Arrays
+import java.util.Objects
 
-public class Fill implements HasParams {
+class Fill : HasParams {
 
-    private FillTypeCode type;
-    private List<Param> params;
+    private var type: FillTypeCode? = null
+    private var params: List<Param>? = null
 
-    public FillTypeCode getType() {
-        return type;
+    fun getType(): FillTypeCode {
+        return type
     }
 
-    public Fill setType(FillTypeCode type) {
-        this.type = type;
-        return this;
-    }
-
-    @Override
-    public List<Param> getParams() {
-        return params;
-    }
-
-    public Fill setParams(Param... params) {
-        return setParams(Arrays.asList(params));
-    }
-
-    public Fill setParams(List<Param> params) {
-        this.params = params;
-        return this;
+    fun setType(type: FillTypeCode): Fill {
+        this.type = type
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Fill)) return false;
-        Fill fill = (Fill) o;
-        return type == fill.type &&
-                Objects.equals(params, fill.params);
+    fun getParams(): List<Param> {
+        return params
+    }
+
+    fun setParams(vararg params: Param): Fill {
+        return setParams(Arrays.asList(params))
+    }
+
+    fun setParams(params: List<Param>): Fill {
+        this.params = params
+        return this
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(type, params);
+    fun equals(o: Object): Boolean {
+        if (this === o) return true
+        if (o !is Fill) return false
+        val fill = o
+        return type === fill.type && Objects.equals(params, fill.params)
     }
 
     @Override
-    public String toString() {
+    fun hashCode(): Int {
+        return Objects.hash(type, params)
+    }
+
+    @Override
+    fun toString(): String {
         return "Fill{" +
                 "type=" + type +
                 ", params=" + params +
-                '}';
+                '}'
     }
 }

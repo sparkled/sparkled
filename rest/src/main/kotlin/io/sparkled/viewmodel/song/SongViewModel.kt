@@ -1,87 +1,87 @@
-package io.sparkled.viewmodel.song;
+package io.sparkled.viewmodel.song
 
-import io.sparkled.viewmodel.ViewModel;
+import io.sparkled.viewmodel.ViewModel
 
-import java.util.Objects;
+import java.util.Objects
 
-public class SongViewModel implements ViewModel {
+class SongViewModel : ViewModel {
 
-    private Integer id;
-    private String name;
-    private String artist;
-    private String album;
-    private Integer durationMs;
+    private var id: Integer? = null
+    private var name: String? = null
+    private var artist: String? = null
+    private var album: String? = null
+    private var durationMs: Integer? = null
 
-    public Integer getId() {
-        return id;
+    fun getId(): Integer {
+        return id
     }
 
-    public SongViewModel setId(Integer id) {
-        this.id = id;
-        return this;
+    fun setId(id: Integer): SongViewModel {
+        this.id = id
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public SongViewModel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): SongViewModel {
+        this.name = name
+        return this
     }
 
-    public String getArtist() {
-        return artist;
+    fun getArtist(): String {
+        return artist
     }
 
-    public SongViewModel setArtist(String artist) {
-        this.artist = artist;
-        return this;
+    fun setArtist(artist: String): SongViewModel {
+        this.artist = artist
+        return this
     }
 
-    public String getAlbum() {
-        return album;
+    fun getAlbum(): String {
+        return album
     }
 
-    public SongViewModel setAlbum(String album) {
-        this.album = album;
-        return this;
+    fun setAlbum(album: String): SongViewModel {
+        this.album = album
+        return this
     }
 
-    public Integer getDurationMs() {
-        return durationMs;
+    fun getDurationMs(): Integer {
+        return durationMs
     }
 
-    public SongViewModel setDurationMs(Integer durationMs) {
-        this.durationMs = durationMs;
-        return this;
+    fun setDurationMs(durationMs: Integer): SongViewModel {
+        this.durationMs = durationMs
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SongViewModel that = (SongViewModel) o;
-        return Objects.equals(id, that.id) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(id, that!!.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(artist, that.artist) &&
                 Objects.equals(album, that.album) &&
-                Objects.equals(durationMs, that.durationMs);
+                Objects.equals(durationMs, that.durationMs)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, artist, album, durationMs);
+    fun hashCode(): Int {
+        return Objects.hash(id, name, artist, album, durationMs)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "SongViewModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", artist='" + artist + '\'' +
                 ", album='" + album + '\'' +
                 ", durationMs=" + durationMs +
-                '}';
+                '}'
     }
 }

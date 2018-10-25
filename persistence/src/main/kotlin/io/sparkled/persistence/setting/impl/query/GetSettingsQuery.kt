@@ -1,17 +1,15 @@
-package io.sparkled.persistence.setting.impl.query;
+package io.sparkled.persistence.setting.impl.query
 
-import io.sparkled.model.entity.Setting;
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
+import io.sparkled.model.entity.Setting
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
 
-import java.util.List;
-
-public class GetSettingsQuery implements PersistenceQuery<List<Setting>> {
+class GetSettingsQuery : PersistenceQuery<List<Setting>> {
 
     @Override
-    public List<Setting> perform(QueryFactory queryFactory) {
+    fun perform(queryFactory: QueryFactory): List<Setting> {
         return queryFactory
                 .selectFrom(qSetting)
-                .fetch();
+                .fetch()
     }
 }

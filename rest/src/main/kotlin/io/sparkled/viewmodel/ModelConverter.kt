@@ -1,16 +1,18 @@
-package io.sparkled.viewmodel;
+package io.sparkled.viewmodel
 
 /**
  * Handles model -> view model conversion.
- *
+
  * @param <M>  A model class
+ * *
  * @param <VM> A view model class
- */
-public interface ModelConverter<M, VM extends ViewModel> {
+</VM></M> */
+interface ModelConverter<M, VM : ViewModel> {
 
     /**
      * @param model The model to be converted
+     * *
      * @return The converted view model.
      */
-    VM toViewModel(M model);
+    fun toViewModel(model: M): VM
 }

@@ -1,46 +1,40 @@
-package io.sparkled.viewmodel.stage;
+package io.sparkled.viewmodel.stage
 
-import io.sparkled.model.entity.Stage;
-import io.sparkled.persistence.stage.StagePersistenceService;
-import io.sparkled.viewmodel.exception.ViewModelConversionException;
+import io.sparkled.model.entity.Stage
+import io.sparkled.persistence.stage.StagePersistenceService
+import io.sparkled.viewmodel.exception.ViewModelConversionException
 
-import javax.inject.Inject;
+import javax.inject.Inject
 
-public class StageViewModelConverterImpl extends StageViewModelConverter {
-
-    private StagePersistenceService stagePersistenceService;
-
-    @Inject
-    public StageViewModelConverterImpl(StagePersistenceService stagePersistenceService) {
-        this.stagePersistenceService = stagePersistenceService;
-    }
+class StageViewModelConverterImpl @Inject
+constructor(private val stagePersistenceService: StagePersistenceService) : StageViewModelConverter() {
 
     @Override
-    public StageViewModel toViewModel(Stage model) {
-        return new StageViewModel()
+    fun toViewModel(model: Stage): StageViewModel {
+        return StageViewModel()
                 .setId(model.getId())
                 .setName(model.getName())
                 .setWidth(model.getWidth())
-                .setHeight(model.getHeight());
+                .setHeight(model.getHeight())
     }
 
     @Override
-    public Stage toModel(StageViewModel viewModel) {
-        final Integer stageId = viewModel.getId();
-        Stage model = getStage(stageId);
+    fun toModel(viewModel: StageViewModel): Stage {
+        val stageId = viewModel.getId()
+        val model = getStage(stageId)
 
         return model
                 .setName(viewModel.getName())
                 .setWidth(viewModel.getWidth())
-                .setHeight(viewModel.getHeight());
+                .setHeight(viewModel.getHeight())
     }
 
-    private Stage getStage(Integer stageId) {
+    private fun getStage(stageId: Integer?): Stage {
         if (stageId == null) {
-            return new Stage();
+            return Stage()
         }
 
         return stagePersistenceService.getStageById(stageId)
-                .orElseThrow(() -> new ViewModelConversionException("Stage with ID of '" + stageId + "' not found."));
+                .orElseThrow({ ViewModelConversionException("Stage with ID of '$stageId' not found.") })
     }
 }

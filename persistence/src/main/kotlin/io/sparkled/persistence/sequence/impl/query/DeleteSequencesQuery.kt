@@ -1,68 +1,68 @@
-package io.sparkled.persistence.sequence.impl.query;
+package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
-import io.sparkled.persistence.playlist.impl.query.DeletePlaylistSequencesQuery;
-import io.sparkled.persistence.stage.impl.query.DeleteRenderedStagePropsQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
+import io.sparkled.persistence.playlist.impl.query.DeletePlaylistSequencesQuery
+import io.sparkled.persistence.stage.impl.query.DeleteRenderedStagePropsQuery
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.util.UUID
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+class DeleteSequencesQuery(sequenceIds: Collection<Integer>) : PersistenceQuery<Void> {
 
-public class DeleteSequencesQuery implements PersistenceQuery<Void> {
+    private val sequenceIds: Collection<Integer>
 
-    private static final Logger logger = LoggerFactory.getLogger(DeleteSequencesQuery.class);
-
-    private final Collection<Integer> sequenceIds;
-
-    public DeleteSequencesQuery(Collection<Integer> sequenceIds) {
-        this.sequenceIds = sequenceIds.isEmpty() ? noIds : sequenceIds;
+    init {
+        this.sequenceIds = if (sequenceIds.isEmpty()) noIds else sequenceIds
     }
 
     @Override
-    public Void perform(QueryFactory queryFactory) {
-        deletePlaylistSequences(queryFactory);
-        deleteRenderedStageProps(queryFactory);
-        deleteSequenceChannels(queryFactory);
-        deleteSequences(queryFactory);
-        return null;
+    fun perform(queryFactory: QueryFactory): Void? {
+        deletePlaylistSequences(queryFactory)
+        deleteRenderedStageProps(queryFactory)
+        deleteSequenceChannels(queryFactory)
+        deleteSequences(queryFactory)
+        return null
     }
 
-    private void deletePlaylistSequences(QueryFactory queryFactory) {
-        List<UUID> playlistSequenceUuids = queryFactory
+    private fun deletePlaylistSequences(queryFactory: QueryFactory) {
+        val playlistSequenceUuids = queryFactory
                 .select(qPlaylistSequence.uuid)
                 .from(qPlaylistSequence)
-                .where(qPlaylistSequence.sequenceId.in(sequenceIds))
-                .fetch();
-        new DeletePlaylistSequencesQuery(playlistSequenceUuids).perform(queryFactory);
+                .where(qPlaylistSequence.sequenceId.`in`(sequenceIds))
+                .fetch()
+        DeletePlaylistSequencesQuery(playlistSequenceUuids).perform(queryFactory)
     }
 
-    private void deleteRenderedStageProps(QueryFactory queryFactory) {
-        List<Integer> renderedStagePropIds = queryFactory
+    private fun deleteRenderedStageProps(queryFactory: QueryFactory) {
+        val renderedStagePropIds = queryFactory
                 .select(qRenderedStageProp.id)
                 .from(qRenderedStageProp)
-                .where(qRenderedStageProp.sequenceId.in(sequenceIds))
-                .fetch();
-        new DeleteRenderedStagePropsQuery(renderedStagePropIds).perform(queryFactory);
+                .where(qRenderedStageProp.sequenceId.`in`(sequenceIds))
+                .fetch()
+        DeleteRenderedStagePropsQuery(renderedStagePropIds).perform(queryFactory)
     }
 
-    private void deleteSequenceChannels(QueryFactory queryFactory) {
-        List<UUID> sequenceChannelUuids = queryFactory
+    private fun deleteSequenceChannels(queryFactory: QueryFactory) {
+        val sequenceChannelUuids = queryFactory
                 .select(qSequenceChannel.uuid)
                 .from(qSequenceChannel)
-                .where(qSequenceChannel.sequenceId.in(sequenceIds))
-                .fetch();
-        new DeleteSequenceChannelsQuery(sequenceChannelUuids).perform(queryFactory);
+                .where(qSequenceChannel.sequenceId.`in`(sequenceIds))
+                .fetch()
+        DeleteSequenceChannelsQuery(sequenceChannelUuids).perform(queryFactory)
     }
 
-    private void deleteSequences(QueryFactory queryFactory) {
-        long deleted = queryFactory
+    private fun deleteSequences(queryFactory: QueryFactory) {
+        val deleted = queryFactory
                 .delete(qSequence)
-                .where(qSequence.id.in(sequenceIds))
-                .execute();
+                .where(qSequence.id.`in`(sequenceIds))
+                .execute()
 
-        logger.info("Deleted {} sequence(s).", deleted);
+        logger.info("Deleted {} sequence(s).", deleted)
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(DeleteSequencesQuery::class.java)
     }
 }

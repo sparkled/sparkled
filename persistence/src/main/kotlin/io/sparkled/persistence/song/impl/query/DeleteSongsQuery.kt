@@ -1,56 +1,56 @@
-package io.sparkled.persistence.song.impl.query;
+package io.sparkled.persistence.song.impl.query
 
-import io.sparkled.persistence.PersistenceQuery;
-import io.sparkled.persistence.QueryFactory;
-import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.sparkled.persistence.PersistenceQuery
+import io.sparkled.persistence.QueryFactory
+import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import java.util.Collection;
-import java.util.List;
+class DeleteSongsQuery(songIds: Collection<Integer>) : PersistenceQuery<Void> {
 
-public class DeleteSongsQuery implements PersistenceQuery<Void> {
+    private val songIds: Collection<Integer>
 
-    private static final Logger logger = LoggerFactory.getLogger(DeleteSongsQuery.class);
-
-    private final Collection<Integer> songIds;
-
-    public DeleteSongsQuery(Collection<Integer> songIds) {
-        this.songIds = songIds.isEmpty() ? noIds : songIds;
+    init {
+        this.songIds = if (songIds.isEmpty()) noIds else songIds
     }
 
     @Override
-    public Void perform(QueryFactory queryFactory) {
-        deleteSequences(queryFactory);
-        deleteSongAudios(queryFactory);
-        deleteSongs(queryFactory);
-        return null;
+    fun perform(queryFactory: QueryFactory): Void? {
+        deleteSequences(queryFactory)
+        deleteSongAudios(queryFactory)
+        deleteSongs(queryFactory)
+        return null
     }
 
-    private void deleteSequences(QueryFactory queryFactory) {
-        List<Integer> sequenceIds = queryFactory
+    private fun deleteSequences(queryFactory: QueryFactory) {
+        val sequenceIds = queryFactory
                 .select(qSequence.id)
                 .from(qSequence)
-                .where(qSequence.songId.in(songIds))
-                .fetch();
-        new DeleteSequencesQuery(sequenceIds).perform(queryFactory);
+                .where(qSequence.songId.`in`(songIds))
+                .fetch()
+        DeleteSequencesQuery(sequenceIds).perform(queryFactory)
     }
 
-    private void deleteSongAudios(QueryFactory queryFactory) {
-        long deleted = queryFactory
+    private fun deleteSongAudios(queryFactory: QueryFactory) {
+        val deleted = queryFactory
                 .delete(qSongAudio)
-                .where(qSongAudio.songId.in(songIds))
-                .execute();
+                .where(qSongAudio.songId.`in`(songIds))
+                .execute()
 
-        logger.info("Deleted {} song audio(s).", deleted);
+        logger.info("Deleted {} song audio(s).", deleted)
     }
 
-    private void deleteSongs(QueryFactory queryFactory) {
-        long deleted = queryFactory
+    private fun deleteSongs(queryFactory: QueryFactory) {
+        val deleted = queryFactory
                 .delete(qSong)
-                .where(qSong.id.in(songIds))
-                .execute();
+                .where(qSong.id.`in`(songIds))
+                .execute()
 
-        logger.info("Deleted {} song(s).", deleted);
+        logger.info("Deleted {} song(s).", deleted)
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory.getLogger(DeleteSongsQuery::class.java)
     }
 }

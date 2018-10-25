@@ -1,6 +1,6 @@
-package io.sparkled.model.animation.easing;
+package io.sparkled.model.animation.easing
 
-public enum EasingTypeCode {
+enum class EasingTypeCode {
     LINEAR,
     CONSTANT
 }

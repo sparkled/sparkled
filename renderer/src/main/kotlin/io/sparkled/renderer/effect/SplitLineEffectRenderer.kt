@@ -1,16 +1,16 @@
-package io.sparkled.renderer.effect;
+package io.sparkled.renderer.effect
 
-import io.sparkled.renderer.context.RenderContext;
+import io.sparkled.renderer.context.RenderContext
 
-public class SplitLineEffectRenderer extends EffectRenderer {
+class SplitLineEffectRenderer : EffectRenderer() {
 
     @Override
-    public void render(RenderContext ctx) {
-        int start = 0;
-        int end = ctx.getChannel().getLedCount() - 1;
-        int middle = end / 2;
+    fun render(ctx: RenderContext) {
+        val start = 0
+        val end = ctx.getChannel().getLedCount() - 1
+        val middle = end / 2
 
-        LineEffectRenderer lineRenderer = new LineEffectRenderer();
-        lineRenderer.renderLine(ctx, start, middle, true);
+        val lineRenderer = LineEffectRenderer()
+        lineRenderer.renderLine(ctx, start, middle, true)
     }
 }

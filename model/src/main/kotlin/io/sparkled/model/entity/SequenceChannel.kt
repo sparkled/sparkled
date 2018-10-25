@@ -1,119 +1,119 @@
-package io.sparkled.model.entity;
+package io.sparkled.model.entity
 
-import io.sparkled.model.animation.SequenceChannelEffects;
+import io.sparkled.model.animation.SequenceChannelEffects
 
-import javax.persistence.*;
-import java.util.Objects;
-import java.util.UUID;
+import javax.persistence.*
+import java.util.Objects
+import java.util.UUID
 
 @Entity
 @Table(name = "sequence_channel")
-public class SequenceChannel {
+class SequenceChannel {
 
     @Id
     @Column(name = "uuid")
-    private UUID uuid;
+    private var uuid: UUID? = null
 
     @Basic
     @Column(name = "sequence_id")
-    private Integer sequenceId;
+    private var sequenceId: Integer? = null
 
     @Basic
     @Column(name = "stage_prop_uuid")
-    private UUID stagePropUuid;
+    private var stagePropUuid: UUID? = null
 
     @Basic
     @Column(name = "name")
-    private String name;
+    private var name: String? = null
 
     @Basic
     @Column(name = "display_order")
-    private Integer displayOrder;
+    private var displayOrder: Integer? = null
 
     @Basic
     @Column(name = "channel_json", columnDefinition = "text")
-    private String channelJson;
+    private var channelJson: String? = null
 
-    public UUID getUuid() {
-        return uuid;
+    fun getUuid(): UUID {
+        return uuid
     }
 
-    public SequenceChannel setUuid(UUID uuid) {
-        this.uuid = uuid;
-        return this;
+    fun setUuid(uuid: UUID): SequenceChannel {
+        this.uuid = uuid
+        return this
     }
 
-    public Integer getSequenceId() {
-        return sequenceId;
+    fun getSequenceId(): Integer {
+        return sequenceId
     }
 
-    public SequenceChannel setSequenceId(Integer sequenceId) {
-        this.sequenceId = sequenceId;
-        return this;
+    fun setSequenceId(sequenceId: Integer): SequenceChannel {
+        this.sequenceId = sequenceId
+        return this
     }
 
-    public UUID getStagePropUuid() {
-        return stagePropUuid;
+    fun getStagePropUuid(): UUID {
+        return stagePropUuid
     }
 
-    public SequenceChannel setStagePropUuid(UUID stagePropUuid) {
-        this.stagePropUuid = stagePropUuid;
-        return this;
+    fun setStagePropUuid(stagePropUuid: UUID): SequenceChannel {
+        this.stagePropUuid = stagePropUuid
+        return this
     }
 
-    public String getName() {
-        return name;
+    fun getName(): String {
+        return name
     }
 
-    public SequenceChannel setName(String name) {
-        this.name = name;
-        return this;
+    fun setName(name: String): SequenceChannel {
+        this.name = name
+        return this
     }
 
-    public Integer getDisplayOrder() {
-        return displayOrder;
+    fun getDisplayOrder(): Integer {
+        return displayOrder
     }
 
-    public SequenceChannel setDisplayOrder(Integer displayOrder) {
-        this.displayOrder = displayOrder;
-        return this;
-    }
-
-    /**
-     * @return a {@link SequenceChannelEffects} instance in JSON form
-     */
-    public String getChannelJson() {
-        return channelJson;
+    fun setDisplayOrder(displayOrder: Integer): SequenceChannel {
+        this.displayOrder = displayOrder
+        return this
     }
 
     /**
-     * @param channelJson a {@link SequenceChannelEffects} instance in JSON form
+     * @return a [SequenceChannelEffects] instance in JSON form
      */
-    public SequenceChannel setChannelJson(String channelJson) {
-        this.channelJson = channelJson;
-        return this;
+    fun getChannelJson(): String {
+        return channelJson
+    }
+
+    /**
+     * @param channelJson a [SequenceChannelEffects] instance in JSON form
+     */
+    fun setChannelJson(channelJson: String): SequenceChannel {
+        this.channelJson = channelJson
+        return this
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SequenceChannel that = (SequenceChannel) o;
-        return Objects.equals(uuid, that.uuid) &&
+    fun equals(o: Object?): Boolean {
+        if (this === o) return true
+        if (o == null || getClass() !== o!!.getClass()) return false
+        val that = o
+        return Objects.equals(uuid, that!!.uuid) &&
                 Objects.equals(sequenceId, that.sequenceId) &&
                 Objects.equals(stagePropUuid, that.stagePropUuid) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(displayOrder, that.displayOrder) &&
-                Objects.equals(channelJson, that.channelJson);
+                Objects.equals(channelJson, that.channelJson)
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(uuid, sequenceId, stagePropUuid, name, displayOrder, channelJson);
+    fun hashCode(): Int {
+        return Objects.hash(uuid, sequenceId, stagePropUuid, name, displayOrder, channelJson)
     }
 
     @Override
-    public String toString() {
+    fun toString(): String {
         return "SequenceChannel{" +
                 "uuid=" + uuid +
                 ", sequenceId=" + sequenceId +
@@ -121,6 +121,6 @@ public class SequenceChannel {
                 ", name='" + name + '\'' +
                 ", displayOrder=" + displayOrder +
                 ", channelJson='" + channelJson + '\'' +
-                '}';
+                '}'
     }
 }

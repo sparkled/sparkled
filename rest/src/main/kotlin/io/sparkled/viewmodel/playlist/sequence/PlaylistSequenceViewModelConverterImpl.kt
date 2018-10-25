@@ -1,35 +1,29 @@
-package io.sparkled.viewmodel.playlist.sequence;
+package io.sparkled.viewmodel.playlist.sequence
 
-import io.sparkled.model.entity.PlaylistSequence;
-import io.sparkled.persistence.playlist.PlaylistPersistenceService;
+import io.sparkled.model.entity.PlaylistSequence
+import io.sparkled.persistence.playlist.PlaylistPersistenceService
 
-import javax.inject.Inject;
+import javax.inject.Inject
 
-public class PlaylistSequenceViewModelConverterImpl extends PlaylistSequenceViewModelConverter {
-
-    private PlaylistPersistenceService playlistPersistenceService;
-
-    @Inject
-    public PlaylistSequenceViewModelConverterImpl(PlaylistPersistenceService playlistPersistenceService) {
-        this.playlistPersistenceService = playlistPersistenceService;
-    }
+class PlaylistSequenceViewModelConverterImpl @Inject
+constructor(private val playlistPersistenceService: PlaylistPersistenceService) : PlaylistSequenceViewModelConverter() {
 
     @Override
-    public PlaylistSequenceViewModel toViewModel(PlaylistSequence model) {
-        return new PlaylistSequenceViewModel()
+    fun toViewModel(model: PlaylistSequence): PlaylistSequenceViewModel {
+        return PlaylistSequenceViewModel()
                 .setUuid(model.getUuid())
                 .setSequenceId(model.getSequenceId())
-                .setDisplayOrder(model.getDisplayOrder());
+                .setDisplayOrder(model.getDisplayOrder())
     }
 
     @Override
-    public PlaylistSequence toModel(PlaylistSequenceViewModel viewModel) {
-        PlaylistSequence model = playlistPersistenceService.getPlaylistSequenceByUuid(viewModel.getSequenceId(), viewModel.getUuid())
-                .orElseGet(PlaylistSequence::new);
+    fun toModel(viewModel: PlaylistSequenceViewModel): PlaylistSequence {
+        val model = playlistPersistenceService.getPlaylistSequenceByUuid(viewModel.getSequenceId(), viewModel.getUuid())
+                .orElseGet(???({ PlaylistSequence() }))
 
         return model
                 .setUuid(viewModel.getUuid())
                 .setSequenceId(viewModel.getSequenceId())
-                .setDisplayOrder(viewModel.getDisplayOrder());
+                .setDisplayOrder(viewModel.getDisplayOrder())
     }
 }

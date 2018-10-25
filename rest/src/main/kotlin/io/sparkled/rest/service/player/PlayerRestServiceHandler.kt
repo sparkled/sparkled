@@ -1,50 +1,42 @@
-package io.sparkled.rest.service.player;
+package io.sparkled.rest.service.player
 
-import io.sparkled.model.entity.Playlist;
-import io.sparkled.model.playlist.PlaylistAction;
-import io.sparkled.model.playlist.PlaylistActionType;
-import io.sparkled.music.PlaybackService;
-import io.sparkled.persistence.playlist.PlaylistPersistenceService;
-import io.sparkled.rest.service.RestServiceHandler;
+import io.sparkled.model.entity.Playlist
+import io.sparkled.model.playlist.PlaylistAction
+import io.sparkled.model.playlist.PlaylistActionType
+import io.sparkled.music.PlaybackService
+import io.sparkled.persistence.playlist.PlaylistPersistenceService
+import io.sparkled.rest.service.RestServiceHandler
 
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-import java.util.Optional;
+import javax.inject.Inject
+import javax.ws.rs.core.Response
+import java.util.Optional
 
-public class PlayerRestServiceHandler extends RestServiceHandler {
+class PlayerRestServiceHandler @Inject
+constructor(private val playlistPersistenceService: PlaylistPersistenceService,
+            private val playbackService: PlaybackService) : RestServiceHandler() {
 
-    private final PlaylistPersistenceService playlistPersistenceService;
-    private final PlaybackService playbackService;
-
-    @Inject
-    public PlayerRestServiceHandler(PlaylistPersistenceService playlistPersistenceService,
-                                    PlaybackService playbackService) {
-        this.playlistPersistenceService = playlistPersistenceService;
-        this.playbackService = playbackService;
-    }
-
-    Response adjustPlayback(PlaylistAction action) {
-        PlaylistActionType type = action.getType();
+    internal fun adjustPlayback(action: PlaylistAction): Response {
+        val type = action.getType()
         if (type == null) {
-            return respond(Response.Status.BAD_REQUEST, "A valid playback action must be supplied.");
-        } else if (type == PlaylistActionType.PLAY) {
+            return respond(Response.Status.BAD_REQUEST, "A valid playback action must be supplied.")
+        } else if (type === PlaylistActionType.PLAY) {
             if (!play(action)) {
-                return respond(Response.Status.NOT_FOUND, "Playlist not found.");
+                return respond(Response.Status.NOT_FOUND, "Playlist not found.")
             }
-        } else if (type == PlaylistActionType.STOP) {
-            stop();
+        } else if (type === PlaylistActionType.STOP) {
+            stop()
         }
 
-        return respondOk();
+        return respondOk()
     }
 
-    private boolean play(PlaylistAction action) {
-        Optional<Playlist> playlist = playlistPersistenceService.getPlaylistById(action.getPlaylistId());
-        playlist.ifPresent(playbackService::play);
-        return playlist.isPresent();
+    private fun play(action: PlaylistAction): Boolean {
+        val playlist = playlistPersistenceService.getPlaylistById(action.getPlaylistId())
+        playlist.ifPresent(???({ playbackService.play() }))
+        return playlist.isPresent()
     }
 
-    private void stop() {
-        playbackService.stopPlayback();
+    private fun stop() {
+        playbackService.stopPlayback()
     }
 }
