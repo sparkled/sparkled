@@ -39,6 +39,7 @@
         <jetty.version>9.4.12.v20180830</jetty.version>
         <junit.version>5.3.1</junit.version>
         <kotlin.version>1.2.71</kotlin.version>
+        <ktlint-maven-plugin.version>0.9.15</ktlint-maven-plugin.version>
         <liquibase.version>3.6.2</liquibase.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <log4j.version>1.2.17</log4j.version>
@@ -268,6 +269,20 @@
 
         <plugins>
             <plugin>
+                <groupId>com.github.gantsign.maven</groupId>
+                <artifactId>ktlint-maven-plugin</artifactId>
+                <version>${ktlint-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <version>${kotlin.version}</version>
@@ -308,8 +323,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${kotlin.compiler.jvmTarget}</source>
+                    <target>${kotlin.compiler.jvmTarget}</target>
                 </configuration>
                 <executions>
                     <!-- Replacing default-compile as it is treated specially by maven -->
