@@ -2,7 +2,8 @@ package io.sparkled.persistence.stage
 
 import io.sparkled.model.entity.Stage
 import io.sparkled.model.entity.StageProp
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 interface StagePersistenceService {
 

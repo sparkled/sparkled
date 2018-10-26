@@ -4,7 +4,8 @@ import io.sparkled.model.entity.StageProp
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.qStageProp
 import io.sparkled.persistence.QueryFactory
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 class GetStagePropByUuidQuery(private val stageId: Int, private val uuid: UUID) : PersistenceQuery<Optional<StageProp>> {
 

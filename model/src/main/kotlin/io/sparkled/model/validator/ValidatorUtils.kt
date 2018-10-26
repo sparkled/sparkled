@@ -1,6 +1,6 @@
 package io.sparkled.model.validator
 
-import java.util.*
+import java.util.HashSet
 
 object ValidatorUtils {
 

@@ -10,7 +10,7 @@ import io.sparkled.persistence.PersistenceQuery.Companion.qRenderedStageProp
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.stage.impl.query.DeleteRenderedStagePropsQuery
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.UUID
 
 class SaveRenderedStagePropsQuery(private val sequence: Sequence, private val renderedStagePropDataMap: RenderedStagePropDataMap) : PersistenceQuery<Unit> {
 

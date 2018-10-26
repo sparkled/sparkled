@@ -2,7 +2,7 @@ package io.sparkled.viewmodel.playlist
 
 import io.sparkled.viewmodel.ViewModel
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModel
-import java.util.*
+import java.util.ArrayList
 
 class PlaylistViewModel : ViewModel {
 

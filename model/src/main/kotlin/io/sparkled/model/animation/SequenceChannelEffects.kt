@@ -1,7 +1,6 @@
 package io.sparkled.model.animation
 
 import io.sparkled.model.animation.effect.Effect
-import java.util.*
 
 class SequenceChannelEffects {
 

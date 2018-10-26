@@ -5,7 +5,7 @@ import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
 import io.sparkled.persistence.PersistenceQuery.Companion.qSongAudio
 import io.sparkled.persistence.QueryFactory
-import java.util.*
+import java.util.Optional
 
 class GetSongAudioBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Optional<SongAudio>> {
 

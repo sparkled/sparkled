@@ -4,8 +4,15 @@ import io.sparkled.model.entity.Stage
 import io.sparkled.model.entity.StageProp
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.stage.StagePersistenceService
-import io.sparkled.persistence.stage.impl.query.*
-import java.util.*
+import io.sparkled.persistence.stage.impl.query.DeleteStageQuery
+import io.sparkled.persistence.stage.impl.query.GetAllStagesQuery
+import io.sparkled.persistence.stage.impl.query.GetStageByIdQuery
+import io.sparkled.persistence.stage.impl.query.GetStagePropByUuidQuery
+import io.sparkled.persistence.stage.impl.query.GetStagePropsByStageIdQuery
+import io.sparkled.persistence.stage.impl.query.SaveStagePropsQuery
+import io.sparkled.persistence.stage.impl.query.SaveStageQuery
+import java.util.Optional
+import java.util.UUID
 import javax.inject.Inject
 
 class StagePersistenceServiceImpl @Inject

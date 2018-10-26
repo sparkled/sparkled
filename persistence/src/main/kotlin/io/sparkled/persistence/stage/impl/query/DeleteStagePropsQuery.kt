@@ -8,7 +8,7 @@ import io.sparkled.persistence.PersistenceQuery.Companion.qStageProp
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.sequence.impl.query.DeleteSequenceChannelsQuery
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.UUID
 
 class DeleteStagePropsQuery internal constructor(stagePropUuids: Collection<UUID>) : PersistenceQuery<Unit> {
 

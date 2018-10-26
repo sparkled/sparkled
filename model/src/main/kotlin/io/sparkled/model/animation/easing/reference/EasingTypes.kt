@@ -5,14 +5,15 @@ import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
 import io.sparkled.model.animation.param.ParamType
-import java.util.*
+import java.util.Arrays
 
 object EasingTypes {
     private val TYPES = Arrays.asList(
-            easingType(EasingTypeCode.CONSTANT, "Constant",
-                    param(ParamName.PERCENT, ParamType.DECIMAL).setValue(50f)
-            ),
-            easingType(EasingTypeCode.LINEAR, "Linear")
+        easingType(
+            EasingTypeCode.CONSTANT, "Constant",
+            param(ParamName.PERCENT, ParamType.DECIMAL).setValue(50f)
+        ),
+        easingType(EasingTypeCode.LINEAR, "Linear")
     )
 
     fun get(): List<EasingType> {

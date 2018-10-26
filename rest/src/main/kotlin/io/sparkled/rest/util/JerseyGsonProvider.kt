@@ -1,7 +1,11 @@
 package io.sparkled.rest.util
 
 import io.sparkled.model.util.GsonProvider
-import java.io.*
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.io.OutputStreamWriter
 import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets
 import javax.ws.rs.Consumes
@@ -18,15 +22,24 @@ import javax.ws.rs.ext.Provider
 @Consumes(MediaType.APPLICATION_JSON)
 class JerseyGsonProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
 
-    override fun isReadable(type: Class<*>, genericType: Type,
-                            annotations: Array<Annotation>, mediaType: MediaType): Boolean {
+    override fun isReadable(
+        type: Class<*>,
+        genericType: Type,
+        annotations: Array<Annotation>,
+        mediaType: MediaType
+    ): Boolean {
         return true
     }
 
     @Throws(IOException::class)
-    override fun readFrom(type: Class<Any>, genericType: Type,
-                          annotations: Array<Annotation>, mediaType: MediaType,
-                          httpHeaders: MultivaluedMap<String, String>, entityStream: InputStream): Any {
+    override fun readFrom(
+        type: Class<Any>,
+        genericType: Type,
+        annotations: Array<Annotation>,
+        mediaType: MediaType,
+        httpHeaders: MultivaluedMap<String, String>,
+        entityStream: InputStream
+    ): Any {
         InputStreamReader(entityStream, StandardCharsets.UTF_8).use { streamReader ->
             return GsonProvider.get().fromJson(streamReader, genericType)
         }
@@ -41,8 +54,15 @@ class JerseyGsonProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
     }
 
     @Throws(IOException::class, WebApplicationException::class)
-    override fun writeTo(`object`: Any, type: Class<*>, genericType: Type, annotations: Array<Annotation>, mediaType: MediaType,
-                         httpHeaders: MultivaluedMap<String, Any>, entityStream: OutputStream) {
+    override fun writeTo(
+        `object`: Any,
+        type: Class<*>,
+        genericType: Type,
+        annotations: Array<Annotation>,
+        mediaType: MediaType,
+        httpHeaders: MultivaluedMap<String, Any>,
+        entityStream: OutputStream
+    ) {
         OutputStreamWriter(entityStream, StandardCharsets.UTF_8).use { writer ->
             GsonProvider.get().toJson(`object`, genericType, writer)
         }

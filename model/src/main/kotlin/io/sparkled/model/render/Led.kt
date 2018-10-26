@@ -1,7 +1,7 @@
 package io.sparkled.model.render
 
 import java.awt.Color
-import java.util.*
+import java.util.Arrays
 
 class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset: Int) {
     private val index: Int
@@ -61,7 +61,6 @@ class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset
     override fun toString(): String {
         return String.format("#%02X%02X%02X", r, g, b)
     }
-
 
     companion object {
 

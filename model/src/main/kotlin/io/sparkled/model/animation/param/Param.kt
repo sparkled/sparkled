@@ -1,6 +1,6 @@
 package io.sparkled.model.animation.param
 
-import java.util.*
+import java.util.ArrayList
 
 class Param {
 

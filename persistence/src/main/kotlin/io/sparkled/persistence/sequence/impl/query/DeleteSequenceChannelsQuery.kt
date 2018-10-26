@@ -5,7 +5,7 @@ import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
 import io.sparkled.persistence.PersistenceQuery.Companion.qSequenceChannel
 import io.sparkled.persistence.QueryFactory
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.UUID
 
 class DeleteSequenceChannelsQuery(sequenceChannelUuids: Collection<UUID>) : PersistenceQuery<Unit> {
 

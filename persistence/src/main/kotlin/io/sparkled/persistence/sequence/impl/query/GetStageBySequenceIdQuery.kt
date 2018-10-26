@@ -5,7 +5,7 @@ import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
 import io.sparkled.persistence.PersistenceQuery.Companion.qStage
 import io.sparkled.persistence.QueryFactory
-import java.util.*
+import java.util.Optional
 
 class GetStageBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Optional<Stage>> {
 

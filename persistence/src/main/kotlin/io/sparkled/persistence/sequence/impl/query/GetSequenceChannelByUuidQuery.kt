@@ -4,7 +4,8 @@ import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.qSequenceChannel
 import io.sparkled.persistence.QueryFactory
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 class GetSequenceChannelByUuidQuery(private val sequenceId: Int, private val uuid: UUID) : PersistenceQuery<Optional<SequenceChannel>> {
 

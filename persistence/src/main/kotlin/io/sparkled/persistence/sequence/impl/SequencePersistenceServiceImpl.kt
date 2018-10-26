@@ -1,11 +1,28 @@
 package io.sparkled.persistence.sequence.impl
 
-import io.sparkled.model.entity.*
+import io.sparkled.model.entity.Sequence
+import io.sparkled.model.entity.SequenceChannel
+import io.sparkled.model.entity.Song
+import io.sparkled.model.entity.SongAudio
+import io.sparkled.model.entity.Stage
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.sequence.SequencePersistenceService
-import io.sparkled.persistence.sequence.impl.query.*
-import java.util.*
+import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery
+import io.sparkled.persistence.sequence.impl.query.GetAllSequencesQuery
+import io.sparkled.persistence.sequence.impl.query.GetRenderedStagePropsBySequenceQuery
+import io.sparkled.persistence.sequence.impl.query.GetSequenceByIdQuery
+import io.sparkled.persistence.sequence.impl.query.GetSequenceChannelByUuidQuery
+import io.sparkled.persistence.sequence.impl.query.GetSequenceChannelsBySequenceIdQuery
+import io.sparkled.persistence.sequence.impl.query.GetSequenceStagePropUuidMapBySequenceIdQuery
+import io.sparkled.persistence.sequence.impl.query.GetSongAudioBySequenceIdQuery
+import io.sparkled.persistence.sequence.impl.query.GetStageBySequenceIdQuery
+import io.sparkled.persistence.sequence.impl.query.SaveRenderedStagePropsQuery
+import io.sparkled.persistence.sequence.impl.query.SaveSequenceChannelsQuery
+import io.sparkled.persistence.sequence.impl.query.SaveSequenceQuery
+import java.util.Collections
+import java.util.Optional
+import java.util.UUID
 import javax.inject.Inject
 
 class SequencePersistenceServiceImpl @Inject

@@ -24,15 +24,17 @@ import javax.persistence.EntityManager
 import javax.ws.rs.core.Response
 
 open class SequenceRestServiceHandler @Inject
-constructor(private val entityManagerProvider: Provider<EntityManager>,
-            private val sequencePersistenceService: SequencePersistenceService,
-            private val songPersistenceService: SongPersistenceService,
-            private val stagePersistenceService: StagePersistenceService,
-            private val sequenceViewModelConverter: SequenceViewModelConverter,
-            private val sequenceSearchViewModelConverter: SequenceSearchViewModelConverter,
-            private val sequenceChannelViewModelConverter: SequenceChannelViewModelConverter,
-            private val stageViewModelConverter: StageViewModelConverter,
-            private val stagePropViewModelConverter: StagePropViewModelConverter) : RestServiceHandler() {
+constructor(
+    private val entityManagerProvider: Provider<EntityManager>,
+    private val sequencePersistenceService: SequencePersistenceService,
+    private val songPersistenceService: SongPersistenceService,
+    private val stagePersistenceService: StagePersistenceService,
+    private val sequenceViewModelConverter: SequenceViewModelConverter,
+    private val sequenceSearchViewModelConverter: SequenceSearchViewModelConverter,
+    private val sequenceChannelViewModelConverter: SequenceChannelViewModelConverter,
+    private val stageViewModelConverter: StageViewModelConverter,
+    private val stagePropViewModelConverter: StagePropViewModelConverter
+) : RestServiceHandler() {
 
     fun createSequence(sequenceViewModel: SequenceViewModel): Response {
         return Transaction(entityManagerProvider).of {

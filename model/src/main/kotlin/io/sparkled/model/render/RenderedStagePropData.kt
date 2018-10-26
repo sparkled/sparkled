@@ -1,6 +1,6 @@
 package io.sparkled.model.render
 
-import java.util.*
+import java.util.ArrayList
 
 class RenderedStagePropData(startFrame: Int, endFrame: Int, val ledCount: Int, val data: ByteArray) {
 

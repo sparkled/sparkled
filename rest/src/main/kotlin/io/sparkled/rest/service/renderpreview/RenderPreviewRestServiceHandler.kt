@@ -14,9 +14,11 @@ import javax.inject.Inject
 import javax.ws.rs.core.Response
 
 open class RenderPreviewRestServiceHandler @Inject
-constructor(private val sequencePersistenceService: SequencePersistenceService,
-            private val songPersistenceService: SongPersistenceService,
-            private val stagePersistenceService: StagePersistenceService) : RestServiceHandler() {
+constructor(
+    private val sequencePersistenceService: SequencePersistenceService,
+    private val songPersistenceService: SongPersistenceService,
+    private val stagePersistenceService: StagePersistenceService
+) : RestServiceHandler() {
 
     internal fun getRenderedSequence(startFrame: Int, frameCount: Int, sequenceChannels: List<SequenceChannel>?): Response {
         if (sequenceChannels == null || sequenceChannels.isEmpty()) {

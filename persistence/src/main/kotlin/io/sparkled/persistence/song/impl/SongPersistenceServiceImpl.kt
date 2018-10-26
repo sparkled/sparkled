@@ -3,8 +3,14 @@ package io.sparkled.persistence.song.impl
 import io.sparkled.model.entity.Song
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.song.SongPersistenceService
-import io.sparkled.persistence.song.impl.query.*
-import java.util.*
+import io.sparkled.persistence.song.impl.query.DeleteSongsQuery
+import io.sparkled.persistence.song.impl.query.GetAllSongsQuery
+import io.sparkled.persistence.song.impl.query.GetSongByIdQuery
+import io.sparkled.persistence.song.impl.query.GetSongBySequenceIdQuery
+import io.sparkled.persistence.song.impl.query.SaveSongAudioQuery
+import io.sparkled.persistence.song.impl.query.SaveSongQuery
+import java.util.Collections
+import java.util.Optional
 import javax.inject.Inject
 
 class SongPersistenceServiceImpl @Inject

@@ -1,7 +1,17 @@
 package io.sparkled.persistence
 
-import io.sparkled.model.entity.*
-import java.util.*
+import io.sparkled.model.entity.QPlaylist
+import io.sparkled.model.entity.QPlaylistSequence
+import io.sparkled.model.entity.QRenderedStageProp
+import io.sparkled.model.entity.QSequence
+import io.sparkled.model.entity.QSequenceChannel
+import io.sparkled.model.entity.QSetting
+import io.sparkled.model.entity.QSong
+import io.sparkled.model.entity.QSongAudio
+import io.sparkled.model.entity.QStage
+import io.sparkled.model.entity.QStageProp
+import java.util.Collections
+import java.util.UUID
 
 interface PersistenceQuery<out T> {
 

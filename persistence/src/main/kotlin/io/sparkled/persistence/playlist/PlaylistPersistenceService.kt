@@ -4,7 +4,8 @@ import io.sparkled.model.entity.Playlist
 import io.sparkled.model.entity.PlaylistSequence
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.playlist.PlaylistSummary
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 interface PlaylistPersistenceService {
 

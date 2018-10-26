@@ -1,8 +1,13 @@
 package io.sparkled.persistence.sequence
 
-import io.sparkled.model.entity.*
+import io.sparkled.model.entity.Sequence
+import io.sparkled.model.entity.SequenceChannel
+import io.sparkled.model.entity.Song
+import io.sparkled.model.entity.SongAudio
+import io.sparkled.model.entity.Stage
 import io.sparkled.model.render.RenderedStagePropDataMap
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 interface SequencePersistenceService {
 

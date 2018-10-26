@@ -9,7 +9,7 @@ import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
 import io.sparkled.persistence.PersistenceQuery.Companion.qStageProp
 import io.sparkled.persistence.QueryFactory
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.UUID
 
 class SaveStagePropsQuery(private val stage: Stage, private val stageProps: List<StageProp>) : PersistenceQuery<Unit> {
 

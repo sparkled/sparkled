@@ -5,7 +5,7 @@ import io.sparkled.renderer.effect.EffectRenderer
 import io.sparkled.renderer.effect.FlashEffectRenderer
 import io.sparkled.renderer.effect.LineEffectRenderer
 import io.sparkled.renderer.effect.SplitLineEffectRenderer
-import java.util.*
+import java.util.HashMap
 
 object EffectTypeRenderers {
 

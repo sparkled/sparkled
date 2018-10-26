@@ -42,7 +42,6 @@ constructor(private val requestHandler: RequestHandler) : UdpServer {
             } catch (e: Exception) {
                 logger.error("Failed to handle UDP request.", e)
             }
-
         }
     }
 

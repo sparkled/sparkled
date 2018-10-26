@@ -14,11 +14,13 @@ import javax.persistence.EntityManager
 import javax.ws.rs.core.Response
 
 open class StageRestServiceHandler @Inject
-constructor(private val entityManagerProvider: Provider<EntityManager>,
-            private val stagePersistenceService: StagePersistenceService,
-            private val stageViewModelConverter: StageViewModelConverter,
-            private val stageSearchViewModelConverter: StageSearchViewModelConverter,
-            private val stagePropViewModelConverter: StagePropViewModelConverter) : RestServiceHandler() {
+constructor(
+    private val entityManagerProvider: Provider<EntityManager>,
+    private val stagePersistenceService: StagePersistenceService,
+    private val stageViewModelConverter: StageViewModelConverter,
+    private val stageSearchViewModelConverter: StageSearchViewModelConverter,
+    private val stagePropViewModelConverter: StagePropViewModelConverter
+) : RestServiceHandler() {
 
     fun createStage(stageViewModel: StageViewModel): Response {
         return Transaction(entityManagerProvider).of {
