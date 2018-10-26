@@ -14,11 +14,13 @@ import javax.persistence.EntityManager
 import javax.ws.rs.core.Response
 
 open class PlaylistRestServiceHandler @Inject
-constructor(private val entityManagerProvider: Provider<EntityManager>,
-            private val playlistPersistenceService: PlaylistPersistenceService,
-            private val playlistViewModelConverter: PlaylistViewModelConverter,
-            private val playlistSearchViewModelConverter: PlaylistSearchViewModelConverter,
-            private val playlistSequenceViewModelConverter: PlaylistSequenceViewModelConverter) : RestServiceHandler() {
+constructor(
+    private val entityManagerProvider: Provider<EntityManager>,
+    private val playlistPersistenceService: PlaylistPersistenceService,
+    private val playlistViewModelConverter: PlaylistViewModelConverter,
+    private val playlistSearchViewModelConverter: PlaylistSearchViewModelConverter,
+    private val playlistSequenceViewModelConverter: PlaylistSequenceViewModelConverter
+) : RestServiceHandler() {
 
     internal fun createPlaylist(playlistViewModel: PlaylistViewModel): Response {
         return Transaction(entityManagerProvider).of {

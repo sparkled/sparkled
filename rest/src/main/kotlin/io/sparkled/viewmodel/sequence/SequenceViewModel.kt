@@ -3,7 +3,7 @@ package io.sparkled.viewmodel.sequence
 import io.sparkled.model.entity.SequenceStatus
 import io.sparkled.viewmodel.ViewModel
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel
-import java.util.*
+import java.util.ArrayList
 
 class SequenceViewModel : ViewModel {
 

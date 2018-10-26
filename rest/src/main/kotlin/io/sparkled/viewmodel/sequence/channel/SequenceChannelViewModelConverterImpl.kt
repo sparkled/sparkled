@@ -4,7 +4,7 @@ import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.util.GsonProvider
 import io.sparkled.persistence.sequence.SequencePersistenceService
-import java.util.*
+import java.util.Collections
 import javax.inject.Inject
 
 class SequenceChannelViewModelConverterImpl @Inject

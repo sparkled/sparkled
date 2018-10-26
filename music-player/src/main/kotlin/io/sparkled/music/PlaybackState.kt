@@ -5,7 +5,8 @@ import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.Song
 import io.sparkled.model.entity.SongAudio
 import io.sparkled.model.render.RenderedStagePropDataMap
-import java.util.*
+import java.util.Objects
+import java.util.UUID
 import java.util.function.Supplier
 
 /**
@@ -37,7 +38,6 @@ class PlaybackState @JvmOverloads constructor(val playlist: Playlist? = null, va
     override fun hashCode(): Int {
         return Objects.hash(playlist, playlistIndex, progressFunction, sequence, song, songAudio, renderedStageProps, stagePropUuids)
     }
-
 
     override fun toString(): String {
         return "PlaybackState{" +

@@ -8,7 +8,8 @@ import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.util.GsonProvider
 import io.sparkled.renderer.Renderer
-import java.util.*
+import java.util.Collections
+import java.util.UUID
 
 object RenderUtils {
 

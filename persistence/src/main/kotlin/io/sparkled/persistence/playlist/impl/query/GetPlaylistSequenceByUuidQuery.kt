@@ -4,7 +4,8 @@ import io.sparkled.model.entity.PlaylistSequence
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylistSequence
 import io.sparkled.persistence.QueryFactory
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 class GetPlaylistSequenceByUuidQuery(private val sequenceId: Int, private val uuid: UUID) : PersistenceQuery<Optional<PlaylistSequence>> {
 

@@ -1,7 +1,14 @@
 package io.sparkled.model.entity
 
-import java.util.*
-import javax.persistence.*
+import java.util.Arrays
+import java.util.UUID
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Lob
+import javax.persistence.Table
 
 @Entity
 @Table(name = "rendered_stage_prop")

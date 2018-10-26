@@ -15,9 +15,11 @@ import javax.persistence.EntityManager
 import javax.ws.rs.core.Response
 
 open class SongRestServiceHandler @Inject
-constructor(private val entityManagerProvider: Provider<EntityManager>,
-            private val songPersistenceService: SongPersistenceService,
-            private val songViewModelConverter: SongViewModelConverter) : RestServiceHandler() {
+constructor(
+    private val entityManagerProvider: Provider<EntityManager>,
+    private val songPersistenceService: SongPersistenceService,
+    private val songViewModelConverter: SongViewModelConverter
+) : RestServiceHandler() {
 
     @Throws(IOException::class)
     fun createSong(songViewModelJson: String, inputStream: InputStream): Response {

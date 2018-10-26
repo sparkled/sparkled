@@ -5,9 +5,14 @@ import io.sparkled.music.PlaybackState
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.InputStream
-import java.util.*
+import java.util.HashSet
 import javax.inject.Inject
-import javax.sound.sampled.*
+import javax.sound.sampled.AudioFormat
+import javax.sound.sampled.AudioInputStream
+import javax.sound.sampled.AudioSystem
+import javax.sound.sampled.Clip
+import javax.sound.sampled.LineEvent
+import javax.sound.sampled.LineListener
 
 class MusicPlayerServiceImpl @Inject
 constructor() : MusicPlayerService, LineListener {
@@ -71,7 +76,6 @@ constructor() : MusicPlayerService, LineListener {
             } catch (e: Exception) {
                 logger.error("Failed to close clip.")
             }
-
         } else {
             logger.info("Clip is already closed.")
         }

@@ -1,7 +1,7 @@
 package io.sparkled.viewmodel.stage.prop
 
 import io.sparkled.viewmodel.ViewModel
-import java.util.*
+import java.util.UUID
 
 class StagePropViewModel : ViewModel {
 

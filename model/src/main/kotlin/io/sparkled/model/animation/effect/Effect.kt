@@ -4,7 +4,8 @@ import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
-import java.util.*
+import java.util.ArrayList
+import java.util.UUID
 
 class Effect : HasParams {
 

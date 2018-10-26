@@ -5,7 +5,7 @@ import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.StageProp
 import io.sparkled.model.util.GsonProvider
-import java.util.*
+import java.util.UUID
 
 /**
  * Pairs up sequence channels with their associated stage prop.

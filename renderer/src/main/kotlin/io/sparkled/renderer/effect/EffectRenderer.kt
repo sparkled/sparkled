@@ -25,7 +25,6 @@ abstract class EffectRenderer {
         val framesPerRepetition = duration / repetitions
         val repetitionFrameNumber = (frame.frameNumber - startFrame) % (framesPerRepetition + 1)
 
-
         val progress = easingFunction.getProgress(effect.getEasing()!!, repetitionFrameNumber, framesPerRepetition)
         if (progress < 0 || progress > 1) {
             throw IllegalStateException("Animation progress is out of bounds: $progress")

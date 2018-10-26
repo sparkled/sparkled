@@ -9,8 +9,10 @@ import io.sparkled.persistence.stage.StagePersistenceService
 import javax.inject.Inject
 
 class SequenceSearchViewModelConverterImpl @Inject
-constructor(private val songPersistenceService: SongPersistenceService,
-            private val stagePersistenceService: StagePersistenceService) : SequenceSearchViewModelConverter() {
+constructor(
+    private val songPersistenceService: SongPersistenceService,
+    private val stagePersistenceService: StagePersistenceService
+) : SequenceSearchViewModelConverter() {
 
     override fun toViewModels(models: Collection<Sequence>): List<SequenceSearchViewModel> {
         val songs = getSongMap()

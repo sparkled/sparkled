@@ -3,7 +3,7 @@ package io.sparkled.renderer.fill
 import io.sparkled.model.animation.fill.FillTypeCode
 import io.sparkled.renderer.fill.function.RainbowFill
 import io.sparkled.renderer.fill.function.SolidFill
-import java.util.*
+import java.util.HashMap
 
 object FillFunctions {
 

@@ -42,7 +42,7 @@ abstract class RestServiceHandler {
     }
 
     /**
-     * @param entity    The payload to be returned.
+     * @param entity The payload to be returned.
      * @param mediaType The type of payload to be returned.
      * @return A 200 HTTP response with the specified status and media type.
      */

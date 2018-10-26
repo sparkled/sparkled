@@ -6,8 +6,17 @@ import io.sparkled.model.entity.Sequence
 import io.sparkled.model.playlist.PlaylistSummary
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
-import io.sparkled.persistence.playlist.impl.query.*
-import java.util.*
+import io.sparkled.persistence.playlist.impl.query.DeletePlaylistQuery
+import io.sparkled.persistence.playlist.impl.query.GetAllPlaylistsQuery
+import io.sparkled.persistence.playlist.impl.query.GetPlaylistByIdQuery
+import io.sparkled.persistence.playlist.impl.query.GetPlaylistSequenceByUuidQuery
+import io.sparkled.persistence.playlist.impl.query.GetPlaylistSequencesByPlaylistIdQuery
+import io.sparkled.persistence.playlist.impl.query.GetPlaylistSummariesQuery
+import io.sparkled.persistence.playlist.impl.query.GetSequenceAtPlaylistIndexQuery
+import io.sparkled.persistence.playlist.impl.query.SavePlaylistQuery
+import io.sparkled.persistence.playlist.impl.query.SavePlaylistSequencesQuery
+import java.util.Optional
+import java.util.UUID
 import javax.inject.Inject
 
 class PlaylistPersistenceServiceImpl @Inject

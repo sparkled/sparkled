@@ -9,8 +9,10 @@ import javax.inject.Inject
 import javax.ws.rs.core.Response
 
 open class PlayerRestServiceHandler @Inject
-constructor(private val playlistPersistenceService: PlaylistPersistenceService,
-            private val playbackService: PlaybackService) : RestServiceHandler() {
+constructor(
+    private val playlistPersistenceService: PlaylistPersistenceService,
+    private val playbackService: PlaybackService
+) : RestServiceHandler() {
 
     internal fun adjustPlayback(action: PlaylistAction): Response {
         val type = action.getType()

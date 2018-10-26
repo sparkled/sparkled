@@ -5,7 +5,13 @@ import org.glassfish.jersey.media.multipart.FormDataParam
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
-import javax.ws.rs.*
+import javax.ws.rs.Consumes
+import javax.ws.rs.DELETE
+import javax.ws.rs.GET
+import javax.ws.rs.POST
+import javax.ws.rs.Path
+import javax.ws.rs.PathParam
+import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
@@ -17,9 +23,11 @@ constructor(private val handler: SongRestServiceHandler) {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     @Throws(IOException::class)
-    fun createSong(@FormDataParam("song") songViewModelJson: String,
-                   @FormDataParam("mp3") inputStream: InputStream,
-                   @FormDataParam("mp3") fileDetail: FormDataContentDisposition): Response {
+    fun createSong(
+        @FormDataParam("song") songViewModelJson: String,
+        @FormDataParam("mp3") inputStream: InputStream,
+        @FormDataParam("mp3") fileDetail: FormDataContentDisposition
+    ): Response {
         return handler.createSong(songViewModelJson, inputStream)
     }
 

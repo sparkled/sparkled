@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory
 import java.net.MalformedURLException
 import java.net.URI
 import java.net.URISyntaxException
-import java.util.*
+import java.util.EnumSet
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject

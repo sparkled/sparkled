@@ -2,7 +2,7 @@ package io.sparkled.viewmodel.stage
 
 import io.sparkled.viewmodel.ViewModel
 import io.sparkled.viewmodel.stage.prop.StagePropViewModel
-import java.util.*
+import java.util.ArrayList
 
 class StageViewModel : ViewModel {
     private var id: Int? = null

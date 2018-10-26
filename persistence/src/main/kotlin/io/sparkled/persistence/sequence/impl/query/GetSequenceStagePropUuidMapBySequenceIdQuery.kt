@@ -5,7 +5,7 @@ import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
 import io.sparkled.persistence.PersistenceQuery.Companion.qStage
 import io.sparkled.persistence.PersistenceQuery.Companion.qStageProp
 import io.sparkled.persistence.QueryFactory
-import java.util.*
+import java.util.UUID
 
 class GetSequenceStagePropUuidMapBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Map<String, UUID>> {
 

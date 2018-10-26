@@ -2,7 +2,8 @@ package io.sparkled.viewmodel.sequence.channel
 
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.viewmodel.ViewModel
-import java.util.*
+import java.util.ArrayList
+import java.util.UUID
 
 class SequenceChannelViewModel : ViewModel {
 

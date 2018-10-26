@@ -1,8 +1,12 @@
 package io.sparkled.model.entity
 
 import io.sparkled.model.animation.SequenceChannelEffects
-import java.util.*
-import javax.persistence.*
+import java.util.UUID
+import javax.persistence.Basic
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
 @Table(name = "sequence_channel")

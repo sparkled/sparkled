@@ -14,8 +14,10 @@ import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 class RequestHandlerImpl @Inject
-constructor(private val playbackStateService: PlaybackStateService,
-            private val settingPersistenceService: SettingPersistenceService) : RequestHandler {
+constructor(
+    private val playbackStateService: PlaybackStateService,
+    private val settingPersistenceService: SettingPersistenceService
+) : RequestHandler {
 
     private val commands = mapOf(
             GetFrameCommand.KEY to GetFrameCommand(),

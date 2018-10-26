@@ -5,7 +5,7 @@ import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylistSequence
 import io.sparkled.persistence.PersistenceQuery.Companion.qSequence
 import io.sparkled.persistence.QueryFactory
-import java.util.*
+import java.util.Optional
 
 class GetSequenceAtPlaylistIndexQuery(private val playlistId: Int, private val index: Int) : PersistenceQuery<Optional<Sequence>> {
 

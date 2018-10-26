@@ -3,7 +3,7 @@ package io.sparkled.renderer.easing
 import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.renderer.easing.function.ConstantEasing
 import io.sparkled.renderer.easing.function.LinearEasing
-import java.util.*
+import java.util.HashMap
 
 object EasingFunctions {
 

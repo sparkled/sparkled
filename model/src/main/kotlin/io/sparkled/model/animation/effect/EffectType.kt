@@ -2,7 +2,7 @@ package io.sparkled.model.animation.effect
 
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
-import java.util.*
+import java.util.ArrayList
 
 class EffectType : HasParams {
 

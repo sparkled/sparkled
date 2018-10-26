@@ -4,7 +4,7 @@ import io.sparkled.model.entity.Playlist
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylist
 import io.sparkled.persistence.QueryFactory
-import java.util.*
+import java.util.Optional
 
 class GetPlaylistByIdQuery(private val playlistId: Int) : PersistenceQuery<Optional<Playlist>> {
 

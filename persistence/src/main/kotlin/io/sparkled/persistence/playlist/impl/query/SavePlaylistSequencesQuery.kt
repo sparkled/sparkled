@@ -9,7 +9,7 @@ import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
 import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylistSequence
 import io.sparkled.persistence.QueryFactory
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.UUID
 
 class SavePlaylistSequencesQuery(private val playlist: Playlist, private val playlistSequences: List<PlaylistSequence>) : PersistenceQuery<Unit> {
 

@@ -20,18 +20,20 @@ import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
 
 class PlaybackServiceImpl @Inject
-constructor(private val songPersistenceService: SongPersistenceService,
-            private val sequencePersistenceService: SequencePersistenceService,
-            private val playlistPersistenceService: PlaylistPersistenceService,
-            private val unitOfWork: UnitOfWork,
-            private val musicPlayerService: MusicPlayerService) : PlaybackService, PlaybackStateService {
+constructor(
+    private val songPersistenceService: SongPersistenceService,
+    private val sequencePersistenceService: SequencePersistenceService,
+    private val playlistPersistenceService: PlaylistPersistenceService,
+    private val unitOfWork: UnitOfWork,
+    private val musicPlayerService: MusicPlayerService
+) : PlaybackService, PlaybackStateService {
     private val executor: ExecutorService
 
     private val playbackState = AtomicReference<PlaybackState>(PlaybackState())
 
     init {
         this.executor = Executors.newSingleThreadScheduledExecutor(
-                ThreadFactoryBuilder().setNameFormat("playback-service-%d").build()
+            ThreadFactoryBuilder().setNameFormat("playback-service-%d").build()
         )
 
         musicPlayerService.addLineListener(LineListener { this.onLineEvent(it) })
@@ -80,17 +82,28 @@ constructor(private val songPersistenceService: SongPersistenceService,
     private fun loadPlaybackState(playlist: Playlist, playlistIndex: Int): PlaybackState {
         try {
             unitOfWork.begin()
-            val sequence = playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId()!!, playlistIndex).orElse(null)
+            val sequence =
+                playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId()!!, playlistIndex).orElse(null)
 
             return if (sequence == null) {
                 PlaybackState()
             } else {
                 val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!).orElse(null)
                 val stagePropData = sequencePersistenceService.getRenderedStagePropsBySequenceAndSong(sequence, song)
-                val stagePropUuids = sequencePersistenceService.getSequenceStagePropUuidMapBySequenceId(sequence.getId()!!)
+                val stagePropUuids =
+                    sequencePersistenceService.getSequenceStagePropUuidMapBySequenceId(sequence.getId()!!)
                 val songAudio = sequencePersistenceService.getSongAudioBySequenceId(sequence.getId()!!).orElse(null)
 
-                PlaybackState(playlist, playlistIndex, Supplier { musicPlayerService.sequenceProgress }, sequence, song, songAudio, stagePropData, stagePropUuids)
+                PlaybackState(
+                    playlist,
+                    playlistIndex,
+                    Supplier { musicPlayerService.sequenceProgress },
+                    sequence,
+                    song,
+                    songAudio,
+                    stagePropData,
+                    stagePropUuids
+                )
             }
         } finally {
             unitOfWork.end()

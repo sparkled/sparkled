@@ -1,7 +1,7 @@
 package io.sparkled.persistence.song
 
 import io.sparkled.model.entity.Song
-import java.util.*
+import java.util.Optional
 
 interface SongPersistenceService {
 

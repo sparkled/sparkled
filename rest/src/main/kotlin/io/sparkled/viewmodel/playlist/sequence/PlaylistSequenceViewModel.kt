@@ -1,7 +1,7 @@
 package io.sparkled.viewmodel.playlist.sequence
 
 import io.sparkled.viewmodel.ViewModel
-import java.util.*
+import java.util.UUID
 
 class PlaylistSequenceViewModel : ViewModel {
 
