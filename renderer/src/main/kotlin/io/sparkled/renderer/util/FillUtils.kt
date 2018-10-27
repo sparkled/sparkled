@@ -1,12 +1,22 @@
 package io.sparkled.renderer.util
 
-import io.sparkled.model.render.Led
 import io.sparkled.renderer.context.RenderContext
 import io.sparkled.renderer.fill.FillFunctions
+import org.slf4j.LoggerFactory
 
 object FillUtils {
 
-    fun fill(ctx: RenderContext, led: Led, alpha: Float) {
-        FillFunctions[ctx.effect.getFill()!!.getType()!!].fill(ctx, led, alpha)
+    private val logger = LoggerFactory.getLogger(FillUtils::class.java)
+
+    fun fill(ctx: RenderContext, ledIndex: Int, alpha: Float) {
+        val frame = ctx.frame
+
+        if (alpha < 0 || alpha > 1) {
+            val frameNumber = frame.frameNumber
+            logger.warn("Alpha {} for led #{} in frame #{} is invalid, skipping.", alpha, ledIndex, frameNumber)
+        } else if (ledIndex >= 0 && ledIndex < frame.ledCount) {
+            val led = frame.getLed(ledIndex)
+            FillFunctions[ctx.effect.getFill()!!.getType()!!].fill(ctx, led, alpha)
+        }
     }
 }

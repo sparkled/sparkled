@@ -3,8 +3,8 @@ package io.sparkled.renderer.util
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.renderer.effect.EffectRenderer
 import io.sparkled.renderer.effect.FlashEffectRenderer
-import io.sparkled.renderer.effect.LineEffectRenderer
-import io.sparkled.renderer.effect.SplitLineEffectRenderer
+import io.sparkled.renderer.effect.line.LineEffectRenderer
+import io.sparkled.renderer.effect.line.SplitLineEffectRenderer
 import java.util.HashMap
 
 object EffectTypeRenderers {

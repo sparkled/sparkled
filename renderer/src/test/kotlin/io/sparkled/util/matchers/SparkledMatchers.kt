@@ -4,7 +4,7 @@ import io.sparkled.model.render.RenderedStagePropData
 import org.hamcrest.Matcher
 
 object SparkledMatchers {
-    fun hasLeds(leds: Array<IntArray>): Matcher<RenderedStagePropData> {
-        return RenderedStagePropDataLedMatcher(leds)
+    fun hasRenderedFrames(vararg leds: IntArray): Matcher<RenderedStagePropData> {
+        return RenderedStagePropDataLedMatcher(arrayOf(*leds))
     }
 }
