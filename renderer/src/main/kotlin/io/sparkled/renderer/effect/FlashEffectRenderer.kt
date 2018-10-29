@@ -9,7 +9,7 @@ class FlashEffectRenderer : EffectRenderer() {
         val alpha = getAlpha(ctx.progress)
 
         for (i in 0 until ctx.channel.ledCount) {
-            FillUtils.fill(ctx, ctx.frame.getLed(i), alpha)
+            FillUtils.fill(ctx, i, alpha)
         }
     }
 

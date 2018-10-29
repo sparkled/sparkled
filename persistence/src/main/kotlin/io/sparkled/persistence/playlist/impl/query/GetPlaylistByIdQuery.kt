@@ -1,8 +1,8 @@
 package io.sparkled.persistence.playlist.impl.query
 
 import io.sparkled.model.entity.Playlist
+import io.sparkled.model.entity.QPlaylist.playlist
 import io.sparkled.persistence.PersistenceQuery
-import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylist
 import io.sparkled.persistence.QueryFactory
 import java.util.Optional
 
@@ -10,9 +10,9 @@ class GetPlaylistByIdQuery(private val playlistId: Int) : PersistenceQuery<Optio
 
     override fun perform(queryFactory: QueryFactory): Optional<Playlist> {
         val playlist = queryFactory
-                .selectFrom(qPlaylist)
-                .where(qPlaylist.id.eq(playlistId))
-                .fetchFirst()
+            .selectFrom(playlist)
+            .where(playlist.id.eq(playlistId))
+            .fetchFirst()
 
         return Optional.ofNullable(playlist)
     }

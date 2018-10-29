@@ -2,16 +2,19 @@ package io.sparkled.persistence.playlist.impl.query
 
 import io.sparkled.model.entity.Playlist
 import io.sparkled.model.entity.PlaylistSequence
+import io.sparkled.model.entity.QPlaylistSequence.playlistSequence
 import io.sparkled.model.validator.PlaylistSequenceValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
-import io.sparkled.persistence.PersistenceQuery.Companion.qPlaylistSequence
 import io.sparkled.persistence.QueryFactory
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
-class SavePlaylistSequencesQuery(private val playlist: Playlist, private val playlistSequences: List<PlaylistSequence>) : PersistenceQuery<Unit> {
+class SavePlaylistSequencesQuery(
+    private val playlist: Playlist,
+    private val playlistSequences: List<PlaylistSequence>
+) : PersistenceQuery<Unit> {
 
     override fun perform(queryFactory: QueryFactory) {
         val playlistSequenceValidator = PlaylistSequenceValidator()
@@ -33,10 +36,10 @@ class SavePlaylistSequencesQuery(private val playlist: Playlist, private val pla
         var uuidsToCheck = playlistSequences.asSequence().map(PlaylistSequence::getUuid).toList()
         uuidsToCheck = if (uuidsToCheck.isEmpty()) noUuids else uuidsToCheck
 
-        val uuidsInUse = queryFactory.select(qPlaylistSequence)
-                .from(qPlaylistSequence)
-                .where(qPlaylistSequence.playlistId.ne(playlist.getId()).and(qPlaylistSequence.uuid.`in`(uuidsToCheck)))
-                .fetchCount()
+        val uuidsInUse = queryFactory.select(playlistSequence)
+            .from(playlistSequence)
+            .where(playlistSequence.playlistId.ne(playlist.getId()).and(playlistSequence.uuid.`in`(uuidsToCheck)))
+            .fetchCount()
         return uuidsInUse > 0
     }
 
@@ -50,10 +53,10 @@ class SavePlaylistSequencesQuery(private val playlist: Playlist, private val pla
         uuidsToKeep = if (uuidsToKeep.isEmpty()) noUuids else uuidsToKeep
 
         return queryFactory
-                .select(qPlaylistSequence.uuid)
-                .from(qPlaylistSequence)
-                .where(qPlaylistSequence.playlistId.eq(playlist.getId()).and(qPlaylistSequence.uuid.notIn(uuidsToKeep)))
-                .fetch()
+            .select(playlistSequence.uuid)
+            .from(playlistSequence)
+            .where(playlistSequence.playlistId.eq(playlist.getId()).and(playlistSequence.uuid.notIn(uuidsToKeep)))
+            .fetch()
     }
 
     companion object {

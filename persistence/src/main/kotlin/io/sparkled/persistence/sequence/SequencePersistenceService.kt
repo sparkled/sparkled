@@ -31,7 +31,11 @@ interface SequencePersistenceService {
 
     fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>)
 
-    fun publishSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>, renderedStageProps: RenderedStagePropDataMap)
+    fun publishSequence(
+        sequence: Sequence,
+        sequenceChannels: List<SequenceChannel>,
+        renderedStageProps: RenderedStagePropDataMap
+    )
 
     fun deleteSequence(sequenceId: Int)
 }
