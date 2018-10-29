@@ -69,7 +69,11 @@ constructor(private val queryFactory: QueryFactory) : SequencePersistenceService
         SaveSequenceChannelsQuery(savedSequence, sequenceChannels).perform(queryFactory)
     }
 
-    override fun publishSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>, renderedStageProps: RenderedStagePropDataMap) {
+    override fun publishSequence(
+        sequence: Sequence,
+        sequenceChannels: List<SequenceChannel>,
+        renderedStageProps: RenderedStagePropDataMap
+    ) {
         val savedSequence = SaveSequenceQuery(sequence).perform(queryFactory)
         SaveSequenceChannelsQuery(savedSequence, sequenceChannels).perform(queryFactory)
         SaveRenderedStagePropsQuery(savedSequence, renderedStageProps).perform(queryFactory)

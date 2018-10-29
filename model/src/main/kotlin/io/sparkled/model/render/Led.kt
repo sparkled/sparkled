@@ -18,19 +18,19 @@ class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset
         this.b = Math.min(this.b + b, 255)
     }
 
-    var r: Int
+    private var r: Int
         get() = (ledData[offset + index + R]).toInt() and 0xFF
         private set(r) {
             ledData[offset + index + R] = r.toByte()
         }
 
-    var g: Int
+    private var g: Int
         get() = (ledData[offset + index + G]).toInt() and 0xFF
         private set(g) {
             ledData[offset + index + G] = g.toByte()
         }
 
-    var b: Int
+    private var b: Int
         get() = (ledData[offset + index + B]).toInt() and 0xFF
         private set(b) {
             ledData[offset + index + B] = b.toByte()

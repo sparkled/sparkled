@@ -1,17 +1,18 @@
 package io.sparkled.persistence.sequence.impl.query
 
+import io.sparkled.model.entity.QSequenceChannel.sequenceChannel
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.validator.SequenceChannelValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
-import io.sparkled.persistence.PersistenceQuery.Companion.qSequenceChannel
 import io.sparkled.persistence.QueryFactory
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
-class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequenceChannels: List<SequenceChannel>) : PersistenceQuery<Unit> {
+class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequenceChannels: List<SequenceChannel>) :
+    PersistenceQuery<Unit> {
 
     override fun perform(queryFactory: QueryFactory) {
         val sequenceChannelValidator = SequenceChannelValidator()
@@ -33,10 +34,10 @@ class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequ
         var uuidsToCheck = sequenceChannels.asSequence().map(SequenceChannel::getUuid).toList()
         uuidsToCheck = if (uuidsToCheck.isEmpty()) noUuids else uuidsToCheck
 
-        val uuidsInUse = queryFactory.select(qSequenceChannel)
-                .from(qSequenceChannel)
-                .where(qSequenceChannel.sequenceId.ne(sequence.getId()).and(qSequenceChannel.uuid.`in`(uuidsToCheck)))
-                .fetchCount()
+        val uuidsInUse = queryFactory.select(sequenceChannel)
+            .from(sequenceChannel)
+            .where(sequenceChannel.sequenceId.ne(sequence.getId()).and(sequenceChannel.uuid.`in`(uuidsToCheck)))
+            .fetchCount()
         return uuidsInUse > 0
     }
 
@@ -50,10 +51,10 @@ class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequ
         uuidsToKeep = if (uuidsToKeep.isEmpty()) noUuids else uuidsToKeep
 
         return queryFactory
-                .select(qSequenceChannel.uuid)
-                .from(qSequenceChannel)
-                .where(qSequenceChannel.sequenceId.eq(sequence.getId()).and(qSequenceChannel.uuid.notIn(uuidsToKeep)))
-                .fetch()
+            .select(sequenceChannel.uuid)
+            .from(sequenceChannel)
+            .where(sequenceChannel.sequenceId.eq(sequence.getId()).and(sequenceChannel.uuid.notIn(uuidsToKeep)))
+            .fetch()
     }
 
     companion object {
