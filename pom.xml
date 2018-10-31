@@ -38,7 +38,7 @@
         <jersey.version>2.27</jersey.version>
         <jetty.version>9.4.12.v20180830</jetty.version>
         <junit.version>5.3.1</junit.version>
-        <kotlin.version>1.2.71</kotlin.version>
+        <kotlin.version>1.3.0</kotlin.version>
         <ktlint-maven-plugin.version>0.9.15</ktlint-maven-plugin.version>
         <liquibase.version>3.6.2</liquibase.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
