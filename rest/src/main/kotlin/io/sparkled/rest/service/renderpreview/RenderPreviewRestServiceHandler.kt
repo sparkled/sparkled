@@ -25,17 +25,14 @@ constructor(
             return respond(Response.Status.BAD_REQUEST, "Nothing to render.")
         }
 
-        val sequenceOptional = sequencePersistenceService.getSequenceById(sequenceChannels[0].getSequenceId()!!)
-        val songOptional = songPersistenceService.getSongBySequenceId(sequenceChannels[0].getSequenceId()!!)
+        val sequence = sequencePersistenceService.getSequenceById(sequenceChannels[0].getSequenceId()!!)
+        val song = songPersistenceService.getSongBySequenceId(sequenceChannels[0].getSequenceId()!!)
 
-        if (!sequenceOptional.isPresent) {
+        if (sequence == null) {
             return respond(Response.Status.NOT_FOUND, "Sequence not found.")
-        } else if (!songOptional.isPresent) {
+        } else if (song == null) {
             return respond(Response.Status.NOT_FOUND, "Song not found.")
         }
-
-        val sequence = sequenceOptional.get()
-        val song = songOptional.get()
 
         val sequenceFrameCount = SequenceUtils.getFrameCount(song, sequence)
 

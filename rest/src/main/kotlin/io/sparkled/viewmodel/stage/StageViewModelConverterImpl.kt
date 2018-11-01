@@ -11,10 +11,10 @@ constructor(private val stagePersistenceService: StagePersistenceService) : Stag
 
     override fun toViewModel(model: Stage): StageViewModel {
         return StageViewModel()
-                .setId(model.getId())
-                .setName(model.getName())
-                .setWidth(model.getWidth())
-                .setHeight(model.getHeight())
+            .setId(model.getId())
+            .setName(model.getName())
+            .setWidth(model.getWidth())
+            .setHeight(model.getHeight())
     }
 
     override fun toModel(viewModel: StageViewModel): Stage {
@@ -22,9 +22,9 @@ constructor(private val stagePersistenceService: StagePersistenceService) : Stag
         val model = getStage(stageId)
 
         return model
-                .setName(viewModel.getName())
-                .setWidth(viewModel.getWidth())
-                .setHeight(viewModel.getHeight())
+            .setName(viewModel.getName())
+            .setWidth(viewModel.getWidth())
+            .setHeight(viewModel.getHeight())
     }
 
     private fun getStage(stageId: Int?): Stage {
@@ -33,6 +33,6 @@ constructor(private val stagePersistenceService: StagePersistenceService) : Stag
         }
 
         return stagePersistenceService.getStageById(stageId)
-                .orElseThrow { ViewModelConversionException("Stage with ID of '$stageId' not found.") }
+            ?: throw ViewModelConversionException("Stage with ID of '$stageId' not found.")
     }
 }

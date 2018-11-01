@@ -11,11 +11,11 @@ constructor(private val songPersistenceService: SongPersistenceService) : SongVi
 
     override fun toViewModel(model: Song): SongViewModel {
         return SongViewModel()
-                .setId(model.getId())
-                .setName(model.getName())
-                .setArtist(model.getArtist())
-                .setAlbum(model.getAlbum())
-                .setDurationMs(model.getDurationMs())
+            .setId(model.getId())
+            .setName(model.getName())
+            .setArtist(model.getArtist())
+            .setAlbum(model.getAlbum())
+            .setDurationMs(model.getDurationMs())
     }
 
     override fun toModel(viewModel: SongViewModel): Song {
@@ -23,11 +23,11 @@ constructor(private val songPersistenceService: SongPersistenceService) : SongVi
         val model = getSong(songId)
 
         return model
-                .setId(viewModel.getId())
-                .setName(viewModel.getName())
-                .setArtist(viewModel.getArtist())
-                .setAlbum(viewModel.getAlbum())
-                .setDurationMs(viewModel.getDurationMs())
+            .setId(viewModel.getId())
+            .setName(viewModel.getName())
+            .setArtist(viewModel.getArtist())
+            .setAlbum(viewModel.getAlbum())
+            .setDurationMs(viewModel.getDurationMs())
     }
 
     private fun getSong(songId: Int?): Song {
@@ -36,6 +36,6 @@ constructor(private val songPersistenceService: SongPersistenceService) : SongVi
         }
 
         return songPersistenceService.getSongById(songId)
-                .orElseThrow { ViewModelConversionException("Song with ID of '$songId' not found.") }
+            ?: throw ViewModelConversionException("Song with ID of '$songId' not found.")
     }
 }

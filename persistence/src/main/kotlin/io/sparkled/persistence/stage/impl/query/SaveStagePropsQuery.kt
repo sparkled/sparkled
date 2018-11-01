@@ -3,10 +3,10 @@ package io.sparkled.persistence.stage.impl.query
 import io.sparkled.model.entity.QStageProp.stageProp
 import io.sparkled.model.entity.Stage
 import io.sparkled.model.entity.StageProp
+import io.sparkled.model.util.IdUtils.NO_UUIDS
 import io.sparkled.model.validator.StagePropValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
-import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
 import io.sparkled.persistence.QueryFactory
 import org.slf4j.LoggerFactory
 import java.util.UUID
@@ -31,7 +31,7 @@ class SaveStagePropsQuery(private val stage: Stage, private val stageProps: List
 
     private fun uuidAlreadyInUse(queryFactory: QueryFactory): Boolean {
         var uuidsToCheck = stageProps.asSequence().map(StageProp::getUuid).toList()
-        uuidsToCheck = if (uuidsToCheck.isEmpty()) noUuids else uuidsToCheck
+        uuidsToCheck = if (uuidsToCheck.isEmpty()) NO_UUIDS else uuidsToCheck
 
         val uuidsInUse = queryFactory.select(stageProp)
             .from(stageProp)
@@ -47,7 +47,7 @@ class SaveStagePropsQuery(private val stage: Stage, private val stageProps: List
 
     private fun getStagePropUuidsToDelete(queryFactory: QueryFactory): List<UUID> {
         var uuidsToKeep = stageProps.asSequence().map(StageProp::getUuid).toList()
-        uuidsToKeep = if (uuidsToKeep.isEmpty()) noUuids else uuidsToKeep
+        uuidsToKeep = if (uuidsToKeep.isEmpty()) NO_UUIDS else uuidsToKeep
 
         return queryFactory
             .select(stageProp.uuid)

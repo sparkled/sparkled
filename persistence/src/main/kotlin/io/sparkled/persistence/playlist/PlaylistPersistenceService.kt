@@ -4,7 +4,6 @@ import io.sparkled.model.entity.Playlist
 import io.sparkled.model.entity.PlaylistSequence
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.playlist.PlaylistSummary
-import java.util.Optional
 import java.util.UUID
 
 interface PlaylistPersistenceService {
@@ -15,13 +14,13 @@ interface PlaylistPersistenceService {
 
     fun getPlaylistSummaries(): Map<Int, PlaylistSummary>
 
-    fun getPlaylistById(playlistId: Int): Optional<Playlist>
+    fun getPlaylistById(playlistId: Int): Playlist?
 
-    fun getSequenceAtPlaylistIndex(playlistId: Int, index: Int): Optional<Sequence>
+    fun getSequenceAtPlaylistIndex(playlistId: Int, index: Int): Sequence?
 
     fun getPlaylistSequencesByPlaylistId(playlistId: Int): List<PlaylistSequence>
 
-    fun getPlaylistSequenceByUuid(sequenceId: Int, uuid: UUID): Optional<PlaylistSequence>
+    fun getPlaylistSequenceByUuid(sequenceId: Int, uuid: UUID): PlaylistSequence?
 
     fun savePlaylist(playlist: Playlist, playlistSequences: List<PlaylistSequence>)
 

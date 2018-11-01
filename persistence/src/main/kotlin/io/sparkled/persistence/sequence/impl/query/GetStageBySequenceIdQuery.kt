@@ -5,17 +5,14 @@ import io.sparkled.model.entity.QStage.stage
 import io.sparkled.model.entity.Stage
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
-import java.util.Optional
 
-class GetStageBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Optional<Stage>> {
+class GetStageBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Stage?> {
 
-    override fun perform(queryFactory: QueryFactory): Optional<Stage> {
-        val stage = queryFactory
+    override fun perform(queryFactory: QueryFactory): Stage? {
+        return queryFactory
             .selectFrom(stage)
             .innerJoin(sequence).on(sequence.stageId.eq(stage.id))
             .where(sequence.id.eq(sequenceId))
             .fetchFirst()
-
-        return Optional.ofNullable(stage)
     }
 }

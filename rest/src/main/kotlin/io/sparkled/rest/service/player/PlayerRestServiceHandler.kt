@@ -31,8 +31,8 @@ constructor(
 
     private fun play(action: PlaylistAction): Boolean {
         val playlist = playlistPersistenceService.getPlaylistById(action.getPlaylistId()!!)
-        playlist.ifPresent(playbackService::play)
-        return playlist.isPresent
+        playlist?.apply(playbackService::play)
+        return playlist != null
     }
 
     private fun stop() {

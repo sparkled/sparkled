@@ -6,7 +6,6 @@ import io.sparkled.model.entity.Song
 import io.sparkled.model.entity.SongAudio
 import io.sparkled.model.entity.Stage
 import io.sparkled.model.render.RenderedStagePropDataMap
-import java.util.Optional
 import java.util.UUID
 
 interface SequencePersistenceService {
@@ -15,15 +14,15 @@ interface SequencePersistenceService {
 
     fun getAllSequences(): List<Sequence>
 
-    fun getSequenceById(sequenceId: Int): Optional<Sequence>
+    fun getSequenceById(sequenceId: Int): Sequence?
 
-    fun getStageBySequenceId(sequenceId: Int): Optional<Stage>
+    fun getStageBySequenceId(sequenceId: Int): Stage?
 
-    fun getSongAudioBySequenceId(sequenceId: Int): Optional<SongAudio>
+    fun getSongAudioBySequenceId(sequenceId: Int): SongAudio?
 
     fun getSequenceChannelsBySequenceId(sequenceId: Int): List<SequenceChannel>
 
-    fun getSequenceChannelByUuid(sequenceId: Int, uuid: UUID): Optional<SequenceChannel>
+    fun getSequenceChannelByUuid(sequenceId: Int, uuid: UUID): SequenceChannel?
 
     fun getRenderedStagePropsBySequenceAndSong(sequence: Sequence, song: Song): RenderedStagePropDataMap
 

@@ -92,9 +92,8 @@ class SchedulerServiceImpl @Throws(SchedulerException::class)
 
     @Synchronized
     private fun playPlaylist(job: ScheduledJob) {
-        playlistPersistenceService.getPlaylistById(job.playlistId!!).ifPresent(
-            playbackService::play
-        )
+        val playlist = playlistPersistenceService.getPlaylistById(job.playlistId!!)
+        playlist?.apply(playbackService::play)
     }
 
     @Synchronized

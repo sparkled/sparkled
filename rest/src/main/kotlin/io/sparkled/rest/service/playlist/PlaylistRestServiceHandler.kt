@@ -35,10 +35,9 @@ constructor(
     }
 
     internal fun getPlaylist(playlistId: Int): Response {
-        val playlistOptional = playlistPersistenceService.getPlaylistById(playlistId)
+        val playlist = playlistPersistenceService.getPlaylistById(playlistId)
 
-        if (playlistOptional.isPresent) {
-            val playlist = playlistOptional.get()
+        if (playlist != null) {
             val viewModel = playlistViewModelConverter.toViewModel(playlist)
 
             val playlistSequences = playlistPersistenceService

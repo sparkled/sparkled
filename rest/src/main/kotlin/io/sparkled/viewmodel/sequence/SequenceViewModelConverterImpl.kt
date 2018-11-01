@@ -17,17 +17,17 @@ constructor(
 
     override fun toViewModel(model: Sequence): SequenceViewModel {
         return SequenceViewModel()
-                .setId(model.getId())
-                .setSongId(model.getSongId())
-                .setStageId(model.getStageId())
-                .setName(model.getName())
-                .setFramesPerSecond(model.getFramesPerSecond())
-                .setFrameCount(getFrameCount(model))
-                .setStatus(model.getStatus())
+            .setId(model.getId())
+            .setSongId(model.getSongId())
+            .setStageId(model.getStageId())
+            .setName(model.getName())
+            .setFramesPerSecond(model.getFramesPerSecond())
+            .setFrameCount(getFrameCount(model))
+            .setStatus(model.getStatus())
     }
 
     private fun getFrameCount(sequence: Sequence): Int {
-        val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!).orElse(Song())
+        val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!) ?: Song()
         return SequenceUtils.getFrameCount(song, sequence)
     }
 
@@ -36,11 +36,11 @@ constructor(
         val model = getSequence(sequenceId)
 
         return model
-                .setSongId(viewModel.getSongId())
-                .setStageId(viewModel.getStageId())
-                .setName(viewModel.getName())
-                .setFramesPerSecond(viewModel.getFramesPerSecond())
-                .setStatus(viewModel.getStatus())
+            .setSongId(viewModel.getSongId())
+            .setStageId(viewModel.getStageId())
+            .setName(viewModel.getName())
+            .setFramesPerSecond(viewModel.getFramesPerSecond())
+            .setStatus(viewModel.getStatus())
     }
 
     private fun getSequence(sequenceId: Int?): Sequence {
@@ -49,6 +49,6 @@ constructor(
         }
 
         return sequencePersistenceService.getSequenceById(sequenceId)
-                .orElseThrow { ViewModelConversionException("Sequence with ID of '$sequenceId' not found.") }
+            ?: throw ViewModelConversionException("Sequence with ID of '$sequenceId' not found.")
     }
 }

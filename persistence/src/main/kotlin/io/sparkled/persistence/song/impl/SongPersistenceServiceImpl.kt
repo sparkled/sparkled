@@ -10,7 +10,6 @@ import io.sparkled.persistence.song.impl.query.GetSongBySequenceIdQuery
 import io.sparkled.persistence.song.impl.query.SaveSongAudioQuery
 import io.sparkled.persistence.song.impl.query.SaveSongQuery
 import java.util.Collections
-import java.util.Optional
 import javax.inject.Inject
 
 class SongPersistenceServiceImpl @Inject
@@ -26,11 +25,11 @@ constructor(private val queryFactory: QueryFactory) : SongPersistenceService {
         return GetAllSongsQuery().perform(queryFactory)
     }
 
-    override fun getSongById(songId: Int): Optional<Song> {
+    override fun getSongById(songId: Int): Song? {
         return GetSongByIdQuery(songId).perform(queryFactory)
     }
 
-    override fun getSongBySequenceId(sequenceId: Int): Optional<Song> {
+    override fun getSongBySequenceId(sequenceId: Int): Song? {
         return GetSongBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 

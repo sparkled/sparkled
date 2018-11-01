@@ -26,7 +26,7 @@ constructor(private val sequencePersistenceService: SequencePersistenceService) 
     override fun toModel(viewModel: SequenceChannelViewModel): SequenceChannel {
         val model = sequencePersistenceService
                 .getSequenceChannelByUuid(viewModel.getSequenceId()!!, viewModel.getUuid()!!)
-                .orElseGet { SequenceChannel() }
+                ?: SequenceChannel()
 
         val channelJson = GsonProvider.get().toJson(SequenceChannelEffects().setEffects(viewModel.getEffects()))
         return model

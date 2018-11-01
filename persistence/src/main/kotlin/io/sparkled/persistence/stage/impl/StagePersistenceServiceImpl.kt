@@ -11,7 +11,6 @@ import io.sparkled.persistence.stage.impl.query.GetStagePropByUuidQuery
 import io.sparkled.persistence.stage.impl.query.GetStagePropsByStageIdQuery
 import io.sparkled.persistence.stage.impl.query.SaveStagePropsQuery
 import io.sparkled.persistence.stage.impl.query.SaveStageQuery
-import java.util.Optional
 import java.util.UUID
 import javax.inject.Inject
 
@@ -26,7 +25,7 @@ constructor(private val queryFactory: QueryFactory) : StagePersistenceService {
         return GetAllStagesQuery().perform(queryFactory)
     }
 
-    override fun getStageById(stageId: Int): Optional<Stage> {
+    override fun getStageById(stageId: Int): Stage? {
         return GetStageByIdQuery(stageId).perform(queryFactory)
     }
 
@@ -34,7 +33,7 @@ constructor(private val queryFactory: QueryFactory) : StagePersistenceService {
         return GetStagePropsByStageIdQuery(stageId).perform(queryFactory)
     }
 
-    override fun getStagePropByUuid(stageId: Int, uuid: UUID): Optional<StageProp> {
+    override fun getStagePropByUuid(stageId: Int, uuid: UUID): StageProp? {
         return GetStagePropByUuidQuery(stageId, uuid).perform(queryFactory)
     }
 

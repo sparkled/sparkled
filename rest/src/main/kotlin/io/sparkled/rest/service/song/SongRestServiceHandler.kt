@@ -48,10 +48,9 @@ constructor(
     }
 
     fun getSong(songId: Int): Response {
-        val songOptional = songPersistenceService.getSongById(songId)
+        val song = songPersistenceService.getSongById(songId)
 
-        if (songOptional.isPresent) {
-            val song = songOptional.get()
+        if (song != null) {
             val viewModel = songViewModelConverter.toViewModel(song)
             return respondOk(viewModel)
         }
