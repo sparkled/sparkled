@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Card, CardBody, CardTitle } from 'reactstrap';
 import { Field, FormSection, reduxForm } from 'redux-form';
-import * as paramTypes from './param-types';
+import * as paramTypes from './paramTypes';
 import ColorPicker from '../../../../components/form/ColorPicker';
 import InputField from '../../../../components/form/InputField';
 import SingleSelectField from '../../../../components/form/SingleSelectField/SingleSelectField';

@@ -3,6 +3,7 @@ import undoable from 'redux-undo';
 import * as actionTypes from './actionTypes';
 import playlistEditReducer from './PlaylistEdit/reducer';
 import playlistListReducer from './PlaylistList/reducer';
+import schedulerReducer from './Scheduler/reducer';
 import sequenceEditReducer from './SequenceEdit/reducer';
 import sequenceListReducer from './SequenceList/reducer';
 import songListReducer from './SongList/reducer';
@@ -30,5 +31,6 @@ export default combineReducers({
   sequenceEdit: undoable(sequenceEditReducer, { filter: undoableFilter }),
   sequenceList: sequenceListReducer,
   playlistEdit: undoable(playlistEditReducer, { filter: undoableFilter }),
-  playlistList: playlistListReducer
+  playlistList: playlistListReducer,
+  scheduler: schedulerReducer
 });

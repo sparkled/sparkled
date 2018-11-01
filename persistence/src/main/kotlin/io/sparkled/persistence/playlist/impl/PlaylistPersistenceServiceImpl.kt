@@ -9,6 +9,7 @@ import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import io.sparkled.persistence.playlist.impl.query.DeletePlaylistQuery
 import io.sparkled.persistence.playlist.impl.query.GetAllPlaylistsQuery
 import io.sparkled.persistence.playlist.impl.query.GetPlaylistByIdQuery
+import io.sparkled.persistence.playlist.impl.query.GetPlaylistNamesQuery
 import io.sparkled.persistence.playlist.impl.query.GetPlaylistSequenceByUuidQuery
 import io.sparkled.persistence.playlist.impl.query.GetPlaylistSequencesByPlaylistIdQuery
 import io.sparkled.persistence.playlist.impl.query.GetPlaylistSummariesQuery
@@ -32,6 +33,10 @@ constructor(private val queryFactory: QueryFactory) : PlaylistPersistenceService
 
     override fun getPlaylistSummaries(): Map<Int, PlaylistSummary> {
         return GetPlaylistSummariesQuery().perform(queryFactory)
+    }
+
+    override fun getPlaylistNames(): Map<Int, String> {
+        return GetPlaylistNamesQuery().perform(queryFactory)
     }
 
     override fun getPlaylistById(playlistId: Int): Optional<Playlist> {

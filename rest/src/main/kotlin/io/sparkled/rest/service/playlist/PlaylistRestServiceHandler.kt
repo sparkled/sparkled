@@ -9,13 +9,11 @@ import io.sparkled.viewmodel.playlist.PlaylistViewModelConverter
 import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModelConverter
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModelConverter
 import javax.inject.Inject
-import javax.inject.Provider
-import javax.persistence.EntityManager
 import javax.ws.rs.core.Response
 
 open class PlaylistRestServiceHandler @Inject
 constructor(
-    private val entityManagerProvider: Provider<EntityManager>,
+    private val transaction: Transaction,
     private val playlistPersistenceService: PlaylistPersistenceService,
     private val playlistViewModelConverter: PlaylistViewModelConverter,
     private val playlistSearchViewModelConverter: PlaylistSearchViewModelConverter,
@@ -23,7 +21,7 @@ constructor(
 ) : RestServiceHandler() {
 
     internal fun createPlaylist(playlistViewModel: PlaylistViewModel): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             var playlist = playlistViewModelConverter.toModel(playlistViewModel)
             playlist = playlistPersistenceService.createPlaylist(playlist)
             return@of respondOk(IdResponse(playlist.getId()!!))
@@ -57,7 +55,7 @@ constructor(
     }
 
     internal fun updatePlaylist(id: Int, playlistViewModel: PlaylistViewModel): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             playlistViewModel.setId(id) // Prevent client-side ID tampering.
 
             val playlist = playlistViewModelConverter.toModel(playlistViewModel)
@@ -73,7 +71,7 @@ constructor(
     }
 
     internal fun deletePlaylist(id: Int): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             playlistPersistenceService.deletePlaylist(id)
             return@of respondOk()
         }

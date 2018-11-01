@@ -19,13 +19,11 @@ import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModelConverter
 import io.sparkled.viewmodel.stage.StageViewModelConverter
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter
 import javax.inject.Inject
-import javax.inject.Provider
-import javax.persistence.EntityManager
 import javax.ws.rs.core.Response
 
 open class SequenceRestServiceHandler @Inject
 constructor(
-    private val entityManagerProvider: Provider<EntityManager>,
+    private val transaction: Transaction,
     private val sequencePersistenceService: SequencePersistenceService,
     private val songPersistenceService: SongPersistenceService,
     private val stagePersistenceService: StagePersistenceService,
@@ -37,7 +35,7 @@ constructor(
 ) : RestServiceHandler() {
 
     fun createSequence(sequenceViewModel: SequenceViewModel): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             sequenceViewModel.setId(null)
             sequenceViewModel.setStatus(SequenceStatus.NEW)
 
@@ -103,7 +101,7 @@ constructor(
     }
 
     fun updateSequence(id: Int, sequenceViewModel: SequenceViewModel): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             sequenceViewModel.setId(id) // Prevent client-side ID tampering.
 
             val sequence = sequenceViewModelConverter.toModel(sequenceViewModel)
@@ -123,7 +121,7 @@ constructor(
     }
 
     fun deleteSequence(id: Int): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             sequencePersistenceService.deleteSequence(id)
             return@of respondOk()
         }

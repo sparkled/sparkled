@@ -11,6 +11,10 @@ import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModelConverter
 import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModelConverterImpl
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModelConverter
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModelConverterImpl
+import io.sparkled.viewmodel.scheduledjob.ScheduledJobViewModelConverter
+import io.sparkled.viewmodel.scheduledjob.ScheduledJobViewModelConverterImpl
+import io.sparkled.viewmodel.scheduledjob.search.ScheduledJobSearchViewModelConverter
+import io.sparkled.viewmodel.scheduledjob.search.ScheduledJobSearchViewModelConverterImpl
 import io.sparkled.viewmodel.sequence.SequenceViewModelConverter
 import io.sparkled.viewmodel.sequence.SequenceViewModelConverterImpl
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverter
@@ -32,22 +36,29 @@ class RestApiServerModule : AbstractModule() {
     override fun configure() {
         logger.info("Configuring Guice module.")
 
-        bind(RestApiServer::class.java).to(RestApiServerImpl::class.java).asEagerSingleton()
+        bindTo(RestApiServer::class.java, RestApiServerImpl::class.java)
         bind(PlaylistRestServiceHandler::class.java).`in`(Singleton::class.java)
 
-        bind(SongViewModelConverter::class.java).to(SongViewModelConverterImpl::class.java).asEagerSingleton()
+        bindTo(SongViewModelConverter::class.java, SongViewModelConverterImpl::class.java)
 
-        bind(StageViewModelConverter::class.java).to(StageViewModelConverterImpl::class.java).asEagerSingleton()
-        bind(StageSearchViewModelConverter::class.java).to(StageSearchViewModelConverterImpl::class.java).asEagerSingleton()
-        bind(StagePropViewModelConverter::class.java).to(StagePropViewModelConverterImpl::class.java).asEagerSingleton()
+        bindTo(StageViewModelConverter::class.java, StageViewModelConverterImpl::class.java)
+        bindTo(StageSearchViewModelConverter::class.java, StageSearchViewModelConverterImpl::class.java)
+        bindTo(StagePropViewModelConverter::class.java, StagePropViewModelConverterImpl::class.java)
 
-        bind(SequenceViewModelConverter::class.java).to(SequenceViewModelConverterImpl::class.java).asEagerSingleton()
-        bind(SequenceSearchViewModelConverter::class.java).to(SequenceSearchViewModelConverterImpl::class.java).asEagerSingleton()
-        bind(SequenceChannelViewModelConverter::class.java).to(SequenceChannelViewModelConverterImpl::class.java).asEagerSingleton()
+        bindTo(SequenceViewModelConverter::class.java, SequenceViewModelConverterImpl::class.java)
+        bindTo(SequenceSearchViewModelConverter::class.java, SequenceSearchViewModelConverterImpl::class.java)
+        bindTo(SequenceChannelViewModelConverter::class.java, SequenceChannelViewModelConverterImpl::class.java)
 
-        bind(PlaylistViewModelConverter::class.java).to(PlaylistViewModelConverterImpl::class.java).asEagerSingleton()
-        bind(PlaylistSearchViewModelConverter::class.java).to(PlaylistSearchViewModelConverterImpl::class.java).asEagerSingleton()
-        bind(PlaylistSequenceViewModelConverter::class.java).to(PlaylistSequenceViewModelConverterImpl::class.java).asEagerSingleton()
+        bindTo(PlaylistViewModelConverter::class.java, PlaylistViewModelConverterImpl::class.java)
+        bindTo(PlaylistSearchViewModelConverter::class.java, PlaylistSearchViewModelConverterImpl::class.java)
+        bindTo(PlaylistSequenceViewModelConverter::class.java, PlaylistSequenceViewModelConverterImpl::class.java)
+
+        bindTo(ScheduledJobViewModelConverter::class.java, ScheduledJobViewModelConverterImpl::class.java)
+        bindTo(ScheduledJobSearchViewModelConverter::class.java, ScheduledJobSearchViewModelConverterImpl::class.java)
+    }
+
+    private fun <T> bindTo(a: Class<T>, b: Class<out T>) {
+        bind(a).to(b).asEagerSingleton()
     }
 
     companion object {

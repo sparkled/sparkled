@@ -1,6 +1,7 @@
 package io.sparkled.udpserver.impl
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
+import com.google.inject.persist.UnitOfWork
 import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.UdpServer
 import org.slf4j.LoggerFactory
@@ -12,10 +13,14 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
-class UdpServerImpl @Inject
-constructor(private val requestHandler: RequestHandler) : UdpServer {
+class UdpServerImpl
+@Inject constructor(
+    private val unitOfWork: UnitOfWork,
+    private val requestHandler: RequestHandler
+) : UdpServer {
+
     private val executor: ExecutorService = Executors.newSingleThreadExecutor(
-            ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
+        ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
     )
     private var started: Boolean = false
 
@@ -36,12 +41,17 @@ constructor(private val requestHandler: RequestHandler) : UdpServer {
     private fun listen(serverSocket: DatagramSocket): Any {
         val receiveData = ByteArray(RECEIVE_BUFFER_SIZE)
 
-        while (true) {
-            try {
-                handleRequest(serverSocket, receiveData)
-            } catch (e: Exception) {
-                logger.error("Failed to handle UDP request.", e)
+        unitOfWork.begin()
+        try {
+            while (true) {
+                try {
+                    handleRequest(serverSocket, receiveData)
+                } catch (e: Exception) {
+                    logger.error("Failed to handle UDP request.", e)
+                }
             }
+        } finally {
+            unitOfWork.end()
         }
     }
 

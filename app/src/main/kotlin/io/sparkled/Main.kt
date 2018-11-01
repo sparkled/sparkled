@@ -6,6 +6,7 @@ import com.google.inject.Guice
 import io.sparkled.music.inject.MusicPlayerModule
 import io.sparkled.persistence.inject.PersistenceModule
 import io.sparkled.rest.inject.RestApiServerModule
+import io.sparkled.scheduler.inject.SchedulerModule
 import io.sparkled.schema.inject.SchemaModule
 import io.sparkled.udpserver.inject.UdpServerModule
 import org.apache.log4j.AppenderSkeleton
@@ -14,8 +15,22 @@ import org.slf4j.LoggerFactory
 
 class Main {
 
+    companion object {
+        private val logger = LoggerFactory.getLogger(Main::class.java)
+        private const val ROOT_LOG4J_APPENDER_NAME = "file"
+
+        @JvmStatic
+        fun main(args: Array<String>) {
+            Main().run(args)
+        }
+    }
+
     @Throws(Exception::class)
     private fun run(args: Array<String>) {
+        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+            logger.error("Uncaught exception on thread '{}'.", t.name, e)
+        }
+
         val settings = AppSettings()
         val jCommander = buildJCommander(settings)
 
@@ -52,23 +67,14 @@ class Main {
 
     private fun createApp(): App {
         val injector = Guice.createInjector(
-                PersistenceModule(),
-                SchemaModule(),
-                RestApiServerModule(),
-                UdpServerModule(),
-                MusicPlayerModule()
+            PersistenceModule(),
+            SchemaModule(),
+            RestApiServerModule(),
+            UdpServerModule(),
+            MusicPlayerModule(),
+            SchedulerModule()
         )
 
         return injector.getInstance(App::class.java)
-    }
-
-    companion object {
-        private val logger = LoggerFactory.getLogger(Main::class.java)
-        private const val ROOT_LOG4J_APPENDER_NAME = "file"
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            Main().run(args)
-        }
     }
 }

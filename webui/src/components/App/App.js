@@ -6,6 +6,7 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/scale.css';
 import PlaylistEditPage from '../../pages/PlaylistEdit';
 import PlaylistListPage from '../../pages/PlaylistList';
+import SchedulerPage from '../../pages/Scheduler';
 import SequenceEditPage from '../../pages/SequenceEdit';
 import SequenceListPage from '../../pages/SequenceList';
 import SongListPage from '../../pages/SongList';
@@ -29,6 +30,7 @@ const App = () => (
           <Route exact path="/sequences/:sequenceId" component={SequenceEditPage}/>
           <Route exact path="/playlists" component={PlaylistListPage}/>
           <Route exact path="/playlists/:playlistId" component={PlaylistEditPage}/>
+          <Route exact path="/scheduler" component={SchedulerPage}/>
           <Route component={RedirectInvalidUrlToIndex}/>
         </Switch>
       </Router>

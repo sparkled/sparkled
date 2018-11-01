@@ -26,4 +26,6 @@ interface PlaylistPersistenceService {
     fun savePlaylist(playlist: Playlist, playlistSequences: List<PlaylistSequence>)
 
     fun deletePlaylist(playlistId: Int)
+
+    fun getPlaylistNames(): Map<Int, String>
 }

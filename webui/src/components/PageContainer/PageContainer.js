@@ -43,6 +43,9 @@ class PageContainer extends Component {
               <NavItem>
                 <Link className={'nav-link ' + this.getPageClass('Playlist')} to="/playlists">Playlists</Link>
               </NavItem>
+              <NavItem>
+                <Link className={'nav-link ' + this.getPageClass('Playlist')} to="/scheduler">Scheduler</Link>
+              </NavItem>
             </Nav>
 
             {navbar}

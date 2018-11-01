@@ -10,20 +10,18 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
-import javax.inject.Provider
-import javax.persistence.EntityManager
 import javax.ws.rs.core.Response
 
 open class SongRestServiceHandler @Inject
 constructor(
-    private val entityManagerProvider: Provider<EntityManager>,
+    private val transaction: Transaction,
     private val songPersistenceService: SongPersistenceService,
     private val songViewModelConverter: SongViewModelConverter
 ) : RestServiceHandler() {
 
     @Throws(IOException::class)
     fun createSong(songViewModelJson: String, inputStream: InputStream): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             val songViewModel = gson.fromJson(songViewModelJson, SongViewModel::class.java)
             songViewModel.setId(null)
 
@@ -62,7 +60,7 @@ constructor(
     }
 
     fun deleteSong(id: Int): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             songPersistenceService.deleteSong(id)
             return@of respondOk()
         }

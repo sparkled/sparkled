@@ -95,14 +95,14 @@ constructor(
                 val songAudio = sequencePersistenceService.getSongAudioBySequenceId(sequence.getId()!!).orElse(null)
 
                 PlaybackState(
-                    playlist,
-                    playlistIndex,
-                    Supplier { musicPlayerService.sequenceProgress },
-                    sequence,
-                    song,
-                    songAudio,
-                    stagePropData,
-                    stagePropUuids
+                    playlist = playlist,
+                    playlistIndex = playlistIndex,
+                    progressFunction = Supplier { musicPlayerService.sequenceProgress },
+                    sequence = sequence,
+                    song = song,
+                    songAudio = songAudio,
+                    renderedStageProps = stagePropData,
+                    stagePropUuids = stagePropUuids
                 )
             }
         } finally {

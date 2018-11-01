@@ -17,4 +17,14 @@ object TupleUtils {
         val value = tuple.get(index, Number::class.java)
         return (value ?: 0).toInt()
     }
+
+    /**
+     * @param tuple The tuple from which to extract a string value.
+     * @param index The tuple index (0-based).
+     * @return The tuple value as a string, or an empty string if no value exists.
+     */
+    fun getString(tuple: Tuple, index: Int): String {
+        val value = tuple.get(index, String::class.java)
+        return value ?: ""
+    }
 }
