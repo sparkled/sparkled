@@ -5,4 +5,6 @@ import io.sparkled.model.setting.SettingsCache
 interface SettingPersistenceService {
 
     val settings: SettingsCache
+
+    fun setBrightness(brightness: Int)
 }

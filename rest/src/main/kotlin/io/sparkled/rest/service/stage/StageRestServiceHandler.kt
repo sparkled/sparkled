@@ -9,13 +9,11 @@ import io.sparkled.viewmodel.stage.StageViewModelConverter
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter
 import io.sparkled.viewmodel.stage.search.StageSearchViewModelConverter
 import javax.inject.Inject
-import javax.inject.Provider
-import javax.persistence.EntityManager
 import javax.ws.rs.core.Response
 
 open class StageRestServiceHandler @Inject
 constructor(
-    private val entityManagerProvider: Provider<EntityManager>,
+    private val transaction: Transaction,
     private val stagePersistenceService: StagePersistenceService,
     private val stageViewModelConverter: StageViewModelConverter,
     private val stageSearchViewModelConverter: StageSearchViewModelConverter,
@@ -23,7 +21,7 @@ constructor(
 ) : RestServiceHandler() {
 
     fun createStage(stageViewModel: StageViewModel): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             var stage = stageViewModelConverter.toModel(stageViewModel)
             stage = stagePersistenceService.createStage(stage)
             return@of respondOk(IdResponse(stage.getId()!!))
@@ -44,10 +42,10 @@ constructor(
             val viewModel = stageViewModelConverter.toViewModel(stage)
 
             val stageProps = stagePersistenceService
-                    .getStagePropsByStageId(stageId)
-                    .asSequence()
-                    .map(stagePropViewModelConverter::toViewModel)
-                    .toList()
+                .getStagePropsByStageId(stageId)
+                .asSequence()
+                .map(stagePropViewModelConverter::toViewModel)
+                .toList()
             viewModel.setStageProps(stageProps)
 
             return respondOk(viewModel)
@@ -57,15 +55,15 @@ constructor(
     }
 
     fun updateStage(id: Int, stageViewModel: StageViewModel): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             stageViewModel.setId(id) // Prevent client-side ID tampering.
 
             val stage = stageViewModelConverter.toModel(stageViewModel)
             val stageProps = stageViewModel.getStageProps()
-                    .asSequence()
-                    .map(stagePropViewModelConverter::toModel)
-                    .map { it.setStageId(id) }
-                    .toList()
+                .asSequence()
+                .map(stagePropViewModelConverter::toModel)
+                .map { it.setStageId(id) }
+                .toList()
 
             stagePersistenceService.saveStage(stage, stageProps)
             return@of respondOk()
@@ -73,7 +71,7 @@ constructor(
     }
 
     fun deleteStage(id: Int): Response {
-        return Transaction(entityManagerProvider).of {
+        return transaction.of {
             stagePersistenceService.deleteStage(id)
             return@of respondOk()
         }

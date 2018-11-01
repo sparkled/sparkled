@@ -47,10 +47,10 @@
             <column name="name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="width" type="INT(10)" defaultValueNumeric="800">
+            <column name="width" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="height" type="INT(10)" defaultValueNumeric="600">
+            <column name="height" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -70,25 +70,25 @@
             <column name="type" type="VARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="led_count" type="INT(10)" defaultValueNumeric="0">
+            <column name="led_count" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="position_x" type="INT(10)" defaultValueNumeric="0">
+            <column name="position_x" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="position_y" type="INT(10)" defaultValueNumeric="0">
+            <column name="position_y" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="scale_x" type="FLOAT(4)" defaultValueNumeric="1">
+            <column name="scale_x" type="FLOAT(4)">
                 <constraints nullable="false"/>
             </column>
-            <column name="scale_y" type="FLOAT(4)" defaultValueNumeric="1">
+            <column name="scale_y" type="FLOAT(4)">
                 <constraints nullable="false"/>
             </column>
-            <column name="rotation" type="INT(10)" defaultValueNumeric="0">
+            <column name="rotation" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="display_order" type="INT(10)" defaultValueNumeric="0">
+            <column name="display_order" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
             <column name="stage_id" type="INT(10)">
@@ -149,7 +149,7 @@
             <column name="name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="display_order" type="INT(10)" defaultValueNumeric="0">
+            <column name="display_order" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
             <column name="channel_json" type="CLOB"/>
@@ -231,6 +231,27 @@
         <addForeignKeyConstraint baseTableName="playlist_sequence" baseColumnNames="sequence_id"
                                  referencedTableName="sequence" referencedColumnNames="id"
                                  constraintName="fk_playlist_sequence_sequence_id"
+                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
+    </changeSet>
+
+    <changeSet author="chrisparton1991" id="create-table-scheduled-job">
+        <createTable tableName="scheduled_job">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="pk_scheduled_job"/>
+            </column>
+            <column name="action" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cron_expression" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(16)"/>
+            <column name="playlist_id" type="INT(10)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="scheduled_job" baseColumnNames="playlist_id"
+                                 referencedTableName="playlist" referencedColumnNames="id"
+                                 constraintName="fk_scheduled_job_playlist_id"
                                  onDelete="RESTRICT" onUpdate="RESTRICT"/>
     </changeSet>
 

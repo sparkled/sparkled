@@ -15,6 +15,7 @@
         <module>persistence</module>
         <module>music-player</module>
         <module>renderer</module>
+        <module>scheduler</module>
         <module>rest</module>
         <module>udp-server</module>
     </modules>
@@ -48,6 +49,7 @@
         <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
         <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
         <mp3spi.version>1.9.5.4</mp3spi.version>
+        <quartz.version>2.3.0</quartz.version>
         <querydsl.version>4.2.1</querydsl.version>
         <slf4j.version>1.7.25</slf4j.version>
     </properties>
@@ -180,6 +182,12 @@
                 <groupId>com.querydsl</groupId>
                 <artifactId>querydsl-jpa</artifactId>
                 <version>${querydsl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz.version}</version>
             </dependency>
 
             <dependency>

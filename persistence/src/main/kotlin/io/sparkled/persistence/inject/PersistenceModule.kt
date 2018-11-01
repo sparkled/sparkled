@@ -5,8 +5,10 @@ import com.google.inject.persist.jpa.JpaPersistModule
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import io.sparkled.persistence.playlist.impl.PlaylistPersistenceServiceImpl
+import io.sparkled.persistence.scheduledjob.impl.ScheduledJobPersistenceServiceImpl
 import io.sparkled.persistence.sequence.SequencePersistenceService
 import io.sparkled.persistence.sequence.impl.SequencePersistenceServiceImpl
+import io.sparkled.persistence.scheduledjob.ScheduledJobPersistenceService
 import io.sparkled.persistence.setting.SettingPersistenceService
 import io.sparkled.persistence.setting.impl.SettingPersistenceServiceImpl
 import io.sparkled.persistence.song.SongPersistenceService
@@ -28,6 +30,8 @@ class PersistenceModule : AbstractModule() {
         bind(SequencePersistenceService::class.java).to(SequencePersistenceServiceImpl::class.java).asEagerSingleton()
         bind(PlaylistPersistenceService::class.java).to(PlaylistPersistenceServiceImpl::class.java).asEagerSingleton()
         bind(SettingPersistenceService::class.java).to(SettingPersistenceServiceImpl::class.java).asEagerSingleton()
+        bind(ScheduledJobPersistenceService::class.java).to(ScheduledJobPersistenceServiceImpl::class.java)
+            .asEagerSingleton()
     }
 
     companion object {

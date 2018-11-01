@@ -2,6 +2,7 @@ package io.sparkled
 
 import com.google.inject.persist.PersistService
 import io.sparkled.rest.RestApiServer
+import io.sparkled.scheduler.SchedulerService
 import io.sparkled.schema.SchemaUpdater
 import io.sparkled.udpserver.UdpServer
 
@@ -13,7 +14,8 @@ constructor(
     private val persistService: PersistService,
     private val schemaUpdater: SchemaUpdater,
     private val restApiServer: RestApiServer,
-    private val udpServer: UdpServer
+    private val udpServer: UdpServer,
+    private val schedulerService: SchedulerService
 ) {
 
     @Throws(Exception::class)
@@ -22,5 +24,6 @@ constructor(
         schemaUpdater.update()
         restApiServer.start(settings.restApiPort)
         udpServer.start(settings.udpPort)
+        schedulerService.start()
     }
 }

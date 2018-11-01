@@ -1,9 +1,11 @@
 package io.sparkled.persistence.transaction
 
+import javax.inject.Inject
 import javax.inject.Provider
 import javax.persistence.EntityManager
 
-class Transaction(private val entityManagerProvider: Provider<EntityManager>) {
+class Transaction
+@Inject constructor(private val entityManagerProvider: Provider<EntityManager>) {
 
     fun <T> of(query: () -> T): T {
         val transaction = entityManagerProvider.get().transaction

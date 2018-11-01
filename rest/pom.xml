@@ -34,6 +34,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.sparkled</groupId>
+            <artifactId>scheduler</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
         </dependency>
