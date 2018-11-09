@@ -5,4 +5,10 @@ import io.sparkled.model.entity.Sequence
 import io.sparkled.model.render.RenderedFrame
 import io.sparkled.model.render.RenderedStagePropData
 
-class RenderContext(val sequence: Sequence, val channel: RenderedStagePropData, val frame: RenderedFrame, val effect: Effect, val progress: Float)
+class RenderContext(
+    val sequence: Sequence,
+    val channel: RenderedStagePropData,
+    val frame: RenderedFrame,
+    val effect: Effect,
+    val progress: Float
+)

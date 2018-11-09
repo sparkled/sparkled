@@ -30,11 +30,12 @@ object RenderUtils {
         val stageProp = StageProp().setCode(PROP_CODE).setUuid(PROP_UUID).setLedCount(ledCount)
 
         val renderedChannels = Renderer(
-                sequence,
-                Collections.singletonList(sequenceChannel),
-                Collections.singletonList(stageProp),
-                0,
-                effect.getEndFrame()).render()
+            sequence,
+            Collections.singletonList(sequenceChannel),
+            Collections.singletonList(stageProp),
+            0,
+            effect.getEndFrame()
+        ).render()
         return renderedChannels[PROP_UUID]!!
     }
 }

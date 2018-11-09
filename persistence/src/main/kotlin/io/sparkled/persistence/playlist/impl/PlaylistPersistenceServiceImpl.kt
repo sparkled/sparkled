@@ -16,7 +16,6 @@ import io.sparkled.persistence.playlist.impl.query.GetPlaylistSummariesQuery
 import io.sparkled.persistence.playlist.impl.query.GetSequenceAtPlaylistIndexQuery
 import io.sparkled.persistence.playlist.impl.query.SavePlaylistQuery
 import io.sparkled.persistence.playlist.impl.query.SavePlaylistSequencesQuery
-import java.util.Optional
 import java.util.UUID
 import javax.inject.Inject
 
@@ -39,11 +38,11 @@ constructor(private val queryFactory: QueryFactory) : PlaylistPersistenceService
         return GetPlaylistNamesQuery().perform(queryFactory)
     }
 
-    override fun getPlaylistById(playlistId: Int): Optional<Playlist> {
+    override fun getPlaylistById(playlistId: Int): Playlist? {
         return GetPlaylistByIdQuery(playlistId).perform(queryFactory)
     }
 
-    override fun getSequenceAtPlaylistIndex(playlistId: Int, index: Int): Optional<Sequence> {
+    override fun getSequenceAtPlaylistIndex(playlistId: Int, index: Int): Sequence? {
         return GetSequenceAtPlaylistIndexQuery(playlistId, index).perform(queryFactory)
     }
 
@@ -51,7 +50,7 @@ constructor(private val queryFactory: QueryFactory) : PlaylistPersistenceService
         return GetPlaylistSequencesByPlaylistIdQuery(playlistId).perform(queryFactory)
     }
 
-    override fun getPlaylistSequenceByUuid(sequenceId: Int, uuid: UUID): Optional<PlaylistSequence> {
+    override fun getPlaylistSequenceByUuid(sequenceId: Int, uuid: UUID): PlaylistSequence? {
         return GetPlaylistSequenceByUuidQuery(sequenceId, uuid).perform(queryFactory)
     }
 

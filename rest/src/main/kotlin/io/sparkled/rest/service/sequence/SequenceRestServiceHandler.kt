@@ -52,17 +52,16 @@ constructor(
     }
 
     fun getSequence(sequenceId: Int): Response {
-        val sequenceOptional = sequencePersistenceService.getSequenceById(sequenceId)
+        val sequence = sequencePersistenceService.getSequenceById(sequenceId)
 
-        if (sequenceOptional.isPresent) {
-            val sequence = sequenceOptional.get()
+        if (sequence != null) {
             val viewModel = sequenceViewModelConverter.toViewModel(sequence)
 
             val channels = sequencePersistenceService
-                    .getSequenceChannelsBySequenceId(sequenceId)
-                    .asSequence()
-                    .map(sequenceChannelViewModelConverter::toViewModel)
-                    .toList()
+                .getSequenceChannelsBySequenceId(sequenceId)
+                .asSequence()
+                .map(sequenceChannelViewModelConverter::toViewModel)
+                .toList()
             viewModel.setChannels(channels)
 
             return respondOk(viewModel)
@@ -72,17 +71,15 @@ constructor(
     }
 
     fun getSequenceStage(sequenceId: Int): Response {
-        val stageOptional = sequencePersistenceService.getStageBySequenceId(sequenceId)
+        val stage = sequencePersistenceService.getStageBySequenceId(sequenceId)
 
-        return if (stageOptional.isPresent) {
-            val stage = stageOptional.get()
-
+        return if (stage != null) {
             val viewModel = stageViewModelConverter.toViewModel(stage)
             val stageProps = stagePersistenceService
-                    .getStagePropsByStageId(stage.getId()!!)
-                    .asSequence()
-                    .map(stagePropViewModelConverter::toViewModel)
-                    .toList()
+                .getStagePropsByStageId(stage.getId()!!)
+                .asSequence()
+                .map(stagePropViewModelConverter::toViewModel)
+                .toList()
 
             viewModel.setStageProps(stageProps)
             respondOk(viewModel)
@@ -92,9 +89,9 @@ constructor(
     }
 
     fun getSequenceSongAudio(sequenceId: Int): Response {
-        val songAudioOptional = sequencePersistenceService.getSongAudioBySequenceId(sequenceId)
-        return if (songAudioOptional.isPresent) {
-            respondMedia(songAudioOptional.get().getAudioData()!!, MP3_MIME_TYPE)
+        val songAudio = sequencePersistenceService.getSongAudioBySequenceId(sequenceId)
+        return if (songAudio != null) {
+            respondMedia(songAudio.getAudioData()!!, MP3_MIME_TYPE)
         } else {
             respond(Response.Status.NOT_FOUND, "Song audio not found.")
         }
@@ -106,9 +103,9 @@ constructor(
 
             val sequence = sequenceViewModelConverter.toModel(sequenceViewModel)
             val sequenceChannels = sequenceViewModel.getChannels()
-                    .asSequence()
-                    .map(sequenceChannelViewModelConverter::toModel)
-                    .toList()
+                .asSequence()
+                .map(sequenceChannelViewModelConverter::toModel)
+                .toList()
 
             if (sequence.getStatus() === SequenceStatus.PUBLISHED) {
                 publishSequence(sequence, sequenceChannels)
@@ -133,7 +130,7 @@ constructor(
 
     private fun publishSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>) {
         val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!)
-                .orElseThrow { EntityNotFoundException("Song not found.") }
+            ?: throw EntityNotFoundException("Song not found.")
 
         val stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId()!!)
         val endFrame = SequenceUtils.getFrameCount(song, sequence) - 1

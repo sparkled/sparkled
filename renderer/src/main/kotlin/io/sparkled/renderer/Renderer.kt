@@ -11,7 +11,13 @@ import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.renderer.util.ChannelPropPairUtils
 import io.sparkled.renderer.util.EffectTypeRenderers
 
-class Renderer(private val sequence: Sequence, sequenceChannels: List<SequenceChannel>, stageProps: List<StageProp>, private val startFrame: Int, private val endFrame: Int) {
+class Renderer(
+    private val sequence: Sequence,
+    sequenceChannels: List<SequenceChannel>,
+    stageProps: List<StageProp>,
+    private val startFrame: Int,
+    private val endFrame: Int
+) {
     private val channelPropPairs: List<ChannelPropPair> = ChannelPropPairUtils.makePairs(sequenceChannels, stageProps)
 
     fun render(): RenderedStagePropDataMap {
@@ -25,7 +31,10 @@ class Renderer(private val sequence: Sequence, sequenceChannels: List<SequenceCh
         return renderedProps
     }
 
-    private fun renderChannel(channelPropPair: ChannelPropPair, renderedStagePropData: RenderedStagePropData?): RenderedStagePropData {
+    private fun renderChannel(
+        channelPropPair: ChannelPropPair,
+        renderedStagePropData: RenderedStagePropData?
+    ): RenderedStagePropData {
         var stagePropData = renderedStagePropData
         if (stagePropData == null) {
             val frameCount = endFrame - startFrame + 1

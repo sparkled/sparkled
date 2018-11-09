@@ -9,7 +9,7 @@ class GetScheduledJobByIdQuery(private val scheduledJobId: Int) : PersistenceQue
 
     override fun perform(queryFactory: QueryFactory): ScheduledJob? {
         return queryFactory
-            .selectFrom<ScheduledJob?>(scheduledJob)
+            .selectFrom(scheduledJob)
             .where(scheduledJob.id.eq(scheduledJobId))
             .fetchFirst()
     }

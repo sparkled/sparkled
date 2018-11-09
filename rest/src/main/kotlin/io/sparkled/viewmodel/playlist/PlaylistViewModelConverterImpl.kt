@@ -11,8 +11,8 @@ constructor(private val playlistPersistenceService: PlaylistPersistenceService) 
 
     override fun toViewModel(model: Playlist): PlaylistViewModel {
         return PlaylistViewModel()
-                .setId(model.getId())
-                .setName(model.getName())
+            .setId(model.getId())
+            .setName(model.getName())
     }
 
     override fun toModel(viewModel: PlaylistViewModel): Playlist {
@@ -28,6 +28,6 @@ constructor(private val playlistPersistenceService: PlaylistPersistenceService) 
         }
 
         return playlistPersistenceService.getPlaylistById(playlistId)
-                .orElseThrow { ViewModelConversionException("Playlist with ID of '$playlistId' not found.") }
+            ?: throw ViewModelConversionException("Playlist with ID of '$playlistId' not found.")
     }
 }

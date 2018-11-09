@@ -9,13 +9,15 @@ import java.util.Arrays
 
 object EffectTypes {
     private val TYPES = Arrays.asList(
-            effectType(EffectTypeCode.FLASH, "Flash"),
-            effectType(EffectTypeCode.LINE, "Line",
-                    param(ParamName.LENGTH, ParamType.INTEGER).setValue(1)
-            ),
-            effectType(EffectTypeCode.SPLIT_LINE, "Split Line",
-                    param(ParamName.LENGTH, ParamType.INTEGER).setValue(1)
-            )
+        effectType(EffectTypeCode.FLASH, "Flash"),
+        effectType(
+            EffectTypeCode.LINE, "Line",
+            param(ParamName.LENGTH, ParamType.INTEGER).setValue(1)
+        ),
+        effectType(
+            EffectTypeCode.SPLIT_LINE, "Split Line",
+            param(ParamName.LENGTH, ParamType.INTEGER).setValue(1)
+        )
     )
 
     fun get(): List<EffectType> {

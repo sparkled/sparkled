@@ -10,7 +10,7 @@ class StageSearchViewModelConverterImpl : StageSearchViewModelConverter() {
 
     private fun toViewModel(model: Stage): StageSearchViewModel {
         return StageSearchViewModel()
-                .setId(model.getId()!!)
-                .setName(model.getName()!!)
+            .setId(model.getId()!!)
+            .setName(model.getName()!!)
     }
 }

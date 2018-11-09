@@ -35,10 +35,9 @@ constructor(
     }
 
     fun getStage(stageId: Int): Response {
-        val stageOptional = stagePersistenceService.getStageById(stageId)
+        val stage = stagePersistenceService.getStageById(stageId)
 
-        if (stageOptional.isPresent) {
-            val stage = stageOptional.get()
+        if (stage != null) {
             val viewModel = stageViewModelConverter.toViewModel(stage)
 
             val stageProps = stagePersistenceService

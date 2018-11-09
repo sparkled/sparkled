@@ -4,16 +4,13 @@ import io.sparkled.model.entity.Playlist
 import io.sparkled.model.entity.QPlaylist.playlist
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
-import java.util.Optional
 
-class GetPlaylistByIdQuery(private val playlistId: Int) : PersistenceQuery<Optional<Playlist>> {
+class GetPlaylistByIdQuery(private val playlistId: Int) : PersistenceQuery<Playlist?> {
 
-    override fun perform(queryFactory: QueryFactory): Optional<Playlist> {
-        val playlist = queryFactory
+    override fun perform(queryFactory: QueryFactory): Playlist? {
+        return queryFactory
             .selectFrom(playlist)
             .where(playlist.id.eq(playlistId))
             .fetchFirst()
-
-        return Optional.ofNullable(playlist)
     }
 }

@@ -33,7 +33,7 @@ constructor(injector: Injector) : RestApiServer {
         JerseyResourceConfig.setInjector(injector)
 
         this.executor = Executors.newSingleThreadExecutor(
-                ThreadFactoryBuilder().setNameFormat("rest-api-server-%d").build()
+            ThreadFactoryBuilder().setNameFormat("rest-api-server-%d").build()
         )
     }
 
@@ -94,9 +94,12 @@ constructor(injector: Injector) : RestApiServer {
 
     private fun addJerseyServlet(context: ServletContextHandler) {
         val jerseyServlet = context.addServlet(ServletContainer::class.qualifiedName, REST_PATH)
-        jerseyServlet.setInitParameter("jersey.config.server.provider.packages", javaClass.getPackage().name)
-        jerseyServlet.setInitParameter("jersey.config.server.provider.classnames", MultiPartFeature::class.qualifiedName)
-        jerseyServlet.setInitParameter(ServletProperties.JAXRS_APPLICATION_CLASS, JerseyResourceConfig::class.qualifiedName)
+        jerseyServlet.setInitParameter(JERSEY_PACKAGES, javaClass.getPackage().name)
+        jerseyServlet.setInitParameter(JERSEY_CLASSNAMES, MultiPartFeature::class.qualifiedName)
+        jerseyServlet.setInitParameter(
+            ServletProperties.JAXRS_APPLICATION_CLASS,
+            JerseyResourceConfig::class.qualifiedName
+        )
         jerseyServlet.initOrder = 0
     }
 
@@ -105,7 +108,10 @@ constructor(injector: Injector) : RestApiServer {
         corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*")
         corsFilter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*")
         corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "DELETE,GET,POST,PUT")
-        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin")
+        corsFilter.setInitParameter(
+            CrossOriginFilter.ALLOWED_HEADERS_PARAM,
+            "X-Requested-With,Content-Type,Accept,Origin"
+        )
     }
 
     private fun startJetty(jettyServer: Server) {
@@ -123,5 +129,7 @@ constructor(injector: Injector) : RestApiServer {
         private val logger = LoggerFactory.getLogger(RestApiServerImpl::class.java)
         private const val REST_PATH = "/rest/*"
         private const val INDEX_HTML = "index.html"
+        private const val JERSEY_PACKAGES = "jersey.config.server.provider.packages"
+        private const val JERSEY_CLASSNAMES = "jersey.config.server.provider.classnames"
     }
 }

@@ -21,7 +21,6 @@ import io.sparkled.persistence.sequence.impl.query.SaveRenderedStagePropsQuery
 import io.sparkled.persistence.sequence.impl.query.SaveSequenceChannelsQuery
 import io.sparkled.persistence.sequence.impl.query.SaveSequenceQuery
 import java.util.Collections
-import java.util.Optional
 import java.util.UUID
 import javax.inject.Inject
 
@@ -36,15 +35,15 @@ constructor(private val queryFactory: QueryFactory) : SequencePersistenceService
         return GetAllSequencesQuery().perform(queryFactory)
     }
 
-    override fun getSequenceById(sequenceId: Int): Optional<Sequence> {
+    override fun getSequenceById(sequenceId: Int): Sequence? {
         return GetSequenceByIdQuery(sequenceId).perform(queryFactory)
     }
 
-    override fun getStageBySequenceId(sequenceId: Int): Optional<Stage> {
+    override fun getStageBySequenceId(sequenceId: Int): Stage? {
         return GetStageBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
-    override fun getSongAudioBySequenceId(sequenceId: Int): Optional<SongAudio> {
+    override fun getSongAudioBySequenceId(sequenceId: Int): SongAudio? {
         return GetSongAudioBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
@@ -52,7 +51,7 @@ constructor(private val queryFactory: QueryFactory) : SequencePersistenceService
         return GetSequenceChannelsBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
-    override fun getSequenceChannelByUuid(sequenceId: Int, uuid: UUID): Optional<SequenceChannel> {
+    override fun getSequenceChannelByUuid(sequenceId: Int, uuid: UUID): SequenceChannel? {
         return GetSequenceChannelByUuidQuery(sequenceId, uuid).perform(queryFactory)
     }
 

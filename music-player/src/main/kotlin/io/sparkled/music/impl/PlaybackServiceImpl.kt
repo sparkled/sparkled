@@ -82,17 +82,16 @@ constructor(
     private fun loadPlaybackState(playlist: Playlist, playlistIndex: Int): PlaybackState {
         try {
             unitOfWork.begin()
-            val sequence =
-                playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId()!!, playlistIndex).orElse(null)
+            val sequence = playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId()!!, playlistIndex)
 
             return if (sequence == null) {
                 PlaybackState()
             } else {
-                val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!).orElse(null)
-                val stagePropData = sequencePersistenceService.getRenderedStagePropsBySequenceAndSong(sequence, song)
+                val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!)
+                val stagePropData = sequencePersistenceService.getRenderedStagePropsBySequenceAndSong(sequence, song!!)
                 val stagePropUuids =
                     sequencePersistenceService.getSequenceStagePropUuidMapBySequenceId(sequence.getId()!!)
-                val songAudio = sequencePersistenceService.getSongAudioBySequenceId(sequence.getId()!!).orElse(null)
+                val songAudio = sequencePersistenceService.getSongAudioBySequenceId(sequence.getId()!!)
 
                 PlaybackState(
                     playlist = playlist,

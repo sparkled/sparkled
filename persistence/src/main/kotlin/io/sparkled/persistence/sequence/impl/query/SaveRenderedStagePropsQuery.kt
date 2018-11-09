@@ -4,9 +4,9 @@ import io.sparkled.model.entity.QRenderedStageProp.renderedStageProp
 import io.sparkled.model.entity.RenderedStageProp
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.render.RenderedStagePropDataMap
+import io.sparkled.model.util.IdUtils.NO_UUIDS
 import io.sparkled.model.util.TupleUtils
 import io.sparkled.persistence.PersistenceQuery
-import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.stage.impl.query.DeleteRenderedStagePropsQuery
 import org.slf4j.LoggerFactory
@@ -56,7 +56,7 @@ class SaveRenderedStagePropsQuery(
         sequence: Sequence,
         uuidsToKeep: Collection<UUID>
     ) {
-        val uuids = if (uuidsToKeep.isEmpty()) noUuids else uuidsToKeep
+        val uuids = if (uuidsToKeep.isEmpty()) NO_UUIDS else uuidsToKeep
 
         val idsToDelete = queryFactory
             .select(renderedStageProp.id)

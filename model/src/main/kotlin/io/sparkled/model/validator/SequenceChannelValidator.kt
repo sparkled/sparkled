@@ -95,12 +95,18 @@ class SequenceChannelValidator {
         internal const val CHANNEL_JSON_MALFORMED = "Sequence channel data is malformed."
 
         internal const val EFFECT_TYPE_MISSING = "Effect type cannot be empty for effect at frame %d in channel."
-        internal const val EFFECT_EASING_TYPE_MISSING = "EasingFunction type cannot be empty for effect at frame %d in channel."
-        internal const val EFFECT_BACK_TO_FRONT = "Effect start frame cannot be after end frame for effect at frame %d in channel."
+        internal const val EFFECT_EASING_TYPE_MISSING =
+            "EasingFunction type cannot be empty for effect at frame %d in channel."
+        internal const val EFFECT_BACK_TO_FRONT =
+            "Effect start frame cannot be after end frame for effect at frame %d in channel."
         internal const val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d for channel."
-        internal const val EFFECT_REPETITIONS_INVALID = "Effect repetitions cannot be less than 1 for effect at frame %d in channel."
-        internal const val EFFECT_REPETITIONS_TOO_MANY = "Effect repetitions cannot be greater than the frame count at frame %d in channel."
-        internal const val EFFECT_DURATION_INDIVISIBLE = "Duration must be evenly divisible by number of repetitions for effect at frame %d in channel."
-        internal const val EFFECT_PARAM_TYPE_MISSING = "Effect parameter type cannot be empty for effect at frame %d in channel."
+        internal const val EFFECT_REPETITIONS_INVALID =
+            "Effect repetitions cannot be less than 1 for effect at frame %d in channel."
+        internal const val EFFECT_REPETITIONS_TOO_MANY =
+            "Effect repetitions cannot be greater than the frame count at frame %d in channel."
+        internal const val EFFECT_DURATION_INDIVISIBLE =
+            "Duration must be evenly divisible by number of repetitions for effect at frame %d in channel."
+        internal const val EFFECT_PARAM_TYPE_MISSING =
+            "Effect parameter type cannot be empty for effect at frame %d in channel."
     }
 }

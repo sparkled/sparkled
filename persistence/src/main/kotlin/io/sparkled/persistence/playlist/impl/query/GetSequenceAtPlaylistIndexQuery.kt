@@ -5,13 +5,12 @@ import io.sparkled.model.entity.QSequence.sequence
 import io.sparkled.model.entity.Sequence
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
-import java.util.Optional
 
 class GetSequenceAtPlaylistIndexQuery(private val playlistId: Int, private val index: Int) :
-    PersistenceQuery<Optional<Sequence>> {
+    PersistenceQuery<Sequence?> {
 
-    override fun perform(queryFactory: QueryFactory): Optional<Sequence> {
-        val sequence = queryFactory
+    override fun perform(queryFactory: QueryFactory): Sequence? {
+        return queryFactory
             .selectFrom(sequence)
             .innerJoin(playlistSequence).on(sequence.id.eq(playlistSequence.sequenceId))
             .where(playlistSequence.playlistId.eq(playlistId))
@@ -19,7 +18,5 @@ class GetSequenceAtPlaylistIndexQuery(private val playlistId: Int, private val i
             .offset(index.toLong())
             .limit(1)
             .fetchFirst()
-
-        return Optional.ofNullable(sequence)
     }
 }

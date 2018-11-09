@@ -3,15 +3,15 @@ package io.sparkled.persistence.song.impl.query
 import io.sparkled.model.entity.QSequence.sequence
 import io.sparkled.model.entity.QSong.song
 import io.sparkled.model.entity.QSongAudio.songAudio
+import io.sparkled.model.util.IdUtils.NO_IDS
 import io.sparkled.persistence.PersistenceQuery
-import io.sparkled.persistence.PersistenceQuery.Companion.noIds
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery
 import org.slf4j.LoggerFactory
 
 class DeleteSongsQuery(songIds: Collection<Int>) : PersistenceQuery<Unit> {
 
-    private val songIds: Collection<Int> = if (songIds.isEmpty()) noIds else songIds
+    private val songIds: Collection<Int> = if (songIds.isEmpty()) NO_IDS else songIds
 
     override fun perform(queryFactory: QueryFactory) {
         deleteSequences(queryFactory)

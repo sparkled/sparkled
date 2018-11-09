@@ -5,18 +5,15 @@ import io.sparkled.model.entity.QSong.song
 import io.sparkled.model.entity.Song
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
-import java.util.Optional
 
-class GetSongBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Optional<Song>> {
+class GetSongBySequenceIdQuery(private val sequenceId: Int) : PersistenceQuery<Song?> {
 
-    override fun perform(queryFactory: QueryFactory): Optional<Song> {
-        val song = queryFactory
+    override fun perform(queryFactory: QueryFactory): Song? {
+        return queryFactory
             .select(song)
             .from(sequence)
-            .innerJoin(song).on(sequence.songId.eq(song.id))
+            .innerJoin<Song?>(song).on(sequence.songId.eq(song.id))
             .where(sequence.id.eq(sequenceId))
             .fetchFirst()
-
-        return Optional.ofNullable(song)
     }
 }

@@ -33,12 +33,12 @@ constructor(
         val stage = stages[model.getStageId()]!!
 
         return SequenceSearchViewModel()
-                .setId(model.getId())
-                .setName(model.getName())
-                .setSongName(song.getName())
-                .setStageName(stage.getName())
-                .setFramesPerSecond(model.getFramesPerSecond())
-                .setDurationSeconds(song.getDurationMs()?.div(MS_PER_SECOND))
-                .setStatus(model.getStatus())
+            .setId(model.getId())
+            .setName(model.getName())
+            .setSongName(song.getName())
+            .setStageName(stage.getName())
+            .setFramesPerSecond(model.getFramesPerSecond())
+            .setDurationSeconds(song.getDurationMs()?.div(MS_PER_SECOND))
+            .setStatus(model.getStatus())
     }
 }

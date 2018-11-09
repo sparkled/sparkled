@@ -3,10 +3,10 @@ package io.sparkled.persistence.sequence.impl.query
 import io.sparkled.model.entity.QSequenceChannel.sequenceChannel
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
+import io.sparkled.model.util.IdUtils.NO_UUIDS
 import io.sparkled.model.validator.SequenceChannelValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
-import io.sparkled.persistence.PersistenceQuery.Companion.noUuids
 import io.sparkled.persistence.QueryFactory
 import org.slf4j.LoggerFactory
 import java.util.UUID
@@ -32,7 +32,7 @@ class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequ
 
     private fun uuidAlreadyInUse(queryFactory: QueryFactory): Boolean {
         var uuidsToCheck = sequenceChannels.asSequence().map(SequenceChannel::getUuid).toList()
-        uuidsToCheck = if (uuidsToCheck.isEmpty()) noUuids else uuidsToCheck
+        uuidsToCheck = if (uuidsToCheck.isEmpty()) NO_UUIDS else uuidsToCheck
 
         val uuidsInUse = queryFactory.select(sequenceChannel)
             .from(sequenceChannel)
@@ -48,7 +48,7 @@ class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequ
 
     private fun getSequenceChannelUuidsToDelete(queryFactory: QueryFactory): List<UUID> {
         var uuidsToKeep = sequenceChannels.asSequence().map(SequenceChannel::getUuid).toList()
-        uuidsToKeep = if (uuidsToKeep.isEmpty()) noUuids else uuidsToKeep
+        uuidsToKeep = if (uuidsToKeep.isEmpty()) NO_UUIDS else uuidsToKeep
 
         return queryFactory
             .select(sequenceChannel.uuid)

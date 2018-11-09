@@ -7,7 +7,7 @@ import java.io.InputStreamReader
 import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.lang.reflect.Type
-import java.nio.charset.StandardCharsets
+import java.nio.charset.StandardCharsets.UTF_8
 import javax.ws.rs.Consumes
 import javax.ws.rs.Produces
 import javax.ws.rs.WebApplicationException
@@ -40,16 +40,27 @@ class JerseyGsonProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
         httpHeaders: MultivaluedMap<String, String>,
         entityStream: InputStream
     ): Any {
-        InputStreamReader(entityStream, StandardCharsets.UTF_8).use { streamReader ->
+        InputStreamReader(entityStream, UTF_8).use { streamReader ->
             return GsonProvider.get().fromJson(streamReader, genericType)
         }
     }
 
-    override fun isWriteable(type: Class<*>, genericType: Type, annotations: Array<Annotation>, mediaType: MediaType): Boolean {
+    override fun isWriteable(
+        type: Class<*>,
+        genericType: Type,
+        annotations: Array<Annotation>,
+        mediaType: MediaType
+    ): Boolean {
         return true
     }
 
-    override fun getSize(`object`: Any, type: Class<*>, genericType: Type, annotations: Array<Annotation>, mediaType: MediaType): Long {
+    override fun getSize(
+        `object`: Any,
+        type: Class<*>,
+        genericType: Type,
+        annotations: Array<Annotation>,
+        mediaType: MediaType
+    ): Long {
         return -1
     }
 
@@ -63,7 +74,7 @@ class JerseyGsonProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
         httpHeaders: MultivaluedMap<String, Any>,
         entityStream: OutputStream
     ) {
-        OutputStreamWriter(entityStream, StandardCharsets.UTF_8).use { writer ->
+        OutputStreamWriter(entityStream, UTF_8).use { writer ->
             GsonProvider.get().toJson(`object`, genericType, writer)
         }
     }

@@ -32,9 +32,9 @@ object ParamUtils {
 
     private fun getParam(parent: HasParams, paramName: ParamName): Param {
         return parent.getParams()
-                .asSequence()
-                .filter { p -> paramName === p.getName() }
-                .firstOrNull() ?: Param()
+            .asSequence()
+            .filter { p -> paramName === p.getName() }
+            .firstOrNull() ?: Param()
     }
 
     private fun convertColor(hexColor: String): Color {
