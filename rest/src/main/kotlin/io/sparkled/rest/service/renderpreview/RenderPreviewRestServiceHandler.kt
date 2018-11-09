@@ -20,7 +20,11 @@ constructor(
     private val stagePersistenceService: StagePersistenceService
 ) : RestServiceHandler() {
 
-    internal fun getRenderedSequence(startFrame: Int, frameCount: Int, sequenceChannels: List<SequenceChannel>?): Response {
+    internal fun getRenderedSequence(
+        startFrame: Int,
+        frameCount: Int,
+        sequenceChannels: List<SequenceChannel>?
+    ): Response {
         if (sequenceChannels == null || sequenceChannels.isEmpty()) {
             return respond(Response.Status.BAD_REQUEST, "Nothing to render.")
         }
@@ -43,7 +47,12 @@ constructor(
         return respondOk(renderResult)
     }
 
-    private fun getRenderResult(sequence: Sequence, startFrame: Int, endFrame: Int, sequenceChannels: List<SequenceChannel>): RenderedStagePropDataMap {
+    private fun getRenderResult(
+        sequence: Sequence,
+        startFrame: Int,
+        endFrame: Int,
+        sequenceChannels: List<SequenceChannel>
+    ): RenderedStagePropDataMap {
         val validator = SequenceChannelValidator()
         sequenceChannels.forEach(validator::validate)
 

@@ -17,7 +17,10 @@ object ChannelPropPairUtils {
     }
 
     private fun getPair(sequenceChannel: SequenceChannel, stageProps: List<StageProp>): ChannelPropPair {
-        return ChannelPropPair(convertChannelData(sequenceChannel), findStagePropByUuid(stageProps, sequenceChannel.getStagePropUuid()!!))
+        return ChannelPropPair(
+            convertChannelData(sequenceChannel),
+            findStagePropByUuid(stageProps, sequenceChannel.getStagePropUuid()!!)
+        )
     }
 
     private fun convertChannelData(sequenceChannel: SequenceChannel): SequenceChannelEffects {
@@ -26,8 +29,8 @@ object ChannelPropPairUtils {
 
     private fun findStagePropByUuid(stageProps: List<StageProp>, uuid: UUID): StageProp {
         return stageProps
-                .asSequence()
-                .filter { sp -> sp.getUuid()!! == uuid }
-                .firstOrNull()!!
+            .asSequence()
+            .filter { sp -> sp.getUuid()!! == uuid }
+            .firstOrNull()!!
     }
 }

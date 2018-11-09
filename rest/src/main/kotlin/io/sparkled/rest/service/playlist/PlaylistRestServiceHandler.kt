@@ -41,10 +41,10 @@ constructor(
             val viewModel = playlistViewModelConverter.toViewModel(playlist)
 
             val playlistSequences = playlistPersistenceService
-                    .getPlaylistSequencesByPlaylistId(playlistId)
-                    .asSequence()
-                    .map(playlistSequenceViewModelConverter::toViewModel)
-                    .toList()
+                .getPlaylistSequencesByPlaylistId(playlistId)
+                .asSequence()
+                .map(playlistSequenceViewModelConverter::toViewModel)
+                .toList()
 
             viewModel.setSequences(playlistSequences)
             return respondOk(viewModel)
@@ -59,10 +59,10 @@ constructor(
 
             val playlist = playlistViewModelConverter.toModel(playlistViewModel)
             val playlistSequences = playlistViewModel.getSequences()
-                    .asSequence()
-                    .map(playlistSequenceViewModelConverter::toModel)
-                    .map { it.setPlaylistId(id) }
-                    .toList()
+                .asSequence()
+                .map(playlistSequenceViewModelConverter::toModel)
+                .map { it.setPlaylistId(id) }
+                .toList()
 
             playlistPersistenceService.savePlaylist(playlist, playlistSequences)
             return@of respondOk()

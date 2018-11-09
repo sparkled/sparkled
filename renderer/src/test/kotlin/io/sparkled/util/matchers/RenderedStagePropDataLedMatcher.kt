@@ -8,7 +8,9 @@ import org.hamcrest.TypeSafeMatcher
 /**
  * Convenience matcher for verifying the LEDs in the rendered frames of a rendered stage prop.
  */
-class RenderedStagePropDataLedMatcher internal constructor(private val ledFrames: Array<IntArray>) : TypeSafeMatcher<RenderedStagePropData>() {
+class RenderedStagePropDataLedMatcher
+internal constructor(private val ledFrames: Array<IntArray>) :
+    TypeSafeMatcher<RenderedStagePropData>() {
 
     override fun describeTo(description: Description) {
         val value = LedTestUtils.toLedString(ledFrames)

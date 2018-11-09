@@ -31,30 +31,30 @@ class GenericExceptionMapper(@param:Context private val uriInfo: UriInfo) : Exce
 
     private fun badRequest(error: String): Response {
         return Response.status(Response.Status.BAD_REQUEST)
-                .location(uriInfo.requestUri)
-                .entity(error)
-                .build()
+            .location(uriInfo.requestUri)
+            .entity(error)
+            .build()
     }
 
     private fun notFound(): Response {
         return Response.status(Response.Status.NOT_FOUND)
-                .location(uriInfo.requestUri)
-                .build()
+            .location(uriInfo.requestUri)
+            .build()
     }
 
     private fun notAllowed(): Response {
         return Response.status(Response.Status.METHOD_NOT_ALLOWED)
-                .location(uriInfo.requestUri)
-                .build()
+            .location(uriInfo.requestUri)
+            .build()
     }
 
     private fun internalError(): Response {
         return Response
-                .status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("An unexpected error occurred.")
-                .location(uriInfo.requestUri)
-                .type(MediaType.APPLICATION_JSON)
-                .build()
+            .status(Response.Status.INTERNAL_SERVER_ERROR)
+            .entity("An unexpected error occurred.")
+            .location(uriInfo.requestUri)
+            .type(MediaType.APPLICATION_JSON)
+            .build()
     }
 
     companion object {

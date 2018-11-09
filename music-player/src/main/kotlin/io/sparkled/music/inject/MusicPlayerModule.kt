@@ -17,9 +17,11 @@ class MusicPlayerModule : AbstractModule() {
         // PlaybackServiceImpl is bound to two interfaces. This scope binding ensures they both get the same singleton instance.
         bind<PlaybackServiceImpl>(PlaybackServiceImpl::class.java).`in`(Singleton::class.java)
         bind<PlaybackService>(PlaybackService::class.java).to(PlaybackServiceImpl::class.java).asEagerSingleton()
-        bind<PlaybackStateService>(PlaybackStateService::class.java).to(PlaybackServiceImpl::class.java).asEagerSingleton()
+        bind<PlaybackStateService>(PlaybackStateService::class.java).to(PlaybackServiceImpl::class.java)
+            .asEagerSingleton()
 
-        bind<MusicPlayerService>(MusicPlayerService::class.java).to(MusicPlayerServiceImpl::class.java).asEagerSingleton()
+        bind<MusicPlayerService>(MusicPlayerService::class.java).to(MusicPlayerServiceImpl::class.java)
+            .asEagerSingleton()
     }
 
     companion object {

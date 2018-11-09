@@ -36,9 +36,9 @@ abstract class RestServiceHandler {
         val responseJson = gson.toJson(entity)
 
         return Response.status(status)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(responseJson)
-                .build()
+            .type(MediaType.APPLICATION_JSON_TYPE)
+            .entity(responseJson)
+            .build()
     }
 
     /**
@@ -48,8 +48,8 @@ abstract class RestServiceHandler {
      */
     protected fun respondMedia(entity: ByteArray, mediaType: String): Response {
         return Response.status(Response.Status.OK)
-                .type(mediaType)
-                .entity(entity)
-                .build()
+            .type(mediaType)
+            .entity(entity)
+            .build()
     }
 }

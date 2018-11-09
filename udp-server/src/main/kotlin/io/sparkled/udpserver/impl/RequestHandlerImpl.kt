@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.nio.charset.StandardCharsets
+import java.nio.charset.StandardCharsets.UTF_8
 import javax.inject.Inject
 
 class RequestHandlerImpl @Inject
@@ -20,14 +20,14 @@ constructor(
 ) : RequestHandler {
 
     private val commands = mapOf(
-            GetFrameCommand.KEY to GetFrameCommand(),
-            GetStagePropCodesCommand.KEY to GetStagePropCodesCommand(),
-            GetVersionCommand.KEY to GetVersionCommand()
+        GetFrameCommand.KEY to GetFrameCommand(),
+        GetStagePropCodesCommand.KEY to GetStagePropCodesCommand(),
+        GetVersionCommand.KEY to GetVersionCommand()
     )
 
     override fun handle(serverSocket: DatagramSocket, receivePacket: DatagramPacket) {
         try {
-            val message = String(receivePacket.data).substring(0, receivePacket.length)
+            val message = String(receivePacket.data, 0, receivePacket.length, UTF_8)
             val args = message.split(":")
             val response = getResponse(args)
             respond(serverSocket, receivePacket, response)
@@ -54,7 +54,7 @@ constructor(
     }
 
     companion object {
-        val ERROR_CODE_BYTES = "ERR".toByteArray(StandardCharsets.US_ASCII)
+        val ERROR_CODE_BYTES = "ERR".toByteArray(UTF_8)
         private val logger = LoggerFactory.getLogger(RequestHandlerImpl::class.java)
     }
 }

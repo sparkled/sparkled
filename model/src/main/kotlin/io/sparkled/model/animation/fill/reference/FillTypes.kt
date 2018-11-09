@@ -9,13 +9,15 @@ import java.util.Arrays
 
 object FillTypes {
     private val TYPES = Arrays.asList(
-            fill(FillTypeCode.RAINBOW, "Rainbow",
-                    param(ParamName.CYCLE_COUNT, ParamType.DECIMAL).setValue(1),
-                    param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(1)
-            ),
-            fill(FillTypeCode.SOLID, "Solid",
-                    param(ParamName.COLOR, ParamType.COLOR).setValue("#ff0000")
-            )
+        fill(
+            FillTypeCode.RAINBOW, "Rainbow",
+            param(ParamName.CYCLE_COUNT, ParamType.DECIMAL).setValue(1),
+            param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(1)
+        ),
+        fill(
+            FillTypeCode.SOLID, "Solid",
+            param(ParamName.COLOR, ParamType.COLOR).setValue("#ff0000")
+        )
     )
 
     fun get(): List<FillType> {

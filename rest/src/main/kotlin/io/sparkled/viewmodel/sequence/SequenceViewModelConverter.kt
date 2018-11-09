@@ -4,4 +4,5 @@ import io.sparkled.model.entity.Sequence
 import io.sparkled.viewmodel.ModelConverter
 import io.sparkled.viewmodel.ViewModelConverter
 
-abstract class SequenceViewModelConverter : ModelConverter<Sequence, SequenceViewModel>, ViewModelConverter<SequenceViewModel, Sequence>
+abstract class SequenceViewModelConverter : ModelConverter<Sequence, SequenceViewModel>,
+    ViewModelConverter<SequenceViewModel, Sequence>

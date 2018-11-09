@@ -20,7 +20,8 @@ class GetFrameCommand : RequestCommand() {
         val stagePropCode = args[1]
         val frameCount = SequenceUtils.getFrameCount(playbackState.song!!, playbackState.sequence!!)
 
-        val renderedFrame = getRenderedFrame(playbackState, stagePropCode, Math.min(frameCount - 1, Math.round(playbackState.progress * frameCount).toInt()))
+        val frameIndex = Math.min(frameCount - 1, Math.round(playbackState.progress * frameCount).toInt())
+        val renderedFrame = getRenderedFrame(playbackState, stagePropCode, frameIndex)
         return buildFrame(renderedFrame, settings)
     }
 
