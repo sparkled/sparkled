@@ -14,7 +14,7 @@ internal class AppSettings {
     var restApiPort = 8080
 
     @Parameter(names = ["-up", "--udpPort"], description = "The UDP server port")
-    var udpPort = 12345
+    var udpPort = 2812
 
     @Parameter(names = ["-l", "--logLevel"], description = "Logging level threshold (DEBUG, INFO, WARN, ERROR)")
     var logLevel = "INFO"
