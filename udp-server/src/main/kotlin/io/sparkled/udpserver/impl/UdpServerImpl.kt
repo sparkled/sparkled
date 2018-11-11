@@ -20,8 +20,11 @@ class UdpServerImpl
 ) : UdpServer {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor(
-        ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
+        ThreadFactoryBuilder().setNameFormat("udp-server").build()
     )
+
+    private val responseExecutor: ExecutorService = Executors.newWorkStealingPool()
+
     private var started: Boolean = false
 
     @Throws(SocketException::class)
@@ -59,7 +62,8 @@ class UdpServerImpl
     private fun handleRequest(serverSocket: DatagramSocket, receiveData: ByteArray) {
         val receivePacket = DatagramPacket(receiveData, receiveData.size)
         serverSocket.receive(receivePacket)
-        requestHandler.handle(serverSocket, receivePacket)
+
+        responseExecutor.submit { requestHandler.handle(serverSocket, receivePacket) }
     }
 
     companion object {
