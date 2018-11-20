@@ -8,5 +8,5 @@ import java.net.DatagramSocket
  */
 interface RequestHandler {
 
-    fun handle(serverSocket: DatagramSocket, receivePacket: DatagramPacket)
+    fun handle(serverSocket: DatagramSocket, receivePacket: DatagramPacket, message: String)
 }

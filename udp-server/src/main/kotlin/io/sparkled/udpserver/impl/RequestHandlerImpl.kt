@@ -23,9 +23,8 @@ class RequestHandlerImpl
         GetVersionCommand.KEY to GetVersionCommand()
     )
 
-    override fun handle(serverSocket: DatagramSocket, receivePacket: DatagramPacket) {
+    override fun handle(serverSocket: DatagramSocket, receivePacket: DatagramPacket, message: String) {
         try {
-            val message = String(receivePacket.data, 0, receivePacket.length, UTF_8)
             val args = message.split(":")
             val response = getResponse(args)
             respond(serverSocket, receivePacket, response)
@@ -40,15 +39,14 @@ class RequestHandlerImpl
         val settings = settingPersistenceService.settings
 
         val command = args[0]
-        val requestCommand = commands[command]
-
-        return requestCommand?.getResponse(args, settings, playbackState) ?: ERROR_CODE_BYTES
+        val requestCommand = commands[command] ?: throw IllegalArgumentException("Unrecognised command: '$command'.")
+        return requestCommand.getResponse(args, settings, playbackState)
     }
 
-    @Throws(IOException::class)
     private fun respond(serverSocket: DatagramSocket, receivePacket: DatagramPacket, data: ByteArray) {
         val ipAddress = receivePacket.address
         val sendPacket = DatagramPacket(data, data.size, ipAddress, receivePacket.port)
+
         serverSocket.send(sendPacket)
     }
 
