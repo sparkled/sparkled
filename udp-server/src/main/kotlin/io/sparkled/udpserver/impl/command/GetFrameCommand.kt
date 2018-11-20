@@ -13,22 +13,25 @@ import io.sparkled.music.PlaybackState
 class GetFrameCommand : RequestCommand() {
 
     override fun getResponse(args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
-        if (args.size != 2 || playbackState.isEmpty) {
-            return errorResponse
+        val frameData = when {
+            args.size != 2 -> blackFrame
+            playbackState.isEmpty -> blackFrame
+            else -> {
+                val stagePropCode = args[1]
+                val frameCount = SequenceUtils.getFrameCount(playbackState.song!!, playbackState.sequence!!)
+
+                val frameIndex = Math.min(frameCount - 1, Math.round(playbackState.progress * frameCount).toInt())
+                val renderedFrame = getRenderedFrame(playbackState, stagePropCode, frameIndex)
+                renderedFrame?.getData() ?: blackFrame
+            }
         }
 
-        val stagePropCode = args[1]
-        val frameCount = SequenceUtils.getFrameCount(playbackState.song!!, playbackState.sequence!!)
-
-        val frameIndex = Math.min(frameCount - 1, Math.round(playbackState.progress * frameCount).toInt())
-        val renderedFrame = getRenderedFrame(playbackState, stagePropCode, frameIndex)
-        return buildFrame(renderedFrame, settings)
+        return buildFrame(frameData, settings)
     }
 
-    private fun buildFrame(renderedFrame: RenderedFrame?, settings: SettingsCache): ByteArray {
+    private fun buildFrame(frameData: ByteArray, settings: SettingsCache): ByteArray {
         val brightness = settings.brightness
         val headerData = buildHeader(brightness)
-        val frameData = renderedFrame?.getData() ?: ByteArray(0)
 
         val headerAndData = ByteArray(headerData.size + frameData.size)
         System.arraycopy(headerData, 0, headerAndData, 0, headerData.size)
@@ -52,5 +55,6 @@ class GetFrameCommand : RequestCommand() {
 
     companion object {
         const val KEY = "GF"
+        private val blackFrame = byteArrayOf(0, 0, 0)
     }
 }

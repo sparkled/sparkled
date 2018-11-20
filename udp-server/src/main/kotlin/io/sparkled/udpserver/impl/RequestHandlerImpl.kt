@@ -7,14 +7,12 @@ import io.sparkled.udpserver.impl.command.GetFrameCommand
 import io.sparkled.udpserver.impl.command.GetStagePropCodesCommand
 import io.sparkled.udpserver.impl.command.GetVersionCommand
 import org.slf4j.LoggerFactory
-import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.nio.charset.StandardCharsets.UTF_8
 import javax.inject.Inject
 
-class RequestHandlerImpl @Inject
-constructor(
+class RequestHandlerImpl
+@Inject constructor(
     private val playbackStateService: PlaybackStateService,
     private val settingPersistenceService: SettingPersistenceService
 ) : RequestHandler {
@@ -31,8 +29,9 @@ constructor(
             val args = message.split(":")
             val response = getResponse(args)
             respond(serverSocket, receivePacket, response)
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             logger.error("Failed to handle response.", e)
+            respond(serverSocket, receivePacket, emptyResponse)
         }
     }
 
@@ -54,7 +53,7 @@ constructor(
     }
 
     companion object {
-        val ERROR_CODE_BYTES = "ERR".toByteArray(UTF_8)
         private val logger = LoggerFactory.getLogger(RequestHandlerImpl::class.java)
+        val emptyResponse = ByteArray(0)
     }
 }
