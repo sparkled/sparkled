@@ -41,7 +41,7 @@ class GetFrameCommand : RequestCommand() {
     }
 
     private fun buildHeader(brightness: Int): ByteArray {
-        return byteArrayOf((brightness shl 4).toByte()) // BBBB0000
+        return byteArrayOf((brightness and 0b00001111).toByte()) // 0000BBBB
     }
 
     private fun getRenderedFrame(playbackState: PlaybackState, stagePropCode: String, frameIndex: Int): RenderedFrame? {
