@@ -14,7 +14,7 @@ class GetStagePropCodesCommand : RequestCommand() {
 
     override fun getResponse(args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
         if (playbackState.isEmpty) {
-            return errorResponse
+            return emptyResponse
         }
 
         val props = playbackState.stagePropUuids.keys.joinToString(":")
