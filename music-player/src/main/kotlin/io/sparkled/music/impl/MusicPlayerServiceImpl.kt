@@ -61,17 +61,19 @@ constructor() : MusicPlayerService, LineListener {
 
     override val sequenceProgress: Double
         get() {
+            val clip = this.clip
             return if (clip == null) {
                 0.0
             } else {
-                Math.min(1.0, clip!!.framePosition / clip!!.frameLength.toDouble())
+                Math.min(1.0, clip.framePosition / clip.frameLength.toDouble())
             }
         }
 
     override fun stopPlayback() {
-        if (clip != null && clip!!.isOpen) {
+        val clip = this.clip
+        if (clip != null && clip.isOpen) {
             try {
-                clip!!.close()
+                clip.close()
                 logger.info("Clip closed.")
             } catch (e: Exception) {
                 logger.error("Failed to close clip.")
@@ -80,7 +82,7 @@ constructor() : MusicPlayerService, LineListener {
             logger.info("Clip is already closed.")
         }
 
-        clip = null
+        this.clip = null
     }
 
     override fun update(event: LineEvent) {

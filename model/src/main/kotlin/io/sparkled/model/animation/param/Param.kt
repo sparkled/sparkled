@@ -1,12 +1,10 @@
 package io.sparkled.model.animation.param
 
-import java.util.ArrayList
-
 class Param {
 
     private var name: ParamName? = null
     private var type: ParamType? = null
-    private var value: List<String?> = ArrayList()
+    private var value: List<String?> = emptyList()
 
     fun getName(): ParamName? {
         return name

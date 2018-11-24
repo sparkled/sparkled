@@ -7,27 +7,29 @@ import java.awt.Color
 
 object ParamUtils {
 
-    fun getIntegerValue(parent: HasParams, paramName: ParamName): Int {
+    fun getIntegerValue(parent: HasParams, paramName: ParamName, default: Int = 0): Int {
         val param = getParam(parent, paramName)
         val value = param.getValue()
-        return Integer.parseInt(value[0])
+        return if (value.isEmpty()) default else value[0]!!.toInt()
     }
 
-    fun getDecimalValue(parent: HasParams, paramName: ParamName): Float {
+    fun getDecimalValue(parent: HasParams, paramName: ParamName, default: Float = 0f): Float {
         val param = getParam(parent, paramName)
         val value = param.getValue()
-        return value[0]!!.toFloat()
+        return if (value.isEmpty()) default else value[0]!!.toFloat()
     }
 
-    fun getColorValue(parent: HasParams, paramName: ParamName): Color {
-        return getColorsValue(parent, paramName)[0]
+    fun getColorValue(parent: HasParams, paramName: ParamName, default: Color = Color.BLACK): Color {
+        return getColorsValue(parent, paramName, default)[0]
     }
 
-    private fun getColorsValue(parent: HasParams, paramName: ParamName): List<Color> {
+    private fun getColorsValue(parent: HasParams, paramName: ParamName, default: Color = Color.BLACK): List<Color> {
         val param = getParam(parent, paramName)
-        val values = param.getValue()
-
-        return values.asSequence().map { convertColor(it!!) }.toList()
+        return if (param.getValue().isEmpty()) {
+            listOf(default)
+        } else {
+            param.getValue().asSequence().map { convertColor(it!!) }.toList()
+        }
     }
 
     private fun getParam(parent: HasParams, paramName: ParamName): Param {

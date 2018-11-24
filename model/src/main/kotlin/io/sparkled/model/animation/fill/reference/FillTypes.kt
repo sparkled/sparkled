@@ -11,8 +11,9 @@ object FillTypes {
     private val TYPES = Arrays.asList(
         fill(
             FillTypeCode.RAINBOW, "Rainbow",
+            param(ParamName.BRIGHTNESS, ParamType.DECIMAL).setValue(1),
             param(ParamName.CYCLE_COUNT, ParamType.DECIMAL).setValue(1),
-            param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(1)
+            param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(.5)
         ),
         fill(
             FillTypeCode.SOLID, "Solid",

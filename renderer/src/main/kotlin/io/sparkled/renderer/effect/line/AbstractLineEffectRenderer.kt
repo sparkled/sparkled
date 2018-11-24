@@ -16,7 +16,7 @@ abstract class AbstractLineEffectRenderer : EffectRenderer() {
      */
     internal fun renderLine(ctx: RenderContext, startLed: Int, endLed: Int) {
         val direction = if (startLed < endLed) 1 else -1
-        val lineOffset = direction * ParamUtils.getDecimalValue(ctx.effect, ParamName.LENGTH)
+        val lineOffset = direction * ParamUtils.getDecimalValue(ctx.effect, ParamName.LENGTH, 1f)
 
         val lineMin = startLed - lineOffset
         val lineMax = (endLed + direction).toFloat()
