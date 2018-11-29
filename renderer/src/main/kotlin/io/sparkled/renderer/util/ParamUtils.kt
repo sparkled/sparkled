@@ -8,9 +8,7 @@ import java.awt.Color
 object ParamUtils {
 
     fun getIntegerValue(parent: HasParams, paramName: ParamName, default: Int = 0): Int {
-        val param = getParam(parent, paramName)
-        val value = param.getValue()
-        return if (value.isEmpty()) default else value[0]!!.toInt()
+        return getDecimalValue(parent, paramName, default.toFloat()).toInt()
     }
 
     fun getDecimalValue(parent: HasParams, paramName: ParamName, default: Float = 0f): Float {

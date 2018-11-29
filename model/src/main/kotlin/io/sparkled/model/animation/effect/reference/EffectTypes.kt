@@ -11,12 +11,18 @@ object EffectTypes {
     private val TYPES = Arrays.asList(
         effectType(EffectTypeCode.FLASH, "Flash"),
         effectType(
+            EffectTypeCode.GLITTER, "Glitter",
+            param(ParamName.DENSITY, ParamType.DECIMAL).setValue(50),
+            param(ParamName.LIFETIME, ParamType.DECIMAL).setValue(1f),
+            param(ParamName.RANDOM_SEED, ParamType.INTEGER).setValue(1)
+        ),
+        effectType(
             EffectTypeCode.LINE, "Line",
-            param(ParamName.LENGTH, ParamType.INTEGER).setValue(1)
+            param(ParamName.LENGTH, ParamType.DECIMAL).setValue(1f)
         ),
         effectType(
             EffectTypeCode.SPLIT_LINE, "Split Line",
-            param(ParamName.LENGTH, ParamType.INTEGER).setValue(1)
+            param(ParamName.LENGTH, ParamType.DECIMAL).setValue(1f)
         )
     )
 
