@@ -28,7 +28,7 @@ constructor() : MusicPlayerService, LineListener {
         var convertedStream: AudioInputStream? = null
 
         try {
-            logger.info("Playing sequence {}.", playbackState.sequence?.getName())
+            logger.debug("Playing sequence {}.", playbackState.sequence?.getName())
 
             byteStream = ByteArrayInputStream(playbackState.songAudio?.getAudioData())
             mp3Stream = AudioSystem.getAudioInputStream(byteStream)
@@ -44,7 +44,6 @@ constructor() : MusicPlayerService, LineListener {
             clip.open(convertedStream)
             clip.addLineListener(this)
             clip.start()
-            logger.info("Sequence finished playing.")
         } catch (e: Exception) {
             logger.error("Failed to play sequence {}: {}.", playbackState.sequence?.getName(), e.message)
         } finally {
@@ -74,12 +73,12 @@ constructor() : MusicPlayerService, LineListener {
         if (clip != null && clip.isOpen) {
             try {
                 clip.close()
-                logger.info("Clip closed.")
+                logger.debug("Clip closed.")
             } catch (e: Exception) {
                 logger.error("Failed to close clip.")
             }
         } else {
-            logger.info("Clip is already closed.")
+            logger.warn("Clip is already closed.")
         }
 
         this.clip = null
