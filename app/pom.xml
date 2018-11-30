@@ -134,9 +134,8 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
                 <configuration>
-                    <changeLogFile>
-                        ${basedir}/src/main/resources/db.changelog.xml
-                    </changeLogFile>
+                    <changeLogDirectory>${basedir}/src/main/resources</changeLogDirectory>
+                    <changeLogFile>db.changelog.xml</changeLogFile>
                     <driver>org.h2.Driver</driver>
                     <url>jdbc:h2:file:${project.parent.basedir}\sparkled</url>
                 </configuration>

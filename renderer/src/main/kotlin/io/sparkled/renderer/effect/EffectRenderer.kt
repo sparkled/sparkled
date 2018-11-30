@@ -2,6 +2,7 @@ package io.sparkled.renderer.effect
 
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.entity.Sequence
+import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.RenderedFrame
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.renderer.context.RenderContext
@@ -9,9 +10,9 @@ import io.sparkled.renderer.easing.EasingFunctions
 
 abstract class EffectRenderer {
 
-    fun render(sequence: Sequence, channel: RenderedStagePropData, frame: RenderedFrame, effect: Effect) {
+    fun render(sequence: Sequence, channel: RenderedStagePropData, frame: RenderedFrame, stageProp: StageProp, effect: Effect) {
         val progress = getProgress(frame, effect)
-        val ctx = RenderContext(sequence, channel, frame, effect, progress)
+        val ctx = RenderContext(sequence, channel, frame, stageProp, effect, progress)
         render(ctx)
     }
 

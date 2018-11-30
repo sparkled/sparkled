@@ -52,6 +52,10 @@ class StagePropForm extends Component {
               </div>
 
               <div className="row">
+                <Field className="col-6" type="checkbox" name="reverse" component={InputField} label="Reverse" onChange={this.updateStageProp}/>
+              </div>
+
+              <div className="row">
                 <Field className="col-6" type="number" parse={toNumber} name="positionX" component={InputField} label="Position X" required={true} validate={required} onChange={this.updateStageProp}/>
                 <Field className="col-6" type="number" parse={toNumber} name="positionY" component={InputField} label="Position Y" required={true} validate={required} onChange={this.updateStageProp}/>
               </div>
