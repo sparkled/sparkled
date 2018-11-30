@@ -43,7 +43,7 @@ class SaveRenderedStagePropsQuery(
         return queryFactory
             .select(renderedStageProp.stagePropUuid, renderedStageProp.id)
             .from(renderedStageProp)
-            .where(renderedStageProp.stagePropUuid.`in`(stagePropUuids))
+            .where(renderedStageProp.sequenceId.eq(sequence.getId()).and(renderedStageProp.stagePropUuid.`in`(stagePropUuids)))
             .fetch()
             .associateBy(
                 { tuple -> tuple.get(0, UUID::class.java)!! },
