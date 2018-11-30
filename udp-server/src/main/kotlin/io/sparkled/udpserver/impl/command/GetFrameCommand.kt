@@ -7,14 +7,14 @@ import io.sparkled.music.PlaybackState
 
 /**
  * Retrieves the rendered stage prop data frame for the current sequence, synchronised to the current point of playback.
- * Returns an error response if no rendered frame is found for the stage prop.
- * Command syntax: GF:StagePropCode, e.g. GF:P1
+ * Returns an empty response if no rendered frame is found for the stage prop.
+ * Command syntax: GF:StagePropCode[:ClientID], e.g. GF:P1:1 or GF:P1 (ClientID defaults to 0).
  */
 class GetFrameCommand : RequestCommand() {
 
     override fun getResponse(args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
         val frameData = when {
-            args.size != 2 -> blackFrame
+            args.size < 2 -> blackFrame
             playbackState.isEmpty -> blackFrame
             else -> {
                 val stagePropCode = args[1]
@@ -26,12 +26,13 @@ class GetFrameCommand : RequestCommand() {
             }
         }
 
-        return buildFrame(frameData, settings)
+        val clientId = (args.getOrNull(2) ?: "0").toInt()
+        return buildFrame(frameData, settings, clientId)
     }
 
-    private fun buildFrame(frameData: ByteArray, settings: SettingsCache): ByteArray {
+    private fun buildFrame(frameData: ByteArray, settings: SettingsCache, clientId: Int): ByteArray {
         val brightness = settings.brightness
-        val headerData = buildHeader(brightness)
+        val headerData = buildHeader(clientId, brightness)
 
         val headerAndData = ByteArray(headerData.size + frameData.size)
         System.arraycopy(headerData, 0, headerAndData, 0, headerData.size)
@@ -40,8 +41,10 @@ class GetFrameCommand : RequestCommand() {
         return headerAndData
     }
 
-    private fun buildHeader(brightness: Int): ByteArray {
-        return byteArrayOf((brightness and 0b00001111).toByte()) // 0000BBBB
+    private fun buildHeader(clientId: Int, brightness: Int): ByteArray {
+        val headerClientId = clientId shl 4 and 0b11110000 // CCCC0000
+        val headerBrightness = brightness and 0b00001111 // 0000BBBB
+        return byteArrayOf((headerClientId or headerBrightness).toByte()) // CCCCBBBB
     }
 
     private fun getRenderedFrame(playbackState: PlaybackState, stagePropCode: String, frameIndex: Int): RenderedFrame? {
