@@ -19,10 +19,7 @@ class FlashEffectRenderer : EffectRenderer() {
      * @return The progress, transformed into 0 > 1 > 0.
      */
     private fun getAlpha(progress: Float): Float {
-        var alpha = progress * 2
-        if (progress >= .5) {
-            alpha = 1 - (progress - .5f) * 2
-        }
+        val alpha = 2 * if (progress < .5) progress else 1 - progress
 
         // Remove floating point inaccuracies to ensure a symmetrical flash.
         return Math.round(alpha * 10000f) / 10000f
