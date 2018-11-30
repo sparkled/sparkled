@@ -11,6 +11,7 @@ class StagePropViewModel : ViewModel {
     private var name: String? = null
     private var type: String? = null
     private var ledCount: Int? = null
+    private var reverse: Boolean? = null
     private var positionX: Int? = null
     private var positionY: Int? = null
     private var scaleX: Float? = null
@@ -69,6 +70,15 @@ class StagePropViewModel : ViewModel {
 
     fun setLedCount(ledCount: Int?): StagePropViewModel {
         this.ledCount = ledCount
+        return this
+    }
+
+    fun isReverse(): Boolean? {
+        return reverse
+    }
+
+    fun setReverse(reverse: Boolean?): StagePropViewModel {
+        this.reverse = reverse
         return this
     }
 
@@ -138,6 +148,7 @@ class StagePropViewModel : ViewModel {
         if (name != other.name) return false
         if (type != other.type) return false
         if (ledCount != other.ledCount) return false
+        if (reverse != other.reverse) return false
         if (positionX != other.positionX) return false
         if (positionY != other.positionY) return false
         if (scaleX != other.scaleX) return false
@@ -155,6 +166,7 @@ class StagePropViewModel : ViewModel {
         result = 31 * result + (name?.hashCode() ?: 0)
         result = 31 * result + (type?.hashCode() ?: 0)
         result = 31 * result + (ledCount ?: 0)
+        result = 31 * result + (reverse?.hashCode() ?: 0)
         result = 31 * result + (positionX ?: 0)
         result = 31 * result + (positionY ?: 0)
         result = 31 * result + (scaleX?.hashCode() ?: 0)
@@ -165,6 +177,6 @@ class StagePropViewModel : ViewModel {
     }
 
     override fun toString(): String {
-        return "StagePropViewModel(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, displayOrder=$displayOrder)"
+        return "StagePropViewModel(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, reverse=$reverse, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, displayOrder=$displayOrder)"
     }
 }

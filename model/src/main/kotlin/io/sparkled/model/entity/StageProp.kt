@@ -36,6 +36,10 @@ class StageProp {
     private var ledCount: Int? = null
 
     @Basic
+    @Column(name = "reverse")
+    private var reverse: Boolean? = null
+
+    @Basic
     @Column(name = "position_x")
     private var positionX: Int? = null
 
@@ -113,6 +117,15 @@ class StageProp {
         return this
     }
 
+    fun isReverse(): Boolean? {
+        return reverse
+    }
+
+    fun setReverse(reverse: Boolean?): StageProp {
+        this.reverse = reverse
+        return this
+    }
+
     fun getPositionX(): Int? {
         return positionX
     }
@@ -179,6 +192,7 @@ class StageProp {
         if (name != other.name) return false
         if (type != other.type) return false
         if (ledCount != other.ledCount) return false
+        if (reverse != other.reverse) return false
         if (positionX != other.positionX) return false
         if (positionY != other.positionY) return false
         if (scaleX != other.scaleX) return false
@@ -196,6 +210,7 @@ class StageProp {
         result = 31 * result + (name?.hashCode() ?: 0)
         result = 31 * result + (type?.hashCode() ?: 0)
         result = 31 * result + (ledCount ?: 0)
+        result = 31 * result + (reverse?.hashCode() ?: 0)
         result = 31 * result + (positionX ?: 0)
         result = 31 * result + (positionY ?: 0)
         result = 31 * result + (scaleX?.hashCode() ?: 0)
@@ -206,6 +221,6 @@ class StageProp {
     }
 
     override fun toString(): String {
-        return "StageProp(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, displayOrder=$displayOrder)"
+        return "StageProp(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, reverse=$reverse, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, displayOrder=$displayOrder)"
     }
 }

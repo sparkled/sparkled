@@ -13,10 +13,15 @@ import java.util.UUID
 
 object RenderUtils {
 
-    private val PROP_UUID = UUID(0, 0)
-    private const val PROP_CODE = "TEST_PROP"
+    val PROP_UUID = UUID(0, 0)
+    const val PROP_CODE = "TEST_PROP"
 
     fun render(effect: Effect, frameCount: Int, ledCount: Int): RenderedStagePropData {
+        val stageProp = StageProp().setCode(PROP_CODE).setUuid(PROP_UUID).setLedCount(ledCount).setReverse(false)
+        return render(effect, frameCount, stageProp)
+    }
+
+    fun render(effect: Effect, frameCount: Int, stageProp: StageProp): RenderedStagePropData {
         effect.setStartFrame(0)
         effect.setEndFrame(frameCount - 1)
 
@@ -26,8 +31,6 @@ object RenderUtils {
         val sequence = Sequence().setFramesPerSecond(60)
         val channelJson = GsonProvider.get().toJson(animationData)
         val sequenceChannel = SequenceChannel().setStagePropUuid(PROP_UUID).setChannelJson(channelJson)
-
-        val stageProp = StageProp().setCode(PROP_CODE).setUuid(PROP_UUID).setLedCount(ledCount)
 
         val renderedChannels = Renderer(
             sequence,

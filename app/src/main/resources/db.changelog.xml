@@ -73,6 +73,9 @@
             <column name="led_count" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
+            <column name="reverse" type="BIT">
+                <constraints nullable="false"/>
+            </column>
             <column name="position_x" type="INT(10)">
                 <constraints nullable="false"/>
             </column>

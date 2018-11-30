@@ -44,12 +44,18 @@ class Renderer(
         }
 
         val dataToRender = stagePropData
-        channelPropPair.channel.getEffects().forEach { renderEffect(sequence, dataToRender, it) }
+        channelPropPair.channel.getEffects()
+            .forEach { renderEffect(sequence, dataToRender, channelPropPair.stageProp, it) }
 
         return stagePropData
     }
 
-    private fun renderEffect(sequence: Sequence, renderedStagePropData: RenderedStagePropData, effect: Effect) {
+    private fun renderEffect(
+        sequence: Sequence,
+        renderedStagePropData: RenderedStagePropData,
+        stageProp: StageProp,
+        effect: Effect
+    ) {
         val effectTypeCode = effect.getType()!!
         val renderer = EffectTypeRenderers[effectTypeCode]
 
@@ -58,7 +64,7 @@ class Renderer(
 
         for (frameNumber in startFrame..endFrame) {
             val frame = renderedStagePropData.frames[frameNumber - this.startFrame]
-            renderer.render(sequence, renderedStagePropData, frame, effect)
+            renderer.render(sequence, renderedStagePropData, frame, stageProp, effect)
         }
     }
 }
