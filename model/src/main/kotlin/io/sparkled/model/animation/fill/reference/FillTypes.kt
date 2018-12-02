@@ -10,10 +10,15 @@ import java.util.Arrays
 object FillTypes {
     private val TYPES = Arrays.asList(
         fill(
+            FillTypeCode.GRADIENT, "Gradient",
+            param(ParamName.COLORS, ParamType.COLORS).setValue(listOf("#ff0000", "#0000ff")),
+            param(ParamName.BLEND_HARDNESS, ParamType.DECIMAL).setValue(0)
+        ),
+        fill(
             FillTypeCode.RAINBOW, "Rainbow",
             param(ParamName.BRIGHTNESS, ParamType.DECIMAL).setValue(100),
             param(ParamName.CYCLE_COUNT, ParamType.DECIMAL).setValue(1),
-            param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(.5)
+            param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(.5f)
         ),
         fill(
             FillTypeCode.SOLID, "Solid",

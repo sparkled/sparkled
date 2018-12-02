@@ -21,7 +21,7 @@ object ParamUtils {
         return getColorsValue(parent, paramName, default)[0]
     }
 
-    private fun getColorsValue(parent: HasParams, paramName: ParamName, default: Color = Color.BLACK): List<Color> {
+    fun getColorsValue(parent: HasParams, paramName: ParamName, default: Color = Color.BLACK): List<Color> {
         val param = getParam(parent, paramName)
         return if (param.getValue().isEmpty()) {
             listOf(default)

@@ -10,8 +10,19 @@
 .ColorPicker .swatch {
   padding: 5px;
   background: #fff;
-  display: inline-block;
+  display: flex;
   cursor: pointer;
+}
+
+.ColorPicker .delete-color {
+  line-height: 11px;
+  margin-left: 4px;
+  color: #000;
+}
+
+.ColorPicker .delete-color:hover {
+  cursor: pointer;
+  color: #c00;
 }
 
 .ColorPicker .popover {

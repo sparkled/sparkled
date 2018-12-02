@@ -1,0 +1,14 @@
+.MultiColorPickerField .color-pickers {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.MultiColorPickerField .color-pickers > * {
+  margin: 0 5px 5px 0;
+}
+
+.MultiColorPickerField .add-color {
+  line-height: .5;
+  height: 24px;
+}

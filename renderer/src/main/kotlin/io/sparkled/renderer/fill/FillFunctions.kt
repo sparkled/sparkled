@@ -1,6 +1,7 @@
 package io.sparkled.renderer.fill
 
 import io.sparkled.model.animation.fill.FillTypeCode
+import io.sparkled.renderer.fill.function.GradientFill
 import io.sparkled.renderer.fill.function.RainbowFill
 import io.sparkled.renderer.fill.function.SolidFill
 import java.util.HashMap
@@ -10,6 +11,7 @@ object FillFunctions {
     private val functions = HashMap<FillTypeCode, FillFunction>()
 
     init {
+        functions[FillTypeCode.GRADIENT] = GradientFill()
         functions[FillTypeCode.RAINBOW] = RainbowFill()
         functions[FillTypeCode.SOLID] = SolidFill()
     }

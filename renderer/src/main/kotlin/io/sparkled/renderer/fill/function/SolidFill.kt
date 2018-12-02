@@ -8,6 +8,10 @@ import io.sparkled.renderer.util.ColorUtils
 import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 
+/**
+ * Fills all pixels with the same colour.
+ * Effect parameters: none.
+ */
 class SolidFill : FillFunction {
 
     override fun fill(ctx: RenderContext, led: Led, alpha: Float) {
