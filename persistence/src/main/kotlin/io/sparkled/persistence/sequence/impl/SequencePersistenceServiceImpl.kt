@@ -24,12 +24,8 @@ import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
 
-class SequencePersistenceServiceImpl @Inject
-constructor(private val queryFactory: QueryFactory) : SequencePersistenceService {
-
-    override fun createSequence(sequence: Sequence): Sequence {
-        return SaveSequenceQuery(sequence).perform(queryFactory)
-    }
+class SequencePersistenceServiceImpl
+@Inject constructor(private val queryFactory: QueryFactory) : SequencePersistenceService {
 
     override fun getAllSequences(): List<Sequence> {
         return GetAllSequencesQuery().perform(queryFactory)
@@ -63,9 +59,10 @@ constructor(private val queryFactory: QueryFactory) : SequencePersistenceService
         return GetSequenceStagePropUuidMapBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
-    override fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>) {
+    override fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>): Sequence {
         val savedSequence = SaveSequenceQuery(sequence).perform(queryFactory)
         SaveSequenceChannelsQuery(savedSequence, sequenceChannels).perform(queryFactory)
+        return savedSequence
     }
 
     override fun publishSequence(

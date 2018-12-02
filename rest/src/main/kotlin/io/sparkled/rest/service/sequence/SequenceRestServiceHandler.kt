@@ -1,5 +1,6 @@
 package io.sparkled.rest.service.sequence
 
+import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.SequenceStatus
@@ -18,6 +19,7 @@ import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverter
 import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModelConverter
 import io.sparkled.viewmodel.stage.StageViewModelConverter
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter
+import java.util.UUID
 import javax.inject.Inject
 import javax.ws.rs.core.Response
 
@@ -40,8 +42,22 @@ constructor(
             sequenceViewModel.setStatus(SequenceStatus.NEW)
 
             val sequence = sequenceViewModelConverter.toModel(sequenceViewModel)
-            val savedSequence = sequencePersistenceService.createSequence(sequence)
+            val sequenceChannels = createSequenceChannels(sequence)
+            val savedSequence = sequencePersistenceService.saveSequence(sequence, sequenceChannels)
+
             return@of respondOk(IdResponse(savedSequence.getId()!!))
+        }
+    }
+
+    private fun createSequenceChannels(sequence: Sequence): List<SequenceChannel> {
+        val stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId()!!)
+        return stageProps.mapIndexed { i, it ->
+            SequenceChannel()
+                .setUuid(UUID.randomUUID())
+                .setName(it.getName())
+                .setStagePropUuid(it.getUuid())
+                .setDisplayOrder(i)
+                .setChannelJson(SequenceChannelEffects.EMPTY_JSON)
         }
     }
 

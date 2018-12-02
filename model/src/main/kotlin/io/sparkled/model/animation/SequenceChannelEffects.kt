@@ -1,6 +1,7 @@
 package io.sparkled.model.animation
 
 import io.sparkled.model.animation.effect.Effect
+import io.sparkled.model.util.GsonProvider
 
 class SequenceChannelEffects {
 
@@ -32,5 +33,9 @@ class SequenceChannelEffects {
 
     override fun toString(): String {
         return "SequenceChannelEffects(effects=$effects)"
+    }
+
+    companion object {
+        val EMPTY_JSON = GsonProvider.get().toJson(SequenceChannelEffects())!!
     }
 }

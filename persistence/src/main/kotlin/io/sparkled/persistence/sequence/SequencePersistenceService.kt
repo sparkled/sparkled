@@ -10,8 +10,6 @@ import java.util.UUID
 
 interface SequencePersistenceService {
 
-    fun createSequence(sequence: Sequence): Sequence
-
     fun getAllSequences(): List<Sequence>
 
     fun getSequenceById(sequenceId: Int): Sequence?
@@ -28,7 +26,7 @@ interface SequencePersistenceService {
 
     fun getSequenceStagePropUuidMapBySequenceId(sequenceId: Int): Map<String, UUID>
 
-    fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>)
+    fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>): Sequence
 
     fun publishSequence(
         sequence: Sequence,
