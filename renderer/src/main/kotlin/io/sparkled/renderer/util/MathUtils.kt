@@ -16,4 +16,16 @@ object MathUtils {
         val end = Math.min(e1, e2)
         return Math.max(0f, end - start)
     }
+
+    /**
+     * Maps a value from a given range to a new range.
+     * @param value the number to map
+     * @param oldMin the lower bound of the value’s current range
+     * @param oldMax the upper bound of the value’s current range
+     * @param newMin the lower bound of the value’s target range
+     * @param newMax the upper bound of the value’s target range
+     */
+    fun map(value: Float, oldMin: Float, oldMax: Float, newMin: Float, newMax: Float): Float {
+        return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin
+    }
 }
