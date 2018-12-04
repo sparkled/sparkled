@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { Card, CardBody, CardTitle } from 'reactstrap';
 import { Field, FormSection, reduxForm } from 'redux-form';
 import * as paramTypes from './paramTypes';
-import ColorPicker from '../../../../components/form/ColorPicker';
+import ColorPickerField from '../../../../components/form/ColorPickerField';
+import MultiColorPickerField from '../../../../components/form/MultiColorPickerField';
 import InputField from '../../../../components/form/InputField';
 import SingleSelectField from '../../../../components/form/SingleSelectField/SingleSelectField';
 import { min, required } from '../../../../components/form/validators';
@@ -145,16 +146,21 @@ class EffectForm extends Component {
   renderParamField(param, index) {
     const { easingTypes } = this.props;
     const label = _.startCase(_.toLower(param.name));
-    const path = `params.${index}.value.0`;
+    const path = `params.${index}.value`;
 
     if (param.type === paramTypes.COLOR) {
       return (
-        <Field key={param.name} name={path} component={ColorPicker} label={label} allowEmpty={false} required={true}
+        <Field key={param.name} name={path + '.0'} component={ColorPickerField} label={label} allowEmpty={false} required={true}
+               validate={required} options={easingTypes} onChange={this.updateEffect}/>
+      );
+    } else if (param.type === paramTypes.COLORS) {
+      return (
+        <Field key={param.name} name={path} component={MultiColorPickerField} label={label} allowEmpty={false} required={true}
                validate={required} options={easingTypes} onChange={this.updateEffect}/>
       );
     } else {
       return (
-        <Field key={param.name} name={path} component={InputField} label={label} allowEmpty={false} required={true}
+        <Field key={param.name} name={path + '.0'} component={InputField} label={label} allowEmpty={false} required={true}
                validate={required} options={easingTypes} onChange={this.updateEffect}/>
       );
     }

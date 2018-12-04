@@ -7,6 +7,13 @@ import io.sparkled.renderer.fill.FillFunction
 import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 
+/**
+ * Fills pixels with a rainbow-ish effect based on a full rotation of the HSV hue circle.
+ * Effect parameters:
+ *  - CYCLE_COUNT: The number of hue circle rotations to fit between the first and last pixel.
+ *  - CYCLES_PER_SECOND: The speed at which the hue circle rotates.
+ *  - BRIGHTNESS: The brightness of the rainbow.
+ */
 class RainbowFill : FillFunction {
 
     override fun fill(ctx: RenderContext, led: Led, alpha: Float) {

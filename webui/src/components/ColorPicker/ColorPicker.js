@@ -3,7 +3,7 @@ import { CompactPicker } from 'react-color';
 import './ColorPicker.css';
 
 class ColorPicker extends React.Component {
-  state = { displayColorPicker: false, color: {} };
+  state = { displayColorPicker: false, color: null };
 
   constructor(props) {
     super(props);
@@ -13,29 +13,25 @@ class ColorPicker extends React.Component {
   }
 
   render() {
-    const { input, className = '', disabled, required, label, meta } = this.props;
-    const hasError = meta.touched && meta.error;
-    const formGroupClass = hasError ? 'form-group has-danger' : 'form-group';
-    const fieldClass = hasError ? 'is-invalid' : '';
-    const errorContent = hasError ? <div className="invalid-feedback">{meta.error}</div> : null;
-    const attrs = { disabled, required };
+    const { color, className = '', onDelete } = this.props;
 
     const colorPicker = !this.state.displayColorPicker ? null : (
       <div className="popover">
         <div className="cover" onClick={this.closeColorPicker}/>
-        <CompactPicker {...input} { ...attrs } color={this.state.color} onChange={this.changeColor}/>
+        <CompactPicker color={color} onChange={this.changeColor}/>
       </div>
     );
 
+    const deleteButton = onDelete ? <div className="delete-color" onClick={onDelete} title="Delete color">⨯</div> : [];
+
     return (
-      <div className={`ColorPicker ${formGroupClass} ${className}`}>
-        <label className="form-control-label">{label} {required ? '*' : ''}</label>
+      <div className={`ColorPicker ${className}`}>
         <div className="swatch-container">
-          <div className={"swatch " + fieldClass} onClick={this.openColorPicker}>
-            <div className="color" style={{ background: input.value }}/>
+          <div className="swatch" onClick={this.openColorPicker}>
+            <div className="color" style={{ background: color }}/>
+            {deleteButton}
           </div>
           {colorPicker}
-          {errorContent}
         </div>
       </div>
     );
@@ -46,12 +42,15 @@ class ColorPicker extends React.Component {
   };
 
   closeColorPicker() {
-    this.props.input.onChange(this.state.color.hex);
+    if (this.state.color) {
+      this.props.onChange(this.state.color);
+    }
     this.setState({ displayColorPicker: false });
   };
 
   changeColor(color) {
     this.setState({ color });
+    this.props.onChange(color);
   };
 }
 
