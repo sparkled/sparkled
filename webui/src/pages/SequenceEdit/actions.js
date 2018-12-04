@@ -78,6 +78,20 @@ export const addEffect = effect => {
   };
 };
 
+export const copyEffect = () => {
+  return {
+    type: actionTypes.COPY_EFFECT,
+    payload: {}
+  };
+};
+
+export const pasteEffect = () => {
+  return {
+    type: actionTypes.PASTE_EFFECT,
+    payload: {}
+  };
+};
+
 export const updateEffect = (channel, effect) => {
   return {
     type: actionTypes.UPDATE_EFFECT,

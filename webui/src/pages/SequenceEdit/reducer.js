@@ -1,5 +1,6 @@
 import produce from 'immer';
 import _ from 'lodash';
+import uuidv4 from 'uuid/v4';
 import { getResponseError } from '../../utils/reducerUtils';
 import * as actionTypes from './actionTypes';
 
@@ -21,7 +22,8 @@ const initialState = {
   selectedChannel: null,
   selectedEffect: null,
   currentFrame: 0,
-  pixelsPerFrame: 2
+  pixelsPerFrame: 2,
+  copiedEffect: null
 };
 
 export default (state = initialState, action) => {
@@ -116,15 +118,33 @@ export default (state = initialState, action) => {
         break;
 
       case actionTypes.ADD_EFFECT:
-        addEffect(draft, action);
+        addEffect(draft, action.payload.effect);
+        break;
+
+      case actionTypes.COPY_EFFECT:
+        draft.copiedEffect = state.selectedEffect;
+        break;
+
+      case actionTypes.PASTE_EFFECT:
+        if (state.copiedEffect) {
+          const frameOffset = state.currentFrame - state.copiedEffect.startFrame;
+          const effect = {
+            ...state.copiedEffect,
+            uuid: uuidv4(),
+            startFrame: state.currentFrame,
+            endFrame: state.copiedEffect.endFrame + frameOffset
+          };
+
+          addEffect(draft, effect);
+        }
         break;
 
       case actionTypes.UPDATE_EFFECT:
-        updateEffect(draft, action);
+        updateEffect(draft, action.payload.effect);
         break;
 
       case actionTypes.DELETE_EFFECT:
-        deleteEffect(draft, action);
+        deleteEffect(draft, action.payload.effect);
         break;
 
       case actionTypes.SELECT_FRAME:
@@ -156,28 +176,25 @@ function selectEffect(draft, action) {
 }
 
 // Re-adding the effect has the benefit of automatically moving the effect to the correct array position.
-function updateEffect(draft, action) {
-  deleteEffect(draft, action);
-  addEffect(draft, action);
+function updateEffect(draft, effect) {
+  deleteEffect(draft, effect);
+  addEffect(draft, effect);
 }
 
-function addEffect(draft, action) {
-  const { effect } = action.payload;
-  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(draft, action);
-
+function addEffect(draft, effect) {
+  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(draft, effect);
   draft.sequence.channels[channelIndex].effects.splice(effectIndex, 0, effect);
   draft.selectedEffect = effect;
 }
 
-function deleteEffect(draft, action) {
-  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(draft, action);
+function deleteEffect(draft, effect) {
+  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(draft, effect);
   draft.sequence.channels[channelIndex].effects.splice(effectIndex, 1);
   draft.selectedEffect = null;
 }
 
-function getChannelAndEffectIndexes(draft, action) {
+function getChannelAndEffectIndexes(draft, effect) {
   const { sequence, selectedChannel } = draft;
-  const { effect } = action.payload;
   const channelIndex = _.findIndex(sequence.channels, { uuid: selectedChannel.uuid });
 
   const { effects } = sequence.channels[channelIndex];

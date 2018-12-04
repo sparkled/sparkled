@@ -11,6 +11,7 @@
     "jsmediatags": "^3.8.1",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
+    "mousetrap": "^1.6.2",
     "raphael": "^2.2.7",
     "react": "^16.4.1",
     "react-color": "^2.14.1",

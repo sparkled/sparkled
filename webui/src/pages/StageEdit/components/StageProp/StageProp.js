@@ -6,7 +6,7 @@ import stagePropTypes from '../../stagePropTypes';
 import { selectStageProp, updateStageProp } from '../../actions';
 import 'Raphael.FreeTransform';
 
-const ledRadius = 5;
+const ledRadius = 1;
 const strokeWidth = 4;
 
 class StageProp extends Component {
