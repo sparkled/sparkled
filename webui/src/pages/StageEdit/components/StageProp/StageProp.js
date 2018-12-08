@@ -2,18 +2,21 @@ import _ from 'lodash';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import 'raphael';
+import { eventType, subscribe, unsubscribe } from '../../../../utils/eventBus';
 import stagePropTypes from '../../stagePropTypes';
 import { selectStageProp, updateStageProp } from '../../actions';
 import 'Raphael.FreeTransform';
 
-const ledRadius = 1;
+const ledRadius = 1.5;
 const strokeWidth = 4;
+const bytesPerLed = 3;
 
 class StageProp extends Component {
 
   state = {
     freeTransform: {},
-    leds: []
+    leds: [],
+    stale: false
   };
 
   componentDidMount() {
@@ -26,6 +29,35 @@ class StageProp extends Component {
     const freeTransform = paper.freeTransform(set, ftProperties, updateStageProp);
     this.applyTransforms(freeTransform, stageProp);
     this.setState({ freeTransform });
+    subscribe(eventType.RENDER_DATA, stageProp.uuid, this.renderLeds);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.stageProp !== nextProps.stageProp) {
+      this.setState({ stale: true });
+    }
+  }
+
+  renderLeds = playbackData => {
+    const { currentFrame, stageProp } = this.props;
+    const { playbackFrame, renderData } = playbackData;
+
+    if (renderData) {
+      const stagePropRenderData = renderData.stageProps[stageProp.uuid];
+      const { ledCount } = stagePropRenderData;
+
+      const frameSize = ledCount * bytesPerLed;
+      const offset = frameSize * (playbackFrame - currentFrame);
+
+      _(this.state.leds).forEach((led, i) => {
+        const index = stageProp.reverse ? (ledCount - i - 1) : i;
+        const ledOffset = offset + (index * bytesPerLed);
+        const r = stagePropRenderData.data[ledOffset];
+        const g = stagePropRenderData.data[ledOffset + 1];
+        const b = stagePropRenderData.data[ledOffset + 2];
+        led.attr('fill', `rgb(${r}, ${g}, ${b})`);
+      });
+    }
   }
 
   createStagePropSet(stageProp) {
@@ -58,7 +90,8 @@ class StageProp extends Component {
     this.drawStagePropLeds();
 
     if (_(eventName).includes(' end')) {
-      this.props.updateStageProp({ ...stageProp,
+      this.props.updateStageProp({
+        ...stageProp,
         scaleX: _.ceil(freeTransform.attrs.scale.x, 2),
         scaleY: _.ceil(freeTransform.attrs.scale.y, 2),
         positionX: Math.floor(freeTransform.attrs.translate.x),
@@ -71,10 +104,10 @@ class StageProp extends Component {
   getFreeTransformProperties() {
     return {
       draw: ['bbox'],
-      snap: { rotate: 5, scale: 5},
+      snap: { rotate: 5, scale: 5 },
       scale: ['bboxCorners', 'bboxSides'],
       keepRatio: ['bboxCorners'],
-      range: { scale: [ 25, 99999 ] }
+      range: { scale: [25, 99999] }
     };
   }
 
@@ -84,7 +117,7 @@ class StageProp extends Component {
   }
 
   render() {
-    const { freeTransform } = this.state;
+    const { freeTransform, stale } = this.state;
     if (!freeTransform || !freeTransform.items) {
       return [];
     }
@@ -93,7 +126,7 @@ class StageProp extends Component {
 
     const { uuid, invalid } = stageProp;
     const path = freeTransform.items[1].el;
-    path.attr({stroke: invalid ? '#f00' : '#fff'});
+    path.attr({ stroke: invalid ? '#f00' : '#fff' });
 
     if (invalid) {
       freeTransform.hideHandles();
@@ -107,8 +140,11 @@ class StageProp extends Component {
         freeTransform.hideHandles();
       }
 
-      this.applyTransforms(freeTransform, stageProp);
-      this.drawStagePropLeds();
+      if (stale) {
+        this.applyTransforms(freeTransform, stageProp);
+        this.drawStagePropLeds();
+        this.setState({ stale: false });
+      }
     }
 
     return [];
@@ -148,7 +184,7 @@ class StageProp extends Component {
     const { paper } = this.props;
 
     while (leds.length < stageProp.ledCount) {
-      const led = paper.circle(-100, -100, ledRadius).attr({ fill: '#000' });
+      const led = paper.circle(-100, -100, ledRadius).attr({ stroke: 'none', fill: '#000' });
       leds.push(led);
     }
   }
@@ -185,6 +221,8 @@ class StageProp extends Component {
     const { freeTransform, leds } = this.state;
     const { items } = freeTransform;
 
+    unsubscribe(eventType.RENDER_DATA, this.props.stageProp.uuid, this.renderLeds);
+
     freeTransform.unplug();
     _.forEach(items, item => item.el.remove());
     _.forEach(leds, led => led.remove());
@@ -192,8 +230,10 @@ class StageProp extends Component {
 
 }
 
-function mapStateToProps({ page: { stageEdit } }) {
+function mapStateToProps({ page: { sequenceEdit, stageEdit } }) {
   return {
+    currentFrame: sequenceEdit.present.currentFrame,
+    renderData: sequenceEdit.present.renderData,
     stage: stageEdit.present.stage,
     selectedStagePropUuid: stageEdit.present.selectedStagePropUuid
   };

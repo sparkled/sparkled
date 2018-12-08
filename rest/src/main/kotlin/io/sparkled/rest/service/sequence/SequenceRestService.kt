@@ -10,12 +10,13 @@ import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
+import javax.ws.rs.QueryParam
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/sequences")
-class SequenceRestService @Inject
-constructor(private val handler: SequenceRestServiceHandler) {
+class SequenceRestService
+@Inject constructor(private val handler: SequenceRestServiceHandler) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -49,6 +50,18 @@ constructor(private val handler: SequenceRestServiceHandler) {
     @Produces(MediaType.APPLICATION_JSON)
     fun getSequenceSongAudio(@PathParam("id") sequenceId: Int): Response {
         return handler.getSequenceSongAudio(sequenceId)
+    }
+
+    @POST
+    @Path("/{id}/preview")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun previewSequence(
+        @PathParam("id") sequenceId: Int,
+        @QueryParam("startFrame") startFrame: Int,
+        @QueryParam("frameCount") frameCount: Int,
+        sequenceViewModel: SequenceViewModel
+    ): Response {
+        return handler.previewSequence(sequenceId, startFrame, frameCount, sequenceViewModel)
     }
 
     @PUT

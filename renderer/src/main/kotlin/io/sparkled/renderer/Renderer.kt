@@ -6,6 +6,7 @@ import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.Led
+import io.sparkled.model.render.RenderResult
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.renderer.util.ChannelPropPairUtils
@@ -20,7 +21,7 @@ class Renderer(
 ) {
     private val channelPropPairs: List<ChannelPropPair> = ChannelPropPairUtils.makePairs(sequenceChannels, stageProps)
 
-    fun render(): RenderedStagePropDataMap {
+    fun render(): RenderResult {
         val renderedProps = RenderedStagePropDataMap()
 
         channelPropPairs.forEach { cpp ->
@@ -28,7 +29,8 @@ class Renderer(
             val data = renderedProps[stagePropUuid]
             renderedProps[stagePropUuid] = renderChannel(cpp, data)
         }
-        return renderedProps
+
+        return RenderResult(renderedProps, endFrame - startFrame + 1)
     }
 
     private fun renderChannel(
