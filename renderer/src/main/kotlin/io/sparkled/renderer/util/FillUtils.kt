@@ -17,7 +17,7 @@ object FillUtils {
         } else if (ledIndex >= 0 && ledIndex < frame.ledCount) {
             val index = if (ctx.stageProp.isReverse()!!) frame.ledCount - ledIndex - 1 else ledIndex
             val led = frame.getLed(index)
-            FillFunctions[ctx.effect.fill.type].fill(ctx, led, alpha)
+            FillFunctions[ctx.effect.fill.type].fill(ctx, led, ledIndex, alpha)
         }
     }
 }

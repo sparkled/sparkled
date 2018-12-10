@@ -10,5 +10,5 @@ interface FillFunction {
     /**
      * Fill the provided [Led] using the [Fill] configuration of the provided [Effect].
      */
-    fun fill(ctx: RenderContext, led: Led, alpha: Float)
+    fun fill(ctx: RenderContext, led: Led, ledIndex: Int, alpha: Float)
 }

@@ -3,11 +3,11 @@ package io.sparkled.model.render
 import java.awt.Color
 import java.util.Arrays
 
-class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset: Int) {
+class Led(private val ledData: ByteArray, private val ledIndex: Int, private val offset: Int) {
     private val index: Int
 
     init {
-        this.index = ledNumber * BYTES_PER_LED
+        this.index = ledIndex * BYTES_PER_LED
     }
 
     fun addColor(color: Color) = addRgb(color.red, color.green, color.blue)
@@ -43,7 +43,7 @@ class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset
         other as Led
 
         if (!Arrays.equals(ledData, other.ledData)) return false
-        if (ledNumber != other.ledNumber) return false
+        if (ledIndex != other.ledIndex) return false
         if (offset != other.offset) return false
         if (index != other.index) return false
 
@@ -52,7 +52,7 @@ class Led(private val ledData: ByteArray, val ledNumber: Int, private val offset
 
     override fun hashCode(): Int {
         var result = Arrays.hashCode(ledData)
-        result = 31 * result + ledNumber
+        result = 31 * result + ledIndex
         result = 31 * result + offset
         result = 31 * result + index
         return result

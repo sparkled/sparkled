@@ -27,7 +27,8 @@ class GradientFillTest {
                 type = FillTypeCode.GRADIENT,
                 params = listOf(
                     param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
-                    param(name = ParamName.BLEND_HARDNESS, value = 0f)
+                    param(name = ParamName.BLEND_HARDNESS, value = 0f),
+                    param(name = ParamName.CYCLES_PER_SECOND, value = 0f)
                 )
             )
         )
@@ -61,7 +62,8 @@ class GradientFillTest {
                 type = FillTypeCode.GRADIENT,
                 params = listOf(
                     param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
-                    param(name = ParamName.BLEND_HARDNESS, value = 50f)
+                    param(name = ParamName.BLEND_HARDNESS, value = 50f),
+                    param(name = ParamName.CYCLES_PER_SECOND, value = 0f)
                 )
             )
         )
@@ -95,7 +97,8 @@ class GradientFillTest {
                 type = FillTypeCode.GRADIENT,
                 params = listOf(
                     param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
-                    param(name = ParamName.BLEND_HARDNESS, value = 100f)
+                    param(name = ParamName.BLEND_HARDNESS, value = 100f),
+                    param(name = ParamName.CYCLES_PER_SECOND, value = 0f)
                 )
             )
         )
@@ -115,6 +118,54 @@ class GradientFillTest {
                 f(0x660000, 0x660000, 0x660000, 0x000066, 0x000066, 0x000066, 0x000066, 0x000066, 0x006600, 0x006600),
                 f(0x330000, 0x330000, 0x330000, 0x000033, 0x000033, 0x000033, 0x000033, 0x000033, 0x003300, 0x003300),
                 f(0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000)
+            )
+        )
+    }
+
+    @Test
+    fun can_render_cycling_gradient() {
+        val effect = Effect(
+            endFrame = 19,
+            type = EffectTypeCode.FLASH,
+            easing = Easing(
+                type = EasingTypeCode.CONSTANT,
+                params = listOf(
+                    param(name = ParamName.PERCENT, value = 50f)
+                )),
+            fill = Fill(
+                type = FillTypeCode.GRADIENT,
+                params = listOf(
+                    param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
+                    param(name = ParamName.BLEND_HARDNESS, value = 0f),
+                    param(name = ParamName.CYCLES_PER_SECOND, value = 6f)
+                )
+            )
+        )
+
+        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, 10)
+
+        assertThat(
+            renderedStagePropData, hasRenderedFrames(
+                f(0xFF0000, 0xCC0033, 0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33),
+                f(0xCC0033, 0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00),
+                f(0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00),
+                f(0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00, 0x669900),
+                f(0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00, 0x669900, 0x996600),
+                f(0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00, 0x669900, 0x996600, 0xCC3300),
+                f(0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00, 0x669900, 0x996600, 0xCC3300, 0xFF0000),
+                f(0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00, 0x669900, 0x996600, 0xCC3300, 0xFF0000, 0xCC0033),
+                f(0x009966, 0x00CC33, 0x00FF00, 0x33CC00, 0x669900, 0x996600, 0xCC3300, 0xFF0000, 0xCC0033, 0x990066),
+                f(0x00CC33, 0x00FF00, 0x33CC00, 0x669900, 0x996600, 0xCC3300, 0xFF0000, 0xCC0033, 0x990066, 0x660099),
+                f(0x00FF00, 0x33CC00, 0x669900, 0x996600, 0xCC3300, 0xFF0000, 0xCC0033, 0x990066, 0x660099, 0x3300CC),
+                f(0x33CC00, 0x669900, 0x996600, 0xCC3300, 0xFF0000, 0xCC0033, 0x990066, 0x660099, 0x3300CC, 0x0000FF),
+                f(0x669900, 0x996600, 0xCC3300, 0xFF0000, 0xCC0033, 0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC),
+                f(0x996600, 0xCC3300, 0xFF0000, 0xCC0033, 0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699),
+                f(0xCC3300, 0xFF0000, 0xCC0033, 0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966),
+                f(0xFF0000, 0xCC0033, 0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33),
+                f(0xCC0033, 0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00),
+                f(0x990066, 0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00),
+                f(0x660099, 0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00, 0x669900),
+                f(0x3300CC, 0x0000FF, 0x0033CC, 0x006699, 0x009966, 0x00CC33, 0x00FF00, 0x33CC00, 0x669900, 0x996600)
             )
         )
     }

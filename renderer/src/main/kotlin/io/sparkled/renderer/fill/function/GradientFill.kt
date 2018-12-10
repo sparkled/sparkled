@@ -19,17 +19,23 @@ import kotlin.math.floor
  */
 class GradientFill : FillFunction {
 
-    override fun fill(ctx: RenderContext, led: Led, alpha: Float) {
-        val colors = ParamUtils.getColorsValue(ctx.effect.fill, ParamName.COLORS, Color.MAGENTA)
+    override fun fill(ctx: RenderContext, led: Led, ledIndex: Int, alpha: Float) {
+        val fill = ctx.effect.fill
 
-        val ledIndexNormalised = led.ledNumber / ctx.frame.ledCount.toFloat()
-        val gradientProgress = ledIndexNormalised * (colors.size - 1)
+        val colors = ParamUtils.getColorsValue(fill, ParamName.COLORS, Color.MAGENTA)
 
-        val color1 = colors[floor(gradientProgress).toInt()]
-        val color2 = colors[ceil(gradientProgress).toInt()]
+        val ledIndexNormalised = ledIndex / ctx.frame.ledCount.toFloat()
 
-        val hardness = ParamUtils.getDecimalValue(ctx.effect.fill, ParamName.BLEND_HARDNESS, 0f) / 100f
-        val blend = getBlend(gradientProgress, hardness)
+        val cyclesPerSecond = ParamUtils.getDecimalValue(fill, ParamName.CYCLES_PER_SECOND, 0f)
+        val cycleProgress = cyclesPerSecond * (ctx.frame.frameNumber.toFloat() / ctx.sequence.getFramesPerSecond()!!)
+        val gradientProgress = ledIndexNormalised + cycleProgress
+
+        val colorProgress = gradientProgress * (colors.size - 1)
+        val color1 = colors[floor(colorProgress).toInt() % colors.size]
+        val color2 = colors[ceil(colorProgress).toInt() % colors.size]
+
+        val hardness = ParamUtils.getDecimalValue(fill, ParamName.BLEND_HARDNESS, 0f) / 100f
+        val blend = getBlend(colorProgress % 1f, hardness)
         val interpolatedColor = interpolate(color1, blend, color2)
 
         val adjustedColor = ColorUtils.adjustBrightness(interpolatedColor, alpha)
