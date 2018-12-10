@@ -1,6 +1,7 @@
 package io.sparkled.model.animation.param
 
 enum class ParamName constructor(val displayName: String) {
+    NONE("None"),
     BLEND_HARDNESS("Blend Hardness (%)"),
     BRIGHTNESS("Brightness (%)"),
     DENSITY("Density (%)"),

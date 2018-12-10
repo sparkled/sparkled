@@ -2,13 +2,12 @@ package io.sparkled.model.animation.effect
 
 import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
-import java.util.ArrayList
 
 class EffectType : HasParams {
 
     private var code: EffectTypeCode? = null
     private var name: String? = null
-    private var params: List<Param> = ArrayList()
+    private var params: List<Param> = emptyList()
 
     fun getCode(): EffectTypeCode? {
         return code

@@ -1,4 +1,4 @@
-package io.sparkled.renderer.effect
+package io.sparkled.renderer
 
 import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.easing.EasingTypeCode
@@ -6,9 +6,9 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
-import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
 import io.sparkled.model.entity.StageProp
+import io.sparkled.model.util.ParamUtils.param
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,25 +19,28 @@ internal class ReverseStagePropRendererTest {
 
     @Test
     fun can_render_3_led_line_on_reversed_stage_prop() {
-        val effect = Effect()
-            .setType(EffectTypeCode.LINE)
-            .setParams(
-                listOf(Param().setName(ParamName.LENGTH).setValue(3))
+        val effect = Effect(
+            endFrame = 19,
+            type = EffectTypeCode.LINE,
+            params = listOf(
+                param(name = ParamName.LENGTH, value = 3)
+            ),
+            easing = Easing(type = EasingTypeCode.LINEAR),
+            fill = Fill(
+                type = FillTypeCode.SOLID,
+                params = listOf(
+                    param(name = ParamName.COLOR, value = "#ff0000")
+                )
             )
-            .setEasing(
-                Easing().setType(EasingTypeCode.LINEAR)
-            )
-            .setFill(
-                Fill()
-                    .setType(FillTypeCode.SOLID)
-                    .setParams(
-                        listOf(Param().setName(ParamName.COLOR).setValue("#ff0000"))
-                    )
-            )
+        )
 
-        val stageProp =
-            StageProp().setCode(RenderUtils.PROP_CODE).setUuid(RenderUtils.PROP_UUID).setLedCount(10).setReverse(true)
-        val renderedStagePropData = RenderUtils.render(effect, 20, stageProp)
+        val stageProp = StageProp()
+            .setCode(RenderUtils.PROP_CODE)
+            .setUuid(RenderUtils.PROP_UUID)
+            .setLedCount(10)
+            .setReverse(true)
+
+        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, stageProp)
 
         assertThat(
             renderedStagePropData, hasRenderedFrames(

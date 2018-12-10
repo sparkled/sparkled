@@ -17,7 +17,7 @@ import java.awt.Color
 class RainbowFill : FillFunction {
 
     override fun fill(ctx: RenderContext, led: Led, alpha: Float) {
-        val fill = ctx.effect.getFill()!!
+        val fill = ctx.effect.fill
         val cycleCount = ParamUtils.getDecimalValue(fill, ParamName.CYCLE_COUNT, 1f)
         val cyclesPerSecond = ParamUtils.getDecimalValue(fill, ParamName.CYCLES_PER_SECOND, 1f)
         val brightness = ParamUtils.getDecimalValue(fill, ParamName.BRIGHTNESS, 100f) / 100f

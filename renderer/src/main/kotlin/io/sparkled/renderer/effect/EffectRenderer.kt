@@ -17,21 +17,18 @@ abstract class EffectRenderer {
     }
 
     private fun getProgress(frame: RenderedFrame, effect: Effect): Float {
-        val easingFunction = EasingFunctions[effect.getEasing()!!.getType()]
+        val easingFunction = EasingFunctions[effect.easing.type]
 
-        val startFrame = effect.getStartFrame()
-        val duration = effect.getEndFrame() - startFrame + 1
+        val currentFrame = frame.frameNumber - effect.startFrame
+        val startFrame = effect.startFrame
+        val duration = effect.endFrame - startFrame + 1
 
-        val repetitions = effect.getRepetitions()
-        val framesPerRepetition = duration / repetitions
-        val repetitionFrameNumber = (frame.frameNumber - startFrame) % (framesPerRepetition + 1)
-
-        val progress = easingFunction.getProgress(effect.getEasing()!!, repetitionFrameNumber, framesPerRepetition)
+        val progress = easingFunction.getProgress(effect.easing, currentFrame, duration)
         if (progress < 0 || progress > 1) {
             throw IllegalStateException("Animation progress is out of bounds: $progress")
         }
 
-        return if (effect.isReverse()) 1 - progress else progress
+        return if (effect.reverse) 1 - progress else progress
     }
 
     protected abstract fun render(ctx: RenderContext)

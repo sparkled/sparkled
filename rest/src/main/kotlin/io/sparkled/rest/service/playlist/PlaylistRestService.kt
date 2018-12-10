@@ -14,8 +14,8 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/playlists")
-class PlaylistRestService @Inject
-constructor(private val handler: PlaylistRestServiceHandler) {
+class PlaylistRestService
+@Inject constructor(private val handler: PlaylistRestServiceHandler) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

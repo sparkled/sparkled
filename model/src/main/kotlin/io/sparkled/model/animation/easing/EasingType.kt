@@ -7,7 +7,7 @@ class EasingType : HasParams {
 
     private var code: EasingTypeCode? = null
     private var name: String? = null
-    private var params: List<Param> = ArrayList()
+    private var params: List<Param> = emptyList()
 
     fun getCode(): EasingTypeCode? {
         return code

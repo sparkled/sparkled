@@ -22,7 +22,6 @@ open class SchemaUpdaterImpl
     private val transaction: Transaction
 ) : SchemaUpdater {
 
-    @Throws(Exception::class)
     override fun update() {
         transaction.of {
             val jdbcConnection = jdbcConnection

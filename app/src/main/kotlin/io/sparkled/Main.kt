@@ -25,7 +25,6 @@ class Main {
         }
     }
 
-    @Throws(Exception::class)
     private fun run(args: Array<String>) {
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             logger.error("Uncaught exception on thread '{}'.", t.name, e)

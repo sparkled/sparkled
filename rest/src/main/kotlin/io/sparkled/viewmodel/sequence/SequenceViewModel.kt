@@ -3,7 +3,6 @@ package io.sparkled.viewmodel.sequence
 import io.sparkled.model.entity.SequenceStatus
 import io.sparkled.viewmodel.ViewModel
 import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModel
-import java.util.ArrayList
 
 class SequenceViewModel : ViewModel {
 
@@ -14,7 +13,7 @@ class SequenceViewModel : ViewModel {
     private var framesPerSecond: Int? = null
     private var frameCount: Int? = null
     private var status: SequenceStatus? = null
-    private var channels: List<SequenceChannelViewModel> = ArrayList()
+    private var channels: List<SequenceChannelViewModel> = emptyList()
 
     fun getId(): Int? {
         return id

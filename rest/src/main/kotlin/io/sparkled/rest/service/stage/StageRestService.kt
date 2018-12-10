@@ -14,8 +14,8 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/stages")
-class StageRestService @Inject
-constructor(private val handler: StageRestServiceHandler) {
+class StageRestService
+@Inject constructor(private val handler: StageRestServiceHandler) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

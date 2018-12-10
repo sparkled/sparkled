@@ -11,8 +11,8 @@ import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModelConverte
 import javax.inject.Inject
 import javax.ws.rs.core.Response
 
-open class PlaylistRestServiceHandler @Inject
-constructor(
+open class PlaylistRestServiceHandler
+@Inject constructor(
     private val transaction: Transaction,
     private val playlistPersistenceService: PlaylistPersistenceService,
     private val playlistViewModelConverter: PlaylistViewModelConverter,

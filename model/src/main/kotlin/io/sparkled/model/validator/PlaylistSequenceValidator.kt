@@ -5,7 +5,6 @@ import io.sparkled.model.validator.exception.EntityValidationException
 
 class PlaylistSequenceValidator {
 
-    @Throws(EntityValidationException::class)
     fun validate(playlistSequence: PlaylistSequence) {
         when {
             playlistSequence.getUuid() == null -> throw EntityValidationException(Errors.UUID_MISSING)

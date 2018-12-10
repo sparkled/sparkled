@@ -6,8 +6,9 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
-import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.ParamType
+import io.sparkled.model.util.ParamUtils.param
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,21 +19,20 @@ class GradientFillTest {
 
     @Test
     fun can_render_soft_gradient_flash() {
-        val effect = Effect()
-            .setType(EffectTypeCode.FLASH)
-            .setEasing(Easing().setType(EasingTypeCode.LINEAR))
-            .setFill(
-                Fill()
-                    .setType(FillTypeCode.GRADIENT)
-                    .setParams(
-                        listOf(
-                            Param().setName(ParamName.COLORS).setValue(listOf("#ff0000", "#0000ff", "#00ff00")),
-                            Param().setName(ParamName.BLEND_HARDNESS).setValue(0f)
-                        )
-                    )
+        val effect = Effect(
+            endFrame = 10,
+            type = EffectTypeCode.FLASH,
+            easing = Easing(type = EasingTypeCode.LINEAR),
+            fill = Fill(
+                type = FillTypeCode.GRADIENT,
+                params = listOf(
+                    param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
+                    param(name = ParamName.BLEND_HARDNESS, value = 0f)
+                )
             )
+        )
 
-        val renderedStagePropData = RenderUtils.render(effect, 11, 10)
+        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, 10)
 
         assertThat(
             renderedStagePropData, hasRenderedFrames(
@@ -53,21 +53,20 @@ class GradientFillTest {
 
     @Test
     fun can_render_medium_gradient_flash() {
-        val effect = Effect()
-            .setType(EffectTypeCode.FLASH)
-            .setEasing(Easing().setType(EasingTypeCode.LINEAR))
-            .setFill(
-                Fill()
-                    .setType(FillTypeCode.GRADIENT)
-                    .setParams(
-                        listOf(
-                            Param().setName(ParamName.COLORS).setValue(listOf("#ff0000", "#0000ff", "#00ff00")),
-                            Param().setName(ParamName.BLEND_HARDNESS).setValue(50f)
-                        )
-                    )
+        val effect = Effect(
+            endFrame = 10,
+            type = EffectTypeCode.FLASH,
+            easing = Easing(type = EasingTypeCode.LINEAR),
+            fill = Fill(
+                type = FillTypeCode.GRADIENT,
+                params = listOf(
+                    param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
+                    param(name = ParamName.BLEND_HARDNESS, value = 50f)
+                )
             )
+        )
 
-        val renderedStagePropData = RenderUtils.render(effect, 11, 10)
+        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, 10)
 
         assertThat(
             renderedStagePropData, hasRenderedFrames(
@@ -88,21 +87,20 @@ class GradientFillTest {
 
     @Test
     fun can_render_hard_gradient_flash() {
-        val effect = Effect()
-            .setType(EffectTypeCode.FLASH)
-            .setEasing(Easing().setType(EasingTypeCode.LINEAR))
-            .setFill(
-                Fill()
-                    .setType(FillTypeCode.GRADIENT)
-                    .setParams(
-                        listOf(
-                            Param().setName(ParamName.COLORS).setValue(listOf("#ff0000", "#0000ff", "#00ff00")),
-                            Param().setName(ParamName.BLEND_HARDNESS).setValue(100f)
-                        )
-                    )
+        val effect = Effect(
+            endFrame = 10,
+            type = EffectTypeCode.FLASH,
+            easing = Easing(type = EasingTypeCode.LINEAR),
+            fill = Fill(
+                type = FillTypeCode.GRADIENT,
+                params = listOf(
+                    param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
+                    param(name = ParamName.BLEND_HARDNESS, value = 100f)
+                )
             )
+        )
 
-        val renderedStagePropData = RenderUtils.render(effect, 11, 10)
+        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, 10)
 
         assertThat(
             renderedStagePropData, hasRenderedFrames(

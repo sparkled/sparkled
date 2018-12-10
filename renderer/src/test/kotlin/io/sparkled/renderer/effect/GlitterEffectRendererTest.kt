@@ -6,8 +6,8 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
-import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.util.ParamUtils.param
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,26 +18,23 @@ class GlitterEffectRendererTest {
 
     @Test
     fun can_render() {
-        val effect = Effect()
-            .setType(EffectTypeCode.GLITTER)
-            .setParams(
-                listOf(
-                    Param().setName(ParamName.DENSITY).setValue(50),
-                    Param().setName(ParamName.LIFETIME).setValue(.2f)
+        val effect = Effect(
+            endFrame = 29,
+            type = EffectTypeCode.GLITTER,
+            params = listOf(
+                param(name = ParamName.DENSITY, value = 50),
+                param(name = ParamName.LIFETIME, value = .2f)
+            ),
+            easing = Easing(type = EasingTypeCode.LINEAR),
+            fill = Fill(
+                type = FillTypeCode.SOLID,
+                params = listOf(
+                    param(name = ParamName.COLOR, value = "0xff0000")
                 )
             )
-            .setEasing(Easing().setType(EasingTypeCode.LINEAR))
-            .setFill(
-                Fill()
-                    .setType(FillTypeCode.SOLID)
-                    .setParams(
-                        listOf(
-                            Param().setName(ParamName.COLOR).setValue("0xff0000")
-                        )
-                    )
-            )
+        )
 
-        val renderedStagePropData = RenderUtils.render(effect, 30, 10)
+        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, 10)
 
         assertThat(
             renderedStagePropData, hasRenderedFrames(

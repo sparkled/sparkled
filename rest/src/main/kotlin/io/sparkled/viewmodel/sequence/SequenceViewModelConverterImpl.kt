@@ -9,8 +9,8 @@ import io.sparkled.viewmodel.exception.ViewModelConversionException
 
 import javax.inject.Inject
 
-class SequenceViewModelConverterImpl @Inject
-constructor(
+class SequenceViewModelConverterImpl
+@Inject constructor(
     private val sequencePersistenceService: SequencePersistenceService,
     private val songPersistenceService: SongPersistenceService
 ) : SequenceViewModelConverter() {

@@ -8,8 +8,8 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/fillTypes")
-class FillTypeRestService @Inject
-constructor(private val handler: FillTypeRestServiceHandler) {
+class FillTypeRestService
+@Inject constructor(private val handler: FillTypeRestServiceHandler) {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

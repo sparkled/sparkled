@@ -5,24 +5,25 @@ import io.sparkled.model.animation.fill.FillTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
 import io.sparkled.model.animation.param.ParamType
+import io.sparkled.model.util.ParamUtils.param
 import java.util.Arrays
 
 object FillTypes {
     private val TYPES = Arrays.asList(
         fill(
             FillTypeCode.GRADIENT, "Gradient",
-            param(ParamName.COLORS, ParamType.COLORS).setValue(listOf("#ff0000", "#0000ff")),
-            param(ParamName.BLEND_HARDNESS, ParamType.DECIMAL).setValue(0)
+            param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff"),
+            param(ParamName.BLEND_HARDNESS, ParamType.DECIMAL, 0)
         ),
         fill(
             FillTypeCode.RAINBOW, "Rainbow",
-            param(ParamName.BRIGHTNESS, ParamType.DECIMAL).setValue(100),
-            param(ParamName.CYCLE_COUNT, ParamType.DECIMAL).setValue(1),
-            param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL).setValue(.5f)
+            param(ParamName.BRIGHTNESS, ParamType.DECIMAL, 100f),
+            param(ParamName.CYCLE_COUNT, ParamType.DECIMAL, 1f),
+            param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL, .5f)
         ),
         fill(
             FillTypeCode.SOLID, "Solid",
-            param(ParamName.COLOR, ParamType.COLOR).setValue("#ff0000")
+            param(ParamName.COLOR, ParamType.COLOR, "#ff0000")
         )
     )
 
@@ -31,10 +32,6 @@ object FillTypes {
     }
 
     private fun fill(fillType: FillTypeCode, name: String, vararg params: Param): FillType {
-        return FillType().setCode(fillType).setName(name).setParams(arrayListOf(*params))
-    }
-
-    private fun param(paramName: ParamName, type: ParamType): Param {
-        return Param().setName(paramName).setType(type)
+        return FillType().setCode(fillType).setName(name).setParams(listOf(*params))
     }
 }

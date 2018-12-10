@@ -2,13 +2,12 @@ package io.sparkled.viewmodel.playlist
 
 import io.sparkled.viewmodel.ViewModel
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModel
-import java.util.ArrayList
 
 class PlaylistViewModel : ViewModel {
 
     private var id: Int? = null
     private var name: String? = null
-    private var sequences: List<PlaylistSequenceViewModel> = ArrayList()
+    private var sequences: List<PlaylistSequenceViewModel> = emptyList()
 
     fun getId(): Int? {
         return id

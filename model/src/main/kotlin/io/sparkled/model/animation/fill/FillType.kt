@@ -7,7 +7,7 @@ class FillType : HasParams {
 
     private var code: FillTypeCode? = null
     private var name: String? = null
-    private var params: List<Param> = ArrayList()
+    private var params: List<Param> = emptyList()
 
     fun getCode(): FillTypeCode? {
         return code

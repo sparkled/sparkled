@@ -2,7 +2,6 @@ package io.sparkled.viewmodel.sequence.channel
 
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.viewmodel.ViewModel
-import java.util.ArrayList
 import java.util.UUID
 
 class SequenceChannelViewModel : ViewModel {
@@ -12,7 +11,7 @@ class SequenceChannelViewModel : ViewModel {
     private var stagePropUuid: UUID? = null
     private var name: String? = null
     private var displayOrder: Int? = null
-    private var effects: List<Effect> = ArrayList()
+    private var effects: List<Effect> = emptyList()
 
     fun getUuid(): UUID? {
         return uuid

@@ -1,7 +1,6 @@
 package io.sparkled.rest.util
 
 import io.sparkled.model.util.GsonProvider
-import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.OutputStream
@@ -10,7 +9,6 @@ import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets.UTF_8
 import javax.ws.rs.Consumes
 import javax.ws.rs.Produces
-import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.ext.MessageBodyReader
@@ -31,7 +29,6 @@ class JerseyGsonProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
         return true
     }
 
-    @Throws(IOException::class)
     override fun readFrom(
         type: Class<Any>,
         genericType: Type,
@@ -64,7 +61,6 @@ class JerseyGsonProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
         return -1
     }
 
-    @Throws(IOException::class, WebApplicationException::class)
     override fun writeTo(
         `object`: Any,
         type: Class<*>,

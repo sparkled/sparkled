@@ -20,7 +20,7 @@ import kotlin.math.floor
 class GradientFill : FillFunction {
 
     override fun fill(ctx: RenderContext, led: Led, alpha: Float) {
-        val colors = ParamUtils.getColorsValue(ctx.effect.getFill()!!, ParamName.COLORS, Color.MAGENTA)
+        val colors = ParamUtils.getColorsValue(ctx.effect.fill, ParamName.COLORS, Color.MAGENTA)
 
         val ledIndexNormalised = led.ledNumber / ctx.frame.ledCount.toFloat()
         val gradientProgress = ledIndexNormalised * (colors.size - 1)
@@ -28,7 +28,7 @@ class GradientFill : FillFunction {
         val color1 = colors[floor(gradientProgress).toInt()]
         val color2 = colors[ceil(gradientProgress).toInt()]
 
-        val hardness = ParamUtils.getDecimalValue(ctx.effect.getFill()!!, ParamName.BLEND_HARDNESS, 0f) / 100f
+        val hardness = ParamUtils.getDecimalValue(ctx.effect.fill, ParamName.BLEND_HARDNESS, 0f) / 100f
         val blend = getBlend(gradientProgress, hardness)
         val interpolatedColor = interpolate(color1, blend, color2)
 

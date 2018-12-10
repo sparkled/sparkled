@@ -5,6 +5,7 @@ import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
 import io.sparkled.model.animation.param.ParamType
+import io.sparkled.model.util.ParamUtils.param
 import java.util.Arrays
 
 object EffectTypes {
@@ -12,17 +13,17 @@ object EffectTypes {
         effectType(EffectTypeCode.FLASH, "Flash"),
         effectType(
             EffectTypeCode.GLITTER, "Glitter",
-            param(ParamName.DENSITY, ParamType.DECIMAL).setValue(50),
-            param(ParamName.LIFETIME, ParamType.DECIMAL).setValue(1f),
-            param(ParamName.RANDOM_SEED, ParamType.INTEGER).setValue(1)
+            param(ParamName.DENSITY, ParamType.DECIMAL, 50),
+            param(ParamName.LIFETIME, ParamType.DECIMAL, 1f),
+            param(ParamName.RANDOM_SEED, ParamType.INTEGER, 1)
         ),
         effectType(
             EffectTypeCode.LINE, "Line",
-            param(ParamName.LENGTH, ParamType.DECIMAL).setValue(1f)
+            param(ParamName.LENGTH, ParamType.DECIMAL, 1f)
         ),
         effectType(
             EffectTypeCode.SPLIT_LINE, "Split Line",
-            param(ParamName.LENGTH, ParamType.DECIMAL).setValue(1f)
+            param(ParamName.LENGTH, ParamType.DECIMAL, 1f)
         )
     )
 
@@ -31,10 +32,6 @@ object EffectTypes {
     }
 
     private fun effectType(effectType: EffectTypeCode, name: String, vararg params: Param): EffectType {
-        return EffectType().setCode(effectType).setName(name).setParams(arrayListOf(*params))
-    }
-
-    private fun param(paramName: ParamName, type: ParamType): Param {
-        return Param().setName(paramName).setType(type)
+        return EffectType().setCode(effectType).setName(name).setParams(listOf(*params))
     }
 }

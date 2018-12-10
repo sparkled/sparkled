@@ -14,8 +14,8 @@ import javax.ws.rs.ext.Provider
  * [EntityManager] for each REST API call.
  */
 @Provider
-class UnitOfWorkFilter @Inject
-constructor(private val unitOfWork: UnitOfWork) : ContainerRequestFilter, ContainerResponseFilter {
+class UnitOfWorkFilter
+@Inject constructor(private val unitOfWork: UnitOfWork) : ContainerRequestFilter, ContainerResponseFilter {
 
     override fun filter(requestContext: ContainerRequestContext) {
         unitOfWork.begin()

@@ -1,7 +1,5 @@
 package io.sparkled.udpserver
 
-import java.net.SocketException
-
 /**
  * A UDP Server that listens on the given port.
  */
@@ -12,6 +10,5 @@ interface UdpServer {
 
      * @param port The port to listen on.
      */
-    @Throws(SocketException::class)
     fun start(port: Int)
 }

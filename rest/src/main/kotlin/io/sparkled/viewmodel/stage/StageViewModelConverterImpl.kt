@@ -6,8 +6,8 @@ import io.sparkled.viewmodel.exception.ViewModelConversionException
 
 import javax.inject.Inject
 
-class StageViewModelConverterImpl @Inject
-constructor(private val stagePersistenceService: StagePersistenceService) : StageViewModelConverter() {
+class StageViewModelConverterImpl
+@Inject constructor(private val stagePersistenceService: StagePersistenceService) : StageViewModelConverter() {
 
     override fun toViewModel(model: Stage): StageViewModel {
         return StageViewModel()

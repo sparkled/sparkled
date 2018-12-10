@@ -5,8 +5,8 @@ import io.sparkled.persistence.stage.StagePersistenceService
 
 import javax.inject.Inject
 
-class StagePropViewModelConverterImpl @Inject
-constructor(private val stagePersistenceService: StagePersistenceService) : StagePropViewModelConverter() {
+class StagePropViewModelConverterImpl
+@Inject constructor(private val stagePersistenceService: StagePersistenceService) : StagePropViewModelConverter() {
 
     override fun toViewModel(model: StageProp): StagePropViewModel {
         return StagePropViewModel()

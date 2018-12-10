@@ -6,8 +6,8 @@ import io.sparkled.viewmodel.exception.ViewModelConversionException
 
 import javax.inject.Inject
 
-class SongViewModelConverterImpl @Inject
-constructor(private val songPersistenceService: SongPersistenceService) : SongViewModelConverter() {
+class SongViewModelConverterImpl
+@Inject constructor(private val songPersistenceService: SongPersistenceService) : SongViewModelConverter() {
 
     override fun toViewModel(model: Song): SongViewModel {
         return SongViewModel()

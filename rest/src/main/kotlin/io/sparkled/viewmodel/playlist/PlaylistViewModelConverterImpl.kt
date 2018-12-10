@@ -6,8 +6,8 @@ import io.sparkled.viewmodel.exception.ViewModelConversionException
 
 import javax.inject.Inject
 
-class PlaylistViewModelConverterImpl @Inject
-constructor(private val playlistPersistenceService: PlaylistPersistenceService) : PlaylistViewModelConverter() {
+class PlaylistViewModelConverterImpl
+@Inject constructor(private val playlistPersistenceService: PlaylistPersistenceService) : PlaylistViewModelConverter() {
 
     override fun toViewModel(model: Playlist): PlaylistViewModel {
         return PlaylistViewModel()

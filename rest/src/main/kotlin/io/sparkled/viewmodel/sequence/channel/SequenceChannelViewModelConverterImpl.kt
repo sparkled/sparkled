@@ -7,8 +7,8 @@ import io.sparkled.persistence.sequence.SequencePersistenceService
 import java.util.Collections
 import javax.inject.Inject
 
-class SequenceChannelViewModelConverterImpl @Inject
-constructor(private val sequencePersistenceService: SequencePersistenceService) : SequenceChannelViewModelConverter() {
+class SequenceChannelViewModelConverterImpl
+@Inject constructor(private val sequencePersistenceService: SequencePersistenceService) : SequenceChannelViewModelConverter() {
 
     override fun toViewModel(model: SequenceChannel): SequenceChannelViewModel {
         val sequenceChannelEffects = GsonProvider.get()

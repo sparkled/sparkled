@@ -33,40 +33,43 @@ class Renderer(
         return RenderResult(renderedProps, endFrame - startFrame + 1)
     }
 
-    private fun renderChannel(
-        channelPropPair: ChannelPropPair,
-        renderedStagePropData: RenderedStagePropData?
-    ): RenderedStagePropData {
-        var stagePropData = renderedStagePropData
-        if (stagePropData == null) {
+    private fun renderChannel(channelPropPair: ChannelPropPair, data: RenderedStagePropData?): RenderedStagePropData {
+        val stagePropData = if (data != null) {
+            data
+        } else {
             val frameCount = endFrame - startFrame + 1
             val leds = channelPropPair.stageProp.getLedCount()!!
-            val data = ByteArray(frameCount * leds * Led.BYTES_PER_LED)
-            stagePropData = RenderedStagePropData(startFrame, endFrame, leds, data)
+            val buffer = ByteArray(frameCount * leds * Led.BYTES_PER_LED)
+            RenderedStagePropData(startFrame, endFrame, leds, buffer)
         }
 
-        val dataToRender = stagePropData
-        channelPropPair.channel.getEffects()
-            .forEach { renderEffect(sequence, dataToRender, channelPropPair.stageProp, it) }
+        channelPropPair.channel.getEffects().forEach {
+            renderEffect(sequence, stagePropData, channelPropPair.stageProp, it)
+        }
 
         return stagePropData
     }
 
-    private fun renderEffect(
-        sequence: Sequence,
-        renderedStagePropData: RenderedStagePropData,
-        stageProp: StageProp,
-        effect: Effect
-    ) {
-        val effectTypeCode = effect.getType()!!
+    private fun renderEffect(sequence: Sequence, data: RenderedStagePropData, prop: StageProp, effect: Effect) {
+        repeat(effect.repetitions) {
+            val duration = effect.endFrame - effect.startFrame + 1
+            val newStartFrame = effect.startFrame + (duration * it)
+
+            val effectRepetition = effect.copy(startFrame = newStartFrame, endFrame = newStartFrame + duration - 1)
+            renderRepetition(sequence, data, prop, effectRepetition)
+        }
+    }
+
+    private fun renderRepetition(sequence: Sequence, data: RenderedStagePropData, prop: StageProp, effect: Effect) {
+        val effectTypeCode = effect.type
         val renderer = EffectTypeRenderers[effectTypeCode]
 
-        val startFrame = Math.max(this.startFrame, effect.getStartFrame())
-        val endFrame = Math.min(this.endFrame, effect.getEndFrame())
+        val startFrame = Math.max(this.startFrame, effect.startFrame)
+        val endFrame = Math.min(this.endFrame, effect.endFrame)
 
         for (frameNumber in startFrame..endFrame) {
-            val frame = renderedStagePropData.frames[frameNumber - this.startFrame]
-            renderer.render(sequence, renderedStagePropData, frame, stageProp, effect)
+            val frame = data.frames[frameNumber - this.startFrame]
+            renderer.render(sequence, data, frame, prop, effect)
         }
     }
 }

@@ -12,8 +12,8 @@ import io.sparkled.persistence.song.impl.query.SaveSongQuery
 import java.util.Collections
 import javax.inject.Inject
 
-class SongPersistenceServiceImpl @Inject
-constructor(private val queryFactory: QueryFactory) : SongPersistenceService {
+class SongPersistenceServiceImpl
+@Inject constructor(private val queryFactory: QueryFactory) : SongPersistenceService {
 
     override fun createSong(song: Song, audioData: ByteArray): Song {
         val savedSong = SaveSongQuery(song).perform(queryFactory)

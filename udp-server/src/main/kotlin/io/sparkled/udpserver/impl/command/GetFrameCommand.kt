@@ -52,7 +52,7 @@ class GetFrameCommand : RequestCommand() {
         val stagePropUuid = playbackState.stagePropUuids[stagePropCode]
 
         val renderedStagePropData = renderedStageProps!![stagePropUuid]
-        val frames = renderedStagePropData?.frames ?: ArrayList()
+        val frames = renderedStagePropData?.frames ?: emptyList()
         return if (frameIndex >= frames.size) null else frames[frameIndex]
     }
 

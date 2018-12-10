@@ -19,8 +19,8 @@ import io.sparkled.persistence.playlist.impl.query.SavePlaylistSequencesQuery
 import java.util.UUID
 import javax.inject.Inject
 
-class PlaylistPersistenceServiceImpl @Inject
-constructor(private val queryFactory: QueryFactory) : PlaylistPersistenceService {
+class PlaylistPersistenceServiceImpl
+@Inject constructor(private val queryFactory: QueryFactory) : PlaylistPersistenceService {
 
     override fun createPlaylist(playlist: Playlist): Playlist {
         return SavePlaylistQuery(playlist).perform(queryFactory)
