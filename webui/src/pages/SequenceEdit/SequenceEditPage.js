@@ -14,6 +14,7 @@ import {
   addEffect,
   copyEffect,
   pasteEffect,
+  previewRender,
   deleteEffect,
   fetchReferenceData,
   fetchSequence,
@@ -29,7 +30,8 @@ import Mousetrap from "mousetrap";
 
 const { undo, redo, clearHistory } = ActionCreators;
 
-const newEffectFrames = 10;
+const RENDER_PREVIEW_SECONDS = 5;
+const NEW_EFFECT_FRAMES = 10;
 
 class SequenceEditPage extends Component {
 
@@ -46,6 +48,7 @@ class SequenceEditPage extends Component {
     Mousetrap.bind('del', this.deleteSelectedEffect);
     Mousetrap.bind('mod+z', this.undo);
     Mousetrap.bind('mod+shift+z', this.redo);
+    Mousetrap.bind('mod+space', this.previewRender);
   }
 
   deleteSelectedEffect = () => {
@@ -63,6 +66,11 @@ class SequenceEditPage extends Component {
   redo = () => {
     const { canRedo, redo } = this.props;
     canRedo && redo();
+  }
+
+  previewRender = () => {
+    const { currentFrame, previewRender, sequence } = this.props;
+    previewRender(sequence, currentFrame, sequence.framesPerSecond * RENDER_PREVIEW_SECONDS);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -142,7 +150,7 @@ class SequenceEditPage extends Component {
         ]
       },
       startFrame: currentFrame,
-      endFrame: Math.min(currentFrame + newEffectFrames, sequence.frameCount) - 1,
+      endFrame: Math.min(currentFrame + NEW_EFFECT_FRAMES, sequence.frameCount) - 1,
       repetitions: 1,
       reverse: false
     };
@@ -203,6 +211,7 @@ class SequenceEditPage extends Component {
     Mousetrap.unbind('mod+v');
     Mousetrap.unbind('mod+z');
     Mousetrap.unbind('mod+shift+z');
+    Mousetrap.unbind('mod+space');
   }
 }
 
@@ -227,6 +236,7 @@ export default connect(mapStateToProps, {
   addEffect,
   copyEffect,
   pasteEffect,
+  previewRender,
   deleteEffect,
   showAddChannelModal,
   saveSequence,

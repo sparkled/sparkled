@@ -12,7 +12,7 @@ class CurrentFrameIndicator extends Component {
     };
 
     return (
-      <div className="current-frame-indicator" style={style}/>
+      <div className="CurrentFrameIndicator" style={style}/>
     );
   }
 }

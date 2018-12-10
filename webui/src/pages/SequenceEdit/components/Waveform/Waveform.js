@@ -4,6 +4,7 @@ import WaveSurfer from 'wavesurfer.js';
 import './Waveform.css';
 import { selectFrame } from '../../actions';
 import * as restConfig from '../../../../config/restConfig';
+import { eventType, publish } from '../../../../utils/eventBus';
 
 class Waveform extends Component {
 
@@ -11,9 +12,23 @@ class Waveform extends Component {
     waveformId: `waveform-${+new Date()}`,
   }
 
-  constructor(props) {
-    super(props);
-    this.selectFrame = this.selectFrame.bind(this);
+  waveSurfer = null
+
+  componentWillReceiveProps(nextProps) {
+    const { props, waveSurfer } = this;
+
+    if (waveSurfer && props.renderData !== nextProps.renderData) {
+      this.performWithoutSeek(() => {
+        if (nextProps.renderData) {
+          const { currentFrame, sequence } = nextProps;
+
+          waveSurfer.seekTo(currentFrame / sequence.frameCount);
+          waveSurfer.play();
+        } else {
+          waveSurfer.stop();
+        }
+      });
+    }
   }
 
   render() {
@@ -31,13 +46,25 @@ class Waveform extends Component {
     const { sequence } = this.props;
     if (sequence) {
       const waveSurfer = new WaveSurfer(this.getWaveSurferProperties(sequence));
+      this.waveSurfer = waveSurfer;
+
       waveSurfer.init();
 
       const url = `${restConfig.ROOT_URL}/sequences/${sequence.id}/songAudio`;
       waveSurfer.load(url);
-      waveSurfer.on('audioprocess', progress => this.selectFrame(progress / waveSurfer.getDuration()));
+      waveSurfer.on('audioprocess', this.publishRenderedFrame);
       waveSurfer.on('seek', this.selectFrame);
     }
+  }
+
+  componentWillUnmount() {
+    this.waveSurfer.destroy();
+  }
+
+  performWithoutSeek = callback => {
+    this.waveSurfer.un('seek');
+    callback();
+    this.waveSurfer.on('seek', this.selectFrame);
   }
 
   getWaveSurferProperties(sequence) {
@@ -50,7 +77,23 @@ class Waveform extends Component {
     };
   }
 
-  selectFrame(progressNormalised) {
+  publishRenderedFrame = progress => {
+    const { currentFrame, renderData, sequence } = this.props;
+
+    if (renderData) {
+      const progressNormalised = progress / this.waveSurfer.getDuration();
+
+      const playbackFrame = Math.floor(sequence.frameCount * progressNormalised);
+      if (playbackFrame < currentFrame + renderData.frameCount - 1) {
+        publish(eventType.RENDER_DATA, { renderData, playbackFrame });
+      } else {
+        publish(eventType.RENDER_DATA, {});
+        this.performWithoutSeek(() => this.waveSurfer.stop());
+      }
+    }
+  }
+
+  selectFrame = progressNormalised => {
     const { sequence, selectFrame } = this.props;
     const frameNumber = Math.floor(sequence.frameCount * progressNormalised);
     selectFrame(frameNumber);
@@ -58,8 +101,8 @@ class Waveform extends Component {
 }
 
 function mapStateToProps({ page }) {
-  const { sequence, pixelsPerFrame } = page.sequenceEdit.present;
-  return { sequence, pixelsPerFrame };
+  const { currentFrame, sequence, pixelsPerFrame, renderData } = page.sequenceEdit.present;
+  return { currentFrame, sequence, pixelsPerFrame, renderData };
 }
 
 export default connect(mapStateToProps, { selectFrame })(Waveform);

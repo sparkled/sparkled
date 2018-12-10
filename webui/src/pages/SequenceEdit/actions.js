@@ -92,6 +92,16 @@ export const pasteEffect = () => {
   };
 };
 
+export const previewRender = (sequence, startFrame, frameCount) => {
+  const url = `${restConfig.ROOT_URL}/sequences/${sequence.id}/preview?startFrame=${startFrame}&frameCount=${frameCount}`;
+  const request = axios.post(url, sequence);
+
+  return {
+    type: actionTypes.FETCH_RENDER_PREVIEW_DATA,
+    payload: request
+  };
+};
+
 export const updateEffect = (channel, effect) => {
   return {
     type: actionTypes.UPDATE_EFFECT,
@@ -108,7 +118,7 @@ export const deleteEffect = (channel, effect) => {
   };
 };
 
-export const selectFrame = (frame) => {
+export const selectFrame = frame => {
   return {
     type: actionTypes.SELECT_FRAME,
     payload: { frame }
