@@ -13,7 +13,8 @@ object FillTypes {
         fill(
             FillTypeCode.GRADIENT, "Gradient",
             param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff"),
-            param(ParamName.BLEND_HARDNESS, ParamType.DECIMAL, 0)
+            param(ParamName.BLEND_HARDNESS, ParamType.DECIMAL, 0f),
+            param(ParamName.CYCLES_PER_SECOND, ParamType.DECIMAL, 0f)
         ),
         fill(
             FillTypeCode.RAINBOW, "Rainbow",
