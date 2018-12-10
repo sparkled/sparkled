@@ -2,7 +2,6 @@ package io.sparkled.rest.service.song
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition
 import org.glassfish.jersey.media.multipart.FormDataParam
-import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
 import javax.ws.rs.Consumes

@@ -5,13 +5,14 @@ import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
 import io.sparkled.model.animation.param.ParamType
+import io.sparkled.model.util.ParamUtils.param
 import java.util.Arrays
 
 object EasingTypes {
     private val TYPES = Arrays.asList(
         easingType(
             EasingTypeCode.CONSTANT, "Constant",
-            param(ParamName.PERCENT, ParamType.DECIMAL).setValue(50f)
+            param(ParamName.PERCENT, ParamType.DECIMAL, 50f)
         ),
         easingType(EasingTypeCode.LINEAR, "Linear")
     )
@@ -21,10 +22,6 @@ object EasingTypes {
     }
 
     private fun easingType(easingType: EasingTypeCode, name: String, vararg params: Param): EasingType {
-        return EasingType().setCode(easingType).setName(name).setParams(arrayListOf(*params))
-    }
-
-    private fun param(paramName: ParamName, type: ParamType): Param {
-        return Param().setName(paramName).setType(type)
+        return EasingType().setCode(easingType).setName(name).setParams(listOf(*params))
     }
 }

@@ -22,9 +22,6 @@ object RenderUtils {
     }
 
     fun render(effect: Effect, frameCount: Int, stageProp: StageProp): RenderedStagePropData {
-        effect.setStartFrame(0)
-        effect.setEndFrame(frameCount - 1)
-
         val animationData = SequenceChannelEffects()
         animationData.setEffects(listOf(effect))
 
@@ -37,7 +34,7 @@ object RenderUtils {
             Collections.singletonList(sequenceChannel),
             Collections.singletonList(stageProp),
             0,
-            effect.getEndFrame()
+            frameCount - 1
         ).render()
 
         return renderResult.stageProps[PROP_UUID]!!

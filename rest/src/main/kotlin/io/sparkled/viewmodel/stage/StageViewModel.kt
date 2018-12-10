@@ -2,14 +2,13 @@ package io.sparkled.viewmodel.stage
 
 import io.sparkled.viewmodel.ViewModel
 import io.sparkled.viewmodel.stage.prop.StagePropViewModel
-import java.util.ArrayList
 
 class StageViewModel : ViewModel {
     private var id: Int? = null
     private var name: String? = null
     private var width: Int? = null
     private var height: Int? = null
-    private var stageProps: List<StagePropViewModel> = ArrayList()
+    private var stageProps: List<StagePropViewModel> = emptyList()
 
     fun getId(): Int? {
         return id

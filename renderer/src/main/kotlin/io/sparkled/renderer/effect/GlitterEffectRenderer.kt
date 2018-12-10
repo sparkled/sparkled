@@ -28,7 +28,7 @@ class GlitterEffectRenderer : EffectRenderer() {
                 val patternStart = random.nextInt(BITS_PER_PATTERN)
                 val offset = random.nextInt(lifetimeFrames)
 
-                val offsetFrameNumber = frameNumber - ctx.effect.getStartFrame() + offset
+                val offsetFrameNumber = frameNumber - ctx.effect.startFrame + offset
 
                 val bit = ((offsetFrameNumber / lifetimeFrames.toFloat()) + patternStart).toInt() % BITS_PER_PATTERN
                 val isOn = pattern and (1 shl bit).toLong() != 0L
@@ -46,8 +46,8 @@ class GlitterEffectRenderer : EffectRenderer() {
      * Fade all particles in at the start of the effect, and fade them out at the end.
      */
     private fun getFadeAlpha(ctx: RenderContext, lifetimeFrames: Int): Float {
-        val elapsedFrames = ctx.frame.frameNumber - ctx.effect.getStartFrame()
-        val totalFrames = ctx.effect.getEndFrame() - ctx.effect.getStartFrame() + 1
+        val elapsedFrames = ctx.frame.frameNumber - ctx.effect.startFrame
+        val totalFrames = ctx.effect.endFrame - ctx.effect.startFrame + 1
         val framesLeft = totalFrames - elapsedFrames
 
         return when {

@@ -9,7 +9,6 @@ class RenderedStagePropData(startFrame: Int, endFrame: Int, val ledCount: Int, v
     val frames: List<RenderedFrame>
 
     init {
-
         val frameCount = endFrame - startFrame + 1
         this.frames = ArrayList(frameCount)
 

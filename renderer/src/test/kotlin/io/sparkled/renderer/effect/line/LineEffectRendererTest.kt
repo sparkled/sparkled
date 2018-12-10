@@ -6,8 +6,8 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
-import io.sparkled.model.animation.param.Param
 import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.util.ParamUtils.param
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,23 +18,22 @@ internal class LineEffectRendererTest {
 
     @Test
     fun can_render_3_led_line_on_10_led_channel() {
-        val effect = Effect()
-            .setType(EffectTypeCode.LINE)
-            .setParams(
-                listOf(Param().setName(ParamName.LENGTH).setValue(3))
+        val effect = Effect(
+            endFrame = 19,
+            type = EffectTypeCode.LINE,
+            params = listOf(
+                param(name = ParamName.LENGTH, value = 3)
+            ),
+            easing = Easing(type = EasingTypeCode.LINEAR),
+            fill = Fill(
+                type = FillTypeCode.SOLID,
+                params = listOf(
+                    param(name = ParamName.COLOR, value = "#ff0000")
+                )
             )
-            .setEasing(
-                Easing().setType(EasingTypeCode.LINEAR)
-            )
-            .setFill(
-                Fill()
-                    .setType(FillTypeCode.SOLID)
-                    .setParams(
-                        listOf(Param().setName(ParamName.COLOR).setValue("#ff0000"))
-                    )
-            )
+        )
 
-        val renderedStagePropData = RenderUtils.render(effect, 20, 10)
+        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, 10)
 
         assertThat(
             renderedStagePropData, hasRenderedFrames(
@@ -64,28 +63,22 @@ internal class LineEffectRendererTest {
 
     @Test
     fun can_render_20_led_line_on_10_led_channel() {
-        val effect = Effect()
-            .setType(EffectTypeCode.LINE)
-            .setParams(
-                listOf(
-                    Param().setName(ParamName.LENGTH).setValue(20)
+        val effect = Effect(
+            endFrame = 19,
+            type = EffectTypeCode.LINE,
+            params = listOf(
+                param(name = ParamName.LENGTH, value = 20)
+            ),
+            easing = Easing(type = EasingTypeCode.LINEAR),
+            fill = Fill(
+                type = FillTypeCode.SOLID,
+                params = listOf(
+                    param(name = ParamName.COLOR, value = "#ffffff")
                 )
             )
-            .setEasing(
-                Easing()
-                    .setType(EasingTypeCode.LINEAR)
-            )
-            .setFill(
-                Fill()
-                    .setType(FillTypeCode.SOLID)
-                    .setParams(
-                        listOf(
-                            Param().setName(ParamName.COLOR).setValue("#ffffff")
-                        )
-                    )
-            )
+        )
 
-        val renderedStagePropData = RenderUtils.render(effect, 20, 10)
+        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, 10)
 
         assertThat(
             renderedStagePropData, hasRenderedFrames(

@@ -5,7 +5,7 @@ import io.sparkled.model.util.GsonProvider
 
 class SequenceChannelEffects {
 
-    private var effects: List<Effect> = ArrayList()
+    private var effects: List<Effect> = emptyList()
 
     fun getEffects(): List<Effect> {
         return effects
