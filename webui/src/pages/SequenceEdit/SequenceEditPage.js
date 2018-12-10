@@ -12,6 +12,9 @@ import { setCurrentPage } from '../actions';
 import StageCanvas from '../StageEdit/components/StageCanvas';
 import {
   addEffect,
+  copyEffect,
+  pasteEffect,
+  deleteEffect,
   fetchReferenceData,
   fetchSequence,
   fetchSequenceStage,
@@ -22,19 +25,13 @@ import AddChannelModal from './components/AddChannelModal';
 import EffectForm from './components/EffectForm';
 import Timeline from './components/Timeline';
 import './SequenceEditPage.css';
+import Mousetrap from "mousetrap";
 
 const { undo, redo, clearHistory } = ActionCreators;
 
 const newEffectFrames = 10;
 
 class SequenceEditPage extends Component {
-
-  constructor(props) {
-    super(props);
-    this.saveSequence = this.saveSequence.bind(this);
-    this.publishSequence = this.publishSequence.bind(this);
-    this.addEffect = this.addEffect.bind(this);
-  }
 
   componentDidMount() {
     const { setCurrentPage, fetchSequenceStage, fetchSequence, fetchReferenceData } = this.props;
@@ -43,6 +40,29 @@ class SequenceEditPage extends Component {
     fetchSequenceStage(sequenceId);
     fetchSequence(sequenceId);
     fetchReferenceData();
+
+    Mousetrap.bind('mod+c', this.props.copyEffect);
+    Mousetrap.bind('mod+v', this.props.pasteEffect);
+    Mousetrap.bind('del', this.deleteSelectedEffect);
+    Mousetrap.bind('mod+z', this.undo);
+    Mousetrap.bind('mod+shift+z', this.redo);
+  }
+
+  deleteSelectedEffect = () => {
+    const { deleteEffect, selectedChannel, selectedEffect } = this.props;
+    if (selectedChannel && selectedEffect) {
+      deleteEffect(selectedChannel, selectedEffect);
+    }
+  }
+
+  undo = () => {
+    const { canUndo, undo } = this.props;
+    canUndo && undo();
+  }
+
+  redo = () => {
+    const { canRedo, redo } = this.props;
+    canRedo && redo();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -95,17 +115,17 @@ class SequenceEditPage extends Component {
     );
   }
 
-  saveSequence() {
+  saveSequence = () => {
     const { sequence, saveSequence } = this.props;
     saveSequence({ ...sequence, status: sequenceStatuses.DRAFT });
   }
 
-  publishSequence() {
+  publishSequence = () => {
     const { sequence, saveSequence } = this.props;
     saveSequence({ ...sequence, status: sequenceStatuses.PUBLISHED });
   }
 
-  addEffect() {
+  addEffect = () => {
     const { addEffect, currentFrame, sequence } = this.props;
     const effect = {
       uuid: uuidv4(),
@@ -178,15 +198,20 @@ class SequenceEditPage extends Component {
 
   componentWillUnmount() {
     this.props.clearHistory();
+    Mousetrap.unbind('del');
+    Mousetrap.unbind('mod+c');
+    Mousetrap.unbind('mod+v');
+    Mousetrap.unbind('mod+z');
+    Mousetrap.unbind('mod+shift+z');
   }
 }
 
 function mapStateToProps({ page }) {
   const { past, present, future } = page.sequenceEdit;
-  const { saving, saveError, sequence, stage, currentFrame, selectedChannel, pixelsPerFrame } = present;
+  const { saving, saveError, sequence, stage, currentFrame, selectedChannel, selectedEffect, pixelsPerFrame } = present;
 
   return {
-    saving, saveError, sequence, stage, currentFrame, selectedChannel, pixelsPerFrame,
+    saving, saveError, sequence, stage, currentFrame, selectedChannel, selectedEffect, pixelsPerFrame,
     fetching: present.fetchingSequence || present.fetchingStage || present.fetchingReferenceData,
     fetchError: present.fetchSequenceError || present.fetchStageError || present.fetchReferenceDataError,
     canUndo: past.length > 1,
@@ -200,6 +225,9 @@ export default connect(mapStateToProps, {
   fetchSequenceStage,
   fetchReferenceData,
   addEffect,
+  copyEffect,
+  pasteEffect,
+  deleteEffect,
   showAddChannelModal,
   saveSequence,
   undo,

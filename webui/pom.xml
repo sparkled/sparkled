@@ -30,6 +30,7 @@
 
                 <configuration>
                     <workingDirectory>src</workingDirectory>
+                    <installDirectory>target</installDirectory>
                 </configuration>
 
                 <executions>

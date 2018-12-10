@@ -66,7 +66,7 @@ class TimelineEffect extends Component {
     const { effect } = props;
     const x = effect.startFrame * 2;
     const width = (effect.endFrame - effect.startFrame + 1) * 2;
-    return { width, height: 'inherit', x, y: 0};
+    return { width, height: 'inherit', x, y: 0 };
   }
 
   onEffectMove(event, data) {
