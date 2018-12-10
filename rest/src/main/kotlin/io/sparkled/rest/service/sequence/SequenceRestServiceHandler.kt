@@ -4,6 +4,7 @@ import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.model.render.RenderResult
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.model.validator.exception.EntityNotFoundException
 import io.sparkled.persistence.sequence.SequencePersistenceService
@@ -19,12 +20,14 @@ import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverter
 import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModelConverter
 import io.sparkled.viewmodel.stage.StageViewModelConverter
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter
+import org.slf4j.LoggerFactory
 import java.util.UUID
 import javax.inject.Inject
 import javax.ws.rs.core.Response
+import kotlin.math.min
 
-open class SequenceRestServiceHandler @Inject
-constructor(
+open class SequenceRestServiceHandler
+@Inject constructor(
     private val transaction: Transaction,
     private val sequencePersistenceService: SequencePersistenceService,
     private val songPersistenceService: SongPersistenceService,
@@ -113,6 +116,25 @@ constructor(
         }
     }
 
+    fun previewSequence(
+        sequenceID: Int,
+        startFrame: Int,
+        frameCount: Int,
+        sequenceViewModel: SequenceViewModel
+    ): Response {
+        logger.info("Previewing sequence #$sequenceID.")
+        val sequence = sequenceViewModelConverter.toModel(sequenceViewModel)
+
+        val sequenceChannels = sequenceViewModel.getChannels()
+            .asSequence()
+            .map(sequenceChannelViewModelConverter::toModel)
+            .toList()
+
+        return respondOk(
+            renderSequence(sequence, sequenceChannels, startFrame, startFrame + frameCount - 1)
+        )
+    }
+
     fun updateSequence(id: Int, sequenceViewModel: SequenceViewModel): Response {
         return transaction.of {
             sequenceViewModel.setId(id) // Prevent client-side ID tampering.
@@ -145,17 +167,27 @@ constructor(
     }
 
     private fun publishSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>) {
+        val renderResult = renderSequence(sequence, sequenceChannels)
+        sequencePersistenceService.publishSequence(sequence, sequenceChannels, renderResult.stageProps)
+    }
+
+    private fun renderSequence(
+        sequence: Sequence,
+        sequenceChannels: List<SequenceChannel>,
+        startFrame: Int = 0,
+        endFrame: Int = Int.MAX_VALUE
+    ): RenderResult {
         val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!)
             ?: throw EntityNotFoundException("Song not found.")
 
         val stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId()!!)
-        val endFrame = SequenceUtils.getFrameCount(song, sequence) - 1
+        val endFrameBounded = min(endFrame, SequenceUtils.getFrameCount(song, sequence) - 1)
 
-        val renderedStageProps = Renderer(sequence, sequenceChannels, stageProps, 0, endFrame).render()
-        sequencePersistenceService.publishSequence(sequence, sequenceChannels, renderedStageProps)
+        return Renderer(sequence, sequenceChannels, stageProps, startFrame, endFrameBounded).render()
     }
 
     companion object {
         private const val MP3_MIME_TYPE = "audio/mpeg"
+        private val logger = LoggerFactory.getLogger(SequenceRestServiceHandler::class.java)
     }
 }

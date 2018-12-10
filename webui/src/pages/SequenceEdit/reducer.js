@@ -11,10 +11,13 @@ const initialState = {
   fetchStageError: null,
   fetchingReferenceData: false,
   fetchReferenceDataError: null,
+  fetchingRenderData: false,
+  fetchRenderDataError: null,
   saving: null,
   saveError: null,
   sequence: null,
   stage: null,
+  renderData: null,
   effectTypes: [],
   fillTypes: [],
   easingTypes: [],
@@ -22,6 +25,7 @@ const initialState = {
   selectedChannel: null,
   selectedEffect: null,
   currentFrame: 0,
+  playbackFrame: null,
   pixelsPerFrame: 2,
   copiedEffect: null
 };
@@ -42,10 +46,11 @@ export default (state = initialState, action) => {
         break;
 
       case actionTypes.FETCH_SEQUENCE_FULFILLED:
+        draft.fetchingSequence = false;
+
         const sequence = action.payload.data;
         draft.sequence = sequence;
         draft.selectedChannel = sequence.channels.length > 0 ? sequence.channels[0] : null;
-        draft.fetchingSequence = false;
         break;
 
       case actionTypes.FETCH_SEQUENCE_REJECTED:
@@ -139,6 +144,22 @@ export default (state = initialState, action) => {
         }
         break;
 
+      case actionTypes.FETCH_RENDER_PREVIEW_DATA_PENDING:
+        draft.fetchingRenderData = true;
+        draft.renderData = null;
+        draft.fetchRenderDataError = null;
+        break;
+
+      case actionTypes.FETCH_RENDER_PREVIEW_DATA_FULFILLED:
+        draft.fetchingRenderData = false;
+        draft.renderData = action.payload.data;
+        break;
+
+      case actionTypes.FETCH_RENDER_PREVIEW_DATA_REJECTED:
+        draft.fetchingRenderData = false;
+        draft.fetchRenderDataError = getResponseError(action);
+        break;
+
       case actionTypes.UPDATE_EFFECT:
         updateEffect(draft, action.payload.effect);
         break;
@@ -150,7 +171,7 @@ export default (state = initialState, action) => {
       case actionTypes.SELECT_FRAME:
         const { frame } = action.payload;
         if (frame >= 0 && frame < state.sequence.frameCount) {
-          draft.currentFrame = action.payload.frame;
+          draft.currentFrame = frame;
         }
         break;
 

@@ -32,13 +32,14 @@ object RenderUtils {
         val channelJson = GsonProvider.get().toJson(animationData)
         val sequenceChannel = SequenceChannel().setStagePropUuid(PROP_UUID).setChannelJson(channelJson)
 
-        val renderedChannels = Renderer(
+        val renderResult = Renderer(
             sequence,
             Collections.singletonList(sequenceChannel),
             Collections.singletonList(stageProp),
             0,
             effect.getEndFrame()
         ).render()
-        return renderedChannels[PROP_UUID]!!
+
+        return renderResult.stageProps[PROP_UUID]!!
     }
 }
