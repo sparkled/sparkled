@@ -11,8 +11,8 @@ import javax.inject.Inject
 /**
  * Facilitates Guice injection of Jersey REST service classes.
  */
-class JerseyResourceConfig @Inject
-constructor(serviceLocator: ServiceLocator) : ResourceConfig() {
+class JerseyResourceConfig
+@Inject constructor(serviceLocator: ServiceLocator) : ResourceConfig() {
 
     init {
         logger.info("Creating Guice bridge.")

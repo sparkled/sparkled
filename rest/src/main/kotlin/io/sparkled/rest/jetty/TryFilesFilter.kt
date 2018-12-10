@@ -1,10 +1,8 @@
 package io.sparkled.rest.jetty
 
-import java.io.IOException
 import javax.servlet.Filter
 import javax.servlet.FilterChain
 import javax.servlet.FilterConfig
-import javax.servlet.ServletException
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
@@ -18,11 +16,9 @@ import javax.servlet.http.HttpServletResponse
  */
 class TryFilesFilter : Filter {
 
-    @Throws(ServletException::class)
     override fun init(config: FilterConfig) {
     }
 
-    @Throws(IOException::class, ServletException::class)
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest
         val httpResponse = response as HttpServletResponse
@@ -46,7 +42,6 @@ class TryFilesFilter : Filter {
         fallback(httpRequest, httpResponse)
     }
 
-    @Throws(IOException::class, ServletException::class)
     private fun fallback(request: HttpServletRequest, response: HttpServletResponse) {
         val resolved = resolve(request, FALLBACK)
         request.servletContext.getRequestDispatcher(resolved).forward(request, response)

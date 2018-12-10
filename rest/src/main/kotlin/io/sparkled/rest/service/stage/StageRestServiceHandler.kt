@@ -11,8 +11,8 @@ import io.sparkled.viewmodel.stage.search.StageSearchViewModelConverter
 import javax.inject.Inject
 import javax.ws.rs.core.Response
 
-open class StageRestServiceHandler @Inject
-constructor(
+open class StageRestServiceHandler
+@Inject constructor(
     private val transaction: Transaction,
     private val stagePersistenceService: StagePersistenceService,
     private val stageViewModelConverter: StageViewModelConverter,

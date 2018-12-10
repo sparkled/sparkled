@@ -9,8 +9,8 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/player")
-class PlayerRestService @Inject
-constructor(private val handler: PlayerRestServiceHandler) {
+class PlayerRestService
+@Inject constructor(private val handler: PlayerRestServiceHandler) {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)

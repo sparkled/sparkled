@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 class UnsignedByteArrayTypeAdapterTest {
 
     @Test
-    @Throws(Exception::class)
     fun can_serialize_bytes_as_unsigned_values() {
         val bytes = byteArrayOf(0, 1, 127, -128, -2, -1)
         val json = GsonProvider.get().toJson(bytes)

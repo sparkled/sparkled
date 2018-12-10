@@ -19,8 +19,8 @@ import javax.inject.Inject
 import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
 
-class PlaybackServiceImpl @Inject
-constructor(
+class PlaybackServiceImpl
+@Inject constructor(
     private val songPersistenceService: SongPersistenceService,
     private val sequencePersistenceService: SequencePersistenceService,
     private val playlistPersistenceService: PlaylistPersistenceService,

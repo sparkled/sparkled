@@ -19,7 +19,7 @@ import org.quartz.impl.StdSchedulerFactory
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
-class SchedulerServiceImpl @Throws(SchedulerException::class)
+class SchedulerServiceImpl
 @Inject constructor(
     private val unitOfWork: UnitOfWork,
     private val transaction: Transaction,

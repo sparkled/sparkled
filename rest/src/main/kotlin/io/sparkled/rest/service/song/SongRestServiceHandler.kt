@@ -7,19 +7,17 @@ import io.sparkled.rest.service.RestServiceHandler
 import io.sparkled.viewmodel.song.SongViewModel
 import io.sparkled.viewmodel.song.SongViewModelConverter
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
 import javax.ws.rs.core.Response
 
-open class SongRestServiceHandler @Inject
-constructor(
+open class SongRestServiceHandler
+@Inject constructor(
     private val transaction: Transaction,
     private val songPersistenceService: SongPersistenceService,
     private val songViewModelConverter: SongViewModelConverter
 ) : RestServiceHandler() {
 
-    @Throws(IOException::class)
     fun createSong(songViewModelJson: String, inputStream: InputStream): Response {
         return transaction.of {
             val songViewModel = gson.fromJson(songViewModelJson, SongViewModel::class.java)
@@ -33,7 +31,6 @@ constructor(
         }
     }
 
-    @Throws(IOException::class)
     private fun loadAudioData(inputStream: InputStream): ByteArray {
         val outputStream = ByteArrayOutputStream()
         inputStream.copyTo(outputStream)

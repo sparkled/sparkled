@@ -14,8 +14,8 @@ import javax.sound.sampled.Clip
 import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
 
-class MusicPlayerServiceImpl @Inject
-constructor() : MusicPlayerService, LineListener {
+class MusicPlayerServiceImpl
+@Inject constructor() : MusicPlayerService, LineListener {
 
     private val listeners = HashSet<LineListener>()
     private var clip: Clip? = null

@@ -6,8 +6,8 @@ import io.sparkled.model.util.IdUtils.NO_UUID
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import javax.inject.Inject
 
-class PlaylistSequenceViewModelConverterImpl @Inject
-constructor(private val playlistPersistenceService: PlaylistPersistenceService) : PlaylistSequenceViewModelConverter() {
+class PlaylistSequenceViewModelConverterImpl
+@Inject constructor(private val playlistPersistenceService: PlaylistPersistenceService) : PlaylistSequenceViewModelConverter() {
 
     override fun toViewModel(model: PlaylistSequence): PlaylistSequenceViewModel {
         return PlaylistSequenceViewModel()

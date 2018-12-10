@@ -24,8 +24,8 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.servlet.DispatcherType
 
-class RestApiServerImpl @Inject
-constructor(injector: Injector) : RestApiServer {
+class RestApiServerImpl
+@Inject constructor(injector: Injector) : RestApiServer {
     private val executor: ExecutorService
     private var started: Boolean = false
 
@@ -37,7 +37,6 @@ constructor(injector: Injector) : RestApiServer {
         )
     }
 
-    @Throws(Exception::class)
     override fun start(port: Int) {
         if (started) {
             logger.warn("Attempted to start REST API server, but it is already running.")

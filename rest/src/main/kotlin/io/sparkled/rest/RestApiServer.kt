@@ -10,6 +10,5 @@ interface RestApiServer {
 
      * @param port The port to listen on.
      */
-    @Throws(Exception::class)
     fun start(port: Int)
 }

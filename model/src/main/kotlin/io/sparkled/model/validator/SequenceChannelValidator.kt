@@ -10,7 +10,6 @@ import io.sparkled.model.validator.exception.EntityValidationException
 
 class SequenceChannelValidator {
 
-    @Throws(EntityValidationException::class)
     fun validate(channel: SequenceChannel) {
         val channelJson = channel.getChannelJson()
 

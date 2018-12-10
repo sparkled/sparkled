@@ -13,8 +13,8 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/scheduledJobs")
-class ScheduledJobRestService @Inject
-constructor(private val handler: ScheduledJobRestServiceHandler) {
+class ScheduledJobRestService
+@Inject constructor(private val handler: ScheduledJobRestServiceHandler) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

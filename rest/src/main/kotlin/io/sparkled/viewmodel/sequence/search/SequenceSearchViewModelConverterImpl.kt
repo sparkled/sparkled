@@ -8,8 +8,8 @@ import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.persistence.stage.StagePersistenceService
 import javax.inject.Inject
 
-class SequenceSearchViewModelConverterImpl @Inject
-constructor(
+class SequenceSearchViewModelConverterImpl
+@Inject constructor(
     private val songPersistenceService: SongPersistenceService,
     private val stagePersistenceService: StagePersistenceService
 ) : SequenceSearchViewModelConverter() {

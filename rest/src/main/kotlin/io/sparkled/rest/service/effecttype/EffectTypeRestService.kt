@@ -8,8 +8,8 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/effectTypes")
-class EffectTypeRestService @Inject
-constructor(private val handler: EffectTypeRestServiceHandler) {
+class EffectTypeRestService
+@Inject constructor(private val handler: EffectTypeRestServiceHandler) {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

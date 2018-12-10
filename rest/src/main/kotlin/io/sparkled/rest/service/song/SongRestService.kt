@@ -16,13 +16,12 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/songs")
-class SongRestService @Inject
-constructor(private val handler: SongRestServiceHandler) {
+class SongRestService
+@Inject constructor(private val handler: SongRestServiceHandler) {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    @Throws(IOException::class)
     fun createSong(
         @FormDataParam("song") songViewModelJson: String,
         @FormDataParam("mp3") inputStream: InputStream,

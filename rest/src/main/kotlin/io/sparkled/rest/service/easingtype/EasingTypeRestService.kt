@@ -8,8 +8,8 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/easingTypes")
-class EasingTypeRestService @Inject
-constructor(private val handler: EasingTypeRestServiceHandler) {
+class EasingTypeRestService
+@Inject constructor(private val handler: EasingTypeRestServiceHandler) {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

@@ -3,14 +3,12 @@ package io.sparkled.scheduler.impl
 import io.sparkled.model.entity.ScheduledJob
 import org.quartz.Job
 import org.quartz.JobExecutionContext
-import org.quartz.JobExecutionException
 
 /**
  * Responsible for passing scheduled jobs executions back to the scheduler for processing.
  */
 internal class JobDelegator : Job {
 
-    @Throws(JobExecutionException::class)
     override fun execute(context: JobExecutionContext) {
         val jobDataMap = context.jobDetail.jobDataMap
         val service: SchedulerServiceImpl = jobDataMap[SERVICE] as SchedulerServiceImpl
