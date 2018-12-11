@@ -1,12 +1,10 @@
 package io.sparkled.model.setting
 
-interface SettingsConstants {
+object SettingsConstants {
 
-    interface BRIGHTNESS {
-        companion object {
-            const val CODE = "BRIGHTNESS"
-            const val MIN = 0
-            const val MAX = 15
-        }
+    object Brightness {
+        const val CODE = "Brightness"
+        const val MIN = 0
+        const val MAX = 15
     }
 }

@@ -14,16 +14,16 @@ object EffectTypes {
         effectType(
             EffectTypeCode.GLITTER,
             param(ParamCode.DENSITY, ParamType.INTEGER, 50),
-            param(ParamCode.LIFETIME, ParamType.DECIMAL, 1f),
+            param(ParamCode.LIFETIME, ParamType.DECIMAL, 1),
             param(ParamCode.RANDOM_SEED, ParamType.INTEGER, 1)
         ),
         effectType(
             EffectTypeCode.LINE,
-            param(ParamCode.LENGTH, ParamType.DECIMAL, 1f)
+            param(ParamCode.LENGTH, ParamType.DECIMAL, 1)
         ),
         effectType(
             EffectTypeCode.SPLIT_LINE,
-            param(ParamCode.LENGTH, ParamType.DECIMAL, 1f)
+            param(ParamCode.LENGTH, ParamType.DECIMAL, 1)
         )
     )
 
@@ -31,7 +31,7 @@ object EffectTypes {
         return TYPES
     }
 
-    private fun effectType(type: EffectTypeCode, vararg params: Param): EffectType {
-        return EffectType().setCode(type).setName(type.displayName).setParams(listOf(*params))
+    private fun effectType(code: EffectTypeCode, vararg params: Param): EffectType {
+        return EffectType(code, code.displayName, listOf(*params))
     }
 }

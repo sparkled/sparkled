@@ -12,16 +12,20 @@ object EasingTypes {
     private val TYPES = Arrays.asList(
         easingType(
             EasingTypeCode.CONSTANT,
-            param(ParamCode.PERCENT, ParamType.DECIMAL, 50f)
+            param(ParamCode.PERCENT, ParamType.DECIMAL, 50)
         ),
-        easingType(EasingTypeCode.LINEAR)
+        easingType(
+            EasingTypeCode.LINEAR,
+            param(ParamCode.PERCENT_FROM, ParamType.DECIMAL, 0),
+            param(ParamCode.PERCENT_TO, ParamType.DECIMAL, 100)
+        )
     )
 
     fun get(): List<EasingType> {
         return TYPES
     }
 
-    private fun easingType(type: EasingTypeCode, vararg params: Param): EasingType {
-        return EasingType().setCode(type).setName(type.displayName).setParams(listOf(*params))
+    private fun easingType(code: EasingTypeCode, vararg params: Param): EasingType {
+        return EasingType(code, code.displayName, listOf(*params))
     }
 }

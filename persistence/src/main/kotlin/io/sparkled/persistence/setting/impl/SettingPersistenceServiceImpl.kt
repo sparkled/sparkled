@@ -54,19 +54,19 @@ class SettingPersistenceServiceImpl
     }
 
     override fun setBrightness(brightness: Int) {
-        val setting = Setting().setCode(SettingsConstants.BRIGHTNESS.CODE).setValue(brightness.toString())
+        val setting = Setting().setCode(SettingsConstants.Brightness.CODE).setValue(brightness.toString())
         SaveSettingQuery(setting).perform(queryFactory)
         settingsCache = SettingsCache(brightness)
     }
 
     private fun getBrightness(settingsMap: Map<String, Setting>): Int {
-        val setting = settingsMap.getOrDefault(SettingsConstants.BRIGHTNESS.CODE, Setting())
+        val setting = settingsMap.getOrDefault(SettingsConstants.Brightness.CODE, Setting())
 
         return try {
             val brightness = Integer.parseInt(setting.getValue())
-            constrain(brightness, SettingsConstants.BRIGHTNESS.MIN, SettingsConstants.BRIGHTNESS.MAX)
+            constrain(brightness, SettingsConstants.Brightness.MIN, SettingsConstants.Brightness.MAX)
         } catch (e: NumberFormatException) {
-            SettingsConstants.BRIGHTNESS.MAX
+            SettingsConstants.Brightness.MAX
         }
     }
 
