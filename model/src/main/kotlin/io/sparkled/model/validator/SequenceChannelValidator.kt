@@ -40,9 +40,7 @@ class SequenceChannelValidator {
     private fun validateChannelEffects(channelEffects: SequenceChannelEffects) {
         var previousEndFrame: Int = -1
 
-        val effects = channelEffects.getEffects()
-
-        for (effect in effects) {
+        for (effect in channelEffects.effects) {
             validateEffect(effect, previousEndFrame)
             previousEndFrame = effect.endFrame
         }

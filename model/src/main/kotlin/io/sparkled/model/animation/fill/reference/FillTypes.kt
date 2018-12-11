@@ -13,13 +13,13 @@ object FillTypes {
         fill(
             FillTypeCode.GRADIENT,
             param(ParamCode.COLORS, ParamType.COLORS, "#ff0000", "#0000ff"),
-            param(ParamCode.BLEND_HARDNESS, ParamType.DECIMAL, 0f),
-            param(ParamCode.CYCLES_PER_SECOND, ParamType.DECIMAL, 0f)
+            param(ParamCode.BLEND_HARDNESS, ParamType.DECIMAL, 0),
+            param(ParamCode.CYCLES_PER_SECOND, ParamType.DECIMAL, 0)
         ),
         fill(
             FillTypeCode.RAINBOW,
-            param(ParamCode.BRIGHTNESS, ParamType.DECIMAL, 100f),
-            param(ParamCode.CYCLE_COUNT, ParamType.DECIMAL, 1f),
+            param(ParamCode.BRIGHTNESS, ParamType.DECIMAL, 100),
+            param(ParamCode.CYCLE_COUNT, ParamType.DECIMAL, 1),
             param(ParamCode.CYCLES_PER_SECOND, ParamType.DECIMAL, .5f)
         ),
         fill(
@@ -32,7 +32,7 @@ object FillTypes {
         return TYPES
     }
 
-    private fun fill(type: FillTypeCode, vararg params: Param): FillType {
-        return FillType().setCode(type).setName(type.displayName).setParams(listOf(*params))
+    private fun fill(code: FillTypeCode, vararg params: Param): FillType {
+        return FillType(code, code.displayName, listOf(*params))
     }
 }

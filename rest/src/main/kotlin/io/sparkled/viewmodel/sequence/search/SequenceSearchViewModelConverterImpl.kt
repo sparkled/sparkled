@@ -1,6 +1,6 @@
 package io.sparkled.viewmodel.sequence.search
 
-import io.sparkled.model.constant.ModelConstants.Companion.MS_PER_SECOND
+import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.Song
 import io.sparkled.model.entity.Stage

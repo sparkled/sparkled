@@ -8,7 +8,6 @@ import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.util.GsonProvider
 import io.sparkled.renderer.Renderer
-import java.util.Collections
 import java.util.UUID
 
 object RenderUtils {
@@ -22,8 +21,7 @@ object RenderUtils {
     }
 
     fun render(effect: Effect, frameCount: Int, stageProp: StageProp): RenderedStagePropData {
-        val animationData = SequenceChannelEffects()
-        animationData.setEffects(listOf(effect))
+        val animationData = SequenceChannelEffects(listOf(effect))
 
         val sequence = Sequence().setFramesPerSecond(60)
         val channelJson = GsonProvider.get().toJson(animationData)
@@ -31,8 +29,8 @@ object RenderUtils {
 
         val renderResult = Renderer(
             sequence,
-            Collections.singletonList(sequenceChannel),
-            Collections.singletonList(stageProp),
+            listOf(sequenceChannel),
+            listOf(stageProp),
             0,
             frameCount - 1
         ).render()

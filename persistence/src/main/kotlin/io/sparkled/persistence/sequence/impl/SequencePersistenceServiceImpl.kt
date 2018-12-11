@@ -20,7 +20,6 @@ import io.sparkled.persistence.sequence.impl.query.GetStageBySequenceIdQuery
 import io.sparkled.persistence.sequence.impl.query.SaveRenderedStagePropsQuery
 import io.sparkled.persistence.sequence.impl.query.SaveSequenceChannelsQuery
 import io.sparkled.persistence.sequence.impl.query.SaveSequenceQuery
-import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
 
@@ -65,17 +64,13 @@ class SequencePersistenceServiceImpl
         return savedSequence
     }
 
-    override fun publishSequence(
-        sequence: Sequence,
-        sequenceChannels: List<SequenceChannel>,
-        renderedStageProps: RenderedStagePropDataMap
-    ) {
+    override fun publishSequence(sequence: Sequence, channels: List<SequenceChannel>, data: RenderedStagePropDataMap) {
         val savedSequence = SaveSequenceQuery(sequence).perform(queryFactory)
-        SaveSequenceChannelsQuery(savedSequence, sequenceChannels).perform(queryFactory)
-        SaveRenderedStagePropsQuery(savedSequence, renderedStageProps).perform(queryFactory)
+        SaveSequenceChannelsQuery(savedSequence, channels).perform(queryFactory)
+        SaveRenderedStagePropsQuery(savedSequence, data).perform(queryFactory)
     }
 
     override fun deleteSequence(sequenceId: Int) {
-        DeleteSequencesQuery(Collections.singletonList(sequenceId)).perform(queryFactory)
+        DeleteSequencesQuery(listOf(sequenceId)).perform(queryFactory)
     }
 }

@@ -9,7 +9,6 @@ import io.sparkled.persistence.song.impl.query.GetSongByIdQuery
 import io.sparkled.persistence.song.impl.query.GetSongBySequenceIdQuery
 import io.sparkled.persistence.song.impl.query.SaveSongAudioQuery
 import io.sparkled.persistence.song.impl.query.SaveSongQuery
-import java.util.Collections
 import javax.inject.Inject
 
 class SongPersistenceServiceImpl
@@ -34,6 +33,6 @@ class SongPersistenceServiceImpl
     }
 
     override fun deleteSong(songId: Int) {
-        DeleteSongsQuery(Collections.singletonList(songId)).perform(queryFactory)
+        DeleteSongsQuery(listOf(songId)).perform(queryFactory)
     }
 }

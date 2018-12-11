@@ -4,16 +4,15 @@ import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.util.GsonProvider
 import io.sparkled.persistence.sequence.SequencePersistenceService
-import java.util.Collections
 import javax.inject.Inject
 
 class SequenceChannelViewModelConverterImpl
-@Inject constructor(private val sequencePersistenceService: SequencePersistenceService) : SequenceChannelViewModelConverter() {
+@Inject constructor(private val sequencePersistenceService: SequencePersistenceService) :
+    SequenceChannelViewModelConverter() {
 
     override fun toViewModel(model: SequenceChannel): SequenceChannelViewModel {
-        val sequenceChannelEffects = GsonProvider.get()
-            .fromJson(model.getChannelJson(), SequenceChannelEffects::class.java)
-        val effects = sequenceChannelEffects?.getEffects() ?: Collections.emptyList()
+        val channelJson = model.getChannelJson()
+        val sequenceChannelEffects = GsonProvider.get().fromJson(channelJson, SequenceChannelEffects::class.java)
 
         return SequenceChannelViewModel()
             .setUuid(model.getUuid())
@@ -21,7 +20,7 @@ class SequenceChannelViewModelConverterImpl
             .setStagePropUuid(model.getStagePropUuid())
             .setName(model.getName())
             .setDisplayOrder(model.getDisplayOrder())
-            .setEffects(effects)
+            .setEffects(sequenceChannelEffects.effects)
     }
 
     override fun toModel(viewModel: SequenceChannelViewModel): SequenceChannel {
@@ -29,7 +28,7 @@ class SequenceChannelViewModelConverterImpl
             .getSequenceChannelByUuid(viewModel.getSequenceId()!!, viewModel.getUuid()!!)
             ?: SequenceChannel()
 
-        val channelJson = GsonProvider.get().toJson(SequenceChannelEffects().setEffects(viewModel.getEffects()))
+        val channelJson = GsonProvider.get().toJson(SequenceChannelEffects(viewModel.getEffects()))
         return model
             .setUuid(viewModel.getUuid())
             .setSequenceId(viewModel.getSequenceId())

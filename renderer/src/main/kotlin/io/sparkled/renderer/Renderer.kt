@@ -43,7 +43,7 @@ class Renderer(
             RenderedStagePropData(startFrame, endFrame, leds, buffer)
         }
 
-        channelPropPair.channel.getEffects().forEach {
+        channelPropPair.channel.effects.forEach {
             renderEffect(sequence, stagePropData, channelPropPair.stageProp, it)
         }
 

@@ -1,6 +1,5 @@
 package io.sparkled.model.util
 
-import java.util.Collections
 import java.util.UUID
 
 object IdUtils {
@@ -13,7 +12,7 @@ object IdUtils {
     /**
      * Useful for IN queries where no IDs will match.
      */
-    val NO_IDS: List<Int> = Collections.singletonList(NO_ID)
+    val NO_IDS: List<Int> = listOf(NO_ID)
 
     /**
      * A UUID value that will never exist in the database.
@@ -23,5 +22,5 @@ object IdUtils {
     /**
      * Useful for IN queries where no UUIDs will match.
      */
-    val NO_UUIDS: List<UUID> = Collections.singletonList(NO_UUID)
+    val NO_UUIDS: List<UUID> = listOf(NO_UUID)
 }
