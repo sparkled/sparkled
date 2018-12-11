@@ -1,28 +1,28 @@
 package io.sparkled.renderer.util
 
-import io.sparkled.model.animation.param.HasParams
-import io.sparkled.model.animation.param.Param
-import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.Argument
+import io.sparkled.model.animation.param.HasArguments
+import io.sparkled.model.animation.param.ParamCode
 import java.awt.Color
 
 object ParamUtils {
 
-    fun getIntegerValue(parent: HasParams, paramName: ParamName, default: Int = 0): Int {
-        return getDecimalValue(parent, paramName, default.toFloat()).toInt()
+    fun getIntegerValue(parent: HasArguments, paramCode: ParamCode, default: Int = 0): Int {
+        return getDecimalValue(parent, paramCode, default.toFloat()).toInt()
     }
 
-    fun getDecimalValue(parent: HasParams, paramName: ParamName, default: Float = 0f): Float {
-        val param = getParam(parent, paramName)
-        val value = param.value
+    fun getDecimalValue(parent: HasArguments, paramCode: ParamCode, default: Float = 0f): Float {
+        val argument = getArgument(parent, paramCode)
+        val value = argument.value
         return if (value.isEmpty()) default else value[0].toFloat()
     }
 
-    fun getColorValue(parent: HasParams, paramName: ParamName, default: Color = Color.BLACK): Color {
-        return getColorsValue(parent, paramName, default)[0]
+    fun getColorValue(parent: HasArguments, paramCode: ParamCode, default: Color = Color.BLACK): Color {
+        return getColorsValue(parent, paramCode, default)[0]
     }
 
-    fun getColorsValue(parent: HasParams, paramName: ParamName, default: Color = Color.BLACK): List<Color> {
-        val param = getParam(parent, paramName)
+    fun getColorsValue(parent: HasArguments, paramCode: ParamCode, default: Color = Color.BLACK): List<Color> {
+        val param = getArgument(parent, paramCode)
         return if (param.value.isEmpty()) {
             listOf(default)
         } else {
@@ -30,11 +30,11 @@ object ParamUtils {
         }
     }
 
-    private fun getParam(parent: HasParams, paramName: ParamName): Param {
-        return parent.getParams()
+    private fun getArgument(parent: HasArguments, paramCode: ParamCode): Argument {
+        return parent.getArguments()
             .asSequence()
-            .filter { p -> paramName === p.name }
-            .firstOrNull() ?: Param()
+            .filter { a -> a.code === paramCode }
+            .firstOrNull() ?: Argument()
     }
 
     private fun convertColor(hexColor: String): Color {

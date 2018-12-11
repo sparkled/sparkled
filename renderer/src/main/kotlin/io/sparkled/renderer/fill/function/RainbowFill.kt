@@ -1,6 +1,6 @@
 package io.sparkled.renderer.fill.function
 
-import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.render.Led
 import io.sparkled.renderer.context.RenderContext
 import io.sparkled.renderer.fill.FillFunction
@@ -18,9 +18,9 @@ class RainbowFill : FillFunction {
 
     override fun fill(ctx: RenderContext, led: Led, ledIndex: Int, alpha: Float) {
         val fill = ctx.effect.fill
-        val cycleCount = ParamUtils.getDecimalValue(fill, ParamName.CYCLE_COUNT, 1f)
-        val cyclesPerSecond = ParamUtils.getDecimalValue(fill, ParamName.CYCLES_PER_SECOND, 1f)
-        val brightness = ParamUtils.getDecimalValue(fill, ParamName.BRIGHTNESS, 100f) / 100f
+        val cycleCount = ParamUtils.getDecimalValue(fill, ParamCode.CYCLE_COUNT, 1f)
+        val cyclesPerSecond = ParamUtils.getDecimalValue(fill, ParamCode.CYCLES_PER_SECOND, 1f)
+        val brightness = ParamUtils.getDecimalValue(fill, ParamCode.BRIGHTNESS, 100f) / 100f
 
         val frame = ctx.frame
         val ledPosition = ledIndex.toFloat() / frame.ledCount * cycleCount

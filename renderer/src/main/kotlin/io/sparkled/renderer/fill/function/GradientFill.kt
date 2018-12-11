@@ -1,6 +1,6 @@
 package io.sparkled.renderer.fill.function
 
-import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.render.Led
 import io.sparkled.renderer.context.RenderContext
 import io.sparkled.renderer.fill.FillFunction
@@ -22,11 +22,11 @@ class GradientFill : FillFunction {
     override fun fill(ctx: RenderContext, led: Led, ledIndex: Int, alpha: Float) {
         val fill = ctx.effect.fill
 
-        val colors = ParamUtils.getColorsValue(fill, ParamName.COLORS, Color.MAGENTA)
+        val colors = ParamUtils.getColorsValue(fill, ParamCode.COLORS, Color.MAGENTA)
 
         val ledIndexNormalised = ledIndex / ctx.frame.ledCount.toFloat()
 
-        val cyclesPerSecond = ParamUtils.getDecimalValue(fill, ParamName.CYCLES_PER_SECOND, 0f)
+        val cyclesPerSecond = ParamUtils.getDecimalValue(fill, ParamCode.CYCLES_PER_SECOND, 0f)
         val cycleProgress = cyclesPerSecond * (ctx.frame.frameNumber.toFloat() / ctx.sequence.getFramesPerSecond()!!)
         val gradientProgress = ledIndexNormalised + cycleProgress
 
@@ -34,7 +34,7 @@ class GradientFill : FillFunction {
         val color1 = colors[floor(colorProgress).toInt() % colors.size]
         val color2 = colors[ceil(colorProgress).toInt() % colors.size]
 
-        val hardness = ParamUtils.getDecimalValue(fill, ParamName.BLEND_HARDNESS, 0f) / 100f
+        val hardness = ParamUtils.getDecimalValue(fill, ParamCode.BLEND_HARDNESS, 0f) / 100f
         val blend = getBlend(colorProgress % 1f, hardness)
         val interpolatedColor = interpolate(color1, blend, color2)
 

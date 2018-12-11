@@ -1,9 +1,8 @@
 package io.sparkled.model.animation.fill
 
-import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
 
-class FillType : HasParams {
+class FillType {
 
     private var code: FillTypeCode? = null
     private var name: String? = null
@@ -27,7 +26,7 @@ class FillType : HasParams {
         return this
     }
 
-    override fun getParams(): List<Param> {
+    fun getParams(): List<Param> {
         return params
     }
 

@@ -23,14 +23,6 @@ let maxEndFrame = () => null;
 
 class EffectForm extends Component {
 
-  constructor(props) {
-    super(props);
-    this.updateEffect = this.updateEffect.bind(this);
-    this.deleteEffect = this.deleteEffect.bind(this);
-    this.renderParamFields = this.renderParamFields.bind(this);
-    this.renderParamField = this.renderParamField.bind(this);
-  }
-
   componentWillReceiveProps(newProps) {
     const { initialize, sequence, selectedEffect } = this.props;
 
@@ -105,73 +97,81 @@ class EffectForm extends Component {
 
   renderEffectPropertiesForm() {
     const { selectedEffect, effectTypes } = this.props;
+    const effectType = effectTypes[selectedEffect.type];
+
     return (
       <Fragment>
         <h5>Effect Type Properties</h5>
         <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required={true}
                validate={required} options={effectTypes} onChange={this.updateEffect}/>
-        {this.renderParamFields(selectedEffect.params)}
+        {this.renderArgumentFields(selectedEffect, effectType)}
       </Fragment>
     );
   }
 
   renderFillPropertiesForm() {
     const { selectedEffect, fillTypes } = this.props;
+    const fillType = fillTypes[selectedEffect.fill.type];
+
     return (
       <FormSection name="fill">
         <h5>Fill Properties</h5>
         <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required={true}
                validate={required} options={fillTypes} onChange={this.updateEffect}/>
-        {this.renderParamFields(selectedEffect.fill.params)}
+        {this.renderArgumentFields(selectedEffect.fill, fillType)}
       </FormSection>
     );
   }
 
   renderEasingPropertiesForm() {
     const { selectedEffect, easingTypes } = this.props;
+    const easingType = easingTypes[selectedEffect.easing.type];
+
     return (
       <FormSection name="easing">
         <h5>Easing Properties</h5>
         <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required={true}
                validate={required} options={easingTypes} onChange={this.updateEffect}/>
-        {this.renderParamFields(selectedEffect.easing.params)}
+        {this.renderArgumentFields(selectedEffect.easing, easingType)}
       </FormSection>
     );
   }
 
-  renderParamFields(params) {
-    return params.map(this.renderParamField);
+  renderArgumentFields(argParent, type) {
+    return argParent.args.map((arg, index) => {
+      const param = _.find(type.params, { code: arg.code });
+      return this.renderArgumentField(arg, param, index);
+    });
   }
 
-  renderParamField(param, index) {
-    const { easingTypes } = this.props;
-    const label = _.startCase(_.toLower(param.name));
-    const path = `params.${index}.value`;
+  renderArgumentField = (arg, param = {}, index) => {
+    const label = param.displayName;
+    const path = `args.${index}.value`;
 
     if (param.type === paramTypes.COLOR) {
       return (
-        <Field key={param.name} name={path + '.0'} component={ColorPickerField} label={label} allowEmpty={false} required={true}
-               validate={required} options={easingTypes} onChange={this.updateEffect}/>
+        <Field key={arg.code} name={path + '.0'} component={ColorPickerField} label={label} allowEmpty={false} required={true}
+               validate={required} onChange={this.updateEffect}/>
       );
     } else if (param.type === paramTypes.COLORS) {
       return (
-        <Field key={param.name} name={path} component={MultiColorPickerField} label={label} allowEmpty={false} required={true}
-               validate={required} options={easingTypes} onChange={this.updateEffect}/>
+        <Field key={arg.code} name={path} component={MultiColorPickerField} label={label} allowEmpty={false} required={true}
+               validate={required} onChange={this.updateEffect}/>
       );
     } else {
       return (
-        <Field key={param.name} name={path + '.0'} component={InputField} label={label} allowEmpty={false} required={true}
-               validate={required} options={easingTypes} onChange={this.updateEffect}/>
+        <Field key={arg.code} name={path + '.0'} component={InputField} label={label} allowEmpty={false} required={true}
+               validate={required} onChange={this.updateEffect}/>
       );
     }
   }
 
-  deleteEffect() {
+  deleteEffect = () => {
     const { selectedChannel, deleteEffect, selectedEffect } = this.props;
     deleteEffect(selectedChannel, selectedEffect);
   }
 
-  updateEffect(event, newValue, previousValue, name) {
+  updateEffect = (event, newValue, previousValue, path) => {
     const { effectTypes, fillTypes, easingTypes } = this.props;
 
     // Timeout is used to allow form to finish validation so we have the correct "invalid" value in props.
@@ -180,23 +180,27 @@ class EffectForm extends Component {
       const updatedEffect = produce(selectedEffect, draft => {
         draft.invalid = invalid;
 
-        // Convert a name path like "fill.params.1.value.0" to an array for _.set() and assign a value to that path.
-        _.set(draft, name.split('.'), newValue);
+        // Convert a name path like "fill.args.1.value.0" to an array for _.set() and assign a value to that path.
+        _.set(draft, path.split('.'), newValue);
 
-        if (name === 'type') {
+        if (path === 'type') {
           const newType = _.find(effectTypes, { code: newValue});
-          draft.params = _.cloneDeep(newType.params);
-        } else if (name === 'fill.type') {
+          draft.args = _.map(newType.params, this.convertParamToArgument);
+        } else if (path === 'fill.type') {
           const newFill = _.find(fillTypes, { code: newValue});
-          draft.fill.params = _.cloneDeep(newFill.params);
-        } else if (name === 'easing.type') {
+          draft.fill.args = _.map(newFill.params, this.convertParamToArgument);
+        } else if (path === 'easing.type') {
           const newEasing = _.find(easingTypes, { code: newValue});
-          draft.easing.params = _.cloneDeep(newEasing.params);
+          draft.easing.args = _.map(newEasing.params, this.convertParamToArgument);
         }
       });
 
       updateEffect(selectedChannel, updatedEffect);
     });
+  }
+
+  convertParamToArgument(param) {
+    return { code: param.code, value: param.defaultValue };
   }
 }
 

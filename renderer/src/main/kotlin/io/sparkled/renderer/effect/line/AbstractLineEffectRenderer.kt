@@ -1,6 +1,6 @@
 package io.sparkled.renderer.effect.line
 
-import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.renderer.context.RenderContext
 import io.sparkled.renderer.effect.EffectRenderer
 import io.sparkled.renderer.util.FillUtils
@@ -16,7 +16,7 @@ abstract class AbstractLineEffectRenderer : EffectRenderer() {
      */
     internal fun renderLine(ctx: RenderContext, startLed: Int, endLed: Int) {
         val direction = if (startLed < endLed) 1 else -1
-        val lineOffset = direction * ParamUtils.getDecimalValue(ctx.effect, ParamName.LENGTH, 1f)
+        val lineOffset = direction * ParamUtils.getDecimalValue(ctx.effect, ParamCode.LENGTH, 1f)
 
         val lineMin = startLed - lineOffset
         val lineMax = (endLed + direction).toFloat()

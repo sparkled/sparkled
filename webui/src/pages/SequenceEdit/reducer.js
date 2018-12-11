@@ -81,9 +81,9 @@ export default (state = initialState, action) => {
       case actionTypes.FETCH_REFERENCE_DATA_FULFILLED:
         const [effectTypes, fillTypes, easingTypes] = action.payload;
         draft.fetchingReferenceData = false;
-        draft.effectTypes = effectTypes.data;
-        draft.fillTypes = fillTypes.data;
-        draft.easingTypes = easingTypes.data;
+        draft.effectTypes = _.mapKeys(effectTypes.data, 'code');
+        draft.fillTypes = _.mapKeys(fillTypes.data, 'code');
+        draft.easingTypes = _.mapKeys(easingTypes.data, 'code');
         break;
 
       case actionTypes.FETCH_REFERENCE_DATA_REJECTED:

@@ -6,8 +6,8 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
-import io.sparkled.model.animation.param.ParamName
-import io.sparkled.model.util.ParamUtils.param
+import io.sparkled.model.animation.param.ParamCode
+import io.sparkled.model.util.ArgumentUtils.arg
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
 import org.hamcrest.MatcherAssert.assertThat
@@ -24,8 +24,8 @@ class FlashEffectRendererTest {
             easing = Easing(type = EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
-                params = listOf(
-                    param(name = ParamName.COLOR, value = "#ffffff")
+                args = listOf(
+                    arg(ParamCode.COLOR, "#ffffff")
                 )
             )
         )

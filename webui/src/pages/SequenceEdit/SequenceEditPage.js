@@ -138,15 +138,15 @@ class SequenceEditPage extends Component {
     const effect = {
       uuid: uuidv4(),
       type: 'FLASH',
-      params: [],
+      args: [],
       easing: {
         type: 'LINEAR',
-        params: []
+        args: []
       },
       fill: {
         type: 'SOLID',
-        params: [
-          { name: 'COLOR', type: 'COLOR', value: ['#ff0000'] }
+        args: [
+          { code: 'COLOR', value: ['#ff0000'] }
         ]
       },
       startFrame: currentFrame,

@@ -1,29 +1,29 @@
 package io.sparkled.model.animation.effect
 
-enum class EffectTypeCode {
+enum class EffectTypeCode(val displayName: String) {
 
     /**
      * Indicates that no type has been provided.
      */
-    NONE,
+    NONE("None"),
 
     /**
      * A single flash from black to full brightness, and back to black.
      */
-    FLASH,
+    FLASH("Flash"),
 
     /**
      * Flashing, stationary particles.
      */
-    GLITTER,
+    GLITTER("Glitter"),
 
     /**
      * A line moving along a stage prop.
      */
-    LINE,
+    LINE("Line"),
 
     /**
      * Two lines moving along a stage prop from a starting point.
      */
-    SPLIT_LINE
+    SPLIT_LINE("Split Line")
 }
