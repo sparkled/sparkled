@@ -10,6 +10,7 @@ import 'Raphael.FreeTransform';
 const ledRadius = 1.5;
 const strokeWidth = 4;
 const bytesPerLed = 3;
+const ledSkip = 3;
 
 class StageProp extends Component {
 
@@ -50,12 +51,15 @@ class StageProp extends Component {
       const offset = frameSize * (playbackFrame - currentFrame);
 
       _(this.state.leds).forEach((led, i) => {
-        const index = stageProp.reverse ? (ledCount - i - 1) : i;
-        const ledOffset = offset + (index * bytesPerLed);
-        const r = stagePropRenderData.data[ledOffset];
-        const g = stagePropRenderData.data[ledOffset + 1];
-        const b = stagePropRenderData.data[ledOffset + 2];
-        led.attr('fill', `rgb(${r}, ${g}, ${b})`);
+        // To improve playback performance, only render one third of the LEDs for a given frame.
+        if (i % ledSkip === playbackFrame % ledSkip) {
+          const index = stageProp.reverse ? (ledCount - i - 1) : i;
+          const ledOffset = offset + (index * bytesPerLed);
+          const r = stagePropRenderData.data[ledOffset];
+          const g = stagePropRenderData.data[ledOffset + 1];
+          const b = stagePropRenderData.data[ledOffset + 2];
+          led.attr('fill', `rgb(${r}, ${g}, ${b})`);
+        }
       });
     }
   }
