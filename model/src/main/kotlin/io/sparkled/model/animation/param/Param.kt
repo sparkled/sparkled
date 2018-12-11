@@ -1,7 +1,8 @@
 package io.sparkled.model.animation.param
 
 data class Param(
-    var name: ParamName = ParamName.NONE,
-    var type: ParamType = ParamType.NONE,
-    var value: List<String> = emptyList()
+    val code: ParamCode = ParamCode.NONE,
+    val displayName: String = ParamCode.NONE.displayName,
+    val type: ParamType = ParamType.NONE,
+    val defaultValue: List<String> = emptyList()
 )

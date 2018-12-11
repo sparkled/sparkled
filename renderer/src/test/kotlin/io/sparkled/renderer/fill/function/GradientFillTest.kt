@@ -6,9 +6,8 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
-import io.sparkled.model.animation.param.ParamName
-import io.sparkled.model.animation.param.ParamType
-import io.sparkled.model.util.ParamUtils.param
+import io.sparkled.model.animation.param.ParamCode
+import io.sparkled.model.util.ArgumentUtils.arg
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
 import org.hamcrest.MatcherAssert.assertThat
@@ -25,10 +24,10 @@ class GradientFillTest {
             easing = Easing(type = EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.GRADIENT,
-                params = listOf(
-                    param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
-                    param(name = ParamName.BLEND_HARDNESS, value = 0f),
-                    param(name = ParamName.CYCLES_PER_SECOND, value = 0f)
+                args = listOf(
+                    arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
+                    arg(ParamCode.BLEND_HARDNESS, 0f),
+                    arg(ParamCode.CYCLES_PER_SECOND, 0f)
                 )
             )
         )
@@ -60,10 +59,10 @@ class GradientFillTest {
             easing = Easing(type = EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.GRADIENT,
-                params = listOf(
-                    param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
-                    param(name = ParamName.BLEND_HARDNESS, value = 50f),
-                    param(name = ParamName.CYCLES_PER_SECOND, value = 0f)
+                args = listOf(
+                    arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
+                    arg(ParamCode.BLEND_HARDNESS, 50f),
+                    arg(ParamCode.CYCLES_PER_SECOND, 0f)
                 )
             )
         )
@@ -95,10 +94,10 @@ class GradientFillTest {
             easing = Easing(type = EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.GRADIENT,
-                params = listOf(
-                    param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
-                    param(name = ParamName.BLEND_HARDNESS, value = 100f),
-                    param(name = ParamName.CYCLES_PER_SECOND, value = 0f)
+                args = listOf(
+                    arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
+                    arg(ParamCode.BLEND_HARDNESS, 100f),
+                    arg(ParamCode.CYCLES_PER_SECOND, 0f)
                 )
             )
         )
@@ -129,15 +128,16 @@ class GradientFillTest {
             type = EffectTypeCode.FLASH,
             easing = Easing(
                 type = EasingTypeCode.CONSTANT,
-                params = listOf(
-                    param(name = ParamName.PERCENT, value = 50f)
-                )),
+                args = listOf(
+                    arg(ParamCode.PERCENT, 50f)
+                )
+            ),
             fill = Fill(
                 type = FillTypeCode.GRADIENT,
-                params = listOf(
-                    param(ParamName.COLORS, ParamType.COLORS, "#ff0000", "#0000ff", "#00ff00"),
-                    param(name = ParamName.BLEND_HARDNESS, value = 0f),
-                    param(name = ParamName.CYCLES_PER_SECOND, value = 6f)
+                args = listOf(
+                    arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
+                    arg(ParamCode.BLEND_HARDNESS, 0f),
+                    arg(ParamCode.CYCLES_PER_SECOND, 6f)
                 )
             )
         )

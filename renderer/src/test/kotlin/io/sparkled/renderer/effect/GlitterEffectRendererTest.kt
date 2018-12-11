@@ -6,8 +6,8 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
-import io.sparkled.model.animation.param.ParamName
-import io.sparkled.model.util.ParamUtils.param
+import io.sparkled.model.animation.param.ParamCode
+import io.sparkled.model.util.ArgumentUtils.arg
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
 import org.hamcrest.MatcherAssert.assertThat
@@ -21,15 +21,15 @@ class GlitterEffectRendererTest {
         val effect = Effect(
             endFrame = 29,
             type = EffectTypeCode.GLITTER,
-            params = listOf(
-                param(name = ParamName.DENSITY, value = 50),
-                param(name = ParamName.LIFETIME, value = .2f)
+            args = listOf(
+                arg(ParamCode.DENSITY, 50),
+                arg(ParamCode.LIFETIME, .2f)
             ),
             easing = Easing(type = EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
-                params = listOf(
-                    param(name = ParamName.COLOR, value = "0xff0000")
+                args = listOf(
+                    arg(ParamCode.COLOR, "0xff0000")
                 )
             )
         )

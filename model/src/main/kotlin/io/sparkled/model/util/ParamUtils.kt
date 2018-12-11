@@ -1,7 +1,7 @@
 package io.sparkled.model.util
 
 import io.sparkled.model.animation.param.Param
-import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.animation.param.ParamType
 
 /**
@@ -10,22 +10,22 @@ import io.sparkled.model.animation.param.ParamType
 object ParamUtils {
 
     /**
-     * @param name The parameter name.
+     * @param code The parameter code.
      * @param type The parameter type.
-     * @param value The parameter value.
+     * @param defaultValue The default parameter value.
      * @return The created parameter object.
      */
-    fun param(name: ParamName, type: ParamType = ParamType.NONE, value: Any): Param {
-        return Param(name, type, listOf(value.toString()))
+    fun param(code: ParamCode, type: ParamType = ParamType.NONE, defaultValue: Any): Param {
+        return Param(code, code.displayName, type, listOf(defaultValue.toString()))
     }
 
     /**
-     * @param name The parameter name.
+     * @param code The parameter code.
      * @param type The parameter type.
-     * @param value The parameter value.
+     * @param defaultValues The default parameter values.
      * @return The created parameter object.
      */
-    fun param(name: ParamName, type: ParamType = ParamType.NONE, vararg value: Any): Param {
-        return Param(name, type, value = value.map { it.toString() })
+    fun param(code: ParamCode, type: ParamType = ParamType.NONE, vararg defaultValues: Any): Param {
+        return Param(code, code.displayName, type, defaultValue = defaultValues.map { it.toString() })
     }
 }

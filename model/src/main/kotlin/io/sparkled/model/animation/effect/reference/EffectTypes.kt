@@ -3,27 +3,27 @@ package io.sparkled.model.animation.effect.reference
 import io.sparkled.model.animation.effect.EffectType
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.param.Param
-import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.animation.param.ParamType
 import io.sparkled.model.util.ParamUtils.param
 import java.util.Arrays
 
 object EffectTypes {
     private val TYPES = Arrays.asList(
-        effectType(EffectTypeCode.FLASH, "Flash"),
+        effectType(EffectTypeCode.FLASH),
         effectType(
-            EffectTypeCode.GLITTER, "Glitter",
-            param(ParamName.DENSITY, ParamType.DECIMAL, 50),
-            param(ParamName.LIFETIME, ParamType.DECIMAL, 1f),
-            param(ParamName.RANDOM_SEED, ParamType.INTEGER, 1)
+            EffectTypeCode.GLITTER,
+            param(ParamCode.DENSITY, ParamType.INTEGER, 50),
+            param(ParamCode.LIFETIME, ParamType.DECIMAL, 1f),
+            param(ParamCode.RANDOM_SEED, ParamType.INTEGER, 1)
         ),
         effectType(
-            EffectTypeCode.LINE, "Line",
-            param(ParamName.LENGTH, ParamType.DECIMAL, 1f)
+            EffectTypeCode.LINE,
+            param(ParamCode.LENGTH, ParamType.DECIMAL, 1f)
         ),
         effectType(
-            EffectTypeCode.SPLIT_LINE, "Split Line",
-            param(ParamName.LENGTH, ParamType.DECIMAL, 1f)
+            EffectTypeCode.SPLIT_LINE,
+            param(ParamCode.LENGTH, ParamType.DECIMAL, 1f)
         )
     )
 
@@ -31,7 +31,7 @@ object EffectTypes {
         return TYPES
     }
 
-    private fun effectType(effectType: EffectTypeCode, name: String, vararg params: Param): EffectType {
-        return EffectType().setCode(effectType).setName(name).setParams(listOf(*params))
+    private fun effectType(type: EffectTypeCode, vararg params: Param): EffectType {
+        return EffectType().setCode(type).setName(type.displayName).setParams(listOf(*params))
     }
 }

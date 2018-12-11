@@ -1,9 +1,8 @@
 package io.sparkled.model.animation.effect
 
-import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
 
-class EffectType : HasParams {
+class EffectType {
 
     private var code: EffectTypeCode? = null
     private var name: String? = null
@@ -27,7 +26,7 @@ class EffectType : HasParams {
         return this
     }
 
-    override fun getParams(): List<Param> {
+    fun getParams(): List<Param> {
         return params
     }
 

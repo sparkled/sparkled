@@ -1,9 +1,8 @@
 package io.sparkled.model.animation.easing
 
-import io.sparkled.model.animation.param.HasParams
 import io.sparkled.model.animation.param.Param
 
-class EasingType : HasParams {
+class EasingType {
 
     private var code: EasingTypeCode? = null
     private var name: String? = null
@@ -27,7 +26,7 @@ class EasingType : HasParams {
         return this
     }
 
-    override fun getParams(): List<Param> {
+    fun getParams(): List<Param> {
         return params
     }
 

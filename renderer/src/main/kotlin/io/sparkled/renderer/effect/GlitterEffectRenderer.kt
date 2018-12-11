@@ -1,6 +1,6 @@
 package io.sparkled.renderer.effect
 
-import io.sparkled.model.animation.param.ParamName
+import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.renderer.context.RenderContext
 import io.sparkled.renderer.util.FillUtils
 import io.sparkled.renderer.util.ParamUtils
@@ -13,11 +13,11 @@ class GlitterEffectRenderer : EffectRenderer() {
 
     override fun render(ctx: RenderContext) {
         val patternIndex =
-            (ParamUtils.getIntegerValue(ctx.effect, ParamName.DENSITY, 10) / 100f * (patterns.size - 1)).toInt()
-        val lifetime = ParamUtils.getDecimalValue(ctx.effect, ParamName.LIFETIME, 1f)
+            (ParamUtils.getIntegerValue(ctx.effect, ParamCode.DENSITY, 10) / 100f * (patterns.size - 1)).toInt()
+        val lifetime = ParamUtils.getDecimalValue(ctx.effect, ParamCode.LIFETIME, 1f)
         val lifetimeFrames = (ctx.sequence.getFramesPerSecond()!! * lifetime).toInt()
 
-        val random = Random(ParamUtils.getIntegerValue(ctx.effect, ParamName.RANDOM_SEED, 1))
+        val random = Random(ParamUtils.getIntegerValue(ctx.effect, ParamCode.RANDOM_SEED, 1))
         val frameNumber = ctx.frame.frameNumber
         val fadeAlpha = getFadeAlpha(ctx, lifetimeFrames)
 

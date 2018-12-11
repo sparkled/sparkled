@@ -1,14 +1,14 @@
 package io.sparkled.model.animation.easing
 
-import io.sparkled.model.animation.param.HasParams
-import io.sparkled.model.animation.param.Param
+import io.sparkled.model.animation.param.Argument
+import io.sparkled.model.animation.param.HasArguments
 
 data class Easing(
     var type: EasingTypeCode = EasingTypeCode.LINEAR,
-    private var params: List<Param> = emptyList()
-) : HasParams {
+    var args: List<Argument> = emptyList()
+) : HasArguments {
 
-    override fun getParams(): List<Param> {
-        return this.params
+    override fun getArguments(): List<Argument> {
+        return this.args
     }
 }

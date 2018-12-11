@@ -1,24 +1,24 @@
 package io.sparkled.model.animation.fill
 
-enum class FillTypeCode {
+enum class FillTypeCode(val displayName: String) {
 
     /**
      * Indicates that no type has been provided.
      */
-    NONE,
+    NONE("None"),
 
     /**
      * A gradient consisting of one or more colors.
      */
-    GRADIENT,
+    GRADIENT("Gradient"),
 
     /**
      * An approximation of a rainbow.
      */
-    RAINBOW,
+    RAINBOW("Rainbow"),
 
     /**
      * A single color.
      */
-    SOLID
+    SOLID("Solid")
 }

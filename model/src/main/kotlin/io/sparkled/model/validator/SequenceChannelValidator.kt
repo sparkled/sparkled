@@ -4,7 +4,7 @@ import com.google.gson.JsonSyntaxException
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
-import io.sparkled.model.animation.param.Param
+import io.sparkled.model.animation.param.Argument
 import io.sparkled.model.animation.param.ParamType
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.util.GsonProvider
@@ -69,15 +69,15 @@ class SequenceChannelValidator {
             throw EntityValidationException(String.format(Errors.EFFECT_REPETITIONS_INVALID, effect.startFrame))
         }
 
-        val params = effect.getParams()
-        for (param in params) {
-            validateEffectParam(effect, param)
+        val args = effect.getArguments()
+        for (arg in args) {
+            validateEffectArgument(effect, arg)
         }
     }
 
-    private fun validateEffectParam(effect: Effect, param: Param) {
-        if (param.type === ParamType.NONE) {
-            throw EntityValidationException(String.format(Errors.EFFECT_PARAM_TYPE_MISSING, effect.startFrame))
+    private fun validateEffectArgument(effect: Effect, argument: Argument) {
+        if (argument.code === ParamType.NONE) {
+            throw EntityValidationException(String.format(Errors.EFFECT_ARGUMENT_CODE_MISSING, effect.startFrame))
         }
     }
 
@@ -94,7 +94,7 @@ class SequenceChannelValidator {
         internal const val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d for channel."
         internal const val EFFECT_REPETITIONS_INVALID =
             "Effect repetitions cannot be less than 1 for effect at frame %d in channel."
-        internal const val EFFECT_PARAM_TYPE_MISSING =
-            "Effect parameter type cannot be empty for effect at frame %d in channel."
+        internal const val EFFECT_ARGUMENT_CODE_MISSING =
+            "Effect argument code cannot be empty for effect at frame %d in channel."
     }
 }
