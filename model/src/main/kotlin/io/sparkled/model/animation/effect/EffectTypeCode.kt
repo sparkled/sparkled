@@ -18,6 +18,11 @@ enum class EffectTypeCode(val displayName: String) {
     GLITTER("Glitter"),
 
     /**
+     * A line built up from falling segments.
+     */
+    BUILD_LINE("Build Line"),
+
+    /**
      * A line moving along a stage prop.
      */
     LINE("Line"),

@@ -15,4 +15,5 @@ enum class ParamCode constructor(val displayName: String) {
     PERCENT_FROM("From (%)"),
     PERCENT_TO("To (%)"),
     RANDOM_SEED("Random Seed"),
+    SEGMENTS("Number of Segments"),
 }
