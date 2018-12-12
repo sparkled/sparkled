@@ -29,8 +29,7 @@ class RequestHandlerImpl
             val response = getResponse(args)
             respond(serverSocket, receivePacket, response)
         } catch (e: Exception) {
-            logger.error("Failed to handle response.", e)
-            respond(serverSocket, receivePacket, emptyResponse)
+            logger.error("Failed to handle response for message '$message': ${e.message}")
         }
     }
 
@@ -39,7 +38,7 @@ class RequestHandlerImpl
         val settings = settingPersistenceService.settings
 
         val command = args[0]
-        val requestCommand = commands[command] ?: throw IllegalArgumentException("Unrecognised command: '$command'.")
+        val requestCommand = commands[command] ?: throw IllegalArgumentException("Unrecognised command '$command'.")
         return requestCommand.getResponse(args, settings, playbackState)
     }
 
@@ -52,6 +51,5 @@ class RequestHandlerImpl
 
     companion object {
         private val logger = LoggerFactory.getLogger(RequestHandlerImpl::class.java)
-        val emptyResponse = ByteArray(0)
     }
 }
