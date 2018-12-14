@@ -72,7 +72,7 @@ class PlaybackServiceImpl
         if (!playbackState.isEmpty) {
             musicPlayerService.play(playbackState)
         } else if (playlistIndex > 0) {
-            logger.info("Finished playlist {}, restarting.", playlist.getId())
+            logger.debug("Finished playlist {}, restarting.", playlist.getId())
             playSequenceAtIndex(playlist, 0)
         } else {
             logger.error("Failed to play playlist {}: playlist is empty.", playlist.getId())

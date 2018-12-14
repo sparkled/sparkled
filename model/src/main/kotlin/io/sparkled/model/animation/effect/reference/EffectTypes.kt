@@ -12,6 +12,10 @@ object EffectTypes {
     private val TYPES = Arrays.asList(
         effectType(EffectTypeCode.FLASH),
         effectType(
+            EffectTypeCode.BUILD_LINE,
+            param(ParamCode.SEGMENTS, ParamType.INTEGER, 4)
+        ),
+        effectType(
             EffectTypeCode.GLITTER,
             param(ParamCode.DENSITY, ParamType.INTEGER, 50),
             param(ParamCode.LIFETIME, ParamType.DECIMAL, 1),
