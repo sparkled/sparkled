@@ -8,7 +8,7 @@ import io.sparkled.rest.service.RestServiceHandler
 import javax.inject.Inject
 import javax.ws.rs.core.Response
 
-open class PlayerRestServiceHandler
+class PlayerRestServiceHandler
 @Inject constructor(
     private val playlistPersistenceService: PlaylistPersistenceService,
     private val playbackService: PlaybackService

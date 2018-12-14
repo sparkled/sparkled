@@ -23,14 +23,14 @@ let maxEndFrame = () => null;
 
 class EffectForm extends Component {
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(nextProps) {
     const { initialize, sequence, selectedEffect } = this.props;
 
-    if (selectedEffect !== newProps.selectedEffect) {
-      initialize(newProps.selectedEffect);
+    if (selectedEffect !== nextProps.selectedEffect) {
+      initialize(nextProps.selectedEffect);
     }
 
-    if (sequence !== newProps.sequence) {
+    if (sequence !== nextProps.sequence) {
       const max = sequence.frameCount - 1;
       maxEndFrame = value => value > max ? 'End frame cannot greater than ' + max : null;
     }

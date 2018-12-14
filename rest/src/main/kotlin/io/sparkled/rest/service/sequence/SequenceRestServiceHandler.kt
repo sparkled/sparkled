@@ -26,7 +26,7 @@ import javax.inject.Inject
 import javax.ws.rs.core.Response
 import kotlin.math.min
 
-open class SequenceRestServiceHandler
+class SequenceRestServiceHandler
 @Inject constructor(
     private val transaction: Transaction,
     private val sequencePersistenceService: SequencePersistenceService,

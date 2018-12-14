@@ -16,7 +16,7 @@ import javax.persistence.EntityManager
 /**
  * Performs an automated database schema upgrade.
  */
-open class SchemaUpdaterImpl
+class SchemaUpdaterImpl
 @Inject constructor(
     private val entityManagerProvider: Provider<EntityManager>,
     private val transaction: Transaction

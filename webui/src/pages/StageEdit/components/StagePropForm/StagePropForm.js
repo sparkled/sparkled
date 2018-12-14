@@ -24,10 +24,10 @@ class StagePropForm extends Component {
     this.updateStageProp = this.updateStageProp.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(nextProps) {
     const { initialize, stageProp } = this.props;
-    if (stageProp !== newProps.stageProp) {
-      initialize(newProps.stageProp);
+    if (stageProp !== nextProps.stageProp) {
+      initialize(nextProps.stageProp);
     }
   }
 

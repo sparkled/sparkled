@@ -11,7 +11,7 @@ import java.io.InputStream
 import javax.inject.Inject
 import javax.ws.rs.core.Response
 
-open class SongRestServiceHandler
+class SongRestServiceHandler
 @Inject constructor(
     private val transaction: Transaction,
     private val songPersistenceService: SongPersistenceService,

@@ -16,17 +16,17 @@ class TimelineEffect extends Component {
     this.rndRef = React.createRef();
   }
 
-  shouldComponentUpdate(newProps) {
+  shouldComponentUpdate(nextProps) {
     const { effect, selectedEffect } = this.props;
-    const effectChanged = effect !== newProps.effect;
-    const selectedEffectChanged = (effect === selectedEffect) !== (newProps.effect === newProps.selectedEffect);
+    const effectChanged = effect !== nextProps.effect;
+    const selectedEffectChanged = (effect === selectedEffect) !== (nextProps.effect === nextProps.selectedEffect);
 
     return effectChanged || selectedEffectChanged;
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.rndRef.current) {
-      const dimensions = this.getDimensions(newProps);
+      const dimensions = this.getDimensions(nextProps);
       this.rndRef.current.updateSize(dimensions);
       this.rndRef.current.updatePosition(dimensions);
     }

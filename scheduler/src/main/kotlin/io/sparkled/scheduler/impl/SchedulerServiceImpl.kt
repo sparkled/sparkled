@@ -103,7 +103,7 @@ class SchedulerServiceImpl
 
     @Synchronized
     private fun setBrightness(job: ScheduledJob) {
-        val brightness = (job.value ?: "0").toInt()
+        val brightness = (job.value ?: "0")
 
         unitOfWork.begin()
         try {
