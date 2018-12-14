@@ -53,10 +53,10 @@ class SettingPersistenceServiceImpl
         }).get()
     }
 
-    override fun setBrightness(brightness: Int) {
-        val setting = Setting().setCode(SettingsConstants.Brightness.CODE).setValue(brightness.toString())
+    override fun setBrightness(brightness: String) {
+        val setting = Setting().setCode(SettingsConstants.Brightness.CODE).setValue(brightness)
         SaveSettingQuery(setting).perform(queryFactory)
-        settingsCache = SettingsCache(brightness)
+        settingsCache = SettingsCache(brightness.toInt())
     }
 
     private fun getBrightness(settingsMap: Map<String, Setting>): Int {

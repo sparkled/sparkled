@@ -12,11 +12,21 @@ import stageListReducer from './StageList/reducer';
 
 const undoableFilter = action => action.undoable === true;
 
-const sharedReducer = (state = {}, action) => {
+const initialState = {
+  brightness: null
+};
+
+const sharedReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SET_CURRENT_PAGE:
       const { pageTitle, pageClass } = action.payload;
       return { ...state, pageTitle, pageClass };
+
+    case actionTypes.FETCH_BRIGHTNESS_PENDING:
+      return { ...state, brightness: null };
+
+    case actionTypes.FETCH_BRIGHTNESS_FULFILLED:
+      return { ...state, brightness: Number(action.payload.data.value) };
 
     default:
       return state;

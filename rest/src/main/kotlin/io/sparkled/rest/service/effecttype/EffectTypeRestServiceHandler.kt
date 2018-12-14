@@ -5,7 +5,7 @@ import io.sparkled.rest.service.RestServiceHandler
 
 import javax.ws.rs.core.Response
 
-open class EffectTypeRestServiceHandler : RestServiceHandler() {
+class EffectTypeRestServiceHandler : RestServiceHandler() {
 
     fun get(): Response {
         return respondOk(EffectTypes.get())

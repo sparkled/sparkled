@@ -11,7 +11,7 @@ import io.sparkled.viewmodel.scheduledjob.search.ScheduledJobSearchViewModelConv
 import javax.inject.Inject
 import javax.ws.rs.core.Response
 
-open class ScheduledJobRestServiceHandler
+class ScheduledJobRestServiceHandler
 @Inject constructor(
     private val transaction: Transaction,
     private val scheduledJobPersistenceService: ScheduledJobPersistenceService,
