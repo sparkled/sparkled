@@ -16,6 +16,12 @@ class PlaybackFrameIndicator extends Component {
     subscribe(eventType.RENDER_DATA, key, this.updateIndicator);
   }
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (!nextProps.renderData) {
+      this.updateIndicator({ renderData: null });
+    }
+  }
+
   render() {
     const style = {
       width: this.props.pixelsPerFrame,
@@ -45,8 +51,8 @@ class PlaybackFrameIndicator extends Component {
 
 function mapStateToProps({ page }) {
   const { present } = page.sequenceEdit;
-  const { currentFrame, pixelsPerFrame } = present;
-  return { currentFrame, pixelsPerFrame };
+  const { currentFrame, pixelsPerFrame, renderData } = present;
+  return { currentFrame, pixelsPerFrame, renderData };
 }
 
 export default connect(mapStateToProps, {})(PlaybackFrameIndicator);
