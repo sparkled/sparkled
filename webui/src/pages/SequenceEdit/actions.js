@@ -102,6 +102,12 @@ export const previewRender = (sequence, startFrame, frameCount) => {
   };
 };
 
+export const cancelRender = () => {
+  return {
+    type: actionTypes.CANCEL_RENDER
+  };
+};
+
 export const updateEffect = (channel, effect) => {
   return {
     type: actionTypes.UPDATE_EFFECT,

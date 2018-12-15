@@ -12,6 +12,7 @@ import { setCurrentPage } from '../actions';
 import StageCanvas from '../StageEdit/components/StageCanvas';
 import {
   addEffect,
+  cancelRender,
   copyEffect,
   pasteEffect,
   previewRender,
@@ -48,7 +49,8 @@ class SequenceEditPage extends Component {
     Mousetrap.bind('del', this.deleteSelectedEffect);
     Mousetrap.bind('mod+z', this.undo);
     Mousetrap.bind('mod+shift+z', this.redo);
-    Mousetrap.bind('mod+space', this.previewRender);
+    Mousetrap.bind('ctrl+space', this.previewRender);
+    Mousetrap.bind('esc', this.props.cancelRender);
   }
 
   deleteSelectedEffect = () => {
@@ -211,7 +213,8 @@ class SequenceEditPage extends Component {
     Mousetrap.unbind('mod+v');
     Mousetrap.unbind('mod+z');
     Mousetrap.unbind('mod+shift+z');
-    Mousetrap.unbind('mod+space');
+    Mousetrap.unbind('ctrl+space');
+    Mousetrap.unbind('esc');
   }
 }
 
@@ -234,6 +237,7 @@ export default connect(mapStateToProps, {
   fetchSequenceStage,
   fetchReferenceData,
   addEffect,
+  cancelRender,
   copyEffect,
   pasteEffect,
   previewRender,

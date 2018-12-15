@@ -26,6 +26,7 @@ const initialState = {
   selectedEffect: null,
   currentFrame: 0,
   playbackFrame: null,
+  playbackRate: 1,
   pixelsPerFrame: 2,
   copiedEffect: null
 };
@@ -141,6 +142,13 @@ export default (state = initialState, action) => {
           };
 
           addEffect(draft, effect);
+        }
+        break;
+
+      case actionTypes.CANCEL_RENDER:
+        if (draft.renderData !== null) {
+          draft.fetchingRenderData = false;
+          draft.renderData = null;
         }
         break;
 
