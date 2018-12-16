@@ -1,3 +1,5 @@
+import Mousetrap from 'mousetrap';
+import Slider from 'rc-slider';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
@@ -5,6 +7,7 @@ import SplitPane from 'react-split-pane';
 import { Nav, NavItem } from 'reactstrap';
 import { ActionCreators } from 'redux-undo';
 import uuidv4 from 'uuid/v4';
+import { PlaybackSpeeds } from './playbackSpeeds';
 import * as sequenceStatuses from '../SequenceList/sequenceStatuses';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
@@ -16,6 +19,8 @@ import {
   copyEffect,
   pasteEffect,
   previewRender,
+  adjustPreviewDuration,
+  adjustPlaybackSpeed,
   deleteEffect,
   fetchReferenceData,
   fetchSequence,
@@ -27,11 +32,9 @@ import AddChannelModal from './components/AddChannelModal';
 import EffectForm from './components/EffectForm';
 import Timeline from './components/Timeline';
 import './SequenceEditPage.css';
-import Mousetrap from "mousetrap";
 
 const { undo, redo, clearHistory } = ActionCreators;
 
-const RENDER_PREVIEW_SECONDS = 5;
 const NEW_EFFECT_FRAMES = 10;
 
 class SequenceEditPage extends Component {
@@ -71,8 +74,8 @@ class SequenceEditPage extends Component {
   }
 
   previewRender = () => {
-    const { currentFrame, previewRender, sequence } = this.props;
-    previewRender(sequence, currentFrame, sequence.framesPerSecond * RENDER_PREVIEW_SECONDS);
+    const { currentFrame, previewDuration, previewRender, sequence } = this.props;
+    previewRender(sequence, currentFrame, sequence.framesPerSecond * previewDuration);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -98,11 +101,19 @@ class SequenceEditPage extends Component {
   }
 
   renderNavbar() {
-    const { canUndo, canRedo, undo, redo, sequence, stage, selectedChannel, saving } = this.props;
+    const { canUndo, canRedo, undo, redo, sequence, stage, selectedChannel, saving, previewDuration, playbackSpeed } = this.props;
     const loaded = sequence && stage;
 
     return (
       <Nav className="ml-auto" navbar>
+
+        <NavItem className={(!saving && loaded) ? 'd-flex align-items-center mr-3' : 'd-none'}>
+          <input type="number" min={1} style={{width: 50}} value={previewDuration} onChange={this.adjustPreviewDuration}/>
+        </NavItem>
+        <NavItem className={(!saving && loaded) ? 'd-flex align-items-center mr-3' : 'd-none'}>
+          <Slider min={0} max={PlaybackSpeeds.length - 1} defaultValue={playbackSpeed} style={{width: 50}} onChange={this.adjustPlaybackSpeed}/>
+        </NavItem>
+
         <NavItem className={(!saving && loaded && canUndo) ? '' : 'd-none'}>
           <span className="nav-link" onClick={() => undo()}>Undo</span>
         </NavItem>
@@ -123,6 +134,15 @@ class SequenceEditPage extends Component {
         </NavItem>
       </Nav>
     );
+  }
+
+  adjustPreviewDuration = event => {
+    const duration = Math.max(1, Number(event.target.value));
+    this.props.adjustPreviewDuration(duration);
+  }
+
+  adjustPlaybackSpeed = speedIndex => {
+    this.props.adjustPlaybackSpeed(speedIndex);
   }
 
   saveSequence = () => {
@@ -220,10 +240,10 @@ class SequenceEditPage extends Component {
 
 function mapStateToProps({ page }) {
   const { past, present, future } = page.sequenceEdit;
-  const { saving, saveError, sequence, stage, currentFrame, selectedChannel, selectedEffect, pixelsPerFrame } = present;
+  const { saving, saveError, sequence, stage, currentFrame, previewDuration, playbackSpeed, selectedChannel, selectedEffect, pixelsPerFrame } = present;
 
   return {
-    saving, saveError, sequence, stage, currentFrame, selectedChannel, selectedEffect, pixelsPerFrame,
+    saving, saveError, sequence, stage, currentFrame, previewDuration, playbackSpeed, selectedChannel, selectedEffect, pixelsPerFrame,
     fetching: present.fetchingSequence || present.fetchingStage || present.fetchingReferenceData,
     fetchError: present.fetchSequenceError || present.fetchStageError || present.fetchReferenceDataError,
     canUndo: past.length > 1,
@@ -241,6 +261,8 @@ export default connect(mapStateToProps, {
   copyEffect,
   pasteEffect,
   previewRender,
+  adjustPreviewDuration,
+  adjustPlaybackSpeed,
   deleteEffect,
   showAddChannelModal,
   saveSequence,

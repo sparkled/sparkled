@@ -3,6 +3,7 @@ import _ from 'lodash';
 import uuidv4 from 'uuid/v4';
 import { getResponseError } from '../../utils/reducerUtils';
 import * as actionTypes from './actionTypes';
+import { NormalSpeed } from './playbackSpeeds';
 
 const initialState = {
   fetchingSequence: false,
@@ -26,7 +27,8 @@ const initialState = {
   selectedEffect: null,
   currentFrame: 0,
   playbackFrame: null,
-  playbackRate: 1,
+  playbackSpeed: NormalSpeed,
+  previewDuration: 5,
   pixelsPerFrame: 2,
   copiedEffect: null
 };
@@ -150,6 +152,14 @@ export default (state = initialState, action) => {
           draft.fetchingRenderData = false;
           draft.renderData = null;
         }
+        break;
+
+      case actionTypes.ADJUST_PREVIEW_DURATION:
+        draft.previewDuration = action.payload.previewDuration;
+        break;
+
+      case actionTypes.ADJUST_PLAYBACK_SPEED:
+        draft.playbackSpeed = action.payload.playbackSpeed;
         break;
 
       case actionTypes.FETCH_RENDER_PREVIEW_DATA_PENDING:

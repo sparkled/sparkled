@@ -102,6 +102,20 @@ export const previewRender = (sequence, startFrame, frameCount) => {
   };
 };
 
+export const adjustPreviewDuration = previewDuration => {
+  return {
+    type: actionTypes.ADJUST_PREVIEW_DURATION,
+    payload: { previewDuration }
+  };
+};
+
+export const adjustPlaybackSpeed = playbackSpeed => {
+  return {
+    type: actionTypes.ADJUST_PLAYBACK_SPEED,
+    payload: { playbackSpeed }
+  };
+};
+
 export const cancelRender = () => {
   return {
     type: actionTypes.CANCEL_RENDER

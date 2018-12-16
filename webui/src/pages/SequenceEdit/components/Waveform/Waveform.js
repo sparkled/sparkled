@@ -5,6 +5,7 @@ import './Waveform.css';
 import { selectFrame } from '../../actions';
 import * as restConfig from '../../../../config/restConfig';
 import { eventType, publish } from '../../../../utils/eventBus';
+import { PlaybackSpeeds } from '../../playbackSpeeds';
 
 class Waveform extends Component {
 
@@ -17,11 +18,18 @@ class Waveform extends Component {
   componentWillReceiveProps(nextProps) {
     const { props, waveSurfer } = this;
 
-    if (waveSurfer && props.renderData !== nextProps.renderData) {
+    if (!waveSurfer) {
+      return;
+    }
+
+    if (props.playbackSpeed !== nextProps.playbackSpeed) {
+      waveSurfer.setPlaybackRate(PlaybackSpeeds[nextProps.playbackSpeed]);
+    }
+
+    if (props.renderData !== nextProps.renderData) {
       this.performWithoutSeek(() => {
         if (nextProps.renderData) {
           const { currentFrame, sequence } = nextProps;
-
           waveSurfer.seekTo(currentFrame / sequence.frameCount);
           waveSurfer.play();
         } else {
@@ -101,8 +109,8 @@ class Waveform extends Component {
 }
 
 function mapStateToProps({ page }) {
-  const { currentFrame, sequence, pixelsPerFrame, renderData } = page.sequenceEdit.present;
-  return { currentFrame, sequence, pixelsPerFrame, renderData };
+  const { currentFrame, sequence, pixelsPerFrame, playbackSpeed, renderData } = page.sequenceEdit.present;
+  return { currentFrame, sequence, pixelsPerFrame, playbackSpeed, renderData };
 }
 
 export default connect(mapStateToProps, { selectFrame })(Waveform);
