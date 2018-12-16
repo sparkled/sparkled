@@ -4,4 +4,5 @@
   bottom: 10px;
   margin-left: 100px;
   background: rgba(0, 162, 211, .8);
+  z-index: 9;
 }

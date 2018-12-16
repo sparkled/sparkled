@@ -7,8 +7,12 @@
   border-left: none;
 }
 
+.timeline .channel-active {
+  background: rgba(0, 0, 0, .4);
+}
+
 .timeline .channel-active .label {
-  color: #ff0;
+  color: #3d86de;
 }
 
 .timeline .channel {
