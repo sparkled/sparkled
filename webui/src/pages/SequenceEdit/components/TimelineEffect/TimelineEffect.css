@@ -1,0 +1,20 @@
+.TimelineEffect {
+  position: absolute;
+  height: 100%;
+  background: #5bc0de;
+  border: 1px solid rgba(255, 255, 255, .5);
+}
+
+.TimelineEffect.Active {
+  background: #3d86de;
+}
+
+.TimelineEffect.Invalid {
+  background: #900;
+}
+
+.TimelineEffectRepetition {
+  position: absolute;
+  height: 100%;
+  border: 1px dashed #3d86de;
+}

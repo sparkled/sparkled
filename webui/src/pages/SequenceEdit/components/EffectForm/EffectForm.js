@@ -17,6 +17,7 @@ import './EffectForm.css';
 const toNumber = value => !value ? null : Number(value);
 const minStartFrame = min(0);
 const minRepetitions = min(1);
+const minRepetitionSpacing = min(0);
 const maxStartFrame = (value, effect) => value > effect.endFrame ? 'Start frame cannot be greater than end frame' : null;
 const minEndFrame = (value, effect) => value < effect.startFrame ? 'End frame cannot be less than start frame' : null;
 let maxEndFrame = () => null;
@@ -81,9 +82,13 @@ class EffectForm extends Component {
                  label="Repetitions" required={true} validate={[required, minRepetitions]}
                  onChange={this.updateEffect}/>
 
-          <Field className="col-6" type="checkbox" name="reverse" component={InputField} label="Reverse"
+          <Field className="col-6" type="number" parse={toNumber} name="repetitionSpacing" component={InputField}
+                 label="Rep Spacing" required={true} validate={[required, minRepetitionSpacing]}
                  onChange={this.updateEffect}/>
         </div>
+
+        <Field className="col-6" type="checkbox" name="reverse" component={InputField} label="Reverse"
+               onChange={this.updateEffect}/>
 
         <hr/>
         {this.renderEffectPropertiesForm()}

@@ -53,7 +53,9 @@ class Renderer(
     private fun renderEffect(sequence: Sequence, data: RenderedStagePropData, prop: StageProp, effect: Effect) {
         repeat(effect.repetitions) {
             val duration = effect.endFrame - effect.startFrame + 1
-            val newStartFrame = effect.startFrame + (duration * it)
+
+            val spacedDuration = duration + effect.repetitionSpacing
+            val newStartFrame = effect.startFrame + (spacedDuration * it)
 
             val effectRepetition = effect.copy(startFrame = newStartFrame, endFrame = newStartFrame + duration - 1)
             renderRepetition(sequence, data, prop, effectRepetition)

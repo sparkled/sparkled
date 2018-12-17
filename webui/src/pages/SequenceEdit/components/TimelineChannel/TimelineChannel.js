@@ -8,16 +8,25 @@ import './TimelineChannel.css';
 class TimelineChannel extends Component {
 
   render() {
-    const { channel, sequence, selectedChannel } = this.props;
-    const width = sequence.frameCount * 2;
-    const activeClass = (selectedChannel && channel.uuid === selectedChannel.uuid) ? 'channel-active' : '';
-    const effects = _.map(channel.effects, effect => <TimelineEffect key={effect.uuid} channel={channel} effect={effect}/>);
+    const { channel, pixelsPerFrame, sequence, selectedChannel } = this.props;
+    const width = sequence.frameCount * pixelsPerFrame;
+
+    const isActiveChannel = selectedChannel && channel.uuid === selectedChannel.uuid;
+    const activeClass = isActiveChannel ? 'channel-active' : '';
 
     return (
       <div className={'channel ' + activeClass} style={{ width }} onMouseDown={this.onChannelClick}>
         <div className="label" onMouseDown={this.onLabelClick}>{channel.name}</div>
-        {effects}
+        {this.renderEffects()}
       </div>
+    );
+  }
+
+  renderEffects() {
+    const { channel } = this.props;
+    return _.map(
+      channel.effects,
+      effect => <TimelineEffect key={effect.uuid} channel={channel} effect={effect}/>
     );
   }
 

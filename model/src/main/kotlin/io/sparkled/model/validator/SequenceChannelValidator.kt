@@ -67,6 +67,10 @@ class SequenceChannelValidator {
             throw EntityValidationException(String.format(Errors.EFFECT_REPETITIONS_INVALID, effect.startFrame))
         }
 
+        if (effect.repetitionSpacing < 0) {
+            throw EntityValidationException(String.format(Errors.EFFECT_REPETITION_SPACING_INVALID, effect.startFrame))
+        }
+
         val args = effect.getArguments()
         for (arg in args) {
             validateEffectArgument(effect, arg)
@@ -92,6 +96,8 @@ class SequenceChannelValidator {
         internal const val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d for channel."
         internal const val EFFECT_REPETITIONS_INVALID =
             "Effect repetitions cannot be less than 1 for effect at frame %d in channel."
+        internal const val EFFECT_REPETITION_SPACING_INVALID =
+            "Effect repetition spacing cannot be less than 0 for effect at frame %d in channel."
         internal const val EFFECT_ARGUMENT_CODE_MISSING =
             "Effect argument code cannot be empty for effect at frame %d in channel."
     }

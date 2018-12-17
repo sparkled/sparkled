@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Rnd } from 'react-rnd';
@@ -8,11 +9,6 @@ class TimelineEffect extends Component {
 
   constructor(props) {
     super(props);
-    this.onEffectMove = this.onEffectMove.bind(this);
-    this.onEffectResize = this.onEffectResize.bind(this);
-    this.onEffectClick = this.onEffectClick.bind(this);
-    this.moveEffect = this.moveEffect.bind(this);
-    this.selectEffect = this.selectEffect.bind(this);
     this.rndRef = React.createRef();
   }
 
@@ -36,27 +32,30 @@ class TimelineEffect extends Component {
     const dimensions = this.getDimensions(this.props);
 
     return (
-      <Rnd className={'effect ' + this.getEffectClass()} ref={this.rndRef}
-           bounds="parent"
-           default={dimensions}
-           enableResizing={{ left: true, right: true }}
-           dragAxis="x"
-           dragGrid={[2, 0]}
-           resizeGrid={[2, 0]}
-           onMouseDown={this.onEffectClick}
-           onDragStart={this.selectEffect}
-           onDragStop={this.onEffectMove}
-           onResizeStart={this.selectEffect}
-           onResizeStop={this.onEffectResize}/>
+      <>
+        <Rnd className={'TimelineEffect ' + this.getEffectClass()} ref={this.rndRef}
+             bounds="parent"
+             default={dimensions}
+             enableResizing={{ left: true, right: true }}
+             dragAxis="x"
+             dragGrid={[2, 0]}
+             resizeGrid={[2, 0]}
+             onMouseDown={this.onEffectClick}
+             onDragStart={this.selectEffect}
+             onDragStop={this.onEffectMove}
+             onResizeStart={this.selectEffect}
+             onResizeStop={this.onEffectResize}/>
+        {this.renderRepetitions()}
+      </>
     );
   }
 
   getEffectClass() {
     const { effect, selectedEffect } = this.props;
     if (selectedEffect && effect.uuid === selectedEffect.uuid) {
-      return 'effect-active';
+      return 'Active';
     } else if (effect.invalid) {
-      return 'effect-invalid';
+      return 'Invalid';
     } else {
       return '';
     }
@@ -69,7 +68,7 @@ class TimelineEffect extends Component {
     return { width, height: 'inherit', x, y: 0 };
   }
 
-  onEffectMove(event, data) {
+  onEffectMove = (event, data) => {
     const { effect } = this.props;
     const startFrame = Math.floor(data.x / 2);
     const endFrame = Math.round(startFrame + (effect.endFrame - effect.startFrame));
@@ -77,7 +76,7 @@ class TimelineEffect extends Component {
     this.moveEffect(startFrame, endFrame);
   }
 
-  onEffectResize(event, data, ref, delta, position) {
+  onEffectResize = (event, data, ref, delta, position) => {
     const { effect } = this.props;
     const isLeft = (data === 'left');
 
@@ -93,7 +92,7 @@ class TimelineEffect extends Component {
     this.moveEffect(startFrame, endFrame);
   }
 
-  moveEffect(startFrame, endFrame) {
+  moveEffect = (startFrame, endFrame) => {
     const { channel, effect, sequence } = this.props;
 
     startFrame = Math.max(startFrame, 0);
@@ -104,20 +103,36 @@ class TimelineEffect extends Component {
     }
   }
 
-  onEffectClick(event) {
+  onEffectClick = event => {
     this.selectEffect();
     event.stopPropagation(); // Prevent channel click handler from firing and deselecting the effect.
   }
 
-  selectEffect() {
+  selectEffect = () => {
     const { channel, effect } = this.props;
     this.props.selectEffect(channel, effect);
+  }
+
+  renderRepetitions() {
+    const { effect, pixelsPerFrame, selectedEffect } = this.props;
+    const { endFrame, repetitions = 1, repetitionSpacing = 0, startFrame, uuid } = effect;
+    if (selectedEffect && uuid === selectedEffect.uuid && repetitions > 1) {
+      const duration = endFrame - startFrame + 1;
+      const width = duration * pixelsPerFrame;
+
+      return _.map(Array(repetitions - 1), (_, i) => {
+        const left = (startFrame + ((duration + repetitionSpacing) * (i + 1))) * pixelsPerFrame;
+        return <div key={`${uuid}-${i}`} className="TimelineEffectRepetition" style={{left, width}}/>;
+      });
+    } else {
+      return [];
+    }
   }
 }
 
 function mapStateToProps({ page }) {
-  const { sequence, selectedEffect } = page.sequenceEdit.present;
-  return { sequence, selectedEffect };
+  const { pixelsPerFrame, sequence, selectedEffect } = page.sequenceEdit.present;
+  return { pixelsPerFrame, sequence, selectedEffect };
 }
 
 export default connect(mapStateToProps, { selectEffect, updateEffect })(TimelineEffect);
