@@ -16,6 +16,7 @@ data class Effect(
     var startFrame: Int = 0,
     var endFrame: Int = 0,
     var repetitions: Int = 1,
+    var repetitionSpacing: Int = 0,
     var reverse: Boolean = false
 ) : HasArguments {
 

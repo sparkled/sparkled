@@ -35,19 +35,3 @@
 .timeline .time-indicator {
   margin: 1px 0 1px 100px;
 }
-
-.timeline .effect {
-  position: absolute;
-  height: 100%;
-  background: #5bc0de;
-  border: 1px solid rgba(255, 255, 255, .5);
-}
-
-.timeline .effect-active {
-  background: #3d86de;
-}
-
-.timeline .effect-invalid {
-  background: #900;
-}
-
