@@ -43,6 +43,8 @@ class StagePropValidator {
             throw EntityValidationException(Errors.SCALE_Y_MISSING)
         } else if (stageProp.getRotation() == null || stageProp.getRotation()!! < -180 || stageProp.getRotation()!! > 180) {
             throw EntityValidationException(Errors.ROTATION_INVALID)
+        } else if (stageProp.getBrightness() == null || stageProp.getBrightness()!! < 0 || stageProp.getBrightness()!! > 100) {
+            throw EntityValidationException(Errors.BRIGHTNESS_INVALID)
         } else if (stageProp.getDisplayOrder() == null) {
             throw EntityValidationException(Errors.DISPLAY_ORDER_MISSING)
         }
@@ -61,6 +63,7 @@ class StagePropValidator {
         internal const val SCALE_X_MISSING = "Stage prop X scale must not be empty."
         internal const val SCALE_Y_MISSING = "Stage prop X scale must not be empty."
         internal const val ROTATION_INVALID = "Stage prop rotation must be between -180 and 180 degrees."
+        internal const val BRIGHTNESS_INVALID = "Stage prop brightness must be between 0% and 100%."
         internal const val DISPLAY_ORDER_MISSING = "Stage prop X display order must not be empty."
     }
 }

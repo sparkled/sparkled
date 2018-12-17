@@ -60,6 +60,10 @@ class StageProp {
     private var rotation: Int? = null
 
     @Basic
+    @Column(name = "brightness")
+    private var brightness: Int? = null
+
+    @Basic
     @Column(name = "display_order")
     private var displayOrder: Int? = null
 
@@ -175,6 +179,15 @@ class StageProp {
         return displayOrder
     }
 
+    fun getBrightness(): Int? {
+        return brightness
+    }
+
+    fun setBrightness(brightness: Int?): StageProp {
+        this.brightness = brightness
+        return this
+    }
+
     fun setDisplayOrder(displayOrder: Int?): StageProp {
         this.displayOrder = displayOrder
         return this
@@ -198,6 +211,7 @@ class StageProp {
         if (scaleX != other.scaleX) return false
         if (scaleY != other.scaleY) return false
         if (rotation != other.rotation) return false
+        if (brightness != other.brightness) return false
         if (displayOrder != other.displayOrder) return false
 
         return true
@@ -216,11 +230,12 @@ class StageProp {
         result = 31 * result + (scaleX?.hashCode() ?: 0)
         result = 31 * result + (scaleY?.hashCode() ?: 0)
         result = 31 * result + (rotation ?: 0)
+        result = 31 * result + (brightness ?: 0)
         result = 31 * result + (displayOrder ?: 0)
         return result
     }
 
     override fun toString(): String {
-        return "StageProp(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, reverse=$reverse, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, displayOrder=$displayOrder)"
+        return "StageProp(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, reverse=$reverse, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, brightness=$brightness, displayOrder=$displayOrder)"
     }
 }

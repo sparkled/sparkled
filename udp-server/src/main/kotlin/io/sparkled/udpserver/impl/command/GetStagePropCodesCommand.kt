@@ -1,5 +1,6 @@
 package io.sparkled.udpserver.impl.command
 
+import io.sparkled.model.entity.StageProp
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.music.PlaybackState
 import java.nio.charset.StandardCharsets.UTF_8
@@ -17,7 +18,9 @@ class GetStagePropCodesCommand : RequestCommand() {
             return emptyResponse
         }
 
-        val props = playbackState.stagePropUuids.keys.joinToString(":")
+        val stageProps = playbackState.stageProps.values
+        val props = stageProps.map(StageProp::getUuid).joinToString(":")
+
         val bytes = props.toByteArray(UTF_8)
         return if (bytes.isEmpty()) ByteArray(0) else bytes
     }

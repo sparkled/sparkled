@@ -24,8 +24,6 @@ interface SequencePersistenceService {
 
     fun getRenderedStagePropsBySequenceAndSong(sequence: Sequence, song: Song): RenderedStagePropDataMap
 
-    fun getSequenceStagePropUuidMapBySequenceId(sequenceId: Int): Map<String, UUID>
-
     fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>): Sequence
 
     fun publishSequence(sequence: Sequence, channels: List<SequenceChannel>, data: RenderedStagePropDataMap)

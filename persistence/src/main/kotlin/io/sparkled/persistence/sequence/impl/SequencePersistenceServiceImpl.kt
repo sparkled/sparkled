@@ -14,7 +14,6 @@ import io.sparkled.persistence.sequence.impl.query.GetRenderedStagePropsBySequen
 import io.sparkled.persistence.sequence.impl.query.GetSequenceByIdQuery
 import io.sparkled.persistence.sequence.impl.query.GetSequenceChannelByUuidQuery
 import io.sparkled.persistence.sequence.impl.query.GetSequenceChannelsBySequenceIdQuery
-import io.sparkled.persistence.sequence.impl.query.GetSequenceStagePropUuidMapBySequenceIdQuery
 import io.sparkled.persistence.sequence.impl.query.GetSongAudioBySequenceIdQuery
 import io.sparkled.persistence.sequence.impl.query.GetStageBySequenceIdQuery
 import io.sparkled.persistence.sequence.impl.query.SaveRenderedStagePropsQuery
@@ -52,10 +51,6 @@ class SequencePersistenceServiceImpl
 
     override fun getRenderedStagePropsBySequenceAndSong(sequence: Sequence, song: Song): RenderedStagePropDataMap {
         return GetRenderedStagePropsBySequenceQuery(sequence, song).perform(queryFactory)
-    }
-
-    override fun getSequenceStagePropUuidMapBySequenceId(sequenceId: Int): Map<String, UUID> {
-        return GetSequenceStagePropUuidMapBySequenceIdQuery(sequenceId).perform(queryFactory)
     }
 
     override fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>): Sequence {

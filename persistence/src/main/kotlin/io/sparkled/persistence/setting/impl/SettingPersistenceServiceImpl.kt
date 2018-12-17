@@ -5,6 +5,7 @@ import com.google.inject.persist.UnitOfWork
 import io.sparkled.model.entity.Setting
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.model.setting.SettingsConstants
+import io.sparkled.model.util.MathUtils.constrain
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.setting.SettingPersistenceService
 import io.sparkled.persistence.setting.impl.query.GetSettingsQuery
@@ -68,9 +69,5 @@ class SettingPersistenceServiceImpl
         } catch (e: NumberFormatException) {
             SettingsConstants.Brightness.MAX
         }
-    }
-
-    private fun constrain(value: Int, min: Int, max: Int): Int {
-        return Math.max(min, Math.min(max, value))
     }
 }

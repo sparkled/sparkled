@@ -15,6 +15,8 @@ const minScale = min(.25);
 const maxScale = max(20);
 const minRotation = min(-180);
 const maxRotation = max(180);
+const minBrightness = min(0);
+const maxBrightness = max(100);
 
 class StagePropForm extends Component {
 
@@ -67,6 +69,10 @@ class StagePropForm extends Component {
 
               <div className="row">
                 <Field className="col-6" type="number" parse={toNumber} name="rotation" component={InputField} label="Rotation" required={true} validate={[minRotation, maxRotation, required]} onChange={this.updateStageProp}/>
+              </div>
+
+              <div className="row">
+                <Field className="col-6" type="number" parse={toNumber} name="brightness" component={InputField} label="Brightness" required={true} validate={[minBrightness, maxBrightness, required]} onChange={this.updateStageProp}/>
               </div>
             </form>
           </Collapse>

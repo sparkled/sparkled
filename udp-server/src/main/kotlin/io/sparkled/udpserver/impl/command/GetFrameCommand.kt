@@ -13,7 +13,32 @@ import io.sparkled.music.PlaybackState
 class GetFrameCommand : RequestCommand() {
 
     override fun getResponse(args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
-        val frameData = when {
+        val brightness = calculateBrightness(args, settings, playbackState)
+        val headerData = buildHeader(args, brightness)
+        val frameData = buildFrame(args, playbackState)
+        return buildResponse(headerData, frameData)
+    }
+
+    private fun calculateBrightness(args: List<String>, settings: SettingsCache, playbackState: PlaybackState): Int {
+        val stagePropCode = args.getOrElse(1) { "" }
+        val propBrightness = (playbackState.stageProps[stagePropCode]?.getBrightness() ?: 100) / 100f
+        val globalBrightness = settings.brightness
+
+        return (globalBrightness * propBrightness).toInt()
+    }
+
+    private fun buildHeader(args: List<String>, brightness: Int): ByteArray {
+        val clientId = (args.getOrNull(2) ?: "0").toInt()
+        val headerClientId = clientId shl 4 and 0b11110000 // CCCC0000
+        val headerBrightness = brightness and 0b00001111 // 0000BBBB
+        return byteArrayOf((headerClientId or headerBrightness).toByte()) // CCCCBBBB
+    }
+
+    private fun buildFrame(
+        args: List<String>,
+        playbackState: PlaybackState
+    ): ByteArray {
+        return when {
             args.size < 2 -> blackFrame
             playbackState.isEmpty -> blackFrame
             else -> {
@@ -25,35 +50,23 @@ class GetFrameCommand : RequestCommand() {
                 renderedFrame?.getData() ?: blackFrame
             }
         }
-
-        val clientId = (args.getOrNull(2) ?: "0").toInt()
-        return buildFrame(frameData, settings, clientId)
-    }
-
-    private fun buildFrame(frameData: ByteArray, settings: SettingsCache, clientId: Int): ByteArray {
-        val brightness = settings.brightness
-        val headerData = buildHeader(clientId, brightness)
-
-        val headerAndData = ByteArray(headerData.size + frameData.size)
-        System.arraycopy(headerData, 0, headerAndData, 0, headerData.size)
-        System.arraycopy(frameData, 0, headerAndData, headerData.size, frameData.size)
-
-        return headerAndData
-    }
-
-    private fun buildHeader(clientId: Int, brightness: Int): ByteArray {
-        val headerClientId = clientId shl 4 and 0b11110000 // CCCC0000
-        val headerBrightness = brightness and 0b00001111 // 0000BBBB
-        return byteArrayOf((headerClientId or headerBrightness).toByte()) // CCCCBBBB
     }
 
     private fun getRenderedFrame(playbackState: PlaybackState, stagePropCode: String, frameIndex: Int): RenderedFrame? {
         val renderedStageProps = playbackState.renderedStageProps
-        val stagePropUuid = playbackState.stagePropUuids[stagePropCode]
+        val stagePropUuid = playbackState.stageProps[stagePropCode]?.getUuid()
 
         val renderedStagePropData = renderedStageProps!![stagePropUuid]
         val frames = renderedStagePropData?.frames ?: emptyList()
         return if (frameIndex >= frames.size) null else frames[frameIndex]
+    }
+
+    private fun buildResponse(header: ByteArray, frameData: ByteArray): ByteArray {
+        val headerAndData = ByteArray(header.size + frameData.size)
+        System.arraycopy(header, 0, headerAndData, 0, header.size)
+        System.arraycopy(frameData, 0, headerAndData, header.size, frameData.size)
+
+        return headerAndData
     }
 
     companion object {

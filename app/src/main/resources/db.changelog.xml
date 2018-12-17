@@ -91,6 +91,9 @@
             <column name="rotation" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
+            <column name="brightness" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
             <column name="display_order" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
