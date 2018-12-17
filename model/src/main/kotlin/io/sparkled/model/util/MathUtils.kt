@@ -1,4 +1,4 @@
-package io.sparkled.renderer.util
+package io.sparkled.model.util
 
 object MathUtils {
 
@@ -18,14 +18,24 @@ object MathUtils {
     }
 
     /**
-     * Maps a value from a given range to a new range.
      * @param value the number to map
      * @param oldMin the lower bound of the value’s current range
      * @param oldMax the upper bound of the value’s current range
      * @param newMin the lower bound of the value’s target range
      * @param newMax the upper bound of the value’s target range
+     * @return a value mapped from a given range to a new range
      */
     fun map(value: Float, oldMin: Float, oldMax: Float, newMin: Float, newMax: Float): Float {
         return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin
+    }
+
+    /**
+     * @param value the value to be constrained
+     * @param min the minimum allowable value (inclusive)
+     * @param max the maximum allowable value (inclusive)
+     * @return the value, constrained by min and max
+     */
+    fun constrain(value: Int, min: Int, max: Int): Int {
+        return Math.max(min, Math.min(max, value))
     }
 }

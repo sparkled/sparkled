@@ -17,6 +17,7 @@ class StagePropViewModel : ViewModel {
     private var scaleX: Float? = null
     private var scaleY: Float? = null
     private var rotation: Int? = null
+    private var brightness: Int? = null
     private var displayOrder: Int? = null
 
     fun getUuid(): UUID? {
@@ -127,6 +128,15 @@ class StagePropViewModel : ViewModel {
         return this
     }
 
+    fun getBrightness(): Int? {
+        return brightness
+    }
+
+    fun setBrightness(brightness: Int?): StagePropViewModel {
+        this.brightness = brightness
+        return this
+    }
+
     fun getDisplayOrder(): Int? {
         return displayOrder
     }
@@ -154,6 +164,7 @@ class StagePropViewModel : ViewModel {
         if (scaleX != other.scaleX) return false
         if (scaleY != other.scaleY) return false
         if (rotation != other.rotation) return false
+        if (brightness != other.brightness) return false
         if (displayOrder != other.displayOrder) return false
 
         return true
@@ -172,11 +183,12 @@ class StagePropViewModel : ViewModel {
         result = 31 * result + (scaleX?.hashCode() ?: 0)
         result = 31 * result + (scaleY?.hashCode() ?: 0)
         result = 31 * result + (rotation ?: 0)
+        result = 31 * result + (brightness ?: 0)
         result = 31 * result + (displayOrder ?: 0)
         return result
     }
 
     override fun toString(): String {
-        return "StagePropViewModel(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, reverse=$reverse, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, displayOrder=$displayOrder)"
+        return "StagePropViewModel(uuid=$uuid, stageId=$stageId, code=$code, name=$name, type=$type, ledCount=$ledCount, reverse=$reverse, positionX=$positionX, positionY=$positionY, scaleX=$scaleX, scaleY=$scaleY, rotation=$rotation, brightness=$brightness, displayOrder=$displayOrder)"
     }
 }

@@ -5,7 +5,7 @@ import io.sparkled.model.render.Led
 import io.sparkled.renderer.context.RenderContext
 import io.sparkled.renderer.fill.FillFunction
 import io.sparkled.renderer.util.ColorUtils
-import io.sparkled.renderer.util.MathUtils
+import io.sparkled.model.util.MathUtils
 import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 import kotlin.math.ceil

@@ -2,7 +2,7 @@ package io.sparkled.renderer.effect.line
 
 import io.sparkled.renderer.context.RenderContext
 import io.sparkled.renderer.util.FillUtils
-import io.sparkled.renderer.util.MathUtils
+import io.sparkled.model.util.MathUtils
 
 object LineEffectUtils {
 

@@ -22,6 +22,7 @@ class StagePropViewModelConverterImpl
             .setScaleX(model.getScaleX())
             .setScaleY(model.getScaleY())
             .setRotation(model.getRotation())
+            .setBrightness(model.getBrightness())
             .setDisplayOrder(model.getDisplayOrder())
     }
 
@@ -42,6 +43,7 @@ class StagePropViewModelConverterImpl
             .setScaleX(viewModel.getScaleX())
             .setScaleY(viewModel.getScaleY())
             .setRotation(viewModel.getRotation())
+            .setBrightness(viewModel.getBrightness())
             .setDisplayOrder(viewModel.getDisplayOrder())
     }
 }

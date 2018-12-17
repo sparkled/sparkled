@@ -10,6 +10,7 @@ import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import io.sparkled.persistence.sequence.SequencePersistenceService
 import io.sparkled.persistence.song.SongPersistenceService
+import io.sparkled.persistence.stage.StagePersistenceService
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -23,6 +24,7 @@ class PlaybackServiceImpl
 @Inject constructor(
     private val songPersistenceService: SongPersistenceService,
     private val sequencePersistenceService: SequencePersistenceService,
+    private val stagePersistenceService: StagePersistenceService,
     private val playlistPersistenceService: PlaylistPersistenceService,
     private val unitOfWork: UnitOfWork,
     private val musicPlayerService: MusicPlayerService
@@ -88,10 +90,12 @@ class PlaybackServiceImpl
                 PlaybackState()
             } else {
                 val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!)
-                val stagePropData = sequencePersistenceService.getRenderedStagePropsBySequenceAndSong(sequence, song!!)
-                val stagePropUuids =
-                    sequencePersistenceService.getSequenceStagePropUuidMapBySequenceId(sequence.getId()!!)
                 val songAudio = sequencePersistenceService.getSongAudioBySequenceId(sequence.getId()!!)
+
+                val stagePropData = sequencePersistenceService.getRenderedStagePropsBySequenceAndSong(sequence, song!!)
+                val stageProps = stagePersistenceService
+                    .getStagePropsByStageId(sequence.getStageId()!!)
+                    .associateBy({ it.getCode()!! }, { it })
 
                 PlaybackState(
                     playlist = playlist,
@@ -101,7 +105,7 @@ class PlaybackServiceImpl
                     song = song,
                     songAudio = songAudio,
                     renderedStageProps = stagePropData,
-                    stagePropUuids = stagePropUuids
+                    stageProps = stageProps
                 )
             }
         } finally {
