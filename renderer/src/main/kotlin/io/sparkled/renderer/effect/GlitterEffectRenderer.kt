@@ -12,13 +12,13 @@ import kotlin.random.Random
 class GlitterEffectRenderer : EffectRenderer() {
 
     override fun render(ctx: RenderContext) {
-        val patternIndex =
-            (ParamUtils.getIntegerValue(ctx.effect, ParamCode.DENSITY, 10) / 100f * (patterns.size - 1)).toInt()
+        val density = ParamUtils.getIntegerValue(ctx.effect, ParamCode.DENSITY, 10) / 100f
+        val patternIndex = (density * (patterns.size - 1)).toInt()
         val lifetime = ParamUtils.getDecimalValue(ctx.effect, ParamCode.LIFETIME, 1f)
         val lifetimeFrames = (ctx.sequence.getFramesPerSecond()!! * lifetime).toInt()
 
         val random = Random(ParamUtils.getIntegerValue(ctx.effect, ParamCode.RANDOM_SEED, 1))
-        val frameNumber = ctx.frame.frameNumber
+        val frameCount = ctx.effect.endFrame - ctx.effect.startFrame + 1
         val fadeAlpha = getFadeAlpha(ctx, lifetimeFrames)
 
         for (i in 0 until ctx.channel.ledCount) {
@@ -28,7 +28,7 @@ class GlitterEffectRenderer : EffectRenderer() {
                 val patternStart = random.nextInt(BITS_PER_PATTERN)
                 val offset = random.nextInt(lifetimeFrames)
 
-                val offsetFrameNumber = frameNumber - ctx.effect.startFrame + offset
+                val offsetFrameNumber = ctx.progress * frameCount + offset
 
                 val bit = ((offsetFrameNumber / lifetimeFrames.toFloat()) + patternStart).toInt() % BITS_PER_PATTERN
                 val isOn = pattern and (1 shl bit).toLong() != 0L
@@ -46,8 +46,8 @@ class GlitterEffectRenderer : EffectRenderer() {
      * Fade all particles in at the start of the effect, and fade them out at the end.
      */
     private fun getFadeAlpha(ctx: RenderContext, lifetimeFrames: Int): Float {
-        val elapsedFrames = ctx.frame.frameNumber - ctx.effect.startFrame
         val totalFrames = ctx.effect.endFrame - ctx.effect.startFrame + 1
+        val elapsedFrames = ctx.progress * (totalFrames)
         val framesLeft = totalFrames - elapsedFrames
 
         return when {

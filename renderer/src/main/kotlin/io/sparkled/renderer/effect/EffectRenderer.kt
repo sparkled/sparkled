@@ -28,7 +28,7 @@ abstract class EffectRenderer {
             throw IllegalStateException("Animation progress is out of bounds: $progress")
         }
 
-        return if (effect.reverse) 1 - progress else progress
+        return progress
     }
 
     protected abstract fun render(ctx: RenderContext)

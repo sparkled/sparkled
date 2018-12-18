@@ -163,6 +163,8 @@ class SequenceEditPage extends Component {
       args: [],
       easing: {
         type: 'LINEAR',
+        start: 0,
+        finish: 100,
         args: []
       },
       fill: {

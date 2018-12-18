@@ -24,7 +24,7 @@ internal class LineEffectRendererTest {
             args = listOf(
                 arg(ParamCode.LENGTH, 3)
             ),
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
                 args = listOf(
@@ -69,7 +69,7 @@ internal class LineEffectRendererTest {
             args = listOf(
                 arg(ParamCode.LENGTH, 20)
             ),
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
                 args = listOf(

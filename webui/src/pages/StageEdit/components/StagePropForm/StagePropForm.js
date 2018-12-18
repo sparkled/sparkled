@@ -72,7 +72,7 @@ class StagePropForm extends Component {
               </div>
 
               <div className="row">
-                <Field className="col-6" type="number" parse={toNumber} name="brightness" component={InputField} label="Brightness" required={true} validate={[minBrightness, maxBrightness, required]} onChange={this.updateStageProp}/>
+                <Field className="col-6" type="number" parse={toNumber} name="brightness" component={InputField} label="Brightness (%)" required={true} validate={[minBrightness, maxBrightness, required]} onChange={this.updateStageProp}/>
               </div>
             </form>
           </Collapse>

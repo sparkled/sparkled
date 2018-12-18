@@ -21,7 +21,7 @@ class GradientFillTest {
         val effect = Effect(
             endFrame = 10,
             type = EffectTypeCode.FLASH,
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.GRADIENT,
                 args = listOf(
@@ -56,7 +56,7 @@ class GradientFillTest {
         val effect = Effect(
             endFrame = 10,
             type = EffectTypeCode.FLASH,
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.GRADIENT,
                 args = listOf(
@@ -91,7 +91,7 @@ class GradientFillTest {
         val effect = Effect(
             endFrame = 10,
             type = EffectTypeCode.FLASH,
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.GRADIENT,
                 args = listOf(
@@ -127,11 +127,7 @@ class GradientFillTest {
             endFrame = 19,
             type = EffectTypeCode.FLASH,
             easing = Easing(
-                type = EasingTypeCode.CONSTANT,
-                args = listOf(
-                    arg(ParamCode.PERCENT, 50f)
-                )
-            ),
+                EasingTypeCode.LINEAR, 50f, 50f),
             fill = Fill(
                 type = FillTypeCode.GRADIENT,
                 args = listOf(

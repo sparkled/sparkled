@@ -21,7 +21,7 @@ class FlashEffectRendererTest {
         val effect = Effect(
             endFrame = 10,
             type = EffectTypeCode.FLASH,
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
                 args = listOf(

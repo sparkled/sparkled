@@ -24,7 +24,7 @@ internal class BuildLineEffectRendererTest {
             args = listOf(
                 arg(ParamCode.SEGMENTS, 4)
             ),
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
                 args = listOf(

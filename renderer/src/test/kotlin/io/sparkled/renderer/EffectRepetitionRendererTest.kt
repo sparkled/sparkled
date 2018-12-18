@@ -22,7 +22,7 @@ class EffectRepetitionRendererTest {
             endFrame = 10,
             repetitions = 2,
             type = EffectTypeCode.FLASH,
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
                 args = listOf(
@@ -72,14 +72,9 @@ class EffectRepetitionRendererTest {
             repetitions = repetitions,
             repetitionSpacing = spacing,
             type = EffectTypeCode.FLASH,
-            easing = Easing(
-                EasingTypeCode.CONSTANT, listOf(
-                    arg(ParamCode.PERCENT, 50f)
-                )
-            ),
+            easing = Easing(EasingTypeCode.LINEAR, 50f, 50f),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID, listOf(
                     arg(ParamCode.COLOR, "#ffffff")
                 )
             )
