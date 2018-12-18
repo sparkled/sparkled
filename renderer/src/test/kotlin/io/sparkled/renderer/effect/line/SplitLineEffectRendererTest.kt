@@ -24,7 +24,7 @@ class SplitLineEffectRendererTest {
             args = listOf(
                 arg(ParamCode.LENGTH, 5)
             ),
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
                 args = listOf(
@@ -99,7 +99,7 @@ class SplitLineEffectRendererTest {
             args = listOf(
                 arg(ParamCode.LENGTH, 5f)
             ),
-            easing = Easing(type = EasingTypeCode.LINEAR),
+            easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 type = FillTypeCode.SOLID,
                 args = listOf(

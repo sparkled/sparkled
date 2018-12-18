@@ -11,7 +11,6 @@ enum class ParamCode constructor(val displayName: String) {
     DENSITY("Density (%)"),
     LENGTH("Length"),
     LIFETIME("Lifetime (Seconds)"),
-    PERCENT("Percent"),
     PERCENT_FROM("From (%)"),
     PERCENT_TO("To (%)"),
     RANDOM_SEED("Random Seed"),

@@ -8,12 +8,12 @@ enum class EasingTypeCode(val displayName: String) {
     NONE("None"),
 
     /**
-     * A simple, linear easing.
+     * An easing with very fast acceleration.
      */
-    LINEAR("Linear"),
+    EXPO_OUT("Exponential (Out)"),
 
     /**
-     * A linear easing, but frozen at a particular point.
+     * A simple, linear easing.
      */
-    CONSTANT("Constant")
+    LINEAR("Linear")
 }

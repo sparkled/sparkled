@@ -4,8 +4,10 @@ import io.sparkled.model.animation.param.Argument
 import io.sparkled.model.animation.param.HasArguments
 
 data class Easing(
-    var type: EasingTypeCode = EasingTypeCode.LINEAR,
-    var args: List<Argument> = emptyList()
+    val type: EasingTypeCode = EasingTypeCode.LINEAR,
+    val start: Float = 0f,
+    val end: Float = 100f,
+    val args: List<Argument> = emptyList()
 ) : HasArguments {
 
     override fun getArguments(): List<Argument> {

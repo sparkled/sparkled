@@ -16,8 +16,7 @@ data class Effect(
     var startFrame: Int = 0,
     var endFrame: Int = 0,
     var repetitions: Int = 1,
-    var repetitionSpacing: Int = 0,
-    var reverse: Boolean = false
+    var repetitionSpacing: Int = 0
 ) : HasArguments {
 
     override fun getArguments(): List<Argument> {

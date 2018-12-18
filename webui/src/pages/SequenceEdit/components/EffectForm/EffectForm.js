@@ -9,7 +9,7 @@ import ColorPickerField from '../../../../components/form/ColorPickerField';
 import MultiColorPickerField from '../../../../components/form/MultiColorPickerField';
 import InputField from '../../../../components/form/InputField';
 import SingleSelectField from '../../../../components/form/SingleSelectField/SingleSelectField';
-import { min, required } from '../../../../components/form/validators';
+import { max, min, required } from '../../../../components/form/validators';
 import trash from '../../../../images/trash.svg';
 import { deleteEffect, updateEffect } from '../../actions';
 import './EffectForm.css';
@@ -18,6 +18,8 @@ const toNumber = value => !value ? null : Number(value);
 const minStartFrame = min(0);
 const minRepetitions = min(1);
 const minRepetitionSpacing = min(0);
+const minPercent = min(0);
+const maxPercent = max(100);
 const maxStartFrame = (value, effect) => value > effect.endFrame ? 'Start frame cannot be greater than end frame' : null;
 const minEndFrame = (value, effect) => value < effect.startFrame ? 'End frame cannot be less than start frame' : null;
 let maxEndFrame = () => null;
@@ -87,9 +89,6 @@ class EffectForm extends Component {
                  onChange={this.updateEffect}/>
         </div>
 
-        <Field className="col-6" type="checkbox" name="reverse" component={InputField} label="Reverse"
-               onChange={this.updateEffect}/>
-
         <hr/>
         {this.renderEffectPropertiesForm()}
         <hr/>
@@ -137,12 +136,22 @@ class EffectForm extends Component {
         <h5>Easing Properties</h5>
         <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required={true}
                validate={required} options={easingTypes} onChange={this.updateEffect}/>
+
+        <div className="row">
+          <Field className="col-6" type="number" parse={toNumber} name="start" component={InputField}
+                 label="Start (%)" required={true} validate={[required, minPercent, maxPercent]}
+                 onChange={this.updateEffect}/>
+
+          <Field className="col-6" type="number" parse={toNumber} name="end" component={InputField}
+                 label="End (%)" required={true} validate={[required, minPercent, maxPercent]}
+                 onChange={this.updateEffect}/>
+        </div>
         {this.renderArgumentFields(selectedEffect.easing, easingType)}
       </FormSection>
     );
   }
 
-  renderArgumentFields(argParent, type) {
+  renderArgumentFields(argParent, type = {}) {
     return argParent.args.map((arg, index) => {
       const param = _.find(type.params, { code: arg.code });
       return this.renderArgumentField(arg, param, index);
