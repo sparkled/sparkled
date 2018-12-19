@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
-import java.util.function.Supplier
 import javax.inject.Inject
 import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
@@ -100,7 +99,7 @@ class PlaybackServiceImpl
                 PlaybackState(
                     playlist = playlist,
                     playlistIndex = playlistIndex,
-                    progressFunction = Supplier { musicPlayerService.sequenceProgress },
+                    progressFunction = { musicPlayerService.sequenceProgress },
                     sequence = sequence,
                     song = song,
                     songAudio = songAudio,
