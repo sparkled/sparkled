@@ -6,17 +6,20 @@ Sparkled is a web-based LED sequencer that aims to reduce the barrier to entry f
 
 ## Features
 With Sparkled, you get an integrated solution containing:
- * A rich web interface for sequencing, previewing and scheduling music-backed LED animations
- * A fast UDP service to stream rendered data to Sparkled clients, which use the data to drive LED strips (or whatever you want!)
+ * A rich web interface for staging, sequencing, previewing and scheduling music-backed LED animations
+ * A fast UDP service to stream rendered pixel data to Sparkled clients, which use the data to drive LED strips (or whatever you want!)
 
-The Sparkled application is used to design and serve the animations, and one or more Sparkled clients consume this data. More information on Sparkled clients will be made available closer to the initial V1 release.
+## Clients
+Sparkled clients are responsible for rendered pixel data from the Sparkled server and displaying it on the LED strips. The official Sparkled clients are listed below:
+
+- [sparkled-client-esp32](https://github.com/sparkled/sparkled-client-esp32)
 
 ## Roadmap
 ### Before Initial Release
 - [x] Move project to Sparkled github account
 - [ ] Set up official project website
-- [ ] Rewrite UI in React (In Progress)
-- [ ] Stage editor, so users can set up their own lighting structures
+- [x] Rewrite UI in React (In Progress)
+- [x] Stage editor, so users can set up their own lighting structures
 - [ ] Lots of unit & integration testing
 - [ ] Various bugfixes
 
