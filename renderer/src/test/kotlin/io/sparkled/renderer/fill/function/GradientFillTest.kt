@@ -23,8 +23,8 @@ class GradientFillTest {
             type = EffectTypeCode.FLASH,
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.GRADIENT,
-                args = listOf(
+                FillTypeCode.GRADIENT,
+                mapOf(
                     arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
                     arg(ParamCode.BLEND_HARDNESS, 0f),
                     arg(ParamCode.CYCLES_PER_SECOND, 0f)
@@ -58,8 +58,8 @@ class GradientFillTest {
             type = EffectTypeCode.FLASH,
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.GRADIENT,
-                args = listOf(
+                FillTypeCode.GRADIENT,
+                mapOf(
                     arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
                     arg(ParamCode.BLEND_HARDNESS, 50f),
                     arg(ParamCode.CYCLES_PER_SECOND, 0f)
@@ -93,8 +93,8 @@ class GradientFillTest {
             type = EffectTypeCode.FLASH,
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.GRADIENT,
-                args = listOf(
+                FillTypeCode.GRADIENT,
+                mapOf(
                     arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
                     arg(ParamCode.BLEND_HARDNESS, 100f),
                     arg(ParamCode.CYCLES_PER_SECOND, 0f)
@@ -129,8 +129,8 @@ class GradientFillTest {
             easing = Easing(
                 EasingTypeCode.LINEAR, 50f, 50f),
             fill = Fill(
-                type = FillTypeCode.GRADIENT,
-                args = listOf(
+                FillTypeCode.GRADIENT,
+                mapOf(
                     arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
                     arg(ParamCode.BLEND_HARDNESS, 0f),
                     arg(ParamCode.CYCLES_PER_SECOND, 6f)

@@ -1,6 +1,5 @@
 package io.sparkled.model.util
 
-import io.sparkled.model.animation.param.Argument
 import io.sparkled.model.animation.param.ParamCode
 
 /**
@@ -13,7 +12,7 @@ object ArgumentUtils {
      * @param values The argument values.
      * @return The created argument object.
      */
-    fun arg(code: ParamCode, vararg values: Any): Argument {
-        return Argument(code, value = values.map { it.toString() })
+    fun arg(code: ParamCode, vararg values: Any): Pair<ParamCode, List<String>> {
+        return Pair(code, values.map { it.toString() })
     }
 }

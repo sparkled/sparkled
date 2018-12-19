@@ -21,14 +21,14 @@ class GlitterEffectRendererTest {
         val effect = Effect(
             endFrame = 29,
             type = EffectTypeCode.GLITTER,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.DENSITY, 10),
                 arg(ParamCode.LIFETIME, .2f)
             ),
             easing = Easing(EasingTypeCode.LINEAR, 0f, 100f),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ff0000")
                 )
             )
@@ -77,14 +77,14 @@ class GlitterEffectRendererTest {
         val effect = Effect(
             endFrame = 29,
             type = EffectTypeCode.GLITTER,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.DENSITY, 50),
                 arg(ParamCode.LIFETIME, .2f)
             ),
             easing = Easing(EasingTypeCode.LINEAR, 0f, 100f),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ff0000")
                 )
             )
@@ -133,14 +133,14 @@ class GlitterEffectRendererTest {
         val effect = Effect(
             endFrame = 29,
             type = EffectTypeCode.GLITTER,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.DENSITY, 90),
                 arg(ParamCode.LIFETIME, .2f)
             ),
             easing = Easing(EasingTypeCode.LINEAR, 0f, 100f),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ff0000")
                 )
             )
@@ -189,14 +189,14 @@ class GlitterEffectRendererTest {
         val effect = Effect(
             endFrame = 29,
             type = EffectTypeCode.GLITTER,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.DENSITY, 50),
                 arg(ParamCode.LIFETIME, .2f)
             ),
             easing = Easing(EasingTypeCode.LINEAR, 50f, 50f),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ff0000")
                 )
             )

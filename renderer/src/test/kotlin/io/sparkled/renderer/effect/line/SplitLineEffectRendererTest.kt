@@ -21,13 +21,13 @@ class SplitLineEffectRendererTest {
         val effect = Effect(
             endFrame = 49,
             type = EffectTypeCode.SPLIT_LINE,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.LENGTH, 5)
             ),
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ffffff")
                 )
             )
@@ -96,13 +96,13 @@ class SplitLineEffectRendererTest {
         val effect = Effect(
             endFrame = 49,
             type = EffectTypeCode.SPLIT_LINE,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.LENGTH, 5f)
             ),
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ffffff")
                 )
             )

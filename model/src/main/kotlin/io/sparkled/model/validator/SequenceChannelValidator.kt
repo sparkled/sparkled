@@ -2,10 +2,10 @@ package io.sparkled.model.validator
 
 import com.google.gson.JsonSyntaxException
 import io.sparkled.model.animation.SequenceChannelEffects
+import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
-import io.sparkled.model.animation.param.Argument
-import io.sparkled.model.animation.param.ParamType
+import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.util.GsonProvider
 import io.sparkled.model.validator.exception.EntityValidationException
@@ -51,7 +51,7 @@ class SequenceChannelValidator {
             throw EntityValidationException(String.format(Errors.EFFECT_TYPE_MISSING, effect.startFrame))
         }
 
-        if (effect.easing.type === ParamType.NONE) {
+        if (effect.easing.type === EasingTypeCode.NONE) {
             throw EntityValidationException(String.format(Errors.EFFECT_EASING_TYPE_MISSING, effect.startFrame))
         }
 
@@ -72,13 +72,13 @@ class SequenceChannelValidator {
         }
 
         val args = effect.getArguments()
-        for (arg in args) {
+        for (arg in args.entries) {
             validateEffectArgument(effect, arg)
         }
     }
 
-    private fun validateEffectArgument(effect: Effect, argument: Argument) {
-        if (argument.code === ParamType.NONE) {
+    private fun validateEffectArgument(effect: Effect, argument: Map.Entry<ParamCode, List<String>>) {
+        if (argument.key === ParamCode.NONE) {
             throw EntityValidationException(String.format(Errors.EFFECT_ARGUMENT_CODE_MISSING, effect.startFrame))
         }
     }

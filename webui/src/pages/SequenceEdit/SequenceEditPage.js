@@ -7,30 +7,30 @@ import SplitPane from 'react-split-pane';
 import { Nav, NavItem } from 'reactstrap';
 import { ActionCreators } from 'redux-undo';
 import uuidv4 from 'uuid/v4';
-import { PlaybackSpeeds } from './playbackSpeeds';
-import * as sequenceStatuses from '../SequenceList/sequenceStatuses';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { setCurrentPage } from '../actions';
+import * as sequenceStatuses from '../SequenceList/sequenceStatuses';
 import StageCanvas from '../StageEdit/components/StageCanvas';
 import {
   addEffect,
+  adjustPlaybackSpeed,
+  adjustPreviewDuration,
   cancelRender,
   copyEffect,
-  pasteEffect,
-  previewRender,
-  adjustPreviewDuration,
-  adjustPlaybackSpeed,
   deleteEffect,
   fetchReferenceData,
   fetchSequence,
   fetchSequenceStage,
+  pasteEffect,
+  previewRender,
   saveSequence,
   showAddChannelModal
 } from './actions';
 import AddChannelModal from './components/AddChannelModal';
 import EffectForm from './components/EffectForm';
 import Timeline from './components/Timeline';
+import { PlaybackSpeeds } from './playbackSpeeds';
 import './SequenceEditPage.css';
 
 const { undo, redo, clearHistory } = ActionCreators;
@@ -160,22 +160,23 @@ class SequenceEditPage extends Component {
     const effect = {
       uuid: uuidv4(),
       type: 'FLASH',
-      args: [],
+      args: {},
       easing: {
         type: 'LINEAR',
         start: 0,
-        finish: 100,
-        args: []
+        end: 100,
+        args: {}
       },
       fill: {
         type: 'SOLID',
-        args: [
-          { code: 'COLOR', value: ['#ff0000'] }
-        ]
+        args: {
+          'COLOR': ['#ff0000']
+        }
       },
       startFrame: currentFrame,
       endFrame: Math.min(currentFrame + NEW_EFFECT_FRAMES, sequence.frameCount) - 1,
       repetitions: 1,
+      repetitionSpacing: 0,
       reverse: false
     };
 

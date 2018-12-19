@@ -1,14 +1,14 @@
 package io.sparkled.model.animation.fill
 
-import io.sparkled.model.animation.param.Argument
 import io.sparkled.model.animation.param.HasArguments
+import io.sparkled.model.animation.param.ParamCode
 
 data class Fill(
     var type: FillTypeCode = FillTypeCode.NONE,
-    var args: List<Argument> = emptyList()
+    var args: Map<ParamCode, List<String>> = emptyMap()
 ) : HasArguments {
 
-    override fun getArguments(): List<Argument> {
+    override fun getArguments(): Map<ParamCode, List<String>> {
         return args
     }
 }
