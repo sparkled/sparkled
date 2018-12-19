@@ -21,13 +21,13 @@ internal class LineEffectRendererTest {
         val effect = Effect(
             endFrame = 19,
             type = EffectTypeCode.LINE,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.LENGTH, 3)
             ),
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ff0000")
                 )
             )
@@ -66,13 +66,13 @@ internal class LineEffectRendererTest {
         val effect = Effect(
             endFrame = 19,
             type = EffectTypeCode.LINE,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.LENGTH, 20)
             ),
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ffffff")
                 )
             )

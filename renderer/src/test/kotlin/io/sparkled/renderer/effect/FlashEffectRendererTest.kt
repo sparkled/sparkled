@@ -23,8 +23,8 @@ class FlashEffectRendererTest {
             type = EffectTypeCode.FLASH,
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ffffff")
                 )
             )

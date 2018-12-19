@@ -24,8 +24,8 @@ class EffectRepetitionRendererTest {
             type = EffectTypeCode.FLASH,
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ffffff")
                 )
             )
@@ -74,7 +74,8 @@ class EffectRepetitionRendererTest {
             type = EffectTypeCode.FLASH,
             easing = Easing(EasingTypeCode.LINEAR, 50f, 50f),
             fill = Fill(
-                FillTypeCode.SOLID, listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ffffff")
                 )
             )

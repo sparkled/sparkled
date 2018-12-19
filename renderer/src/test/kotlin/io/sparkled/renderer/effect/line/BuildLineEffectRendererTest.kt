@@ -21,13 +21,13 @@ internal class BuildLineEffectRendererTest {
         val effect = Effect(
             endFrame = 19,
             type = EffectTypeCode.BUILD_LINE,
-            args = listOf(
+            args = mapOf(
                 arg(ParamCode.SEGMENTS, 4)
             ),
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
-                type = FillTypeCode.SOLID,
-                args = listOf(
+                FillTypeCode.SOLID,
+                mapOf(
                     arg(ParamCode.COLOR, "#ff0000")
                 )
             )

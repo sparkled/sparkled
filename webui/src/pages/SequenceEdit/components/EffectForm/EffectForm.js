@@ -152,29 +152,29 @@ class EffectForm extends Component {
   }
 
   renderArgumentFields(argParent, type = {}) {
-    return argParent.args.map((arg, index) => {
-      const param = _.find(type.params, { code: arg.code });
+    return type.params.map((param, index) => {
+      const arg = argParent.args[param.code] || {};
       return this.renderArgumentField(arg, param, index);
     });
   }
 
   renderArgumentField = (arg, param = {}, index) => {
     const label = param.displayName;
-    const path = `args.${index}.value`;
+    const path = `args.${param.code}`;
 
     if (param.type === paramTypes.COLOR) {
       return (
-        <Field key={arg.code} name={path + '.0'} component={ColorPickerField} label={label} allowEmpty={false} required={true}
+        <Field key={param.code} name={path + '.0'} component={ColorPickerField} label={label} allowEmpty={false} required={true}
                validate={required} onChange={this.updateEffect}/>
       );
     } else if (param.type === paramTypes.COLORS) {
       return (
-        <Field key={arg.code} name={path} component={MultiColorPickerField} label={label} allowEmpty={false} required={true}
+        <Field key={param.code} name={path} component={MultiColorPickerField} label={label} allowEmpty={false} required={true}
                validate={required} onChange={this.updateEffect}/>
       );
     } else {
       return (
-        <Field key={arg.code} name={path + '.0'} component={InputField} label={label} allowEmpty={false} required={true}
+        <Field key={param.code} name={path + '.0'} component={InputField} label={label} allowEmpty={false} required={true}
                validate={required} onChange={this.updateEffect}/>
       );
     }
@@ -194,18 +194,18 @@ class EffectForm extends Component {
       const updatedEffect = produce(selectedEffect, draft => {
         draft.invalid = invalid;
 
-        // Convert a name path like "fill.args.1.value.0" to an array for _.set() and assign a value to that path.
+        // Convert a name path like "fill.args.argName.0" to an array for _.set() and assign a value to that path.
         _.set(draft, path.split('.'), newValue);
 
         if (path === 'type') {
           const newType = _.find(effectTypes, { code: newValue});
-          draft.args = _.map(newType.params, this.convertParamToArgument);
+          draft.args = this.convertParamsToArguments(newType.params);
         } else if (path === 'fill.type') {
           const newFill = _.find(fillTypes, { code: newValue});
-          draft.fill.args = _.map(newFill.params, this.convertParamToArgument);
+          draft.fill.args = this.convertParamsToArguments(newFill.params);
         } else if (path === 'easing.type') {
           const newEasing = _.find(easingTypes, { code: newValue});
-          draft.easing.args = _.map(newEasing.params, this.convertParamToArgument);
+          draft.easing.args = this.convertParamsToArguments(newEasing.params);
         }
       });
 
@@ -213,8 +213,8 @@ class EffectForm extends Component {
     });
   }
 
-  convertParamToArgument(param) {
-    return { code: param.code, value: param.defaultValue };
+  convertParamsToArguments(params) {
+    return _(params).keyBy('code').mapValues(param => param.defaultValue).value();
   }
 }
 

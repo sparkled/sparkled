@@ -1,6 +1,5 @@
 package io.sparkled.renderer.util
 
-import io.sparkled.model.animation.param.Argument
 import io.sparkled.model.animation.param.HasArguments
 import io.sparkled.model.animation.param.ParamCode
 import java.awt.Color
@@ -12,9 +11,8 @@ object ParamUtils {
     }
 
     fun getDecimalValue(parent: HasArguments, paramCode: ParamCode, default: Float = 0f): Float {
-        val argument = getArgument(parent, paramCode)
-        val value = argument.value
-        return if (value.isEmpty()) default else value[0].toFloat()
+        val values = getArgumentValues(parent, paramCode)
+        return if (values.isEmpty()) default else values[0].toFloat()
     }
 
     fun getColorValue(parent: HasArguments, paramCode: ParamCode, default: Color = Color.BLACK): Color {
@@ -22,19 +20,16 @@ object ParamUtils {
     }
 
     fun getColorsValue(parent: HasArguments, paramCode: ParamCode, default: Color = Color.BLACK): List<Color> {
-        val param = getArgument(parent, paramCode)
-        return if (param.value.isEmpty()) {
+        val values = getArgumentValues(parent, paramCode)
+        return if (values.isEmpty()) {
             listOf(default)
         } else {
-            param.value.asSequence().map { convertColor(it) }.toList()
+            values.map { convertColor(it) }.toList()
         }
     }
 
-    private fun getArgument(parent: HasArguments, paramCode: ParamCode): Argument {
-        return parent.getArguments()
-            .asSequence()
-            .filter { a -> a.code === paramCode }
-            .firstOrNull() ?: Argument()
+    private fun getArgumentValues(parent: HasArguments, paramCode: ParamCode): List<String> {
+        return parent.getArguments()[paramCode] ?: emptyList()
     }
 
     private fun convertColor(hexColor: String): Color {
