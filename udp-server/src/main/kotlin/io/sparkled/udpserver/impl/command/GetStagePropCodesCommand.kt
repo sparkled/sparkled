@@ -19,9 +19,12 @@ class GetStagePropCodesCommand : RequestCommand() {
         }
 
         val stageProps = playbackState.stageProps.values
-        val props = stageProps.map(StageProp::getUuid).joinToString(":")
+        val stagePropCodes = stageProps
+            .sortedBy(StageProp::getDisplayOrder)
+            .map(StageProp::getCode)
+            .joinToString(":")
 
-        val bytes = props.toByteArray(UTF_8)
+        val bytes = stagePropCodes.toByteArray(UTF_8)
         return if (bytes.isEmpty()) ByteArray(0) else bytes
     }
 
