@@ -1,66 +1,59 @@
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Alert from 'react-s-alert';
 import { Field, reduxForm } from 'redux-form';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import InputField from '../../../../components/form/InputField';
+import TextField from '../../../../components/form/TextField';
 import { required } from '../../../../components/form/validators';
 import { addStage, hideAddModal } from '../../actions';
+
+const formName = 'addStage';
 
 class AddStageModal extends Component {
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.addModalVisible && nextProps.addModalVisible) {
+    const { addError, addModalVisible } = nextProps;
+    if (!this.props.addModalVisible && addModalVisible) {
       this.props.initialize({});
+    }
+
+    if (!this.props.addError && addError) {
+      Alert.error(`Failed to add stage: ${addError}`);
     }
   }
 
   render() {
-    const { adding, addModalVisible, handleSubmit, valid } = this.props;
-    const addButtonText = adding ? 'Adding...' : 'Add stage';
+    const { adding, addModalVisible, handleSubmit, fullScreen, valid } = this.props;
 
     return (
-      <div>
-        <Modal isOpen={addModalVisible} wrapClassName="add-stage-modal" backdrop={true}>
-          <form onSubmit={handleSubmit(this.addStage.bind(this))}>
-            <ModalHeader>Add stage</ModalHeader>
-            <ModalBody>
-
-              <Field name="name" component={InputField} label="Stage Name" type="text"
-                     required={true} validate={required}/>
-
-              {this.renderAddError()}
-            </ModalBody>
-            <ModalFooter>
-              <Button type="submit" color="info" disabled={adding || !valid}>{addButtonText}</Button>
-              <Button type="button" color="secondary" disabled={adding}
-                      onClick={this.hideModal.bind(this)}>Cancel</Button>
-            </ModalFooter>
+      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen}>
+        <DialogTitle>Add stage</DialogTitle>
+        <DialogContent>
+          <form id={formName} onSubmit={handleSubmit(this.addStage)} noValidate autoComplete="off">
+            <Field component={TextField} fullWidth name="name" label="Stage Name"
+                   required={true} validate={required}/>
           </form>
-        </Modal>
-      </div>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={this.props.hideAddModal} color="default" disabled={adding}>
+            Cancel
+          </Button>
+          <Button variant="contained" color="primary" type="submit" form={formName} disabled={adding || !valid}>
+            {adding ? 'Adding...' : 'Add stage'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
-  renderAddError() {
-    const { addError } = this.props;
-    if (!addError) {
-      return null;
-    } else {
-      return (
-        <div className="card border-danger">
-          <div className="card-body">Failed to add stage: {addError}</div>
-        </div>
-      );
-    }
-  }
-
-  hideModal() {
-    this.props.hideAddModal();
-  }
-
-  addStage(stage) {
-    const { addStage } = this.props;
-    addStage({ ...stage, width: 800, height: 600 });
+  addStage = stage => {
+    this.props.addStage({ ...stage, width: 800, height: 600 });
   }
 }
 
@@ -72,5 +65,6 @@ function mapStateToProps({ page: { stageList } }) {
   };
 }
 
+AddStageModal = withMobileDialog({ breakpoint: 'xs' })(AddStageModal);
 AddStageModal = connect(mapStateToProps, { addStage, hideAddModal })(AddStageModal);
-export default reduxForm({ form: 'addStage' })(AddStageModal);
+export default reduxForm({ form: formName })(AddStageModal);

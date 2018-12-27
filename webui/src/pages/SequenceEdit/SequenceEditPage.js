@@ -1,5 +1,5 @@
+import Slider from '@material-ui/lab/Slider';
 import Mousetrap from 'mousetrap';
-import Slider from 'rc-slider';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
@@ -108,10 +108,12 @@ class SequenceEditPage extends Component {
       <Nav className="ml-auto" navbar>
 
         <NavItem className={(!saving && loaded) ? 'd-flex align-items-center mr-3' : 'd-none'}>
-          <input type="number" min={1} style={{width: 50}} value={previewDuration} onChange={this.adjustPreviewDuration}/>
+          <input type="number" min={1} style={{ width: 50 }} value={previewDuration}
+                 onChange={this.adjustPreviewDuration}/>
         </NavItem>
         <NavItem className={(!saving && loaded) ? 'd-flex align-items-center mr-3' : 'd-none'}>
-          <Slider min={0} max={PlaybackSpeeds.length - 1} defaultValue={playbackSpeed} style={{width: 50}} onChange={this.adjustPlaybackSpeed}/>
+          <Slider min={0} max={PlaybackSpeeds.length - 1} value={playbackSpeed} style={{ width: 50 }}
+                  onChange={this.adjustPlaybackSpeed}/>
         </NavItem>
 
         <NavItem className={(!saving && loaded && canUndo) ? '' : 'd-none'}>
@@ -246,7 +248,16 @@ function mapStateToProps({ page }) {
   const { saving, saveError, sequence, stage, currentFrame, previewDuration, playbackSpeed, selectedChannel, selectedEffect, pixelsPerFrame } = present;
 
   return {
-    saving, saveError, sequence, stage, currentFrame, previewDuration, playbackSpeed, selectedChannel, selectedEffect, pixelsPerFrame,
+    saving,
+    saveError,
+    sequence,
+    stage,
+    currentFrame,
+    previewDuration,
+    playbackSpeed,
+    selectedChannel,
+    selectedEffect,
+    pixelsPerFrame,
     fetching: present.fetchingSequence || present.fetchingStage || present.fetchingReferenceData,
     fetchError: present.fetchSequenceError || present.fetchStageError || present.fetchReferenceDataError,
     canUndo: past.length > 1,

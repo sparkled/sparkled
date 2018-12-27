@@ -1,14 +1,55 @@
+import AppBar from '@material-ui/core/AppBar';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import Typography from '@material-ui/core/es/Typography/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import { withStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import SongPageIcon from '@material-ui/icons/Audiotrack';
+import BackIcon from '@material-ui/icons/ChevronLeft';
+import SequencePageIcon from '@material-ui/icons/FormatPaint';
+import StagePageIcon from '@material-ui/icons/Looks';
+import MenuIcon from '@material-ui/icons/Menu';
+import PlaylistPageIcon from '@material-ui/icons/PlaylistPlay';
+import SchedulerPageIcon from '@material-ui/icons/Schedule';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from 'reactstrap';
-import AppLogo from '../AppLogo';
 import BrightnessToggle from '../BrightnessToggle';
-import './PageContainer.css';
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+  },
+  title: {
+    marginLeft: 20,
+    flexGrow: 1
+  },
+  toolbarIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  drawerPaper: {
+    width: 240,
+  },
+  content: {
+    display: 'flex',
+    flexGrow: 1,
+    overflow: 'auto',
+    padding: theme.spacing.unit * 3
+  },
+});
 
 class PageContainer extends Component {
 
-  state = { collapsed: false };
+  state = { drawerOpen: false };
 
   componentWillReceiveProps(nextProps) {
     const { pageTitle, pageClass = '' } = nextProps;
@@ -19,57 +60,85 @@ class PageContainer extends Component {
   }
 
   render() {
-    const { className = '', body, navbar } = this.props;
+    const { classes, body, navbar } = this.props;
+
+    const drawer = (
+      <div>
+        <div className={classes.toolbarIcon}>
+          <IconButton onClick={this.closeDrawer}>
+            <BackIcon/>
+          </IconButton>
+        </div>
+        <Divider/>
+        <List>
+          <ListItem button variant="default" component={Link} to="/songs">
+            <ListItemIcon><SongPageIcon/></ListItemIcon>
+            <ListItemText primary="Songs"/>
+          </ListItem>
+
+          <ListItem button variant="default" component={Link} to="/stages">
+            <ListItemIcon><StagePageIcon/></ListItemIcon>
+            <ListItemText primary="Stages"/>
+          </ListItem>
+
+          <ListItem button variant="default" component={Link} to="/sequences">
+            <ListItemIcon><SequencePageIcon/></ListItemIcon>
+            <ListItemText primary="Sequences"/>
+          </ListItem>
+
+          <ListItem button variant="default" component={Link} to="/playlists">
+            <ListItemIcon><PlaylistPageIcon/></ListItemIcon>
+            <ListItemText primary="Playlists"/>
+          </ListItem>
+
+          <ListItem button variant="default" component={Link} to="/scheduler">
+            <ListItemIcon><SchedulerPageIcon/></ListItemIcon>
+            <ListItemText primary="Scheduler"/>
+          </ListItem>
+
+          {navbar}
+        </List>
+      </div>
+    );
 
     return (
-      <div className={className + ' PageContainer d-flex flex-column h-100'}>
-        <Navbar className="navbar-expand-lg navbar-dark bg-dark flex-grow-0 flex-shrink-0">
-          <Link to="/" className="navbar-brand mr-3">
-            <AppLogo/>
-          </Link>
+      <>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton onClick={this.handleDrawerToggle}>
+              <MenuIcon/>
+            </IconButton>
 
-          <BrightnessToggle/>
+            <Typography variant="h6" className={classes.title}>Sparkled</Typography>
 
-          <NavbarToggler onClick={this.toggleNavbar} className="navbar-toggler-right"/>
+            <BrightnessToggle/>
+          </Toolbar>
+        </AppBar>
 
-          <Collapse isOpen={this.state.collapsed} navbar>
-            <Nav className="mr-auto" navbar>
-              <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('Song')} to="/songs">Songs</Link>
-              </NavItem>
-              <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('Stage')} to="/stages">Stages</Link>
-              </NavItem>
-              <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('Sequence')} to="/sequences">Sequences</Link>
-              </NavItem>
-              <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('Playlist')} to="/playlists">Playlists</Link>
-              </NavItem>
-              <NavItem>
-                <Link className={'nav-link ' + this.getPageClass('Playlist')} to="/scheduler">Scheduler</Link>
-              </NavItem>
-            </Nav>
+        <nav className={classes.drawer}>
+          <Drawer
+            variant="temporary"
+            open={this.state.drawerOpen}
+            onClose={this.handleDrawerToggle}
+            classes={{ paper: classes.drawerPaper }}>
+            {drawer}
+          </Drawer>
+        </nav>
 
-            {navbar}
-          </Collapse>
-        </Navbar>
-
-        <div className="page-container-body flex-grow-1 h-100">
+        <main className={classes.content}>
           {body}
-        </div>
-      </div>
+        </main>
+      </>
     );
   }
 
-  getPageClass(pageName) {
-    const { pageClass = '' } = this.props;
-    return pageClass.startsWith(pageName) ? 'active' : '';
+  closeDrawer = () => {
+    this.setState({ drawerOpen: false });
   }
 
-  toggleNavbar = () => {
-    this.setState(prevState => ({ collapsed: !prevState.collapsed }));
-  }
+  handleDrawerToggle = () => {
+    this.setState(state => ({ drawerOpen: !state.drawerOpen }));
+  };
 }
 
 function mapStateToProps({ page }) {
@@ -77,4 +146,5 @@ function mapStateToProps({ page }) {
   return { pageTitle, pageClass };
 }
 
-export default connect(mapStateToProps, { })(PageContainer);
+PageContainer = withStyles(styles, { withTheme: true })(PageContainer);
+export default connect(mapStateToProps, {})(PageContainer);

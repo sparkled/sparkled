@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import ColorPicker from '../../ColorPicker/ColorPicker';
 import './MultiColorPickerField.css';
-import { Button } from "reactstrap";
+import { Button } from 'reactstrap';
 
 class MultiColorPickerField extends React.Component {
 

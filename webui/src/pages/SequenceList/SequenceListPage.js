@@ -1,17 +1,30 @@
+import { withStyles } from '@material-ui/core';
+import Card from '@material-ui/core/es/Card/Card';
+import CardContent from '@material-ui/core/es/CardContent/CardContent';
+import Grid from '@material-ui/core/Grid/Grid';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
-import { Nav, NavItem } from 'reactstrap';
-import { setCurrentPage } from '../actions';
-import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import { fetchSequences, showAddModal } from './actions';
+import SearchBar from '../../components/SearchBar';
+import { setCurrentPage } from '../actions';
 import { fetchSongs } from '../SongList/actions';
 import { fetchStages } from '../StageList/actions';
+import { fetchSequences, showAddModal } from './actions';
 import AddSequenceModal from './components/AddSequenceModal';
 import DeleteSequenceModal from './components/DeleteSequenceModal';
-import SequenceEntry from './components/SequenceEntry';
+import SequenceCard from './components/SequenceCard';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  emptyCard: {
+    margin: 'auto'
+  }
+});
+
 
 class SequenceListPage extends Component {
 
@@ -34,50 +47,38 @@ class SequenceListPage extends Component {
     if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
       Alert.success('Sequence deleted successfully');
       nextProps.fetchSequences();
-    } else if (props.adding && !nextProps.adding && !nextProps.addError) {
+    } else if (this.props.adding && !nextProps.adding && !nextProps.addError) {
       Alert.success('Sequence added successfully');
       nextProps.fetchSequences();
     }
   }
 
   render() {
+    const { classes, fetching, showAddModal, songs, stages } = this.props;
+
     const pageBody = (
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12 input-group input-group-lg my-4">
-            <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
-                   onChange={e => this.setState({ searchQuery: e.target.value })}/>
-          </div>
-        </div>
+      <div className={classes.root}>
+        <SearchBar placeholderText="Search sequences" fetching={fetching} onAddButtonClick={showAddModal}
+                   onSearch={this.filterSequences}
+        />
 
-        <div className="row">
-          <div className="col-lg-12">{this.renderContent()}</div>
-        </div>
+        <Grid container spacing={24}>
+          {this.renderContent()}
+        </Grid>
 
-        <AddSequenceModal songs={this.props.songs} stages={this.props.stages}/>
+        <AddSequenceModal songs={songs} stages={stages}/>
         <DeleteSequenceModal/>
       </div>
     );
 
-    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
-  }
-
-  renderNavbar() {
-    const canAdd = this.props.sequences && this.props.songs && this.props.stages;
-    return (
-      <Nav className="ml-auto" navbar>
-        <NavItem className={canAdd ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.props.showAddModal}>Add Sequence</span>
-        </NavItem>
-      </Nav>
-    );
+    return <PageContainer body={pageBody}/>;
   }
 
   renderContent() {
     const { fetching, fetchingSongs, fetchingStages, fetchError, fetchSongsError, fetchStagesError } = this.props;
 
     if (fetching || fetchingSongs || fetchingStages) {
-      return this.renderLoading();
+      return [];
     } else if (fetchError) {
       return this.renderError(`Failed to load sequences: ${fetchError}`);
     } else if (fetchSongsError) {
@@ -85,12 +86,13 @@ class SequenceListPage extends Component {
     } else if (fetchStagesError) {
       return this.renderError(`Failed to load stages: ${fetchStagesError}`);
     } else {
-      return this.renderSequences();
+      const filteredSequences = this.getFilteredSequences();
+      if (_.isEmpty(filteredSequences)) {
+        return this.renderEmpty();
+      } else {
+        return this.renderSequences(filteredSequences);
+      }
     }
-  }
-
-  renderLoading() {
-    return <LoadingIndicator size={100}/>;
   }
 
   renderError(error) {
@@ -104,30 +106,33 @@ class SequenceListPage extends Component {
     );
   }
 
-  renderSequences() {
-    if (_.isEmpty(this.props.sequences)) {
-      return (
-        <div className="card border-info">
-          <div className="card-body">
-            No sequences have been added.
-          </div>
-        </div>
-      );
-    }
-
-    const sequences = _(this.props.sequences)
-      .filter(this.sequenceMatchesSearch)
-      .map(sequence => (
-        <div key={sequence.id} className="col-md-6 col-lg-4 mb-4">
-          <SequenceEntry sequence={sequence}/>
-        </div>
-      ))
-      .value();
-
-    return <div className="row">{sequences}</div>;
+  renderEmpty() {
+    return (
+      <Card className={this.props.classes.emptyCard}>
+        <CardContent>
+          No sequences found.
+        </CardContent>
+      </Card>
+    );
   }
 
-  sequenceMatchesSearch(sequence) {
+  renderSequences(sequences) {
+    return _.map(sequences, sequence => (
+      <Grid item key={sequence.id} xs={12} sm={6} md={4}>
+        <SequenceCard sequence={sequence}/>
+      </Grid>
+    ));
+  }
+
+  filterSequences = searchQuery => {
+    this.setState({ searchQuery });
+  }
+
+  getFilteredSequences = () => {
+    return _.filter(this.props.sequences || [], this.sequenceMatchesSearch);
+  }
+
+  sequenceMatchesSearch = sequence => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
     return !searchQuery || _.includes(sequence.name.toLowerCase(), searchQuery);
   }
@@ -151,6 +156,11 @@ function mapStateToProps({ page: { sequenceList, songList, stageList } }) {
   };
 }
 
+SequenceListPage = withStyles(styles)(SequenceListPage);
 export default connect(mapStateToProps, {
-  setCurrentPage, showAddModal, fetchSequences, fetchSongs, fetchStages
+  setCurrentPage,
+  showAddModal,
+  fetchSequences,
+  fetchSongs,
+  fetchStages
 })(SequenceListPage);

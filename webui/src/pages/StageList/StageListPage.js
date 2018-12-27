@@ -1,15 +1,28 @@
+import { withStyles } from '@material-ui/core';
+import Card from '@material-ui/core/es/Card/Card';
+import CardContent from '@material-ui/core/es/CardContent/CardContent';
+import Grid from '@material-ui/core/Grid/Grid';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
-import { setCurrentPage } from '../actions';
-import { Nav, NavItem } from 'reactstrap';
-import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
+import SearchBar from '../../components/SearchBar';
+import { setCurrentPage } from '../actions';
 import { fetchStages, showAddModal } from './actions';
 import AddStageModal from './components/AddStageModal';
 import DeleteStageModal from './components/DeleteStageModal';
-import StageEntry from './components/StageEntry';
+import StageCard from './components/StageCard';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  emptyCard: {
+    margin: 'auto'
+  }
+});
+
 
 class StageListPage extends Component {
 
@@ -37,88 +50,81 @@ class StageListPage extends Component {
   }
 
   render() {
-    const pageBody = (
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12 input-group input-group-lg my-4">
-            <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
-                   onChange={e => this.setState({ searchQuery: e.target.value })}/>
-          </div>
-        </div>
+    const { classes, fetching, showAddModal } = this.props;
 
-        <div className="row">
-          <div className="col-lg-12">{this.renderContent()}</div>
-        </div>
+    const pageBody = (
+      <div className={classes.root}>
+        <SearchBar placeholderText="Search stages" fetching={fetching} onAddButtonClick={showAddModal}
+                   onSearch={this.filterStages}
+        />
+
+        <Grid container spacing={24}>
+          {this.renderContent()}
+        </Grid>
 
         <AddStageModal/>
         <DeleteStageModal/>
       </div>
     );
 
-    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
-  }
-
-  renderNavbar() {
-    return (
-      <Nav className="ml-auto" navbar>
-        <NavItem>
-          <span className="nav-link" onClick={this.props.showAddModal}>Add Stage</span>
-        </NavItem>
-      </Nav>
-    );
+    return <PageContainer body={pageBody}/>;
   }
 
   renderContent() {
-    const { fetchError, fetching } = this.props;
+    const { fetching, fetchError } = this.props;
 
     if (fetching) {
-      return this.renderLoading();
+      return [];
     } else if (fetchError) {
-      return this.renderError();
+      return this.renderError(`Failed to load stages: ${fetchError}`);
     } else {
-      return this.renderStages();
+      const filteredStages = this.getFilteredStages();
+      if (_.isEmpty(filteredStages)) {
+        return this.renderEmpty();
+      } else {
+        return this.renderStages(filteredStages);
+      }
     }
   }
 
-  renderLoading() {
-    return <LoadingIndicator size={100}/>;
-  }
-
-  renderError() {
+  renderError(error) {
     return (
       <div className="card border-danger">
         <div className="card-body">
-          <p>Failed to load stages: {this.props.fetchError}</p>
+          <p>{error}</p>
           <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
         </div>
       </div>
     );
   }
 
-  renderStages() {
-    if (_.isEmpty(this.props.stages)) {
-      return (
-        <div className="card border-info">
-          <div className="card-body">
-            No stages have been added.
-          </div>
-        </div>
-      );
-    }
-
-    const stages = _(this.props.stages)
-      .filter(this.stageMatchesSearch)
-      .map(stage => (
-        <div key={stage.id} className="col-md-6 col-lg-4 mb-4">
-          <StageEntry stage={stage}/>
-        </div>
-      ))
-      .value();
-
-    return <div className="row">{stages}</div>;
+  renderEmpty() {
+    return (
+      <Card className={this.props.classes.emptyCard}>
+        <CardContent>
+          No stages found.
+        </CardContent>
+      </Card>
+    );
   }
 
-  stageMatchesSearch(stage) {
+  renderStages(stages) {
+    return _.map(stages, stage => (
+      <Grid item key={stage.id} xs={12} sm={6} md={4}>
+        <StageCard stage={stage}/>
+      </Grid>
+    ));
+  }
+
+  filterStages = searchQuery => {
+    this.setState({ searchQuery });
+  }
+
+  getFilteredStages = () => {
+    return _.filter(this.props.stages || [], this.stageMatchesSearch);
+  }
+
+  stageMatchesSearch = stage => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
     return !searchQuery || _.includes(stage.name.toLowerCase(), searchQuery);
   }
@@ -136,4 +142,5 @@ function mapStateToProps({ page: { stageList } }) {
   };
 }
 
+StageListPage = withStyles(styles)(StageListPage);
 export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchStages })(StageListPage);

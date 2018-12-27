@@ -1,24 +1,31 @@
+import Card from '@material-ui/core/es/Card/Card';
+import CardContent from '@material-ui/core/es/CardContent/CardContent';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
-import { Nav, NavItem } from 'reactstrap';
-import { setCurrentPage } from '../actions';
-import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
+import SearchBar from '../../components/SearchBar';
+import { setCurrentPage } from '../actions';
 import { fetchSongs, showAddModal } from './actions';
 import AddSongModal from './components/AddSongModal';
 import DeleteSongModal from './components/DeleteSongModal';
-import SongEntry from './components/SongEntry';
+import SongCard from './components/SongCard';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  emptyCard: {
+    margin: 'auto'
+  }
+});
 
 class SongListPage extends Component {
 
   state = { searchQuery: '' };
-
-  constructor(props) {
-    super(props);
-    this.songMatchesSearch = this.songMatchesSearch.bind(this);
-  }
 
   componentDidMount() {
     this.props.setCurrentPage({ pageTitle: 'Songs', pageClass: 'SongListPage' });
@@ -37,52 +44,45 @@ class SongListPage extends Component {
   }
 
   render() {
-    const pageBody = (
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12 input-group input-group-lg my-4">
-            <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
-                   onChange={e => this.setState({ searchQuery: e.target.value })}/>
-          </div>
-        </div>
+    const { classes, fetching, showAddModal } = this.props;
 
-        <div className="row">
-          <div className="col-lg-12">{this.renderContent()}</div>
-        </div>
+    const pageBody = (
+      <div className={classes.root}>
+        <SearchBar placeholderText="Search songs" fetching={fetching} onAddButtonClick={showAddModal}
+                   onSearch={this.filterSongs}
+        />
+
+        <Grid container spacing={24}>
+          {this.renderContent()}
+        </Grid>
 
         <AddSongModal/>
         <DeleteSongModal/>
       </div>
     );
 
-    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
+    return <PageContainer body={pageBody}/>;
   }
 
-  renderNavbar() {
-    const canAdd = this.props.songs;
-    return (
-      <Nav className="ml-auto" navbar>
-        <NavItem className={canAdd ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.props.showAddModal}>Add Song</span>
-        </NavItem>
-      </Nav>
-    );
+  filterSongs = searchQuery => {
+    this.setState({ searchQuery });
   }
 
   renderContent() {
     const { fetching, fetchError } = this.props;
 
     if (fetching) {
-      return this.renderLoading();
+      return [];
     } else if (fetchError) {
       return this.renderError(`Failed to load songs: ${fetchError}`);
     } else {
-      return this.renderSongs();
+      const filteredSongs = this.getFilteredSongs();
+      if (_.isEmpty(filteredSongs)) {
+        return this.renderEmpty();
+      } else {
+        return this.renderSongs(filteredSongs);
+      }
     }
-  }
-
-  renderLoading() {
-    return <LoadingIndicator size={100}/>;
   }
 
   renderError(error) {
@@ -96,30 +96,29 @@ class SongListPage extends Component {
     );
   }
 
-  renderSongs() {
-    if (_.isEmpty(this.props.songs)) {
-      return (
-        <div className="card border-info">
-          <div className="card-body">
-            No songs have been added.
-          </div>
-        </div>
-      );
-    }
-
-    const songs = _(this.props.songs)
-      .filter(this.songMatchesSearch)
-      .map(song => (
-        <div key={song.id} className="col-md-6 col-lg-4 mb-4">
-          <SongEntry song={song}/>
-        </div>
-      ))
-      .value();
-
-    return <div className="row">{songs}</div>;
+  renderEmpty() {
+    return (
+      <Card className={this.props.classes.emptyCard}>
+        <CardContent>
+          No songs found.
+        </CardContent>
+      </Card>
+    );
   }
 
-  songMatchesSearch(song) {
+  renderSongs(songs) {
+    return _.map(songs, song => (
+      <Grid item key={song.id} xs={12} sm={6} md={4}>
+        <SongCard song={song}/>
+      </Grid>
+    ));
+  }
+
+  getFilteredSongs = () => {
+    return _.filter(this.props.songs || [], this.songMatchesSearch);
+  }
+
+  songMatchesSearch = song => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
 
     if (!searchQuery) {
@@ -143,4 +142,5 @@ function mapStateToProps({ page: { songList } }) {
   };
 }
 
+SongListPage = withStyles(styles)(SongListPage);
 export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchSongs })(SongListPage);

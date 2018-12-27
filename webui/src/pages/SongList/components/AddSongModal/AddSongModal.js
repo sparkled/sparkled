@@ -1,71 +1,93 @@
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { withStyles } from '@material-ui/core/styles';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import jsMediaTags from 'jsmediatags/dist/jsmediatags';
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
+import Alert from 'react-s-alert';
 import { Field, reduxForm } from 'redux-form';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import InputField from '../../../../components/form/InputField';
+import TextField from '../../../../components/form/TextField';
 import { required } from '../../../../components/form/validators';
 import { addSong, hideAddModal } from '../../actions';
-import './AddSongModal.css';
+
+const formName = 'addSong';
+
+const styles = theme => ({
+  dropZone: {
+    marginBottom: 24,
+    padding: 24,
+    borderRadius: theme.shape.borderRadius,
+    background: theme.palette.grey[900],
+    fontFamily: theme.typography.fontFamily,
+    '&:hover, &.drop-zone-accept, &.drop-zone-reject': {
+      background: theme.palette.grey[700],
+      cursor: 'pointer'
+    }
+  }
+});
 
 class AddSongModal extends Component {
 
   state = { mp3: null };
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.addModalVisible && nextProps.addModalVisible) {
+    const { addError, addModalVisible } = nextProps;
+
+    if (!this.props.addModalVisible && addModalVisible) {
       this.props.initialize({});
-      this.setState({mp3: null});
+      this.setState({ mp3: null });
+    }
+
+    if (!this.props.addError && addError) {
+      Alert.error(`Failed to add song: ${addError}`);
     }
   }
 
   render() {
-    const { adding, addModalVisible, handleSubmit, valid } = this.props;
-    const addButtonText = adding ? 'Adding...' : 'Add song';
+    const { adding, addModalVisible, classes, handleSubmit, fullScreen, valid } = this.props;
     const canSubmit = valid && this.state.mp3;
     const dropzoneText = this.state.mp3 ? `Selected file: ${this.state.mp3.name}.` : 'Drop .mp3 file here, or click.';
 
     return (
-      <div>
-        <Modal isOpen={addModalVisible} wrapClassName="AddSongModal" backdrop={true}>
-          <form onSubmit={handleSubmit(this.addSong.bind(this))}>
-            <ModalHeader>Add song</ModalHeader>
-            <ModalBody>
-              <Dropzone className="drop-zone mb-4" acceptClassName="drop-zone-accept" rejectClassName="drop-zone-reject"
-                        accept=".mp3" multiple={false}
-                        onDrop={this.onDrop.bind(this)}>
-                {dropzoneText}
-              </Dropzone>
+      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen}>
+        <DialogTitle>Add song</DialogTitle>
+        <DialogContent>
+          <form id={formName} onSubmit={handleSubmit(this.addSong)} noValidate autoComplete="off">
+            <Dropzone className={classes.dropZone} acceptClassName="drop-zone-accept" rejectClassName="drop-zone-reject"
+                      accept=".mp3" multiple={false}
+                      onDrop={this.onDrop.bind(this)}>
+              {dropzoneText}
+            </Dropzone>
 
-              <Field name="name" component={InputField} label="Song Name" type="text"
-                     required={true} validate={required}/>
+            <Field component={TextField} fullWidth name="name" label="Song Name"
+                   required={true} validate={required}/>
 
-              <div className="row">
-                <div className="col-sm-6">
-                  <Field name="artist" component={InputField} label="Artist" type="text"
-                         required={true} validate={required}/>
-                </div>
-                <div className="col-sm-6">
-                  <Field name="album" component={InputField} label="Album" type="text"
-                         required={true} validate={required}/>
-                </div>
-              </div>
+            <Field component={TextField} fullWidth name="artist" label="Artist"
+                   required={true} validate={required}/>
 
-              <div className="d-none">
-                <Field name="durationMs" component={InputField} label="Duration (ms)" type="number" disabled={true}/>
-              </div>
+            <Field component={TextField} fullWidth name="album" label="Album"
+                   required={true} validate={required}/>
 
-              {this.renderAddError()}
-            </ModalBody>
-            <ModalFooter>
-              <Button type="submit" color="info" disabled={adding || !canSubmit}>{addButtonText}</Button>
-              <Button type="button" color="secondary" disabled={adding}
-                      onClick={this.hideModal.bind(this)}>Cancel</Button>
-            </ModalFooter>
+            <div className="d-none">
+              <Field name="durationMs" component={TextField} label="Duration (ms)" type="number" disabled={true}/>
+            </div>
           </form>
-        </Modal>
-      </div>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={this.props.hideAddModal} color="default" disabled={adding}>
+            Cancel
+          </Button>
+          <Button variant="contained" color="primary" type="submit" form={formName} disabled={adding || !canSubmit}>
+            {adding ? 'Adding...' : 'Add song'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -96,27 +118,9 @@ class AddSongModal extends Component {
     change('album', album);
   }
 
-  renderAddError() {
-    const { addError } = this.props;
-    if (!addError) {
-      return null;
-    } else {
-      return (
-        <div className="card border-danger">
-          <div className="card-body">Failed to add song: {addError}</div>
-        </div>
-      );
-    }
-  }
-
-  hideModal() {
-    this.props.hideAddModal();
-  }
-
-  addSong(values) {
-    const { addSong } = this.props;
+  addSong = song => {
     const { mp3 } = this.state;
-    addSong({ song: values, mp3 });
+    this.props.addSong({ song, mp3 });
   }
 }
 
@@ -128,5 +132,7 @@ function mapStateToProps({ page: { songList } }) {
   };
 }
 
+AddSongModal = withMobileDialog({ breakpoint: 'xs' })(AddSongModal);
+AddSongModal = withStyles(styles)(AddSongModal);
 AddSongModal = connect(mapStateToProps, { addSong, hideAddModal })(AddSongModal);
-export default reduxForm({ form: 'addSong' })(AddSongModal);
+export default reduxForm({ form: formName })(AddSongModal);

@@ -2,6 +2,17 @@ html, body, #root {
   height: 100%;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Ensure alerts are shown above modal backdrops. */
+.s-alert-wrapper {
+  z-index: 1500;
+}
+
 /* Styling for react-split-pane */
 .Resizer {
   background: #000;

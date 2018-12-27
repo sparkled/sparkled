@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { eventType, subscribe, unsubscribe } from "../../../../utils/eventBus";
+import { eventType, subscribe, unsubscribe } from '../../../../utils/eventBus';
 import './PlaybackFrameIndicator.css';
 
 const key = 'PlaybackFrameIndicator';

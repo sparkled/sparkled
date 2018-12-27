@@ -1,33 +1,41 @@
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { deleteStage, hideDeleteModal } from '../../actions';
 
 class DeleteStageModal extends Component {
 
   render() {
-    const { deleting, stageToDelete } = this.props;
-    const deleteButtonText = deleting ? 'Deleting...' : 'Delete stage';
-
-    if (!stageToDelete) {
-      return null;
-    }
+    const { deleting, fullScreen, stageToDelete } = this.props;
+    const stageName = (stageToDelete || {}).name;
 
     return (
-      <div>
-        <Modal isOpen={!!stageToDelete} wrapClassName="delete-stage-modal" backdrop={true}>
-          <ModalHeader>Delete stage</ModalHeader>
-          <ModalBody>
-            <p>Are you sure you want to delete <em>{stageToDelete.name}</em>?</p>
-            <p>If any sequences have been created against this stage, they will also be deleted.</p>
+      <Dialog open={Boolean(stageToDelete)} onClose={this.hideModal} fullScreen={fullScreen}>
+        <DialogTitle>Delete stage</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete <em>{stageName}</em>?
+          </DialogContentText>
+          <DialogContentText>
+            If any sequences have been created against this stage, they will also be deleted.
             {this.renderDeletionError()}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" disabled={deleting} onClick={this.deleteStage.bind(this)}>{deleteButtonText}</Button>
-            <Button color="secondary" disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.props.hideDeleteModal} color="default">
+            Cancel
+          </Button>
+          <Button onClick={this.deleteStage} variant="contained" color="secondary">
+            {deleting ? 'Deleting...' : 'Delete stage'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -44,11 +52,7 @@ class DeleteStageModal extends Component {
     }
   }
 
-  hideModal() {
-    this.props.hideDeleteModal();
-  }
-
-  deleteStage() {
+  deleteStage = () => {
     const { deleteStage, stageToDelete } = this.props;
     deleteStage(stageToDelete.id);
   }
@@ -62,4 +66,5 @@ function mapStateToProps({ page: { stageList } }) {
   };
 }
 
+DeleteStageModal = withMobileDialog({ breakpoint: 'xs' })(DeleteStageModal);
 export default connect(mapStateToProps, { deleteStage, hideDeleteModal })(DeleteStageModal);
