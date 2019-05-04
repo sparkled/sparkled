@@ -9,7 +9,7 @@ import PageContainer from '../../components/PageContainer';
 import { fetchPlaylists, showAddModal } from './actions';
 import AddPlaylistModal from './components/AddPlaylistModal';
 import DeletePlaylistModal from './components/DeletePlaylistModal';
-import PlaylistEntry from './components/PlaylistEntry';
+import PlaylistCard from './components/PlaylistCard';
 
 class PlaylistListPage extends Component {
 
@@ -111,7 +111,7 @@ class PlaylistListPage extends Component {
       .filter(this.playlistMatchesSearch)
       .map(playlist => (
         <div key={playlist.id} className="col-md-6 col-lg-4 mb-4">
-          <PlaylistEntry playlist={playlist}/>
+          <PlaylistCard playlist={playlist}/>
         </div>
       ))
       .value();
