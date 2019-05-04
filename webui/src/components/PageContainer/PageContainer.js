@@ -1,7 +1,6 @@
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
-import Typography from '@material-ui/core/es/Typography/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -19,15 +18,16 @@ import SchedulerPageIcon from '@material-ui/icons/Schedule';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import AppLogo from '../AppLogo';
 import BrightnessToggle from '../BrightnessToggle';
 
 const styles = theme => ({
   root: {
     display: 'flex',
   },
-  title: {
-    marginLeft: 20,
-    flexGrow: 1
+  appLogo: {
+    flexGrow: 1,
+    height: 30
   },
   toolbarIcon: {
     display: 'flex',
@@ -109,7 +109,7 @@ class PageContainer extends Component {
               <MenuIcon/>
             </IconButton>
 
-            <Typography variant="h6" className={classes.title}>Sparkled</Typography>
+            <AppLogo className={classes.appLogo}/>
 
             <BrightnessToggle/>
           </Toolbar>
