@@ -64,10 +64,6 @@ class SongListPage extends Component {
     return <PageContainer body={pageBody}/>;
   }
 
-  filterSongs = searchQuery => {
-    this.setState({ searchQuery });
-  }
-
   renderContent() {
     const { fetching, fetchError } = this.props;
 
@@ -114,9 +110,9 @@ class SongListPage extends Component {
     ));
   }
 
-  getFilteredSongs = () => {
-    return _.filter(this.props.songs || [], this.songMatchesSearch);
-  }
+  filterSongs = searchQuery => this.setState({ searchQuery });
+
+  getFilteredSongs = () => _.filter(this.props.songs || [], this.songMatchesSearch);
 
   songMatchesSearch = song => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();

@@ -1,15 +1,28 @@
+import { withStyles } from '@material-ui/core';
+import Card from '@material-ui/core/es/Card/Card';
+import CardContent from '@material-ui/core/es/CardContent/CardContent';
+import Grid from '@material-ui/core/Grid/Grid';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
-import { Nav, NavItem } from 'reactstrap';
-import { setCurrentPage } from '../actions';
-import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
+import SearchBar from '../../components/SearchBar';
+import { setCurrentPage } from '../actions';
 import { fetchPlaylists, showAddModal } from './actions';
 import AddPlaylistModal from './components/AddPlaylistModal';
 import DeletePlaylistModal from './components/DeletePlaylistModal';
 import PlaylistCard from './components/PlaylistCard';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  emptyCard: {
+    margin: 'auto'
+  }
+});
+
 
 class PlaylistListPage extends Component {
 
@@ -30,59 +43,48 @@ class PlaylistListPage extends Component {
     if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
       Alert.success('Playlist deleted successfully');
       nextProps.fetchPlaylists();
-    } else if (props.adding && !nextProps.adding && !nextProps.addError) {
+    } else if (this.props.adding && !nextProps.adding && !nextProps.addError) {
       Alert.success('Playlist added successfully');
       nextProps.fetchPlaylists();
     }
   }
 
   render() {
-    const pageBody = (
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12 input-group input-group-lg my-4">
-            <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
-                   onChange={e => this.setState({ searchQuery: e.target.value })}/>
-          </div>
-        </div>
+    const { classes, fetching, showAddModal } = this.props;
 
-        <div className="row">
-          <div className="col-lg-12">{this.renderContent()}</div>
-        </div>
+    const pageBody = (
+      <div className={classes.root}>
+        <SearchBar placeholderText="Search playlists" fetching={fetching} onAddButtonClick={showAddModal}
+                   onSearch={this.filterPlaylists}
+        />
+
+        <Grid container spacing={24}>
+          {this.renderContent()}
+        </Grid>
 
         <AddPlaylistModal/>
         <DeletePlaylistModal/>
       </div>
     );
 
-    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
-  }
-
-  renderNavbar() {
-    const canAdd = this.props.playlists;
-    return (
-      <Nav className="ml-auto" navbar>
-        <NavItem className={canAdd ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.props.showAddModal}>Add Playlist</span>
-        </NavItem>
-      </Nav>
-    );
+    return <PageContainer body={pageBody}/>;
   }
 
   renderContent() {
     const { fetching, fetchError } = this.props;
 
     if (fetching) {
-      return this.renderLoading();
+      return [];
     } else if (fetchError) {
       return this.renderError(`Failed to load playlists: ${fetchError}`);
     } else {
-      return this.renderPlaylists();
+      const filteredPlaylists = this.getFilteredPlaylists();
+      if (_.isEmpty(filteredPlaylists)) {
+        return this.renderEmpty();
+      } else {
+        return this.renderPlaylists(filteredPlaylists);
+      }
     }
-  }
-
-  renderLoading() {
-    return <LoadingIndicator size={100}/>;
   }
 
   renderError(error) {
@@ -96,30 +98,29 @@ class PlaylistListPage extends Component {
     );
   }
 
-  renderPlaylists() {
-    if (_.isEmpty(this.props.playlists)) {
-      return (
-        <div className="card border-info">
-          <div className="card-body">
-            No playlists have been added.
-          </div>
-        </div>
-      );
-    }
-
-    const playlists = _(this.props.playlists)
-      .filter(this.playlistMatchesSearch)
-      .map(playlist => (
-        <div key={playlist.id} className="col-md-6 col-lg-4 mb-4">
-          <PlaylistCard playlist={playlist}/>
-        </div>
-      ))
-      .value();
-
-    return <div className="row">{playlists}</div>;
+  renderEmpty() {
+    return (
+      <Card className={this.props.classes.emptyCard}>
+        <CardContent>
+          No playlists found.
+        </CardContent>
+      </Card>
+    );
   }
 
-  playlistMatchesSearch(playlist) {
+  renderPlaylists(playlists) {
+    return _.map(playlists, playlist => (
+      <Grid item key={playlist.id} xs={12} sm={6} md={4}>
+        <PlaylistCard playlist={playlist}/>
+      </Grid>
+    ));
+  }
+
+  filterPlaylists = searchQuery => this.setState({ searchQuery });
+
+  getFilteredPlaylists = () => _.filter(this.props.playlists || [], this.playlistMatchesSearch);
+
+  playlistMatchesSearch = playlist => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
     return !searchQuery || _.includes(playlist.name.toLowerCase(), searchQuery);
   }
@@ -127,9 +128,9 @@ class PlaylistListPage extends Component {
 
 function mapStateToProps({ page: { playlistList } }) {
   return {
+    playlists: playlistList.playlists,
     fetching: playlistList.fetching,
     fetchError: playlistList.fetchError,
-    playlists: playlistList.playlists,
     adding: playlistList.adding,
     addError: playlistList.addError,
     deleting: playlistList.deleting,
@@ -137,4 +138,5 @@ function mapStateToProps({ page: { playlistList } }) {
   };
 }
 
+PlaylistListPage = withStyles(styles)(PlaylistListPage);
 export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchPlaylists })(PlaylistListPage);

@@ -1,30 +1,36 @@
+import { withStyles } from '@material-ui/core';
+import Card from '@material-ui/core/es/Card/Card';
+import CardContent from '@material-ui/core/es/CardContent/CardContent';
+import Grid from '@material-ui/core/Grid/Grid';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
-import { Nav, NavItem } from 'reactstrap';
-import { setCurrentPage } from '../actions';
-import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
+import SearchBar from '../../components/SearchBar';
+import { setCurrentPage } from '../actions';
 import { fetchScheduledJobs, showAddModal } from './actions';
 import { fetchPlaylists } from '../PlaylistList/actions';
 import AddScheduledJobModal from './components/AddScheduledJobModal';
 import DeleteScheduledJobModal from './components/DeleteScheduledJobModal';
 import ScheduledJobEntry from './components/ScheduledJobEntry';
 
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  emptyCard: {
+    margin: 'auto'
+  }
+});
+
 class SchedulerPage extends Component {
 
   state = { searchQuery: '' };
 
-  constructor(props) {
-    super(props);
-    this.scheduledJobMatchesSearch = this.scheduledJobMatchesSearch.bind(this);
-  }
-
   componentDidMount() {
-    this.props.setCurrentPage({ pageTitle: 'Scheduled Jobs', pageClass: 'SchedulerPage' });
+    this.props.setCurrentPage({ pageTitle: 'Scheduler', pageClass: 'SchedulerPage' });
     this.props.fetchScheduledJobs();
-    this.props.fetchPlaylists();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,54 +45,43 @@ class SchedulerPage extends Component {
   }
 
   render() {
-    const pageBody = (
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12 input-group input-group-lg my-4">
-            <input type="text" className="form-control" placeholder="Search..." value={this.state.searchQuery}
-                   onChange={e => this.setState({ searchQuery: e.target.value })}/>
-          </div>
-        </div>
+    const { classes, fetching, showAddModal } = this.props;
 
-        <div className="row">
-          <div className="col-lg-12">{this.renderContent()}</div>
-        </div>
+    const pageBody = (
+      <div className={classes.root}>
+        <SearchBar placeholderText="Search scheduled jobs" fetching={fetching} onAddButtonClick={showAddModal}
+                   onSearch={this.filterScheduledJobs}
+        />
+
+        <Grid container spacing={24}>
+          {this.renderContent()}
+        </Grid>
 
         <AddScheduledJobModal playlists={this.props.playlists}/>
         <DeleteScheduledJobModal/>
       </div>
     );
 
-    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
-  }
-
-  renderNavbar() {
-    const canAdd = this.props.scheduledJobs;
-    return (
-      <Nav className="ml-auto" navbar>
-        <NavItem className={canAdd ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.props.showAddModal}>Add Scheduled Job</span>
-        </NavItem>
-      </Nav>
-    );
+    return <PageContainer body={pageBody}/>;
   }
 
   renderContent() {
     const { fetching, fetchingPlaylists, fetchError, fetchPlaylistsError } = this.props;
 
     if (fetching || fetchingPlaylists) {
-      return this.renderLoading();
+      return [];
     } else if (fetchError) {
       return this.renderError(`Failed to load scheduled jobs: ${fetchError}`);
     } else if (fetchPlaylistsError) {
       return this.renderError(`Failed to load playlists: ${fetchPlaylistsError}`);
     } else {
-      return this.renderScheduledJobs();
+      const filteredScheduledJobs = this.getFilteredScheduledJobs();
+      if (_.isEmpty(filteredScheduledJobs)) {
+        return this.renderEmpty();
+      } else {
+        return this.renderScheduledJobs(filteredScheduledJobs);
+      }
     }
-  }
-
-  renderLoading() {
-    return <LoadingIndicator size={100}/>;
   }
 
   renderError(error) {
@@ -100,32 +95,31 @@ class SchedulerPage extends Component {
     );
   }
 
-  renderScheduledJobs() {
-    if (_.isEmpty(this.props.scheduledJobs)) {
-      return (
-        <div className="card border-info">
-          <div className="card-body">
-            No scheduled jobs have been added.
-          </div>
-        </div>
-      );
-    }
-
-    const scheduledJobs = _(this.props.scheduledJobs)
-      .filter(this.scheduledJobMatchesSearch)
-      .map(scheduledJob => (
-        <div key={scheduledJob.id} className="col-md-6 col-lg-4 mb-4">
-          <ScheduledJobEntry scheduledJob={scheduledJob}/>
-        </div>
-      ))
-      .value();
-
-    return <div className="row">{scheduledJobs}</div>;
+  renderEmpty() {
+    return (
+      <Card className={this.props.classes.emptyCard}>
+        <CardContent>
+          No scheduled jobs found.
+        </CardContent>
+      </Card>
+    );
   }
 
-  scheduledJobMatchesSearch(scheduledJob) {
+  renderScheduledJobs(scheduledJobs) {
+    return _.map(scheduledJobs, scheduledJob => (
+      <Grid item key={scheduledJob.id} xs={12} sm={6} md={4}>
+        <ScheduledJobEntry scheduledJob={scheduledJob}/>
+      </Grid>
+    ));
+  }
+
+  filterScheduledJobs = searchQuery => this.setState({ searchQuery });
+
+  getFilteredScheduledJobs = () => _.filter(this.props.scheduledJobs || [], this.scheduledJobMatchesSearch);
+
+  scheduledJobMatchesSearch = scheduledJob => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
-    return !searchQuery || _.includes(scheduledJob.playlistName.toLowerCase(), searchQuery);
+    return !searchQuery || _.includes(scheduledJob.action.toLowerCase(), searchQuery);
   }
 }
 
@@ -144,4 +138,5 @@ function mapStateToProps({ page: { scheduler, playlistList } }) {
   };
 }
 
+SchedulerPage = withStyles(styles)(SchedulerPage);
 export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchScheduledJobs, fetchPlaylists })(SchedulerPage);

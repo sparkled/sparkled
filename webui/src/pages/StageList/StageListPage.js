@@ -43,7 +43,7 @@ class StageListPage extends Component {
     if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
       Alert.success('Stage deleted successfully');
       nextProps.fetchStages();
-    } else if (this.props.adding && !nextProps.adding && !nextProps.addError) {
+    } else if (props.adding && !nextProps.adding && !nextProps.addError) {
       Alert.success('Stage added successfully');
       nextProps.fetchStages();
     }
@@ -116,13 +116,9 @@ class StageListPage extends Component {
     ));
   }
 
-  filterStages = searchQuery => {
-    this.setState({ searchQuery });
-  }
+  filterStages = searchQuery => this.setState({ searchQuery });
 
-  getFilteredStages = () => {
-    return _.filter(this.props.stages || [], this.stageMatchesSearch);
-  }
+  getFilteredStages = () => _.filter(this.props.stages || [], this.stageMatchesSearch);
 
   stageMatchesSearch = stage => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
