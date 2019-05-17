@@ -16,7 +16,7 @@ class DeleteSongModal extends Component {
     const songName = (songToDelete || {}).name;
 
     return (
-      <Dialog open={Boolean(songToDelete)} onClose={this.hideModal} fullScreen={fullScreen}>
+      <Dialog open={Boolean(songToDelete)} onClose={this.hideModal} fullScreen={fullScreen} fullWidth>
         <DialogTitle>Delete song</DialogTitle>
         <DialogContent>
           <DialogContentText>

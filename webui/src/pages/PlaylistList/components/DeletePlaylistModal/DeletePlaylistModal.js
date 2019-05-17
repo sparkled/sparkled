@@ -1,32 +1,38 @@
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { deletePlaylist, hideDeleteModal } from '../../actions';
 
 class DeletePlaylistModal extends Component {
 
   render() {
-    const { deleting, playlistToDelete } = this.props;
-    const deleteButtonText = deleting ? 'Deleting...' : 'Delete playlist';
-
-    if (!playlistToDelete) {
-      return null;
-    }
+    const { deleting, fullScreen, playlistToDelete } = this.props;
+    const playlistName = (playlistToDelete || {}).name;
 
     return (
-      <div>
-        <Modal isOpen={!!playlistToDelete} wrapClassName="delete-playlist-modal" backdrop={true}>
-          <ModalHeader>Delete playlist</ModalHeader>
-          <ModalBody>
-            <p>Are you sure you want to delete <em>{playlistToDelete.name}</em>?</p>
+      <Dialog open={Boolean(playlistToDelete)} onClose={this.hideModal} fullScreen={fullScreen} fullWidth>
+        <DialogTitle>Delete playlist</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete <em>{playlistName}</em>?
             {this.renderDeletionError()}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" disabled={deleting} onClick={this.deletePlaylist.bind(this)}>{deleteButtonText}</Button>
-            <Button color="secondary" disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.props.hideDeleteModal} color="default">
+            Cancel
+          </Button>
+          <Button onClick={this.deletePlaylist} variant="contained" color="secondary">
+            {deleting ? 'Deleting...' : 'Delete playlist'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -43,11 +49,7 @@ class DeletePlaylistModal extends Component {
     }
   }
 
-  hideModal() {
-    this.props.hideDeleteModal();
-  }
-
-  deletePlaylist() {
+  deletePlaylist = () => {
     const { deletePlaylist, playlistToDelete } = this.props;
     deletePlaylist(playlistToDelete.id);
   }
@@ -61,4 +63,5 @@ function mapStateToProps({ page: { playlistList } }) {
   };
 }
 
+DeletePlaylistModal = withMobileDialog({ breakpoint: 'xs' })(DeletePlaylistModal);
 export default connect(mapStateToProps, { deletePlaylist, hideDeleteModal })(DeletePlaylistModal);

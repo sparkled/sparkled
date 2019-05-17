@@ -31,7 +31,7 @@ class AddStageModal extends Component {
     const { adding, addModalVisible, handleSubmit, fullScreen, valid } = this.props;
 
     return (
-      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen}>
+      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen} fullWidth>
         <DialogTitle>Add stage</DialogTitle>
         <DialogContent>
           <form id={formName} onSubmit={handleSubmit(this.addStage)} noValidate autoComplete="off">

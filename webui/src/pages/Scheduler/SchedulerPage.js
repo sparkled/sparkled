@@ -13,7 +13,7 @@ import { fetchScheduledJobs, showAddModal } from './actions';
 import { fetchPlaylists } from '../PlaylistList/actions';
 import AddScheduledJobModal from './components/AddScheduledJobModal';
 import DeleteScheduledJobModal from './components/DeleteScheduledJobModal';
-import ScheduledJobEntry from './components/ScheduledJobEntry';
+import ScheduledJobCard from './components/ScheduledJobCard';
 
 const styles = theme => ({
   root: {
@@ -31,6 +31,7 @@ class SchedulerPage extends Component {
   componentDidMount() {
     this.props.setCurrentPage({ pageTitle: 'Scheduler', pageClass: 'SchedulerPage' });
     this.props.fetchScheduledJobs();
+    this.props.fetchPlaylists();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -108,7 +109,7 @@ class SchedulerPage extends Component {
   renderScheduledJobs(scheduledJobs) {
     return _.map(scheduledJobs, scheduledJob => (
       <Grid item key={scheduledJob.id} xs={12} sm={6} md={4}>
-        <ScheduledJobEntry scheduledJob={scheduledJob}/>
+        <ScheduledJobCard scheduledJob={scheduledJob}/>
       </Grid>
     ));
   }

@@ -1,32 +1,37 @@
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { deleteScheduledJob, hideDeleteModal } from '../../actions';
 
 class DeleteScheduledJobModal extends Component {
 
   render() {
-    const { deleting, scheduledJobToDelete } = this.props;
-    const deleteButtonText = deleting ? 'Deleting...' : 'Delete scheduled job';
-
-    if (!scheduledJobToDelete) {
-      return null;
-    }
+    const { deleting, fullScreen, scheduledJobToDelete } = this.props;
 
     return (
-      <div>
-        <Modal isOpen={!!scheduledJobToDelete} wrapClassName="DeleteScheduledJobModal" backdrop={true}>
-          <ModalHeader>Delete scheduled job</ModalHeader>
-          <ModalBody>
-            <p>Are you sure you want to delete this scheduled job?</p>
+      <Dialog open={Boolean(scheduledJobToDelete)} onClose={this.hideModal} fullScreen={fullScreen} fullWidth>
+        <DialogTitle>Delete scheduled job</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this scheduled job?
             {this.renderDeletionError()}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" disabled={deleting} onClick={this.deleteScheduledJob.bind(this)}>{deleteButtonText}</Button>
-            <Button color="secondary" disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.props.hideDeleteModal} color="default">
+            Cancel
+          </Button>
+          <Button onClick={this.deleteScheduledJob} variant="contained" color="secondary">
+            {deleting ? 'Deleting...' : 'Delete scheduledJob'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -37,17 +42,13 @@ class DeleteScheduledJobModal extends Component {
     } else {
       return (
         <div className="card border-danger">
-          <div className="card-body">Failed to delete scheduled job: {deleteError}</div>
+          <div className="card-body">Failed to delete scheduledJob: {deleteError}</div>
         </div>
       );
     }
   }
 
-  hideModal() {
-    this.props.hideDeleteModal();
-  }
-
-  deleteScheduledJob() {
+  deleteScheduledJob = () => {
     const { deleteScheduledJob, scheduledJobToDelete } = this.props;
     deleteScheduledJob(scheduledJobToDelete.id);
   }
@@ -61,4 +62,5 @@ function mapStateToProps({ page: { scheduler } }) {
   };
 }
 
+DeleteScheduledJobModal = withMobileDialog({ breakpoint: 'xs' })(DeleteScheduledJobModal);
 export default connect(mapStateToProps, { deleteScheduledJob, hideDeleteModal })(DeleteScheduledJobModal);

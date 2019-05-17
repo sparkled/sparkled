@@ -1,12 +1,20 @@
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Alert from 'react-s-alert';
 import { Field, reduxForm } from 'redux-form';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import jobActions from '../../jobActions';
-import InputField from '../../../../components/form/InputField';
+import TextField from '../../../../components/form/TextField';
 import SingleSelectField from '../../../../components/form/SingleSelectField';
 import { required } from '../../../../components/form/validators';
 import { addScheduledJob, hideAddModal } from '../../actions';
+import jobActions from '../../jobActions';
+
+const formName = 'addScheduledJob';
 
 class AddScheduledJobModal extends Component {
 
@@ -14,43 +22,49 @@ class AddScheduledJobModal extends Component {
     action: null
   }
 
-  constructor(props) {
-    super(props);
-    this.onActionChange = this.onActionChange.bind(this);
+  componentWillReceiveProps(nextProps) {
+    const { addError, addModalVisible } = nextProps;
+    if (!this.props.addModalVisible && addModalVisible) {
+      this.props.initialize({});
+    }
+
+    if (!this.props.addError && addError) {
+      Alert.error(`Failed to add scheduled job: ${addError}`);
+    }
   }
 
   render() {
-    const { adding, addModalVisible, handleSubmit, valid } = this.props;
-    const addButtonText = adding ? 'Adding...' : 'Add scheduled job';
+    const { adding, addModalVisible, handleSubmit, fullScreen, valid } = this.props;
 
     return (
-      <div>
-        <Modal isOpen={addModalVisible} wrapClassName="AddScheduledJobModal" backdrop={true}>
-          <form onSubmit={handleSubmit(this.addScheduledJob.bind(this))}>
-            <ModalHeader>Add scheduled job</ModalHeader>
-            <ModalBody>
-              <Field name="cronExpression" component={InputField} label="Cron Expression" type="text"
-                     required={true} validate={required}/>
+      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen} fullWidth>
+        <DialogTitle>Add scheduled job</DialogTitle>
+        <DialogContent>
+          <form id={formName} onSubmit={handleSubmit(this.addScheduledJob)} noValidate autoComplete="off">
+            <Field name="cronExpression" component={TextField} fullWidth label="Cron Expression" type="text"
+                   required={true} validate={required}/>
 
-              <Field name="action" component={SingleSelectField} label="Action" options={jobActions}
-                     required={true} validate={required} onChange={this.onActionChange}/>
+            <Field name="action" component={SingleSelectField} fullWidth label="Action" options={jobActions}
+                   required={true} validate={required} onChange={this.onActionChange}/>
 
-              {this.renderValueField()}
-              {this.renderPlaylistField()}
-              {this.renderAddError()}
-            </ModalBody>
-            <ModalFooter>
-              <Button type="submit" color="info" disabled={adding || !valid}>{addButtonText}</Button>
-              <Button type="button" color="secondary" disabled={adding}
-                      onClick={this.hideModal.bind(this)}>Cancel</Button>
-            </ModalFooter>
+            {this.renderValueField()}
+            {this.renderPlaylistField()}
           </form>
-        </Modal>
-      </div>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={this.props.hideAddModal} color="default" disabled={adding}>
+          Cancel
+          </Button>
+          <Button variant="contained" color="primary" type="submit" form={formName} disabled={adding || !valid}>
+            {adding ? 'Adding...' : 'Add scheduled job'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
-  onActionChange(event, newValue) {
+  onActionChange = (event, newValue) => {
     const { change } = this.props;
     change('value', null);
     change('playlistId', null);
@@ -75,33 +89,15 @@ class AddScheduledJobModal extends Component {
 
     if (hasValue) {
       return (
-        <Field name="value" component={InputField} label="Value" type="text"
-               required={true} validate={required}/>
+        <Field name="value" component={TextField} fullWidth label="Brightness" required={true} validate={required}/>
       );
     } else {
       return null;
     }
   }
 
-  renderAddError() {
-    const { addError } = this.props;
-    if (!addError) {
-      return null;
-    } else {
-      return (
-        <div className="card border-danger">
-          <div className="card-body">Failed to add scheduled job: {addError}</div>
-        </div>
-      );
-    }
-  }
-
-  hideModal() {
-    this.props.hideAddModal();
-  }
-
-  addScheduledJob(values) {
-    this.props.addScheduledJob(values);
+  addScheduledJob = scheduledJob => {
+    this.props.addScheduledJob(scheduledJob);
   }
 }
 
@@ -113,5 +109,6 @@ function mapStateToProps({ page: { scheduler } }) {
   };
 }
 
+AddScheduledJobModal = withMobileDialog({ breakpoint: 'xs' })(AddScheduledJobModal);
 AddScheduledJobModal = connect(mapStateToProps, { addScheduledJob, hideAddModal })(AddScheduledJobModal);
 export default reduxForm({ form: 'addScheduledJob' })(AddScheduledJobModal);

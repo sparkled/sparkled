@@ -54,7 +54,7 @@ class AddSongModal extends Component {
     const dropzoneText = this.state.mp3 ? `Selected file: ${this.state.mp3.name}.` : 'Drop .mp3 file here, or click.';
 
     return (
-      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen}>
+      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen} fullWidth>
         <DialogTitle>Add song</DialogTitle>
         <DialogContent>
           <form id={formName} onSubmit={handleSubmit(this.addSong)} noValidate autoComplete="off">

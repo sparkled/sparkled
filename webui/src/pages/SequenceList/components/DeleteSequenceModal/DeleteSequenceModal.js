@@ -1,32 +1,38 @@
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { deleteSequence, hideDeleteModal } from '../../actions';
 
 class DeleteSequenceModal extends Component {
 
   render() {
-    const { deleting, sequenceToDelete } = this.props;
-    const deleteButtonText = deleting ? 'Deleting...' : 'Delete sequence';
-
-    if (!sequenceToDelete) {
-      return null;
-    }
+    const { deleting, fullScreen, sequenceToDelete } = this.props;
+    const sequenceName = (sequenceToDelete || {}).name;
 
     return (
-      <div>
-        <Modal isOpen={!!sequenceToDelete} wrapClassName="delete-sequence-modal" backdrop={true}>
-          <ModalHeader>Delete sequence</ModalHeader>
-          <ModalBody>
-            <p>Are you sure you want to delete <em>{sequenceToDelete.name}</em>?</p>
+      <Dialog open={Boolean(sequenceToDelete)} onClose={this.hideModal} fullScreen={fullScreen} fullWidth>
+        <DialogTitle>Delete sequence</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete <em>{sequenceName}</em>?
             {this.renderDeletionError()}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" disabled={deleting} onClick={this.deleteSequence.bind(this)}>{deleteButtonText}</Button>
-            <Button color="secondary" disabled={deleting} onClick={this.hideModal.bind(this)}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.props.hideDeleteModal} color="default">
+            Cancel
+          </Button>
+          <Button onClick={this.deleteSequence} variant="contained" color="secondary">
+            {deleting ? 'Deleting...' : 'Delete sequence'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -43,11 +49,7 @@ class DeleteSequenceModal extends Component {
     }
   }
 
-  hideModal() {
-    this.props.hideDeleteModal();
-  }
-
-  deleteSequence() {
+  deleteSequence = () => {
     const { deleteSequence, sequenceToDelete } = this.props;
     deleteSequence(sequenceToDelete.id);
   }
@@ -61,4 +63,5 @@ function mapStateToProps({ page: { sequenceList } }) {
   };
 }
 
+DeleteSequenceModal = withMobileDialog({ breakpoint: 'xs' })(DeleteSequenceModal);
 export default connect(mapStateToProps, { deleteSequence, hideDeleteModal })(DeleteSequenceModal);

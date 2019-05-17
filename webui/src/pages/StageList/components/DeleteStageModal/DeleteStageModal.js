@@ -16,7 +16,7 @@ class DeleteStageModal extends Component {
     const stageName = (stageToDelete || {}).name;
 
     return (
-      <Dialog open={Boolean(stageToDelete)} onClose={this.hideModal} fullScreen={fullScreen}>
+      <Dialog open={Boolean(stageToDelete)} onClose={this.hideModal} fullScreen={fullScreen} fullWidth>
         <DialogTitle>Delete stage</DialogTitle>
         <DialogContent>
           <DialogContentText>

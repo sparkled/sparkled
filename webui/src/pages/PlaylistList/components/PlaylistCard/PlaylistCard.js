@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React, { Component } from 'react';
@@ -14,18 +13,12 @@ import { Link } from 'react-router-dom';
 import { getFormattedDuration } from '../../../../utils/dateUtils';
 import { playPlaylist, showDeleteModal } from '../../actions';
 
-const styles = theme => ({
-  topRow: {
-    marginBottom: 8
-  },
-});
-
 class PlaylistCard extends Component {
 
   state = { anchorEl: null };
 
   render() {
-    const { classes, playlist } = this.props;
+    const { playlist } = this.props;
     const { anchorEl } = this.state;
 
     return (
@@ -41,7 +34,7 @@ class PlaylistCard extends Component {
           />
 
           <CardContent>
-            <Grid container justify="space-between" className={classes.topRow}>
+            <Grid container justify="space-between">
               <Grid item>
                 <Typography>Sequences: {playlist.sequenceCount}</Typography>
               </Grid>
@@ -89,5 +82,4 @@ function mapStateToProps({ page: { playlistList } }) {
   };
 }
 
-PlaylistCard = withStyles(styles)(PlaylistCard);
 export default connect(mapStateToProps, { showDeleteModal, playPlaylist })(PlaylistCard);
