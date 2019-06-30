@@ -106,5 +106,5 @@ function mapStateToProps({ page: { sequenceList } }) {
   };
 }
 
-SequenceCard = withStyles(styles)(SequenceCard);
-export default connect(mapStateToProps, { showDeleteModal })(SequenceCard);
+SequenceCard = connect(mapStateToProps, { showDeleteModal })(SequenceCard);
+export default withStyles(styles)(SequenceCard);

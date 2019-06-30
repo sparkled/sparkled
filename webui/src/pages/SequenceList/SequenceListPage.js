@@ -62,7 +62,7 @@ class SequenceListPage extends Component {
                    onSearch={this.filterSequences}
         />
 
-        <Grid container spacing={24}>
+        <Grid container spacing={3}>
           {this.renderContent()}
         </Grid>
 
@@ -156,11 +156,11 @@ function mapStateToProps({ page: { sequenceList, songList, stageList } }) {
   };
 }
 
-SequenceListPage = withStyles(styles)(SequenceListPage);
-export default connect(mapStateToProps, {
+SequenceListPage = connect(mapStateToProps, {
   setCurrentPage,
   showAddModal,
   fetchSequences,
   fetchSongs,
   fetchStages
 })(SequenceListPage);
+export default withStyles(styles)(SequenceListPage);

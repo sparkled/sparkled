@@ -32,7 +32,7 @@ const styles = theme => ({
 class BrightnessToggle extends Component {
 
   state = {
-    anchorEl: null,
+    anchorEl: null
   };
 
   constructor(props) {
@@ -62,9 +62,7 @@ class BrightnessToggle extends Component {
           <div className={classes.popoverContainer}>
             <Typography className={classes.label}>Adjust global brightness</Typography>
 
-            <Slider min={0} max={15} step={1} value={brightness} classes={{ container: classes.slider }}
-                    onChange={this.updateBrightness}
-            />
+            <Slider min={0} max={15} step={1} value={brightness} onChange={this.updateBrightness}/>
           </div>
         </Popover>
       </>
@@ -94,6 +92,5 @@ function mapStateToProps({ page }) {
   return { brightness };
 }
 
-BrightnessToggle = withStyles(styles)(BrightnessToggle);
-
-export default connect(mapStateToProps, { fetchBrightness, updateBrightness })(BrightnessToggle);
+BrightnessToggle = connect(mapStateToProps, { fetchBrightness, updateBrightness })(BrightnessToggle);
+export default withStyles(styles)(BrightnessToggle);

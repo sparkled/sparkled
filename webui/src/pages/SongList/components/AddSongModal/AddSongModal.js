@@ -133,6 +133,6 @@ function mapStateToProps({ page: { songList } }) {
 }
 
 AddSongModal = withMobileDialog({ breakpoint: 'xs' })(AddSongModal);
-AddSongModal = withStyles(styles)(AddSongModal);
 AddSongModal = connect(mapStateToProps, { addSong, hideAddModal })(AddSongModal);
-export default reduxForm({ form: formName })(AddSongModal);
+AddSongModal = reduxForm({ form: formName })(AddSongModal);
+export default withStyles(styles)(AddSongModal);

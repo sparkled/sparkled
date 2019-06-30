@@ -54,7 +54,7 @@ class SchedulerPage extends Component {
                    onSearch={this.filterScheduledJobs}
         />
 
-        <Grid container spacing={24}>
+        <Grid container spacing={3}>
           {this.renderContent()}
         </Grid>
 
@@ -139,5 +139,5 @@ function mapStateToProps({ page: { scheduler, playlistList } }) {
   };
 }
 
-SchedulerPage = withStyles(styles)(SchedulerPage);
-export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchScheduledJobs, fetchPlaylists })(SchedulerPage);
+SchedulerPage = connect(mapStateToProps, { setCurrentPage, showAddModal, fetchScheduledJobs, fetchPlaylists })(SchedulerPage);
+export default withStyles(styles)(SchedulerPage);

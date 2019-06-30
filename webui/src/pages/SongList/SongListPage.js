@@ -52,7 +52,7 @@ class SongListPage extends Component {
                    onSearch={this.filterSongs}
         />
 
-        <Grid container spacing={24}>
+        <Grid container spacing={3}>
           {this.renderContent()}
         </Grid>
 
@@ -138,5 +138,5 @@ function mapStateToProps({ page: { songList } }) {
   };
 }
 
-SongListPage = withStyles(styles)(SongListPage);
-export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchSongs })(SongListPage);
+SongListPage = connect(mapStateToProps, { setCurrentPage, showAddModal, fetchSongs })(SongListPage);
+export default withStyles(styles)(SongListPage);

@@ -58,7 +58,7 @@ class StageListPage extends Component {
                    onSearch={this.filterStages}
         />
 
-        <Grid container spacing={24}>
+        <Grid container spacing={3}>
           {this.renderContent()}
         </Grid>
 
@@ -138,5 +138,5 @@ function mapStateToProps({ page: { stageList } }) {
   };
 }
 
-StageListPage = withStyles(styles)(StageListPage);
-export default connect(mapStateToProps, { setCurrentPage, showAddModal, fetchStages })(StageListPage);
+StageListPage = connect(mapStateToProps, { setCurrentPage, showAddModal, fetchStages })(StageListPage);
+export default withStyles(styles)(StageListPage);

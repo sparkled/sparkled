@@ -43,7 +43,7 @@ const styles = theme => ({
     display: 'flex',
     flexGrow: 1,
     overflow: 'auto',
-    padding: theme.spacing.unit * 3
+    padding: theme.spacing(3)
   },
 });
 
@@ -146,5 +146,5 @@ function mapStateToProps({ page }) {
   return { pageTitle, pageClass };
 }
 
-PageContainer = withStyles(styles, { withTheme: true })(PageContainer);
-export default connect(mapStateToProps, {})(PageContainer);
+PageContainer = connect(mapStateToProps, {})(PageContainer);
+export default withStyles(styles, { withTheme: true })(PageContainer);
