@@ -8,7 +8,7 @@ import { setCurrentPage }  from '../actions';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import PropSelector from './components/PropSelector';
-import StageCanvas from './components/StageCanvas';
+import StageCanvasV2 from './components/StageCanvasV2';
 import StagePropList from './components/StagePropList';
 import { fetchStage, saveStage } from './actions';
 import './StageEditPage.css';
@@ -95,7 +95,7 @@ class StageEditPage extends Component {
       <SplitPane split="vertical" defaultSize={300} primary="second" allowResize={false}>
         <SplitPane split="horizontal" defaultSize={80} allowResize={false} pane2ClassName="stage-canvas-container">
           <PropSelector/>
-          <StageCanvas stage={this.props.stage} editable={true}/>
+          <StageCanvasV2 stage={this.props.stage} editable={true}/>
         </SplitPane>
 
         <StagePropList className="flex-shrink-0 h-100"/>

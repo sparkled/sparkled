@@ -16,6 +16,7 @@
     "jsmediatags": "^3.8.1",
     "lodash": "^4.17.11",
     "mousetrap": "^1.6.3",
+    "pixi.js": "^5.0.4",
     "raphael": "^2.2.8",
     "react": "^16.8.6",
     "react-color": "^2.14.1",
@@ -34,6 +35,7 @@
     "redux-form": "^8.2.4",
     "redux-promise-middleware": "^5.1.1",
     "redux-undo": "^1.0.0-beta9-9-7",
+    "svg-path-properties": "^0.4.11",
     "uuid": "^3.3.2",
     "wavesurfer.js": "^2.0.6"
   },
