@@ -19,6 +19,7 @@ class StageCanvasV2 extends Component {
 
     const pixiApp = new PIXI.Application({ antialias: true, resolution: window.devicePixelRatio || 1 });
     pixiApp.resizeTo = parent;
+    pixiApp.view.style.width = pixiApp.view.style.height = '100%';
     canvasContainer.appendChild(pixiApp.view);
 
     this.setState({ pixiApp }, () => {
