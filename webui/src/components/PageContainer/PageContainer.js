@@ -43,13 +43,18 @@ const styles = theme => ({
     display: 'flex',
     flexGrow: 1,
     overflow: 'auto',
-    padding: theme.spacing(3)
-  },
+    padding: props => theme.spacing(props.spacing === undefined ? 3 : props.spacing)
+  }
 });
 
 class PageContainer extends Component {
 
   state = { drawerOpen: false };
+
+  constructor(props) {
+    super(props);
+    this.mainRef = React.createRef();
+  }
 
   componentWillReceiveProps(nextProps) {
     const { pageTitle, pageClass = '' } = nextProps;

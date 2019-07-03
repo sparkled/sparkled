@@ -1,30 +1,34 @@
+import { withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ActionCreators } from 'redux-undo';
 import Alert from 'react-s-alert';
-import SplitPane from 'react-split-pane';
 import { Nav, NavItem } from 'reactstrap';
-import { setCurrentPage }  from '../actions';
+import { ActionCreators } from 'redux-undo';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import PropSelector from './components/PropSelector';
-import StageCanvasV2 from './components/StageCanvasV2';
-import StagePropList from './components/StagePropList';
+import { setCurrentPage } from '../actions';
 import { fetchStage, saveStage } from './actions';
+import StageCanvasV2 from './components/StageCanvasV2';
 import './StageEditPage.css';
 
 const { undo, redo, clearHistory } = ActionCreators;
+
+const styles = theme => ({
+  container: {
+    overflow: 'hidden',
+  }
+});
 
 class StageEditPage extends Component {
 
   render() {
     const pageBody = (
-      <div className="d-flex w-100 h-100">
+      <div className={`d-flex w-100 h-100 ${this.props.classes.container}`}>
         {this.renderContent()}
       </div>
     );
 
-    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
+    return <PageContainer body={pageBody} spacing={0} navbar={this.renderNavbar()}/>;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -92,14 +96,7 @@ class StageEditPage extends Component {
 
   renderEditor() {
     return (
-      <SplitPane split="vertical" defaultSize={300} primary="second" allowResize={false}>
-        <SplitPane split="horizontal" defaultSize={80} allowResize={false} pane2ClassName="stage-canvas-container">
-          <PropSelector/>
-          <StageCanvasV2 stage={this.props.stage} editable={true}/>
-        </SplitPane>
-
-        <StagePropList className="flex-shrink-0 h-100"/>
-      </SplitPane>
+      <StageCanvasV2 stage={this.props.stage} editable={true}/>
     );
   }
 
@@ -122,4 +119,13 @@ function mapStateToProps({ page }) {
   };
 }
 
-export default connect(mapStateToProps, { setCurrentPage, fetchStage, saveStage, undo, redo, clearHistory })(StageEditPage);
+StageEditPage = connect(mapStateToProps, {
+  setCurrentPage,
+  fetchStage,
+  saveStage,
+  undo,
+  redo,
+  clearHistory
+})(StageEditPage);
+
+export default withStyles(styles, { withTheme: true })(StageEditPage);

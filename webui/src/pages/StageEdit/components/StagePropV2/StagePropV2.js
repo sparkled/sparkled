@@ -6,10 +6,10 @@ import { svgPathProperties } from "svg-path-properties";
 import { selectStageProp, updateStageProp } from '../../actions';
 import stagePropTypes from '../../stagePropTypes';
 
-const lineWidth = 2;
+const lineWidth = 3;
 const lineColor = 0xffffff;
 const padding = 5;
-const handleRadius = 5;
+const handleRadius = 6;
 const quarterTurn = Math.PI / 2;
 const fullCircle = Math.PI * 2;
 const names = { background: "Background", path: "Path", rotateHandle: "RotateHandle" };

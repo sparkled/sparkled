@@ -2,6 +2,7 @@ import _ from 'lodash';
 import * as PIXI from 'pixi.js';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { clamp } from '../../../../utils/numberUtils';
 import { selectStageProp } from '../../actions';
 import StagePropV2 from '../StagePropV2';
 
@@ -13,15 +14,57 @@ class StageCanvasV2 extends Component {
   };
 
   componentDidMount() {
-    const { width, height } = this.props.stage;
-    const resolution = window.devicePixelRatio || 1;
+    const canvasContainer = document.querySelector(`#${this.state.canvasId}`);
+    const parent = canvasContainer.parentElement;
 
-    const pixiApp = new PIXI.Application({ antialias: true, width, height, resolution });
-    pixiApp.view.style.width = width + "px";
-    pixiApp.view.style.height = height + "px";
-    document.querySelector(`#${this.state.canvasId}`).appendChild(pixiApp.view);
+    const pixiApp = new PIXI.Application({ antialias: true, resolution: window.devicePixelRatio || 1 });
+    pixiApp.resizeTo = parent;
+    canvasContainer.appendChild(pixiApp.view);
 
-    this.setState({ pixiApp });
+    this.setState({ pixiApp }, () => {
+      pixiApp.renderer.plugins.interaction
+        .on('pointerdown', this.onDragStart)
+        .on('pointermove', this.onDragMove)
+        .on('pointerup', this.onDragEnd)
+        .on('pointerupoutside', this.onDragEnd);
+
+      pixiApp.view.addEventListener('wheel', this.onZoom);
+    });
+  }
+
+  onZoom = event => {
+    const { pixiApp } = this.state;
+    const newScale = clamp(pixiApp.stage.scale.x + (event.deltaY / -30), .25, 5);
+    pixiApp.stage.scale.x = pixiApp.stage.scale.y = newScale;
+  }
+
+  onDragStart = event => {
+    if (event.target !== null) {
+      // Only drag if the background is selected.
+      return;
+    }
+
+    const { pixiApp } = this.state;
+    const { clientX, clientY } = event.data.originalEvent;
+    this.setState({
+      dragState: { originX: pixiApp.stage.x, originY: pixiApp.stage.y, mouseX: clientX, mouseY: clientY }
+    });
+  }
+
+  onDragMove = event => {
+    const { dragState, pixiApp } = this.state;
+
+    if (dragState) {
+      const { originX, originY, mouseX, mouseY } = dragState;
+      const { clientX, clientY } = event.data.originalEvent;
+
+      pixiApp.stage.x = originX + (clientX - mouseX);
+      pixiApp.stage.y = originY + (clientY - mouseY);
+    }
+  }
+
+  onDragEnd = event => {
+    this.setState({ dragState: null });
   }
 
   render() {
