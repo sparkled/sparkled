@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "tslint-react-hooks"
+  ],
+  "rules": {
+    "arrow-parens": false,
+    "interface-name": false,
+    "react-hooks-nesting": "error",
+    "trailing-comma": false
+  },
+  "linterOptions": {
+    "exclude": ["**/*.js"]
+  }
+}

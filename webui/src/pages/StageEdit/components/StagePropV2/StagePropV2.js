@@ -22,7 +22,6 @@ class StagePropV2 extends Component {
   };
 
   componentDidMount() {
-    console.log('Mounted');
     this.buildStageProp();
   }
 
@@ -37,7 +36,7 @@ class StagePropV2 extends Component {
     const { pixiContainer, width, height } = this.state;
     return !pixiContainer ? <></> : (
       <>
-        <StagePropBackground pixiContainer={pixiContainer} width={width} height={height} onMoved={this.onMoved}/>
+        <StagePropBackground parent={pixiContainer} width={width} height={height} onClicked={this.onClicked} onMoved={this.onMoved}/>
       </>
     );
   }
@@ -45,6 +44,10 @@ class StagePropV2 extends Component {
   async componentWillUnmount() {
     console.log('Destroying.');
     await this.destroyContainer();
+  }
+
+  onClicked = () => {
+    this.props.selectStageProp(this.props.stageProp.uuid);
   }
 
   onMoved = (offsetX, offsetY) => {
