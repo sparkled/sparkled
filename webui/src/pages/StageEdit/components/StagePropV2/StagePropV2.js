@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { svgPathProperties } from "svg-path-properties";
 import { selectStageProp, updateStageProp } from '../../actions';
 import stagePropTypes from '../../stagePropTypes';
+import StagePropBackground from './StagePropBackground';
 
 const lineWidth = 3;
 const lineColor = 0xffffff;
-const padding = 5;
 const handleRadius = 6;
 const quarterTurn = Math.PI / 2;
 const fullCircle = Math.PI * 2;
@@ -22,22 +22,38 @@ class StagePropV2 extends Component {
   };
 
   componentDidMount() {
+    console.log('Mounted');
     this.buildStageProp();
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (this.state.pixiContainer && this.props.stageProp !== prevProps.stageProp) {
-      this.destroyContainer();
+      await this.destroyContainer();
       this.buildStageProp();
     }
   }
 
   render() {
-    return <></>;
+    const { pixiContainer, width, height } = this.state;
+    return !pixiContainer ? <></> : (
+      <>
+        <StagePropBackground pixiContainer={pixiContainer} width={width} height={height} onMoved={this.onMoved}/>
+      </>
+    );
   }
 
-  componentWillUnmount() {
-    this.destroyContainer();
+  async componentWillUnmount() {
+    console.log('Destroying.');
+    await this.destroyContainer();
+  }
+
+  onMoved = (offsetX, offsetY) => {
+    const { stageProp } = this.props;
+    this.props.updateStageProp({
+      ...stageProp,
+      positionX: Math.round(stageProp.positionX + offsetX),
+      positionY: Math.round(stageProp.positionY + offsetY)
+    });
   }
 
   buildStageProp() {
@@ -48,19 +64,19 @@ class StagePropV2 extends Component {
     const points = this.getLinePoints(pathProperties, stageProp, segments);
 
     const pixiPath = this.buildPath(points);
-    const pathWidth = pixiPath.width - lineWidth;
-    const pathHeight = pixiPath.height - lineWidth;
-    const pixiContainer = this.buildContainer(stageProp, pathWidth, pathHeight);
-    pixiContainer.addChild(this.buildBackground(stageProp, pathWidth, pathHeight));
+    const width = pixiPath.width - lineWidth;
+    const height = pixiPath.height - lineWidth;
+    const pixiContainer = this.buildContainer(stageProp, width, height);
     pixiContainer.addChild(pixiPath);
-    pixiContainer.addChild(this.buildRotateHandle(stageProp, pathWidth, pathHeight));
+    pixiContainer.addChild(this.buildRotateHandle(stageProp, width, height));
     pixiApp.stage.addChild(pixiContainer);
 
-    this.setState({ pixiContainer });
+    this.setState({ pixiContainer, width, height });
   }
 
   buildContainer(stageProp, width, height) {
     const pixiContainer = new PIXI.Container();
+    pixiContainer.sortableChildren = true;
     pixiContainer.position = { x: stageProp.positionX + (width / 2), y: stageProp.positionY + (height / 2) };
     pixiContainer.rotation = stageProp.rotation / 180 * Math.PI;
     pixiContainer.scale = { x: 1, y: 1 };
@@ -68,28 +84,10 @@ class StagePropV2 extends Component {
     return pixiContainer;
   }
 
-  buildBackground(stageProp, width, height) {
-    const background = new PIXI.Graphics();
-    background.name = names.background;
-
-    background.beginFill(0xFF00FF);
-    background.drawRect(-padding, -padding, width + (2 * padding), height + (2 * padding));
-    background.endFill();
-
-    background.buttonMode = true;
-    background.interactive = true;
-    background
-      .on('pointerdown', event => this.onDragStart(event, names.background))
-      .on('pointermove', this.onDragMove)
-      .on('pointerup', this.onDragEnd)
-      .on('pointerupoutside', this.onDragEnd);
-
-    return background;
-  }
-
   buildPath(points) {
     const path = new PIXI.Graphics();
     path.name = names.path;
+    path.zIndex = 2;
     path.lineStyle(lineWidth, lineColor);
 
     const origin = points[0];
@@ -121,24 +119,17 @@ class StagePropV2 extends Component {
   onDragStart = (event, target) => {
     const { pixiContainer } = this.state;
     this.props.selectStageProp(this.props.stageProp.uuid);
-
-    const { x, y } = event.data.getLocalPosition(pixiContainer.parent);
-    this.setState({
-      dragState: { target, originX: pixiContainer.x, originY: pixiContainer.y, mouseX: x, mouseY: y }
-    });
+    this.setState({ dragState: { target, originX: pixiContainer.x, originY: pixiContainer.y } });
   }
 
   onDragMove = event => {
     const { dragState, pixiContainer } = this.state;
 
     if (dragState) {
-      const { originX, originY, mouseX, mouseY, target } = dragState;
+      const { originX, originY } = dragState;
       const { x: relativeParentX, y: relativeParentY } = event.data.getLocalPosition(pixiContainer.parent);
 
-      if (target === names.background) {
-        pixiContainer.x = originX + (relativeParentX - mouseX);
-        pixiContainer.y = originY + (relativeParentY - mouseY);
-      } else if (dragState.target === names.rotateHandle) {
+      if (dragState.target === names.rotateHandle) {
         const rotateHandle = pixiContainer.getChildByName(names.rotateHandle);
         rotateHandle.position.y = event.data.getLocalPosition(pixiContainer).y;
 
@@ -154,18 +145,9 @@ class StagePropV2 extends Component {
   onDragEnd = event => {
     const { stageProp } = this.props;
     const { dragState, pixiContainer } = this.state;
-    const { x, y } = event.data.getLocalPosition(pixiContainer.parent);
 
     if (dragState) {
-      if (dragState.target === names.background) {
-        const offsetX = x - dragState.mouseX;
-        const offsetY = y - dragState.mouseY;
-        this.props.updateStageProp({
-          ...stageProp,
-          positionX: Math.round(stageProp.positionX + offsetX),
-          positionY: Math.round(stageProp.positionY + offsetY)
-        });
-      } else if (dragState.target === names.rotateHandle) {
+      if (dragState.target === names.rotateHandle) {
         const rotation = Math.round(pixiContainer.rotation / Math.PI * 180);
         this.props.updateStageProp({ ...stageProp, rotation });
       }
@@ -189,7 +171,10 @@ class StagePropV2 extends Component {
   }
 
   destroyContainer() {
-    this.state.pixiContainer.destroy({ children: true });
+    return new Promise(resolve => {
+      this.state.pixiContainer.destroy({ children: true });
+      this.setState({ pixiContainer: null }, resolve);
+    });
   }
 }
 
