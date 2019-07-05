@@ -44,12 +44,10 @@ const StagePropBackground: React.FC<Props> = props => {
   const [dragState, setDragState] = useState<DragState | null>(null);
 
   if (background === null) {
-    logger.debug("Creating background.");
-
-    const bg = buildBackground(props);
-    bg.on("pointerdown", (event: InteractionEvent) => onDragStart(event, props, setDragState));
-    setBackground(bg);
-    props.parent.addChild(bg);
+    const stagePropBackground = buildBackground(props);
+    stagePropBackground.on("pointerdown", (event: InteractionEvent) => onDragStart(event, props, setDragState));
+    setBackground(stagePropBackground);
+    props.parent.addChild(stagePropBackground);
   } else if (dragState !== null) {
     logger.debug("Dragging started, adding listeners.");
 
@@ -83,8 +81,8 @@ function buildBackground(props: Props) {
 }
 
 function onDragStart(event: InteractionEvent, props: Props, setDragState: Dispatch<DragState | null>) {
-  const {parent} = props;
-  props.onClicked();
+  const {onClicked, parent} = props;
+  onClicked();
 
   const {x, y} = event.data.getLocalPosition(parent.parent);
   setDragState({originX: parent.x, originY: parent.y, dragStartX: x, dragStartY: y});
