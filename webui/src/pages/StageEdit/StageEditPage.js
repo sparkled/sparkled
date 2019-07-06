@@ -8,7 +8,7 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { setCurrentPage } from '../actions';
 import { fetchStage, saveStage } from './actions';
-import StageCanvasV2 from './components/StageCanvasV2';
+import StageCanvas from './components/StageCanvas';
 import './StageEditPage.css';
 
 const { undo, redo, clearHistory } = ActionCreators;
@@ -96,7 +96,7 @@ class StageEditPage extends Component {
 
   renderEditor() {
     return (
-      <StageCanvasV2 stage={this.props.stage} editable={true}/>
+      <StageCanvas stage={this.props.stage} editable={true}/>
     );
   }
 
