@@ -9,13 +9,15 @@ import PageContainer from '../../components/PageContainer';
 import { setCurrentPage } from '../actions';
 import { fetchStage, saveStage } from './actions';
 import StageCanvas from './components/StageCanvas';
-import './StageEditPage.css';
 
 const { undo, redo, clearHistory } = ActionCreators;
 
 const styles = theme => ({
   container: {
     overflow: 'hidden',
+    display: 'flex',
+    width: '100%',
+    height: '100%'
   }
 });
 
@@ -23,7 +25,7 @@ class StageEditPage extends Component {
 
   render() {
     const pageBody = (
-      <div className={`d-flex w-100 h-100 ${this.props.classes.container}`}>
+      <div className={this.props.classes.container}>
         {this.renderContent()}
       </div>
     );
