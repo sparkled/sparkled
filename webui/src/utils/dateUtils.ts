@@ -1,5 +1,5 @@
-export const getFormattedDuration = seconds => {
-  const date = new Date(null);
+export const getFormattedDuration = (seconds: number) => {
+  const date = new Date(0);
   date.setSeconds(seconds);
 
   if (seconds < 3600) {
