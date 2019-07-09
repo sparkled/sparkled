@@ -34,12 +34,12 @@ class StageProp extends Component {
     const { pixiContainer, points, width, height } = this.state;
     return !pixiContainer ? <></> : (
       <>
-        <StagePropBackground parent={pixiContainer} width={width} height={height}
+        <StagePropBackground parent={pixiContainer} width={width} height={height} editable={this.props.editable}
                              onClicked={this.selectStageProp} onMoved={this.moveStageProp}/>
 
         <StagePropPath parent={pixiContainer} points={points} width={width} height={height}/>
 
-        <StagePropRotateHandle parent={pixiContainer} points={points} width={width}
+        <StagePropRotateHandle parent={pixiContainer} points={points} width={width} editable={this.props.editable}
                                onClicked={this.selectStageProp} onRotated={this.rotateStageProp}/>
       </>
     );

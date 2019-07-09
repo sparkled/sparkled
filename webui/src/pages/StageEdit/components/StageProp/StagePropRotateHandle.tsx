@@ -17,6 +17,9 @@ declare interface Props {
   /** The width of the stage prop in pixels, accounting for scale. */
   width: number;
 
+  /** Whether or not the rotate handle should appear. */
+  editable: boolean;
+
   /** A callback to notify the stage prop that it has been clicked. */
   onClicked: () => void;
 
@@ -35,6 +38,10 @@ declare interface DragState {
 const StagePropRotateHandle: React.FC<Props> = props => {
   const [rotateHandle, setRotateHandle] = useState<PIXI.Graphics | null>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
+
+  if (!props.editable) {
+    return <></>;
+  }
 
   if (rotateHandle === null) {
     const stagePropRotateHandle = buildRotateHandle(props);

@@ -18,6 +18,9 @@ declare interface Props {
   /** The height of the stage prop in pixels, accounting for scale. */
   height: number;
 
+  /** Whether or not the drag handlers should be added. */
+  editable: boolean;
+
   /** A callback to notify the stage prop that it has been clicked. */
   onClicked: () => void;
 
@@ -45,7 +48,13 @@ const StagePropBackground: React.FC<Props> = props => {
 
   if (background === null) {
     const stagePropBackground = buildBackground(props);
-    stagePropBackground.on("pointerdown", (event: InteractionEvent) => onDragStart(event, props, setDragState));
+
+    if (props.editable) {
+      stagePropBackground.buttonMode = true;
+      stagePropBackground.interactive = true;
+      stagePropBackground.on("pointerdown", (event: InteractionEvent) => onDragStart(event, props, setDragState));
+    }
+
     setBackground(stagePropBackground);
     props.parent.addChild(stagePropBackground);
   } else if (dragState !== null) {
@@ -74,9 +83,6 @@ function buildBackground(props: Props) {
   background.beginFill(0xFF00FF);
   background.drawRect(-padding, -padding, props.width + (2 * padding), props.height + (2 * padding));
   background.endFill();
-
-  background.buttonMode = true;
-  background.interactive = true;
   return background;
 }
 
