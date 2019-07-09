@@ -1,6 +1,7 @@
 import blue from '@material-ui/core/colors/blue';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 import React, { Fragment } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
@@ -24,7 +25,7 @@ const theme = createMuiTheme({
     primary: blue
   },
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   }
 });
 
@@ -32,7 +33,7 @@ const RedirectInvalidUrlToIndex = () => <Redirect to="/sequences"/>;
 
 const App = () => (
   <Fragment>
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline/>
       <Provider store={store}>
         <Router>
@@ -49,7 +50,7 @@ const App = () => (
           </Switch>
         </Router>
       </Provider>
-    </MuiThemeProvider>
+    </ThemeProvider>
 
     <Alert position="bottom-right" effect="scale" stack={{ limit: 3 }}/>
   </Fragment>

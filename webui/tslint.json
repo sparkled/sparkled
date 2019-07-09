@@ -7,6 +7,8 @@
   "rules": {
     "arrow-parens": false,
     "interface-name": false,
+    "no-submodule-imports": [false, "@material-ui"],
+    "object-literal-sort-keys": false,
     "react-hooks-nesting": "error",
     "trailing-comma": false
   },
