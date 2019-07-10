@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 export default class Logger {
   private readonly name: string;
 
@@ -6,7 +7,7 @@ export default class Logger {
   }
 
   public debug(msg: string) {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== "production") {
       console.debug(this.format(msg));
     }
   }
@@ -19,8 +20,8 @@ export default class Logger {
     console.warn(this.format(msg));
   }
 
-  public error(msg: string) {
-    console.error(this.format(msg));
+  public error(msg: string, error?: any) {
+    console.error(this.format(msg), error);
   }
 
   private format(msg: string) {

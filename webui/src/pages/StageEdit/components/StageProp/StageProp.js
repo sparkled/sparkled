@@ -114,9 +114,7 @@ class StageProp extends Component {
 }
 
 function mapStateToProps({ page: { sequenceEdit, stageEdit } }) {
-  return {
-    stage: stageEdit.present.stage
-  };
+  return {};
 }
 
 export default connect(mapStateToProps, { updateStageProp, selectStageProp })(StageProp);

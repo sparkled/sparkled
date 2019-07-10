@@ -5,4 +5,8 @@ declare interface Props {
   className: string;
 }
 
-export default (props: Props) => <img className={props.className} src={largeLogo} alt="Sparkled"/>;
+const AppLogo: React.FC<Props> = (props: Props) => {
+  return <img className={props.className} src={largeLogo} alt="Sparkled"/>;
+};
+
+export default AppLogo;

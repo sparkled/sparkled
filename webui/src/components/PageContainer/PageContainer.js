@@ -25,8 +25,24 @@ const styles = theme => ({
   root: {
     display: 'flex',
   },
+  toolbar: {
+      display: 'grid',
+      gridTemplateColumns: '1fr min-content 1fr',
+      gridTemplateRows: '1fr',
+      '& > :first-child': {
+        justifySelf: 'flex-start'
+      },
+      '& > :nth-child(2)': {
+        justifySelf: 'center',
+        [theme.breakpoints.down('sm')]: {
+          width: 0
+        }
+      },
+      '& > :last-child': {
+        justifySelf: 'flex-end'
+      }
+  },
   appLogo: {
-    flexGrow: 1,
     height: 30
   },
   toolbarIcon: {
@@ -56,16 +72,8 @@ class PageContainer extends Component {
     this.mainRef = React.createRef();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { pageTitle, pageClass = '' } = nextProps;
-    document.title = pageTitle ? `Sparkled | ${pageTitle}` : 'Sparkled';
-
-    document.body.classList.remove(this.props.pageClass);
-    document.body.classList.add(pageClass);
-  }
-
   render() {
-    const { classes, body, navbar } = this.props;
+    const { classes, body, actions } = this.props;
 
     const drawer = (
       <div>
@@ -100,8 +108,6 @@ class PageContainer extends Component {
             <ListItemIcon><SchedulerPageIcon/></ListItemIcon>
             <ListItemText primary="Scheduler"/>
           </ListItem>
-
-          {navbar}
         </List>
       </div>
     );
@@ -109,14 +115,19 @@ class PageContainer extends Component {
     return (
       <>
         <AppBar position="static">
-          <Toolbar>
-            <IconButton onClick={this.handleDrawerToggle}>
-              <MenuIcon/>
-            </IconButton>
+          <Toolbar className={classes.toolbar}>
+            <div>
+              <IconButton onClick={this.handleDrawerToggle}>
+                <MenuIcon/>
+              </IconButton>
+            </div>
 
             <AppLogo className={classes.appLogo}/>
 
-            <BrightnessToggle/>
+            <div className={classes.toolbarIcon}>
+              {actions}
+              <BrightnessToggle/>
+            </div>
           </Toolbar>
         </AppBar>
 
