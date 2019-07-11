@@ -6,9 +6,9 @@ import * as StagePropPart from "./StagePropPart";
 const logger = new Logger("StagePropBackground");
 const padding = 5;
 
-declare type InteractionEvent = PIXI.interaction.InteractionEvent;
+type InteractionEvent = PIXI.interaction.InteractionEvent;
 
-declare interface Props {
+interface Props {
   /** The parent container that manages the stage prop. */
   parent: PIXI.Container;
 
@@ -28,7 +28,7 @@ declare interface Props {
   onMoved: (offsetX: number, offsetY: number) => void;
 }
 
-declare interface DragState {
+interface DragState {
   /** The X origin of the background when dragging begins. */
   originX: number;
 
@@ -103,7 +103,7 @@ function onDragMove(event: InteractionEvent, props: Props, dragState: DragState)
     // Convert the mouse/touch position to a relative offset.
     const {x: relativeParentX, y: relativeParentY} = event.data.getLocalPosition(parent.parent);
 
-    // Add the new offset
+    // Add the new offset.
     parent.x = originX + (relativeParentX - dragStartX);
     parent.y = originY + (relativeParentY - dragStartY);
   }
