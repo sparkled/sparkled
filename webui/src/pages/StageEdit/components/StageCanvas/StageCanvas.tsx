@@ -91,7 +91,8 @@ function buildGrid() {
 }
 
 function onZoom(event: WheelEvent, pixiApp: PIXI.Application) {
-  const newScale = clamp(pixiApp.stage.scale.x + (event.deltaY / -30), zoomLimits.min, zoomLimits.max);
+  const scrollDirection = Math.sign(event.deltaY);
+  const newScale = clamp(pixiApp.stage.scale.x + (scrollDirection / -50), zoomLimits.min, zoomLimits.max);
   pixiApp.stage.scale.x = pixiApp.stage.scale.y = newScale;
 
   redrawGrid(pixiApp);
