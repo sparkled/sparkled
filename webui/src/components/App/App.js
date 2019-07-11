@@ -1,5 +1,5 @@
-import blue from '@material-ui/core/colors/blue';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { blue } from '@material-ui/core/colors';
+import { CssBaseline } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import React, { Fragment } from 'react';

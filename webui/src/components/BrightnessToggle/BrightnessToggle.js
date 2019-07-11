@@ -1,9 +1,6 @@
-import IconButton from '@material-ui/core/IconButton';
-import Popover from '@material-ui/core/Popover';
+import { IconButton, Popover, Typography, Slider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography/Typography';
 import BrightnessIcon from '@material-ui/icons/WbSunny';
-import Slider from '@material-ui/lab/Slider';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -11,7 +8,7 @@ import { fetchBrightness, updateBrightness } from '../../pages/actions';
 
 const anchorOrigin = { vertical: 'bottom', horizontal: 'left' };
 
-const styles = theme => ({
+const styles = () => ({
   icon: {
     cursor: 'pointer'
   },

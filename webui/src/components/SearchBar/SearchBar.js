@@ -1,13 +1,9 @@
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
-import Paper from '@material-ui/core/Paper';
+import { CircularProgress, Divider, IconButton, InputBase, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
+import { Add } from '@material-ui/icons';
 import React, { Component } from 'react';
 
-const styles = theme => ({
+const styles = () => ({
   searchBar: {
     margin: '0 auto 24px auto',
     padding: '2px 4px',
@@ -55,7 +51,7 @@ class SongListPage extends Component {
     } else {
       return (
         <IconButton color="primary" className={classes.iconButton} onClick={onAddButtonClick}>
-          <AddIcon/>
+          <Add/>
         </IconButton>
       );
     }

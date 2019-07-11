@@ -1,11 +1,11 @@
-import MuiTextField from '@material-ui/core/TextField';
+import { TextField } from '@material-ui/core';
 import React from 'react';
 
 let inputId = 0;
 
 const NON_BREAKING_SPACE = ' ';
 
-const TextField = ({ input, disabled, required, min, max, label, type, meta, fullWidth }) => {
+export default ({ input, disabled, required, min, max, label, meta, fullWidth }) => {
   const hasError = meta.touched && Boolean(meta.error);
   const attrs = { disabled, required, min, max, fullWidth, error: hasError };
 
@@ -15,7 +15,7 @@ const TextField = ({ input, disabled, required, min, max, label, type, meta, ful
   const helperText = errorText || NON_BREAKING_SPACE;
 
   return (
-    <MuiTextField
+    <TextField
       id={id}
       label={label}
       helperText={helperText}
@@ -26,5 +26,3 @@ const TextField = ({ input, disabled, required, min, max, label, type, meta, ful
     />
   );
 };
-
-export default TextField;

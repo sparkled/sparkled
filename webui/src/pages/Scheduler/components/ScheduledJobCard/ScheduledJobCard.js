@@ -1,11 +1,5 @@
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { Card, CardContent, CardHeader, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
+import { MoreVert } from '@material-ui/icons';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { showDeleteModal } from '../../actions';
@@ -24,7 +18,7 @@ class StageCard extends Component {
           <CardHeader
             action={
               <IconButton onClick={this.openMenu}>
-                <MoreVertIcon/>
+                <MoreVert/>
               </IconButton>
             }
             title={scheduledJob.action}

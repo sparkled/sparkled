@@ -1,9 +1,5 @@
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { Card, CardHeader, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { MoreVert } from '@material-ui/icons';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -23,7 +19,7 @@ class StageCard extends Component {
           <CardHeader
             action={
               <IconButton onClick={this.openMenu}>
-                <MoreVertIcon/>
+                <MoreVert/>
               </IconButton>
             }
             title={stage.name}
