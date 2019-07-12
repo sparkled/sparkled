@@ -28,7 +28,7 @@
     "redux-form": "^8.2.4",
     "redux-promise-middleware": "^5.1.1",
     "redux-undo": "^1.0.0-beta9-9-7",
-    "svg-path-properties": "^0.4.11",
+    "svg-path-properties": "^0.5.1",
     "uuid": "^3.3.2",
     "wavesurfer.js": "^2.0.6"
   },
