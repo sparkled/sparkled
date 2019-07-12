@@ -79,7 +79,11 @@ const StageEditPage: React.FC<Props> = props => {
     const [title, body] = state.loadError;
     content = <ErrorCard title={title} body={body} linkUrl="/stages" linkText="Return to stage list"/>;
   } else if (state.stage) {
-    content = <StageCanvas stage={state.stage} editable={true}/>;
+    content = (
+      <>
+        <StageCanvas stage={state.stage} editable={true}/>
+      </>
+    );
   }
 
   const save = () => {

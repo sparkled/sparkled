@@ -1,6 +1,7 @@
 import _ from "lodash";
 import * as PIXI from "pixi.js";
 import React, {useState} from "react";
+import {Point} from "svg-path-properties";
 import * as StagePropPart from "./StagePropPart";
 
 const lineWidth = 3;
@@ -17,7 +18,7 @@ declare interface Props {
   height: number;
 
   /** A series of coordinates used to form the stage prop line. */
-  points: [{x: number, y: number}];
+  points: Point[];
 }
 
 const StagePropPath: React.FC<Props> = props => {
@@ -32,7 +33,7 @@ const StagePropPath: React.FC<Props> = props => {
   return <></>;
 };
 
-function buildPath(points: [{x: number, y: number}]) {
+function buildPath(points: Point[]) {
   const path = new PIXI.Graphics();
   path.name = StagePropPart.path.name;
   path.zIndex = StagePropPart.path.zIndex;
