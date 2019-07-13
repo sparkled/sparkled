@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import React, {Dispatch, useState} from "react";
-import Logger from "../../../../utils/Logger";
+import Logger from "../../../utils/Logger";
 import * as StagePropPart from "./StagePropPart";
 
 const logger = new Logger("StagePropBackground");

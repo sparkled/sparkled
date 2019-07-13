@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card, CardBody, CardTitle, Collapse } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
-import InputField from '../../../../components/form/InputField';
-import SingleSelectField from '../../../../components/form/SingleSelectField';
-import { max, min, required } from '../../../../components/form/validators';
-import trash from '../../../../images/trash.svg';
+import InputField from '../../form/InputField';
+import SingleSelectField from '../../form/SingleSelectField';
+import { max, min, required } from '../../form/validators';
+import trash from '../../../images/trash.svg';
 import { deleteStageProp, selectStageProp, updateStageProp } from '../../actions';
-import stagePropTypes from '../../stagePropTypes';
+import stagePropTypes from '../../../pages/StageEdit/stagePropTypes';
 
 const toNumber = value => !value ? null : Number(value);
 const minLedCount = min(0);

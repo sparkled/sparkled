@@ -11,7 +11,7 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
 import { setCurrentPage } from '../actions';
 import * as sequenceStatuses from '../SequenceList/sequenceStatuses';
-import StageCanvas from '../StageEdit/components/StageCanvas';
+import StageCanvas from '../../components/StageEditor';
 import {
   addEffect,
   adjustPlaybackSpeed,

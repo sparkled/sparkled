@@ -15,7 +15,7 @@ import BrightnessToggle from '../BrightnessToggle';
 
 const styles = theme => ({
   root: {
-    display: 'flex',
+    display: 'flex'
   },
   toolbar: {
       display: 'grid',
@@ -61,7 +61,6 @@ class PageContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.mainRef = React.createRef();
   }
 
   render() {

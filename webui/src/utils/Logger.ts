@@ -25,6 +25,6 @@ export default class Logger {
   }
 
   private format(msg: string) {
-    return `[${this.name}] ${msg}`;
+    return `[${this.name} ${new Date().toISOString()}] ${msg}`;
   }
 }

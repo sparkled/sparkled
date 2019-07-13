@@ -1,10 +1,10 @@
 import _ from "lodash";
 import * as PIXI from "pixi.js";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Point, SvgPathProperties, svgPathProperties} from "svg-path-properties";
-import {StagePropViewModel} from "../../../../types/ViewModel";
-import Logger from "../../../../utils/Logger";
-import stagePropTypes from "../../stagePropTypes";
+import stagePropTypes from "../../../pages/StageEdit/stagePropTypes";
+import {StagePropViewModel} from "../../../types/ViewModel";
+import Logger from "../../../utils/Logger";
 import StagePropBackground from "./StagePropBackground";
 import StagePropPath from "./StagePropPath";
 import StagePropRotateHandle from "./StagePropRotateHandle";
@@ -40,20 +40,21 @@ const StageProp: React.FC<Props> = props => {
   const [state, setState] = useState<State | null>(null);
 
   useEffect(() => {
-    logger.info(`Creating ${props.stageProp.uuid}.`);
-    const stagePropState = buildStageProp(props);
+    const stagePropState = buildStageProp(props.pixiApp, props.stageProp);
     setState(stagePropState);
     return () => {
       logger.info(`Destroying ${props.stageProp.uuid}.`);
       stagePropState.pixiContainer.destroy({children: true});
+      setState(null);
     };
-  }, [props]);
+  }, [props.pixiApp, props.stageProp]);
 
   // TODO recreate on update.
   if (state === null) {
     return <></>;
   } else {
     const {pixiContainer, width, height, points} = state;
+
     return (
       <>
         <StagePropBackground
@@ -79,9 +80,7 @@ const StageProp: React.FC<Props> = props => {
   }
 };
 
-function buildStageProp(props: Props): State {
-  const {pixiApp, stageProp} = props;
-
+function buildStageProp(pixiApp: PIXI.Application, stageProp: StagePropViewModel): State {
   const {path} = stagePropTypes[stageProp.type!];
   const pathProperties = svgPathProperties(path);
 

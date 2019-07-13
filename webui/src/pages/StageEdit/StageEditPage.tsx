@@ -5,10 +5,10 @@ import React, {useEffect, useReducer, useState} from "react";
 import {RouteComponentProps} from "react-router-dom";
 import ErrorCard from "../../components/ErrorCard";
 import PageContainer from "../../components/PageContainer";
+import StageEditor from "../../components/StageEditor";
 import {loadStage, saveStage} from "../../rest/StageRestService";
 import {StageViewModel} from "../../types/ViewModel";
 import {setPageTitle} from "../../utils/pageUtils";
-import StageCanvas from "./components/StageCanvas";
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 class State {
   public mounted: boolean = false;
   public stage: StageViewModel | null = null;
+  public editedStage: StageViewModel | null = null;
   public loading: boolean = false;
   public loadError: [string, string] | null = null;
   public saving: boolean = false;
@@ -33,6 +34,7 @@ type Action =
   | { type: "Load"; }
   | { type: "LoadSuccess"; payload: StageViewModel }
   | { type: "LoadFailure"; payload: [string, string] | null }
+  | { type: "Update"; payload: StageViewModel }
   | { type: "Save"; }
   | { type: "SaveSuccess"; }
   | { type: "SaveFailure"; payload: [string, string] | null };
@@ -45,6 +47,8 @@ const reducer: React.Reducer<State, Action> = (state, action): State => {
       return {...state, loading: false, stage: action.payload};
     case "LoadFailure":
       return {...state, loading: false, loadError: action.payload};
+    case "Update":
+      return {...state, loading: false, editedStage: action.payload};
     case "Save":
       return {...state, mounted: true, saving: true, saveError: null};
     case "SaveSuccess":
@@ -74,21 +78,19 @@ const StageEditPage: React.FC<Props> = props => {
     }
   });
 
+  const updateStage = (stage: StageViewModel) => dispatch({type: "Update", payload: stage});
+
   let content = <></>;
   if (state.loadError !== null) {
     const [title, body] = state.loadError;
     content = <ErrorCard title={title} body={body} linkUrl="/stages" linkText="Return to stage list"/>;
   } else if (state.stage) {
-    content = (
-      <>
-        <StageCanvas stage={state.stage} editable={true}/>
-      </>
-    );
+    content = <StageEditor stage={state.stage} onChange={updateStage} editable={true}/>;
   }
 
   const save = () => {
     dispatch({type: "Save"});
-    saveStage(state.stage!,
+    saveStage(state.editedStage!,
       () => {
         setSaved(true);
         dispatch({type: "SaveSuccess"});
@@ -99,7 +101,7 @@ const StageEditPage: React.FC<Props> = props => {
 
   const pageBody = <div className={classes.container}>{content}</div>;
   const actions = (
-    <IconButton onClick={save} disabled={state.stage === null || state.saving}>
+    <IconButton onClick={save} disabled={state.editedStage === null || state.saving}>
       <SaveIcon/>
     </IconButton>
   );

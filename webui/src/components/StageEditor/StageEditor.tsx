@@ -1,12 +1,12 @@
 import _ from "lodash";
 import * as PIXI from "pixi.js";
-import React, {Dispatch, useEffect, useRef, useState} from "react";
-import {StageViewModel} from "../../../../types/ViewModel";
-import Logger from "../../../../utils/Logger";
-import {clamp} from "../../../../utils/numberUtils";
-import StageProp from "../StageProp";
+import React, {Dispatch, useEffect, useReducer, useRef, useState} from "react";
+import {StageViewModel} from "../../types/ViewModel";
+import Logger from "../../utils/Logger";
+import {clamp} from "../../utils/numberUtils";
+import StageProp from "./StageProp";
 
-const logger = new Logger("StageCanvas");
+const logger = new Logger("StageEditor");
 const gridSize = 20;
 const zoomLimits = {min: .5, max: 5};
 
@@ -15,6 +15,9 @@ type InteractionEvent = PIXI.interaction.InteractionEvent;
 interface Props {
   /** The stage being viewed or edited. */
   stage: StageViewModel;
+
+  /** An optional callback to invoke whenever a change is made to the stage. */
+  onChange?: (stage: StageViewModel) => any; // TODO use.
 
   /** Whether or not to enable stage prop editing. */
   editable: boolean;
@@ -34,16 +37,22 @@ interface DragState {
   mouseY: number;
 }
 
-const StageCanvas: React.FC<Props> = props => {
+const StageEditor: React.FC<Props> = props => {
   const canvasElement = useRef<HTMLDivElement>(null);
   const [pixiApp, setPixiApp] = useState<PIXI.Application | null>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
 
+  const [state, dispatch] = useReducer(reducer, {stage: props.stage, selectedStageProps: new Set<string>()});
+
   useEffect(() => {
+    logger.info("Creating.");
     const resolution = window.devicePixelRatio || 1;
     const app = new PIXI.Application({resolution, antialias: true, transparent: true});
     setPixiApp(app);
-    return () => app.destroy(true);
+    return () => {
+      logger.info("Destroying.");
+      app.destroy(true);
+    };
   }, []);
 
   if (pixiApp === null || canvasElement.current === null) {
@@ -66,9 +75,13 @@ const StageCanvas: React.FC<Props> = props => {
   }
 
   return (
-    <div ref={canvasElement}>
-      {renderStageProps(pixiApp, props)}
-    </div>
+    <StateContext.Provider value={state}>
+      <DispatchContext.Provider value={dispatch}>
+        <div ref={canvasElement}>
+          {renderStageProps(pixiApp, props)}
+        </div>
+      </DispatchContext.Provider>
+    </StateContext.Provider>
   );
 };
 
@@ -174,4 +187,4 @@ function renderStageProps(pixiApp: PIXI.Application | null, props: Props) {
   });
 }
 
-export default StageCanvas;
+export default StageEditor;

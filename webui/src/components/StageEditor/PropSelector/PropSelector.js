@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import uuidv4 from 'uuid/v4';
-import stagePropTypes from '../../stagePropTypes';
+import stagePropTypes from '../../../pages/StageEdit/stagePropTypes';
 import { addStageProp } from '../../actions';
 
 class PropSelector extends Component {
