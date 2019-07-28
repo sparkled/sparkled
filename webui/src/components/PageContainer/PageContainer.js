@@ -51,6 +51,7 @@ const styles = theme => ({
     display: 'flex',
     flexGrow: 1,
     overflow: 'auto',
+    position: 'relative',
     padding: props => theme.spacing(props.spacing === undefined ? 3 : props.spacing)
   }
 });
@@ -59,15 +60,11 @@ class PageContainer extends Component {
 
   state = { drawerOpen: false };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { classes, body, actions } = this.props;
 
     const drawer = (
-      <div>
+      <>
         <div className={classes.toolbarIcon}>
           <IconButton onClick={this.closeDrawer}>
             <BackIcon/>
@@ -100,7 +97,7 @@ class PageContainer extends Component {
             <ListItemText primary="Scheduler"/>
           </ListItem>
         </List>
-      </div>
+      </>
     );
 
     return (
@@ -132,7 +129,7 @@ class PageContainer extends Component {
           </Drawer>
         </nav>
 
-        <main className={classes.content}>
+        <main className={`${classes.content} ${this.props.className || ''}`}>
           {body}
         </main>
       </>

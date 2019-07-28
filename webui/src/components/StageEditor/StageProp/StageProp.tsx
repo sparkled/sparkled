@@ -1,10 +1,11 @@
 import _ from "lodash";
 import * as PIXI from "pixi.js";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {Point, SvgPathProperties, svgPathProperties} from "svg-path-properties";
 import stagePropTypes from "../../../pages/StageEdit/stagePropTypes";
 import {StagePropViewModel} from "../../../types/ViewModel";
 import Logger from "../../../utils/Logger";
+import {DispatchContext} from "../Reducer";
 import StagePropBackground from "./StagePropBackground";
 import StagePropPath from "./StagePropPath";
 import StagePropRotateHandle from "./StagePropRotateHandle";
@@ -37,50 +38,73 @@ interface State {
 }
 
 const StageProp: React.FC<Props> = props => {
-  const [state, setState] = useState<State | null>(null);
+  const [state] = useState<State>(() => initState(props.pixiApp, props.stageProp));
+  const dispatch = useContext(DispatchContext);
+
+  const {pixiContainer, width, height, points} = state;
+
+  const selectStageProp = useCallback(() => {
+    dispatch({type: "SelectStageProp", payload: {uuid: props.stageProp.uuid}});
+  }, [dispatch, props.stageProp.uuid]);
 
   useEffect(() => {
-    const stagePropState = buildStageProp(props.pixiApp, props.stageProp);
-    setState(stagePropState);
+    pixiContainer.x = props.stageProp.positionX + (pixiContainer.width / 2);
+    pixiContainer.y = props.stageProp.positionY + (pixiContainer.height / 2);
+  }, [pixiContainer, props.stageProp.positionX, props.stageProp.positionY]);
+
+  useEffect(() => {
+    pixiContainer.rotation = props.stageProp.rotation / 180 * Math.PI;
+  }, [pixiContainer, props.stageProp.rotation]);
+
+  useEffect(() => {
     return () => {
       logger.info(`Destroying ${props.stageProp.uuid}.`);
-      stagePropState.pixiContainer.destroy({children: true});
-      setState(null);
+      state.pixiContainer.destroy({children: true});
     };
-  }, [props.pixiApp, props.stageProp]);
+  }, [props.stageProp.uuid, state.pixiContainer]);
 
-  // TODO recreate on update.
-  if (state === null) {
-    return <></>;
-  } else {
-    const {pixiContainer, width, height, points} = state;
+  const moveStageProp = useCallback((offsetX: number, offsetY: number) => {
+    dispatch({
+      type: "MoveStageProp",
+      payload: {
+        x: Math.round(props.stageProp.positionX + offsetX),
+        y: Math.round(props.stageProp.positionY + offsetY)
+      }
+    });
+  }, [dispatch, props.stageProp.positionX, props.stageProp.positionY]);
 
-    return (
-      <>
-        <StagePropBackground
-          parent={pixiContainer}
-          width={width}
-          height={height}
-          editable={props.editable}
-          onClicked={selectStageProp}
-          onMoved={moveStageProp}
-        />
+  const rotateStageProp = useCallback((rotation: number) => {
+    dispatch({
+      type: "RotateStageProp",
+      payload: {rotation: Math.round(rotation)}
+    });
+  }, [dispatch]);
 
-        <StagePropPath parent={pixiContainer} points={points} width={width} height={height}/>
+  return (
+    <>
+      <StagePropBackground
+        parent={pixiContainer}
+        width={width}
+        height={height}
+        editable={props.editable}
+        onClicked={selectStageProp}
+        onMoved={moveStageProp}
+      />
 
-        <StagePropRotateHandle
-          parent={pixiContainer}
-          width={width}
-          editable={props.editable}
-          onClicked={selectStageProp}
-          onRotated={rotateStageProp}
-        />
-      </>
-    );
-  }
+      <StagePropPath parent={pixiContainer} points={points} width={width} height={height}/>
+
+      <StagePropRotateHandle
+        parent={pixiContainer}
+        width={width}
+        editable={props.editable}
+        onClicked={selectStageProp}
+        onRotated={rotateStageProp}
+      />
+    </>
+  );
 };
 
-function buildStageProp(pixiApp: PIXI.Application, stageProp: StagePropViewModel): State {
+function initState(pixiApp: PIXI.Application, stageProp: StagePropViewModel): State {
   const {path} = stagePropTypes[stageProp.type!];
   const pathProperties = svgPathProperties(path);
 
@@ -94,31 +118,9 @@ function buildStageProp(pixiApp: PIXI.Application, stageProp: StagePropViewModel
   return {pixiContainer, points, width, height};
 }
 
-function selectStageProp() {
-  // TODO this.props.selectStageProp(this.props.stageProp.uuid);
-}
-
-function moveStageProp(offsetX: number, offsetY: number) {
-  // TODO
-  // const { stageProp } = this.props;
-  // this.props.updateStageProp({
-  //   ...stageProp,
-  //   positionX: Math.round(stageProp.positionX + offsetX),
-  //   positionY: Math.round(stageProp.positionY + offsetY)
-  // });
-}
-
-// TODO
-function rotateStageProp(rotation: number) {
-  // => this.props.updateStageProp({ ...this.props.stageProp, rotation });
-}
-
 function buildContainer(stageProp: StagePropViewModel, width: number, height: number) {
   const pixiContainer = new PIXI.Container();
   pixiContainer.sortableChildren = true;
-  pixiContainer.position.x = stageProp.positionX! + (width / 2);
-  pixiContainer.y = stageProp.positionY! + (height / 2);
-  pixiContainer.rotation = stageProp.rotation! / 180 * Math.PI;
   pixiContainer.scale.x = pixiContainer.scale.y = 1;
   pixiContainer.pivot.x = width / 2;
   pixiContainer.pivot.y = height / 2;
@@ -126,6 +128,7 @@ function buildContainer(stageProp: StagePropViewModel, width: number, height: nu
 }
 
 function getLinePoints(pathProperties: SvgPathProperties, stageProp: StagePropViewModel): Point[] {
+  logger.info("GET LINE POINTS");
   const length = pathProperties.getTotalLength();
 
   const linePoints: Point[] = [];

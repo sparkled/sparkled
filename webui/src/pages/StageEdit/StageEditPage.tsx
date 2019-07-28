@@ -1,7 +1,7 @@
 import {IconButton, Snackbar, Theme} from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
-import {makeStyles} from "@material-ui/styles";
-import React, {useEffect, useReducer, useState} from "react";
+import {Save, Tune} from "@material-ui/icons";
+import {makeStyles, useTheme} from "@material-ui/styles";
+import React, {useCallback, useEffect, useReducer, useState} from "react";
 import {RouteComponentProps} from "react-router-dom";
 import ErrorCard from "../../components/ErrorCard";
 import PageContainer from "../../components/PageContainer";
@@ -10,7 +10,11 @@ import {loadStage, saveStage} from "../../rest/StageRestService";
 import {StageViewModel} from "../../types/ViewModel";
 import {setPageTitle} from "../../utils/pageUtils";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
+  // The page container never overflows, and the editor tools need to be hidden when they slide offscreen.
+  pageContainer: {
+    overflow: "hidden"
+  },
   container: {
     display: "flex",
     justifyContent: "center",
@@ -28,6 +32,7 @@ class State {
   public loadError: [string, string] | null = null;
   public saving: boolean = false;
   public saveError: [string, string] | null = null;
+  public toolsVisible: boolean = false;
 }
 
 type Action =
@@ -37,7 +42,8 @@ type Action =
   | { type: "Update"; payload: StageViewModel }
   | { type: "Save"; }
   | { type: "SaveSuccess"; }
-  | { type: "SaveFailure"; payload: [string, string] | null };
+  | { type: "SaveFailure"; payload: [string, string] | null }
+  | { type: "ToggleTools"; };
 
 const reducer: React.Reducer<State, Action> = (state, action): State => {
   switch (action.type) {
@@ -55,6 +61,8 @@ const reducer: React.Reducer<State, Action> = (state, action): State => {
       return {...state, saving: false};
     case "SaveFailure":
       return {...state, saving: false, saveError: action.payload};
+    case "ToggleTools":
+      return {...state, saving: false, toolsVisible: !state.toolsVisible};
     default:
       return state;
   }
@@ -63,9 +71,14 @@ const reducer: React.Reducer<State, Action> = (state, action): State => {
 type Props = RouteComponentProps<{ stageId: string | undefined }>;
 
 const StageEditPage: React.FC<Props> = props => {
-  const [state, dispatch] = useReducer(reducer, new State());
+  const theme = useTheme<Theme>();
+
+  const toolsInitiallyVisible = window.outerWidth >= theme.breakpoints.values.sm;
+  const [state, dispatch] = useReducer(reducer, {...new State(), toolsVisible: toolsInitiallyVisible});
   const [saved, setSaved] = useState(false);
   const classes = useStyles();
+
+  const toggleTools = useCallback(() => dispatch({type: "ToggleTools"}), []);
 
   useEffect(() => {
     if (!state.mounted) {
@@ -85,7 +98,8 @@ const StageEditPage: React.FC<Props> = props => {
     const [title, body] = state.loadError;
     content = <ErrorCard title={title} body={body} linkUrl="/stages" linkText="Return to stage list"/>;
   } else if (state.stage) {
-    content = <StageEditor stage={state.stage} onChange={updateStage} editable={true}/>;
+    const {stage, toolsVisible} = state;
+    content = <StageEditor stage={stage} onStageUpdate={updateStage} toolsVisible={toolsVisible} editable={true}/>;
   }
 
   const save = () => {
@@ -101,15 +115,20 @@ const StageEditPage: React.FC<Props> = props => {
 
   const pageBody = <div className={classes.container}>{content}</div>;
   const actions = (
-    <IconButton onClick={save} disabled={state.editedStage === null || state.saving}>
-      <SaveIcon/>
-    </IconButton>
+    <>
+      <IconButton onClick={save} disabled={state.editedStage === null || state.saving}>
+        <Save/>
+      </IconButton>
+      <IconButton onClick={toggleTools}>
+        <Tune/>
+      </IconButton>
+    </>
   );
 
   const closeSnackbar = () => setSaved(false);
   return (
     <>
-      <PageContainer body={pageBody} spacing={0} actions={actions}/>
+      <PageContainer className={classes.pageContainer} body={pageBody} spacing={0} actions={actions}/>
       <Snackbar
         open={saved}
         anchorOrigin={{vertical: "bottom", horizontal: "right"}}

@@ -55,7 +55,7 @@ const StagePropRotateHandle: React.FC<Props> = props => {
       .on("pointermove", (event: InteractionEvent) => onDragMove(event, props, rotateHandle, dragState))
       .on("pointerup", (event: InteractionEvent) => onDragEnd(event, props, dragState, setDragState))
       .on("pointerupoutside", (event: InteractionEvent) => onDragEnd(event, props, dragState, setDragState));
-  } else {
+  } else if (rotateHandle.listenerCount("pointermove") > 0) {
     logger.debug("Dragging stopped, removing listeners.");
 
     rotateHandle.removeListener("pointermove");

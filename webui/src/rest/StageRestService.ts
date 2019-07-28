@@ -10,21 +10,23 @@ const stageNotFoundError: Error = ["Stage not found", "The stage you're looking 
 const saveError: Error = ["Failed to save stage", "Please check your data and try again."];
 const unexpectedError: Error = ["An unexpected error occurred", "Sorry! Please check your data and try again."];
 
-export const loadStage = async (
+export const loadStage = (
   stageId: number,
   onSuccess: (stage: StageViewModel) => void,
   onFailure: (error: Error) => void
 ) => {
-  logger.info(`Loading stage ${stageId}.`);
-  try {
-    const response = await axios.get(`${restConfig.ROOT_URL}/stages/${stageId}`);
-    logger.info(`Loaded stage ${stageId}.`);
-    onSuccess(response.data);
-  } catch (error) {
-    logger.error(`Failed to load stage ${stageId}.`, error);
-    const status = (error.response as AxiosResponse).status;
-    onFailure(status === 404 ? stageNotFoundError : unexpectedError);
-  }
+  (async () => {
+    logger.info(`Loading stage ${stageId}.`);
+    try {
+      const response = await axios.get(`${restConfig.ROOT_URL}/stages/${stageId}`);
+      logger.info(`Loaded stage ${stageId}.`);
+      onSuccess(response.data);
+    } catch (error) {
+      logger.error(`Failed to load stage ${stageId}.`, error);
+      const status = (error.response as AxiosResponse).status;
+      onFailure(status === 404 ? stageNotFoundError : unexpectedError);
+    }
+  })();
 };
 
 export const saveStage = async (stage: StageViewModel, onSuccess: () => void, onFailure: (error: Error) => void) => {

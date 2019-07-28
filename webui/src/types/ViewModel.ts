@@ -1,24 +1,24 @@
-export interface StageViewModel {
-  id: number | null;
-  name: string | null;
-  width: number | null;
-  height: number | null;
-  stageProps: StagePropViewModel[];
+export class StageViewModel {
+  public id: number | null = null;
+  public name: string = "";
+  public width: number = 0;
+  public height: number = 0;
+  public stageProps: StagePropViewModel[] = [];
 }
 
 export interface StagePropViewModel {
-  uuid: number | null;
-  stageId: number | null;
-  code: string | null;
-  name: string | null;
-  type: string | null;
-  ledCount: number | null;
-  reverse: boolean | null;
-  positionX: number | null;
-  positionY: number | null;
-  scaleX: number | null;
-  scaleY: number | null;
-  rotation: number | null;
-  brightness: number | null;
-  displayOrder: number | null;
+  uuid: string;
+  stageId: number;
+  code: string;
+  name: string;
+  type: string;
+  ledCount: number;
+  reverse: boolean;
+  positionX: number;
+  positionY: number;
+  scaleX: number;
+  scaleY: number;
+  rotation: number;
+  brightness: number;
+  displayOrder: number;
 }

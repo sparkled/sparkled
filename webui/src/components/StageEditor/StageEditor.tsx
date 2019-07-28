@@ -1,9 +1,15 @@
+import {Theme} from "@material-ui/core";
+import {makeStyles} from "@material-ui/styles";
 import _ from "lodash";
 import * as PIXI from "pixi.js";
-import React, {Dispatch, useEffect, useReducer, useRef, useState} from "react";
+import React, {Dispatch, useCallback, useEffect, useMemo, useReducer, useRef, useState} from "react";
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.css";
 import {StageViewModel} from "../../types/ViewModel";
 import Logger from "../../utils/Logger";
 import {clamp} from "../../utils/numberUtils";
+import EditorSidebar from "./EditorSidebar";
+import {DispatchContext, reducer, StateContext} from "./Reducer";
 import StageProp from "./StageProp";
 
 const logger = new Logger("StageEditor");
@@ -12,12 +18,15 @@ const zoomLimits = {min: .5, max: 5};
 
 type InteractionEvent = PIXI.interaction.InteractionEvent;
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLElement> {
   /** The stage being viewed or edited. */
   stage: StageViewModel;
 
   /** An optional callback to invoke whenever a change is made to the stage. */
-  onChange?: (stage: StageViewModel) => any; // TODO use.
+  onStageUpdate?: (stage: StageViewModel) => any; // TODO use.
+
+  /** Whether or not to display the tools sidebar. */
+  toolsVisible: boolean;
 
   /** Whether or not to enable stage prop editing. */
   editable: boolean;
@@ -37,12 +46,42 @@ interface DragState {
   mouseY: number;
 }
 
+const useStyles = makeStyles((theme: Theme) => {
+  const sidebarWidth = 300;
+  const tween = "cubic-bezier(0.4, 0, 0.2, 1)";
+
+  return {
+    sidebarContainer: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+      width: sidebarWidth,
+      maxHeight: "100%",
+      transition: `opacity .5s ${tween}, transform .5s ${tween}`
+    },
+    sidebar: {
+      margin: theme.spacing(1),
+    },
+    noTools: {
+      opacity: 0,
+      transform: `translate3d(${sidebarWidth}px, 0, 0)`
+    }
+  };
+});
+
 const StageEditor: React.FC<Props> = props => {
+  const classes = useStyles();
+
   const canvasElement = useRef<HTMLDivElement>(null);
   const [pixiApp, setPixiApp] = useState<PIXI.Application | null>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
 
-  const [state, dispatch] = useReducer(reducer, {stage: props.stage, selectedStageProps: new Set<string>()});
+  const [state, dispatch] = useReducer(reducer, {stage: props.stage, selectedStageProp: ""});
+
+  const deselectStageProp = useCallback(
+    () => dispatch({type: "SelectStageProp", payload: {uuid: null}}),
+    []
+  );
 
   useEffect(() => {
     logger.info("Creating.");
@@ -55,13 +94,21 @@ const StageEditor: React.FC<Props> = props => {
     };
   }, []);
 
+  const onStageUpdate = useCallback(props.onStageUpdate || _.identity, []);
+  useEffect(() => {
+    logger.info("Stage changed.");
+    onStageUpdate(state.stage);
+  }, [onStageUpdate, state.stage]);
+
   if (pixiApp === null || canvasElement.current === null) {
     logger.debug("Waiting for canvas element to mount.");
   } else if (pixiApp.stage.children.length === 0) {
     initCanvas(pixiApp, canvasElement.current);
 
     const {interaction} = pixiApp.renderer.plugins;
-    interaction.on("pointerdown", (event: InteractionEvent) => onDragStart(event, pixiApp, setDragState));
+    interaction.on("pointerdown", (event: InteractionEvent) => {
+      onDragStart(event, pixiApp, deselectStageProp, setDragState);
+    });
     pixiApp.view.addEventListener("wheel", event => onZoom(event, pixiApp));
   } else if (dragState !== null) {
     pixiApp.renderer.plugins.interaction
@@ -74,11 +121,20 @@ const StageEditor: React.FC<Props> = props => {
     pixiApp.renderer.plugins.interaction.removeListener("pointerupoutside");
   }
 
+  const stageProps = useMemo(() => {
+    return renderStageProps(pixiApp, state.stage, props.editable);
+  }, [pixiApp, props.editable, state.stage]);
+
+  const toolsClass = props.toolsVisible ? "" : classes.noTools;
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
+        <SimpleBar className={`${classes.sidebarContainer} ${toolsClass}`}>
+          <EditorSidebar className={classes.sidebar}/>
+        </SimpleBar>
+
         <div ref={canvasElement}>
-          {renderStageProps(pixiApp, props)}
+          {stageProps}
         </div>
       </DispatchContext.Provider>
     </StateContext.Provider>
@@ -111,9 +167,15 @@ function onZoom(event: WheelEvent, pixiApp: PIXI.Application) {
   redrawGrid(pixiApp);
 }
 
-function onDragStart(event: InteractionEvent, pixiApp: PIXI.Application, setDragState: Dispatch<DragState>) {
+function onDragStart(
+  event: InteractionEvent,
+  pixiApp: PIXI.Application,
+  deselectStageProp: () => void,
+  setDragState: Dispatch<DragState>
+) {
   // Only drag if the background is selected (i.e. no stage prop is set as the target).
   if (event.target === null) {
+    deselectStageProp();
     const {clientX, clientY, changedTouches} = event.data.originalEvent as MouseEvent & TouchEvent;
     const mouseX = clientX !== undefined ? clientX : changedTouches[0].clientX;
     const mouseY = clientY !== undefined ? clientY : changedTouches[0].clientY;
@@ -128,7 +190,6 @@ function onDragMove(event: InteractionEvent, pixiApp: PIXI.Application, dragStat
   }
 
   const {originX, originY, mouseX, mouseY} = dragState;
-
   const {clientX, clientY, changedTouches} = event.data.originalEvent as MouseEvent & TouchEvent;
   const newMouseX = clientX !== undefined ? clientX : changedTouches[0].clientX;
   const newMouseY = clientY !== undefined ? clientY : changedTouches[0].clientY;
@@ -173,9 +234,7 @@ function redrawGrid(pixiApp: PIXI.Application) {
   }
 }
 
-function renderStageProps(pixiApp: PIXI.Application | null, props: Props) {
-  const {stage, editable} = props;
-
+function renderStageProps(pixiApp: PIXI.Application | null, stage: StageViewModel, editable: boolean) {
   if (!pixiApp) {
     return <></>;
   }
