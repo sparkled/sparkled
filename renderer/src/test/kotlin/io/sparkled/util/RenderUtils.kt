@@ -1,12 +1,12 @@
 package io.sparkled.util
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.RenderedStagePropData
-import io.sparkled.model.util.GsonProvider
 import io.sparkled.renderer.Renderer
 import java.util.UUID
 
@@ -24,7 +24,7 @@ object RenderUtils {
         val animationData = SequenceChannelEffects(listOf(effect))
 
         val sequence = Sequence().setFramesPerSecond(60)
-        val channelJson = GsonProvider.get().toJson(animationData)
+        val channelJson = ObjectMapper().writeValueAsString(animationData)
         val sequenceChannel = SequenceChannel().setStagePropUuid(PROP_UUID).setChannelJson(channelJson)
 
         val renderResult = Renderer(

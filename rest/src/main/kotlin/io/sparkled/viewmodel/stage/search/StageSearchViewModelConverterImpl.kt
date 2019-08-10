@@ -1,7 +1,9 @@
 package io.sparkled.viewmodel.stage.search
 
 import io.sparkled.model.entity.Stage
+import javax.inject.Singleton
 
+@Singleton
 class StageSearchViewModelConverterImpl : StageSearchViewModelConverter() {
 
     override fun toViewModels(models: Collection<Stage>): List<StageSearchViewModel> {

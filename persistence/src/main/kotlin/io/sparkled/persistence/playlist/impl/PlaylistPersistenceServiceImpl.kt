@@ -17,10 +17,10 @@ import io.sparkled.persistence.playlist.impl.query.GetSequenceAtPlaylistIndexQue
 import io.sparkled.persistence.playlist.impl.query.SavePlaylistQuery
 import io.sparkled.persistence.playlist.impl.query.SavePlaylistSequencesQuery
 import java.util.UUID
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class PlaylistPersistenceServiceImpl
-@Inject constructor(private val queryFactory: QueryFactory) : PlaylistPersistenceService {
+@Singleton
+class PlaylistPersistenceServiceImpl(private val queryFactory: QueryFactory) : PlaylistPersistenceService {
 
     override fun createPlaylist(playlist: Playlist): Playlist {
         return SavePlaylistQuery(playlist).perform(queryFactory)

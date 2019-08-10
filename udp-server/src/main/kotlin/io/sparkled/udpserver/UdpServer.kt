@@ -11,4 +11,9 @@ interface UdpServer {
      * @param port The port to listen on.
      */
     fun start(port: Int)
+
+    /**
+     * Shuts the UDP serer down.
+     */
+    fun stop()
 }

@@ -1,6 +1,6 @@
 package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.QRenderedStageProp.renderedStageProp
+import io.sparkled.model.entity.QRenderedStageProp.Companion.renderedStageProp
 import io.sparkled.model.entity.RenderedStageProp
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.render.RenderedStagePropDataMap
@@ -9,8 +9,8 @@ import io.sparkled.model.util.TupleUtils
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.stage.impl.query.DeleteRenderedStagePropsQuery
-import org.slf4j.LoggerFactory
 import java.util.UUID
+import org.slf4j.LoggerFactory
 
 class SaveRenderedStagePropsQuery(
     private val sequence: Sequence,

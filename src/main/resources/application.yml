@@ -1,0 +1,34 @@
+micronaut:
+  application:
+    name: sparkled
+
+  router:
+    static-resources:
+      default:
+        paths:
+          - classpath:webui
+
+  server:
+    maxFileSize: 30mb
+    maxRequestSize: 30mb
+    multipart:
+      maxFileSize: 30mb
+    cors:
+      enabled: true
+
+datasources:
+  default:
+    url: ${JDBC_URL:`jdbc:h2:./sparkled`}
+    username: ${JDBC_USER:}
+    password: ${JDBC_PASSWORD:}
+    driverClassName: ${JDBC_DRIVER:org.h2.Driver}
+
+jpa:
+  default:
+    packages-to-scan:
+      - 'io.sparkled.model.entity'
+
+liquibase:
+  datasources:
+    default:
+      change-log: 'classpath:db/liquibase-changelog.xml'

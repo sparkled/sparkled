@@ -1,6 +1,6 @@
 package io.sparkled.persistence.stage.impl.query
 
-import io.sparkled.model.entity.QStageProp.stageProp
+import io.sparkled.model.entity.QStageProp.Companion.stageProp
 import io.sparkled.model.entity.StageProp
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory

@@ -6,11 +6,10 @@ import io.sparkled.model.util.SequenceUtils
 import io.sparkled.persistence.sequence.SequencePersistenceService
 import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.viewmodel.exception.ViewModelConversionException
+import javax.inject.Singleton
 
-import javax.inject.Inject
-
-class SequenceViewModelConverterImpl
-@Inject constructor(
+@Singleton
+class SequenceViewModelConverterImpl(
     private val sequencePersistenceService: SequencePersistenceService,
     private val songPersistenceService: SongPersistenceService
 ) : SequenceViewModelConverter() {

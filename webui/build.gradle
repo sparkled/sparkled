@@ -1,0 +1,21 @@
+plugins {
+  id "com.moowork.node" version "1.3.1"
+}
+
+task deleteWebUi(type: Delete, group: 'webui') {
+  delete "$rootDir/src/main/resources/webui"
+}
+
+task buildWebUi(type: NpmTask, group: 'webui') {
+  args = ['run', 'build']
+}
+
+task copyWebUi(type: Copy, group: 'webui') {
+  from "$buildDir"
+  into "$rootDir/src/main/resources/webui"
+}
+
+deleteWebUi.dependsOn(npmSetup)
+npmInstall.dependsOn(deleteWebUi)
+buildWebUi.dependsOn(npmInstall)
+copyWebUi.dependsOn(buildWebUi)

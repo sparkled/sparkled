@@ -20,10 +20,10 @@ import io.sparkled.persistence.sequence.impl.query.SaveRenderedStagePropsQuery
 import io.sparkled.persistence.sequence.impl.query.SaveSequenceChannelsQuery
 import io.sparkled.persistence.sequence.impl.query.SaveSequenceQuery
 import java.util.UUID
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class SequencePersistenceServiceImpl
-@Inject constructor(private val queryFactory: QueryFactory) : SequencePersistenceService {
+@Singleton
+class SequencePersistenceServiceImpl(private val queryFactory: QueryFactory) : SequencePersistenceService {
 
     override fun getAllSequences(): List<Sequence> {
         return GetAllSequencesQuery().perform(queryFactory)

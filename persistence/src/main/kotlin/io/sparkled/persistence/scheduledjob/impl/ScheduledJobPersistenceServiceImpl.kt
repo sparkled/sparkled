@@ -7,10 +7,10 @@ import io.sparkled.persistence.scheduledjob.impl.query.DeleteScheduledJobQuery
 import io.sparkled.persistence.scheduledjob.impl.query.GetScheduledJobByIdQuery
 import io.sparkled.persistence.scheduledjob.impl.query.GetScheduledJobsQuery
 import io.sparkled.persistence.scheduledjob.impl.query.SaveScheduledJobQuery
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class ScheduledJobPersistenceServiceImpl
-@Inject constructor(private val queryFactory: QueryFactory) : ScheduledJobPersistenceService {
+@Singleton
+class ScheduledJobPersistenceServiceImpl(private val queryFactory: QueryFactory) : ScheduledJobPersistenceService {
 
     override fun createScheduledJob(scheduledJob: ScheduledJob): ScheduledJob {
         return SaveScheduledJobQuery(scheduledJob).perform(queryFactory)

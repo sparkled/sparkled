@@ -1,18 +1,19 @@
 package io.sparkled.viewmodel.sequence.channel
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.SequenceChannel
-import io.sparkled.model.util.GsonProvider
 import io.sparkled.persistence.sequence.SequencePersistenceService
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class SequenceChannelViewModelConverterImpl
-@Inject constructor(private val sequencePersistenceService: SequencePersistenceService) :
-    SequenceChannelViewModelConverter() {
+@Singleton
+class SequenceChannelViewModelConverterImpl(
+    private val sequencePersistenceService: SequencePersistenceService
+) : SequenceChannelViewModelConverter() {
 
     override fun toViewModel(model: SequenceChannel): SequenceChannelViewModel {
         val channelJson = model.getChannelJson()
-        val sequenceChannelEffects = GsonProvider.get().fromJson(channelJson, SequenceChannelEffects::class.java)
+        val sequenceChannelEffects = ObjectMapper().readValue(channelJson, SequenceChannelEffects::class.java)
 
         return SequenceChannelViewModel()
             .setUuid(model.getUuid())
@@ -28,7 +29,7 @@ class SequenceChannelViewModelConverterImpl
             .getSequenceChannelByUuid(viewModel.getSequenceId()!!, viewModel.getUuid()!!)
             ?: SequenceChannel()
 
-        val channelJson = GsonProvider.get().toJson(SequenceChannelEffects(viewModel.getEffects()))
+        val channelJson = ObjectMapper().writeValueAsString(SequenceChannelEffects(viewModel.getEffects()))
         return model
             .setUuid(viewModel.getUuid())
             .setSequenceId(viewModel.getSequenceId())

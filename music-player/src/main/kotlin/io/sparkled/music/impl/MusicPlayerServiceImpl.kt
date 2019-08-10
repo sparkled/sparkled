@@ -2,20 +2,20 @@ package io.sparkled.music.impl
 
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackState
-import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.HashSet
-import javax.inject.Inject
+import javax.inject.Singleton
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.AudioInputStream
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
+import org.slf4j.LoggerFactory
 
-class MusicPlayerServiceImpl
-@Inject constructor() : MusicPlayerService, LineListener {
+@Singleton
+class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
 
     private val listeners = HashSet<LineListener>()
     private var clip: Clip? = null
@@ -34,8 +34,10 @@ class MusicPlayerServiceImpl
             mp3Stream = AudioSystem.getAudioInputStream(byteStream)
 
             val baseFormat = mp3Stream!!.format
-            val decodedFormat = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.sampleRate, 16, baseFormat.channels,
-                    baseFormat.channels * 2, baseFormat.sampleRate, false)
+            val decodedFormat = AudioFormat(
+                AudioFormat.Encoding.PCM_SIGNED, baseFormat.sampleRate, 16, baseFormat.channels,
+                baseFormat.channels * 2, baseFormat.sampleRate, false
+            )
             convertedStream = AudioSystem.getAudioInputStream(decodedFormat, mp3Stream)
 
             val clip = AudioSystem.getClip()

@@ -1,6 +1,6 @@
 package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.QRenderedStageProp.renderedStageProp
+import io.sparkled.model.entity.QRenderedStageProp.Companion.renderedStageProp
 import io.sparkled.model.entity.RenderedStageProp
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.Song

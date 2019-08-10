@@ -3,11 +3,12 @@ package io.sparkled.viewmodel.stage
 import io.sparkled.model.entity.Stage
 import io.sparkled.persistence.stage.StagePersistenceService
 import io.sparkled.viewmodel.exception.ViewModelConversionException
+import javax.inject.Singleton
 
-import javax.inject.Inject
-
-class StageViewModelConverterImpl
-@Inject constructor(private val stagePersistenceService: StagePersistenceService) : StageViewModelConverter() {
+@Singleton
+class StageViewModelConverterImpl(
+    private val stagePersistenceService: StagePersistenceService
+) : StageViewModelConverter() {
 
     override fun toViewModel(model: Stage): StageViewModel {
         return StageViewModel()

@@ -1,13 +1,13 @@
 package io.sparkled.model.validator
 
-import com.google.gson.JsonSyntaxException
+import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.entity.SequenceChannel
-import io.sparkled.model.util.GsonProvider
 import io.sparkled.model.validator.exception.EntityValidationException
 
 class SequenceChannelValidator {
@@ -27,14 +27,11 @@ class SequenceChannelValidator {
     }
 
     private fun getEffectsFromJson(rawAnimationData: String): SequenceChannelEffects {
-        val animationData: SequenceChannelEffects
         try {
-            animationData = GsonProvider.get().fromJson(rawAnimationData, SequenceChannelEffects::class.java)
-        } catch (e: JsonSyntaxException) {
+            return ObjectMapper().readValue(rawAnimationData, SequenceChannelEffects::class.java)
+        } catch (e: JsonProcessingException) {
             throw EntityValidationException(Errors.CHANNEL_JSON_MALFORMED, e)
         }
-
-        return animationData
     }
 
     private fun validateChannelEffects(channelEffects: SequenceChannelEffects) {

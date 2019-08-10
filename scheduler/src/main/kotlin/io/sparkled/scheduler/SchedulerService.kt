@@ -13,6 +13,11 @@ interface SchedulerService {
     fun start()
 
     /**
+     * Shuts down the scheduler.
+     */
+    fun stop()
+
+    /**
      * Reload all [ScheduledJob]s from the database and restart the scheduler.
      */
     fun reload()

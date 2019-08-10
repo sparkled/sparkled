@@ -1,6 +1,6 @@
 package io.sparkled.persistence.stage.impl.query
 
-import io.sparkled.model.entity.QStageProp.stageProp
+import io.sparkled.model.entity.QStageProp.Companion.stageProp
 import io.sparkled.model.entity.Stage
 import io.sparkled.model.entity.StageProp
 import io.sparkled.model.util.IdUtils.NO_UUIDS
@@ -8,8 +8,8 @@ import io.sparkled.model.validator.StagePropValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
-import org.slf4j.LoggerFactory
 import java.util.UUID
+import org.slf4j.LoggerFactory
 
 class SaveStagePropsQuery(private val stage: Stage, private val stageProps: List<StageProp>) : PersistenceQuery<Unit> {
 

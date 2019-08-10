@@ -1,6 +1,6 @@
 package io.sparkled.persistence.song.impl.query
 
-import io.sparkled.model.entity.QSong.song
+import io.sparkled.model.entity.QSong.Companion.song
 import io.sparkled.model.entity.Song
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory

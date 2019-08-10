@@ -1,8 +1,8 @@
 package io.sparkled.persistence.song.impl.query
 
-import io.sparkled.model.entity.QSequence.sequence
-import io.sparkled.model.entity.QSong.song
-import io.sparkled.model.entity.QSongAudio.songAudio
+import io.sparkled.model.entity.QSequence.Companion.sequence
+import io.sparkled.model.entity.QSong.Companion.song
+import io.sparkled.model.entity.QSongAudio.Companion.songAudio
 import io.sparkled.model.util.IdUtils.NO_IDS
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory

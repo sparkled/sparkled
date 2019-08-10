@@ -10,9 +10,9 @@ import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.util.ArgumentUtils.arg
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
+import kotlin.intArrayOf as f
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
-import kotlin.intArrayOf as f
 
 class GradientFillTest {
 

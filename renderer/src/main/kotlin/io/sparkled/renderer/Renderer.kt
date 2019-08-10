@@ -11,6 +11,8 @@ import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.renderer.util.ChannelPropPairUtils
 import io.sparkled.renderer.util.EffectTypeRenderers
+import kotlin.math.max
+import kotlin.math.min
 
 class Renderer(
     private val sequence: Sequence,
@@ -66,8 +68,8 @@ class Renderer(
         val effectTypeCode = effect.type
         val renderer = EffectTypeRenderers[effectTypeCode]
 
-        val startFrame = Math.max(this.startFrame, effect.startFrame)
-        val endFrame = Math.min(this.endFrame, effect.endFrame)
+        val startFrame = max(this.startFrame, effect.startFrame)
+        val endFrame = min(this.endFrame, effect.endFrame)
 
         for (frameNumber in startFrame..endFrame) {
             val frame = data.frames[frameNumber - this.startFrame]

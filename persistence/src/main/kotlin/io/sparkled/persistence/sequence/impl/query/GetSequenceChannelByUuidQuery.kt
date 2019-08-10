@@ -1,6 +1,6 @@
 package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.QSequenceChannel.sequenceChannel
+import io.sparkled.model.entity.QSequenceChannel.Companion.sequenceChannel
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory

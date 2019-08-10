@@ -9,10 +9,10 @@ import io.sparkled.persistence.song.impl.query.GetSongByIdQuery
 import io.sparkled.persistence.song.impl.query.GetSongBySequenceIdQuery
 import io.sparkled.persistence.song.impl.query.SaveSongAudioQuery
 import io.sparkled.persistence.song.impl.query.SaveSongQuery
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class SongPersistenceServiceImpl
-@Inject constructor(private val queryFactory: QueryFactory) : SongPersistenceService {
+@Singleton
+class SongPersistenceServiceImpl(private val queryFactory: QueryFactory) : SongPersistenceService {
 
     override fun createSong(song: Song, audioData: ByteArray): Song {
         val savedSong = SaveSongQuery(song).perform(queryFactory)
