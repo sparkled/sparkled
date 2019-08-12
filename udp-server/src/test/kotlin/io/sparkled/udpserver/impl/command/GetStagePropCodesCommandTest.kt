@@ -8,10 +8,10 @@ import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.music.PlaybackState
+import java.nio.charset.StandardCharsets
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.jupiter.api.Test
-import java.nio.charset.StandardCharsets
 
 internal class GetStagePropCodesCommandTest {
 

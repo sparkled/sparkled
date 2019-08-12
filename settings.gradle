@@ -1,0 +1,2 @@
+rootProject.name = 'sparkled'
+include 'model', 'music-player', 'persistence', 'renderer', 'rest', 'scheduler', 'udp-server', 'webui'

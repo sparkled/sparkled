@@ -6,10 +6,10 @@ import io.sparkled.model.entity.Song
 import io.sparkled.model.entity.Stage
 import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.persistence.stage.StagePersistenceService
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class SequenceSearchViewModelConverterImpl
-@Inject constructor(
+@Singleton
+class SequenceSearchViewModelConverterImpl(
     private val songPersistenceService: SongPersistenceService,
     private val stagePersistenceService: StagePersistenceService
 ) : SequenceSearchViewModelConverter() {

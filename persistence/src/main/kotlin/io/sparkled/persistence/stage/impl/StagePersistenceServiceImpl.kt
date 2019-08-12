@@ -12,10 +12,10 @@ import io.sparkled.persistence.stage.impl.query.GetStagePropsByStageIdQuery
 import io.sparkled.persistence.stage.impl.query.SaveStagePropsQuery
 import io.sparkled.persistence.stage.impl.query.SaveStageQuery
 import java.util.UUID
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class StagePersistenceServiceImpl
-@Inject constructor(private val queryFactory: QueryFactory) : StagePersistenceService {
+@Singleton
+class StagePersistenceServiceImpl(private val queryFactory: QueryFactory) : StagePersistenceService {
 
     override fun createStage(stage: Stage): Stage {
         return SaveStageQuery(stage).perform(queryFactory)

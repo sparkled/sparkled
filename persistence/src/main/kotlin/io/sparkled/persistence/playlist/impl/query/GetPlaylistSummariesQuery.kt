@@ -2,10 +2,10 @@ package io.sparkled.persistence.playlist.impl.query
 
 import com.querydsl.core.Tuple
 import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
-import io.sparkled.model.entity.QPlaylist.playlist
-import io.sparkled.model.entity.QPlaylistSequence.playlistSequence
-import io.sparkled.model.entity.QSequence.sequence
-import io.sparkled.model.entity.QSong.song
+import io.sparkled.model.entity.QPlaylist.Companion.playlist
+import io.sparkled.model.entity.QPlaylistSequence.Companion.playlistSequence
+import io.sparkled.model.entity.QSequence.Companion.sequence
+import io.sparkled.model.entity.QSong.Companion.song
 import io.sparkled.model.playlist.PlaylistSummary
 import io.sparkled.model.util.TupleUtils
 import io.sparkled.persistence.PersistenceQuery

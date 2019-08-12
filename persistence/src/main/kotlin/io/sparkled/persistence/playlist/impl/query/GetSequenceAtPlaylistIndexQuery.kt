@@ -1,7 +1,7 @@
 package io.sparkled.persistence.playlist.impl.query
 
-import io.sparkled.model.entity.QPlaylistSequence.playlistSequence
-import io.sparkled.model.entity.QSequence.sequence
+import io.sparkled.model.entity.QPlaylistSequence.Companion.playlistSequence
+import io.sparkled.model.entity.QSequence.Companion.sequence
 import io.sparkled.model.entity.Sequence
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory

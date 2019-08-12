@@ -2,11 +2,12 @@ package io.sparkled.viewmodel.scheduledjob.search
 
 import io.sparkled.model.entity.ScheduledJob
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class ScheduledJobSearchViewModelConverterImpl
-@Inject constructor(private val playlistPersistenceService: PlaylistPersistenceService) :
-    ScheduledJobSearchViewModelConverter() {
+@Singleton
+class ScheduledJobSearchViewModelConverterImpl(
+    private val playlistPersistenceService: PlaylistPersistenceService
+) : ScheduledJobSearchViewModelConverter() {
 
     override fun toViewModels(models: Collection<ScheduledJob>): List<ScheduledJobSearchViewModel> {
         val playlistNames = playlistPersistenceService.getPlaylistNames()

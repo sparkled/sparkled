@@ -6,7 +6,7 @@ import org.hamcrest.TypeSafeMatcher
 /**
  * Convenience matcher for comparing arrays of floats.
  */
-class FloatArrayMatcher internal constructor(private val values: FloatArray) : TypeSafeMatcher<FloatArray>() {
+class FloatArrayMatcher(private val values: FloatArray) : TypeSafeMatcher<FloatArray>() {
 
     override fun describeTo(description: Description) {
         val value = floatArrayToString(values)

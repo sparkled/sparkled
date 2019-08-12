@@ -6,13 +6,13 @@ import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.impl.command.GetFrameCommand
 import io.sparkled.udpserver.impl.command.GetStagePropCodesCommand
 import io.sparkled.udpserver.impl.command.GetVersionCommand
-import org.slf4j.LoggerFactory
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import javax.inject.Inject
+import javax.inject.Singleton
+import org.slf4j.LoggerFactory
 
-class RequestHandlerImpl
-@Inject constructor(
+@Singleton
+class RequestHandlerImpl(
     private val playbackStateService: PlaybackStateService,
     private val settingPersistenceService: SettingPersistenceService
 ) : RequestHandler {

@@ -4,10 +4,12 @@ import io.sparkled.model.entity.PlaylistSequence
 import io.sparkled.model.util.IdUtils.NO_ID
 import io.sparkled.model.util.IdUtils.NO_UUID
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class PlaylistSequenceViewModelConverterImpl
-@Inject constructor(private val playlistPersistenceService: PlaylistPersistenceService) : PlaylistSequenceViewModelConverter() {
+@Singleton
+class PlaylistSequenceViewModelConverterImpl(
+    private val playlistPersistenceService: PlaylistPersistenceService
+) : PlaylistSequenceViewModelConverter() {
 
     override fun toViewModel(model: PlaylistSequence): PlaylistSequenceViewModel {
         return PlaylistSequenceViewModel()

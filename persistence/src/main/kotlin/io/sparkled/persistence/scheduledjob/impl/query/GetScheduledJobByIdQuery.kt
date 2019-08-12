@@ -1,6 +1,6 @@
 package io.sparkled.persistence.scheduledjob.impl.query
 
-import io.sparkled.model.entity.QScheduledJob.scheduledJob
+import io.sparkled.model.entity.QScheduledJob.Companion.scheduledJob
 import io.sparkled.model.entity.ScheduledJob
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory

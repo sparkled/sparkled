@@ -1,0 +1,116 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadowPluginVersion"
+        classpath "io.spring.gradle:dependency-management-plugin:$dependencyManagementPluginVersion"
+        classpath "net.ltgt.gradle:gradle-apt-plugin:$gradleAptPluginVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+configurations {
+    ktlint
+}
+
+allprojects { project ->
+    version '0.0.1'
+    group 'io.sparkled'
+
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+    apply plugin: 'kotlin-kapt'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://jcenter.bintray.com" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "io.micronaut:micronaut-bom:$micronautVersion"
+        }
+    }
+
+    dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+        implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+        implementation 'io.micronaut:micronaut-runtime'
+        implementation 'io.micronaut:micronaut-http-client'
+        implementation 'io.micronaut:micronaut-http-server-netty'
+        implementation "javax.annotation:javax.annotation-api:$javaxAnnotationApiVersion"
+        implementation "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$hibernateJpaApiVersion"
+        kapt 'io.micronaut:micronaut-inject-java'
+        kaptTest 'io.micronaut:micronaut-inject-java'
+        runtime "ch.qos.logback:logback-classic:$logbackVersion"
+        runtime "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinModuleVersion"
+
+        testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
+        testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
+        testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+    }
+
+    test {
+        useJUnitPlatform {
+        }
+    }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = '1.8'
+            //Will retain parameter names for Java reflection
+            javaParameters = true
+        }
+    }
+
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = '1.8'
+            javaParameters = true
+        }
+    }
+}
+
+apply plugin: 'application'
+apply plugin: 'net.ltgt.apt-eclipse'
+apply plugin: 'net.ltgt.apt-idea'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+mainClassName = 'io.sparkled.app.Main'
+
+run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
+
+dependencies {
+    implementation project(':rest')
+    implementation project(':scheduler')
+    implementation project(':udp-server')
+    implementation 'io.micronaut.configuration:micronaut-hibernate-jpa'
+    implementation 'io.micronaut.configuration:micronaut-jdbc-hikari'
+    implementation 'io.micronaut.configuration:micronaut-liquibase'
+    runtime 'com.h2database:h2'
+    ktlint "com.pinterest:ktlint:$ktlintVersion"
+}
+
+task ktlintConfigure(type: JavaExec, group: 'formatting') {
+    description = 'Use ktlint formatting in IntelliJ project.'
+    classpath = configurations.ktlint
+    main = 'com.pinterest.ktlint.Main'
+    args '--apply-to-idea-project', '-y'
+}
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = 'Fix Kotlin code style deviations.'
+    classpath = configurations.ktlint
+    main = 'com.pinterest.ktlint.Main'
+    args '-F', '**/*.kt'
+}

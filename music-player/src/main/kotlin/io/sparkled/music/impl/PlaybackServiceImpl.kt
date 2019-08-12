@@ -1,7 +1,7 @@
 package io.sparkled.music.impl
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import com.google.inject.persist.UnitOfWork
+import io.micronaut.spring.tx.annotation.Transactional
 import io.sparkled.model.entity.Playlist
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackService
@@ -12,31 +12,26 @@ import io.sparkled.persistence.sequence.SequencePersistenceService
 import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.persistence.stage.StagePersistenceService
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Inject
+import javax.inject.Singleton
 import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
 
-class PlaybackServiceImpl
-@Inject constructor(
+@Singleton
+open class PlaybackServiceImpl(
     private val songPersistenceService: SongPersistenceService,
     private val sequencePersistenceService: SequencePersistenceService,
     private val stagePersistenceService: StagePersistenceService,
     private val playlistPersistenceService: PlaylistPersistenceService,
-    private val unitOfWork: UnitOfWork,
     private val musicPlayerService: MusicPlayerService
 ) : PlaybackService, PlaybackStateService {
-    private val executor: ExecutorService
-
-    private val playbackState = AtomicReference<PlaybackState>(PlaybackState())
+    private val playbackState = AtomicReference(PlaybackState())
+    private val executor = Executors.newSingleThreadScheduledExecutor(
+        ThreadFactoryBuilder().setNameFormat("playback-service-%d").build()
+    )
 
     init {
-        this.executor = Executors.newSingleThreadScheduledExecutor(
-            ThreadFactoryBuilder().setNameFormat("playback-service-%d").build()
-        )
-
         musicPlayerService.addLineListener(LineListener { this.onLineEvent(it) })
     }
 
@@ -80,9 +75,9 @@ class PlaybackServiceImpl
         }
     }
 
-    private fun loadPlaybackState(playlist: Playlist, playlistIndex: Int): PlaybackState {
+    @Transactional(readOnly = true)
+    open fun loadPlaybackState(playlist: Playlist, playlistIndex: Int): PlaybackState {
         try {
-            unitOfWork.begin()
             val sequence = playlistPersistenceService.getSequenceAtPlaylistIndex(playlist.getId()!!, playlistIndex)
 
             return if (sequence == null) {
@@ -107,8 +102,9 @@ class PlaybackServiceImpl
                     stageProps = stageProps
                 )
             }
-        } finally {
-            unitOfWork.end()
+        } catch (e: Exception) {
+            logger.error("Failed to load playback state.", e)
+            return PlaybackState()
         }
     }
 

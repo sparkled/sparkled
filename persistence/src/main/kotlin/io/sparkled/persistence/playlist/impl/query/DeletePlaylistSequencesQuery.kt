@@ -1,11 +1,11 @@
 package io.sparkled.persistence.playlist.impl.query
 
-import io.sparkled.model.entity.QPlaylistSequence.playlistSequence
+import io.sparkled.model.entity.QPlaylistSequence.Companion.playlistSequence
 import io.sparkled.model.util.IdUtils.NO_UUIDS
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
-import org.slf4j.LoggerFactory
 import java.util.UUID
+import org.slf4j.LoggerFactory
 
 class DeletePlaylistSequencesQuery(playlistSequenceUuids: Collection<UUID>) : PersistenceQuery<Unit> {
 

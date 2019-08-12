@@ -3,11 +3,12 @@ package io.sparkled.viewmodel.scheduledjob
 import io.sparkled.model.entity.ScheduledJob
 import io.sparkled.persistence.scheduledjob.ScheduledJobPersistenceService
 import io.sparkled.viewmodel.exception.ViewModelConversionException
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class ScheduledJobViewModelConverterImpl
-@Inject constructor(private val scheduledJobPersistenceService: ScheduledJobPersistenceService) :
-    ScheduledJobViewModelConverter() {
+@Singleton
+class ScheduledJobViewModelConverterImpl(
+    private val scheduledJobPersistenceService: ScheduledJobPersistenceService
+) : ScheduledJobViewModelConverter() {
 
     override fun toViewModel(model: ScheduledJob): ScheduledJobViewModel {
         return ScheduledJobViewModel(

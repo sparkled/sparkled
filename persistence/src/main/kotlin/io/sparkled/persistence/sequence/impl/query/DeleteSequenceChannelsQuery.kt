@@ -1,11 +1,11 @@
 package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.QSequenceChannel.sequenceChannel
+import io.sparkled.model.entity.QSequenceChannel.Companion.sequenceChannel
 import io.sparkled.model.util.IdUtils.NO_UUIDS
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
-import org.slf4j.LoggerFactory
 import java.util.UUID
+import org.slf4j.LoggerFactory
 
 class DeleteSequenceChannelsQuery(sequenceChannelUuids: Collection<UUID>) : PersistenceQuery<Unit> {
 

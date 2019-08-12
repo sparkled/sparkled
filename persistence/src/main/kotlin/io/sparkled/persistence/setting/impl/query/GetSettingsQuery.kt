@@ -1,6 +1,6 @@
 package io.sparkled.persistence.setting.impl.query
 
-import io.sparkled.model.entity.QSetting.setting
+import io.sparkled.model.entity.QSetting.Companion.setting
 import io.sparkled.model.entity.Setting
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory

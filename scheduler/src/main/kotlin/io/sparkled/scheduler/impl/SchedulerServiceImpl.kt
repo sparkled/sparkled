@@ -1,13 +1,12 @@
 package io.sparkled.scheduler.impl
 
-import com.google.inject.persist.UnitOfWork
+import io.micronaut.spring.tx.annotation.Transactional
 import io.sparkled.model.entity.ScheduledJob
 import io.sparkled.model.entity.ScheduledJobAction
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import io.sparkled.persistence.scheduledjob.ScheduledJobPersistenceService
 import io.sparkled.persistence.setting.SettingPersistenceService
-import io.sparkled.persistence.transaction.Transaction
 import io.sparkled.scheduler.SchedulerService
 import org.quartz.CronScheduleBuilder
 import org.quartz.JobBuilder
@@ -17,12 +16,10 @@ import org.quartz.SchedulerException
 import org.quartz.TriggerBuilder
 import org.quartz.impl.StdSchedulerFactory
 import org.slf4j.LoggerFactory
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class SchedulerServiceImpl
-@Inject constructor(
-    private val unitOfWork: UnitOfWork,
-    private val transaction: Transaction,
+@Singleton
+open class SchedulerServiceImpl(
     private val scheduledJobPersistenceService: ScheduledJobPersistenceService,
     private val playlistPersistenceService: PlaylistPersistenceService,
     private val settingPersistenceService: SettingPersistenceService,
@@ -40,6 +37,10 @@ class SchedulerServiceImpl
         } catch (e: SchedulerException) {
             logger.error("Failed to start scheduler.", e)
         }
+    }
+
+    override fun stop() {
+        scheduler.shutdown()
     }
 
     override fun reload() {
@@ -81,8 +82,7 @@ class SchedulerServiceImpl
     internal fun handleJob(job: ScheduledJob) {
         logger.info("Executing scheduled job {}.", job.id)
 
-        val action = job.action!!
-        when (action) {
+        when (val action = job.action!!) {
             ScheduledJobAction.PLAY_PLAYLIST -> playPlaylist(job)
             ScheduledJobAction.STOP_PLAYBACK -> stopPlayback()
             ScheduledJobAction.SET_BRIGHTNESS -> setBrightness(job)
@@ -102,17 +102,10 @@ class SchedulerServiceImpl
     }
 
     @Synchronized
-    private fun setBrightness(job: ScheduledJob) {
+    @Transactional
+    open fun setBrightness(job: ScheduledJob) {
         val brightness = (job.value ?: "0")
-
-        unitOfWork.begin()
-        try {
-            transaction.of {
-                settingPersistenceService.setBrightness(brightness)
-            }
-        } finally {
-            unitOfWork.end()
-        }
+        settingPersistenceService.setBrightness(brightness)
     }
 
     companion object {

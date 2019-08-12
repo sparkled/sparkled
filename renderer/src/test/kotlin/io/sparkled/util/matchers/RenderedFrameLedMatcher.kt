@@ -8,7 +8,7 @@ import org.hamcrest.TypeSafeMatcher
 /**
  * Convenience matcher for verifying the LEDs in a rendered frame.
  */
-class RenderedFrameLedMatcher internal constructor(private val leds: IntArray) : TypeSafeMatcher<RenderedFrame>() {
+class RenderedFrameLedMatcher(private val leds: IntArray) : TypeSafeMatcher<RenderedFrame>() {
 
     override fun describeTo(description: Description) {
         val value = LedTestUtils.toLedString(leds)

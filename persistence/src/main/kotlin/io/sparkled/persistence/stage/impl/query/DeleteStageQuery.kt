@@ -1,8 +1,8 @@
 package io.sparkled.persistence.stage.impl.query
 
-import io.sparkled.model.entity.QSequence.sequence
-import io.sparkled.model.entity.QStage.stage
-import io.sparkled.model.entity.QStageProp.stageProp
+import io.sparkled.model.entity.QSequence.Companion.sequence
+import io.sparkled.model.entity.QStage.Companion.stage
+import io.sparkled.model.entity.QStageProp.Companion.stageProp
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.sequence.impl.query.DeleteSequencesQuery

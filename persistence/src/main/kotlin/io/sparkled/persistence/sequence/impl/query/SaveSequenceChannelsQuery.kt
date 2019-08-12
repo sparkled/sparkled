@@ -1,6 +1,6 @@
 package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.QSequenceChannel.sequenceChannel
+import io.sparkled.model.entity.QSequenceChannel.Companion.sequenceChannel
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.util.IdUtils.NO_UUIDS
@@ -11,8 +11,10 @@ import io.sparkled.persistence.QueryFactory
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
-class SaveSequenceChannelsQuery(private val sequence: Sequence, private val sequenceChannels: List<SequenceChannel>) :
-    PersistenceQuery<Unit> {
+class SaveSequenceChannelsQuery(
+    private val sequence: Sequence,
+    private val sequenceChannels: List<SequenceChannel>
+) : PersistenceQuery<Unit> {
 
     override fun perform(queryFactory: QueryFactory) {
         val sequenceChannelValidator = SequenceChannelValidator()

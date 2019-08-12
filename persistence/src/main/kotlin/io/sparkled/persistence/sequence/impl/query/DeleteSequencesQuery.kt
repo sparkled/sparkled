@@ -1,9 +1,9 @@
 package io.sparkled.persistence.sequence.impl.query
 
-import io.sparkled.model.entity.QPlaylistSequence.playlistSequence
-import io.sparkled.model.entity.QRenderedStageProp.renderedStageProp
-import io.sparkled.model.entity.QSequence.sequence
-import io.sparkled.model.entity.QSequenceChannel.sequenceChannel
+import io.sparkled.model.entity.QPlaylistSequence.Companion.playlistSequence
+import io.sparkled.model.entity.QRenderedStageProp.Companion.renderedStageProp
+import io.sparkled.model.entity.QSequence.Companion.sequence
+import io.sparkled.model.entity.QSequenceChannel.Companion.sequenceChannel
 import io.sparkled.model.util.IdUtils.NO_IDS
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory

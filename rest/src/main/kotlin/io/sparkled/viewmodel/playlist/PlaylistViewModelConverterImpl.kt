@@ -3,11 +3,12 @@ package io.sparkled.viewmodel.playlist
 import io.sparkled.model.entity.Playlist
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import io.sparkled.viewmodel.exception.ViewModelConversionException
+import javax.inject.Singleton
 
-import javax.inject.Inject
-
-class PlaylistViewModelConverterImpl
-@Inject constructor(private val playlistPersistenceService: PlaylistPersistenceService) : PlaylistViewModelConverter() {
+@Singleton
+class PlaylistViewModelConverterImpl(
+    private val playlistPersistenceService: PlaylistPersistenceService
+) : PlaylistViewModelConverter() {
 
     override fun toViewModel(model: Playlist): PlaylistViewModel {
         return PlaylistViewModel()

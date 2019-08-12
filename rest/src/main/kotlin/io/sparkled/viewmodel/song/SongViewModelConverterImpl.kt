@@ -3,11 +3,12 @@ package io.sparkled.viewmodel.song
 import io.sparkled.model.entity.Song
 import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.viewmodel.exception.ViewModelConversionException
+import javax.inject.Singleton
 
-import javax.inject.Inject
-
-class SongViewModelConverterImpl
-@Inject constructor(private val songPersistenceService: SongPersistenceService) : SongViewModelConverter() {
+@Singleton
+class SongViewModelConverterImpl(
+    private val songPersistenceService: SongPersistenceService
+) : SongViewModelConverter() {
 
     override fun toViewModel(model: Song): SongViewModel {
         return SongViewModel()

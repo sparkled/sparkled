@@ -4,9 +4,9 @@ import io.sparkled.model.entity.ScheduledJobAction
 import io.sparkled.viewmodel.ViewModel
 
 data class ScheduledJobSearchViewModel(
-    private var id: Int?,
-    private var action: ScheduledJobAction?,
-    private var cronExpression: String?,
-    private var playlistName: String?,
-    private var playlistId: Int?
+    val id: Int?,
+    val action: ScheduledJobAction?,
+    val cronExpression: String?,
+    val playlistName: String?,
+    val playlistId: Int?
 ) : ViewModel

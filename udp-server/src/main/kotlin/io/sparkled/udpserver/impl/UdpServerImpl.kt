@@ -9,10 +9,10 @@ import java.net.DatagramSocket
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class UdpServerImpl
-@Inject constructor(private val requestHandler: RequestHandler) : UdpServer {
+@Singleton
+class UdpServerImpl(private val requestHandler: RequestHandler) : UdpServer {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor(
         ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
@@ -30,17 +30,21 @@ class UdpServerImpl
             return
         }
 
+        started = true
         val serverSocket = DatagramSocket(port)
         executor.submit { listen(serverSocket) }
 
-        started = true
         logger.info("Started UDP server at port {}.", port)
     }
 
-    private fun listen(serverSocket: DatagramSocket): Any {
+    override fun stop() {
+        started = false
+    }
+
+    private fun listen(serverSocket: DatagramSocket) {
         val receiveData = ByteArray(RECEIVE_BUFFER_SIZE)
 
-        while (true) {
+        while (started) {
             try {
                 handleRequest(serverSocket, receiveData)
             } catch (e: Exception) {

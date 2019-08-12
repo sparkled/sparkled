@@ -1,10 +1,10 @@
 package io.sparkled.renderer.util
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.animation.ChannelPropPair
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.StageProp
-import io.sparkled.model.util.GsonProvider
 import java.util.UUID
 
 /**
@@ -24,7 +24,7 @@ object ChannelPropPairUtils {
     }
 
     private fun convertChannelData(sequenceChannel: SequenceChannel): SequenceChannelEffects {
-        return GsonProvider.get().fromJson(sequenceChannel.getChannelJson(), SequenceChannelEffects::class.java)
+        return ObjectMapper().readValue(sequenceChannel.getChannelJson(), SequenceChannelEffects::class.java)
     }
 
     private fun findStagePropByUuid(stageProps: List<StageProp>, uuid: UUID): StageProp {
