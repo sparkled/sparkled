@@ -1,5 +1,6 @@
 package io.sparkled.model.animation.effect
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.param.HasArguments
@@ -19,6 +20,7 @@ data class Effect(
     var repetitionSpacing: Int = 0
 ) : HasArguments {
 
+    @JsonIgnore
     override fun getArguments(): Map<ParamCode, List<String>> {
         return this.args
     }
