@@ -14,12 +14,12 @@ With Sparkled, you get an integrated solution containing:
 Sparkled clients are responsible for rendered pixel data from the Sparkled server and displaying it on the LED strips.
 The official Sparkled clients are listed below:
 
-- [sparkled-client-esp32](https://github.com/sparkled/sparkled-client-esp32)
+- [sparkled-client-esp](https://github.com/sparkled/sparkled-client-esp) (ESP32 and ESP8266)
 
 ## Roadmap
 ### Before Initial Release
 - [x] Move project to Sparkled github account
-- [ ] Set up official project website
+- [x] Set up official project website
 - [ ] Rewrite UI in React (In Progress)
 - [x] Stage editor, so users can set up their own lighting structures
 
@@ -28,7 +28,6 @@ The official Sparkled clients are listed below:
 - [ ] Multithreaded rendering
 - [ ] Support sequences without music (currently requires a mute MP3 file to be uploaded)
 - [ ] Ability to replace MP3 files for existing sequences (even with different lengths)
-- [ ] More Sparkled Clients (ESP8266, Arduino Ethernet)
 
 ## Getting Started
 Sparkled is currently in pre-alpha, so significant chunks of core functionality are still missing or incomplete.
@@ -91,7 +90,6 @@ npm run test
 * [HikariCP](https://github.com/brettwooldridge/HikariCP)
 * [Hibernate](https://hibernate.org)
 * [React.js](https://reactjs.org)
-* [Bootstrap](https://getbootstrap.com)
 * [Wavesurfer.js](https://wavesurfer-js.org)
 
 ## Authors
