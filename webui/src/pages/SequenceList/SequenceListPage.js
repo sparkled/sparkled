@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/core';
-import { Card, CardContent, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -13,6 +13,7 @@ import { fetchSequences, showAddModal } from './actions';
 import AddSequenceModal from './components/AddSequenceModal';
 import DeleteSequenceModal from './components/DeleteSequenceModal';
 import SequenceCard from './components/SequenceCard';
+import SimpleTextCard from "../../components/SimpleTextCard";
 
 const styles = () => ({
   root: {
@@ -105,13 +106,7 @@ class SequenceListPage extends Component {
   }
 
   renderEmpty() {
-    return (
-      <Card className={this.props.classes.emptyCard}>
-        <CardContent>
-          No sequences found.
-        </CardContent>
-      </Card>
-    );
+    return <SimpleTextCard>No sequences found.</SimpleTextCard>;
   }
 
   renderSequences(sequences) {
@@ -124,11 +119,11 @@ class SequenceListPage extends Component {
 
   filterSequences = searchQuery => {
     this.setState({ searchQuery });
-  }
+  };
 
   getFilteredSequences = () => {
     return _.filter(this.props.sequences || [], this.sequenceMatchesSearch);
-  }
+  };
 
   sequenceMatchesSearch = sequence => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();

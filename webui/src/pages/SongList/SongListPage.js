@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid, withStyles } from '@material-ui/core';
+import { Grid, withStyles } from '@material-ui/core';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -10,8 +10,9 @@ import { fetchSongs, showAddModal } from './actions';
 import AddSongModal from './components/AddSongModal';
 import DeleteSongModal from './components/DeleteSongModal';
 import SongCard from './components/SongCard';
+import SimpleTextCard from "../../components/SimpleTextCard";
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     flexGrow: 1
   },
@@ -90,13 +91,7 @@ class SongListPage extends Component {
   }
 
   renderEmpty() {
-    return (
-      <Card className={this.props.classes.emptyCard}>
-        <CardContent>
-          No songs found.
-        </CardContent>
-      </Card>
-    );
+    return <SimpleTextCard>No songs found.</SimpleTextCard>;
   }
 
   renderSongs(songs) {

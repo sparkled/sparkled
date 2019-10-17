@@ -10,6 +10,7 @@ import { fetchStages, showAddModal } from './actions';
 import AddStageModal from './components/AddStageModal';
 import DeleteStageModal from './components/DeleteStageModal';
 import StageCard from './components/StageCard';
+import SimpleTextCard from "../../components/SimpleTextCard";
 
 const styles = theme => ({
   root: {
@@ -96,13 +97,7 @@ class StageListPage extends Component {
   }
 
   renderEmpty() {
-    return (
-      <Card className={this.props.classes.emptyCard}>
-        <CardContent>
-          No stages found.
-        </CardContent>
-      </Card>
-    );
+    return <SimpleTextCard>No stages found.</SimpleTextCard>;
   }
 
   renderStages(stages) {

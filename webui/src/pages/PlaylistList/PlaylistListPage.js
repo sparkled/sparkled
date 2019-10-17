@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/core';
-import { Card, CardContent, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -11,6 +11,7 @@ import { fetchPlaylists, showAddModal } from './actions';
 import AddPlaylistModal from './components/AddPlaylistModal';
 import DeletePlaylistModal from './components/DeletePlaylistModal';
 import PlaylistCard from './components/PlaylistCard';
+import SimpleTextCard from "../../components/SimpleTextCard";
 
 const styles = () => ({
   root: {
@@ -97,13 +98,7 @@ class PlaylistListPage extends Component {
   }
 
   renderEmpty() {
-    return (
-      <Card className={this.props.classes.emptyCard}>
-        <CardContent>
-          No playlists found.
-        </CardContent>
-      </Card>
-    );
+    return <SimpleTextCard>No playlists found.</SimpleTextCard>;
   }
 
   renderPlaylists(playlists) {

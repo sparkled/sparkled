@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/core';
-import { Card, CardContent, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -12,6 +12,7 @@ import { fetchPlaylists } from '../PlaylistList/actions';
 import AddScheduledJobModal from './components/AddScheduledJobModal';
 import DeleteScheduledJobModal from './components/DeleteScheduledJobModal';
 import ScheduledJobCard from './components/ScheduledJobCard';
+import SimpleTextCard from "../../components/SimpleTextCard";
 
 const styles = () => ({
   root: {
@@ -95,13 +96,7 @@ class SchedulerPage extends Component {
   }
 
   renderEmpty() {
-    return (
-      <Card className={this.props.classes.emptyCard}>
-        <CardContent>
-          No scheduled jobs found.
-        </CardContent>
-      </Card>
-    );
+    return <SimpleTextCard>No scheduled jobs found.</SimpleTextCard>;
   }
 
   renderScheduledJobs(scheduledJobs) {
