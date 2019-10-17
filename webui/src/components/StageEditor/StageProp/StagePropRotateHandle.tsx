@@ -10,7 +10,7 @@ const fullCircle = Math.PI * 2;
 
 declare type InteractionEvent = PIXI.interaction.InteractionEvent;
 
-declare interface Props {
+interface Props {
   /** The parent container that manages the stage prop. */
   parent: PIXI.Container;
 
@@ -27,7 +27,7 @@ declare interface Props {
   onRotated: (rotation: number) => void;
 }
 
-declare interface DragState {
+interface DragState {
   /** The X origin of the background when dragging begins. */
   originX: number;
 

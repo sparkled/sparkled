@@ -9,7 +9,7 @@ import {StageViewModel} from "../../types/ViewModel";
 import Logger from "../../utils/Logger";
 import {clamp} from "../../utils/numberUtils";
 import EditorSidebar from "./EditorSidebar";
-import {DispatchContext, reducer, StateContext} from "./Reducer";
+import {StageEditorDispatchContext, stageEditorReducer, StageEditorStateContext} from "./StageEditorReducer";
 import StageProp from "./StageProp";
 
 const logger = new Logger("StageEditor");
@@ -76,7 +76,7 @@ const StageEditor: React.FC<Props> = props => {
   const [pixiApp, setPixiApp] = useState<PIXI.Application | null>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
 
-  const [state, dispatch] = useReducer(reducer, {stage: props.stage, selectedStageProp: ""});
+  const [state, dispatch] = useReducer(stageEditorReducer, {stage: props.stage, selectedStageProp: ""});
 
   const deselectStageProp = useCallback(
     () => dispatch({type: "SelectStageProp", payload: {uuid: null}}),
@@ -127,8 +127,8 @@ const StageEditor: React.FC<Props> = props => {
 
   const toolsClass = props.toolsVisible ? "" : classes.noTools;
   return (
-    <StateContext.Provider value={state}>
-      <DispatchContext.Provider value={dispatch}>
+    <StageEditorStateContext.Provider value={state}>
+      <StageEditorDispatchContext.Provider value={dispatch}>
         <SimpleBar className={`${classes.sidebarContainer} ${toolsClass}`}>
           <EditorSidebar className={classes.sidebar}/>
         </SimpleBar>
@@ -136,8 +136,8 @@ const StageEditor: React.FC<Props> = props => {
         <div ref={canvasElement}>
           {stageProps}
         </div>
-      </DispatchContext.Provider>
-    </StateContext.Provider>
+      </StageEditorDispatchContext.Provider>
+    </StageEditorStateContext.Provider>
   );
 };
 
