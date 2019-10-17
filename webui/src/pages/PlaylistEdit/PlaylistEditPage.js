@@ -22,7 +22,7 @@ class PlaylistEditPage extends Component {
       </div>
     );
 
-    return <PageContainer body={pageBody} navbar={this.renderNavbar()}/>;
+    return <PageContainer navbar={this.renderNavbar()}>{pageBody}</PageContainer>;
   }
 
   componentWillReceiveProps(nextProps) {

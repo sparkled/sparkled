@@ -128,7 +128,7 @@ const StageEditPage: React.FC<Props> = props => {
   const closeSnackbar = () => setSaved(false);
   return (
     <>
-      <PageContainer className={classes.pageContainer} body={pageBody} spacing={0} actions={actions}/>
+      <PageContainer className={classes.pageContainer} spacing={0} actions={actions}>{pageBody}</PageContainer>
       <Snackbar
         open={saved}
         anchorOrigin={{vertical: "bottom", horizontal: "right"}}

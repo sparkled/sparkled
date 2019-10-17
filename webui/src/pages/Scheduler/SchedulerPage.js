@@ -62,7 +62,7 @@ class SchedulerPage extends Component {
       </div>
     );
 
-    return <PageContainer body={pageBody}/>;
+    return <PageContainer>{pageBody}</PageContainer>;
   }
 
   renderContent() {
