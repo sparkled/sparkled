@@ -12,6 +12,7 @@
     "jsmediatags": "^3.8.1",
     "lodash": "^4.17.15",
     "mousetrap": "^1.6.3",
+    "notistack": "^0.8.9",
     "pixi.js": "^5.0.4",
     "react": "^16.8.6",
     "react-color": "^2.14.1",

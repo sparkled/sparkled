@@ -1,7 +1,8 @@
-import { blue } from '@material-ui/core/colors';
 import { CssBaseline } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import { SnackbarProvider } from 'notistack';
 import React, { Fragment } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
@@ -31,25 +32,28 @@ const theme = createMuiTheme({
 
 const RedirectInvalidUrlToIndex = () => <Redirect to="/sequences"/>;
 
+const snackbarAnchor = { horizontal: "right", vertical: "bottom" };
 const App = () => (
   <Fragment>
     <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <Provider store={store}>
-        <Router>
-          <Switch>
-            <Route exact path="/songs" component={SongListPage}/>
-            <Route exact path="/stages" component={StageListPage}/>
-            <Route exact path="/stages/:stageId" component={StageEditPage}/>
-            <Route exact path="/sequences" component={SequenceListPage}/>
-            <Route exact path="/sequences/:sequenceId" component={SequenceEditPage}/>
-            <Route exact path="/playlists" component={PlaylistListPage}/>
-            <Route exact path="/playlists/:playlistId" component={PlaylistEditPage}/>
-            <Route exact path="/scheduler" component={SchedulerPage}/>
-            <Route component={RedirectInvalidUrlToIndex}/>
-          </Switch>
-        </Router>
-      </Provider>
+      <SnackbarProvider maxSnack={1} anchorOrigin={snackbarAnchor} TransitionProps={{direction: "up"}}>
+        <Provider store={store}>
+          <Router>
+            <Switch>
+              <Route exact path="/songs" component={SongListPage}/>
+              <Route exact path="/stages" component={StageListPage}/>
+              <Route exact path="/stages/:stageId" component={StageEditPage}/>
+              <Route exact path="/sequences" component={SequenceListPage}/>
+              <Route exact path="/sequences/:sequenceId" component={SequenceEditPage}/>
+              <Route exact path="/playlists" component={PlaylistListPage}/>
+              <Route exact path="/playlists/:playlistId" component={PlaylistEditPage}/>
+              <Route exact path="/scheduler" component={SchedulerPage}/>
+              <Route component={RedirectInvalidUrlToIndex}/>
+            </Switch>
+          </Router>
+        </Provider>
+      </SnackbarProvider>
     </ThemeProvider>
 
     <Alert position="bottom-right" effect="scale" stack={{ limit: 3 }}/>
