@@ -1,7 +1,7 @@
-import {IconButton, Snackbar, Theme} from "@material-ui/core";
+import {IconButton, Theme} from "@material-ui/core";
 import {Save, Tune} from "@material-ui/icons";
 import {makeStyles, useTheme} from "@material-ui/styles";
-import React, {useCallback, useEffect, useReducer, useState} from "react";
+import React, {useCallback, useEffect, useReducer} from "react";
 import {RouteComponentProps} from "react-router-dom";
 import ErrorCard from "../../components/ErrorCard";
 import PageContainer from "../../components/PageContainer";
@@ -9,6 +9,7 @@ import StageEditor from "../../components/StageEditor";
 import {loadStage, saveStage} from "../../rest/StageRestService";
 import {StageViewModel} from "../../types/ViewModel";
 import {setPageTitle} from "../../utils/pageUtils";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles(() => ({
   // The page container never overflows, and the editor tools need to be hidden when they slide offscreen.
@@ -75,8 +76,8 @@ const StageEditPage: React.FC<Props> = props => {
 
   const toolsInitiallyVisible = window.outerWidth >= theme.breakpoints.values.sm;
   const [state, dispatch] = useReducer(reducer, {...new State(), toolsVisible: toolsInitiallyVisible});
-  const [saved, setSaved] = useState(false);
   const classes = useStyles();
+  const snackbar = useSnackbar();
 
   const toggleTools = useCallback(() => dispatch({type: "ToggleTools"}), []);
 
@@ -106,7 +107,7 @@ const StageEditPage: React.FC<Props> = props => {
     dispatch({type: "Save"});
     saveStage(state.editedStage!,
       () => {
-        setSaved(true);
+        snackbar.enqueueSnackbar("Stage saved");
         dispatch({type: "SaveSuccess"});
       },
       error => dispatch({type: "SaveFailure", payload: error})
@@ -125,18 +126,8 @@ const StageEditPage: React.FC<Props> = props => {
     </>
   );
 
-  const closeSnackbar = () => setSaved(false);
   return (
-    <>
-      <PageContainer className={classes.pageContainer} spacing={0} actions={actions}>{pageBody}</PageContainer>
-      <Snackbar
-        open={saved}
-        anchorOrigin={{vertical: "bottom", horizontal: "right"}}
-        message="Stage saved"
-        autoHideDuration={3000}
-        onClose={closeSnackbar}
-      />
-    </>
+    <PageContainer className={classes.pageContainer} spacing={0} actions={actions}>{pageBody}</PageContainer>
   );
 };
 
