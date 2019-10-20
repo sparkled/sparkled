@@ -59,17 +59,14 @@ class AddSongModal extends Component {
               {dropzoneText}
             </Dropzone>
 
-            <Field component={TextField} fullWidth name="name" label="Song Name"
-                   required={true} validate={required}/>
+            <Field component={TextField} fullWidth name="name" label="Song Name" required validate={required}/>
 
-            <Field component={TextField} fullWidth name="artist" label="Artist"
-                   required={true} validate={required}/>
+            <Field component={TextField} fullWidth name="artist" label="Artist" required validate={required}/>
 
-            <Field component={TextField} fullWidth name="album" label="Album"
-                   required={true} validate={required}/>
+            <Field component={TextField} fullWidth name="album" label="Album" required validate={required}/>
 
             <div className="d-none">
-              <Field name="durationMs" component={TextField} label="Duration (ms)" type="number" disabled={true}/>
+              <Field name="durationMs" component={TextField} label="Duration (ms)" type="number" disabled/>
             </div>
           </form>
         </DialogContent>

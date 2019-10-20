@@ -49,8 +49,8 @@ const StagePropDetails: React.FC = () => {
 
   return (
     <form>
-      <Grid container={true} spacing={2}>
-        <Grid item={true} xs={6}>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
           <TextField
             variant="outlined"
             label="Position X"
@@ -64,7 +64,7 @@ const StagePropDetails: React.FC = () => {
           />
         </Grid>
 
-        <Grid item={true} xs={6}>
+        <Grid item xs={6}>
           <TextField
             variant="outlined"
             label="Position Y"
@@ -78,7 +78,7 @@ const StagePropDetails: React.FC = () => {
           />
         </Grid>
 
-        <Grid item={true} xs={6}>
+        <Grid item xs={6}>
           <TextField
             variant="outlined"
             label="Rotation &deg;"

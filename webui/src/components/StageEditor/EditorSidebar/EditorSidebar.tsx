@@ -16,7 +16,7 @@ const EditorSidebar: React.FC<HTMLAttributes<void>> = props => {
 
   return (
     <div className={props.className || ""}>
-      <ExpansionPanel defaultExpanded={true}>
+      <ExpansionPanel defaultExpanded>
         <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
           <Typography className={classes.heading}>Stage Prop Details</Typography>
         </ExpansionPanelSummary>
@@ -25,7 +25,7 @@ const EditorSidebar: React.FC<HTMLAttributes<void>> = props => {
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
-      <ExpansionPanel defaultExpanded={true}>
+      <ExpansionPanel defaultExpanded>
         <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
           <Typography className={classes.heading}>Add Stage Prop</Typography>
         </ExpansionPanelSummary>

@@ -28,7 +28,7 @@ class PlaylistSequenceRow extends Component {
         <td width="66%">
           <form>
             <Field name="sequenceId" className="m-0" component={SingleSelectField} options={sequences}
-                   parse={toNumber} required={true} validate={required}
+                   parse={toNumber} required validate={required}
                    onChange={this.updatePlaylistSequence}/>
           </form>
         </td>

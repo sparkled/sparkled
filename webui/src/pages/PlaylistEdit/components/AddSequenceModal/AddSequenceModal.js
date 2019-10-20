@@ -21,12 +21,12 @@ class AddSequenceModal extends Component {
 
     return (
       <div>
-        <Modal isOpen={visible} wrapClassName="AddSequenceModal" backdrop={true}>
+        <Modal isOpen={visible} wrapClassName="AddSequenceModal" backdrop>
           <form onSubmit={handleSubmit(this.addSequence.bind(this))}>
             <ModalHeader>Add channel</ModalHeader>
             <ModalBody>
               <Field name="sequenceId" component={SingleSelectField} options={sequences} label="Sequence"
-                     required={true} validate={required}/>
+                     required validate={required}/>
             </ModalBody>
             <ModalFooter>
               <Button type="submit" color="info" disabled={!valid}>Add sequence</Button>

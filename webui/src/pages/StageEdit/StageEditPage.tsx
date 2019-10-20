@@ -100,7 +100,7 @@ const StageEditPage: React.FC<Props> = props => {
     content = <ErrorCard title={title} body={body} linkUrl="/stages" linkText="Return to stage list"/>;
   } else if (state.stage) {
     const {stage, toolsVisible} = state;
-    content = <StageEditor stage={stage} onStageUpdate={updateStage} toolsVisible={toolsVisible} editable={true}/>;
+    content = <StageEditor stage={stage} onStageUpdate={updateStage} toolsVisible={toolsVisible} editable/>;
   }
 
   const save = () => {

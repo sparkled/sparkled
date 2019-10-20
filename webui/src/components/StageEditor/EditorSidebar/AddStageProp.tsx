@@ -18,7 +18,7 @@ const AddStageProp: React.FC = () => {
   ));
 
   return (
-    <Grid container={true} spacing={2}>
+    <Grid container spacing={2}>
       {buttons}
     </Grid>
   );

@@ -31,15 +31,15 @@ class AddChannelModal extends Component {
 
     return (
       <div>
-        <Modal isOpen={visible} wrapClassName="add-channel-modal" backdrop={true}>
+        <Modal isOpen={visible} wrapClassName="add-channel-modal" backdrop>
           <form onSubmit={handleSubmit(this.addChannel.bind(this))}>
             <ModalHeader>Add channel</ModalHeader>
             <ModalBody>
               <Field name="stagePropUuid" component={SingleSelectField} options={stageProps} label="Stage Prop"
-                     required={true} validate={required}/>
+                     required validate={required}/>
 
               <Field name="name" component={InputField} type="text" label="Channel Name"
-                     required={true} validate={required}/>
+                     required validate={required}/>
             </ModalBody>
             <ModalFooter>
               <Button type="submit" color="info" disabled={!valid}>Add channel</Button>

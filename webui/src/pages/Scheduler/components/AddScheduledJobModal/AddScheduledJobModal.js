@@ -37,10 +37,10 @@ class AddScheduledJobModal extends Component {
         <DialogContent>
           <form id={formName} onSubmit={handleSubmit(this.addScheduledJob)} noValidate autoComplete="off">
             <Field name="cronExpression" component={TextField} fullWidth label="Cron Expression" type="text"
-                   required={true} validate={required}/>
+                   required validate={required}/>
 
             <Field name="action" component={SingleSelectField} fullWidth label="Action" options={jobActions}
-                   required={true} validate={required} onChange={this.onActionChange}/>
+                   required validate={required} onChange={this.onActionChange}/>
 
             {this.renderValueField()}
             {this.renderPlaylistField()}
@@ -72,7 +72,7 @@ class AddScheduledJobModal extends Component {
     if (hasPlaylist) {
       return (
         <Field name="playlistId" component={SingleSelectField} label="Playlist" options={this.props.playlists}
-               required={true} validate={required}/>
+               required validate={required}/>
       );
     } else {
       return null;
@@ -84,7 +84,7 @@ class AddScheduledJobModal extends Component {
 
     if (hasValue) {
       return (
-        <Field name="value" component={TextField} fullWidth label="Brightness" required={true} validate={required}/>
+        <Field name="value" component={TextField} fullWidth label="Brightness" required validate={required}/>
       );
     } else {
       return null;

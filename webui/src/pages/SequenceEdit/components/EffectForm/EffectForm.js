@@ -71,21 +71,21 @@ class EffectForm extends Component {
       <form>
         <div className="row">
           <Field className="col-6" type="number" parse={toNumber} name="startFrame" component={InputField}
-                 label="Start Frame" required={true} validate={[required, minStartFrame, maxStartFrame]}
+                 label="Start Frame" required validate={[required, minStartFrame, maxStartFrame]}
                  min="0" max={effect.endFrame - 1} onChange={this.updateEffect}/>
 
           <Field className="col-6" type="number" parse={toNumber} name="endFrame" component={InputField}
-                 label="End Frame" required={true} validate={[required, minEndFrame, maxEndFrame]}
+                 label="End Frame" required validate={[required, minEndFrame, maxEndFrame]}
                  min={effect.startFrame + 1} max={sequence.frameCount - 1} onChange={this.updateEffect}/>
         </div>
 
         <div className="row">
           <Field className="col-6" type="number" parse={toNumber} name="repetitions" component={InputField}
-                 label="Repetitions" required={true} validate={[required, minRepetitions]}
+                 label="Repetitions" required validate={[required, minRepetitions]}
                  onChange={this.updateEffect}/>
 
           <Field className="col-6" type="number" parse={toNumber} name="repetitionSpacing" component={InputField}
-                 label="Rep Spacing" required={true} validate={[required, minRepetitionSpacing]}
+                 label="Rep Spacing" required validate={[required, minRepetitionSpacing]}
                  onChange={this.updateEffect}/>
         </div>
 
@@ -106,7 +106,7 @@ class EffectForm extends Component {
     return (
       <Fragment>
         <h5>Effect Type Properties</h5>
-        <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required={true}
+        <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required
                validate={required} options={effectTypes} onChange={this.updateEffect}/>
         {this.renderArgumentFields(selectedEffect, effectType)}
       </Fragment>
@@ -120,7 +120,7 @@ class EffectForm extends Component {
     return (
       <FormSection name="fill">
         <h5>Fill Properties</h5>
-        <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required={true}
+        <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required
                validate={required} options={fillTypes} onChange={this.updateEffect}/>
         {this.renderArgumentFields(selectedEffect.fill, fillType)}
       </FormSection>
@@ -134,16 +134,16 @@ class EffectForm extends Component {
     return (
       <FormSection name="easing">
         <h5>Easing Properties</h5>
-        <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required={true}
+        <Field name="type" component={SingleSelectField} label="Type" allowEmpty={false} required
                validate={required} options={easingTypes} onChange={this.updateEffect}/>
 
         <div className="row">
           <Field className="col-6" type="number" parse={toNumber} name="start" component={InputField}
-                 label="Start (%)" required={true} validate={[required, minPercent, maxPercent]}
+                 label="Start (%)" required validate={[required, minPercent, maxPercent]}
                  onChange={this.updateEffect}/>
 
           <Field className="col-6" type="number" parse={toNumber} name="end" component={InputField}
-                 label="End (%)" required={true} validate={[required, minPercent, maxPercent]}
+                 label="End (%)" required validate={[required, minPercent, maxPercent]}
                  onChange={this.updateEffect}/>
         </div>
         {this.renderArgumentFields(selectedEffect.easing, easingType)}
@@ -164,17 +164,17 @@ class EffectForm extends Component {
 
     if (param.type === paramTypes.COLOR) {
       return (
-        <Field key={param.code} name={path + '.0'} component={ColorPickerField} label={label} allowEmpty={false} required={true}
+        <Field key={param.code} name={path + '.0'} component={ColorPickerField} label={label} allowEmpty={false} required
                validate={required} onChange={this.updateEffect}/>
       );
     } else if (param.type === paramTypes.COLORS) {
       return (
-        <Field key={param.code} name={path} component={MultiColorPickerField} label={label} allowEmpty={false} required={true}
+        <Field key={param.code} name={path} component={MultiColorPickerField} label={label} allowEmpty={false} required
                validate={required} onChange={this.updateEffect}/>
       );
     } else {
       return (
-        <Field key={param.code} name={path + '.0'} component={InputField} label={label} allowEmpty={false} required={true}
+        <Field key={param.code} name={path + '.0'} component={InputField} label={label} allowEmpty={false} required
                validate={required} onChange={this.updateEffect}/>
       );
     }

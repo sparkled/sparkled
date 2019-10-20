@@ -33,16 +33,16 @@ class AddSequenceModal extends Component {
         <DialogContent>
           <form id={formName} onSubmit={handleSubmit(this.addSequence)} noValidate autoComplete="off">
             <Field name="name" component={TextField} fullWidth label="Sequence Name" type="text"
-                   required={true} validate={required}/>
+                   required validate={required}/>
 
             <Field name="songId" component={SingleSelectField} fullWidth label="Song" type="text" options={songs}
-                   parse={toNumber} required={true} validate={required}/>
+                   parse={toNumber} required validate={required}/>
 
             <Field name="stageId" component={SingleSelectField} fullWidth label="Stage" type="text" options={stages}
-                   parse={toNumber} required={true} validate={required}/>
+                   parse={toNumber} required validate={required}/>
 
             <Field name="framesPerSecond" component={TextField} fullWidth label="Frames Per Second" type="number"
-                   parse={toNumber} required={true} validate={required}/>
+                   parse={toNumber} required validate={required}/>
           </form>
         </DialogContent>
 

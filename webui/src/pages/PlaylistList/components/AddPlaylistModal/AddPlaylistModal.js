@@ -31,7 +31,7 @@ class AddPlaylistModal extends Component {
         <DialogContent>
           <form id={formName} onSubmit={handleSubmit(this.addPlaylist)} noValidate autoComplete="off">
             <Field component={TextField} fullWidth name="name" label="Playlist Name"
-                   required={true} validate={required}/>
+                   required validate={required}/>
           </form>
         </DialogContent>
 
