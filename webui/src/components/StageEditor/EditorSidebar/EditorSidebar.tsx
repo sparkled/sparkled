@@ -3,6 +3,7 @@ import {ExpandMore} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/styles";
 import React, {HTMLAttributes} from "react";
 import StagePropDetails from "./StagePropDetails";
+import AddStageProp from "./AddStageProp";
 
 const useStyles = makeStyles((theme: Theme) => ({
   heading: {
@@ -21,6 +22,15 @@ const EditorSidebar: React.FC<HTMLAttributes<void>> = props => {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <StagePropDetails/>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+
+      <ExpansionPanel defaultExpanded={true}>
+        <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
+          <Typography className={classes.heading}>Add Stage Prop</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <AddStageProp/>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </div>

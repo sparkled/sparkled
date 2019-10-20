@@ -6,7 +6,7 @@ export class StageViewModel {
   public stageProps: StagePropViewModel[] = [];
 }
 
-export interface StagePropViewModel {
+export type StagePropViewModel = {
   uuid: string;
   stageId: number;
   code: string;

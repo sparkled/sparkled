@@ -2,8 +2,8 @@ import {Grid, TextField} from "@material-ui/core";
 import {find, isEmpty} from "lodash";
 import React, {useContext, useEffect} from "react";
 import useForm from "react-hook-form";
-import {POSITIVE_INTEGER} from "../../../../utils/regexes";
-import {StageEditorDispatchContext, StageEditorStateContext} from "../../StageEditorReducer";
+import {POSITIVE_INTEGER} from "../../../utils/regexes";
+import {StageEditorDispatchContext, StageEditorStateContext} from "../StageEditorReducer";
 
 const StagePropDetails: React.FC = () => {
   const state = useContext(StageEditorStateContext);

@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid, withStyles } from '@material-ui/core';
+import { Grid, withStyles } from '@material-ui/core';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
