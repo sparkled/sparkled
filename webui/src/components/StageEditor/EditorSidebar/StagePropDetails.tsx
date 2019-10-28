@@ -1,6 +1,6 @@
-import {Grid, TextField} from "@material-ui/core";
+import {Button, Grid, TextField} from "@material-ui/core";
 import {find} from "lodash";
-import React, {useContext, useEffect} from "react";
+import React, {useCallback, useContext, useEffect} from "react";
 import useForm from "react-hook-form";
 import {POSITIVE_INTEGER, POSITIVE_NUMBER} from "../../../utils/regexes";
 import {StageEditorDispatchContext, StageEditorStateContext} from "../StageEditorReducer";
@@ -59,6 +59,10 @@ const StagePropDetails: React.FC = () => {
       dispatch({type: "RotateStageProp", payload: {rotation: Number(rotation)}});
     }
   }, [dispatch, errors.rotation, rotation]);
+
+  const deleteStageProp = useCallback(() => {
+    dispatch({type: "DeleteStageProp"});
+  }, [dispatch]);
 
   return (
     <form>
@@ -131,6 +135,18 @@ const StagePropDetails: React.FC = () => {
             error={errors.rotation !== undefined}
             inputRef={register({required: true, min: 0, max: 359, pattern: POSITIVE_INTEGER})}
           />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Button
+            fullWidth
+            variant="outlined"
+            color="secondary"
+            disabled={!hasStageProp}
+            onClick={deleteStageProp}
+          >
+            Delete stage prop
+          </Button>
         </Grid>
       </Grid>
     </form>

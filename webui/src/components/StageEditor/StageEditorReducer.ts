@@ -1,5 +1,5 @@
 import produce, {immerable} from "immer";
-import {identity} from "lodash";
+import {identity, remove} from "lodash";
 import React, {createContext, Dispatch} from "react";
 import {StageViewModel} from "../../types/ViewModel";
 import {StagePropType} from "../../pages/StageEdit/stagePropTypes";
@@ -16,7 +16,8 @@ export type Action =
   | { type: "AddStageProp", payload: { type: StagePropType } }
   | { type: "MoveStageProp", payload: { x: number, y: number } }
   | { type: "ScaleStageProp", payload: { x: number, y: number } }
-  | { type: "RotateStageProp", payload: { rotation: number } };
+  | { type: "RotateStageProp", payload: { rotation: number } }
+  | { type: "DeleteStageProp" };
 
 export const StageEditorStateContext = createContext<State>(new State());
 export const StageEditorDispatchContext = createContext<Dispatch<Action>>(identity);
@@ -27,21 +28,20 @@ export const stageEditorReducer: React.Reducer<State, Action> = (state, action):
       case "SelectStageProp":
         draft.selectedStageProp = action.payload.uuid || "";
         break;
-
       case "AddStageProp":
         addStageProp(draft, action.payload.type);
         break;
-
       case "MoveStageProp":
         moveStageProp(draft, action.payload.x, action.payload.y);
         break;
-
       case "ScaleStageProp":
         scaleStageProp(draft, action.payload.x, action.payload.y);
         break;
-
       case "RotateStageProp":
         rotateStageProp(draft, action.payload.rotation);
+        break;
+      case "DeleteStageProp":
+        deleteStageProp(draft);
         break;
     }
   });
@@ -91,4 +91,8 @@ function rotateStageProp(draft: State, rotation: number) {
   if (stageProp) {
     stageProp.rotation = rotation;
   }
+}
+
+function deleteStageProp(draft: State) {
+  remove(draft.stage.stageProps, sp => sp.uuid === draft.selectedStageProp);
 }
