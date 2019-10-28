@@ -85,7 +85,7 @@ const StageEditor: React.FC<Props> = props => {
 
   useEffect(() => {
     logger.info("Creating.");
-    const resolution = window.devicePixelRatio || 1;
+    const resolution = Math.max(2, window.devicePixelRatio);
     const app = new PIXI.Application({resolution, antialias: true, transparent: true});
     setPixiApp(app);
     return () => {
