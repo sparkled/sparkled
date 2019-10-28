@@ -15,6 +15,7 @@ export type Action =
   | { type: "SelectStageProp", payload: { uuid: string | null } }
   | { type: "AddStageProp", payload: { type: StagePropType } }
   | { type: "MoveStageProp", payload: { x: number, y: number } }
+  | { type: "ScaleStageProp", payload: { x: number, y: number } }
   | { type: "RotateStageProp", payload: { rotation: number } };
 
 export const StageEditorStateContext = createContext<State>(new State());
@@ -33,6 +34,10 @@ export const stageEditorReducer: React.Reducer<State, Action> = (state, action):
 
       case "MoveStageProp":
         moveStageProp(draft, action.payload.x, action.payload.y);
+        break;
+
+      case "ScaleStageProp":
+        scaleStageProp(draft, action.payload.x, action.payload.y);
         break;
 
       case "RotateStageProp":
@@ -70,6 +75,14 @@ function moveStageProp(draft: State, x: number, y: number) {
   if (stageProp) {
     stageProp.positionX = x;
     stageProp.positionY = y;
+  }
+}
+
+function scaleStageProp(draft: State, x: number, y: number) {
+  const stageProp = draft.stage.stageProps.find(sp => sp.uuid === draft.selectedStageProp);
+  if (stageProp) {
+    stageProp.scaleX = x;
+    stageProp.scaleY = y;
   }
 }
 

@@ -38,40 +38,46 @@ interface State {
 }
 
 const StageProp: React.FC<Props> = props => {
-  const [state] = useState<State>(() => initState(props.pixiApp, props.stageProp));
-  const dispatch = useContext(StageEditorDispatchContext);
+  const {stageProp} = props;
 
+  const [state] = useState<State>(() => initState(props.pixiApp, stageProp));
+  const dispatch = useContext(StageEditorDispatchContext);
   const {pixiContainer, width, height, points} = state;
 
   const selectStageProp = useCallback(() => {
-    dispatch({type: "SelectStageProp", payload: {uuid: props.stageProp.uuid}});
-  }, [dispatch, props.stageProp.uuid]);
+    dispatch({type: "SelectStageProp", payload: {uuid: stageProp.uuid}});
+  }, [dispatch, stageProp.uuid]);
 
   useEffect(() => {
-    pixiContainer.x = props.stageProp.positionX + (pixiContainer.width / 2);
-    pixiContainer.y = props.stageProp.positionY + (pixiContainer.height / 2);
-  }, [pixiContainer, props.stageProp.positionX, props.stageProp.positionY]);
+    pixiContainer.x = stageProp.positionX + (pixiContainer.width / 2);
+    pixiContainer.y = stageProp.positionY + (pixiContainer.height / 2);
+  }, [pixiContainer, stageProp.positionX, stageProp.positionY]);
 
   useEffect(() => {
-    pixiContainer.rotation = props.stageProp.rotation / 180 * Math.PI;
-  }, [pixiContainer, props.stageProp.rotation]);
+    pixiContainer.scale.x = stageProp.scaleX;
+    pixiContainer.scale.y = stageProp.scaleY;
+  }, [pixiContainer, stageProp.scaleX, stageProp.scaleY]);
+
+  useEffect(() => {
+    pixiContainer.rotation = stageProp.rotation / 180 * Math.PI;
+  }, [pixiContainer, stageProp.rotation]);
 
   useEffect(() => {
     return () => {
-      logger.info(`Destroying ${props.stageProp.uuid}.`);
+      logger.info(`Destroying ${stageProp.uuid}.`);
       state.pixiContainer.destroy({children: true});
     };
-  }, [props.stageProp.uuid, state.pixiContainer]);
+  }, [stageProp.uuid, state.pixiContainer]);
 
   const moveStageProp = useCallback((offsetX: number, offsetY: number) => {
     dispatch({
       type: "MoveStageProp",
       payload: {
-        x: Math.round(props.stageProp.positionX + offsetX),
-        y: Math.round(props.stageProp.positionY + offsetY)
+        x: Math.round(stageProp.positionX + offsetX),
+        y: Math.round(stageProp.positionY + offsetY)
       }
     });
-  }, [dispatch, props.stageProp.positionX, props.stageProp.positionY]);
+  }, [dispatch, stageProp.positionX, stageProp.positionY]);
 
   const rotateStageProp = useCallback((rotation: number) => {
     dispatch({
