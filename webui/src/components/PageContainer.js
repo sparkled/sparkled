@@ -10,8 +10,8 @@ import SchedulerPageIcon from '@material-ui/icons/Schedule';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import AppLogo from '../AppLogo';
-import BrightnessToggle from '../BrightnessToggle';
+import AppLogo from './AppLogo';
+import BrightnessToggle from './BrightnessToggle';
 
 const styles = theme => ({
   root: {

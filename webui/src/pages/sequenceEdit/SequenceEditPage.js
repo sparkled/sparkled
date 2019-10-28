@@ -1,17 +1,17 @@
 import Slider from '@material-ui/lab/Slider';
 import Mousetrap from 'mousetrap';
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
 import Alert from 'react-s-alert';
 import SplitPane from 'react-split-pane';
-import { Nav, NavItem } from 'reactstrap';
-import { ActionCreators } from 'redux-undo';
+import {Nav, NavItem} from 'reactstrap';
+import {ActionCreators} from 'redux-undo';
 import uuidv4 from 'uuid/v4';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import PageContainer from '../../components/PageContainer';
-import { setCurrentPage } from '../actions';
-import * as sequenceStatuses from '../SequenceList/sequenceStatuses';
-import StageCanvas from '../../components/StageEditor';
+import {setCurrentPage} from '../actions';
+import * as sequenceStatuses from '../sequenceList/sequenceStatuses';
+import StageEditor from '../../components/stageEditor';
 import {
   addEffect,
   adjustPlaybackSpeed,
@@ -30,19 +30,19 @@ import {
 import AddChannelModal from './components/AddChannelModal';
 import EffectForm from './components/EffectForm';
 import Timeline from './components/Timeline';
-import { PlaybackSpeeds } from './playbackSpeeds';
+import {PlaybackSpeeds} from './playbackSpeeds';
 import './SequenceEditPage.css';
 
-const { undo, redo, clearHistory } = ActionCreators;
+const {undo, redo, clearHistory} = ActionCreators;
 
 const NEW_EFFECT_FRAMES = 10;
 
 class SequenceEditPage extends Component {
 
   componentDidMount() {
-    const { setCurrentPage, fetchSequenceStage, fetchSequence, fetchReferenceData } = this.props;
-    const { sequenceId } = this.props.match.params;
-    setCurrentPage({ pageTitle: 'Edit Sequence', pageClass: 'SequenceEditPage' });
+    const {setCurrentPage, fetchSequenceStage, fetchSequence, fetchReferenceData} = this.props;
+    const {sequenceId} = this.props.match.params;
+    setCurrentPage({pageTitle: 'Edit Sequence', pageClass: 'SequenceEditPage'});
     fetchSequenceStage(sequenceId);
     fetchSequence(sequenceId);
     fetchReferenceData();
@@ -57,26 +57,26 @@ class SequenceEditPage extends Component {
   }
 
   deleteSelectedEffect = () => {
-    const { deleteEffect, selectedChannel, selectedEffect } = this.props;
+    const {deleteEffect, selectedChannel, selectedEffect} = this.props;
     if (selectedChannel && selectedEffect) {
       deleteEffect(selectedChannel, selectedEffect);
     }
-  }
+  };
 
   undo = () => {
-    const { canUndo, undo } = this.props;
+    const {canUndo, undo} = this.props;
     canUndo && undo();
-  }
+  };
 
   redo = () => {
-    const { canRedo, redo } = this.props;
+    const {canRedo, redo} = this.props;
     canRedo && redo();
-  }
+  };
 
   previewRender = () => {
-    const { currentFrame, previewDuration, previewRender, sequence } = this.props;
+    const {currentFrame, previewDuration, previewRender, sequence} = this.props;
     previewRender(sequence, currentFrame, sequence.framesPerSecond * previewDuration);
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     const didSave = this.props.saving && !nextProps.saving;
@@ -101,18 +101,18 @@ class SequenceEditPage extends Component {
   }
 
   renderNavbar() {
-    const { canUndo, canRedo, undo, redo, sequence, stage, selectedChannel, saving, previewDuration, playbackSpeed } = this.props;
+    const {canUndo, canRedo, undo, redo, sequence, stage, selectedChannel, saving, previewDuration, playbackSpeed} = this.props;
     const loaded = sequence && stage;
 
     return (
       <Nav className="ml-auto" navbar>
 
         <NavItem className={(!saving && loaded) ? 'd-flex align-items-center mr-3' : 'd-none'}>
-          <input type="number" min={1} style={{ width: 50 }} value={previewDuration}
+          <input type="number" min={1} style={{width: 50}} value={previewDuration}
                  onChange={this.adjustPreviewDuration}/>
         </NavItem>
         <NavItem className={(!saving && loaded) ? 'd-flex align-items-center mr-3' : 'd-none'}>
-          <Slider min={0} max={PlaybackSpeeds.length - 1} value={playbackSpeed} style={{ width: 50 }}
+          <Slider min={0} max={PlaybackSpeeds.length - 1} value={playbackSpeed} style={{width: 50}}
                   onChange={this.adjustPlaybackSpeed}/>
         </NavItem>
 
@@ -141,24 +141,24 @@ class SequenceEditPage extends Component {
   adjustPreviewDuration = event => {
     const duration = Math.max(1, Number(event.target.value));
     this.props.adjustPreviewDuration(duration);
-  }
+  };
 
   adjustPlaybackSpeed = speedIndex => {
     this.props.adjustPlaybackSpeed(speedIndex);
-  }
+  };
 
   saveSequence = () => {
-    const { sequence, saveSequence } = this.props;
-    saveSequence({ ...sequence, status: sequenceStatuses.DRAFT });
-  }
+    const {sequence, saveSequence} = this.props;
+    saveSequence({...sequence, status: sequenceStatuses.DRAFT});
+  };
 
   publishSequence = () => {
-    const { sequence, saveSequence } = this.props;
-    saveSequence({ ...sequence, status: sequenceStatuses.PUBLISHED });
-  }
+    const {sequence, saveSequence} = this.props;
+    saveSequence({...sequence, status: sequenceStatuses.PUBLISHED});
+  };
 
   addEffect = () => {
-    const { addEffect, currentFrame, sequence } = this.props;
+    const {addEffect, currentFrame, sequence} = this.props;
     const effect = {
       uuid: uuidv4(),
       type: 'FLASH',
@@ -183,10 +183,10 @@ class SequenceEditPage extends Component {
     };
 
     addEffect(effect);
-  }
+  };
 
   renderContent() {
-    const { fetchError, fetching, sequence, stage } = this.props;
+    const {fetchError, fetching, sequence, stage} = this.props;
 
     if (fetching) {
       return this.renderLoading();
@@ -213,13 +213,13 @@ class SequenceEditPage extends Component {
   }
 
   renderEditor() {
-    const { sequence, stage, stageProps, pixelsPerFrame } = this.props;
+    const {sequence, stage, stageProps, pixelsPerFrame} = this.props;
     return (
       <Fragment>
         <SplitPane split="horizontal" minSize={100} defaultSize={200} primary="second">
           <SplitPane split="vertical" primary="second" defaultSize={300} allowResize={false}
                      pane1ClassName="stage-canvas-container">
-            <StageCanvas stage={this.props.stage} editable={false}/>
+            <StageEditor stage={this.props.stage} editable={false}/>
             <EffectForm/>
           </SplitPane>
 
@@ -243,9 +243,9 @@ class SequenceEditPage extends Component {
   }
 }
 
-function mapStateToProps({ page }) {
-  const { past, present, future } = page.sequenceEdit;
-  const { saving, saveError, sequence, stage, currentFrame, previewDuration, playbackSpeed, selectedChannel, selectedEffect, pixelsPerFrame } = present;
+function mapStateToProps({page}) {
+  const {past, present, future} = page.sequenceEdit;
+  const {saving, saveError, sequence, stage, currentFrame, previewDuration, playbackSpeed, selectedChannel, selectedEffect, pixelsPerFrame} = present;
 
   return {
     saving,

@@ -4,7 +4,7 @@ import BrightnessIcon from '@material-ui/icons/WbSunny';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchBrightness, updateBrightness } from '../../pages/actions';
+import { fetchBrightness, updateBrightness } from '../pages/actions';
 
 const anchorOrigin = { vertical: 'bottom', horizontal: 'left' };
 

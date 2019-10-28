@@ -2,7 +2,7 @@ import _ from "lodash";
 import * as PIXI from "pixi.js";
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import {Point, SvgPathProperties, svgPathProperties} from "svg-path-properties";
-import stagePropTypes from "../../../pages/StageEdit/stagePropTypes";
+import stagePropTypes from "../../../data/stagePropTypes";
 import {StagePropViewModel} from "../../../types/ViewModel";
 import Logger from "../../../utils/Logger";
 import {StageEditorDispatchContext} from "../StageEditorReducer";

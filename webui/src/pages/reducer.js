@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 import undoable from 'redux-undo';
 import * as actionTypes from './actionTypes';
-import playlistEditReducer from './PlaylistEdit/reducer';
-import playlistListReducer from './PlaylistList/reducer';
-import schedulerReducer from './Scheduler/reducer';
-import sequenceEditReducer from './SequenceEdit/reducer';
-import sequenceListReducer from './SequenceList/reducer';
-import songListReducer from './SongList/reducer';
-import stageListReducer from './StageList/reducer';
+import playlistEditReducer from './playlistEdit/reducer';
+import playlistListReducer from './playlistList/reducer';
+import schedulerReducer from './scheduler/reducer';
+import sequenceEditReducer from './sequenceEdit/reducer';
+import sequenceListReducer from './sequenceList/reducer';
+import songListReducer from './songList/reducer';
+import stageListReducer from './stageList/reducer';
 
 const undoableFilter = action => action.undoable === true;
 

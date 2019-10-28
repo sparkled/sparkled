@@ -1,7 +1,7 @@
 import {Button, Grid} from "@material-ui/core";
 import React, {useContext} from "react";
 import {StageEditorDispatchContext} from "../StageEditorReducer";
-import stagePropTypes, {StagePropType} from "../../../pages/StageEdit/stagePropTypes";
+import stagePropTypes, {StagePropType} from "../../../data/stagePropTypes";
 import {values} from "lodash";
 
 const AddStageProp: React.FC = () => {

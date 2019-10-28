@@ -1,22 +1,22 @@
-import { CssBaseline } from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
-import { SnackbarProvider } from 'notistack';
-import React, { Fragment } from 'react';
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import {CssBaseline} from '@material-ui/core';
+import {blue} from '@material-ui/core/colors';
+import {createMuiTheme} from '@material-ui/core/styles';
+import {ThemeProvider} from '@material-ui/styles';
+import {SnackbarProvider} from 'notistack';
+import React, {Fragment} from 'react';
+import {Provider} from 'react-redux';
+import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-css-effects/scale.css';
 import 'react-s-alert/dist/s-alert-default.css';
-import PlaylistEditPage from '../../pages/PlaylistEdit';
-import PlaylistListPage from '../../pages/PlaylistList';
-import SchedulerPage from '../../pages/Scheduler';
-import SequenceEditPage from '../../pages/SequenceEdit';
-import SequenceListPage from '../../pages/SequenceList';
-import SongListPage from '../../pages/SongList';
-import StageEditPage from '../../pages/StageEdit';
-import StageListPage from '../../pages/StageList';
+import PlaylistEditPage from '../../pages/playlistEdit/PlaylistEditPage';
+import PlaylistListPage from '../../pages/playlistList/PlaylistListPage';
+import SchedulerPage from '../../pages/scheduler/SchedulerPage';
+import SequenceEditPage from '../../pages/sequenceEdit/SequenceEditPage';
+import SequenceListPage from '../../pages/sequenceList/SequenceListPage';
+import SongListPage from '../../pages/songList/SongListPage';
+import StageEditPage from '../../pages/stageEdit/StageEditPage';
+import StageListPage from '../../pages/stageList/StageListPage';
 import store from '../../store/store';
 import './App.css';
 
@@ -32,7 +32,7 @@ const theme = createMuiTheme({
 
 const RedirectInvalidUrlToIndex = () => <Redirect to="/sequences"/>;
 
-const snackbarAnchor = { horizontal: "right", vertical: "bottom" };
+const snackbarAnchor = {horizontal: "right", vertical: "bottom"};
 const App = () => (
   <Fragment>
     <ThemeProvider theme={theme}>
@@ -56,7 +56,7 @@ const App = () => (
       </SnackbarProvider>
     </ThemeProvider>
 
-    <Alert position="bottom-right" effect="scale" stack={{ limit: 3 }}/>
+    <Alert position="bottom-right" effect="scale" stack={{limit: 3}}/>
   </Fragment>
 );
 

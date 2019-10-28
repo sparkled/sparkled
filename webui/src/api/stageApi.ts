@@ -3,14 +3,14 @@ import * as restConfig from "../config/restConfig";
 import {StageViewModel} from "../types/ViewModel";
 import Logger from "../utils/Logger";
 
-const logger = new Logger("StageRestService");
+const logger = new Logger("stageApi");
 
 type Error = [string, string];
 const stageNotFoundError: Error = ["Stage not found", "The stage you're looking for no longer exists."];
 const saveError: Error = ["Failed to save stage", "Please check your data and try again."];
 const unexpectedError: Error = ["An unexpected error occurred", "Sorry! Please check your data and try again."];
 
-export const loadStage = (
+const loadStage = (
   stageId: number,
   onSuccess: (stage: StageViewModel) => void,
   onFailure: (error: Error) => void
@@ -29,7 +29,7 @@ export const loadStage = (
   })();
 };
 
-export const saveStage = async (stage: StageViewModel, onSuccess: () => void, onFailure: (error: Error) => void) => {
+const saveStage = async (stage: StageViewModel, onSuccess: () => void, onFailure: (error: Error) => void) => {
   logger.info(`Saving stage ${stage.id}.`);
   try {
     await axios.put(`${restConfig.ROOT_URL}/stages/${stage.id}`, stage);
@@ -40,3 +40,5 @@ export const saveStage = async (stage: StageViewModel, onSuccess: () => void, on
     onFailure(saveError);
   }
 };
+
+export {loadStage, saveStage};

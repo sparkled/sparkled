@@ -1,6 +1,6 @@
 import React from 'react';
 import './LoadingIndicator.css';
-import spinner from './spinner.svg';
+import spinner from '../../images/spinner.svg';
 
 export default ({ size = 100 }) => (
   <div className="loading-indicator">

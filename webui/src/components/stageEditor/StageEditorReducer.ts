@@ -2,7 +2,7 @@ import produce, {immerable} from "immer";
 import {identity, remove} from "lodash";
 import React, {createContext, Dispatch} from "react";
 import {StageViewModel} from "../../types/ViewModel";
-import {StagePropType} from "../../pages/StageEdit/stagePropTypes";
+import {StagePropType} from "../../data/stagePropTypes";
 import uuidv4 from "uuid/v4";
 
 export class State {

@@ -1,5 +1,5 @@
 import React from "react";
-import largeLogo from "./logo-large.svg";
+import largeLogo from "../images/logo-large.svg";
 
 declare interface Props {
   className: string;

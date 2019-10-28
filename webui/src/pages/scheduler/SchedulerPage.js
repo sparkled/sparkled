@@ -1,14 +1,13 @@
-import { withStyles } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
+import {Grid, withStyles} from '@material-ui/core';
 import _ from 'lodash';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import Alert from 'react-s-alert';
 import PageContainer from '../../components/PageContainer';
 import SearchBar from '../../components/SearchBar';
-import { setCurrentPage } from '../actions';
-import { fetchScheduledJobs, showAddModal } from './actions';
-import { fetchPlaylists } from '../PlaylistList/actions';
+import {setCurrentPage} from '../actions';
+import {fetchScheduledJobs, showAddModal} from './actions';
+import {fetchPlaylists} from '../playlistList/actions';
 import AddScheduledJobModal from './components/AddScheduledJobModal';
 import DeleteScheduledJobModal from './components/DeleteScheduledJobModal';
 import ScheduledJobCard from './components/ScheduledJobCard';
@@ -25,16 +24,16 @@ const styles = () => ({
 
 class SchedulerPage extends Component {
 
-  state = { searchQuery: '' };
+  state = {searchQuery: ''};
 
   componentDidMount() {
-    this.props.setCurrentPage({ pageTitle: 'Scheduler', pageClass: 'SchedulerPage' });
+    this.props.setCurrentPage({pageTitle: 'Scheduler', pageClass: 'SchedulerPage'});
     this.props.fetchScheduledJobs();
     this.props.fetchPlaylists();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { props } = this;
+    const {props} = this;
     if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
       Alert.success('Scheduled job deleted successfully');
       nextProps.fetchScheduledJobs();
@@ -45,7 +44,7 @@ class SchedulerPage extends Component {
   }
 
   render() {
-    const { classes, fetching, showAddModal } = this.props;
+    const {classes, fetching, showAddModal} = this.props;
 
     const pageBody = (
       <div className={classes.root}>
@@ -66,7 +65,7 @@ class SchedulerPage extends Component {
   }
 
   renderContent() {
-    const { fetching, fetchingPlaylists, fetchError, fetchPlaylistsError } = this.props;
+    const {fetching, fetchingPlaylists, fetchError, fetchPlaylistsError} = this.props;
 
     if (fetching || fetchingPlaylists) {
       return [];
@@ -107,17 +106,17 @@ class SchedulerPage extends Component {
     ));
   }
 
-  filterScheduledJobs = searchQuery => this.setState({ searchQuery });
+  filterScheduledJobs = searchQuery => this.setState({searchQuery});
 
   getFilteredScheduledJobs = () => _.filter(this.props.scheduledJobs || [], this.scheduledJobMatchesSearch);
 
   scheduledJobMatchesSearch = scheduledJob => {
     const searchQuery = this.state.searchQuery.trim().toLowerCase();
     return !searchQuery || _.includes(scheduledJob.action.toLowerCase(), searchQuery);
-  }
+  };
 }
 
-function mapStateToProps({ page: { scheduler, playlistList } }) {
+function mapStateToProps({page: {scheduler, playlistList}}) {
   return {
     scheduledJobs: scheduler.scheduledJobs,
     fetching: scheduler.fetching,
@@ -132,5 +131,10 @@ function mapStateToProps({ page: { scheduler, playlistList } }) {
   };
 }
 
-SchedulerPage = connect(mapStateToProps, { setCurrentPage, showAddModal, fetchScheduledJobs, fetchPlaylists })(SchedulerPage);
+SchedulerPage = connect(mapStateToProps, {
+  setCurrentPage,
+  showAddModal,
+  fetchScheduledJobs,
+  fetchPlaylists
+})(SchedulerPage);
 export default withStyles(styles)(SchedulerPage);
