@@ -71,7 +71,7 @@ function buildRotateHandle(props: Props) {
   rotateHandle.name = StagePropPart.rotateHandle.name;
   rotateHandle.zIndex = StagePropPart.rotateHandle.zIndex;
 
-  rotateHandle.beginFill(0x00FF00);
+  rotateHandle.beginFill(0xFFFFFF);
   rotateHandle.drawCircle(0, 0, handleRadius);
   rotateHandle.endFill();
   rotateHandle.x = props.width / 2;

@@ -80,7 +80,7 @@ function buildBackground(props: Props) {
   background.name = StagePropPart.background.name;
   background.zIndex = StagePropPart.background.zIndex;
 
-  background.beginFill(0xFF00FF);
+  background.beginFill(0x000000, .3);
   background.drawRect(-padding, -padding, props.width + (2 * padding), props.height + (2 * padding));
   background.endFill();
   return background;
