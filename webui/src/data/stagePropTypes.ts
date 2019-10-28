@@ -1,5 +1,3 @@
-/* tslint:disable:max-line-length */
-
 export type StagePropType = {
   id: string;
   name: string;

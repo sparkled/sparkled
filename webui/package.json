@@ -44,15 +44,11 @@
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "4.3.4",
     "@types/uuid": "3.4.5",
-    "create-react-app": "3.0.1",
-    "tslint": "5.18.0",
-    "tslint-config-airbnb": "5.11.1",
-    "tslint-react": "4.0.0",
-    "tslint-react-hooks": "2.1.1",
     "typescript": "3.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
+    "lint": "eslint src",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

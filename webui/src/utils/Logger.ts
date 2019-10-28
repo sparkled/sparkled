@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 export default class Logger {
   private readonly name: string;
 
