@@ -55,13 +55,13 @@ Build the project
 **Note:** the initial build will take quite a while, as all of the dependencies need to be downloaded
 ```
 cd sparkled
-mvn install
+./gradlew clean copyWebUi shadowJar
 ```
 
 Run Sparkled
 ```
-cd sparkled/app/target
-java -jar sparkled.jar
+cd build/libs
+java -jar sparkled-0.0.1-all.jar
 ```
 
 Wait for the application to start, then connect to the UI in Chrome via the following URL:
@@ -70,13 +70,13 @@ http://localhost:8080
 ```
 
 ## Running the tests
-Use `maven` to run both the frontend and backend unit tests:
+Use `gradle` to run the backend unit tests:
 ```
 cd sparkled
-gradlew test
+./gradlew test
 ```
 
-Use `npm` to run just the frontend unit tests:
+Use `npm` to run the frontend unit tests:
 ```
 cd sparkled/webui
 npm run test
@@ -90,6 +90,7 @@ npm run test
 * [HikariCP](https://github.com/brettwooldridge/HikariCP)
 * [Hibernate](https://hibernate.org)
 * [React.js](https://reactjs.org)
+* [Material UI](https://material-ui.com)
 * [Wavesurfer.js](https://wavesurfer-js.org)
 
 ## Authors
@@ -98,10 +99,10 @@ npm run test
 See also the list of [contributors](https://github.com/sparkled/sparkled/contributors) who participated in this project.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 * [FastLED](http://fastled.io) for building and maintaining an incredible LED strip library, without which this project
   would never have been conceived.
-* [The FastLED community](https://plus.google.com/communities/109127054924227823508) for being a great source of help
+* [The FastLED community](https://reddit.com/r/fastled) for being a great source of help
   and inspiration.
