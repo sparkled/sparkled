@@ -44,11 +44,15 @@
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "4.3.4",
     "@types/uuid": "3.4.5",
+    "husky": "3.0.9",
+    "lint-staged": "9.4.2",
+    "prettier": "1.18.2",
     "typescript": "3.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "lint": "eslint src",
+    "eslint": "eslint --fix \"src/*.{js,jsx,ts,tsx}\"",
+    "prettier": "prettier --write \"**/*.{css,json,md,js,jsx,ts,tsx}\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
@@ -58,5 +62,20 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
 }
