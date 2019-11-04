@@ -1,3 +1,6 @@
+/** A code used by the system to identify an object such as a stage prop. */
+export const CODE_NAME = /^[a-zA-Z\d_]+$/
+
 /** One or more numbers. */
 export const POSITIVE_INTEGER = /^\d+$/
 

@@ -1,8 +1,8 @@
-import produce, { immerable } from 'immer'
-import { identity, remove } from 'lodash'
-import React, { createContext, Dispatch } from 'react'
-import { StageViewModel } from '../../types/ViewModel'
-import { StagePropType } from '../../data/stagePropTypes'
+import produce, {immerable} from 'immer'
+import {identity, remove} from 'lodash'
+import React, {createContext, Dispatch} from 'react'
+import {StagePropViewModel, StageViewModel} from '../../types/ViewModel'
+import {StagePropType} from '../../data/stagePropTypes'
 import uuidv4 from 'uuid/v4'
 
 export class State {
@@ -14,6 +14,8 @@ export class State {
 export type Action =
   | { type: 'SelectStageProp'; payload: { uuid: string | null } }
   | { type: 'AddStageProp'; payload: { type: StagePropType } }
+  | { type: 'UpdateStagePropCode'; payload: string }
+  | { type: 'UpdateStagePropName'; payload: string }
   | { type: 'MoveStageProp'; payload: { x: number; y: number } }
   | { type: 'ScaleStageProp'; payload: { x: number; y: number } }
   | { type: 'RotateStageProp'; payload: { rotation: number } }
@@ -29,6 +31,8 @@ export const stageEditorReducer: React.Reducer<State, Action> = (
   action
 ): State => {
   return produce(state, draft => {
+    const selectedStageProp = getSelectedStageProp(draft)
+
     switch (action.type) {
       case 'SelectStageProp':
         draft.selectedStageProp = action.payload.uuid || ''
@@ -36,14 +40,24 @@ export const stageEditorReducer: React.Reducer<State, Action> = (
       case 'AddStageProp':
         addStageProp(draft, action.payload.type)
         break
+      case 'UpdateStagePropCode':
+        if (selectedStageProp) {
+          selectedStageProp.code = action.payload
+        }
+        break
+      case 'UpdateStagePropName':
+        if (selectedStageProp) {
+          selectedStageProp.name = action.payload
+        }
+        break
       case 'MoveStageProp':
-        moveStageProp(draft, action.payload.x, action.payload.y)
+        moveStageProp(selectedStageProp, action.payload.x, action.payload.y)
         break
       case 'ScaleStageProp':
-        scaleStageProp(draft, action.payload.x, action.payload.y)
+        scaleStageProp(selectedStageProp, action.payload.x, action.payload.y)
         break
       case 'RotateStageProp':
-        rotateStageProp(draft, action.payload.rotation)
+        rotateStageProp(selectedStageProp, action.payload.rotation)
         break
       case 'DeleteStageProp':
         deleteStageProp(draft)
@@ -75,33 +89,30 @@ function addStageProp(draft: State, type: StagePropType) {
   stage.stageProps.forEach((stageProp, i) => (stageProp.displayOrder = i))
 }
 
-function moveStageProp(draft: State, x: number, y: number) {
-  const stageProp = draft.stage.stageProps.find(
-    sp => sp.uuid === draft.selectedStageProp
-  )
+function moveStageProp(stageProp: StagePropViewModel | undefined, x: number, y: number) {
   if (stageProp) {
     stageProp.positionX = x
     stageProp.positionY = y
   }
 }
 
-function scaleStageProp(draft: State, x: number, y: number) {
-  const stageProp = draft.stage.stageProps.find(
-    sp => sp.uuid === draft.selectedStageProp
-  )
+function scaleStageProp(stageProp: StagePropViewModel | undefined, x: number, y: number) {
   if (stageProp) {
     stageProp.scaleX = x
     stageProp.scaleY = y
   }
 }
 
-function rotateStageProp(draft: State, rotation: number) {
-  const stageProp = draft.stage.stageProps.find(
-    sp => sp.uuid === draft.selectedStageProp
-  )
+function rotateStageProp(stageProp: StagePropViewModel | undefined, rotation: number) {
   if (stageProp) {
     stageProp.rotation = rotation
   }
+}
+
+let getSelectedStageProp = function (draft: State) {
+  return draft.stage.stageProps.find(
+    sp => sp.uuid === draft.selectedStageProp
+  )
 }
 
 function deleteStageProp(draft: State) {

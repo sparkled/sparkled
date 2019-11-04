@@ -2,7 +2,7 @@ import { Button, Grid, TextField } from '@material-ui/core'
 import { find } from 'lodash'
 import React, { useCallback, useContext, useEffect } from 'react'
 import useForm from 'react-hook-form'
-import { POSITIVE_INTEGER, POSITIVE_NUMBER } from '../../../utils/regexes'
+import {CODE_NAME, POSITIVE_INTEGER, POSITIVE_NUMBER} from '../../../utils/regexes'
 import {
   StageEditorDispatchContext,
   StageEditorStateContext
@@ -25,6 +25,8 @@ const StagePropDetails: React.FC = () => {
     if (!stageProp) {
       reset()
     } else {
+      setValue('code', stageProp.code, true)
+      setValue('name', stageProp.name, true)
       setValue('positionX', stageProp.positionX.toString(), true)
       setValue('positionY', stageProp.positionY.toString(), true)
       setValue('scaleX', stageProp.scaleX.toString(), true)
@@ -33,13 +35,33 @@ const StagePropDetails: React.FC = () => {
     }
   }, [reset, setValue, stageProp])
 
-  const [positionX, positionY, scaleX, scaleY, rotation] = watch([
+  const [code, name, positionX, positionY, scaleX, scaleY, rotation] = watch([
+    'code',
+    'name',
     'positionX',
     'positionY',
     'scaleX',
     'scaleY',
     'rotation'
   ])
+
+  useEffect(() => {
+    if (code && !errors.code) {
+      dispatch({
+        type: 'UpdateStagePropCode',
+        payload: code
+      })
+    }
+  }, [code, dispatch, errors.code])
+
+  useEffect(() => {
+    if (name && !errors.name) {
+      dispatch({
+        type: 'UpdateStagePropName',
+        payload: name
+      })
+    }
+  }, [name, dispatch, errors.name])
 
   useEffect(() => {
     if (!errors.positionX && !errors.positionY) {
@@ -81,6 +103,39 @@ const StagePropDetails: React.FC = () => {
   return (
     <form>
       <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <TextField
+            variant="outlined"
+            label="Code"
+            name="code"
+            type="text"
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+            disabled={!hasStageProp}
+            error={errors.code !== undefined}
+            inputRef={register({
+              required: true,
+              pattern: CODE_NAME
+            })}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            variant="outlined"
+            label="Name"
+            name="name"
+            type="text"
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+            disabled={!hasStageProp}
+            error={errors.name !== undefined}
+            inputRef={register({
+              required: true,
+            })}
+          />
+        </Grid>
+
         <Grid item xs={6}>
           <TextField
             variant="outlined"
@@ -173,6 +228,7 @@ const StagePropDetails: React.FC = () => {
             })}
           />
         </Grid>
+        <Grid item xs={6}/>
 
         <Grid item xs={12}>
           <Button
