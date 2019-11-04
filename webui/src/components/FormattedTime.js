@@ -1,28 +1,25 @@
-import React from 'react';
+import React from 'react'
 
 export default ({ millis }) => {
-
-  return (
-    <span>{formatTime(millis)}</span>
-  );
-};
+  return <span>{formatTime(millis)}</span>
+}
 
 function formatTime(millis) {
   if (millis == null) {
-    return '';
+    return ''
   }
 
-  const hours = Math.floor(millis / 3600);
-  const minutes = Math.floor((millis % 3600) / 60);
-  const seconds = Math.floor(millis % 60);
+  const hours = Math.floor(millis / 3600)
+  const minutes = Math.floor((millis % 3600) / 60)
+  const seconds = Math.floor(millis % 60)
 
   if (hours > 0) {
-    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
   } else {
-    return `${pad(minutes)}:${pad(seconds)}`;
+    return `${pad(minutes)}:${pad(seconds)}`
   }
 }
 
 function pad(millis) {
-  return millis < 10 ? '0' + millis : millis;
+  return millis < 10 ? '0' + millis : millis
 }

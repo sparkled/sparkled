@@ -1,2 +1,2 @@
-import TimeIndicator from './TimeIndicator';
-export default TimeIndicator;
+import TimeIndicator from './TimeIndicator'
+export default TimeIndicator

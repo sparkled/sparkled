@@ -1,2 +1,2 @@
-import LoadingIndicator from './LoadingIndicator';
-export default LoadingIndicator;
+import LoadingIndicator from './LoadingIndicator'
+export default LoadingIndicator

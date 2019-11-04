@@ -1,2 +1,2 @@
-import PlaybackFrameIndicator from './PlaybackFrameIndicator';
-export default PlaybackFrameIndicator;
+import PlaybackFrameIndicator from './PlaybackFrameIndicator'
+export default PlaybackFrameIndicator

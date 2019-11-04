@@ -1,2 +1,2 @@
-import AddChannelModal from './AddChannelModal';
-export default AddChannelModal;
+import AddChannelModal from './AddChannelModal'
+export default AddChannelModal

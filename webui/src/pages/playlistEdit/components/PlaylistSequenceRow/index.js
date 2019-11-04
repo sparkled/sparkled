@@ -1,2 +1,2 @@
-import PlaylistSequenceRow from './PlaylistSequenceRow';
-export default PlaylistSequenceRow;
+import PlaylistSequenceRow from './PlaylistSequenceRow'
+export default PlaylistSequenceRow

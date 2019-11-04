@@ -1,19 +1,19 @@
-import { withStyles } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
-import _ from 'lodash';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
-import PageContainer from '../../components/PageContainer';
-import SearchBar from '../../components/SearchBar';
-import { setCurrentPage } from '../actions';
-import { fetchSongs } from '../songList/actions';
-import { fetchStages } from '../stageList/actions';
-import { fetchSequences, showAddModal } from './actions';
-import AddSequenceModal from './components/AddSequenceModal';
-import DeleteSequenceModal from './components/DeleteSequenceModal';
-import SequenceCard from './components/SequenceCard';
-import SimpleTextCard from "../../components/SimpleTextCard";
+import { withStyles } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
+import _ from 'lodash'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import Alert from 'react-s-alert'
+import PageContainer from '../../components/PageContainer'
+import SearchBar from '../../components/SearchBar'
+import { setCurrentPage } from '../actions'
+import { fetchSongs } from '../songList/actions'
+import { fetchStages } from '../stageList/actions'
+import { fetchSequences, showAddModal } from './actions'
+import AddSequenceModal from './components/AddSequenceModal'
+import DeleteSequenceModal from './components/DeleteSequenceModal'
+import SequenceCard from './components/SequenceCard'
+import SimpleTextCard from '../../components/SimpleTextCard'
 
 const styles = () => ({
   root: {
@@ -22,74 +22,85 @@ const styles = () => ({
   emptyCard: {
     margin: 'auto'
   }
-});
-
+})
 
 class SequenceListPage extends Component {
-
-  state = { searchQuery: '' };
+  state = { searchQuery: '' }
 
   constructor(props) {
-    super(props);
-    this.sequenceMatchesSearch = this.sequenceMatchesSearch.bind(this);
+    super(props)
+    this.sequenceMatchesSearch = this.sequenceMatchesSearch.bind(this)
   }
 
   componentDidMount() {
-    this.props.setCurrentPage({ pageTitle: 'Sequences', pageClass: 'SequenceListPage' });
-    this.props.fetchSequences();
-    this.props.fetchSongs();
-    this.props.fetchStages();
+    this.props.setCurrentPage({
+      pageTitle: 'Sequences',
+      pageClass: 'SequenceListPage'
+    })
+    this.props.fetchSequences()
+    this.props.fetchSongs()
+    this.props.fetchStages()
   }
 
   componentWillReceiveProps(nextProps) {
-    const { props } = this;
+    const { props } = this
     if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
-      Alert.success('Sequence deleted successfully');
-      nextProps.fetchSequences();
+      Alert.success('Sequence deleted successfully')
+      nextProps.fetchSequences()
     } else if (this.props.adding && !nextProps.adding && !nextProps.addError) {
-      Alert.success('Sequence added successfully');
-      nextProps.fetchSequences();
+      Alert.success('Sequence added successfully')
+      nextProps.fetchSequences()
     }
   }
 
   render() {
-    const { classes, fetching, showAddModal, songs, stages } = this.props;
+    const { classes, fetching, showAddModal, songs, stages } = this.props
 
     const pageBody = (
       <div className={classes.root}>
-        <SearchBar placeholderText="Search sequences" fetching={fetching} onAddButtonClick={showAddModal}
-                   onSearch={this.filterSequences}
+        <SearchBar
+          placeholderText="Search sequences"
+          fetching={fetching}
+          onAddButtonClick={showAddModal}
+          onSearch={this.filterSequences}
         />
 
         <Grid container spacing={3}>
           {this.renderContent()}
         </Grid>
 
-        <AddSequenceModal songs={songs} stages={stages}/>
-        <DeleteSequenceModal/>
+        <AddSequenceModal songs={songs} stages={stages} />
+        <DeleteSequenceModal />
       </div>
-    );
+    )
 
-    return <PageContainer>{pageBody}</PageContainer>;
+    return <PageContainer>{pageBody}</PageContainer>
   }
 
   renderContent() {
-    const { fetching, fetchingSongs, fetchingStages, fetchError, fetchSongsError, fetchStagesError } = this.props;
+    const {
+      fetching,
+      fetchingSongs,
+      fetchingStages,
+      fetchError,
+      fetchSongsError,
+      fetchStagesError
+    } = this.props
 
     if (fetching || fetchingSongs || fetchingStages) {
-      return [];
+      return []
     } else if (fetchError) {
-      return this.renderError(`Failed to load sequences: ${fetchError}`);
+      return this.renderError(`Failed to load sequences: ${fetchError}`)
     } else if (fetchSongsError) {
-      return this.renderError(`Failed to load songs: ${fetchSongsError}`);
+      return this.renderError(`Failed to load songs: ${fetchSongsError}`)
     } else if (fetchStagesError) {
-      return this.renderError(`Failed to load stages: ${fetchStagesError}`);
+      return this.renderError(`Failed to load stages: ${fetchStagesError}`)
     } else {
-      const filteredSequences = this.getFilteredSequences();
+      const filteredSequences = this.getFilteredSequences()
       if (_.isEmpty(filteredSequences)) {
-        return this.renderEmpty();
+        return this.renderEmpty()
       } else {
-        return this.renderSequences(filteredSequences);
+        return this.renderSequences(filteredSequences)
       }
     }
   }
@@ -99,35 +110,40 @@ class SequenceListPage extends Component {
       <div className="card border-danger">
         <div className="card-body">
           <p>{error}</p>
-          <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => window.location.reload()}
+          >
+            Reload the page
+          </button>
         </div>
       </div>
-    );
+    )
   }
 
   renderEmpty() {
-    return <SimpleTextCard>No sequences found.</SimpleTextCard>;
+    return <SimpleTextCard>No sequences found.</SimpleTextCard>
   }
 
   renderSequences(sequences) {
     return _.map(sequences, sequence => (
       <Grid item key={sequence.id} xs={12} sm={6} md={4}>
-        <SequenceCard sequence={sequence}/>
+        <SequenceCard sequence={sequence} />
       </Grid>
-    ));
+    ))
   }
 
   filterSequences = searchQuery => {
-    this.setState({ searchQuery });
-  };
+    this.setState({ searchQuery })
+  }
 
   getFilteredSequences = () => {
-    return _.filter(this.props.sequences || [], this.sequenceMatchesSearch);
-  };
+    return _.filter(this.props.sequences || [], this.sequenceMatchesSearch)
+  }
 
   sequenceMatchesSearch = sequence => {
-    const searchQuery = this.state.searchQuery.trim().toLowerCase();
-    return !searchQuery || _.includes(sequence.name.toLowerCase(), searchQuery);
+    const searchQuery = this.state.searchQuery.trim().toLowerCase()
+    return !searchQuery || _.includes(sequence.name.toLowerCase(), searchQuery)
   }
 }
 
@@ -146,14 +162,17 @@ function mapStateToProps({ page: { sequenceList, songList, stageList } }) {
     addError: sequenceList.addError,
     deleting: sequenceList.deleting,
     deleteError: sequenceList.deleteError
-  };
+  }
 }
 
-SequenceListPage = connect(mapStateToProps, {
-  setCurrentPage,
-  showAddModal,
-  fetchSequences,
-  fetchSongs,
-  fetchStages
-})(SequenceListPage);
-export default withStyles(styles)(SequenceListPage);
+SequenceListPage = connect(
+  mapStateToProps,
+  {
+    setCurrentPage,
+    showAddModal,
+    fetchSequences,
+    fetchSongs,
+    fetchStages
+  }
+)(SequenceListPage)
+export default withStyles(styles)(SequenceListPage)

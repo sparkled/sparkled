@@ -1,2 +1,2 @@
-import DeleteSequenceModal from './DeleteSequenceModal';
-export default DeleteSequenceModal;
+import DeleteSequenceModal from './DeleteSequenceModal'
+export default DeleteSequenceModal

@@ -1,2 +1,2 @@
-import ScheduledJobCard from './ScheduledJobCard';
-export default ScheduledJobCard;
+import ScheduledJobCard from './ScheduledJobCard'
+export default ScheduledJobCard

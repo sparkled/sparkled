@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "tslint:latest",
-    "tslint-react",
-    "tslint-react-hooks"
-  ],
+  "extends": ["tslint:latest", "tslint-react", "tslint-react-hooks"],
   "rules": {
     "arrow-parens": false,
     "interface-name": false,

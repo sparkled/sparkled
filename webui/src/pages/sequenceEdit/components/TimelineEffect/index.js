@@ -1,2 +1,2 @@
-import TimelineEffect from './TimelineEffect';
-export default TimelineEffect;
+import TimelineEffect from './TimelineEffect'
+export default TimelineEffect

@@ -1,2 +1,2 @@
-import SongCard from './SongCard';
-export default SongCard;
+import SongCard from './SongCard'
+export default SongCard

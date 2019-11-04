@@ -1,2 +1,2 @@
-import EditorSidebar from "./EditorSidebar";
-export default EditorSidebar;
+import EditorSidebar from './EditorSidebar'
+export default EditorSidebar

@@ -2,7 +2,7 @@
   position: absolute;
   height: 100%;
   background: #5bc0de;
-  border: 1px solid rgba(255, 255, 255, .5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .TimelineEffect.Active {

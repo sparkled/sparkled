@@ -1,2 +1,2 @@
-import AddPlaylistModal from './AddPlaylistModal';
-export default AddPlaylistModal;
+import AddPlaylistModal from './AddPlaylistModal'
+export default AddPlaylistModal

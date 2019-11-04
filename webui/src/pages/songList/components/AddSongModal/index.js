@@ -1,2 +1,2 @@
-import AddSongModal from './AddSongModal';
-export default AddSongModal;
+import AddSongModal from './AddSongModal'
+export default AddSongModal

@@ -1,2 +1,2 @@
-import DeleteStageModal from './DeleteStageModal';
-export default DeleteStageModal;
+import DeleteStageModal from './DeleteStageModal'
+export default DeleteStageModal

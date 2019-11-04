@@ -1,2 +1,2 @@
-import StageListPage from './StageListPage';
-export default StageListPage;
+import StageListPage from './StageListPage'
+export default StageListPage

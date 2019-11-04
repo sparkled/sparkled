@@ -1,13 +1,23 @@
-import { Card, CardContent, CardHeader, Chip, Grid, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
-import { blue, green, orange } from '@material-ui/core/colors';
-import { withStyles } from '@material-ui/core/styles';
-import { MoreVert } from '@material-ui/icons';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getFormattedDuration } from '../../../../utils/dateUtils';
-import { showDeleteModal } from '../../actions';
-import * as sequenceStatuses from '../../sequenceStatuses';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Chip,
+  Grid,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography
+} from '@material-ui/core'
+import { blue, green, orange } from '@material-ui/core/colors'
+import { withStyles } from '@material-ui/core/styles'
+import { MoreVert } from '@material-ui/icons'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { getFormattedDuration } from '../../../../utils/dateUtils'
+import { showDeleteModal } from '../../actions'
+import * as sequenceStatuses from '../../sequenceStatuses'
 
 const styles = () => ({
   topRow: {
@@ -22,15 +32,14 @@ const styles = () => ({
   [sequenceStatuses.PUBLISHED]: {
     background: green[500]
   }
-});
+})
 
 class SequenceCard extends Component {
-
-  state = { anchorEl: null };
+  state = { anchorEl: null }
 
   render() {
-    const { classes, sequence } = this.props;
-    const { anchorEl } = this.state;
+    const { classes, sequence } = this.props
+    const { anchorEl } = this.state
 
     return (
       <>
@@ -38,7 +47,7 @@ class SequenceCard extends Component {
           <CardHeader
             action={
               <IconButton onClick={this.openMenu}>
-                <MoreVert/>
+                <MoreVert />
               </IconButton>
             }
             title={sequence.name}
@@ -50,7 +59,10 @@ class SequenceCard extends Component {
                 <Typography>Song: {sequence.songName}</Typography>
               </Grid>
               <Grid item>
-                <Typography>Duration: {getFormattedDuration(Math.floor(sequence.durationSeconds))}</Typography>
+                <Typography>
+                  Duration:{' '}
+                  {getFormattedDuration(Math.floor(sequence.durationSeconds))}
+                </Typography>
               </Grid>
             </Grid>
 
@@ -59,33 +71,42 @@ class SequenceCard extends Component {
                 <Typography>Stage: {sequence.stageName}</Typography>
               </Grid>
               <Grid item>
-                <Chip className={classes[sequence.status]} label={sequence.status}/>
+                <Chip
+                  className={classes[sequence.status]}
+                  label={sequence.status}
+                />
               </Grid>
             </Grid>
           </CardContent>
         </Card>
 
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.closeMenu}>
-          <MenuItem component={Link} to={`/sequences/${sequence.id}`}>Edit sequence</MenuItem>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.closeMenu}
+        >
+          <MenuItem component={Link} to={`/sequences/${sequence.id}`}>
+            Edit sequence
+          </MenuItem>
           <MenuItem onClick={this.showDeleteModal}>Delete sequence</MenuItem>
         </Menu>
       </>
-    );
+    )
   }
 
   openMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.setState({ anchorEl: event.currentTarget })
   }
 
   closeMenu = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: null })
   }
 
   showDeleteModal = () => {
-    this.closeMenu();
+    this.closeMenu()
 
-    const { showDeleteModal, sequence } = this.props;
-    showDeleteModal(sequence);
+    const { showDeleteModal, sequence } = this.props
+    showDeleteModal(sequence)
   }
 }
 
@@ -93,8 +114,11 @@ function mapStateToProps({ page: { sequenceList } }) {
   return {
     sequenceToDelete: sequenceList.sequenceToDelete,
     deleting: sequenceList.deleting
-  };
+  }
 }
 
-SequenceCard = connect(mapStateToProps, { showDeleteModal })(SequenceCard);
-export default withStyles(styles)(SequenceCard);
+SequenceCard = connect(
+  mapStateToProps,
+  { showDeleteModal }
+)(SequenceCard)
+export default withStyles(styles)(SequenceCard)

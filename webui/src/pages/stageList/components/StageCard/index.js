@@ -1,2 +1,2 @@
-import StageCard from './StageCard';
-export default StageCard;
+import StageCard from './StageCard'
+export default StageCard

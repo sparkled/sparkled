@@ -1,85 +1,109 @@
-import _ from 'lodash';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { ActionCreators } from 'redux-undo';
-import Alert from 'react-s-alert';
-import { Nav, NavItem, Table } from 'reactstrap';
-import AddSequenceModal from './components/AddSequenceModal';
-import PlaylistSequenceRow from './components/PlaylistSequenceRow';
-import { setCurrentPage }  from '../actions';
-import LoadingIndicator from '../../components/LoadingIndicator';
-import PageContainer from '../../components/PageContainer';
-import { fetchPlaylist, fetchSequences, savePlaylist, showAddSequenceModal } from './actions';
+import _ from 'lodash'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { ActionCreators } from 'redux-undo'
+import Alert from 'react-s-alert'
+import { Nav, NavItem, Table } from 'reactstrap'
+import AddSequenceModal from './components/AddSequenceModal'
+import PlaylistSequenceRow from './components/PlaylistSequenceRow'
+import { setCurrentPage } from '../actions'
+import LoadingIndicator from '../../components/LoadingIndicator'
+import PageContainer from '../../components/PageContainer'
+import {
+  fetchPlaylist,
+  fetchSequences,
+  savePlaylist,
+  showAddSequenceModal
+} from './actions'
 
-const { undo, redo, clearHistory } = ActionCreators;
+const { undo, redo, clearHistory } = ActionCreators
 
 class PlaylistEditPage extends Component {
-
   render() {
     const pageBody = (
-      <div className="d-flex w-100 h-100">
-        {this.renderContent()}
-      </div>
-    );
+      <div className="d-flex w-100 h-100">{this.renderContent()}</div>
+    )
 
-    return <PageContainer navbar={this.renderNavbar()}>{pageBody}</PageContainer>;
+    return (
+      <PageContainer navbar={this.renderNavbar()}>{pageBody}</PageContainer>
+    )
   }
 
   componentWillReceiveProps(nextProps) {
-    const didSave = this.props.saving && !nextProps.saving;
+    const didSave = this.props.saving && !nextProps.saving
     if (didSave) {
-      const saveError = nextProps.saveError;
+      const saveError = nextProps.saveError
       if (saveError) {
-        Alert.error(`Save failed: ${saveError}`);
+        Alert.error(`Save failed: ${saveError}`)
       } else {
-        Alert.success('Playlist saved successfully');
+        Alert.success('Playlist saved successfully')
       }
     }
   }
 
   componentDidMount() {
-    const { playlistId } = this.props.match.params;
-    this.props.setCurrentPage({ pageTitle: 'Edit Playlist', pageClass: 'PlaylistEditPage' });
-    this.props.fetchPlaylist(playlistId);
-    this.props.fetchSequences();
+    const { playlistId } = this.props.match.params
+    this.props.setCurrentPage({
+      pageTitle: 'Edit Playlist',
+      pageClass: 'PlaylistEditPage'
+    })
+    this.props.fetchPlaylist(playlistId)
+    this.props.fetchSequences()
   }
 
   renderNavbar() {
-    const { canUndo, canRedo, undo, redo, playlist, sequences, savePlaylist, saving } = this.props;
-    const loaded = playlist && sequences;
+    const {
+      canUndo,
+      canRedo,
+      undo,
+      redo,
+      playlist,
+      sequences,
+      savePlaylist,
+      saving
+    } = this.props
+    const loaded = playlist && sequences
 
     return (
       <Nav className="ml-auto" navbar>
-        <NavItem className={(!saving && loaded && canUndo) ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => undo()}>Undo</span>
+        <NavItem className={!saving && loaded && canUndo ? '' : 'd-none'}>
+          <span className="nav-link" onClick={() => undo()}>
+            Undo
+          </span>
         </NavItem>
-        <NavItem className={(!saving && loaded && canRedo) ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => redo()}>Redo</span>
+        <NavItem className={!saving && loaded && canRedo ? '' : 'd-none'}>
+          <span className="nav-link" onClick={() => redo()}>
+            Redo
+          </span>
         </NavItem>
         <NavItem className={!saving && loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.props.showAddSequenceModal}>Add Sequence</span>
+          <span className="nav-link" onClick={this.props.showAddSequenceModal}>
+            Add Sequence
+          </span>
         </NavItem>
         <NavItem className={!saving && loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => savePlaylist(playlist)}>Save</span>
+          <span className="nav-link" onClick={() => savePlaylist(playlist)}>
+            Save
+          </span>
         </NavItem>
       </Nav>
-    );
+    )
   }
 
   renderContent() {
-    const { fetchError, fetching, playlist, sequences } = this.props;
+    const { fetchError, fetching, playlist, sequences } = this.props
 
     if (fetching) {
-      return this.renderLoading();
+      return this.renderLoading()
     } else if (fetchError) {
-      return this.renderError();
+      return this.renderError()
     } else if (playlist && sequences) {
-      return this.renderEditor();
+      return this.renderEditor()
     }
   }
 
   renderLoading() {
-    return <LoadingIndicator size={100}/>;
+    return <LoadingIndicator size={100} />
   }
 
   renderError() {
@@ -87,14 +111,19 @@ class PlaylistEditPage extends Component {
       <div className="card border-danger">
         <div className="card-body">
           <p>Failed to load playlist: {this.props.fetchError}</p>
-          <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => window.location.reload()}
+          >
+            Reload the page
+          </button>
         </div>
       </div>
-    );
+    )
   }
 
   renderEditor() {
-    const { playlist } = this.props;
+    const { playlist } = this.props
 
     return (
       <div className="container">
@@ -109,26 +138,28 @@ class PlaylistEditPage extends Component {
           </div>
         </div>
 
-        <AddSequenceModal/>
+        <AddSequenceModal />
       </div>
-    );
+    )
   }
 
   renderPlaylistSequence(playlistSequence) {
     return (
-      <PlaylistSequenceRow key={playlistSequence.uuid}
-                           form={`playlistSequence_${playlistSequence.uuid}`}
-                           playlistSequence={playlistSequence}/>
-    );
+      <PlaylistSequenceRow
+        key={playlistSequence.uuid}
+        form={`playlistSequence_${playlistSequence.uuid}`}
+        playlistSequence={playlistSequence}
+      />
+    )
   }
 
   componentWillUnmount() {
-    this.props.clearHistory();
+    this.props.clearHistory()
   }
 }
 
 function mapStateToProps({ page }) {
-  const { past, present, future } = page.playlistEdit;
+  const { past, present, future } = page.playlistEdit
 
   return {
     fetching: present.fetchingPlaylist || present.fetchingSequences,
@@ -139,9 +170,19 @@ function mapStateToProps({ page }) {
     sequences: present.sequences,
     canUndo: past.length > 1,
     canRedo: future.length > 0
-  };
+  }
 }
 
-export default connect(mapStateToProps, {
-  setCurrentPage, fetchPlaylist, fetchSequences, showAddSequenceModal, savePlaylist, undo, redo, clearHistory
-})(PlaylistEditPage);
+export default connect(
+  mapStateToProps,
+  {
+    setCurrentPage,
+    fetchPlaylist,
+    fetchSequences,
+    showAddSequenceModal,
+    savePlaylist,
+    undo,
+    redo,
+    clearHistory
+  }
+)(PlaylistEditPage)

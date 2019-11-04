@@ -1,4 +1,6 @@
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 
@@ -16,7 +18,7 @@ html, body, #root {
 /* Styling for react-split-pane */
 .Resizer {
   background: #000;
-  opacity: .2;
+  opacity: 0.2;
   z-index: 1;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;

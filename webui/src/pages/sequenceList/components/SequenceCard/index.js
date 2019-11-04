@@ -1,2 +1,2 @@
-import SequenceCard from './SequenceCard';
-export default SequenceCard;
+import SequenceCard from './SequenceCard'
+export default SequenceCard

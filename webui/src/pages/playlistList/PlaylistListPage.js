@@ -1,17 +1,17 @@
-import { withStyles } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
-import _ from 'lodash';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
-import PageContainer from '../../components/PageContainer';
-import SearchBar from '../../components/SearchBar';
-import { setCurrentPage } from '../actions';
-import { fetchPlaylists, showAddModal } from './actions';
-import AddPlaylistModal from './components/AddPlaylistModal';
-import DeletePlaylistModal from './components/DeletePlaylistModal';
-import PlaylistCard from './components/PlaylistCard';
-import SimpleTextCard from "../../components/SimpleTextCard";
+import { withStyles } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
+import _ from 'lodash'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import Alert from 'react-s-alert'
+import PageContainer from '../../components/PageContainer'
+import SearchBar from '../../components/SearchBar'
+import { setCurrentPage } from '../actions'
+import { fetchPlaylists, showAddModal } from './actions'
+import AddPlaylistModal from './components/AddPlaylistModal'
+import DeletePlaylistModal from './components/DeletePlaylistModal'
+import PlaylistCard from './components/PlaylistCard'
+import SimpleTextCard from '../../components/SimpleTextCard'
 
 const styles = () => ({
   root: {
@@ -20,68 +20,72 @@ const styles = () => ({
   emptyCard: {
     margin: 'auto'
   }
-});
-
+})
 
 class PlaylistListPage extends Component {
-
-  state = { searchQuery: '' };
+  state = { searchQuery: '' }
 
   constructor(props) {
-    super(props);
-    this.playlistMatchesSearch = this.playlistMatchesSearch.bind(this);
+    super(props)
+    this.playlistMatchesSearch = this.playlistMatchesSearch.bind(this)
   }
 
   componentDidMount() {
-    this.props.setCurrentPage({ pageTitle: 'Playlists', pageClass: 'PlaylistListPage' });
-    this.props.fetchPlaylists();
+    this.props.setCurrentPage({
+      pageTitle: 'Playlists',
+      pageClass: 'PlaylistListPage'
+    })
+    this.props.fetchPlaylists()
   }
 
   componentWillReceiveProps(nextProps) {
-    const { props } = this;
+    const { props } = this
     if (props.deleting && !nextProps.deleting && !nextProps.deleteError) {
-      Alert.success('Playlist deleted successfully');
-      nextProps.fetchPlaylists();
+      Alert.success('Playlist deleted successfully')
+      nextProps.fetchPlaylists()
     } else if (this.props.adding && !nextProps.adding && !nextProps.addError) {
-      Alert.success('Playlist added successfully');
-      nextProps.fetchPlaylists();
+      Alert.success('Playlist added successfully')
+      nextProps.fetchPlaylists()
     }
   }
 
   render() {
-    const { classes, fetching, showAddModal } = this.props;
+    const { classes, fetching, showAddModal } = this.props
 
     const pageBody = (
       <div className={classes.root}>
-        <SearchBar placeholderText="Search playlists" fetching={fetching} onAddButtonClick={showAddModal}
-                   onSearch={this.filterPlaylists}
+        <SearchBar
+          placeholderText="Search playlists"
+          fetching={fetching}
+          onAddButtonClick={showAddModal}
+          onSearch={this.filterPlaylists}
         />
 
         <Grid container spacing={3}>
           {this.renderContent()}
         </Grid>
 
-        <AddPlaylistModal/>
-        <DeletePlaylistModal/>
+        <AddPlaylistModal />
+        <DeletePlaylistModal />
       </div>
-    );
+    )
 
-    return <PageContainer>{pageBody}</PageContainer>;
+    return <PageContainer>{pageBody}</PageContainer>
   }
 
   renderContent() {
-    const { fetching, fetchError } = this.props;
+    const { fetching, fetchError } = this.props
 
     if (fetching) {
-      return [];
+      return []
     } else if (fetchError) {
-      return this.renderError(`Failed to load playlists: ${fetchError}`);
+      return this.renderError(`Failed to load playlists: ${fetchError}`)
     } else {
-      const filteredPlaylists = this.getFilteredPlaylists();
+      const filteredPlaylists = this.getFilteredPlaylists()
       if (_.isEmpty(filteredPlaylists)) {
-        return this.renderEmpty();
+        return this.renderEmpty()
       } else {
-        return this.renderPlaylists(filteredPlaylists);
+        return this.renderPlaylists(filteredPlaylists)
       }
     }
   }
@@ -91,31 +95,37 @@ class PlaylistListPage extends Component {
       <div className="card border-danger">
         <div className="card-body">
           <p>{error}</p>
-          <button className="btn btn-danger" onClick={() => window.location.reload()}>Reload the page</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => window.location.reload()}
+          >
+            Reload the page
+          </button>
         </div>
       </div>
-    );
+    )
   }
 
   renderEmpty() {
-    return <SimpleTextCard>No playlists found.</SimpleTextCard>;
+    return <SimpleTextCard>No playlists found.</SimpleTextCard>
   }
 
   renderPlaylists(playlists) {
     return _.map(playlists, playlist => (
       <Grid item key={playlist.id} xs={12} sm={6} md={4}>
-        <PlaylistCard playlist={playlist}/>
+        <PlaylistCard playlist={playlist} />
       </Grid>
-    ));
+    ))
   }
 
-  filterPlaylists = searchQuery => this.setState({ searchQuery });
+  filterPlaylists = searchQuery => this.setState({ searchQuery })
 
-  getFilteredPlaylists = () => _.filter(this.props.playlists || [], this.playlistMatchesSearch);
+  getFilteredPlaylists = () =>
+    _.filter(this.props.playlists || [], this.playlistMatchesSearch)
 
   playlistMatchesSearch = playlist => {
-    const searchQuery = this.state.searchQuery.trim().toLowerCase();
-    return !searchQuery || _.includes(playlist.name.toLowerCase(), searchQuery);
+    const searchQuery = this.state.searchQuery.trim().toLowerCase()
+    return !searchQuery || _.includes(playlist.name.toLowerCase(), searchQuery)
   }
 }
 
@@ -128,8 +138,11 @@ function mapStateToProps({ page: { playlistList } }) {
     addError: playlistList.addError,
     deleting: playlistList.deleting,
     deleteError: playlistList.deleteError
-  };
+  }
 }
 
-PlaylistListPage = connect(mapStateToProps, { setCurrentPage, showAddModal, fetchPlaylists })(PlaylistListPage);
-export default withStyles(styles)(PlaylistListPage);
+PlaylistListPage = connect(
+  mapStateToProps,
+  { setCurrentPage, showAddModal, fetchPlaylists }
+)(PlaylistListPage)
+export default withStyles(styles)(PlaylistListPage)

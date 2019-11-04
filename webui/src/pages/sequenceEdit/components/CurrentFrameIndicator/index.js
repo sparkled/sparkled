@@ -1,2 +1,2 @@
-import CurrentFrameIndicator from './CurrentFrameIndicator';
-export default CurrentFrameIndicator;
+import CurrentFrameIndicator from './CurrentFrameIndicator'
+export default CurrentFrameIndicator

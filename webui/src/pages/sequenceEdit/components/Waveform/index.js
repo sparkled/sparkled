@@ -1,2 +1,2 @@
-import Waveform from './Waveform';
-export default Waveform;
+import Waveform from './Waveform'
+export default Waveform

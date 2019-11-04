@@ -1,2 +1,2 @@
-import SongListPage from './SongListPage';
-export default SongListPage;
+import SongListPage from './SongListPage'
+export default SongListPage

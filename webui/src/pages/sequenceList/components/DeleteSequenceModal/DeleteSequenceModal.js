@@ -1,17 +1,28 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { deleteSequence, hideDeleteModal } from '../../actions';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from '@material-ui/core'
+import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { deleteSequence, hideDeleteModal } from '../../actions'
 
 class DeleteSequenceModal extends Component {
-
   render() {
-    const { deleting, fullScreen, sequenceToDelete } = this.props;
-    const sequenceName = (sequenceToDelete || {}).name;
+    const { deleting, fullScreen, sequenceToDelete } = this.props
+    const sequenceName = (sequenceToDelete || {}).name
 
     return (
-      <Dialog open={Boolean(sequenceToDelete)} onClose={this.hideModal} fullScreen={fullScreen} fullWidth>
+      <Dialog
+        open={Boolean(sequenceToDelete)}
+        onClose={this.hideModal}
+        fullScreen={fullScreen}
+        fullWidth
+      >
         <DialogTitle>Delete sequence</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -23,30 +34,36 @@ class DeleteSequenceModal extends Component {
           <Button onClick={this.props.hideDeleteModal} color="default">
             Cancel
           </Button>
-          <Button onClick={this.deleteSequence} variant="contained" color="secondary">
+          <Button
+            onClick={this.deleteSequence}
+            variant="contained"
+            color="secondary"
+          >
             {deleting ? 'Deleting...' : 'Delete sequence'}
           </Button>
         </DialogActions>
       </Dialog>
-    );
+    )
   }
 
   renderDeletionError() {
-    const { deleteError } = this.props;
+    const { deleteError } = this.props
     if (!deleteError) {
-      return null;
+      return null
     } else {
       return (
         <div className="card border-danger">
-          <div className="card-body">Failed to delete sequence: {deleteError}</div>
+          <div className="card-body">
+            Failed to delete sequence: {deleteError}
+          </div>
         </div>
-      );
+      )
     }
   }
 
   deleteSequence = () => {
-    const { deleteSequence, sequenceToDelete } = this.props;
-    deleteSequence(sequenceToDelete.id);
+    const { deleteSequence, sequenceToDelete } = this.props
+    deleteSequence(sequenceToDelete.id)
   }
 }
 
@@ -55,8 +72,13 @@ function mapStateToProps({ page: { sequenceList } }) {
     sequenceToDelete: sequenceList.sequenceToDelete,
     deleting: sequenceList.deleting,
     deleteError: sequenceList.deleteError
-  };
+  }
 }
 
-DeleteSequenceModal = withMobileDialog({ breakpoint: 'xs' })(DeleteSequenceModal);
-export default connect(mapStateToProps, { deleteSequence, hideDeleteModal })(DeleteSequenceModal);
+DeleteSequenceModal = withMobileDialog({ breakpoint: 'xs' })(
+  DeleteSequenceModal
+)
+export default connect(
+  mapStateToProps,
+  { deleteSequence, hideDeleteModal }
+)(DeleteSequenceModal)

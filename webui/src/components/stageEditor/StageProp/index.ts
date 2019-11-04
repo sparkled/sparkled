@@ -1,2 +1,2 @@
-import StageProp from './StageProp';
-export default StageProp;
+import StageProp from './StageProp'
+export default StageProp

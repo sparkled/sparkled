@@ -1,16 +1,23 @@
-import { Card, CardContent, CardHeader, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
-import { MoreVert } from '@material-ui/icons';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { showDeleteModal } from '../../actions';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography
+} from '@material-ui/core'
+import { MoreVert } from '@material-ui/icons'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { showDeleteModal } from '../../actions'
 
 class StageCard extends Component {
-
-  state = { anchorEl: null };
+  state = { anchorEl: null }
 
   render() {
-    const { scheduledJob } = this.props;
-    const { anchorEl } = this.state;
+    const { scheduledJob } = this.props
+    const { anchorEl } = this.state
 
     return (
       <>
@@ -18,39 +25,43 @@ class StageCard extends Component {
           <CardHeader
             action={
               <IconButton onClick={this.openMenu}>
-                <MoreVert/>
+                <MoreVert />
               </IconButton>
             }
             title={scheduledJob.action}
           />
 
           <CardContent>
-            <Typography>
-              Expression: {scheduledJob.cronExpression}
-            </Typography>
+            <Typography>Expression: {scheduledJob.cronExpression}</Typography>
           </CardContent>
         </Card>
 
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.closeMenu}>
-          <MenuItem onClick={this.showDeleteModal}>Delete scheduled job</MenuItem>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.closeMenu}
+        >
+          <MenuItem onClick={this.showDeleteModal}>
+            Delete scheduled job
+          </MenuItem>
         </Menu>
       </>
-    );
+    )
   }
 
   openMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.setState({ anchorEl: event.currentTarget })
   }
 
   closeMenu = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: null })
   }
 
   showDeleteModal = () => {
-    this.closeMenu();
+    this.closeMenu()
 
-    const { showDeleteModal, scheduledJob } = this.props;
-    showDeleteModal(scheduledJob);
+    const { showDeleteModal, scheduledJob } = this.props
+    showDeleteModal(scheduledJob)
   }
 }
 
@@ -58,7 +69,10 @@ function mapStateToProps({ page: { scheduler } }) {
   return {
     scheduledJobToDelete: scheduler.scheduledJobToDelete,
     deleting: scheduler.deleting
-  };
+  }
 }
 
-export default connect(mapStateToProps, { showDeleteModal })(StageCard);
+export default connect(
+  mapStateToProps,
+  { showDeleteModal }
+)(StageCard)

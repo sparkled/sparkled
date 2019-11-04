@@ -1,2 +1,2 @@
-import DeletePlaylistModal from './DeletePlaylistModal';
-export default DeletePlaylistModal;
+import DeletePlaylistModal from './DeletePlaylistModal'
+export default DeletePlaylistModal

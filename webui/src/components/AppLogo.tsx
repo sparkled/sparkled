@@ -1,12 +1,12 @@
-import React from "react";
-import largeLogo from "../images/logo-large.svg";
+import React from 'react'
+import largeLogo from '../images/logo-large.svg'
 
 declare interface Props {
-  className: string;
+  className: string
 }
 
 const AppLogo: React.FC<Props> = (props: Props) => {
-  return <img className={props.className} src={largeLogo} alt="Sparkled"/>;
-};
+  return <img className={props.className} src={largeLogo} alt="Sparkled" />
+}
 
-export default AppLogo;
+export default AppLogo

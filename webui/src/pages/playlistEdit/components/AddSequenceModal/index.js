@@ -1,2 +1,2 @@
-import AddSequenceModal from './AddSequenceModal';
-export default AddSequenceModal;
+import AddSequenceModal from './AddSequenceModal'
+export default AddSequenceModal

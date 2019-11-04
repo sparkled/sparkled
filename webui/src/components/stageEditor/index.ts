@@ -1,2 +1,2 @@
-import StageEditor from "./StageEditor";
-export default StageEditor;
+import StageEditor from './StageEditor'
+export default StageEditor

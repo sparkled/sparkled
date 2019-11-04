@@ -1,2 +1,2 @@
-import DeleteSongModal from './DeleteSongModal';
-export default DeleteSongModal;
+import DeleteSongModal from './DeleteSongModal'
+export default DeleteSongModal

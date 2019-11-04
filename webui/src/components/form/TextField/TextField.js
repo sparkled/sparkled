@@ -1,18 +1,27 @@
-import { TextField } from '@material-ui/core';
-import React from 'react';
+import { TextField } from '@material-ui/core'
+import React from 'react'
 
-let inputId = 0;
+let inputId = 0
 
-const NON_BREAKING_SPACE = ' ';
+const NON_BREAKING_SPACE = ' '
 
-export default ({ input, disabled, required, min, max, label, meta, fullWidth }) => {
-  const hasError = meta.touched && Boolean(meta.error);
-  const attrs = { disabled, required, min, max, fullWidth, error: hasError };
+export default ({
+  input,
+  disabled,
+  required,
+  min,
+  max,
+  label,
+  meta,
+  fullWidth
+}) => {
+  const hasError = meta.touched && Boolean(meta.error)
+  const attrs = { disabled, required, min, max, fullWidth, error: hasError }
 
-  const id = 'TextField-' + (inputId++);
+  const id = 'TextField-' + inputId++
 
-  const errorText = hasError ? meta.error : null;
-  const helperText = errorText || NON_BREAKING_SPACE;
+  const errorText = hasError ? meta.error : null
+  const helperText = errorText || NON_BREAKING_SPACE
 
   return (
     <TextField
@@ -24,5 +33,5 @@ export default ({ input, disabled, required, min, max, label, meta, fullWidth })
       {...input}
       {...attrs}
     />
-  );
-};
+  )
+}
