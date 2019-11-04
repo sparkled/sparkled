@@ -82,18 +82,18 @@ class PageContainer extends Component {
         </div>
         <Divider />
         <List>
-          <ListItem button variant="default" component={Link} to="/songs">
-            <ListItemIcon>
-              <SongPageIcon />
-            </ListItemIcon>
-            <ListItemText primary="Songs" />
-          </ListItem>
-
           <ListItem button variant="default" component={Link} to="/stages">
             <ListItemIcon>
               <StagePageIcon />
             </ListItemIcon>
             <ListItemText primary="Stages" />
+          </ListItem>
+
+          <ListItem button variant="default" component={Link} to="/songs">
+            <ListItemIcon>
+              <SongPageIcon />
+            </ListItemIcon>
+            <ListItemText primary="Songs" />
           </ListItem>
 
           <ListItem button variant="default" component={Link} to="/sequences">
