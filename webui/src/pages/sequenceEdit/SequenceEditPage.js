@@ -1,10 +1,8 @@
-import Slider from '@material-ui/lab/Slider'
 import Mousetrap from 'mousetrap'
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
 import SplitPane from 'react-split-pane'
-import { Nav, NavItem } from 'reactstrap'
 import { ActionCreators } from 'redux-undo'
 import uuidv4 from 'uuid/v4'
 import LoadingIndicator from '../../components/LoadingIndicator'
@@ -30,12 +28,27 @@ import {
 import AddChannelModal from './components/AddChannelModal'
 import EffectForm from './components/EffectForm'
 import Timeline from './components/Timeline'
-import { PlaybackSpeeds } from './playbackSpeeds'
 import './SequenceEditPage.css'
+import { IconButton, withStyles } from '@material-ui/core'
+import {
+  Redo,
+  Undo,
+  Save,
+  Publish,
+  Layers,
+  Star,
+  PlayArrow
+} from '@material-ui/icons'
 
 const { undo, redo, clearHistory } = ActionCreators
 
 const NEW_EFFECT_FRAMES = 10
+
+const styles = () => ({
+  pageContainer: {
+    padding: 0
+  }
+})
 
 class SequenceEditPage extends Component {
   componentDidMount() {
@@ -112,7 +125,10 @@ class SequenceEditPage extends Component {
     )
 
     return (
-      <PageContainer navbar={this.renderNavbar()} className="sequence-editor">
+      <PageContainer
+        actions={this.renderNavbar()}
+        className={this.props.classes.pageContainer}
+      >
         {pageBody}
       </PageContainer>
     )
@@ -122,6 +138,7 @@ class SequenceEditPage extends Component {
     const {
       canUndo,
       canRedo,
+      fetchingRenderData,
       undo,
       redo,
       sequence,
@@ -134,67 +151,95 @@ class SequenceEditPage extends Component {
     const loaded = sequence && stage
 
     return (
-      <Nav className="ml-auto" navbar>
-        <NavItem
-          className={
-            !saving && loaded ? 'd-flex align-items-center mr-3' : 'd-none'
-          }
+      <>
+        <select
+          style={{ width: 60, marginRight: 5 }}
+          value={previewDuration}
+          onChange={this.adjustPreviewDuration}
+          title="Preview duration (seconds)"
         >
-          <input
-            type="number"
-            min={1}
-            style={{ width: 50 }}
-            value={previewDuration}
-            onChange={this.adjustPreviewDuration}
-          />
-        </NavItem>
-        <NavItem
-          className={
-            !saving && loaded ? 'd-flex align-items-center mr-3' : 'd-none'
-          }
-        >
-          <Slider
-            min={0}
-            max={PlaybackSpeeds.length - 1}
-            value={playbackSpeed}
-            style={{ width: 50 }}
-            onChange={this.adjustPlaybackSpeed}
-          />
-        </NavItem>
+          <option value="2">2s</option>
+          <option value="5">5s</option>
+          <option value="10">10s</option>
+          <option value="20">20s</option>
+          <option value="30">30s</option>
+          <option value="60">1m</option>
+          <option value="120">2m</option>
+          <option value="180">3m</option>
+          <option value="240">4m</option>
+          <option value="300">5m</option>
+        </select>
 
-        <NavItem className={!saving && loaded && canUndo ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => undo()}>
-            Undo
-          </span>
-        </NavItem>
-        <NavItem className={!saving && loaded && canRedo ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => redo()}>
-            Redo
-          </span>
-        </NavItem>
-        <NavItem className={!saving && loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.props.showAddChannelModal}>
-            Add Channel
-          </span>
-        </NavItem>
-        <NavItem
-          className={!saving && loaded && selectedChannel ? '' : 'd-none'}
+        <select
+          style={{ width: 60, marginRight: 5 }}
+          value={playbackSpeed}
+          onChange={e => this.adjustPlaybackSpeed(e.target.value)}
+          title="Preview speed"
         >
-          <span className="nav-link" onClick={this.addEffect}>
-            Add Effect
-          </span>
-        </NavItem>
-        <NavItem className={!saving && loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.saveSequence}>
-            Save
-          </span>
-        </NavItem>
-        <NavItem className={!saving && loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.publishSequence}>
-            Publish
-          </span>
-        </NavItem>
-      </Nav>
+          <option value="25">.25x</option>
+          <option value="50">.5x</option>
+          <option value="100">1x</option>
+          <option value="125">1.25x</option>
+          <option value="150">1.5x</option>
+          <option value="200">2x</option>
+        </select>
+
+        <IconButton
+          onClick={() => undo()}
+          disabled={saving || !loaded || !canUndo || fetchingRenderData}
+          title="Undo"
+        >
+          <Undo />
+        </IconButton>
+
+        <IconButton
+          onClick={() => redo()}
+          disabled={saving || !loaded || !canRedo || fetchingRenderData}
+          title="Redo"
+        >
+          <Redo />
+        </IconButton>
+
+        <IconButton
+          onClick={this.props.showAddChannelModal}
+          disabled={saving || !loaded || fetchingRenderData}
+          title="Add channel"
+        >
+          <Layers />
+        </IconButton>
+
+        <IconButton
+          onClick={this.addEffect}
+          disabled={saving || !loaded || !selectedChannel || fetchingRenderData}
+          title="Add effect"
+        >
+          <Star />
+        </IconButton>
+
+        <IconButton
+          onClick={this.saveSequence}
+          disabled={saving || !loaded || fetchingRenderData}
+          title="Save sequence"
+        >
+          <Save />
+        </IconButton>
+
+        <IconButton
+          onClick={this.previewRender}
+          disabled={saving || !loaded || fetchingRenderData}
+          title="Preview sequence"
+        >
+          <PlayArrow />
+        </IconButton>
+
+        <IconButton
+          onClick={this.publishSequence}
+          disabled={saving || !loaded || fetchingRenderData}
+          title="Publish sequence"
+        >
+          <Publish />
+        </IconButton>
+      </>
     )
   }
 
@@ -203,8 +248,8 @@ class SequenceEditPage extends Component {
     this.props.adjustPreviewDuration(duration)
   }
 
-  adjustPlaybackSpeed = speedIndex => {
-    this.props.adjustPlaybackSpeed(speedIndex)
+  adjustPlaybackSpeed = playbackSpeed => {
+    this.props.adjustPlaybackSpeed(playbackSpeed)
   }
 
   saveSequence = () => {
@@ -363,7 +408,7 @@ function mapStateToProps({ page }) {
   }
 }
 
-export default connect(
+SequenceEditPage = connect(
   mapStateToProps,
   {
     setCurrentPage,
@@ -385,3 +430,4 @@ export default connect(
     clearHistory
   }
 )(SequenceEditPage)
+export default withStyles(styles)(SequenceEditPage)

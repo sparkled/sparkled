@@ -5,7 +5,6 @@ import './Waveform.css'
 import { selectFrame } from '../../actions'
 import * as restConfig from '../../../../config/restConfig'
 import { eventType, publish } from '../../../../utils/eventBus'
-import { PlaybackSpeeds } from '../../playbackSpeeds'
 
 class Waveform extends Component {
   state = {
@@ -22,7 +21,8 @@ class Waveform extends Component {
     }
 
     if (props.playbackSpeed !== nextProps.playbackSpeed) {
-      waveSurfer.setPlaybackRate(PlaybackSpeeds[nextProps.playbackSpeed])
+      console.log(nextProps.playbackSpeed)
+      waveSurfer.setPlaybackRate(nextProps.playbackSpeed / 100)
     }
 
     if (props.renderData !== nextProps.renderData) {

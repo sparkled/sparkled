@@ -3,7 +3,6 @@ import _ from 'lodash'
 import uuidv4 from 'uuid/v4'
 import { getResponseError } from '../../utils/reducerUtils'
 import * as actionTypes from './actionTypes'
-import { NormalSpeed } from './playbackSpeeds'
 
 const initialState = {
   fetchingSequence: false,
@@ -27,7 +26,7 @@ const initialState = {
   selectedEffect: null,
   currentFrame: 0,
   playbackFrame: null,
-  playbackSpeed: NormalSpeed,
+  playbackSpeed: 100,
   previewDuration: 5,
   pixelsPerFrame: 2,
   copiedEffect: null
