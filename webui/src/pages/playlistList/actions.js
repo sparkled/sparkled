@@ -24,6 +24,12 @@ export const playPlaylist = playlistId => {
   return { type: actionTypes.PLAY_PLAYLIST, payload: request }
 }
 
+export const stopPlaylist = () => {
+  const playlistAction = { type: 'STOP' }
+  const request = axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
+  return { type: actionTypes.STOP_PLAYLIST, payload: request }
+}
+
 export const showAddModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
 
 export const hideAddModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
