@@ -13,7 +13,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { getFormattedDuration } from '../../../../utils/dateUtils'
-import { playPlaylist, showDeleteModal } from '../../actions'
+import { playPlaylist, stopPlaylist, showDeleteModal } from '../../actions'
 
 class PlaylistCard extends Component {
   state = { anchorEl: null }
@@ -55,6 +55,7 @@ class PlaylistCard extends Component {
           onClose={this.closeMenu}
         >
           <MenuItem onClick={this.playPlaylist}>Play playlist</MenuItem>
+          <MenuItem onClick={this.props.stopPlaylist}>Stop playlist</MenuItem>
           <MenuItem component={Link} to={`/playlists/${playlist.id}`}>
             Edit playlist
           </MenuItem>
@@ -94,5 +95,5 @@ function mapStateToProps({ page: { playlistList } }) {
 
 export default connect(
   mapStateToProps,
-  { showDeleteModal, playPlaylist }
+  { showDeleteModal, playPlaylist, stopPlaylist }
 )(PlaylistCard)
