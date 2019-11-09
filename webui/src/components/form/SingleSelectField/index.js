@@ -1,2 +1,2 @@
-import SingleSelectField from './SingleSelectField';
-export default SingleSelectField;
+import SingleSelectField from './SingleSelectField'
+export default SingleSelectField

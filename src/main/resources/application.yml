@@ -23,6 +23,9 @@ datasources:
     password: ${JDBC_PASSWORD:}
     driverClassName: ${JDBC_DRIVER:org.h2.Driver}
 
+jackson:
+  serializationInclusion: ALWAYS # Include empty arrays in JSON output
+
 jpa:
   default:
     packages-to-scan:

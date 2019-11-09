@@ -1,2 +1,2 @@
-import MultiColorPickerField from './MultiColorPickerField';
-export default MultiColorPickerField;
+import MultiColorPickerField from './MultiColorPickerField'
+export default MultiColorPickerField
