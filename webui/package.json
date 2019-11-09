@@ -31,7 +31,7 @@
     "redux-promise-middleware": "5.1.1",
     "redux-undo": "1.0.0-beta9-9-7",
     "simplebar": "4.1.0",
-    "simplebar-react": "1.1.0",
+    "simplebar-react": "1.2.3",
     "svg-path-properties": "0.5.1",
     "uuid": "3.3.2",
     "wavesurfer.js": "2.0.6"
