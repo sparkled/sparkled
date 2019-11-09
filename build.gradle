@@ -84,6 +84,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
     mergeServiceFiles()
+    archiveName = "sparkled-${version}.jar"
 }
 
 mainClassName = 'io.sparkled.app.Main'
