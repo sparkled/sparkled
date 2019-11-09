@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ActionCreators } from 'redux-undo'
 import Alert from 'react-s-alert'
-import { Nav, NavItem, Table } from 'reactstrap'
+import { Table } from 'reactstrap'
 import AddSequenceModal from './components/AddSequenceModal'
 import PlaylistSequenceRow from './components/PlaylistSequenceRow'
 import { setCurrentPage } from '../actions'
@@ -15,6 +15,8 @@ import {
   savePlaylist,
   showAddSequenceModal
 } from './actions'
+import { IconButton } from '@material-ui/core'
+import { Add, Redo, Save, Undo } from '@material-ui/icons'
 
 const { undo, redo, clearHistory } = ActionCreators
 
@@ -25,7 +27,7 @@ class PlaylistEditPage extends Component {
     )
 
     return (
-      <PageContainer navbar={this.renderNavbar()}>{pageBody}</PageContainer>
+      <PageContainer actions={this.renderAction()}>{pageBody}</PageContainer>
     )
   }
 
@@ -51,7 +53,7 @@ class PlaylistEditPage extends Component {
     this.props.fetchSequences()
   }
 
-  renderNavbar() {
+  renderAction() {
     const {
       canUndo,
       canRedo,
@@ -65,28 +67,39 @@ class PlaylistEditPage extends Component {
     const loaded = playlist && sequences
 
     return (
-      <Nav className="ml-auto" navbar>
-        <NavItem className={!saving && loaded && canUndo ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => undo()}>
-            Undo
-          </span>
-        </NavItem>
-        <NavItem className={!saving && loaded && canRedo ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => redo()}>
-            Redo
-          </span>
-        </NavItem>
-        <NavItem className={!saving && loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={this.props.showAddSequenceModal}>
-            Add Sequence
-          </span>
-        </NavItem>
-        <NavItem className={!saving && loaded ? '' : 'd-none'}>
-          <span className="nav-link" onClick={() => savePlaylist(playlist)}>
-            Save
-          </span>
-        </NavItem>
-      </Nav>
+      <>
+        <IconButton
+          onClick={() => undo()}
+          disabled={saving || !loaded || !canUndo}
+          title="Undo"
+        >
+          <Undo />
+        </IconButton>
+
+        <IconButton
+          onClick={() => redo()}
+          disabled={saving || !loaded || !canRedo}
+          title="Redo"
+        >
+          <Redo />
+        </IconButton>
+
+        <IconButton
+          onClick={this.props.showAddSequenceModal}
+          disabled={saving || !loaded}
+          title="Add sequence"
+        >
+          <Add />
+        </IconButton>
+
+        <IconButton
+          onClick={() => savePlaylist(playlist)}
+          disabled={saving || !loaded}
+          title="Save playlist"
+        >
+          <Save />
+        </IconButton>
+      </>
     )
   }
 
