@@ -36,7 +36,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 The following software and hardware requirements must be met before installing the Sparkled server:
-* Java SE 8 JDK 8 or later
+* Java 11 or later
 * Gradle v4.8 or later
 * A modern web browser
 
