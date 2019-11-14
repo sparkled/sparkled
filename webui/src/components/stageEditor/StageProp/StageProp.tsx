@@ -52,19 +52,20 @@ const StageProp: React.FC<Props> = props => {
     dispatch({ type: 'SelectStageProp', payload: { uuid: stageProp.uuid } })
   }, [dispatch, stageProp.uuid])
 
-  useEffect(() => {
+  const setPosition = useCallback(() => {
     pixiContainer.x = stageProp.positionX + pixiContainer.width / 2
     pixiContainer.y = stageProp.positionY + pixiContainer.height / 2
   }, [pixiContainer, stageProp.positionX, stageProp.positionY])
 
-  useEffect(() => {
-    pixiContainer.scale.x = stageProp.scaleX
-    pixiContainer.scale.y = stageProp.scaleY
-  }, [pixiContainer, stageProp.scaleX, stageProp.scaleY])
-
-  useEffect(() => {
+  const setRotation = useCallback(() => {
     pixiContainer.rotation = (stageProp.rotation / 180) * Math.PI
   }, [pixiContainer, stageProp.rotation])
+
+  setPosition()
+  useEffect(setPosition, [pixiContainer, stageProp.positionX, stageProp.positionY])
+
+  setRotation()
+  useEffect(setRotation, [pixiContainer, stageProp.rotation])
 
   useEffect(() => {
     return () => {
@@ -159,7 +160,6 @@ function getLinePoints(
   pathProperties: SvgPathProperties,
   stageProp: StagePropViewModel
 ): Point[] {
-  logger.info('GET LINE POINTS')
   const length = pathProperties.getTotalLength()
 
   const linePoints: Point[] = []
