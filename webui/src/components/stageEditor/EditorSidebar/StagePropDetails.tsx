@@ -2,7 +2,11 @@ import { Button, Grid, TextField } from '@material-ui/core'
 import { find } from 'lodash'
 import React, { useCallback, useContext, useEffect } from 'react'
 import useForm from 'react-hook-form'
-import {CODE_NAME, POSITIVE_INTEGER, POSITIVE_NUMBER} from '../../../utils/regexes'
+import {
+  CODE_NAME,
+  POSITIVE_INTEGER,
+  POSITIVE_NUMBER
+} from '../../../utils/regexes'
 import {
   StageEditorDispatchContext,
   StageEditorStateContext
@@ -32,17 +36,28 @@ const StagePropDetails: React.FC = () => {
       setValue('scaleX', stageProp.scaleX.toString(), true)
       setValue('scaleY', stageProp.scaleY.toString(), true)
       setValue('rotation', stageProp.rotation.toString(), true)
+      setValue('ledCount', stageProp.ledCount.toString(), true)
     }
   }, [reset, setValue, stageProp])
 
-  const [code, name, positionX, positionY, scaleX, scaleY, rotation] = watch([
+  const [
+    code,
+    name,
+    positionX,
+    positionY,
+    scaleX,
+    scaleY,
+    rotation,
+    ledCount
+  ] = watch([
     'code',
     'name',
     'positionX',
     'positionY',
     'scaleX',
     'scaleY',
-    'rotation'
+    'rotation',
+    'ledCount'
   ])
 
   useEffect(() => {
@@ -96,6 +111,15 @@ const StagePropDetails: React.FC = () => {
     }
   }, [dispatch, errors.rotation, rotation])
 
+  useEffect(() => {
+    if (!errors.ledCount) {
+      dispatch({
+        type: 'UpdateStagePropLedCount',
+        payload: { ledCount: Number(ledCount) }
+      })
+    }
+  }, [dispatch, errors.ledCount, ledCount])
+
   const deleteStageProp = useCallback(() => {
     dispatch({ type: 'DeleteStageProp' })
   }, [dispatch])
@@ -131,7 +155,7 @@ const StagePropDetails: React.FC = () => {
             disabled={!hasStageProp}
             error={errors.name !== undefined}
             inputRef={register({
-              required: true,
+              required: true
             })}
           />
         </Grid>
@@ -228,7 +252,25 @@ const StagePropDetails: React.FC = () => {
             })}
           />
         </Grid>
-        <Grid item xs={6}/>
+        <Grid item xs={6} />
+
+        <Grid item xs={6}>
+          <TextField
+            variant="outlined"
+            label="LED Count"
+            name="ledCount"
+            type="number"
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+            disabled={!hasStageProp}
+            error={errors.ledCount !== undefined}
+            inputRef={register({
+              required: true,
+              min: 1,
+              pattern: POSITIVE_INTEGER
+            })}
+          />
+        </Grid>
 
         <Grid item xs={12}>
           <Button

@@ -1,8 +1,8 @@
-import produce, {immerable} from 'immer'
-import {identity, remove} from 'lodash'
-import React, {createContext, Dispatch} from 'react'
-import {StagePropViewModel, StageViewModel} from '../../types/ViewModel'
-import {StagePropType} from '../../data/stagePropTypes'
+import produce, { immerable } from 'immer'
+import { identity, remove } from 'lodash'
+import React, { createContext, Dispatch } from 'react'
+import { StagePropViewModel, StageViewModel } from '../../types/ViewModel'
+import { StagePropType } from '../../data/stagePropTypes'
 import uuidv4 from 'uuid/v4'
 
 export class State {
@@ -19,6 +19,7 @@ export type Action =
   | { type: 'MoveStageProp'; payload: { x: number; y: number } }
   | { type: 'ScaleStageProp'; payload: { x: number; y: number } }
   | { type: 'RotateStageProp'; payload: { rotation: number } }
+  | { type: 'UpdateStagePropLedCount'; payload: { ledCount: number } }
   | { type: 'DeleteStageProp' }
 
 export const StageEditorStateContext = createContext<State>(new State())
@@ -59,6 +60,9 @@ export const stageEditorReducer: React.Reducer<State, Action> = (
       case 'RotateStageProp':
         rotateStageProp(selectedStageProp, action.payload.rotation)
         break
+      case 'UpdateStagePropLedCount':
+        updateStagePropLedCount(selectedStageProp, action.payload.ledCount)
+        break
       case 'DeleteStageProp':
         deleteStageProp(draft)
         break
@@ -89,30 +93,48 @@ function addStageProp(draft: State, type: StagePropType) {
   stage.stageProps.forEach((stageProp, i) => (stageProp.displayOrder = i))
 }
 
-function moveStageProp(stageProp: StagePropViewModel | undefined, x: number, y: number) {
+function moveStageProp(
+  stageProp: StagePropViewModel | undefined,
+  x: number,
+  y: number
+) {
   if (stageProp) {
     stageProp.positionX = x
     stageProp.positionY = y
   }
 }
 
-function scaleStageProp(stageProp: StagePropViewModel | undefined, x: number, y: number) {
+function scaleStageProp(
+  stageProp: StagePropViewModel | undefined,
+  x: number,
+  y: number
+) {
   if (stageProp) {
     stageProp.scaleX = x
     stageProp.scaleY = y
   }
 }
 
-function rotateStageProp(stageProp: StagePropViewModel | undefined, rotation: number) {
+function rotateStageProp(
+  stageProp: StagePropViewModel | undefined,
+  rotation: number
+) {
   if (stageProp) {
     stageProp.rotation = rotation
   }
 }
 
-let getSelectedStageProp = function (draft: State) {
-  return draft.stage.stageProps.find(
-    sp => sp.uuid === draft.selectedStageProp
-  )
+function updateStagePropLedCount(
+  stageProp: StagePropViewModel | undefined,
+  ledCount: number
+) {
+  if (stageProp) {
+    stageProp.ledCount = ledCount
+  }
+}
+
+let getSelectedStageProp = function(draft: State) {
+  return draft.stage.stageProps.find(sp => sp.uuid === draft.selectedStageProp)
 }
 
 function deleteStageProp(draft: State) {
