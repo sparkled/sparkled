@@ -17,6 +17,7 @@ import {
 } from './actions'
 import { IconButton } from '@material-ui/core'
 import { Add, Redo, Save, Undo } from '@material-ui/icons'
+import { getErrorMessage } from '../../utils/errorUtils'
 
 const { undo, redo, clearHistory } = ActionCreators
 
@@ -36,7 +37,7 @@ class PlaylistEditPage extends Component {
     if (didSave) {
       const saveError = nextProps.saveError
       if (saveError) {
-        Alert.error(`Save failed: ${saveError}`)
+        Alert.error(`Save failed: ${getErrorMessage(saveError)}`)
       } else {
         Alert.success('Playlist saved successfully')
       }

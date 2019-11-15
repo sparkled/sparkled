@@ -7,16 +7,17 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Error
 import io.sparkled.model.validator.exception.EntityValidationException
+import io.sparkled.rest.response.UserFriendlyErrorResponse
 import io.sparkled.viewmodel.exception.ViewModelConversionException
 import org.slf4j.LoggerFactory
 
 @Controller
 class ErrorController {
 
-    @Error(global = true, status = HttpStatus.INTERNAL_SERVER_ERROR)
+    @Error(global = true, exception = Throwable::class)
     fun handleInternalServerError(request: HttpRequest<Any>, t: Throwable): HttpResponse<Any> {
         return if (t is EntityValidationException || t is ViewModelConversionException) {
-            HttpResponse.badRequest(t.message!!)
+            HttpResponse.badRequest(UserFriendlyErrorResponse(t.message!!))
         } else {
             logger.error("Unexpected error response for URI '${request.path}':", t)
             HttpResponse.serverError("An unexpected error occurred.")

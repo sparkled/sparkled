@@ -17,55 +17,55 @@ class SequenceChannelValidator {
         val channelJson = channel.getChannelJson()
 
         if (channel.getUuid() == null) {
-            throw EntityValidationException(Errors.UUID_MISSING)
+            throw EntityValidationException(String.format(Errors.UUID_MISSING, channel.getName()))
         } else if (channelJson == null) {
-            throw EntityValidationException(Errors.CHANNEL_JSON_MISSING)
+            throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MISSING, channel.getName()))
         }
 
-        val effects = getEffectsFromJson(channelJson)
-        validateChannelEffects(effects)
+        val effects = getEffectsFromJson(channel)
+        validateChannelEffects(channel, effects.effects)
     }
 
-    private fun getEffectsFromJson(rawAnimationData: String): SequenceChannelEffects {
+    private fun getEffectsFromJson(channel: SequenceChannel): SequenceChannelEffects {
         try {
-            return ObjectMapper().readValue(rawAnimationData, SequenceChannelEffects::class.java)
+            return ObjectMapper().readValue(channel.getChannelJson(), SequenceChannelEffects::class.java)
         } catch (e: JsonProcessingException) {
-            throw EntityValidationException(Errors.CHANNEL_JSON_MALFORMED, e)
+            throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MALFORMED, channel.getName()), e)
         }
     }
 
-    private fun validateChannelEffects(channelEffects: SequenceChannelEffects) {
+    private fun validateChannelEffects(channel: SequenceChannel, effects: List<Effect>) {
         var previousEndFrame: Int = -1
 
-        for (effect in channelEffects.effects) {
-            validateEffect(effect, previousEndFrame)
+        for (effect in effects) {
+            validateEffect(channel, effect, previousEndFrame)
             previousEndFrame = effect.endFrame
         }
     }
 
-    private fun validateEffect(effect: Effect, previousEndFrame: Int) {
+    private fun validateEffect(channel: SequenceChannel, effect: Effect, previousEndFrame: Int) {
         if (effect.type === EffectTypeCode.NONE) {
-            throw EntityValidationException(String.format(Errors.EFFECT_TYPE_MISSING, effect.startFrame))
+            throw EntityValidationException(String.format(Errors.EFFECT_TYPE_MISSING, effect.startFrame, channel.getName()))
         }
 
         if (effect.easing.type === EasingTypeCode.NONE) {
-            throw EntityValidationException(String.format(Errors.EFFECT_EASING_TYPE_MISSING, effect.startFrame))
+            throw EntityValidationException(String.format(Errors.EFFECT_EASING_TYPE_MISSING, effect.startFrame, channel.getName()))
         }
 
         if (effect.startFrame > effect.endFrame) {
-            throw EntityValidationException(String.format(Errors.EFFECT_BACK_TO_FRONT, effect.startFrame))
+            throw EntityValidationException(String.format(Errors.EFFECT_BACK_TO_FRONT, effect.startFrame, channel.getName()))
         }
 
         if (effect.startFrame < previousEndFrame) {
-            throw EntityValidationException(String.format(Errors.EFFECT_OVERLAPPING, previousEndFrame))
+            throw EntityValidationException(String.format(Errors.EFFECT_OVERLAPPING, previousEndFrame, channel.getName()))
         }
 
         if (effect.repetitions <= 0) {
-            throw EntityValidationException(String.format(Errors.EFFECT_REPETITIONS_INVALID, effect.startFrame))
+            throw EntityValidationException(String.format(Errors.EFFECT_REPETITIONS_INVALID, effect.startFrame, channel.getName()))
         }
 
         if (effect.repetitionSpacing < 0) {
-            throw EntityValidationException(String.format(Errors.EFFECT_REPETITION_SPACING_INVALID, effect.startFrame))
+            throw EntityValidationException(String.format(Errors.EFFECT_REPETITION_SPACING_INVALID, effect.startFrame, channel.getName()))
         }
 
         val args = effect.getArguments()
@@ -81,21 +81,21 @@ class SequenceChannelValidator {
     }
 
     private object Errors {
-        internal const val UUID_MISSING = "Sequence channel has no unique identifier."
-        internal const val CHANNEL_JSON_MISSING = "Sequence has no animation data."
-        internal const val CHANNEL_JSON_MALFORMED = "Sequence channel data is malformed."
+        internal const val UUID_MISSING = "Channel '%s' has no unique identifier."
+        internal const val CHANNEL_JSON_MISSING = "Channel '%s' has no animation data."
+        internal const val CHANNEL_JSON_MALFORMED = "Channel '%s' has malformed effect data."
 
-        internal const val EFFECT_TYPE_MISSING = "Effect type cannot be empty for effect at frame %d in channel."
+        internal const val EFFECT_TYPE_MISSING = "Effect type cannot be empty for effect at frame %d in channel '%s'."
         internal const val EFFECT_EASING_TYPE_MISSING =
-            "EasingFunction type cannot be empty for effect at frame %d in channel."
+            "EasingFunction type cannot be empty for effect at frame %d in channel '%s'."
         internal const val EFFECT_BACK_TO_FRONT =
-            "Effect start frame cannot be after end frame for effect at frame %d in channel."
-        internal const val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d for channel."
+            "Effect start frame cannot be after end frame for effect at frame %d in channel '%s'."
+        internal const val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d in channel '%s'."
         internal const val EFFECT_REPETITIONS_INVALID =
-            "Effect repetitions cannot be less than 1 for effect at frame %d in channel."
+            "Effect repetitions cannot be less than 1 for effect at frame %d in channel '%s'."
         internal const val EFFECT_REPETITION_SPACING_INVALID =
-            "Effect repetition spacing cannot be less than 0 for effect at frame %d in channel."
+            "Effect repetition spacing cannot be less than 0 for effect at frame %d in channel '%s'."
         internal const val EFFECT_ARGUMENT_CODE_MISSING =
-            "Effect argument code cannot be empty for effect at frame %d in channel."
+            "Effect argument code cannot be empty for effect at frame %d in channel '%s'."
     }
 }

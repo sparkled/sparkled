@@ -39,6 +39,7 @@ import {
   Star,
   PlayArrow
 } from '@material-ui/icons'
+import { getErrorMessage } from '../../utils/errorUtils'
 
 const { undo, redo, clearHistory } = ActionCreators
 
@@ -112,7 +113,7 @@ class SequenceEditPage extends Component {
     if (didSave) {
       const saveError = nextProps.saveError
       if (saveError) {
-        Alert.error(`Save failed: ${saveError}`)
+        Alert.error(`Save failed: ${getErrorMessage(saveError)}`)
       } else {
         Alert.success('Sequence saved successfully')
       }
