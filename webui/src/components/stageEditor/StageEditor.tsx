@@ -283,7 +283,7 @@ function renderStageProps(
   return _.map(stage.stageProps, stageProp => {
     // Keying on type will recreate the component with the correct path when its type changes.
     // Keying on scale rebuilds the prop line data whenever the prop is resized.
-    const key = `${stageProp.uuid!}:${stageProp.type!}:${stageProp.scaleX}:${stageProp.scaleY}`
+    const key = `${stageProp.uuid!}:${stageProp.type!}:${stageProp.scaleX}:${stageProp.scaleY}:${stageProp.ledCount}`
     return (
       <StageProp
         key={key}

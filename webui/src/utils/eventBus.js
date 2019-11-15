@@ -6,24 +6,22 @@ export const eventType = {
   RENDER_DATA: 'RENDER_DATA'
 }
 
-export const subscribe = (eventType, key, callback) => {
+export const subscribe = (eventType, callback) => {
   if (!subscribers[eventType]) {
-    subscribers[eventType] = {}
+    subscribers[eventType] = []
   }
 
-  subscribers[eventType][key] = callback
+  subscribers[eventType].push(callback)
 }
 
-export const unsubscribe = (eventType, key) => {
+export const unsubscribe = (eventType, callback) => {
   if (subscribers[eventType]) {
-    delete subscribers[eventType][key]
+    _.remove(subscribers[eventType], c => c === callback)
   }
 }
 
 export const publish = (eventType, data) => {
   if (subscribers[eventType]) {
-    _(subscribers[eventType])
-      .values()
-      .forEach(callback => callback(data))
+    _(subscribers[eventType]).forEach(callback => callback(data))
   }
 }

@@ -13,6 +13,7 @@ import { StageEditorDispatchContext } from '../StageEditorReducer'
 import StagePropBackground from './StagePropBackground'
 import StagePropPath from './StagePropPath'
 import StagePropRotateHandle from './StagePropRotateHandle'
+import StagePropLeds from './StagePropLeds'
 
 const logger = new Logger('StageProp')
 
@@ -37,8 +38,11 @@ interface State {
   /** The height of the unscaled stage prop. */
   height: number
 
-  /** The scaled points of the line. */
-  points: Point[]
+  /** The scaled points of the path that makes up the stage prop. */
+  pathPoints: Point[]
+
+  /** The position of the LEDs on the stage prop. */
+  ledPoints: Point[]
 }
 
 const StageProp: React.FC<Props> = props => {
@@ -46,7 +50,7 @@ const StageProp: React.FC<Props> = props => {
 
   const [state] = useState<State>(() => initState(props.pixiApp, stageProp))
   const dispatch = useContext(StageEditorDispatchContext)
-  const { pixiContainer, width, height, points } = state
+  const { pixiContainer, width, height, pathPoints, ledPoints } = state
 
   const selectStageProp = useCallback(() => {
     dispatch({ type: 'SelectStageProp', payload: { uuid: stageProp.uuid } })
@@ -110,7 +114,15 @@ const StageProp: React.FC<Props> = props => {
 
       <StagePropPath
         parent={pixiContainer}
-        points={points}
+        points={pathPoints}
+        width={width}
+        height={height}
+      />
+
+      <StagePropLeds
+        parent={pixiContainer}
+        uuid={stageProp.uuid}
+        points={ledPoints}
         width={width}
         height={height}
       />
@@ -133,14 +145,15 @@ function initState(
   const { path } = stagePropTypes[stageProp.type!]
   const pathProperties = svgPathProperties(path)
 
-  const points = getLinePoints(pathProperties, stageProp)
-  const width = _.maxBy(points, 'x')!.x
-  const height = _.maxBy(points, 'y')!.y
+  const pathPoints = getLinePoints(pathProperties, stageProp)
+  const ledPoints = getLinePoints(pathProperties, stageProp, stageProp.ledCount)
+  const width = _.maxBy(pathPoints, 'x')!.x
+  const height = _.maxBy(pathPoints, 'y')!.y
 
   const pixiContainer = buildContainer(stageProp, width, height)
   pixiApp.stage.addChild(pixiContainer)
 
-  return { pixiContainer, points, width, height }
+  return { pixiContainer, pathPoints, ledPoints, width, height }
 }
 
 function buildContainer(
@@ -158,17 +171,23 @@ function buildContainer(
 
 function getLinePoints(
   pathProperties: SvgPathProperties,
-  stageProp: StagePropViewModel
+  stageProp: StagePropViewModel,
+  pointCount: number = -1
 ): Point[] {
   const length = pathProperties.getTotalLength()
+  pointCount = pointCount === -1 ? Math.floor(length) : pointCount
 
   const linePoints: Point[] = []
-  const pointCount = Math.floor(length)
-  _.forEach(Array(pointCount + 1), (a, i) => {
-    const progress = length * (i / pointCount)
-    const point = pathProperties.getPointAtLength(progress)
-    linePoints.push(point)
-  })
+
+  if (pointCount === 1) {
+    linePoints.push(pathProperties.getPointAtLength(length * .5))
+  } else {
+    _.forEach(Array(pointCount), (a, i) => {
+      const progress = length * (i / (pointCount - 1))
+      const point = pathProperties.getPointAtLength(progress)
+      linePoints.push(point)
+    })
+  }
 
   return _.map(linePoints, point => ({
     x: point.x * stageProp.scaleX!,

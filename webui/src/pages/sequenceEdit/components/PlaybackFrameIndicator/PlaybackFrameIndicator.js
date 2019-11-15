@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 import { eventType, subscribe, unsubscribe } from '../../../../utils/eventBus'
 import './PlaybackFrameIndicator.css'
 
-const key = 'PlaybackFrameIndicator'
-
 class PlaybackFrameIndicator extends Component {
   constructor(props) {
     super(props)
@@ -12,7 +10,7 @@ class PlaybackFrameIndicator extends Component {
   }
 
   componentDidMount() {
-    subscribe(eventType.RENDER_DATA, key, this.updateIndicator)
+    subscribe(eventType.RENDER_DATA, this.updateIndicator)
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -33,15 +31,15 @@ class PlaybackFrameIndicator extends Component {
   }
 
   componentWillUnmount() {
-    unsubscribe(eventType.RENDER_DATA, this)
+    unsubscribe(eventType.RENDER_DATA, this.updateIndicator)
   }
 
-  updateIndicator = ({ renderData, playbackFrame }) => {
+  updateIndicator = data => {
     const node = this.ref.current
 
-    if (renderData) {
+    if (data) {
       node.style.display = ''
-      node.style.left = `${playbackFrame * this.props.pixelsPerFrame}px`
+      node.style.left = `${data.playbackFrame * this.props.pixelsPerFrame}px`
     } else {
       node.style.display = 'none'
     }

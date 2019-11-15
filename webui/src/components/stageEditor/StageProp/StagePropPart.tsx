@@ -1,4 +1,4 @@
-declare interface StagePropPart {
+type StagePropPart = {
   /** A unique name for a part of the stage prop. */
   name: string
 
@@ -12,5 +12,8 @@ export const background: StagePropPart = { name: 'Background', zIndex: 0 }
 /** The line representing the physical stage prop object. */
 export const path: StagePropPart = { name: 'Path', zIndex: 1 }
 
+/** An LED on the stage prop. */
+export const led: StagePropPart = { name: 'Led', zIndex: 2 }
+
 /** An interactive handle that rotates the stage prop when moved by the user. */
-export const rotateHandle: StagePropPart = { name: 'RotateHandle', zIndex: 2 }
+export const rotateHandle: StagePropPart = { name: 'RotateHandle', zIndex: 3 }

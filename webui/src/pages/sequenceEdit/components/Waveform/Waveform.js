@@ -98,7 +98,7 @@ class Waveform extends Component {
       if (playbackFrame < currentFrame + renderData.frameCount - 1) {
         publish(eventType.RENDER_DATA, { renderData, playbackFrame })
       } else {
-        publish(eventType.RENDER_DATA, {})
+        publish(eventType.RENDER_DATA, null)
         this.performWithoutSeek(() => this.waveSurfer.stop())
       }
     }

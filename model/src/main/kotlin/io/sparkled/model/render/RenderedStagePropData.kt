@@ -1,11 +1,12 @@
 package io.sparkled.model.render
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.ArrayList
 
 class RenderedStagePropData(startFrame: Int, endFrame: Int, val ledCount: Int, val data: ByteArray) {
 
     // Don't serialise frames to JSON, as each frame contains a reference to the (very large) data array
-    @Transient
+    @JsonIgnore
     val frames: List<RenderedFrame>
 
     init {
