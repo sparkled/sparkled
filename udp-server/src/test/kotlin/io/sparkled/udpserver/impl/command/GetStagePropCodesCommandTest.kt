@@ -1,6 +1,5 @@
 package io.sparkled.udpserver.impl.command
 
-import io.sparkled.model.entity.Playlist
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.Song
 import io.sparkled.model.entity.SongAudio
@@ -22,8 +21,8 @@ internal class GetStagePropCodesCommandTest {
             args = listOf(GetStagePropCodesCommand.KEY),
             settings = SettingsCache(0),
             playbackState = PlaybackState(
-                playlist = Playlist(),
-                playlistIndex = 0,
+                sequences = emptyList(),
+                sequenceIndex = 0,
                 progressFunction = { 0.0 },
                 sequence = Sequence(),
                 song = Song(),

@@ -1,6 +1,7 @@
 package io.sparkled.model.playlist
 
 enum class PlaylistActionType {
-    PLAY,
+    PLAY_PLAYLIST,
+    PLAY_SEQUENCE,
     STOP
 }

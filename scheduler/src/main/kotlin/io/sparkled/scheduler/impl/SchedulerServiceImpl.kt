@@ -92,8 +92,8 @@ open class SchedulerServiceImpl(
 
     @Synchronized
     private fun playPlaylist(job: ScheduledJob) {
-        val playlist = playlistPersistenceService.getPlaylistById(job.playlistId!!)
-        playlist?.apply(playbackService::play)
+        val sequences = playlistPersistenceService.getSequencesByPlaylistId(job.playlistId ?: -1)
+        playbackService.play(sequences)
     }
 
     @Synchronized

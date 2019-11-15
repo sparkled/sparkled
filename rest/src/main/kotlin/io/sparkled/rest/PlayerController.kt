@@ -8,34 +8,40 @@ import io.sparkled.model.playlist.PlaylistAction
 import io.sparkled.model.playlist.PlaylistActionType
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
+import io.sparkled.persistence.sequence.SequencePersistenceService
 
 @Controller("/rest/player")
 open class PlayerController(
     private val playbackService: PlaybackService,
-    private val playlistPersistenceService: PlaylistPersistenceService
+    private val playlistPersistenceService: PlaylistPersistenceService,
+    private val sequencePersistenceService: SequencePersistenceService
 ) {
 
     @Post("/")
     @Transactional(readOnly = true)
     open fun adjustPlayback(action: PlaylistAction): HttpResponse<Any> {
-        val type = action.getType()
-        if (type == null) {
-            return HttpResponse.badRequest("A valid playback action must be supplied.")
-        } else if (type === PlaylistActionType.PLAY) {
-            if (!play(action)) {
-                return HttpResponse.notFound("Playlist not found.")
+        return when (action.type) {
+            PlaylistActionType.PLAY_PLAYLIST, PlaylistActionType.PLAY_SEQUENCE -> {
+                play(action)
+                HttpResponse.ok()
             }
-        } else if (type === PlaylistActionType.STOP) {
-            stop()
+            PlaylistActionType.STOP -> {
+                stop()
+                HttpResponse.ok()
+            }
+            else -> HttpResponse.badRequest("A valid playback action must be supplied.")
         }
-
-        return HttpResponse.ok()
     }
 
-    private fun play(action: PlaylistAction): Boolean {
-        val playlist = playlistPersistenceService.getPlaylistById(action.getPlaylistId()!!)
-        playlist?.apply(playbackService::play)
-        return playlist != null
+    private fun play(action: PlaylistAction) {
+        val sequences = if (action.type === PlaylistActionType.PLAY_PLAYLIST) {
+            playlistPersistenceService.getSequencesByPlaylistId(action.playlistId ?: -1)
+        } else {
+            val sequence = sequencePersistenceService.getSequenceById(action.sequenceId ?: -1)
+            if (sequence === null) emptyList() else listOf(sequence)
+        }
+
+        playbackService.play(sequences)
     }
 
     private fun stop() {

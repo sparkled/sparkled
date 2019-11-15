@@ -1,6 +1,5 @@
 package io.sparkled.music
 
-import io.sparkled.model.entity.Playlist
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.Song
 import io.sparkled.model.entity.SongAudio
@@ -12,8 +11,8 @@ import io.sparkled.model.render.RenderedStagePropDataMap
  * playback and associated rendered data for streaming to clients.
  */
 data class PlaybackState(
-    val playlist: Playlist? = null,
-    val playlistIndex: Int = 0,
+    val sequences: List<Sequence>? = null,
+    val sequenceIndex: Int = 0,
     private val progressFunction: () -> Double = { 0.0 },
     val sequence: Sequence? = null,
     val song: Song? = null,
@@ -23,7 +22,7 @@ data class PlaybackState(
 ) {
 
     val isEmpty: Boolean
-        get() = playlist == null || sequence == null || song == null || songAudio == null || renderedStageProps == null
+        get() = sequences == null || sequence == null || song == null || songAudio == null || renderedStageProps == null
 
     val progress: Double
         get() = progressFunction.invoke()

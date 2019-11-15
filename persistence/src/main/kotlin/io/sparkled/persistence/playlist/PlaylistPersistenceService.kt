@@ -18,6 +18,8 @@ interface PlaylistPersistenceService {
 
     fun getSequenceAtPlaylistIndex(playlistId: Int, index: Int): Sequence?
 
+    fun getSequencesByPlaylistId(playlistId: Int): List<Sequence>
+
     fun getPlaylistSequencesByPlaylistId(playlistId: Int): List<PlaylistSequence>
 
     fun getPlaylistSequenceByUuid(sequenceId: Int, uuid: UUID): PlaylistSequence?

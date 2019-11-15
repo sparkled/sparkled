@@ -18,6 +18,8 @@ import { Link } from 'react-router-dom'
 import { getFormattedDuration } from '../../../../utils/dateUtils'
 import { showDeleteModal } from '../../actions'
 import * as sequenceStatuses from '../../sequenceStatuses'
+import axios from 'axios'
+import * as restConfig from '../../../../config/restConfig'
 
 const styles = () => ({
   topRow: {
@@ -88,10 +90,25 @@ class SequenceCard extends Component {
           <MenuItem component={Link} to={`/sequences/${sequence.id}`}>
             Edit sequence
           </MenuItem>
+          <MenuItem onClick={this.playSequence}>Play sequence</MenuItem>
+          <MenuItem onClick={this.stopSequence}>Stop sequence</MenuItem>
           <MenuItem onClick={this.showDeleteModal}>Delete sequence</MenuItem>
         </Menu>
       </>
     )
+  }
+
+  playSequence = () => {
+    const playlistAction = {
+      type: 'PLAY_SEQUENCE',
+      sequenceId: this.props.sequence.id
+    }
+    axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
+  }
+
+  stopSequence = () => {
+    const playlistAction = { type: 'STOP' }
+    axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
   }
 
   openMenu = event => {

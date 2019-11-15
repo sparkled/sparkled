@@ -14,6 +14,7 @@ import io.sparkled.persistence.playlist.impl.query.GetPlaylistSequenceByUuidQuer
 import io.sparkled.persistence.playlist.impl.query.GetPlaylistSequencesByPlaylistIdQuery
 import io.sparkled.persistence.playlist.impl.query.GetPlaylistSummariesQuery
 import io.sparkled.persistence.playlist.impl.query.GetSequenceAtPlaylistIndexQuery
+import io.sparkled.persistence.playlist.impl.query.GetSequencesByPlaylistIdQuery
 import io.sparkled.persistence.playlist.impl.query.SavePlaylistQuery
 import io.sparkled.persistence.playlist.impl.query.SavePlaylistSequencesQuery
 import java.util.UUID
@@ -44,6 +45,10 @@ class PlaylistPersistenceServiceImpl(private val queryFactory: QueryFactory) : P
 
     override fun getSequenceAtPlaylistIndex(playlistId: Int, index: Int): Sequence? {
         return GetSequenceAtPlaylistIndexQuery(playlistId, index).perform(queryFactory)
+    }
+
+    override fun getSequencesByPlaylistId(playlistId: Int): List<Sequence> {
+        return GetSequencesByPlaylistIdQuery(playlistId).perform(queryFactory)
     }
 
     override fun getPlaylistSequencesByPlaylistId(playlistId: Int): List<PlaylistSequence> {

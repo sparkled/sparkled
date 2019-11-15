@@ -19,7 +19,7 @@ export const deletePlaylist = playlistId => {
 }
 
 export const playPlaylist = playlistId => {
-  const playlistAction = { type: 'PLAY', playlistId }
+  const playlistAction = { type: 'PLAY_PLAYLIST', playlistId }
   const request = axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
   return { type: actionTypes.PLAY_PLAYLIST, payload: request }
 }
