@@ -100,14 +100,14 @@ class SequenceCard extends Component {
 
   playSequence = () => {
     const playlistAction = {
-      type: 'PLAY_SEQUENCE',
+      action: 'PLAY_SEQUENCE',
       sequenceId: this.props.sequence.id
     }
     axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
   }
 
   stopSequence = () => {
-    const playlistAction = { type: 'STOP' }
+    const playlistAction = { action: 'STOP' }
     axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
   }
 

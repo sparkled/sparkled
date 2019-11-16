@@ -1,6 +1,7 @@
 package io.sparkled.rest
 
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.micronaut.spring.tx.annotation.Transactional
@@ -19,8 +20,8 @@ open class PlayerController(
 
     @Post("/")
     @Transactional(readOnly = true)
-    open fun adjustPlayback(action: PlaylistAction): HttpResponse<Any> {
-        return when (action.type) {
+    open fun adjustPlayback(@Body action: PlaylistAction): HttpResponse<Any> {
+        return when (action.action) {
             PlaylistActionType.PLAY_PLAYLIST, PlaylistActionType.PLAY_SEQUENCE -> {
                 play(action)
                 HttpResponse.ok()
@@ -34,7 +35,7 @@ open class PlayerController(
     }
 
     private fun play(action: PlaylistAction) {
-        val sequences = if (action.type === PlaylistActionType.PLAY_PLAYLIST) {
+        val sequences = if (action.action === PlaylistActionType.PLAY_PLAYLIST) {
             playlistPersistenceService.getSequencesByPlaylistId(action.playlistId ?: -1)
         } else {
             val sequence = sequencePersistenceService.getSequenceById(action.sequenceId ?: -1)
