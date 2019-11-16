@@ -14,7 +14,7 @@ import io.sparkled.rest.response.IdResponse
 import io.sparkled.viewmodel.song.SongViewModel
 import io.sparkled.viewmodel.song.SongViewModelConverter
 
-@Controller("/rest/songs")
+@Controller("/api/songs")
 open class SongController(
     private val songPersistenceService: SongPersistenceService,
     private val songViewModelConverter: SongViewModelConverter

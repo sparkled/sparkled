@@ -7,7 +7,7 @@ import io.sparkled.model.animation.easing.reference.EasingTypes
 import io.sparkled.model.animation.effect.reference.EffectTypes
 import io.sparkled.model.animation.fill.reference.FillTypes
 
-@Controller("/rest")
+@Controller("/api")
 open class ReferenceDataController {
 
     @Get("/easingTypes")

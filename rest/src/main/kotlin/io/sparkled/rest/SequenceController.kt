@@ -31,7 +31,7 @@ import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter
 import java.util.UUID
 import kotlin.math.min
 
-@Controller("/rest/sequences")
+@Controller("/api/sequences")
 open class SequenceController(
     private val sequencePersistenceService: SequencePersistenceService,
     private val songPersistenceService: SongPersistenceService,

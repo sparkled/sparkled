@@ -14,7 +14,7 @@ import io.sparkled.viewmodel.stage.StageViewModelConverter
 import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter
 import io.sparkled.viewmodel.stage.search.StageSearchViewModelConverter
 
-@Controller("/rest/stages")
+@Controller("/api/stages")
 open class StageController(
     private val stagePersistenceService: StagePersistenceService,
     private val stageSearchViewModelConverter: StageSearchViewModelConverter,

@@ -13,7 +13,7 @@ import io.sparkled.viewmodel.scheduledjob.ScheduledJobViewModel
 import io.sparkled.viewmodel.scheduledjob.ScheduledJobViewModelConverter
 import io.sparkled.viewmodel.scheduledjob.search.ScheduledJobSearchViewModelConverter
 
-@Controller("/rest/scheduledJobs")
+@Controller("/api/scheduledJobs")
 open class ScheduledJobController(
     private val schedulerService: SchedulerService,
     private val scheduledJobPersistenceService: ScheduledJobPersistenceService,

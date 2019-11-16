@@ -10,7 +10,7 @@ import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.playlist.PlaylistPersistenceService
 import io.sparkled.persistence.sequence.SequencePersistenceService
 
-@Controller("/rest/player")
+@Controller("/api/player")
 open class PlayerController(
     private val playbackService: PlaybackService,
     private val playlistPersistenceService: PlaylistPersistenceService,

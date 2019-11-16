@@ -9,7 +9,7 @@ import io.sparkled.model.entity.Setting
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.setting.SettingPersistenceService
 
-@Controller("/rest/settings")
+@Controller("/api/settings")
 open class SettingController(
     private val settingPersistenceService: SettingPersistenceService
 ) {

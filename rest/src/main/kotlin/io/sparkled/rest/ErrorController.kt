@@ -26,7 +26,7 @@ class ErrorController {
 
     @Error(global = true, status = HttpStatus.NOT_FOUND)
     fun handleNotFoundError(request: HttpRequest<Any>): HttpResponse<out Any> {
-        return if (!request.path.startsWith("/rest")) {
+        return if (!request.path.startsWith("/api")) {
             return rerouteUiRequest()
         } else {
             HttpResponse.notFound()

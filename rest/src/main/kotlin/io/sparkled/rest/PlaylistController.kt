@@ -14,7 +14,7 @@ import io.sparkled.viewmodel.playlist.PlaylistViewModelConverter
 import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModelConverter
 import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModelConverter
 
-@Controller("/rest/playlists")
+@Controller("/api/playlists")
 open class PlaylistController(
     private val playlistPersistenceService: PlaylistPersistenceService,
     private val playlistSearchViewModelConverter: PlaylistSearchViewModelConverter,
