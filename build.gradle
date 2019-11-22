@@ -17,7 +17,7 @@ configurations {
 }
 
 allprojects { project ->
-    version '0.0.3'
+    version '0.0.4'
     group 'io.sparkled'
 
     apply plugin: 'io.spring.dependency-management'
