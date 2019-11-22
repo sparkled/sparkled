@@ -2,17 +2,13 @@ package io.sparkled.music.impl
 
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackState
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.InputStream
-import java.util.HashSet
+import java.util.*
 import javax.inject.Singleton
-import javax.sound.sampled.AudioFormat
-import javax.sound.sampled.AudioInputStream
-import javax.sound.sampled.AudioSystem
-import javax.sound.sampled.Clip
-import javax.sound.sampled.LineEvent
-import javax.sound.sampled.LineListener
-import org.slf4j.LoggerFactory
+import javax.sound.sampled.*
+import kotlin.math.min
 
 @Singleton
 class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
@@ -66,7 +62,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
             return if (clip == null) {
                 0.0
             } else {
-                Math.min(1.0, clip.framePosition / clip.frameLength.toDouble())
+                min(1.0, clip.framePosition / clip.frameLength.toDouble())
             }
         }
 

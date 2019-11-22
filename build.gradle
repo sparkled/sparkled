@@ -92,6 +92,7 @@ mainClassName = 'io.sparkled.app.Main'
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
 
 dependencies {
+    implementation project(':persistence')
     implementation project(':rest')
     implementation project(':scheduler')
     implementation project(':udp-server')

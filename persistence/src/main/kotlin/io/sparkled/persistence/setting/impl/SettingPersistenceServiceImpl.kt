@@ -1,6 +1,5 @@
 package io.sparkled.persistence.setting.impl
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.sparkled.model.entity.Setting
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.model.setting.SettingsConstants
@@ -9,44 +8,31 @@ import io.sparkled.persistence.QueryFactory
 import io.sparkled.persistence.setting.SettingPersistenceService
 import io.sparkled.persistence.setting.impl.query.GetSettingsQuery
 import io.sparkled.persistence.setting.impl.query.SaveSettingQuery
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import org.slf4j.LoggerFactory
 import javax.inject.Singleton
 
 @Singleton
 class SettingPersistenceServiceImpl(private val queryFactory: QueryFactory) : SettingPersistenceService {
 
-    private var settingsCache: SettingsCache? = null
-
-    private var executor: ExecutorService = Executors.newSingleThreadExecutor(
-        ThreadFactoryBuilder().setNameFormat("settings-cache-%d").build()
-    )
-
-    override val settings: SettingsCache
-        get() {
-            if (settingsCache == null) {
-                reloadSettingsCache()
-            }
-
-            return settingsCache!!
-        }
+    override var settings = SettingsCache(SettingsConstants.Brightness.MAX)
 
     /**
      * The settings cache is read and written to by multiple threads (e.g. REST API updates brightness, UDP server reads
      * new brightness). Therefore, the entity manager is cleared to ensure fresh data is retrieved from the database.
      */
-    private fun reloadSettingsCache() {
-        queryFactory.entityManager.clear()
-
+    override fun reloadSettingsCache() {
+        logger.info("Reloading settings cache.")
         val settings = GetSettingsQuery().perform(queryFactory)
         val settingsMap = settings.associateBy({ it.getCode()!! }, { it })
-        settingsCache = SettingsCache(getBrightness(settingsMap))
+
+        this.settings = SettingsCache(getBrightness(settingsMap))
+        logger.info("Reloaded settings cache.")
     }
 
     override fun setBrightness(brightness: String) {
         val setting = Setting().setCode(SettingsConstants.Brightness.CODE).setValue(brightness)
         SaveSettingQuery(setting).perform(queryFactory)
-        settingsCache = SettingsCache(brightness.toInt())
+        settings = SettingsCache(brightness.toInt())
     }
 
     private fun getBrightness(settingsMap: Map<String, Setting>): Int {
@@ -58,5 +44,9 @@ class SettingPersistenceServiceImpl(private val queryFactory: QueryFactory) : Se
         } catch (e: NumberFormatException) {
             SettingsConstants.Brightness.MAX
         }
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(SettingPersistenceServiceImpl::class.java)
     }
 }

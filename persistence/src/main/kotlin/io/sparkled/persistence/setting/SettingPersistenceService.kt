@@ -6,5 +6,7 @@ interface SettingPersistenceService {
 
     val settings: SettingsCache
 
+    fun reloadSettingsCache()
+
     fun setBrightness(brightness: String)
 }
