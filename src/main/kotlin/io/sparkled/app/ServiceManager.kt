@@ -22,6 +22,7 @@ open class ServiceManager(
         settingPersistenceService.reloadSettingsCache()
         schedulerService.start()
         udpServer.start(2812)
+        println("Sparkled server is running.")
     }
 
     @EventListener
