@@ -102,6 +102,7 @@ See also the list of [contributors](https://github.com/sparkled/sparkled/contrib
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
+* [EJ-Technologies](https://www.ej-technologies.com) for providing an Open Source license for [JProfiler, the award winning all-in-one Java Profiler](https://www.ej-technologies.com/products/jprofiler/overview.html).
 * [FastLED](http://fastled.io) for building and maintaining an incredible LED strip library, without which this project
   would never have been conceived.
 * [The FastLED community](https://reddit.com/r/fastled) for being a great source of help
