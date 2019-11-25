@@ -15,6 +15,8 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
 
     private val listeners = HashSet<LineListener>()
     private var clip: Clip? = null
+    private var lastFramePosition = 0
+    private var lastProgressUpdate = 0L
 
     override fun play(playbackState: PlaybackState) {
         stopPlayback()
@@ -59,14 +61,26 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
     override val sequenceProgress: Double
         get() {
             val clip = this.clip
-            return if (clip == null) {
-                0.0
-            } else {
-                min(1.0, clip.framePosition / clip.frameLength.toDouble())
+            return when {
+                clip == null -> 0.0
+                System.currentTimeMillis() - lastProgressUpdate < 1000 -> {
+                    // Looking up playback position can be slow (up to 50ms), so the position is only looked up once per
+                    // second, and progress is inferred from that.
+                    val newFrames = (System.currentTimeMillis() - lastProgressUpdate) * (clip.format.frameRate / 1000.0)
+                    val frame = lastFramePosition + newFrames
+                    min(1.0, frame / clip.frameLength.toDouble())
+                }
+                else -> {
+                    lastFramePosition = clip.framePosition
+                    lastProgressUpdate = System.currentTimeMillis()
+                    min(1.0, lastFramePosition / clip.frameLength.toDouble())
+                }
             }
         }
 
     override fun stopPlayback() {
+        lastProgressUpdate = 0
+
         val clip = this.clip
         if (clip != null && clip.isOpen) {
             try {

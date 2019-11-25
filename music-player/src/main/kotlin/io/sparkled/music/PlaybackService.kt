@@ -1,6 +1,5 @@
 package io.sparkled.music
 
-import io.sparkled.model.entity.Playlist
 import io.sparkled.model.entity.Sequence
 
 /**

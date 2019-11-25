@@ -10,12 +10,12 @@ import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.sequence.SequencePersistenceService
 import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.persistence.stage.StagePersistenceService
-import org.slf4j.LoggerFactory
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Singleton
 import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
+import org.slf4j.LoggerFactory
 
 @Singleton
 open class PlaybackServiceImpl(
