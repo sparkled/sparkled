@@ -48,8 +48,8 @@ allprojects { project ->
         implementation "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$hibernateJpaApiVersion"
         kapt 'io.micronaut:micronaut-inject-java'
         kaptTest 'io.micronaut:micronaut-inject-java'
-        runtime "ch.qos.logback:logback-classic:$logbackVersion"
-        runtime "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinModuleVersion"
+        runtimeOnly "ch.qos.logback:logback-classic:$logbackVersion"
+        runtimeOnly "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinModuleVersion"
 
         testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
         testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
@@ -82,14 +82,20 @@ apply plugin: 'net.ltgt.apt-eclipse'
 apply plugin: 'net.ltgt.apt-idea'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-shadowJar {
-    mergeServiceFiles()
-    archiveName = "sparkled-${version}.jar"
+mainClassName = 'io.sparkled.app.Main'
+run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'io.sparkled.app.Main'
+    }
 }
 
-mainClassName = 'io.sparkled.app.Main'
-
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
+shadowJar {
+    mergeServiceFiles()
+    baseName = 'sparkled'
+    classifier = ''
+}
 
 dependencies {
     implementation project(':persistence')
@@ -99,7 +105,7 @@ dependencies {
     implementation 'io.micronaut.configuration:micronaut-hibernate-jpa'
     implementation 'io.micronaut.configuration:micronaut-jdbc-hikari'
     implementation 'io.micronaut.configuration:micronaut-liquibase'
-    runtime 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2'
     ktlint "com.pinterest:ktlint:$ktlintVersion"
 }
 
