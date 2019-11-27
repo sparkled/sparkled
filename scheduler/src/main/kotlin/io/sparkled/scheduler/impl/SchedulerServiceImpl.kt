@@ -91,7 +91,8 @@ open class SchedulerServiceImpl(
     }
 
     @Synchronized
-    private fun playPlaylist(job: ScheduledJob) {
+    @Transactional
+    open fun playPlaylist(job: ScheduledJob) {
         val sequences = playlistPersistenceService.getSequencesByPlaylistId(job.playlistId ?: -1)
         playbackService.play(sequences)
     }
