@@ -11,13 +11,16 @@ import java.nio.charset.StandardCharsets
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.jupiter.api.Test
+import java.net.InetAddress
 
 internal class GetStagePropCodesCommandTest {
 
     @Test
     fun can_retrieve_stage_prop_codes() {
         val command = GetStagePropCodesCommand()
-        val response = command.getResponse(
+        val response = command.handle(
+            ipAddress = InetAddress.getLocalHost(),
+            port = 2812,
             args = listOf(GetStagePropCodesCommand.KEY),
             settings = SettingsCache(0),
             playbackState = PlaybackState(

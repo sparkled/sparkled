@@ -6,7 +6,6 @@ import com.querydsl.core.types.dsl.ComparablePath
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.core.types.dsl.StringPath
-import javax.annotation.Generated
 
 /**
  * QStageProp is a Querydsl query type for StageProp

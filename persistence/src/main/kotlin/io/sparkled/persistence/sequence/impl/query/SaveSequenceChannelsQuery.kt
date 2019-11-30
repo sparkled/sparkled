@@ -8,8 +8,8 @@ import io.sparkled.model.validator.SequenceChannelValidator
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.persistence.PersistenceQuery
 import io.sparkled.persistence.QueryFactory
-import org.slf4j.LoggerFactory
 import java.util.UUID
+import org.slf4j.LoggerFactory
 
 class SaveSequenceChannelsQuery(
     private val sequence: Sequence,

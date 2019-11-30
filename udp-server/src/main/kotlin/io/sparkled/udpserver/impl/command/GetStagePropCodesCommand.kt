@@ -3,6 +3,7 @@ package io.sparkled.udpserver.impl.command
 import io.sparkled.model.entity.StageProp
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.music.PlaybackState
+import java.net.InetAddress
 import java.nio.charset.StandardCharsets.UTF_8
 
 /**
@@ -11,11 +12,17 @@ import java.nio.charset.StandardCharsets.UTF_8
  * protocol of the Sparkled instance they are talking to.
  * Command syntax: GP (returns stage prop codes joined by colons, e.g. "P1:P2:P3"
  */
-class GetStagePropCodesCommand : RequestCommand() {
+class GetStagePropCodesCommand : UdpCommand {
 
-    override fun getResponse(args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
+    override fun handle(
+        ipAddress: InetAddress,
+        port: Int,
+        args: List<String>,
+        settings: SettingsCache,
+        playbackState: PlaybackState
+    ): ByteArray {
         if (playbackState.isEmpty) {
-            return emptyResponse
+            return ByteArray(0)
         }
 
         val stageProps = playbackState.stageProps.values

@@ -3,18 +3,18 @@ package io.sparkled.udpserver
 import java.net.DatagramSocket
 
 /**
- * A UDP Server that listens on the given port.
+ * Sends synchronised LED data to subscribed clients..
  */
-interface UdpServer {
+interface LedDataStreamer {
 
     /**
-     * Starts the UDP server. This method is idempotent.
+     * Starts the LED streamer.
      * @param socket The socket to listen on.
      */
     fun start(socket: DatagramSocket)
 
     /**
-     * Shuts the UDP server down.
+     * Stops the LED streamer.
      */
     fun stop()
 }

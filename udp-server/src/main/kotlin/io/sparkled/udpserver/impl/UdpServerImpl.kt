@@ -3,13 +3,13 @@ package io.sparkled.udpserver.impl
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.UdpServer
-import org.slf4j.LoggerFactory
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Singleton
+import org.slf4j.LoggerFactory
 
 @Singleton
 class UdpServerImpl(private val requestHandler: RequestHandler) : UdpServer {
@@ -24,17 +24,16 @@ class UdpServerImpl(private val requestHandler: RequestHandler) : UdpServer {
 
     private var started: Boolean = false
 
-    override fun start(port: Int) {
+    override fun start(socket: DatagramSocket) {
         if (started) {
             logger.warn("Attempted to start UDP server, but it is already running.")
             return
         }
 
         started = true
-        val serverSocket = DatagramSocket(port)
-        executor.submit { listen(serverSocket) }
+        executor.submit { listen(socket) }
 
-        logger.info("Started UDP server at port {}.", port)
+        logger.info("Started UDP server at port {}.", socket.port)
     }
 
     override fun stop() {
@@ -63,7 +62,7 @@ class UdpServerImpl(private val requestHandler: RequestHandler) : UdpServer {
 
     companion object {
         private val logger = LoggerFactory.getLogger(UdpServerImpl::class.java)
-        private const val RECEIVE_BUFFER_SIZE = 20
+        private const val RECEIVE_BUFFER_SIZE = 32
         private const val REQUEST_HANDLER_THREADS = 4
     }
 }
