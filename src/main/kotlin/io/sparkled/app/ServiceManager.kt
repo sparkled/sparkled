@@ -35,6 +35,14 @@ open class ServiceManager(
 
     private fun buildSocket(): DatagramSocket {
         val socket = DatagramSocket(2812)
+
+        try {
+            socket.sendBufferSize = UDP_BUFFER_SIZE
+            socket.receiveBufferSize = UDP_BUFFER_SIZE
+        } catch (e: Exception) {
+            logger.error("Failed to set socket buffer size.", e)
+        }
+
         logger.info("Socket send buffer size: ${socket.sendBufferSize} bytes.")
         logger.info("Socket receive buffer size: ${socket.receiveBufferSize} bytes.")
         return socket
@@ -49,5 +57,6 @@ open class ServiceManager(
 
     companion object {
         private val logger = LoggerFactory.getLogger(ServiceManager::class.java)
+        private const val UDP_BUFFER_SIZE = 25 * 1024 * 1024 // 25MB
     }
 }
