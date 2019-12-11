@@ -32,7 +32,7 @@ class Renderer(
             renderedProps[stagePropUuid] = renderChannel(cpp, data)
         }
 
-        return RenderResult(renderedProps, endFrame - startFrame + 1)
+        return RenderResult(renderedProps, startFrame, endFrame - startFrame + 1)
     }
 
     private fun renderChannel(channelPropPair: ChannelPropPair, data: RenderedStagePropData?): RenderedStagePropData {

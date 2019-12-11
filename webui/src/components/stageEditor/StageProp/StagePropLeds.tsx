@@ -14,6 +14,7 @@ type RenderedStagePropData = {
 type RenderedFrameData = {
   playbackFrame: number
   renderData: {
+    startFrame: number
     frameCount: number
     stageProps: Record<string, RenderedStagePropData>
   }
@@ -43,17 +44,17 @@ const StagePropLeds: React.FC<Props> = props => {
     leds.name = StagePropPart.led.name
     leds.zIndex = StagePropPart.led.zIndex
 
-    renderLeds(leds, props.points, 0, null)
+    renderLeds(leds, props.points, 0, 0, null)
     props.parent.addChild(leds)
   }, [leds, props.parent, props.points])
 
   useEffect(() => {
     const callback = (data: RenderedFrameData | null) => {
       if (!data) {
-        renderLeds(leds, props.points, 0, null)
+        renderLeds(leds, props.points, 0, 0, null)
       } else {
         const { renderData } = data
-        renderLeds(leds, props.points, data.playbackFrame, renderData.stageProps[props.uuid] || null)
+        renderLeds(leds, props.points, renderData.startFrame, data.playbackFrame, renderData.stageProps[props.uuid] || null)
       }
     }
 
@@ -64,7 +65,7 @@ const StagePropLeds: React.FC<Props> = props => {
   return <></>
 }
 
-function renderLeds(leds: PIXI.Graphics, points: Point[], frameCount: number, data: RenderedStagePropData | null) {
+function renderLeds(leds: PIXI.Graphics, points: Point[], startFrame: number, frameCount: number, data: RenderedStagePropData | null) {
   leds.clear()
 
   for (let i = points.length - 1; i >= 0; i--) {
@@ -72,7 +73,7 @@ function renderLeds(leds: PIXI.Graphics, points: Point[], frameCount: number, da
     if (data) {
       // TODO handle reversed stage props.
       const frameSize = data.ledCount * 3;
-      const offset = frameSize * frameCount;
+      const offset = frameSize * (frameCount - startFrame);
 
       const ledOffset = offset + (i * 3);
       const r = data.data[ledOffset];
