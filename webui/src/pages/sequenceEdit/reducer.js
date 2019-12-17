@@ -118,7 +118,18 @@ export default (state = initialState, action) => {
 
       case actionTypes.ADD_CHANNEL:
         draft.addChannelModalVisible = false
+
+        draft.sequence.channels.forEach(it => {
+          if (it.displayOrder >= action.payload.channel.displayOrder) {
+            it.displayOrder++
+          }
+        })
+
         draft.sequence.channels.push(action.payload.channel)
+        draft.sequence.channels = _.sortBy(
+          draft.sequence.channels,
+          'displayOrder'
+        )
         break
 
       case actionTypes.SELECT_EFFECT:

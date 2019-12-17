@@ -74,7 +74,13 @@ class AddChannelModal extends Component {
 
   addChannel(channel) {
     const { sequence } = this.props
-    const displayOrder = sequence.channels.length
+
+    const displayOrder =
+      _.findLastIndex(
+        sequence.channels,
+        it => it.stagePropUuid === channel.stagePropUuid
+      ) + 1
+
     this.props.addChannel({
       ...channel,
       uuid: uuidv4(),

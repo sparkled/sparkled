@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { useMemo } from 'react'
 import CurrentFrameIndicator from '../CurrentFrameIndicator'
 import PlaybackFrameIndicator from '../PlaybackFrameIndicator'
 import TimeIndicator from '../TimeIndicator'
@@ -8,6 +8,12 @@ import Waveform from '../Waveform'
 import './Timeline.css'
 
 const Timeline = ({ sequence, pixelsPerFrame }) => {
+  const channels = useMemo(() => {
+    return _.map(sequence.channels, channel => (
+      <TimelineChannel key={channel.uuid} channel={channel} />
+    ))
+  }, [sequence.channels])
+
   return (
     <div className="timeline" onScroll={handleScroll}>
       <div className="timeline-container">
@@ -15,9 +21,7 @@ const Timeline = ({ sequence, pixelsPerFrame }) => {
           <div className="channel-wrapper">
             <CurrentFrameIndicator />
             <PlaybackFrameIndicator />
-            {_.map(sequence.channels, channel => (
-              <TimelineChannel key={channel.uuid} channel={channel} />
-            ))}
+            {channels}
             <Waveform />
             <TimeIndicator
               sequence={sequence}
