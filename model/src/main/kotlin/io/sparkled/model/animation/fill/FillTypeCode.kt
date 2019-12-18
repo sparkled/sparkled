@@ -1,10 +1,13 @@
 package io.sparkled.model.animation.fill
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
+
 enum class FillTypeCode(val displayName: String) {
 
     /**
      * Indicates that no type has been provided.
      */
+    @JsonEnumDefaultValue
     NONE("None"),
 
     /**

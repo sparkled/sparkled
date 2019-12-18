@@ -1,10 +1,13 @@
 package io.sparkled.model.animation.easing
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
+
 enum class EasingTypeCode(val displayName: String) {
 
     /**
      * Indicates that no type has been provided.
      */
+    @JsonEnumDefaultValue
     NONE("None"),
 
     /**

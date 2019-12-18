@@ -1,6 +1,9 @@
 package io.sparkled.model.animation.param
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
+
 enum class ParamCode constructor(val displayName: String) {
+    @JsonEnumDefaultValue
     NONE("None"),
     BLEND_HARDNESS("Blend Hardness (%)"),
     BRIGHTNESS("Brightness (%)"),

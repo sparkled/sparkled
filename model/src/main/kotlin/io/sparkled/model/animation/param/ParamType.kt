@@ -1,10 +1,13 @@
 package io.sparkled.model.animation.param
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
+
 enum class ParamType {
 
     /**
      * Indicates that no type has been provided.
      */
+    @JsonEnumDefaultValue
     NONE,
 
     /**

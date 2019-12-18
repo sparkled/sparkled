@@ -1,9 +1,12 @@
 package io.sparkled.model.entity
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
+
 enum class SequenceStatus {
     /**
      * Has no animation data whatsoever, cannot be played.
      */
+    @JsonEnumDefaultValue
     NEW,
 
     /**
