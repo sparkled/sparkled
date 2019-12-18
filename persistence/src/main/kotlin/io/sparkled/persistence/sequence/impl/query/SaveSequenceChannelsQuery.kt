@@ -1,5 +1,6 @@
 package io.sparkled.persistence.sequence.impl.query
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.entity.QSequenceChannel.Companion.sequenceChannel
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
@@ -13,11 +14,12 @@ import org.slf4j.LoggerFactory
 
 class SaveSequenceChannelsQuery(
     private val sequence: Sequence,
-    private val sequenceChannels: List<SequenceChannel>
+    private val sequenceChannels: List<SequenceChannel>,
+    private val objectMapper: ObjectMapper
 ) : PersistenceQuery<Unit> {
 
     override fun perform(queryFactory: QueryFactory) {
-        val sequenceChannelValidator = SequenceChannelValidator()
+        val sequenceChannelValidator = SequenceChannelValidator(objectMapper)
         sequenceChannels.forEach { sc -> sc.setSequenceId(sequence.getId()!!) }
         sequenceChannels.forEach(sequenceChannelValidator::validate)
 
@@ -33,8 +35,10 @@ class SaveSequenceChannelsQuery(
     }
 
     private fun uuidAlreadyInUse(queryFactory: QueryFactory): Boolean {
-        var uuidsToCheck = sequenceChannels.asSequence().map(SequenceChannel::getUuid).toList()
-        uuidsToCheck = if (uuidsToCheck.isEmpty()) NO_UUIDS else uuidsToCheck
+        val uuidsToCheck = sequenceChannels
+            .map(SequenceChannel::getUuid)
+            .toList()
+            .ifEmpty { NO_UUIDS }
 
         val uuidsInUse = queryFactory.select(sequenceChannel)
             .from(sequenceChannel)

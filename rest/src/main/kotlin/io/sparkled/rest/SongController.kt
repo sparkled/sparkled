@@ -17,7 +17,8 @@ import io.sparkled.viewmodel.song.SongViewModelConverter
 @Controller("/api/songs")
 open class SongController(
     private val songPersistenceService: SongPersistenceService,
-    private val songViewModelConverter: SongViewModelConverter
+    private val songViewModelConverter: SongViewModelConverter,
+    private val objectMapper: ObjectMapper
 ) {
 
     @Get("/")
@@ -44,7 +45,7 @@ open class SongController(
     @Post("/", consumes = [MediaType.MULTIPART_FORM_DATA])
     @Transactional
     open fun createSong(song: String, mp3: CompletedFileUpload): HttpResponse<Any> {
-        val songViewModel = ObjectMapper().readValue(song, SongViewModel::class.java)
+        val songViewModel = objectMapper.readValue(song, SongViewModel::class.java)
         songViewModel.setId(null) // Prevent client-side ID tampering.
 
         val songModel = songViewModelConverter.toModel(songViewModel)

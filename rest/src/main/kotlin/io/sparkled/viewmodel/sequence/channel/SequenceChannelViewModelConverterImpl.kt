@@ -8,12 +8,13 @@ import javax.inject.Singleton
 
 @Singleton
 class SequenceChannelViewModelConverterImpl(
-    private val sequencePersistenceService: SequencePersistenceService
+    private val sequencePersistenceService: SequencePersistenceService,
+    private val objectMapper: ObjectMapper
 ) : SequenceChannelViewModelConverter() {
 
     override fun toViewModel(model: SequenceChannel): SequenceChannelViewModel {
         val channelJson = model.getChannelJson()
-        val sequenceChannelEffects = ObjectMapper().readValue(channelJson, SequenceChannelEffects::class.java)
+        val sequenceChannelEffects = objectMapper.readValue(channelJson, SequenceChannelEffects::class.java)
 
         return SequenceChannelViewModel()
             .setUuid(model.getUuid())
@@ -29,7 +30,7 @@ class SequenceChannelViewModelConverterImpl(
             .getSequenceChannelByUuid(viewModel.getSequenceId()!!, viewModel.getUuid()!!)
             ?: SequenceChannel()
 
-        val channelJson = ObjectMapper().writeValueAsString(SequenceChannelEffects(viewModel.getEffects()))
+        val channelJson = objectMapper.writeValueAsString(SequenceChannelEffects(viewModel.getEffects()))
         return model
             .setUuid(viewModel.getUuid())
             .setSequenceId(viewModel.getSequenceId())

@@ -1,5 +1,6 @@
 package io.sparkled.persistence.sequence.impl
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.Song
@@ -23,7 +24,10 @@ import java.util.UUID
 import javax.inject.Singleton
 
 @Singleton
-class SequencePersistenceServiceImpl(private val queryFactory: QueryFactory) : SequencePersistenceService {
+class SequencePersistenceServiceImpl(
+    private val queryFactory: QueryFactory,
+    private val objectMapper: ObjectMapper
+) : SequencePersistenceService {
 
     override fun getAllSequences(): List<Sequence> {
         return GetAllSequencesQuery().perform(queryFactory)
@@ -55,13 +59,13 @@ class SequencePersistenceServiceImpl(private val queryFactory: QueryFactory) : S
 
     override fun saveSequence(sequence: Sequence, sequenceChannels: List<SequenceChannel>): Sequence {
         val savedSequence = SaveSequenceQuery(sequence).perform(queryFactory)
-        SaveSequenceChannelsQuery(savedSequence, sequenceChannels).perform(queryFactory)
+        SaveSequenceChannelsQuery(savedSequence, sequenceChannels, objectMapper).perform(queryFactory)
         return savedSequence
     }
 
     override fun publishSequence(sequence: Sequence, channels: List<SequenceChannel>, data: RenderedStagePropDataMap) {
         val savedSequence = SaveSequenceQuery(sequence).perform(queryFactory)
-        SaveSequenceChannelsQuery(savedSequence, channels).perform(queryFactory)
+        SaveSequenceChannelsQuery(savedSequence, channels, objectMapper).perform(queryFactory)
         SaveRenderedStagePropsQuery(savedSequence, data).perform(queryFactory)
     }
 

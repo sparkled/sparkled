@@ -10,7 +10,9 @@ import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.validator.exception.EntityValidationException
 
-class SequenceChannelValidator {
+class SequenceChannelValidator(
+    private val objectMapper: ObjectMapper
+) {
 
     @Throws(EntityValidationException::class)
     fun validate(channel: SequenceChannel) {
@@ -28,7 +30,7 @@ class SequenceChannelValidator {
 
     private fun getEffectsFromJson(channel: SequenceChannel): SequenceChannelEffects {
         try {
-            return ObjectMapper().readValue(channel.getChannelJson(), SequenceChannelEffects::class.java)
+            return objectMapper.readValue(channel.getChannelJson(), SequenceChannelEffects::class.java)
         } catch (e: JsonProcessingException) {
             throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MALFORMED, channel.getName()), e)
         }
