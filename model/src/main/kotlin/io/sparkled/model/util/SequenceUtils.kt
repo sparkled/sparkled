@@ -15,6 +15,6 @@ object SequenceUtils {
      * @return The number of frames available in the sequence.
      */
     fun getFrameCount(song: Song, sequence: Sequence): Int {
-        return song.getDurationMs()!! / MS_PER_SECOND * sequence.getFramesPerSecond()!!
+        return (song.getDurationMs()!! / MS_PER_SECOND.toFloat() * sequence.getFramesPerSecond()!!).toInt()
     }
 }
