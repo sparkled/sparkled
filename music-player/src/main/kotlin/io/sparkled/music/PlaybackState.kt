@@ -13,6 +13,7 @@ import io.sparkled.model.render.RenderedStagePropDataMap
 data class PlaybackState(
     val sequences: List<Sequence>? = null,
     val sequenceIndex: Int = 0,
+    val repeat: Boolean = true,
     private val progressFunction: () -> Double = { 0.0 },
     val sequence: Sequence? = null,
     val song: Song? = null,

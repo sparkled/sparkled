@@ -12,7 +12,7 @@ interface PlaybackService {
 
      * @param sequences The sequences to be played
      */
-    fun play(sequences: List<Sequence>)
+    fun play(sequences: List<Sequence>, repeat: Boolean)
 
     /**
      * Stops playback of the current playlist. If no playlist is playing, this is a no-op.

@@ -42,7 +42,8 @@ open class PlayerController(
             if (sequence === null) emptyList() else listOf(sequence)
         }
 
-        playbackService.play(sequences)
+        val repeat = action.repeat != false // If repeat is null, enable repeat.
+        playbackService.play(sequences, repeat)
     }
 
     private fun stop() {

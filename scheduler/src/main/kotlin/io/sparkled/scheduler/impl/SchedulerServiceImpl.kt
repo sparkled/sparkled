@@ -94,7 +94,7 @@ open class SchedulerServiceImpl(
     @Transactional
     open fun playPlaylist(job: ScheduledJob) {
         val sequences = playlistPersistenceService.getSequencesByPlaylistId(job.playlistId ?: -1)
-        playbackService.play(sequences)
+        playbackService.play(sequences, true) // TODO: Allow repeat config via scheduler API.
     }
 
     @Synchronized

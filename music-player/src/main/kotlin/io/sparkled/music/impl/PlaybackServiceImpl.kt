@@ -39,7 +39,7 @@ open class PlaybackServiceImpl(
             if (!state.isEmpty) {
                 val sequences = state.sequences!!
                 val sequenceIndex = state.sequenceIndex
-                submitSequencePlayback(sequences, sequenceIndex + 1)
+                submitSequencePlayback(sequences, sequenceIndex + 1, state.repeat)
             }
         }
     }
@@ -48,34 +48,36 @@ open class PlaybackServiceImpl(
         return playbackState.get()
     }
 
-    override fun play(sequences: List<Sequence>) {
+    override fun play(sequences: List<Sequence>, repeat: Boolean) {
         stopPlayback()
-        submitSequencePlayback(sequences, 0)
+        submitSequencePlayback(sequences, 0, repeat)
     }
 
-    private fun submitSequencePlayback(sequences: List<Sequence>, sequenceIndex: Int) {
-        executor.submit { playSequenceAtIndex(sequences, sequenceIndex) }
+    private fun submitSequencePlayback(sequences: List<Sequence>, sequenceIndex: Int, repeat: Boolean) {
+        executor.submit { playSequenceAtIndex(sequences, sequenceIndex, repeat) }
     }
 
-    private fun playSequenceAtIndex(sequences: List<Sequence>, sequenceIndex: Int) {
-        val playbackState = loadPlaybackState(sequences, sequenceIndex)
+    private fun playSequenceAtIndex(sequences: List<Sequence>, sequenceIndex: Int, repeat: Boolean) {
+        val playbackState = loadPlaybackState(sequences, sequenceIndex, repeat)
         this.playbackState.set(playbackState)
 
         if (!playbackState.isEmpty) {
             musicPlayerService.play(playbackState)
         } else if (sequenceIndex > 0) {
-            logger.debug("Finished playlist, restarting.")
-            playSequenceAtIndex(sequences, 0)
+            if (playbackState.repeat) {
+                logger.debug("Finished playlist, restarting.")
+                playSequenceAtIndex(sequences, 0, playbackState.repeat)
+            }
         } else {
             logger.error("Failed to play empty playlist.")
         }
     }
 
     @Transactional(readOnly = true)
-    open fun loadPlaybackState(sequences: List<Sequence>, sequenceIndex: Int): PlaybackState {
+    open fun loadPlaybackState(sequences: List<Sequence>, sequenceIndex: Int, repeat: Boolean): PlaybackState {
         try {
             if (sequenceIndex >= sequences.size) {
-                return PlaybackState()
+                return PlaybackState(repeat = repeat)
             }
 
             val sequence = sequences[sequenceIndex]
@@ -91,6 +93,7 @@ open class PlaybackServiceImpl(
             return PlaybackState(
                 sequences = sequences,
                 sequenceIndex = sequenceIndex,
+                repeat = repeat,
                 progressFunction = { musicPlayerService.sequenceProgress },
                 sequence = sequence,
                 song = song,
