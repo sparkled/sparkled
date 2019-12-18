@@ -17,4 +17,5 @@ task copyWebUi(type: Copy, group: 'webui') {
 
 deleteWebUi.dependsOn(npmSetup)
 npmInstall.dependsOn(deleteWebUi)
+copyWebUi.dependsOn(deleteWebUi)
 buildWebUi.dependsOn(npmInstall)
