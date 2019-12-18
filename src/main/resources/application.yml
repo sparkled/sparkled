@@ -25,6 +25,9 @@ datasources:
 
 jackson:
   serializationInclusion: ALWAYS # Include empty arrays in JSON output
+  deserialization:
+    failOnUnknownProperties: false # Enables backward compatibility for effect JSON containing removed fields.
+    readUnknownEnumValuesUsingDefaultValue: true # Backward compatibility for effect JSON containing removed enums.
 
 jpa:
   default:
