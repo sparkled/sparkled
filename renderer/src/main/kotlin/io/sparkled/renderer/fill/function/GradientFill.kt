@@ -24,6 +24,8 @@ class GradientFill : FillFunction {
         val fill = ctx.effect.fill
 
         val colors = ParamUtils.getColorsValue(fill, ParamCode.COLORS, Color.MAGENTA)
+        val repetitions = ParamUtils.getIntegerValue(fill, ParamCode.COLOR_REPETITIONS, 1)
+        val colorCount = colors.size * max(1, repetitions)
 
         val ledIndexNormalised = ledIndex / ctx.frame.ledCount.toFloat()
 
@@ -31,7 +33,7 @@ class GradientFill : FillFunction {
         val cycleProgress = cyclesPerSecond * (ctx.frame.frameNumber.toFloat() / ctx.sequence.getFramesPerSecond()!!)
         val gradientProgress = ledIndexNormalised + cycleProgress
 
-        val colorProgress = gradientProgress * (colors.size - 1)
+        val colorProgress = gradientProgress * (colorCount - 1)
         val color1 = colors[floor(colorProgress).toInt() % colors.size]
         val color2 = colors[ceil(colorProgress).toInt() % colors.size]
 

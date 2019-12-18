@@ -5,6 +5,7 @@ enum class ParamCode constructor(val displayName: String) {
     BLEND_HARDNESS("Blend Hardness (%)"),
     BRIGHTNESS("Brightness (%)"),
     COLOR("Color"),
+    COLOR_REPETITIONS("Color Repetitions"),
     COLORS("Colors"),
     CYCLE_COUNT("Cycle Count"),
     CYCLES_PER_SECOND("Cycles Per Second"),
