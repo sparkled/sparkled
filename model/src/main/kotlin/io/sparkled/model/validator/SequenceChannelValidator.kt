@@ -6,7 +6,6 @@ import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
-import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.validator.exception.EntityValidationException
 
@@ -69,17 +68,6 @@ class SequenceChannelValidator(
         if (effect.repetitionSpacing < 0) {
             throw EntityValidationException(String.format(Errors.EFFECT_REPETITION_SPACING_INVALID, effect.startFrame, channel.getName()))
         }
-
-        val args = effect.getArguments()
-        for (arg in args.entries) {
-            validateEffectArgument(effect, arg)
-        }
-    }
-
-    private fun validateEffectArgument(effect: Effect, argument: Map.Entry<ParamCode, List<String>>) {
-        if (argument.key === ParamCode.NONE) {
-            throw EntityValidationException(String.format(Errors.EFFECT_ARGUMENT_CODE_MISSING, effect.startFrame))
-        }
     }
 
     private object Errors {
@@ -97,7 +85,5 @@ class SequenceChannelValidator(
             "Effect repetitions cannot be less than 1 for effect at frame %d in channel '%s'."
         internal const val EFFECT_REPETITION_SPACING_INVALID =
             "Effect repetition spacing cannot be less than 0 for effect at frame %d in channel '%s'."
-        internal const val EFFECT_ARGUMENT_CODE_MISSING =
-            "Effect argument code cannot be empty for effect at frame %d in channel '%s'."
     }
 }
