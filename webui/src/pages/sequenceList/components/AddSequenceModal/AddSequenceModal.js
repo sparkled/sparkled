@@ -22,7 +22,7 @@ class AddSequenceModal extends Component {
   componentWillReceiveProps(nextProps) {
     const { addError, addModalVisible } = nextProps
     if (!this.props.addModalVisible && addModalVisible) {
-      this.props.initialize({ framesPerSecond: 60 })
+      this.props.initialize({ framesPerSecond: 30 })
     }
 
     if (!this.props.addError && addError) {
