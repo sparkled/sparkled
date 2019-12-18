@@ -10,6 +10,7 @@ import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.max
 
 /**
  * Fills pixels with an N-color gradient, where N > 0. The colours are distributed equally.
@@ -19,7 +20,7 @@ import kotlin.math.floor
  */
 class GradientFill : FillFunction {
 
-    override fun fill(ctx: RenderContext, led: Led, ledIndex: Int, alpha: Float) {
+    override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
         val fill = ctx.effect.fill
 
         val colors = ParamUtils.getColorsValue(fill, ParamCode.COLORS, Color.MAGENTA)
@@ -36,10 +37,7 @@ class GradientFill : FillFunction {
 
         val hardness = ParamUtils.getDecimalValue(fill, ParamCode.BLEND_HARDNESS, 0f) / 100f
         val blend = getBlend(colorProgress % 1f, hardness)
-        val interpolatedColor = interpolate(color1, blend, color2)
-
-        val adjustedColor = ColorUtils.adjustBrightness(interpolatedColor, alpha)
-        led.addColor(adjustedColor)
+        return interpolate(color1, blend, color2)
     }
 
     /**

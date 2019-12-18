@@ -18,9 +18,10 @@ const initialState = {
   sequence: null,
   stage: null,
   renderData: null,
+  blendModes: [],
+  easingTypes: [],
   effectTypes: [],
   fillTypes: [],
-  easingTypes: [],
   addChannelModalVisible: false,
   selectedChannel: null,
   selectedEffect: null,
@@ -82,11 +83,17 @@ export default (state = initialState, action) => {
         break
 
       case actionTypes.FETCH_REFERENCE_DATA_FULFILLED:
-        const [effectTypes, fillTypes, easingTypes] = action.payload
+        const {
+          blendModes,
+          effectTypes,
+          fillTypes,
+          easingTypes
+        } = action.payload.data
         draft.fetchingReferenceData = false
-        draft.effectTypes = _.mapKeys(effectTypes.data, 'code')
-        draft.fillTypes = _.mapKeys(fillTypes.data, 'code')
-        draft.easingTypes = _.mapKeys(easingTypes.data, 'code')
+        draft.blendModes = _.mapKeys(blendModes, 'code')
+        draft.easingTypes = _.mapKeys(easingTypes, 'code')
+        draft.effectTypes = _.mapKeys(effectTypes, 'code')
+        draft.fillTypes = _.mapKeys(fillTypes, 'code')
         break
 
       case actionTypes.FETCH_REFERENCE_DATA_REJECTED:

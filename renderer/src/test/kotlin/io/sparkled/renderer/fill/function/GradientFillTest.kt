@@ -4,6 +4,7 @@ import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
+import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
 import io.sparkled.model.animation.param.ParamCode
@@ -24,6 +25,7 @@ class GradientFillTest {
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 FillTypeCode.GRADIENT,
+                BlendMode.NORMAL,
                 mapOf(
                     arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
                     arg(ParamCode.BLEND_HARDNESS, 0f),
@@ -59,6 +61,7 @@ class GradientFillTest {
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 FillTypeCode.GRADIENT,
+                BlendMode.NORMAL,
                 mapOf(
                     arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
                     arg(ParamCode.BLEND_HARDNESS, 50f),
@@ -94,6 +97,7 @@ class GradientFillTest {
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 FillTypeCode.GRADIENT,
+                BlendMode.NORMAL,
                 mapOf(
                     arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
                     arg(ParamCode.BLEND_HARDNESS, 100f),
@@ -130,6 +134,7 @@ class GradientFillTest {
                 EasingTypeCode.LINEAR, 50f, 50f),
             fill = Fill(
                 FillTypeCode.GRADIENT,
+                BlendMode.NORMAL,
                 mapOf(
                     arg(ParamCode.COLORS, "#ff0000", "#0000ff", "#00ff00"),
                     arg(ParamCode.BLEND_HARDNESS, 0f),

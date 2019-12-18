@@ -276,6 +276,7 @@ class SequenceEditPage extends Component {
         args: {}
       },
       fill: {
+        blendMode: 'NORMAL',
         type: 'SOLID',
         args: {
           COLOR: ['#ff0000']

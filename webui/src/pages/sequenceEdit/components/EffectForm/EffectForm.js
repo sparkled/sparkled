@@ -167,12 +167,23 @@ class EffectForm extends Component {
   }
 
   renderFillPropertiesForm() {
-    const { selectedEffect, fillTypes } = this.props
+    const { selectedEffect, blendModes, fillTypes } = this.props
     const fillType = fillTypes[selectedEffect.fill.type]
 
     return (
       <FormSection name="fill">
         <h5>Fill Properties</h5>
+        <Field
+          name="blendMode"
+          component={SingleSelectField}
+          label="Blend Mode"
+          allowEmpty={false}
+          required
+          validate={required}
+          options={blendModes}
+          onChange={this.updateEffect}
+        />
+
         <Field
           name="type"
           component={SingleSelectField}
@@ -337,6 +348,7 @@ class EffectForm extends Component {
 
 function mapStateToProps({ page }) {
   const {
+    blendModes,
     effectTypes,
     fillTypes,
     easingTypes,
@@ -345,6 +357,7 @@ function mapStateToProps({ page }) {
     sequence
   } = page.sequenceEdit.present
   return {
+    blendModes,
     effectTypes,
     fillTypes,
     easingTypes,

@@ -4,6 +4,7 @@ import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.effect.EffectTypeCode
+import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.fill.FillTypeCode
 import io.sparkled.model.animation.param.ParamCode
@@ -28,6 +29,7 @@ internal class ReverseStagePropRendererTest {
             easing = Easing(EasingTypeCode.LINEAR),
             fill = Fill(
                 FillTypeCode.SOLID,
+                BlendMode.NORMAL,
                 mapOf(
                     arg(ParamCode.COLOR, "#ff0000")
                 )

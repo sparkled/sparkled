@@ -38,4 +38,14 @@ object MathUtils {
     fun constrain(value: Int, min: Int, max: Int): Int {
         return Math.max(min, Math.min(max, value))
     }
+
+    /**
+     * Linear interpolation between two numbers
+     * @param from the start value
+     * @param to the end value
+     * @param progress a value between 0 and 1, where 0 yields from, and 1 yields to
+     */
+    fun lerp(from: Float, to: Float, progress: Float): Float {
+        return from * (1 - progress) + to * progress
+    }
 }

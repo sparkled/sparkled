@@ -23,11 +23,7 @@ export const fetchSequenceStage = sequenceId => {
 }
 
 export const fetchReferenceData = () => {
-  const request = axios.all([
-    axios.get(`${restConfig.ROOT_URL}/effectTypes`),
-    axios.get(`${restConfig.ROOT_URL}/fillTypes`),
-    axios.get(`${restConfig.ROOT_URL}/easingTypes`)
-  ])
+  const request = axios.get(`${restConfig.ROOT_URL}/referenceData`)
 
   return {
     type: actionTypes.FETCH_REFERENCE_DATA,

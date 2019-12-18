@@ -16,7 +16,7 @@ import java.awt.Color
  */
 class RainbowFill : FillFunction {
 
-    override fun fill(ctx: RenderContext, led: Led, ledIndex: Int, alpha: Float) {
+    override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
         val fill = ctx.effect.fill
         val cycleCount = ParamUtils.getDecimalValue(fill, ParamCode.CYCLE_COUNT, 1f)
         val cyclesPerSecond = ParamUtils.getDecimalValue(fill, ParamCode.CYCLES_PER_SECOND, 1f)
@@ -27,8 +27,7 @@ class RainbowFill : FillFunction {
         val progress = frame.frameNumber.toFloat() / ctx.sequence.getFramesPerSecond()!! * cyclesPerSecond
         val hue = ledPosition + progress % 1f
 
-        val color = Color.getHSBColor(hue, SATURATION, alpha * brightness)
-        led.addColor(color)
+        return Color.getHSBColor(hue, SATURATION, brightness)
     }
 
     companion object {

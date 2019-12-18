@@ -1,7 +1,10 @@
 package io.sparkled.model.render
 
+import io.sparkled.model.util.MathUtils.constrain
+import io.sparkled.model.util.MathUtils.lerp
 import java.awt.Color
-import java.util.Arrays
+import java.util.*
+import kotlin.math.roundToInt
 
 class Led(private val ledData: ByteArray, private val ledIndex: Int, private val offset: Int) {
     private val index: Int
@@ -10,12 +13,20 @@ class Led(private val ledData: ByteArray, private val ledIndex: Int, private val
         this.index = ledIndex * BYTES_PER_LED
     }
 
+    fun setColor(color: Color, alpha: Float) {
+        this.r = lerp(this.r.toFloat(), color.red.toFloat(), alpha).roundToInt()
+        this.g = lerp(this.g.toFloat(), color.green.toFloat(), alpha).roundToInt()
+        this.b = lerp(this.b.toFloat(), color.blue.toFloat(), alpha).roundToInt()
+    }
+
     fun addColor(color: Color) = addRgb(color.red, color.green, color.blue)
+    fun subtractColor(color: Color) = addRgb(-color.red, -color.green, -color.blue)
+    fun maskColor(color: Color) = addRgb(-(255 - color.red), -(255 - color.green), -(255 - color.blue))
 
     fun addRgb(r: Int, g: Int, b: Int) {
-        this.r = Math.min(this.r + r, 255)
-        this.g = Math.min(this.g + g, 255)
-        this.b = Math.min(this.b + b, 255)
+        this.r = constrain(this.r + r, 0, 255)
+        this.g = constrain(this.g + g, 0, 255)
+        this.b = constrain(this.b + b, 0, 255)
     }
 
     private var r: Int

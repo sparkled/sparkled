@@ -14,9 +14,7 @@ import java.awt.Color
  */
 class SolidFill : FillFunction {
 
-    override fun fill(ctx: RenderContext, led: Led, ledIndex: Int, alpha: Float) {
-        val color = ParamUtils.getColorValue(ctx.effect.fill, ParamCode.COLOR, Color.MAGENTA)
-        val adjustedColor = ColorUtils.adjustBrightness(color, alpha)
-        led.addColor(adjustedColor)
+    override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
+        return ParamUtils.getColorValue(ctx.effect.fill, ParamCode.COLOR, Color.MAGENTA)
     }
 }

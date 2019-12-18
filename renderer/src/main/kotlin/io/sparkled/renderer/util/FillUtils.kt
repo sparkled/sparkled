@@ -1,5 +1,6 @@
 package io.sparkled.renderer.util
 
+import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.renderer.context.RenderContext
 import io.sparkled.renderer.fill.FillFunctions
 import org.slf4j.LoggerFactory
@@ -17,7 +18,23 @@ object FillUtils {
         } else if (ledIndex >= 0 && ledIndex < frame.ledCount) {
             val index = if (ctx.stageProp.isReverse()!!) frame.ledCount - ledIndex - 1 else ledIndex
             val led = frame.getLed(index)
-            FillFunctions[ctx.effect.fill.type].fill(ctx, led, ledIndex, alpha)
+            val fillColor = FillFunctions[ctx.effect.fill.type].getFill(ctx, ledIndex)
+
+            when (ctx.effect.fill.blendMode) {
+                BlendMode.NORMAL -> led.setColor(fillColor, alpha)
+                BlendMode.ADD -> {
+                    val color = ColorUtils.adjustBrightness(fillColor, alpha)
+                    led.addColor(color)
+                }
+                BlendMode.SUBTRACT -> {
+                    val color = ColorUtils.adjustBrightness(fillColor, alpha)
+                    led.subtractColor(color)
+                }
+                BlendMode.ALPHA_MASK -> {
+                    val color = ColorUtils.adjustBrightness(fillColor, alpha)
+                    led.maskColor(color)
+                }
+            }
         }
     }
 }

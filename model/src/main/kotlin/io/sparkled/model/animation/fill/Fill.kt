@@ -5,8 +5,9 @@ import io.sparkled.model.animation.param.HasArguments
 import io.sparkled.model.animation.param.ParamCode
 
 data class Fill(
-    var type: FillTypeCode = FillTypeCode.NONE,
-    var args: Map<ParamCode, List<String>> = emptyMap()
+    val type: FillTypeCode = FillTypeCode.NONE,
+    val blendMode: BlendMode = BlendMode.NORMAL,
+    val args: Map<ParamCode, List<String>> = emptyMap()
 ) : HasArguments {
 
     @JsonIgnore

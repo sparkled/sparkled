@@ -26,7 +26,8 @@ class Renderer(
     fun render(): RenderResult {
         val renderedProps = RenderedStagePropDataMap()
 
-        channelPropPairs.forEach { cpp ->
+        // Channels are rendered in reverse order for blending purposes.
+        channelPropPairs.reversed().forEach { cpp ->
             val stagePropUuid = cpp.stageProp.getUuid()!!
             val data = renderedProps[stagePropUuid]
             renderedProps[stagePropUuid] = renderChannel(cpp, data)

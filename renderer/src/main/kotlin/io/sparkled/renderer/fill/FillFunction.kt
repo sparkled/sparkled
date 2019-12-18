@@ -2,13 +2,13 @@ package io.sparkled.renderer.fill
 
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.fill.Fill
-import io.sparkled.model.render.Led
 import io.sparkled.renderer.context.RenderContext
+import java.awt.Color
 
 interface FillFunction {
 
     /**
-     * Fill the provided [Led] using the [Fill] configuration of the provided [Effect].
+     * @return the fill color for a given LED using the [Fill] configuration of the provided [Effect].
      */
-    fun fill(ctx: RenderContext, led: Led, ledIndex: Int, alpha: Float)
+    fun getFill(ctx: RenderContext, ledIndex: Int): Color
 }
