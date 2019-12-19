@@ -4,5 +4,5 @@ data class PlaylistAction(
     val action: PlaylistActionType? = null,
     val playlistId: Int? = null,
     val sequenceId: Int? = null,
-    val repeat: Boolean? = false
+    val repeat: Boolean? = true
 )
