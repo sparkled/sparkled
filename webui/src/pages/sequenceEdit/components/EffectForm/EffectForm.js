@@ -248,7 +248,7 @@ class EffectForm extends Component {
   }
 
   renderArgumentFields(argParent, type = {}) {
-    return type.params.map(param => {
+    return (type.params || []).map(param => {
       const arg = argParent.args[param.code] || {}
       return this.renderArgumentField(arg, param)
     })
