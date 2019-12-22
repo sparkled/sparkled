@@ -128,7 +128,7 @@ class TimelineEffect extends Component {
       startFrame,
       uuid
     } = effect
-    if (selectedEffect && uuid === selectedEffect.uuid && repetitions > 1) {
+    if (repetitions > 1) {
       const duration = endFrame - startFrame + 1
       const width = duration * pixelsPerFrame
 
