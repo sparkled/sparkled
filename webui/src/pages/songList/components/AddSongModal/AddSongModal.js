@@ -1,11 +1,4 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  withMobileDialog
-} from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, withMobileDialog } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import jsMediaTags from 'jsmediatags/dist/jsmediatags'
 import React, { Component } from 'react'
@@ -15,7 +8,7 @@ import Alert from 'react-s-alert'
 import { Field, reduxForm } from 'redux-form'
 import TextField from '../../../../components/form/TextField'
 import { required } from '../../../../components/form/validators'
-import { addSong, hideAddModal } from '../../actions'
+import { addSong, hideAddSongModal } from '../../actions'
 
 const formName = 'addSong'
 
@@ -28,9 +21,9 @@ const styles = theme => ({
     fontFamily: theme.typography.fontFamily,
     '&:hover, &.drop-zone-accept, &.drop-zone-reject': {
       background: theme.palette.grey[700],
-      cursor: 'pointer'
-    }
-  }
+      cursor: 'pointer',
+    },
+  },
 })
 
 class AddSongModal extends Component {
@@ -50,99 +43,43 @@ class AddSongModal extends Component {
   }
 
   render() {
-    const {
-      adding,
-      addModalVisible,
-      classes,
-      handleSubmit,
-      fullScreen,
-      valid
-    } = this.props
+    const { adding, addModalVisible, classes, handleSubmit, fullScreen, valid } = this.props
     const canSubmit = valid && this.state.mp3
-    const dropzoneText = this.state.mp3
-      ? `Selected file: ${this.state.mp3.name}.`
-      : 'Drop .mp3 file here, or click.'
+    const dropzoneText = this.state.mp3 ? `Selected file: ${this.state.mp3.name}.` : 'Drop .mp3 file here, or click.'
 
     return (
-      <Dialog
-        open={addModalVisible}
-        onClose={this.props.hideAddModal}
-        fullScreen={fullScreen}
-        fullWidth
-      >
+      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen} fullWidth>
         <DialogTitle>Add song</DialogTitle>
         <DialogContent>
-          <form
-            id={formName}
-            onSubmit={handleSubmit(this.addSong)}
-            noValidate
-            autoComplete="off"
-          >
+          <form id={formName} onSubmit={handleSubmit(this.addSong)} noValidate autoComplete='off'>
             <Dropzone
               className={classes.dropZone}
-              acceptClassName="drop-zone-accept"
-              rejectClassName="drop-zone-reject"
-              accept=".mp3"
+              acceptClassName='drop-zone-accept'
+              rejectClassName='drop-zone-reject'
+              accept='.mp3'
               multiple={false}
               onDrop={this.onDrop.bind(this)}
             >
               {dropzoneText}
             </Dropzone>
 
-            <Field
-              component={TextField}
-              fullWidth
-              name="name"
-              label="Song Name"
-              required
-              validate={required}
-            />
+            <Field component={TextField} fullWidth name='name' label='Song Name' required validate={required} />
 
-            <Field
-              component={TextField}
-              fullWidth
-              name="artist"
-              label="Artist"
-              required
-              validate={required}
-            />
+            <Field component={TextField} fullWidth name='artist' label='Artist' required validate={required} />
 
-            <Field
-              component={TextField}
-              fullWidth
-              name="album"
-              label="Album"
-              required
-              validate={required}
-            />
+            <Field component={TextField} fullWidth name='album' label='Album' required validate={required} />
 
-            <div className="d-none">
-              <Field
-                name="durationMs"
-                component={TextField}
-                label="Duration (ms)"
-                type="number"
-                disabled
-              />
+            <div className='d-none'>
+              <Field name='durationMs' component={TextField} label='Duration (ms)' type='number' disabled />
             </div>
           </form>
         </DialogContent>
 
         <DialogActions>
-          <Button
-            onClick={this.props.hideAddModal}
-            color="default"
-            disabled={adding}
-          >
+          <Button onClick={this.props.hideAddModal} color='default' disabled={adding}>
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            form={formName}
-            disabled={adding || !canSubmit}
-          >
+          <Button variant='contained' color='primary' type='submit' form={formName} disabled={adding || !canSubmit}>
             {adding ? 'Adding...' : 'Add song'}
           </Button>
         </DialogActions>
@@ -155,7 +92,7 @@ class AddSongModal extends Component {
       this.setState({ mp3: acceptedFiles[0] })
       jsMediaTags.read(acceptedFiles[0], {
         onSuccess: tag => this.populateSongFields(tag.tags),
-        onError: error => this.populateSongFields({})
+        onError: error => this.populateSongFields({}),
       })
     }
   }
@@ -187,14 +124,11 @@ function mapStateToProps({ page: { songList } }) {
   return {
     addModalVisible: songList.addModalVisible,
     adding: songList.adding,
-    addError: songList.addError
+    addError: songList.addError,
   }
 }
 
 AddSongModal = withMobileDialog({ breakpoint: 'xs' })(AddSongModal)
-AddSongModal = connect(
-  mapStateToProps,
-  { addSong, hideAddModal }
-)(AddSongModal)
+AddSongModal = connect(mapStateToProps, { addSong, hideAddModal: hideAddSongModal })(AddSongModal)
 AddSongModal = reduxForm({ form: formName })(AddSongModal)
 export default withStyles(styles)(AddSongModal)

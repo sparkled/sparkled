@@ -1,18 +1,11 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  withMobileDialog
-} from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, withMobileDialog } from '@material-ui/core'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
 import { Field, reduxForm } from 'redux-form'
 import TextField from '../../../../components/form/TextField'
 import { required } from '../../../../components/form/validators'
-import { addStage, hideAddModal } from '../../actions'
+import { addStage, hideAddStageModal } from '../../actions'
 
 const formName = 'addStage'
 
@@ -29,55 +22,22 @@ class AddStageModal extends Component {
   }
 
   render() {
-    const {
-      adding,
-      addModalVisible,
-      handleSubmit,
-      fullScreen,
-      valid
-    } = this.props
+    const { adding, addModalVisible, handleSubmit, fullScreen, valid } = this.props
 
     return (
-      <Dialog
-        open={addModalVisible}
-        onClose={this.props.hideAddModal}
-        fullScreen={fullScreen}
-        fullWidth
-      >
+      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen} fullWidth>
         <DialogTitle>Add stage</DialogTitle>
         <DialogContent>
-          <form
-            id={formName}
-            onSubmit={handleSubmit(this.addStage)}
-            noValidate
-            autoComplete="off"
-          >
-            <Field
-              component={TextField}
-              fullWidth
-              name="name"
-              label="Stage Name"
-              required={true}
-              validate={required}
-            />
+          <form id={formName} onSubmit={handleSubmit(this.addStage)} noValidate autoComplete='off'>
+            <Field component={TextField} fullWidth name='name' label='Stage Name' required={true} validate={required} />
           </form>
         </DialogContent>
 
         <DialogActions>
-          <Button
-            onClick={this.props.hideAddModal}
-            color="default"
-            disabled={adding}
-          >
+          <Button onClick={this.props.hideAddModal} color='default' disabled={adding}>
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            form={formName}
-            disabled={adding || !valid}
-          >
+          <Button variant='contained' color='primary' type='submit' form={formName} disabled={adding || !valid}>
             {adding ? 'Adding...' : 'Add stage'}
           </Button>
         </DialogActions>
@@ -94,13 +54,10 @@ function mapStateToProps({ page: { stageList } }) {
   return {
     addModalVisible: stageList.addModalVisible,
     adding: stageList.adding,
-    addError: stageList.addError
+    addError: stageList.addError,
   }
 }
 
 AddStageModal = withMobileDialog({ breakpoint: 'xs' })(AddStageModal)
-AddStageModal = connect(
-  mapStateToProps,
-  { addStage, hideAddModal }
-)(AddStageModal)
+AddStageModal = connect(mapStateToProps, { addStage, hideAddModal: hideAddStageModal })(AddStageModal)
 export default reduxForm({ form: formName })(AddStageModal)

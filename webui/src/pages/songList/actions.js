@@ -24,13 +24,13 @@ export const deleteSong = songId => {
   return { type: actionTypes.DELETE_SONG, payload: request }
 }
 
-export const showAddModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
+export const showAddSongModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
 
-export const hideAddModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
+export const hideAddSongModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
 
-export const showDeleteModal = songToDelete => ({
+export const showDeleteSongModal = songToDelete => ({
   type: actionTypes.SHOW_DELETE_MODAL,
-  payload: { songToDelete }
+  payload: { songToDelete },
 })
 
 export const hideDeleteModal = () => ({ type: actionTypes.HIDE_DELETE_MODAL })

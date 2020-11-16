@@ -14,19 +14,17 @@ export const addScheduledJob = scheduledJob => {
 }
 
 export const deleteScheduledJob = scheduledJobId => {
-  const request = axios.delete(
-    `${restConfig.ROOT_URL}/scheduledJobs/${scheduledJobId}`
-  )
+  const request = axios.delete(`${restConfig.ROOT_URL}/scheduledJobs/${scheduledJobId}`)
   return { type: actionTypes.DELETE_SCHEDULED_JOB, payload: request }
 }
 
-export const showAddModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
+export const showAddScheduledTaskModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
 
-export const hideAddModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
+export const hideAddScheduledTaskModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
 
-export const showDeleteModal = scheduledJobToDelete => ({
+export const showDeleteScheduledTaskModal = scheduledJobToDelete => ({
   type: actionTypes.SHOW_DELETE_MODAL,
-  payload: { scheduledJobToDelete }
+  payload: { scheduledJobToDelete },
 })
 
 export const hideDeleteModal = () => ({ type: actionTypes.HIDE_DELETE_MODAL })
