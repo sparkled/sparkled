@@ -14,9 +14,7 @@ class TimelineEffect extends Component {
   shouldComponentUpdate(nextProps) {
     const { effect, selectedEffect } = this.props
     const effectChanged = effect !== nextProps.effect
-    const selectedEffectChanged =
-      (effect === selectedEffect) !==
-      (nextProps.effect === nextProps.selectedEffect)
+    const selectedEffectChanged = (effect === selectedEffect) !== (nextProps.effect === nextProps.selectedEffect)
 
     return effectChanged || selectedEffectChanged
   }
@@ -37,10 +35,10 @@ class TimelineEffect extends Component {
         <Rnd
           className={'TimelineEffect ' + this.getEffectClass()}
           ref={this.rndRef}
-          bounds="parent"
+          bounds='parent'
           default={dimensions}
           enableResizing={{ left: true, right: true }}
-          dragAxis="x"
+          dragAxis='x'
           dragGrid={[2, 0]}
           resizeGrid={[2, 0]}
           onMouseDown={this.onEffectClick}
@@ -75,9 +73,7 @@ class TimelineEffect extends Component {
   onEffectMove = (event, data) => {
     const { effect } = this.props
     const startFrame = Math.floor(data.x / 2)
-    const endFrame = Math.round(
-      startFrame + (effect.endFrame - effect.startFrame)
-    )
+    const endFrame = Math.round(startFrame + (effect.endFrame - effect.startFrame))
 
     this.moveEffect(startFrame, endFrame)
   }
@@ -120,29 +116,15 @@ class TimelineEffect extends Component {
   }
 
   renderRepetitions() {
-    const { effect, pixelsPerFrame, selectedEffect } = this.props
-    const {
-      endFrame,
-      repetitions = 1,
-      repetitionSpacing = 0,
-      startFrame,
-      uuid
-    } = effect
+    const { effect, pixelsPerFrame } = this.props
+    const { endFrame, repetitions = 1, repetitionSpacing = 0, startFrame, uuid } = effect
     if (repetitions > 1) {
       const duration = endFrame - startFrame + 1
       const width = duration * pixelsPerFrame
 
       return _.map(Array(repetitions - 1), (_, i) => {
-        const left =
-          (startFrame + (duration + repetitionSpacing) * (i + 1)) *
-          pixelsPerFrame
-        return (
-          <div
-            key={`${uuid}-${i}`}
-            className="TimelineEffectRepetition"
-            style={{ left, width }}
-          />
-        )
+        const left = (startFrame + (duration + repetitionSpacing) * (i + 1)) * pixelsPerFrame
+        return <div key={`${uuid}-${i}`} className='TimelineEffectRepetition' style={{ left, width }} />
       })
     } else {
       return []
@@ -155,7 +137,4 @@ function mapStateToProps({ page }) {
   return { pixelsPerFrame, sequence, selectedEffect }
 }
 
-export default connect(
-  mapStateToProps,
-  { selectEffect, updateEffect }
-)(TimelineEffect)
+export default connect(mapStateToProps, { selectEffect, updateEffect })(TimelineEffect)

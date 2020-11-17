@@ -1,11 +1,4 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  withMobileDialog
-} from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, withMobileDialog } from '@material-ui/core'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
@@ -13,14 +6,14 @@ import { Field, reduxForm } from 'redux-form'
 import TextField from '../../../../components/form/TextField'
 import SingleSelectField from '../../../../components/form/SingleSelectField'
 import { required } from '../../../../components/form/validators'
-import { addScheduledJob, hideAddModal } from '../../actions'
+import { addScheduledJob, hideAddScheduledTaskModal } from '../../actions'
 import jobActions from '../../jobActions'
 
 const formName = 'addScheduledJob'
 
 class AddScheduledJobModal extends Component {
   state = {
-    action: null
+    action: null,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,44 +28,28 @@ class AddScheduledJobModal extends Component {
   }
 
   render() {
-    const {
-      adding,
-      addModalVisible,
-      handleSubmit,
-      fullScreen,
-      valid
-    } = this.props
+    const { adding, addModalVisible, handleSubmit, fullScreen, valid } = this.props
 
     return (
-      <Dialog
-        open={addModalVisible}
-        onClose={this.props.hideAddModal}
-        fullScreen={fullScreen}
-        fullWidth
-      >
+      <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen} fullWidth>
         <DialogTitle>Add scheduled job</DialogTitle>
         <DialogContent>
-          <form
-            id={formName}
-            onSubmit={handleSubmit(this.addScheduledJob)}
-            noValidate
-            autoComplete="off"
-          >
+          <form id={formName} onSubmit={handleSubmit(this.addScheduledJob)} noValidate autoComplete='off'>
             <Field
-              name="cronExpression"
+              name='cronExpression'
               component={TextField}
               fullWidth
-              label="Cron Expression"
-              type="text"
+              label='Cron Expression'
+              type='text'
               required
               validate={required}
             />
 
             <Field
-              name="action"
+              name='action'
               component={SingleSelectField}
               fullWidth
-              label="Action"
+              label='Action'
               options={jobActions}
               required
               validate={required}
@@ -85,20 +62,10 @@ class AddScheduledJobModal extends Component {
         </DialogContent>
 
         <DialogActions>
-          <Button
-            onClick={this.props.hideAddModal}
-            color="default"
-            disabled={adding}
-          >
+          <Button onClick={this.props.hideAddModal} color='default' disabled={adding}>
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            form={formName}
-            disabled={adding || !valid}
-          >
+          <Button variant='contained' color='primary' type='submit' form={formName} disabled={adding || !valid}>
             {adding ? 'Adding...' : 'Add scheduled job'}
           </Button>
         </DialogActions>
@@ -119,9 +86,9 @@ class AddScheduledJobModal extends Component {
     if (hasPlaylist) {
       return (
         <Field
-          name="playlistId"
+          name='playlistId'
           component={SingleSelectField}
-          label="Playlist"
+          label='Playlist'
           options={this.props.playlists}
           required
           validate={required}
@@ -136,16 +103,7 @@ class AddScheduledJobModal extends Component {
     const hasValue = this.state.action === 'SET_BRIGHTNESS'
 
     if (hasValue) {
-      return (
-        <Field
-          name="value"
-          component={TextField}
-          fullWidth
-          label="Brightness"
-          required
-          validate={required}
-        />
-      )
+      return <Field name='value' component={TextField} fullWidth label='Brightness' required validate={required} />
     } else {
       return null
     }
@@ -160,15 +118,12 @@ function mapStateToProps({ page: { scheduler } }) {
   return {
     addModalVisible: scheduler.addModalVisible,
     adding: scheduler.adding,
-    addError: scheduler.addError
+    addError: scheduler.addError,
   }
 }
 
-AddScheduledJobModal = withMobileDialog({ breakpoint: 'xs' })(
+AddScheduledJobModal = withMobileDialog({ breakpoint: 'xs' })(AddScheduledJobModal)
+AddScheduledJobModal = connect(mapStateToProps, { addScheduledJob, hideAddModal: hideAddScheduledTaskModal })(
   AddScheduledJobModal
 )
-AddScheduledJobModal = connect(
-  mapStateToProps,
-  { addScheduledJob, hideAddModal }
-)(AddScheduledJobModal)
 export default reduxForm({ form: 'addScheduledJob' })(AddScheduledJobModal)

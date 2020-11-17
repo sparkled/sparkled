@@ -13,7 +13,7 @@ export const addSequence = sequence => {
 
   return {
     type: actionTypes.ADD_SEQUENCE,
-    payload: request
+    payload: request,
   }
 }
 
@@ -22,13 +22,13 @@ export const deleteSequence = sequenceId => {
   return { type: actionTypes.DELETE_SEQUENCE, payload: request }
 }
 
-export const showAddModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
+export const showAddSequenceModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
 
-export const hideAddModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
+export const hideAddSequenceModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
 
-export const showDeleteModal = sequenceToDelete => ({
+export const showDeleteSequenceModal = sequenceToDelete => ({
   type: actionTypes.SHOW_DELETE_MODAL,
-  payload: { sequenceToDelete }
+  payload: { sequenceToDelete },
 })
 
 export const hideDeleteModal = () => ({ type: actionTypes.HIDE_DELETE_MODAL })

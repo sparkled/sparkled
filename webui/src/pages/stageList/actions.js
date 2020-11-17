@@ -7,7 +7,7 @@ export const fetchStages = () => {
 
   return {
     type: actionTypes.FETCH_STAGES,
-    payload: request
+    payload: request,
   }
 }
 
@@ -17,7 +17,7 @@ export const addStage = stage => {
 
   return {
     type: actionTypes.ADD_STAGE,
-    payload: request
+    payload: request,
   }
 }
 
@@ -26,31 +26,31 @@ export const deleteStage = stageId => {
 
   return {
     type: actionTypes.DELETE_STAGE,
-    payload: request
+    payload: request,
   }
 }
 
-export const showAddModal = () => {
+export const showAddStageModal = () => {
   return {
-    type: actionTypes.SHOW_ADD_MODAL
+    type: actionTypes.SHOW_ADD_MODAL,
   }
 }
 
-export const hideAddModal = () => {
+export const hideAddStageModal = () => {
   return {
-    type: actionTypes.HIDE_ADD_MODAL
+    type: actionTypes.HIDE_ADD_MODAL,
   }
 }
 
-export const showDeleteModal = stageToDelete => {
+export const showDeleteStageModal = stageToDelete => {
   return {
     type: actionTypes.SHOW_DELETE_MODAL,
-    payload: { stageToDelete }
+    payload: { stageToDelete },
   }
 }
 
 export const hideDeleteModal = () => {
   return {
-    type: actionTypes.HIDE_DELETE_MODAL
+    type: actionTypes.HIDE_DELETE_MODAL,
   }
 }

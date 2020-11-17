@@ -30,13 +30,13 @@ export const stopPlaylist = () => {
   return { type: actionTypes.STOP_PLAYLIST, payload: request }
 }
 
-export const showAddModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
+export const showAddPlaylistModal = () => ({ type: actionTypes.SHOW_ADD_MODAL })
 
-export const hideAddModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
+export const hideAddPlaylistModal = () => ({ type: actionTypes.HIDE_ADD_MODAL })
 
-export const showDeleteModal = playlistToDelete => ({
+export const showDeletePlaylistModal = playlistToDelete => ({
   type: actionTypes.SHOW_DELETE_MODAL,
-  payload: { playlistToDelete }
+  payload: { playlistToDelete },
 })
 
 export const hideDeleteModal = () => ({ type: actionTypes.HIDE_DELETE_MODAL })
