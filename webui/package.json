@@ -1,6 +1,6 @@
 {
   "name": "sparkled",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "4.2.0",
