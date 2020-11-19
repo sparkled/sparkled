@@ -1,6 +1,20 @@
 micronaut:
   application:
     name: sparkled
+    
+  io:
+    watch:
+      enabled: true
+      paths:
+        - src/main
+        - model/src/main
+        - music-player/src/main
+        - persistence/src/main
+        - renderer/src/main
+        - rest/src/main
+        - scheduler/src/main
+        - udp-server/src/main
+      restart: true
 
   router:
     static-resources:
