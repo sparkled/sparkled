@@ -12,19 +12,19 @@ import java.util.UUID
  */
 object ChannelPropPairUtils {
 
-    fun makePairs(sequenceChannels: List<SequenceChannel>, stageProps: List<StageProp>): List<ChannelPropPair> {
-        return sequenceChannels.asSequence().map { sc -> getPair(sc, stageProps) }.toList()
+    fun makePairs(objectMapper: ObjectMapper, sequenceChannels: List<SequenceChannel>, stageProps: List<StageProp>): List<ChannelPropPair> {
+        return sequenceChannels.asSequence().map { sc -> getPair(objectMapper, sc, stageProps) }.toList()
     }
 
-    private fun getPair(sequenceChannel: SequenceChannel, stageProps: List<StageProp>): ChannelPropPair {
+    private fun getPair(objectMapper: ObjectMapper, sequenceChannel: SequenceChannel, stageProps: List<StageProp>): ChannelPropPair {
         return ChannelPropPair(
-            convertChannelData(sequenceChannel),
+            convertChannelData(objectMapper, sequenceChannel),
             findStagePropByUuid(stageProps, sequenceChannel.getStagePropUuid()!!)
         )
     }
 
-    private fun convertChannelData(sequenceChannel: SequenceChannel): SequenceChannelEffects {
-        return ObjectMapper().readValue(sequenceChannel.getChannelJson(), SequenceChannelEffects::class.java)
+    private fun convertChannelData(objectMapper: ObjectMapper, sequenceChannel: SequenceChannel): SequenceChannelEffects {
+        return objectMapper.readValue(sequenceChannel.getChannelJson(), SequenceChannelEffects::class.java)
     }
 
     private fun findStagePropByUuid(stageProps: List<StageProp>, uuid: UUID): StageProp {

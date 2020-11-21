@@ -30,7 +30,7 @@ const initialState = {
   playbackSpeed: 100,
   previewDuration: 5,
   pixelsPerFrame: 2,
-  copiedEffect: null
+  copiedEffect: null,
 }
 
 export default (state = initialState, action) => {
@@ -53,8 +53,7 @@ export default (state = initialState, action) => {
 
         const sequence = action.payload.data
         draft.sequence = sequence
-        draft.selectedChannel =
-          sequence.channels.length > 0 ? sequence.channels[0] : null
+        draft.selectedChannel = sequence.channels.length > 0 ? sequence.channels[0] : null
         break
 
       case actionTypes.FETCH_SEQUENCE_REJECTED:
@@ -83,17 +82,12 @@ export default (state = initialState, action) => {
         break
 
       case actionTypes.FETCH_REFERENCE_DATA_FULFILLED:
-        const {
-          blendModes,
-          effectTypes,
-          fillTypes,
-          easingTypes
-        } = action.payload.data
+        const { blendModes, effects, fills, easings } = action.payload.data
         draft.fetchingReferenceData = false
         draft.blendModes = _.mapKeys(blendModes, 'code')
-        draft.easingTypes = _.mapKeys(easingTypes, 'code')
-        draft.effectTypes = _.mapKeys(effectTypes, 'code')
-        draft.fillTypes = _.mapKeys(fillTypes, 'code')
+        draft.easingTypes = _.mapKeys(easings, 'code')
+        draft.effectTypes = _.mapKeys(effects, 'code')
+        draft.fillTypes = _.mapKeys(fills, 'code')
         break
 
       case actionTypes.FETCH_REFERENCE_DATA_REJECTED:
@@ -133,10 +127,7 @@ export default (state = initialState, action) => {
         })
 
         draft.sequence.channels.push(action.payload.channel)
-        draft.sequence.channels = _.sortBy(
-          draft.sequence.channels,
-          'displayOrder'
-        )
+        draft.sequence.channels = _.sortBy(draft.sequence.channels, 'displayOrder')
         break
 
       case actionTypes.SELECT_EFFECT:
@@ -158,7 +149,7 @@ export default (state = initialState, action) => {
             ...state.copiedEffect,
             uuid: uuidv4(),
             startFrame: state.currentFrame,
-            endFrame: state.copiedEffect.endFrame + frameOffset
+            endFrame: state.copiedEffect.endFrame + frameOffset,
           }
 
           addEffect(draft, effect)
@@ -239,19 +230,13 @@ function updateEffect(draft, effect) {
 }
 
 function addEffect(draft, effect) {
-  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(
-    draft,
-    effect
-  )
+  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(draft, effect)
   draft.sequence.channels[channelIndex].effects.splice(effectIndex, 0, effect)
   draft.selectedEffect = effect
 }
 
 function deleteEffect(draft, effect) {
-  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(
-    draft,
-    effect
-  )
+  const { channelIndex, effectIndex } = getChannelAndEffectIndexes(draft, effect)
   draft.sequence.channels[channelIndex].effects.splice(effectIndex, 1)
   draft.selectedEffect = null
 }
@@ -259,7 +244,7 @@ function deleteEffect(draft, effect) {
 function getChannelAndEffectIndexes(draft, effect) {
   const { sequence, selectedChannel } = draft
   const channelIndex = _.findIndex(sequence.channels, {
-    uuid: selectedChannel.uuid
+    uuid: selectedChannel.uuid,
   })
 
   const { effects } = sequence.channels[channelIndex]

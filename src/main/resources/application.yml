@@ -4,7 +4,6 @@ micronaut:
     
   io:
     watch:
-      enabled: true
       paths:
         - src/main
         - model/src/main
@@ -52,3 +51,6 @@ liquibase:
   datasources:
     default:
       change-log: 'classpath:db/liquibase-changelog.xml'
+
+sparkled:
+  directory: './data'

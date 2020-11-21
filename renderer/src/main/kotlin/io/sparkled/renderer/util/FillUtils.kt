@@ -1,9 +1,9 @@
 package io.sparkled.renderer.util
 
 import io.sparkled.model.animation.fill.BlendMode
-import io.sparkled.renderer.context.RenderContext
-import io.sparkled.renderer.fill.FillFunctions
+import io.sparkled.renderer.api.RenderContext
 import org.slf4j.LoggerFactory
+import java.awt.Color
 
 object FillUtils {
 
@@ -18,7 +18,7 @@ object FillUtils {
         } else if (ledIndex >= 0 && ledIndex < frame.ledCount) {
             val index = if (ctx.stageProp.isReverse()!!) frame.ledCount - ledIndex - 1 else ledIndex
             val led = frame.getLed(index)
-            val fillColor = FillFunctions[ctx.effect.fill.type].getFill(ctx, ledIndex)
+            val fillColor = ctx.fill?.getFill(ctx, ledIndex) ?: Color.BLACK
 
             when (ctx.effect.fill.blendMode) {
                 BlendMode.NORMAL -> led.setColor(fillColor, alpha)

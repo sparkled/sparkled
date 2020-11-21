@@ -1,5 +1,6 @@
 package io.sparkled.rest
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MutableHttpResponse
@@ -21,6 +22,7 @@ import io.sparkled.persistence.sequence.SequencePersistenceService
 import io.sparkled.persistence.song.SongPersistenceService
 import io.sparkled.persistence.stage.StagePersistenceService
 import io.sparkled.renderer.Renderer
+import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.rest.response.IdResponse
 import io.sparkled.viewmodel.sequence.SequenceViewModel
 import io.sparkled.viewmodel.sequence.SequenceViewModelConverter
@@ -33,6 +35,8 @@ import kotlin.math.min
 
 @Controller("/api/sequences")
 open class SequenceController(
+    private val pluginManager: SparkledPluginManager,
+    private val objectMapper: ObjectMapper,
     private val sequencePersistenceService: SequencePersistenceService,
     private val songPersistenceService: SongPersistenceService,
     private val stagePersistenceService: StagePersistenceService,
@@ -168,7 +172,7 @@ open class SequenceController(
         val stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId()!!)
         val endFrameBounded = min(endFrame, SequenceUtils.getFrameCount(song, sequence) - 1)
 
-        return Renderer(sequence, sequenceChannels, stageProps, startFrame, endFrameBounded).render()
+        return Renderer(pluginManager, objectMapper, sequence, sequenceChannels, stageProps, startFrame, endFrameBounded).render()
     }
 
     @Delete("/{id}")

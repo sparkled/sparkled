@@ -1,6 +1,6 @@
 package io.sparkled.model.reference
 
-interface ReferenceDataItem<T : Enum<T>> {
-    val code: T
+data class ReferenceDataItem<T : Enum<T>>(
+    val code: T,
     val name: String
-}
+)

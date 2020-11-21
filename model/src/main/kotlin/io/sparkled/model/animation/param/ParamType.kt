@@ -11,6 +11,11 @@ enum class ParamType {
     NONE,
 
     /**
+     * True or false.
+     */
+    BOOLEAN,
+
+    /**
      * A single color value.
      */
     COLOR,

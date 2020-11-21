@@ -1,27 +1,31 @@
 package io.sparkled.renderer
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.animation.ChannelPropPair
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.StageProp
-import io.sparkled.model.render.Led
-import io.sparkled.model.render.RenderResult
-import io.sparkled.model.render.RenderedStagePropData
-import io.sparkled.model.render.RenderedStagePropDataMap
+import io.sparkled.model.render.*
+import io.sparkled.renderer.api.RenderContext
+import io.sparkled.renderer.api.SparkledEffect
+import io.sparkled.renderer.easing.function.LinearEasing
 import io.sparkled.renderer.util.ChannelPropPairUtils
-import io.sparkled.renderer.util.EffectTypeRenderers
+import org.slf4j.LoggerFactory
 import kotlin.math.max
 import kotlin.math.min
 
+// TODO inject the renderer, so cache and objectMapper can be injected.
 class Renderer(
+    private val pluginManager: SparkledPluginManager,
+    objectMapper: ObjectMapper,
     private val sequence: Sequence,
     sequenceChannels: List<SequenceChannel>,
     stageProps: List<StageProp>,
     private val startFrame: Int,
     private val endFrame: Int
 ) {
-    private val channelPropPairs: List<ChannelPropPair> = ChannelPropPairUtils.makePairs(sequenceChannels, stageProps)
+    private val channelPropPairs: List<ChannelPropPair> = ChannelPropPairUtils.makePairs(objectMapper, sequenceChannels, stageProps)
 
     fun render(): RenderResult {
         val renderedProps = RenderedStagePropDataMap()
@@ -67,14 +71,43 @@ class Renderer(
 
     private fun renderRepetition(sequence: Sequence, data: RenderedStagePropData, prop: StageProp, effect: Effect) {
         val effectTypeCode = effect.type
-        val renderer = EffectTypeRenderers[effectTypeCode]
+        val effectRenderer = pluginManager.effects.get()[effectTypeCode]
+        
+        if (effectRenderer == null) {
+            logger.warn("Failed to find effect '${effect.type}, skipping.")
+        } else {
+            val startFrame = max(this.startFrame, effect.startFrame)
+            val endFrame = min(this.endFrame, effect.endFrame)
 
-        val startFrame = max(this.startFrame, effect.startFrame)
-        val endFrame = min(this.endFrame, effect.endFrame)
-
-        for (frameNumber in startFrame..endFrame) {
-            val frame = data.frames[frameNumber - this.startFrame]
-            renderer.render(sequence, data, frame, prop, effect)
+            for (frameNumber in startFrame..endFrame) {
+                val frame = data.frames[frameNumber - this.startFrame]
+                render(sequence, data, frame, prop, effect, effectRenderer)
+            }
         }
+    }
+
+    fun render(sequence: Sequence, channel: RenderedStagePropData, frame: RenderedFrame, stageProp: StageProp, effect: Effect, renderer: SparkledEffect) {
+        val progress = getProgress(frame, effect)
+        val ctx = RenderContext(sequence, channel, frame, stageProp, effect, progress, pluginManager.fills.get())
+        renderer.render(ctx)
+    }
+
+    private fun getProgress(frame: RenderedFrame, effect: Effect): Float {
+        val easingFunction = pluginManager.easings.get()[effect.easing.type] ?: LinearEasing
+
+        val currentFrame = frame.frameNumber - effect.startFrame
+        val startFrame = effect.startFrame
+        val duration = effect.endFrame - startFrame + 1
+
+        val progress = easingFunction.getScaledProgress(effect.easing, currentFrame, duration)
+        if (progress < 0 || progress > 1) {
+            throw IllegalStateException("Animation progress is out of bounds: $progress")
+        }
+
+        return progress
+    }
+    
+    companion object {
+        private val logger = LoggerFactory.getLogger(Renderer::class.java)
     }
 }

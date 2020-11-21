@@ -3,9 +3,7 @@ package io.sparkled.model.validator
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.animation.SequenceChannelEffects
-import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.effect.Effect
-import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.validator.exception.EntityValidationException
 
@@ -45,11 +43,11 @@ class SequenceChannelValidator(
     }
 
     private fun validateEffect(channel: SequenceChannel, effect: Effect, previousEndFrame: Int) {
-        if (effect.type === EffectTypeCode.NONE) {
+        if (effect.type == "NONE") {
             throw EntityValidationException(String.format(Errors.EFFECT_TYPE_MISSING, effect.startFrame, channel.getName()))
         }
 
-        if (effect.easing.type === EasingTypeCode.NONE) {
+        if (effect.easing.type == "NONE") {
             throw EntityValidationException(String.format(Errors.EFFECT_EASING_TYPE_MISSING, effect.startFrame, channel.getName()))
         }
 
@@ -71,19 +69,19 @@ class SequenceChannelValidator(
     }
 
     private object Errors {
-        internal const val UUID_MISSING = "Channel '%s' has no unique identifier."
-        internal const val CHANNEL_JSON_MISSING = "Channel '%s' has no animation data."
-        internal const val CHANNEL_JSON_MALFORMED = "Channel '%s' has malformed effect data."
+        const val UUID_MISSING = "Channel '%s' has no unique identifier."
+        const val CHANNEL_JSON_MISSING = "Channel '%s' has no animation data."
+        const val CHANNEL_JSON_MALFORMED = "Channel '%s' has malformed effect data."
 
-        internal const val EFFECT_TYPE_MISSING = "Effect type cannot be empty for effect at frame %d in channel '%s'."
-        internal const val EFFECT_EASING_TYPE_MISSING =
+        const val EFFECT_TYPE_MISSING = "Effect type cannot be empty for effect at frame %d in channel '%s'."
+        const val EFFECT_EASING_TYPE_MISSING =
             "EasingFunction type cannot be empty for effect at frame %d in channel '%s'."
-        internal const val EFFECT_BACK_TO_FRONT =
+        const val EFFECT_BACK_TO_FRONT =
             "Effect start frame cannot be after end frame for effect at frame %d in channel '%s'."
-        internal const val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d in channel '%s'."
-        internal const val EFFECT_REPETITIONS_INVALID =
+        const val EFFECT_OVERLAPPING = "Overlapping or out-of-order effects detected at frame %d in channel '%s'."
+        const val EFFECT_REPETITIONS_INVALID =
             "Effect repetitions cannot be less than 1 for effect at frame %d in channel '%s'."
-        internal const val EFFECT_REPETITION_SPACING_INVALID =
+        const val EFFECT_REPETITION_SPACING_INVALID =
             "Effect repetition spacing cannot be less than 0 for effect at frame %d in channel '%s'."
     }
 }

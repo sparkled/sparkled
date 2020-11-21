@@ -42,6 +42,13 @@ allprojects { project ->
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
         implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
+
+        // Kotlin runtime scripting.
+        implementation 'org.jetbrains.kotlin:kotlin-script-runtime'
+        implementation 'org.jetbrains.kotlin:kotlin-compiler-embeddable'
+        implementation 'org.jetbrains.kotlin:kotlin-script-util'
+        runtime 'org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable'
+        
         implementation 'io.micronaut:micronaut-runtime'
         implementation 'io.micronaut:micronaut-http-client'
         implementation 'io.micronaut:micronaut-http-server-netty'
@@ -100,6 +107,7 @@ shadowJar {
 
 dependencies {
     implementation project(':persistence')
+    implementation project(':renderer')
     implementation project(':rest')
     implementation project(':scheduler')
     implementation project(':udp-server')

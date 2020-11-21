@@ -1,17 +1,22 @@
 package io.sparkled.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.effect.Effect
+import io.sparkled.model.config.SparkledConfig
 import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.renderer.Renderer
+import io.sparkled.renderer.SparkledPluginManager
 import java.util.UUID
 
 object RenderUtils {
-
+    
+    private val objectMapper = ObjectMapper().registerKotlinModule()
+    private val pluginManager = SparkledPluginManager(SparkledConfig(directory = ".")).apply { reloadPlugins() }
     val PROP_UUID = UUID(0, 0)
     const val PROP_CODE = "TEST_PROP"
 
@@ -24,10 +29,12 @@ object RenderUtils {
         val animationData = SequenceChannelEffects(listOf(effect))
 
         val sequence = Sequence().setFramesPerSecond(60)
-        val channelJson = ObjectMapper().writeValueAsString(animationData)
+        val channelJson = objectMapper.writeValueAsString(animationData)
         val sequenceChannel = SequenceChannel().setStagePropUuid(PROP_UUID).setChannelJson(channelJson)
 
         val renderResult = Renderer(
+            pluginManager,
+            objectMapper,
             sequence,
             listOf(sequenceChannel),
             listOf(stageProp),

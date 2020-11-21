@@ -1,19 +1,18 @@
 package io.sparkled.renderer
 
 import io.sparkled.model.animation.easing.Easing
-import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.model.animation.effect.Effect
-import io.sparkled.model.animation.effect.EffectTypeCode
 import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.model.animation.fill.Fill
-import io.sparkled.model.animation.fill.FillTypeCode
-import io.sparkled.model.animation.param.ParamCode
 import io.sparkled.model.util.ArgumentUtils.arg
+import io.sparkled.renderer.easing.function.LinearEasing
+import io.sparkled.renderer.effect.FlashEffect
+import io.sparkled.renderer.fill.SolidFill
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
-import kotlin.intArrayOf as f
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.intArrayOf as f
 
 class EffectRepetitionRendererTest {
 
@@ -22,13 +21,13 @@ class EffectRepetitionRendererTest {
         val effect = Effect(
             endFrame = 10,
             repetitions = 2,
-            type = EffectTypeCode.FLASH,
-            easing = Easing(EasingTypeCode.LINEAR),
+            type = FlashEffect.id,
+            easing = Easing(LinearEasing.id),
             fill = Fill(
-                FillTypeCode.SOLID,
+                SolidFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg(ParamCode.COLOR, "#ffffff")
+                    arg("COLOR", "#ffffff")
                 )
             )
         )
@@ -73,13 +72,13 @@ class EffectRepetitionRendererTest {
             endFrame = 2,
             repetitions = repetitions,
             repetitionSpacing = spacing,
-            type = EffectTypeCode.FLASH,
-            easing = Easing(EasingTypeCode.LINEAR, 50f, 50f),
+            type = FlashEffect.id,
+            easing = Easing(LinearEasing.id, 50f, 50f),
             fill = Fill(
-                FillTypeCode.SOLID,
+                SolidFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg(ParamCode.COLOR, "#ffffff")
+                    arg("COLOR", "#ffffff")
                 )
             )
         )

@@ -23,22 +23,14 @@ import {
   pasteEffect,
   previewRender,
   saveSequence,
-  showAddChannelModal
+  showAddChannelModal,
 } from './actions'
 import AddChannelModal from './components/AddChannelModal'
 import EffectForm from './components/EffectForm'
 import Timeline from './components/Timeline'
 import './SequenceEditPage.css'
 import { IconButton, withStyles } from '@material-ui/core'
-import {
-  Redo,
-  Undo,
-  Save,
-  Publish,
-  Layers,
-  Star,
-  PlayArrow
-} from '@material-ui/icons'
+import { Redo, Undo, Save, Publish, Layers, Star, PlayArrow } from '@material-ui/icons'
 import { getErrorMessage } from '../../utils/errorUtils'
 
 const { undo, redo, clearHistory } = ActionCreators
@@ -47,22 +39,17 @@ const NEW_EFFECT_FRAMES = 10
 
 const styles = () => ({
   pageContainer: {
-    padding: 0
-  }
+    padding: 0,
+  },
 })
 
 class SequenceEditPage extends Component {
   componentDidMount() {
-    const {
-      setCurrentPage,
-      fetchSequenceStage,
-      fetchSequence,
-      fetchReferenceData
-    } = this.props
+    const { setCurrentPage, fetchSequenceStage, fetchSequence, fetchReferenceData } = this.props
     const { sequenceId } = this.props.match.params
     setCurrentPage({
       pageTitle: 'Edit Sequence',
-      pageClass: 'SequenceEditPage'
+      pageClass: 'SequenceEditPage',
     })
     fetchSequenceStage(sequenceId)
     fetchSequence(sequenceId)
@@ -95,17 +82,8 @@ class SequenceEditPage extends Component {
   }
 
   previewRender = () => {
-    const {
-      currentFrame,
-      previewDuration,
-      previewRender,
-      sequence
-    } = this.props
-    previewRender(
-      sequence,
-      currentFrame,
-      sequence.framesPerSecond * previewDuration
-    )
+    const { currentFrame, previewDuration, previewRender, sequence } = this.props
+    previewRender(sequence, currentFrame, sequence.framesPerSecond * previewDuration)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -121,15 +99,10 @@ class SequenceEditPage extends Component {
   }
 
   render() {
-    const pageBody = (
-      <div className="d-flex w-100 h-100">{this.renderContent()}</div>
-    )
+    const pageBody = <div className='d-flex w-100 h-100'>{this.renderContent()}</div>
 
     return (
-      <PageContainer
-        actions={this.renderNavbar()}
-        className={this.props.classes.pageContainer}
-      >
+      <PageContainer actions={this.renderNavbar()} className={this.props.classes.pageContainer}>
         {pageBody}
       </PageContainer>
     )
@@ -147,7 +120,7 @@ class SequenceEditPage extends Component {
       selectedChannel,
       saving,
       previewDuration,
-      playbackSpeed
+      playbackSpeed,
     } = this.props
     const loaded = sequence && stage
 
@@ -157,54 +130,46 @@ class SequenceEditPage extends Component {
           style={{ width: 60, marginRight: 5 }}
           value={previewDuration}
           onChange={this.adjustPreviewDuration}
-          title="Preview duration (seconds)"
+          title='Preview duration (seconds)'
         >
-          <option value="2">2s</option>
-          <option value="5">5s</option>
-          <option value="10">10s</option>
-          <option value="20">20s</option>
-          <option value="30">30s</option>
-          <option value="60">1m</option>
-          <option value="120">2m</option>
-          <option value="180">3m</option>
-          <option value="240">4m</option>
-          <option value="300">5m</option>
+          <option value='2'>2s</option>
+          <option value='5'>5s</option>
+          <option value='10'>10s</option>
+          <option value='20'>20s</option>
+          <option value='30'>30s</option>
+          <option value='60'>1m</option>
+          <option value='120'>2m</option>
+          <option value='180'>3m</option>
+          <option value='240'>4m</option>
+          <option value='300'>5m</option>
         </select>
 
         <select
           style={{ width: 60, marginRight: 5 }}
           value={playbackSpeed}
           onChange={e => this.adjustPlaybackSpeed(e.target.value)}
-          title="Preview speed"
+          title='Preview speed'
         >
-          <option value="25">.25x</option>
-          <option value="50">.5x</option>
-          <option value="100">1x</option>
-          <option value="125">1.25x</option>
-          <option value="150">1.5x</option>
-          <option value="200">2x</option>
+          <option value='25'>.25x</option>
+          <option value='50'>.5x</option>
+          <option value='100'>1x</option>
+          <option value='125'>1.25x</option>
+          <option value='150'>1.5x</option>
+          <option value='200'>2x</option>
         </select>
 
-        <IconButton
-          onClick={() => undo()}
-          disabled={saving || !loaded || !canUndo || fetchingRenderData}
-          title="Undo"
-        >
+        <IconButton onClick={() => undo()} disabled={saving || !loaded || !canUndo || fetchingRenderData} title='Undo'>
           <Undo />
         </IconButton>
 
-        <IconButton
-          onClick={() => redo()}
-          disabled={saving || !loaded || !canRedo || fetchingRenderData}
-          title="Redo"
-        >
+        <IconButton onClick={() => redo()} disabled={saving || !loaded || !canRedo || fetchingRenderData} title='Redo'>
           <Redo />
         </IconButton>
 
         <IconButton
           onClick={this.props.showAddChannelModal}
           disabled={saving || !loaded || fetchingRenderData}
-          title="Add channel"
+          title='Add channel'
         >
           <Layers />
         </IconButton>
@@ -212,7 +177,7 @@ class SequenceEditPage extends Component {
         <IconButton
           onClick={this.addEffect}
           disabled={saving || !loaded || !selectedChannel || fetchingRenderData}
-          title="Add effect"
+          title='Add effect'
         >
           <Star />
         </IconButton>
@@ -220,7 +185,7 @@ class SequenceEditPage extends Component {
         <IconButton
           onClick={this.saveSequence}
           disabled={saving || !loaded || fetchingRenderData}
-          title="Save sequence"
+          title='Save sequence'
         >
           <Save />
         </IconButton>
@@ -228,7 +193,7 @@ class SequenceEditPage extends Component {
         <IconButton
           onClick={this.previewRender}
           disabled={saving || !loaded || fetchingRenderData}
-          title="Preview sequence"
+          title='Preview sequence'
         >
           <PlayArrow />
         </IconButton>
@@ -236,7 +201,7 @@ class SequenceEditPage extends Component {
         <IconButton
           onClick={this.publishSequence}
           disabled={saving || !loaded || fetchingRenderData}
-          title="Publish sequence"
+          title='Publish sequence'
         >
           <Publish />
         </IconButton>
@@ -267,27 +232,26 @@ class SequenceEditPage extends Component {
     const { addEffect, currentFrame, sequence } = this.props
     const effect = {
       uuid: uuidv4(),
-      type: 'FLASH',
+      type: '@sparkled/flash',
       args: {},
       easing: {
-        type: 'LINEAR',
+        type: '@sparkled/linear',
         start: 0,
         end: 100,
-        args: {}
+        args: {},
       },
       fill: {
         blendMode: 'NORMAL',
-        type: 'SOLID',
+        type: '@sparkled/solid',
         args: {
-          COLOR: ['#ff0000']
-        }
+          COLOR: ['#ff0000'],
+        },
       },
       startFrame: currentFrame,
-      endFrame:
-        Math.min(currentFrame + NEW_EFFECT_FRAMES, sequence.frameCount) - 1,
+      endFrame: Math.min(currentFrame + NEW_EFFECT_FRAMES, sequence.frameCount) - 1,
       repetitions: 1,
       repetitionSpacing: 0,
-      reverse: false
+      reverse: false,
     }
 
     addEffect(effect)
@@ -311,13 +275,10 @@ class SequenceEditPage extends Component {
 
   renderError() {
     return (
-      <div className="card border-danger">
-        <div className="card-body">
+      <div className='card border-danger'>
+        <div className='card-body'>
           <p>Failed to load page: {this.props.fetchError}</p>
-          <button
-            className="btn btn-danger"
-            onClick={() => window.location.reload()}
-          >
+          <button className='btn btn-danger' onClick={() => window.location.reload()}>
             Reload the page
           </button>
         </div>
@@ -329,29 +290,19 @@ class SequenceEditPage extends Component {
     const { sequence, stage, stageProps, pixelsPerFrame } = this.props
     return (
       <Fragment>
-        <SplitPane
-          split="horizontal"
-          minSize={100}
-          defaultSize={200}
-          primary="second"
-        >
+        <SplitPane split='horizontal' minSize={100} defaultSize={200} primary='second'>
           <SplitPane
-            split="vertical"
-            primary="second"
+            split='vertical'
+            primary='second'
             defaultSize={300}
             allowResize={false}
-            pane1ClassName="stage-canvas-container"
+            pane1ClassName='stage-canvas-container'
           >
             <StageEditor stage={this.props.stage} editable={false} />
             <EffectForm />
           </SplitPane>
 
-          <Timeline
-            sequence={sequence}
-            stage={stage}
-            stageProps={stageProps}
-            pixelsPerFrame={pixelsPerFrame}
-          />
+          <Timeline sequence={sequence} stage={stage} stageProps={stageProps} pixelsPerFrame={pixelsPerFrame} />
         </SplitPane>
 
         <AddChannelModal />
@@ -383,7 +334,7 @@ function mapStateToProps({ page }) {
     playbackSpeed,
     selectedChannel,
     selectedEffect,
-    pixelsPerFrame
+    pixelsPerFrame,
   } = present
 
   return {
@@ -397,39 +348,30 @@ function mapStateToProps({ page }) {
     selectedChannel,
     selectedEffect,
     pixelsPerFrame,
-    fetching:
-      present.fetchingSequence ||
-      present.fetchingStage ||
-      present.fetchingReferenceData,
-    fetchError:
-      present.fetchSequenceError ||
-      present.fetchStageError ||
-      present.fetchReferenceDataError,
+    fetching: present.fetchingSequence || present.fetchingStage || present.fetchingReferenceData,
+    fetchError: present.fetchSequenceError || present.fetchStageError || present.fetchReferenceDataError,
     canUndo: past.length > 1,
-    canRedo: future.length > 0
+    canRedo: future.length > 0,
   }
 }
 
-SequenceEditPage = connect(
-  mapStateToProps,
-  {
-    setCurrentPage,
-    fetchSequence,
-    fetchSequenceStage,
-    fetchReferenceData,
-    addEffect,
-    cancelRender,
-    copyEffect,
-    pasteEffect,
-    previewRender,
-    adjustPreviewDuration,
-    adjustPlaybackSpeed,
-    deleteEffect,
-    showAddChannelModal,
-    saveSequence,
-    undo,
-    redo,
-    clearHistory
-  }
-)(SequenceEditPage)
+SequenceEditPage = connect(mapStateToProps, {
+  setCurrentPage,
+  fetchSequence,
+  fetchSequenceStage,
+  fetchReferenceData,
+  addEffect,
+  cancelRender,
+  copyEffect,
+  pasteEffect,
+  previewRender,
+  adjustPreviewDuration,
+  adjustPlaybackSpeed,
+  deleteEffect,
+  showAddChannelModal,
+  saveSequence,
+  undo,
+  redo,
+  clearHistory,
+})(SequenceEditPage)
 export default withStyles(styles)(SequenceEditPage)

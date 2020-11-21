@@ -1,3 +1,4 @@
 dependencies {
     implementation project(':model')
+    testImplementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinModuleVersion"
 }
