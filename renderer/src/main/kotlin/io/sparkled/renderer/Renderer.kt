@@ -78,6 +78,11 @@ class Renderer(
         if (effectRenderer == null) {
             logger.warn("Failed to find effect '${effect.type}, skipping.")
         } else {
+            if (effect.startFrame >= endFrame || effect.endFrame <= startFrame) {
+                // Don't render out-of-bounds effects.
+                return
+            }
+
             val startFrame = max(this.startFrame, effect.startFrame)
             val endFrame = min(this.endFrame, effect.endFrame)
 
