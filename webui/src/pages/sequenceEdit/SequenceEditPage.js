@@ -242,7 +242,7 @@ class SequenceEditPage extends Component {
       },
       fill: {
         blendMode: 'NORMAL',
-        type: '@sparkled/solid',
+        type: '@sparkled/single-color',
         args: {
           COLOR: ['#ff0000'],
         },
