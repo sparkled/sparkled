@@ -6,13 +6,15 @@ import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.util.FillUtils
 import kotlin.math.roundToInt
 
-object FlashEffect : SparkledEffect {
+object FlashEffect : SparkledEffect<Unit> {
 
     override val id = "@sparkled/flash"
     override val version = SemVer(1, 0, 0)
     override val name = "Flash"
 
-    override fun render(ctx: RenderContext) {
+    override fun createState(ctx: RenderContext) {}
+
+    override fun render(ctx: RenderContext, state: Unit) {
         val alpha = getAlpha(ctx.progress)
 
         for (i in 0 until ctx.channel.ledCount) {

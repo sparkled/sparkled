@@ -6,7 +6,7 @@ import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.util.ArgumentUtils.arg
 import io.sparkled.renderer.easing.function.LinearEasing
-import io.sparkled.renderer.fill.SolidFill
+import io.sparkled.renderer.fill.SingleColorFill
 import io.sparkled.util.RenderUtils
 import io.sparkled.util.matchers.SparkledMatchers.hasRenderedFrames
 import org.hamcrest.MatcherAssert.assertThat
@@ -25,7 +25,7 @@ internal class LineEffectTest {
             ),
             easing = Easing(LinearEasing.id),
             fill = Fill(
-                SolidFill.id,
+                SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
                     arg("COLOR", "#ff0000")
@@ -71,7 +71,7 @@ internal class LineEffectTest {
             ),
             easing = Easing(LinearEasing.id),
             fill = Fill(
-                SolidFill.id,
+                SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
                     arg("COLOR", "#ffffff")

@@ -8,7 +8,7 @@ data class Param(
 ) {
     companion object {
         fun boolean(code: String, displayName: String, defaultValue: Boolean): Param {
-            return Param(code, displayName, ParamType.COLOR, listOf(defaultValue.toString()))
+            return Param(code, displayName, ParamType.BOOLEAN, listOf(defaultValue.toString()))
         }
 
         fun color(code: String, displayName: String, defaultValue: String): Param {

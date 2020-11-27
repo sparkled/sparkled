@@ -65,31 +65,51 @@ class Renderer(
             val newStartFrame = effect.startFrame + (spacedDuration * it)
 
             val effectRepetition = effect.copy(startFrame = newStartFrame, endFrame = newStartFrame + duration - 1)
-            renderRepetition(sequence, data, prop, effectRepetition)
+            renderRepetition<Any>(sequence, data, prop, effectRepetition)
         }
     }
 
-    private fun renderRepetition(sequence: Sequence, data: RenderedStagePropData, prop: StageProp, effect: Effect) {
+    private fun <T> renderRepetition(sequence: Sequence, data: RenderedStagePropData, prop: StageProp, effect: Effect) {
         val effectTypeCode = effect.type
-        val effectRenderer = pluginManager.effects.get()[effectTypeCode]
-        
+
+        @Suppress("UNCHECKED_CAST")
+        val effectRenderer = pluginManager.effects.get()[effectTypeCode] as SparkledEffect<T>?
+
         if (effectRenderer == null) {
             logger.warn("Failed to find effect '${effect.type}, skipping.")
         } else {
             val startFrame = max(this.startFrame, effect.startFrame)
             val endFrame = min(this.endFrame, effect.endFrame)
 
+            if (startFrame - this.startFrame >= data.frames.size) {
+                return
+            }
+
+            val firstFrame = data.frames[startFrame - this.startFrame]
+            val state = effectRenderer.createState(
+                RenderContext(sequence, data, firstFrame, prop, effect, 0f, pluginManager.fills.get())
+            )
+
+            // Stateful effects need to be rendered from the beginning, so perform a dummy render on any frames that
+            // fall outside of the preview window.
+            if (state != null) {
+                for (frameNumber in effect.startFrame until startFrame) {
+                    val frame = RenderedFrame(startFrame = effect.startFrame, frameNumber = frameNumber, ledCount = firstFrame.ledCount, data = byteArrayOf(), dummyFrame = true)
+                    render(sequence, data, frame, prop, effect, effectRenderer, state)
+                }
+            }
+            
             for (frameNumber in startFrame..endFrame) {
                 val frame = data.frames[frameNumber - this.startFrame]
-                render(sequence, data, frame, prop, effect, effectRenderer)
+                render(sequence, data, frame, prop, effect, effectRenderer, state)
             }
         }
     }
 
-    fun render(sequence: Sequence, channel: RenderedStagePropData, frame: RenderedFrame, stageProp: StageProp, effect: Effect, renderer: SparkledEffect) {
+    fun <T> render(sequence: Sequence, channel: RenderedStagePropData, frame: RenderedFrame, stageProp: StageProp, effect: Effect, renderer: SparkledEffect<T>, state: T) {
         val progress = getProgress(frame, effect)
         val ctx = RenderContext(sequence, channel, frame, stageProp, effect, progress, pluginManager.fills.get())
-        renderer.render(ctx)
+        renderer.render(ctx, state)
     }
 
     private fun getProgress(frame: RenderedFrame, effect: Effect): Float {
@@ -106,7 +126,7 @@ class Renderer(
 
         return progress
     }
-    
+
     companion object {
         private val logger = LoggerFactory.getLogger(Renderer::class.java)
     }

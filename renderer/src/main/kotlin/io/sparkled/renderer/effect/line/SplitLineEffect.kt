@@ -1,13 +1,13 @@
 package io.sparkled.renderer.effect.line
 
 import io.sparkled.model.animation.param.Param
-import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.RenderContext
+import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.SparkledEffect
 import io.sparkled.renderer.effect.line.LineEffectUtils.renderLine
 import io.sparkled.renderer.util.ParamUtils
 
-object SplitLineEffect : SparkledEffect {
+object SplitLineEffect : SparkledEffect<Unit> {
 
     override val id = "@sparkled/split-line"
     override val name = "Split Line"
@@ -16,7 +16,9 @@ object SplitLineEffect : SparkledEffect {
         Param.int("LENGTH", "Length", 1)
     )
 
-    override fun render(ctx: RenderContext) {
+    override fun createState(ctx: RenderContext) {}
+
+    override fun render(ctx: RenderContext, state: Unit) {
         val end = ctx.channel.ledCount
         val evenLedCount = end % 2 == 0
         val middle = end / 2

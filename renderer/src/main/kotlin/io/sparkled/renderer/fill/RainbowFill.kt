@@ -20,9 +20,9 @@ object RainbowFill : SparkledFill {
     override val name = "Rainbow"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
-        Param.decimal("BRIGHTNESS", "BRIGHTNESS", 100.0),
-        Param.decimal("CYCLE_COUNT", "CYCLE_COUNT", 1.0),
-        Param.decimal("CYCLES_PER_SECOND", "CYCLES_PER_SECOND", 0.5)
+        Param.decimal("BRIGHTNESS", "Brightness (%)", 100.0),
+        Param.decimal("CYCLE_COUNT", "Cycle Count", 1.0),
+        Param.decimal("CYCLES_PER_SECOND", "Cycles Per Second", 0.5)
     )
 
     override fun getFill(ctx: RenderContext, ledIndex: Int): Color {

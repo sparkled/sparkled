@@ -11,18 +11,21 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
 
-// TODO add direction parameter.
-object BuildLineEffect : SparkledEffect {
+object BuildLineEffect : SparkledEffect<Unit> {
 
     override val id = "@sparkled/build-line"
     override val name = "Build Line"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
         Param.int("SEGMENTS", "Segments", 4),
+        Param.boolean("REVERSE", "Reverse Build Direction", false)
     )
-    
-    override fun render(ctx: RenderContext) {
+
+    override fun createState(ctx: RenderContext) {}
+
+    override fun render(ctx: RenderContext, state: Unit) {
         val segments = ParamUtils.getInt(ctx.effect, "SEGMENTS", 4)
+        val reverse = ParamUtils.getBoolean(ctx.effect, "REVERSE", false)
         val ledCount = ctx.frame.ledCount
         val lineLength = ceil(ledCount / segments.toFloat()).toInt()
 
@@ -35,7 +38,8 @@ object BuildLineEffect : SparkledEffect {
             endPos = min(ledCount, max(lineLength * i, endPos))
 
             for (j in startPos until endPos) {
-                FillUtils.fill(ctx, j, 1f)
+                val ledIndex = if (reverse) ledCount - j - 1 else j
+                FillUtils.fill(ctx, ledIndex, 1f)
             }
         }
     }

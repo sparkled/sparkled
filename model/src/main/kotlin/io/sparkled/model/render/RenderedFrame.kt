@@ -2,9 +2,14 @@ package io.sparkled.model.render
 
 import java.util.Arrays
 
-class RenderedFrame(private val startFrame: Int, val frameNumber: Int, val ledCount: Int, private val data: ByteArray) {
+class RenderedFrame(private val startFrame: Int, val frameNumber: Int, val ledCount: Int, private val data: ByteArray, private val dummyFrame: Boolean = false) {
 
     fun getData(): ByteArray {
+        if (dummyFrame) {
+            // Dummy frames should only ever appear in preview renders for stateful effects.
+            throw RuntimeException("Attempted to retrieve data from dummy frame.")
+        }
+
         val bytesPerFrame = ledCount * Led.BYTES_PER_LED
         val offset = (frameNumber - startFrame) * bytesPerFrame
 
@@ -15,9 +20,13 @@ class RenderedFrame(private val startFrame: Int, val frameNumber: Int, val ledCo
     }
 
     fun getLed(ledIndex: Int): Led {
-        val bytesPerFrame = ledCount * Led.BYTES_PER_LED
-        val offset = (frameNumber - startFrame) * bytesPerFrame
-        return Led(data, ledIndex, offset)
+        return if (dummyFrame) {
+            Led(byteArrayOf(0, 0, 0), 0, 0)
+        } else {
+            val bytesPerFrame = ledCount * Led.BYTES_PER_LED
+            val offset = (frameNumber - startFrame) * bytesPerFrame
+            Led(data, ledIndex, offset)
+        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -29,7 +38,7 @@ class RenderedFrame(private val startFrame: Int, val frameNumber: Int, val ledCo
         if (startFrame != other.startFrame) return false
         if (frameNumber != other.frameNumber) return false
         if (ledCount != other.ledCount) return false
-        if (!Arrays.equals(data, other.data)) return false
+        if (!data.contentEquals(other.data)) return false
 
         return true
     }
@@ -38,7 +47,7 @@ class RenderedFrame(private val startFrame: Int, val frameNumber: Int, val ledCo
         var result = startFrame
         result = 31 * result + frameNumber
         result = 31 * result + ledCount
-        result = 31 * result + Arrays.hashCode(data)
+        result = 31 * result + data.contentHashCode()
         return result
     }
 

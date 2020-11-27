@@ -9,7 +9,9 @@ object FillUtils {
 
     private val logger = LoggerFactory.getLogger(FillUtils::class.java)
 
-    fun fill(ctx: RenderContext, ledIndex: Int, alpha: Float) {
+    // TODO effectColor is an intermediate step. At present, we have the concept of fills and effects. These concepts
+    //      will be merged into one, where effects can stack and act as a mask to combine effects.
+    fun fill(ctx: RenderContext, ledIndex: Int, alpha: Float, effectColor: Color? = null) {
         val frame = ctx.frame
 
         if (alpha < 0 || alpha > 1) {
@@ -18,7 +20,7 @@ object FillUtils {
         } else if (ledIndex >= 0 && ledIndex < frame.ledCount) {
             val index = if (ctx.stageProp.isReverse()!!) frame.ledCount - ledIndex - 1 else ledIndex
             val led = frame.getLed(index)
-            val fillColor = ctx.fill?.getFill(ctx, ledIndex) ?: Color.BLACK
+            val fillColor = effectColor ?: ctx.fill?.getFill(ctx, ledIndex) ?: Color.BLACK
 
             when (ctx.effect.fill.blendMode) {
                 BlendMode.NORMAL -> led.setColor(fillColor, alpha)

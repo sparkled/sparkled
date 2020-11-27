@@ -12,10 +12,10 @@ import java.awt.Color
  * Effect parameters:
  *  - COLOR: The color to fill.
  */
-object SolidFill : SparkledFill {
+object SingleColorFill : SparkledFill {
 
-    override val id = "@sparkled/solid"
-    override val name = "Solid"
+    override val id = "@sparkled/single_color"
+    override val name = "Single Color"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
         Param.color("COLOR", "Color", "#ff0000")

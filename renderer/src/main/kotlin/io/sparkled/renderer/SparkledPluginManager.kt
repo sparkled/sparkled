@@ -9,12 +9,14 @@ import io.sparkled.renderer.easing.function.ExpoOutEasing
 import io.sparkled.renderer.easing.function.LinearEasing
 import io.sparkled.renderer.effect.FlashEffect
 import io.sparkled.renderer.effect.GlitterEffect
+import io.sparkled.renderer.effect.SolidEffect
 import io.sparkled.renderer.effect.line.BuildLineEffect
+import io.sparkled.renderer.effect.line.FireEffect
 import io.sparkled.renderer.effect.line.LineEffect
 import io.sparkled.renderer.effect.line.SplitLineEffect
 import io.sparkled.renderer.fill.GradientFill
 import io.sparkled.renderer.fill.RainbowFill
-import io.sparkled.renderer.fill.SolidFill
+import io.sparkled.renderer.fill.SingleColorFill
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.*
@@ -28,17 +30,17 @@ class SparkledPluginManager(
 ) {
     private val scriptEngine = ScriptEngineManager().getEngineByExtension("kts")
     private val defaultEasings = listOf(LinearEasing, ExpoOutEasing)
-    private val defaultEffects = listOf(BuildLineEffect, FlashEffect, GlitterEffect, LineEffect, SplitLineEffect)
-    private val defaultFills = listOf(GradientFill, RainbowFill, SolidFill)
+    private val defaultEffects: List<SparkledEffect<*>> = listOf(BuildLineEffect, FireEffect, FlashEffect, GlitterEffect, LineEffect, SplitLineEffect, SolidEffect)
+    private val defaultFills = listOf(GradientFill, RainbowFill, SingleColorFill)
 
     val easings = AtomicReference<SortedMap<String, SparkledEasing>>(sortedMapOf())
-    val effects = AtomicReference<SortedMap<String, SparkledEffect>>(sortedMapOf())
+    val effects = AtomicReference<SortedMap<String, SparkledEffect<*>>>(sortedMapOf())
     val fills = AtomicReference<SortedMap<String, SparkledFill>>(sortedMapOf())
     
     fun reloadPlugins() {
         logger.info("Reloading plugins.")
         val easingPlugins = reloadTypedPlugins<SparkledEasing>("easings")
-        val effectPlugins = reloadTypedPlugins<SparkledEffect>("effects")
+        val effectPlugins = reloadTypedPlugins<SparkledEffect<*>>("effects")
         val fillPlugins = reloadTypedPlugins<SparkledFill>("fills")
 
         easings.set((defaultEasings + easingPlugins).associateBy { it.id }.toSortedMap())

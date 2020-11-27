@@ -11,7 +11,7 @@ import kotlin.random.Random
 /**
  * Random flickering lights with adjustable lifetime and density.
  */
-object GlitterEffect : SparkledEffect {
+object GlitterEffect : SparkledEffect<Unit> {
 
     override val id = "@sparkled/glitter"
     override val name = "Glitter"
@@ -22,7 +22,9 @@ object GlitterEffect : SparkledEffect {
         Param.int("SEED", "Random Seed", 50),
     )
 
-    override fun render(ctx: RenderContext) {
+    override fun createState(ctx: RenderContext) {}
+
+    override fun render(ctx: RenderContext, state: Unit) {
         val density = ParamUtils.getInt(ctx.effect, "DENSITY", 10) / 100f
         val patternIndex = (density * (patterns.size - 1)).toInt()
         val lifetime = ParamUtils.getFloat(ctx.effect, "LIFETIME", 1f)
