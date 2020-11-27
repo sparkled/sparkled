@@ -3,7 +3,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { setQuery } from '../store/reducers/dashboardScreenReducer'
-import { RootReducerState } from '../store/reducers/rootReducer'
+import { AppState } from '../store/reducers/rootReducer'
 import AppLogo from './AppLogo'
 import { Col, Container, Row } from 'react-grid-system'
 import BrightnessToggle from './BrightnessToggle'
@@ -55,7 +55,7 @@ const AppBar = () => {
   const handleClose = () => setAnchorEl(null)
 
   const dispatch = useDispatch()
-  const { query } = useSelector((state: RootReducerState) => state.dashboardScreen)
+  const { query } = useSelector((state: AppState) => state.dashboardScreen)
 
   return (
     <S.Nav>

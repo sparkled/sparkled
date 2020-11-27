@@ -21,11 +21,8 @@ const minRepetitionSpacing = min(0)
 const minPercent = min(0)
 const maxPercent = max(100)
 const maxStartFrame = (value, effect) =>
-  value > effect.endFrame
-    ? 'Start frame cannot be greater than end frame'
-    : null
-const minEndFrame = (value, effect) =>
-  value < effect.startFrame ? 'End frame cannot be less than start frame' : null
+  value > effect.endFrame ? 'Start frame cannot be greater than end frame' : null
+const minEndFrame = (value, effect) => (value < effect.startFrame ? 'End frame cannot be less than start frame' : null)
 let maxEndFrame = () => null
 
 class EffectForm extends Component {
@@ -38,8 +35,7 @@ class EffectForm extends Component {
 
     if (sequence !== nextProps.sequence) {
       const max = sequence.frameCount - 1
-      maxEndFrame = value =>
-        value > max ? 'End frame cannot greater than ' + max : null
+      maxEndFrame = value => (value > max ? 'End frame cannot greater than ' + max : null)
     }
   }
 
@@ -54,10 +50,10 @@ class EffectForm extends Component {
     return (
       <Card className={'EffectForm ' + className}>
         <CardBody>
-          <CardTitle className="d-flex justify-content-between">
+          <CardTitle className='d-flex justify-content-between'>
             Effect Properties
             <img
-              alt="Delete"
+              alt='Delete'
               src={trash}
               style={{ width: 20, height: 20 }}
               className={selectedEffect ? '' : 'd-none'}
@@ -78,28 +74,28 @@ class EffectForm extends Component {
     const { sequence, selectedEffect: effect } = this.props
     return (
       <form>
-        <div className="row">
+        <div className='row'>
           <Field
-            className="col-6"
-            type="number"
+            className='col-6'
+            type='number'
             parse={toNumber}
-            name="startFrame"
+            name='startFrame'
             component={InputField}
-            label="Start Frame"
+            label='Start Frame'
             required
             validate={[required, minStartFrame, maxStartFrame]}
-            min="0"
+            min='0'
             max={effect.endFrame - 1}
             onChange={this.updateEffect}
           />
 
           <Field
-            className="col-6"
-            type="number"
+            className='col-6'
+            type='number'
             parse={toNumber}
-            name="endFrame"
+            name='endFrame'
             component={InputField}
-            label="End Frame"
+            label='End Frame'
             required
             validate={[required, minEndFrame, maxEndFrame]}
             min={effect.startFrame + 1}
@@ -108,26 +104,26 @@ class EffectForm extends Component {
           />
         </div>
 
-        <div className="row">
+        <div className='row'>
           <Field
-            className="col-6"
-            type="number"
+            className='col-6'
+            type='number'
             parse={toNumber}
-            name="repetitions"
+            name='repetitions'
             component={InputField}
-            label="Repetitions"
+            label='Repetitions'
             required
             validate={[required, minRepetitions]}
             onChange={this.updateEffect}
           />
 
           <Field
-            className="col-6"
-            type="number"
+            className='col-6'
+            type='number'
             parse={toNumber}
-            name="repetitionSpacing"
+            name='repetitionSpacing'
             component={InputField}
-            label="Rep Spacing"
+            label='Rep Spacing'
             required
             validate={[required, minRepetitionSpacing]}
             onChange={this.updateEffect}
@@ -152,9 +148,9 @@ class EffectForm extends Component {
       <Fragment>
         <h5>Effect Type Properties</h5>
         <Field
-          name="type"
+          name='type'
           component={SingleSelectField}
-          label="Type"
+          label='Type'
           allowEmpty={false}
           required
           validate={required}
@@ -171,12 +167,12 @@ class EffectForm extends Component {
     const fillType = fillTypes[selectedEffect.fill.type]
 
     return (
-      <FormSection name="fill">
+      <FormSection name='fill'>
         <h5>Fill Properties</h5>
         <Field
-          name="blendMode"
+          name='blendMode'
           component={SingleSelectField}
-          label="Blend Mode"
+          label='Blend Mode'
           allowEmpty={false}
           required
           validate={required}
@@ -185,9 +181,9 @@ class EffectForm extends Component {
         />
 
         <Field
-          name="type"
+          name='type'
           component={SingleSelectField}
-          label="Type"
+          label='Type'
           allowEmpty={false}
           required
           validate={required}
@@ -204,12 +200,12 @@ class EffectForm extends Component {
     const easingType = easingTypes[selectedEffect.easing.type]
 
     return (
-      <FormSection name="easing">
+      <FormSection name='easing'>
         <h5>Easing Properties</h5>
         <Field
-          name="type"
+          name='type'
           component={SingleSelectField}
-          label="Type"
+          label='Type'
           allowEmpty={false}
           required
           validate={required}
@@ -217,26 +213,26 @@ class EffectForm extends Component {
           onChange={this.updateEffect}
         />
 
-        <div className="row">
+        <div className='row'>
           <Field
-            className="col-6"
-            type="number"
+            className='col-6'
+            type='number'
             parse={toNumber}
-            name="start"
+            name='start'
             component={InputField}
-            label="Start (%)"
+            label='Start (%)'
             required
             validate={[required, minPercent, maxPercent]}
             onChange={this.updateEffect}
           />
 
           <Field
-            className="col-6"
-            type="number"
+            className='col-6'
+            type='number'
             parse={toNumber}
-            name="end"
+            name='end'
             component={InputField}
-            label="End (%)"
+            label='End (%)'
             required
             validate={[required, minPercent, maxPercent]}
             onChange={this.updateEffect}
@@ -258,7 +254,18 @@ class EffectForm extends Component {
     const label = param.displayName
     const path = `args.${param.code}`
 
-    if (param.type === paramTypes.COLOR) {
+    if (param.type === paramTypes.BOOLEAN) {
+      return (
+        <Field
+          key={param.code}
+          name={path}
+          component={InputField}
+          type='checkbox'
+          label={label}
+          onChange={this.updateEffect}
+        />
+      )
+    } else if (param.type === paramTypes.COLOR) {
       return (
         <Field
           key={param.code}
@@ -310,12 +317,7 @@ class EffectForm extends Component {
 
     // Timeout is used to allow form to finish validation so we have the correct "invalid" value in props.
     setTimeout(() => {
-      const {
-        selectedChannel,
-        updateEffect,
-        selectedEffect,
-        invalid
-      } = this.props
+      const { selectedChannel, updateEffect, selectedEffect, invalid } = this.props
       const updatedEffect = produce(selectedEffect, draft => {
         draft.invalid = invalid
 
@@ -354,7 +356,7 @@ function mapStateToProps({ page }) {
     easingTypes,
     selectedChannel,
     selectedEffect,
-    sequence
+    sequence,
   } = page.sequenceEdit.present
   return {
     blendModes,
@@ -363,12 +365,9 @@ function mapStateToProps({ page }) {
     easingTypes,
     selectedChannel,
     selectedEffect,
-    sequence
+    sequence,
   }
 }
 
-EffectForm = connect(
-  mapStateToProps,
-  { updateEffect, deleteEffect }
-)(EffectForm)
+EffectForm = connect(mapStateToProps, { updateEffect, deleteEffect })(EffectForm)
 export default reduxForm({ form: 'effect' })(EffectForm)

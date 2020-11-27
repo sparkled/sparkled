@@ -28,7 +28,7 @@ import DeleteSongModal from '../../pages/songList/components/DeleteSongModal/Del
 import { showAddStageModal, showDeleteStageModal } from '../../pages/stageList/actions'
 import AddStageModal from '../../pages/stageList/components/AddStageModal'
 import DeleteStageModal from '../../pages/stageList/components/DeleteStageModal'
-import { RootReducerState } from '../../store/reducers/rootReducer'
+import { AppState } from '../../store/reducers/rootReducer'
 import { getFormattedDuration } from '../../utils/dateUtils'
 import DashboardSwimlane from './DashboardSwimlane'
 import DashboardSwimlaneItem from './DashboardSwimlaneItem'
@@ -108,7 +108,7 @@ const S = {
 
 const DashboardScreen = () => {
   useApiGetDashboard()
-  const { dashboard, query, requestStatus } = useSelector((state: RootReducerState) => state.dashboardScreen)
+  const { dashboard, query, requestStatus } = useSelector((state: AppState) => state.dashboardScreen)
   const searchQuery = query.trim().toLowerCase()
   const dispatch = useDispatch()
 

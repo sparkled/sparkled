@@ -1,3 +1,4 @@
+export const BOOLEAN = 'BOOLEAN'
 export const COLOR = 'COLOR'
 export const COLORS = 'COLORS'
 export const DECIMAL = 'DECIMAL'

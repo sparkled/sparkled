@@ -1,4 +1,4 @@
-import React, { EventHandler, MouseEventHandler } from 'react'
+import React, { EventHandler } from 'react'
 import styled from 'styled-components'
 
 const S = {

@@ -4,13 +4,13 @@ import { Dispatch } from 'redux'
 import { failed, loaded } from '../../store/reducers/dashboardScreenReducer'
 import { DashboardViewModel } from './apiTypes'
 import useAxios, { isLoadingOrReloading } from './useAxios'
-import { RootReducerState } from '../../store/reducers/rootReducer'
+import { AppState } from '../../store/reducers/rootReducer'
 
 function useApiGetDashboard() {
   const axios = useAxios()
   const dispatch = useDispatch()
   const { requestStatus } = useSelector(
-    (state: RootReducerState) => state.dashboardScreen
+    (state: AppState) => state.dashboardScreen
   )
 
   useEffect(() => {

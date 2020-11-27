@@ -9,5 +9,5 @@ const rootReducer = combineReducers({
   page: pageReducer,
 })
 
-export type RootReducerState = ReturnType<typeof rootReducer>
+export type AppState = ReturnType<typeof rootReducer>
 export default rootReducer
