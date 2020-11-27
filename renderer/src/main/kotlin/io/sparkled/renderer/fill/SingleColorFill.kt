@@ -14,7 +14,7 @@ import java.awt.Color
  */
 object SingleColorFill : SparkledFill {
 
-    override val id = "@sparkled/single_color"
+    override val id = "@sparkled/single-color"
     override val name = "Single Color"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
