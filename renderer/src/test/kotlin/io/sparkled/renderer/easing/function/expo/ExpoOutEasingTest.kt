@@ -1,7 +1,6 @@
 package io.sparkled.renderer.easing.function.expo
 
 import io.sparkled.model.animation.easing.Easing
-import io.sparkled.model.animation.easing.EasingTypeCode
 import io.sparkled.renderer.easing.function.ExpoOutEasing
 import io.sparkled.util.matchers.SparkledMatchers.equalsFloatArray
 import org.hamcrest.MatcherAssert.assertThat
