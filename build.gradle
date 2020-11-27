@@ -47,6 +47,7 @@ allprojects { project ->
         implementation 'org.jetbrains.kotlin:kotlin-script-runtime'
         implementation 'org.jetbrains.kotlin:kotlin-compiler-embeddable'
         implementation 'org.jetbrains.kotlin:kotlin-script-util'
+        implementation 'net.java.dev.jna:jna:5.6.0'
         runtime 'org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable'
         
         implementation 'io.micronaut:micronaut-runtime'
