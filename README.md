@@ -1,5 +1,4 @@
 # Sparkled
-[![Build Status](https://travis-ci.org/sparkled/sparkled.svg?branch=master)](https://travis-ci.org/sparkled/sparkled)
 
 Sparkled is a web-based LED sequencer that aims to reduce the barrier to entry for lighting projects.
 ![Sparkled](https://github.com/sparkled/sparkled/raw/gh-pages/images/sparkled-screenshot.jpg "Sparkled")
