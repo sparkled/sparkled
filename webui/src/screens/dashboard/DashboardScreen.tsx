@@ -204,7 +204,7 @@ const DashboardScreen = () => {
             <S.DropdownItem onClick={() => dispatch(playPlaylist(it.id))}>Play Playlist</S.DropdownItem>
             <S.DropdownItem onClick={() => dispatch(stopPlaylist())}>Stop Playlist</S.DropdownItem>
             <S.DropdownItem>
-              <Link to={`/playlists/${it.id}`}>Edit Playlists</Link>
+              <Link to={`/playlists/${it.id}`}>Edit Playlist</Link>
             </S.DropdownItem>
             <S.DropdownItem onClick={() => dispatch(showDeletePlaylistModal(it))}>Delete Playlist</S.DropdownItem>
           </>
@@ -267,7 +267,8 @@ const DashboardScreen = () => {
       <DeleteSequenceModal />
       <AddPlaylistModal />
       <DeletePlaylistModal />
-      <AddScheduledJobModal />
+      {/*@ts-ignore*/}
+      <AddScheduledJobModal playlists={dashboard?.playlists} />
       <DeleteScheduledJobModal />
 
       <AppBar />
