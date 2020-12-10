@@ -21,14 +21,14 @@ class SplitLineEffectTest {
             endFrame = 49,
             type = SplitLineEffect.id,
             args = mapOf(
-                arg("LENGTH", 5)
+                arg(SplitLineEffect.Params.LENGTH.name, 5)
             ),
             easing = Easing(LinearEasing.id),
             fill = Fill(
                 SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLOR", "#ffffff")
+                    arg(SingleColorFill.Params.COLOR.name, "#ffffff")
                 )
             )
         )
@@ -97,14 +97,14 @@ class SplitLineEffectTest {
             endFrame = 49,
             type = SplitLineEffect.id,
             args = mapOf(
-                arg("LENGTH", 5f)
+                arg(SplitLineEffect.Params.LENGTH.name, 5f)
             ),
             easing = Easing(LinearEasing.id),
             fill = Fill(
                 SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLOR", "#ffffff")
+                    arg(SingleColorFill.Params.COLOR.name, "#ffffff")
                 )
             )
         )

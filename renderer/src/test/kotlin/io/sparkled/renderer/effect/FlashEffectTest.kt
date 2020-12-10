@@ -25,7 +25,7 @@ class FlashEffectTest {
                 SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLOR", "#ffffff")
+                    arg(SingleColorFill.Params.COLOR.name, "#ffffff")
                 )
             )
         )

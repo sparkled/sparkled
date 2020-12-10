@@ -9,12 +9,13 @@ import io.sparkled.model.entity.Sequence
 import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.StageProp
 import io.sparkled.model.render.RenderedStagePropData
+import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
-import java.util.UUID
+import java.util.*
 
 object RenderUtils {
-    
+
     private val objectMapper = ObjectMapper().registerKotlinModule()
     private val pluginManager = SparkledPluginManager(SparkledConfig(directory = ".")).apply { reloadPlugins() }
     val PROP_UUID = UUID(0, 0)
@@ -22,26 +23,34 @@ object RenderUtils {
 
     fun render(effect: Effect, frameCount: Int, ledCount: Int): RenderedStagePropData {
         val stageProp = StageProp().setCode(PROP_CODE).setUuid(PROP_UUID).setLedCount(ledCount).setReverse(false)
-        return render(effect, frameCount, stageProp)
+        val result = render(mapOf(PROP_UUID to listOf(effect)), frameCount, listOf(stageProp))
+        return result[PROP_UUID.toString()]!!
     }
 
-    fun render(effect: Effect, frameCount: Int, stageProp: StageProp): RenderedStagePropData {
-        val animationData = SequenceChannelEffects(listOf(effect))
-
+    fun render(
+        effects: Map<UUID, List<Effect>>,
+        frameCount: Int,
+        stageProps: List<StageProp>
+    ): RenderedStagePropDataMap {
         val sequence = Sequence().setFramesPerSecond(60)
-        val channelJson = objectMapper.writeValueAsString(animationData)
-        val sequenceChannel = SequenceChannel().setStagePropUuid(PROP_UUID).setChannelJson(channelJson)
+        val sequenceChannels = effects.map {
+            SequenceChannel().apply {
+                setStagePropUuid(it.key)
+                setChannelJson(objectMapper.writeValueAsString(SequenceChannelEffects(it.value)))
+            }
+        }
 
         val renderResult = Renderer(
             pluginManager,
             objectMapper,
             sequence,
-            listOf(sequenceChannel),
-            listOf(stageProp),
+            sequenceChannels,
+            stageProps,
             0,
-            frameCount - 1
+            frameCount - 1,
+            preview = false
         ).render()
 
-        return renderResult.stageProps[PROP_UUID]!!
+        return renderResult.stageProps
     }
 }

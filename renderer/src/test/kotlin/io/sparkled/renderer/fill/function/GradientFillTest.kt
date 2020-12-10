@@ -26,9 +26,9 @@ class GradientFillTest {
                 GradientFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLORS", "#ff0000", "#0000ff", "#00ff00"),
-                    arg("BLEND_HARDNESS", 0f),
-                    arg("CYCLES_PER_SECOND", 0f)
+                    arg(GradientFill.Params.COLORS.name, "#ff0000", "#0000ff", "#00ff00"),
+                    arg(GradientFill.Params.BLEND_HARDNESS.name, 0f),
+                    arg(GradientFill.Params.CYCLES_PER_SECOND.name, 0f)
                 )
             )
         )
@@ -62,9 +62,9 @@ class GradientFillTest {
                 GradientFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLORS", "#ff0000", "#0000ff", "#00ff00"),
-                    arg("BLEND_HARDNESS", 50f),
-                    arg("CYCLES_PER_SECOND", 0f)
+                    arg(GradientFill.Params.COLORS.name, "#ff0000", "#0000ff", "#00ff00"),
+                    arg(GradientFill.Params.BLEND_HARDNESS.name, 50f),
+                    arg(GradientFill.Params.CYCLES_PER_SECOND.name, 0f)
                 )
             )
         )
@@ -98,9 +98,9 @@ class GradientFillTest {
                 GradientFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLORS", "#ff0000", "#0000ff", "#00ff00"),
-                    arg("BLEND_HARDNESS", 100f),
-                    arg("CYCLES_PER_SECOND", 0f)
+                    arg(GradientFill.Params.COLORS.name, "#ff0000", "#0000ff", "#00ff00"),
+                    arg(GradientFill.Params.BLEND_HARDNESS.name, 100f),
+                    arg(GradientFill.Params.CYCLES_PER_SECOND.name, 0f)
                 )
             )
         )
@@ -135,9 +135,9 @@ class GradientFillTest {
                 GradientFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLORS", "#ff0000", "#0000ff", "#00ff00"),
-                    arg("BLEND_HARDNESS", 0f),
-                    arg("CYCLES_PER_SECOND", 6f)
+                    arg(GradientFill.Params.COLORS.name, "#ff0000", "#0000ff", "#00ff00"),
+                    arg(GradientFill.Params.BLEND_HARDNESS.name, 0f),
+                    arg(GradientFill.Params.CYCLES_PER_SECOND.name, 6f)
                 )
             )
         )

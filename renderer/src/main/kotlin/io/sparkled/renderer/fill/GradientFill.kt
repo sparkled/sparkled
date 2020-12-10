@@ -19,26 +19,28 @@ import kotlin.math.max
  */
 object GradientFill : SparkledFill {
 
+    enum class Params { COLORS, COLOR_REPETITIONS, BLEND_HARDNESS, CYCLES_PER_SECOND }
+    
     override val id = "@sparkled/gradient"
     override val name = "Gradient"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
-        Param.colors("COLORS", "Colors", listOf("#ff0000", "#0000ff")),
-        Param.int("REPETITIONS", "Color Repetitions", 1),
-        Param.decimal("BLEND_HARDNESS", "Blend Hardness", 0.0),
-        Param.decimal("CYCLES_PER_SECOND", "Cycles Per Second", 0.0)
+        Param.colors(Params.COLORS.name, "Colors", listOf("#ff0000", "#0000ff")),
+        Param.int(Params.COLOR_REPETITIONS.name, "Color Repetitions", 1),
+        Param.decimal(Params.BLEND_HARDNESS.name, "Blend Hardness", 0.0),
+        Param.decimal(Params.CYCLES_PER_SECOND.name, "Cycles Per Second", 0.0)
     )
 
     override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
         val fill = ctx.effect.fill
 
-        val colors = ParamUtils.getColors(fill, "COLORS", Color.MAGENTA)
-        val repetitions = ParamUtils.getInt(fill, "COLOR_REPETITIONS", 1)
+        val colors = ParamUtils.getColors(fill, Params.COLORS.name, Color.MAGENTA)
+        val repetitions = ParamUtils.getInt(fill, Params.COLOR_REPETITIONS.name, 1)
         val colorCount = colors.size * max(1, repetitions)
 
-        val ledIndexNormalised = ledIndex / ctx.frame.ledCount.toFloat()
+        val ledIndexNormalised = ledIndex / ctx.ledCount.toFloat()
 
-        val cyclesPerSecond = ParamUtils.getFloat(fill, "CYCLES_PER_SECOND", 0f)
+        val cyclesPerSecond = ParamUtils.getFloat(fill, Params.CYCLES_PER_SECOND.name, 0f)
         val cycleProgress = cyclesPerSecond * (ctx.frame.frameNumber.toFloat() / ctx.sequence.getFramesPerSecond()!!)
         val gradientProgress = ledIndexNormalised + cycleProgress
 
@@ -46,7 +48,7 @@ object GradientFill : SparkledFill {
         val color1 = colors[floor(colorProgress).toInt() % colors.size]
         val color2 = colors[ceil(colorProgress).toInt() % colors.size]
 
-        val hardness = ParamUtils.getFloat(fill, "BLEND_HARDNESS", 0f) / 100f
+        val hardness = ParamUtils.getFloat(fill, Params.BLEND_HARDNESS.name, 0f) / 100f
         val blend = getBlend(colorProgress % 1f, hardness)
         return interpolate(color1, blend, color2)
     }

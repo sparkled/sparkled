@@ -14,7 +14,7 @@ object SolidEffect : SparkledEffect<Unit> {
     override fun createState(ctx: RenderContext) {}
 
     override fun render(ctx: RenderContext, state: Unit) {
-        for (i in 0 until ctx.channel.ledCount) {
+        for (i in 0 until ctx.ledCount) {
             FillUtils.fill(ctx, i, 1f)
         }
     }

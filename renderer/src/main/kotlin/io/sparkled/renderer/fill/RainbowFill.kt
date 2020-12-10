@@ -16,20 +16,22 @@ import java.awt.Color
  */
 object RainbowFill : SparkledFill {
 
+    enum class Params { BRIGHTNESS, CYCLE_COUNT, CYCLES_PER_SECOND }
+    
     override val id = "@sparkled/rainbow"
     override val name = "Rainbow"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
-        Param.decimal("BRIGHTNESS", "Brightness (%)", 100.0),
-        Param.decimal("CYCLE_COUNT", "Cycle Count", 1.0),
-        Param.decimal("CYCLES_PER_SECOND", "Cycles Per Second", 0.5)
+        Param.decimal(Params.BRIGHTNESS.name, "Brightness (%)", 100.0),
+        Param.decimal(Params.CYCLE_COUNT.name, "Cycle Count", 1.0),
+        Param.decimal(Params.CYCLES_PER_SECOND.name, "Cycles Per Second", 0.5)
     )
 
     override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
         val fill = ctx.effect.fill
-        val cycleCount = ParamUtils.getFloat(fill, "CYCLE_COUNT", 1f)
-        val cyclesPerSecond = ParamUtils.getFloat(fill, "CYCLES_PER_SECOND", 1f)
-        val brightness = ParamUtils.getFloat(fill, "BRIGHTNESS", 100f) / 100f
+        val cycleCount = ParamUtils.getFloat(fill, Params.CYCLE_COUNT.name, 1f)
+        val cyclesPerSecond = ParamUtils.getFloat(fill, Params.CYCLES_PER_SECOND.name, 1f)
+        val brightness = ParamUtils.getFloat(fill, Params.BRIGHTNESS.name, 100f) / 100f
 
         val frame = ctx.frame
         val ledPosition = ledIndex.toFloat() / frame.ledCount * cycleCount

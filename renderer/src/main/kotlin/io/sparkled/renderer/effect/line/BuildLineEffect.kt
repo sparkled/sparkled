@@ -12,21 +12,23 @@ import kotlin.math.min
 import kotlin.math.round
 
 object BuildLineEffect : SparkledEffect<Unit> {
+    
+    enum class Params { SEGMENTS, REVERSE }
 
     override val id = "@sparkled/build-line"
     override val name = "Build Line"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
-        Param.int("SEGMENTS", "Segments", 4),
-        Param.boolean("REVERSE", "Reverse Build Direction", false)
+        Param.int(Params.SEGMENTS.name, "Segments", 4),
+        Param.boolean(Params.REVERSE.name, "Reverse Build Direction", false)
     )
 
     override fun createState(ctx: RenderContext) {}
 
     override fun render(ctx: RenderContext, state: Unit) {
-        val segments = ParamUtils.getInt(ctx.effect, "SEGMENTS", 4)
-        val reverse = ParamUtils.getBoolean(ctx.effect, "REVERSE", false)
-        val ledCount = ctx.frame.ledCount
+        val segments = ParamUtils.getInt(ctx.effect, Params.SEGMENTS.name, 4)
+        val reverse = ParamUtils.getBoolean(ctx.effect, Params.REVERSE.name, false)
+        val ledCount = ctx.ledCount
         val lineLength = ceil(ledCount / segments.toFloat()).toInt()
 
         for (i in 0 until segments) {

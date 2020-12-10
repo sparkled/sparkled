@@ -23,14 +23,14 @@ internal class ReverseStagePropRendererTest {
             endFrame = 19,
             type = LineEffect.id,
             args = mapOf(
-                arg("LENGTH", 3)
+                arg(LineEffect.Params.LENGTH.name, 3)
             ),
             easing = Easing(LinearEasing.id),
             fill = Fill(
                 SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLOR", "#ff0000")
+                    arg(SingleColorFill.Params.COLOR.name, "#ff0000")
                 )
             )
         )
@@ -41,10 +41,10 @@ internal class ReverseStagePropRendererTest {
             .setLedCount(10)
             .setReverse(true)
 
-        val renderedStagePropData = RenderUtils.render(effect, effect.endFrame + 1, stageProp)
+        val renderedStagePropData = RenderUtils.render(mapOf(RenderUtils.PROP_UUID to listOf(effect)), effect.endFrame + 1, listOf(stageProp))
 
         assertThat(
-            renderedStagePropData, hasRenderedFrames(
+            renderedStagePropData[RenderUtils.PROP_UUID.toString()]!!, hasRenderedFrames(
             f(0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000),
             f(0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xAE0000),
             f(0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x5E0000, 0xFF0000),
