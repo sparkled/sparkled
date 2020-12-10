@@ -17,7 +17,7 @@ object FlashEffect : SparkledEffect<Unit> {
     override fun render(ctx: RenderContext, state: Unit) {
         val alpha = getAlpha(ctx.progress)
 
-        for (i in 0 until ctx.channel.ledCount) {
+        for (i in 0 until ctx.ledCount) {
             FillUtils.fill(ctx, i, alpha)
         }
     }

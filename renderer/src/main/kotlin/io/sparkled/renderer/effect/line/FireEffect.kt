@@ -15,9 +15,11 @@ import kotlin.random.Random
  * Based on https://github.com/FastLED/FastLED/blob/master/examples/Fire2012/Fire2012.ino.
  */
 object FireEffect : SparkledEffect<MutableList<Int>> {
+    
+    enum class Params { COOLING, SPARKING, RANDOM_SEED }
 
     override fun createState(ctx: RenderContext): MutableList<Int> {
-        return (0 until ctx.channel.ledCount)
+        return (0 until ctx.ledCount)
             .map { 0 }
             .toMutableList()
     }
@@ -26,26 +28,27 @@ object FireEffect : SparkledEffect<MutableList<Int>> {
     override val name = "Fire"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
-        Param.int("COOLING", "Cooling (%)", 20),
-        Param.int("SPARKING", "Sparking (%)", 50)
+        Param.int(Params.COOLING.name, "Cooling (%)", 20),
+        Param.int(Params.SPARKING.name, "Sparking (%)", 50),
+        Param.int(Params.RANDOM_SEED.name, "Random Seed", 1),
     )
 
     override fun render(ctx: RenderContext, state: MutableList<Int>) {
-        val ledCount = ctx.frame.ledCount
-        val random = Random(ctx.frame.frameNumber)
+        val randomSeed = ParamUtils.getInt(ctx.effect, Params.RANDOM_SEED.name, 1)
+        val random = Random(ctx.frame.frameNumber + randomSeed)
 
-        val rawCooling = ParamUtils.getInt(ctx.effect, "COOLING", 20)
-        val rawSparking = ParamUtils.getInt(ctx.effect, "SPARKING", 50)
+        val rawCooling = ParamUtils.getInt(ctx.effect, Params.COOLING.name, 20)
+        val rawSparking = ParamUtils.getInt(ctx.effect, Params.SPARKING.name, 50)
         val cooling = (rawCooling / 100f * 255f).toInt()
         val sparking = (rawSparking / 100f * 255f).toInt()
 
         // Step 1. Cool down every cell a little
         state.forEachIndexed { i, it ->
-            state[i] = max(0, it - random.nextInt((cooling * 10 / ledCount) + 2))
+            state[i] = max(0, it - random.nextInt((cooling * 10 / ctx.ledCount) + 2))
         }
 
         // Step 2. Heat from each cell drifts 'up' and diffuses a little
-        for (i in ledCount - 1 downTo 2) {
+        for (i in ctx.ledCount - 1 downTo 2) {
             state[i] = (state[i - 1] + state[i - 2] + state[i - 2]) / 3
         }
 

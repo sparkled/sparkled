@@ -12,29 +12,31 @@ import kotlin.random.Random
  * Random flickering lights with adjustable lifetime and density.
  */
 object GlitterEffect : SparkledEffect<Unit> {
+    
+    enum class Params { DENSITY, LIFETIME, RANDOM_SEED }
 
     override val id = "@sparkled/glitter"
     override val name = "Glitter"
     override val version = SemVer(1, 0, 0)
     override val params = listOf(
-        Param.int("DENSITY", "Density (%)", 50),
-        Param.decimal("LIFETIME", "Lifetime", 50.0),
-        Param.int("SEED", "Random Seed", 50),
+        Param.int(Params.DENSITY.name, "Density (%)", 50),
+        Param.decimal(Params.LIFETIME.name, "Lifetime", 1.0),
+        Param.int(Params.RANDOM_SEED.name, "Random Seed", 1),
     )
 
     override fun createState(ctx: RenderContext) {}
 
     override fun render(ctx: RenderContext, state: Unit) {
-        val density = ParamUtils.getInt(ctx.effect, "DENSITY", 10) / 100f
+        val density = ParamUtils.getInt(ctx.effect, Params.DENSITY.name, 10) / 100f
         val patternIndex = (density * (patterns.size - 1)).toInt()
-        val lifetime = ParamUtils.getFloat(ctx.effect, "LIFETIME", 1f)
+        val lifetime = ParamUtils.getFloat(ctx.effect, Params.LIFETIME.name, 1f)
         val lifetimeFrames = (ctx.sequence.getFramesPerSecond()!! * lifetime).toInt()
 
-        val random = Random(ParamUtils.getInt(ctx.effect, "RANDOM_SEED", 1))
+        val random = Random(ParamUtils.getInt(ctx.effect, Params.RANDOM_SEED.name, 1))
         val frameCount = ctx.effect.endFrame - ctx.effect.startFrame + 1
         val fadeAlpha = getFadeAlpha(ctx, lifetimeFrames)
 
-        for (i in 0 until ctx.channel.ledCount) {
+        for (i in 0 until ctx.ledCount) {
             var alpha = 0f
             if (lifetimeFrames > 0) {
                 val pattern = patterns[patternIndex]

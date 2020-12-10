@@ -17,4 +17,6 @@ data class RenderContext(
 ) {
     val fill
         get() = fills[effect.fill.type]
+    
+    val ledCount = stageProp.getLedCount()!!
 }

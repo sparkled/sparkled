@@ -21,14 +21,14 @@ internal class LineEffectTest {
             endFrame = 19,
             type = LineEffect.id,
             args = mapOf(
-                arg("LENGTH", 3)
+                arg(LineEffect.Params.LENGTH.name, 3)
             ),
             easing = Easing(LinearEasing.id),
             fill = Fill(
                 SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLOR", "#ff0000")
+                    arg(SingleColorFill.Params.COLOR.name, "#ff0000")
                 )
             )
         )
@@ -67,14 +67,14 @@ internal class LineEffectTest {
             endFrame = 19,
             type = LineEffect.id,
             args = mapOf(
-                arg("LENGTH", 20)
+                arg(LineEffect.Params.LENGTH.name, 20)
             ),
             easing = Easing(LinearEasing.id),
             fill = Fill(
                 SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg("COLOR", "#ffffff")
+                    arg(SingleColorFill.Params.COLOR.name, "#ffffff")
                 )
             )
         )
