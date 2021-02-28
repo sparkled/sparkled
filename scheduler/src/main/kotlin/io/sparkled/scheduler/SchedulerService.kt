@@ -1,7 +1,5 @@
 package io.sparkled.scheduler
 
-import io.sparkled.model.entity.ScheduledJob
-
 /**
  * Controls the lifecycle of the [ScheduledJob] scheduler.
  */

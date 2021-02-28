@@ -1,5 +1,5 @@
 dependencies {
-    implementation "org.hibernate:hibernate-core:$hibernateVersion"
-    implementation "org.hibernate:hibernate-hikaricp:$hibernateVersion"
-    implementation "com.querydsl:querydsl-jpa:$queryDslVersion"
+    implementation "org.jdbi:jdbi3-core:$jdbiVersion"
+    implementation "org.jdbi:jdbi3-kotlin:$jdbiVersion"
+    implementation "org.jdbi:jdbi3-kotlin-sqlobject:$jdbiVersion"
 }

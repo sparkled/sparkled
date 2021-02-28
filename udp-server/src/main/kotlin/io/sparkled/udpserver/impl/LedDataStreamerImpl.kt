@@ -1,7 +1,8 @@
 package io.sparkled.udpserver.impl
 
+import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
 import io.sparkled.music.PlaybackStateService
-import io.sparkled.persistence.setting.SettingPersistenceService
+import io.sparkled.persistence.cache.CacheService
 import io.sparkled.udpserver.LedDataStreamer
 import io.sparkled.udpserver.impl.command.GetFrameCommand
 import io.sparkled.udpserver.impl.subscriber.UdpClientSubscribers
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class LedDataStreamerImpl(
     private val playbackStateService: PlaybackStateService,
-    private val settingPersistenceService: SettingPersistenceService,
+    private val caches: CacheService,
     private val subscribers: UdpClientSubscribers
 ) : LedDataStreamer {
 
@@ -40,10 +41,15 @@ class LedDataStreamerImpl(
         try {
             while (started) {
                 val iterationTime = System.currentTimeMillis()
-                val settings = settingPersistenceService.settings
+                val settings = caches.settings.get()
                 val playbackState = playbackStateService.getPlaybackState()
 
                 try {
+                    if (subscribers.isEmpty()) {
+                        delay(100)
+                        continue
+                    }
+
                     subscribers.forEach { subscriber ->
                         subscriber.value.forEach {
                             if (iterationTime - it.timestamp < SUBSCRIBER_TIMEOUT_MS) {
@@ -60,7 +66,7 @@ class LedDataStreamerImpl(
                         println("${System.currentTimeMillis()} Iteration took ${System.currentTimeMillis() - iterationTime} ms")
                     }
                     val elapsedMs = System.currentTimeMillis() - iterationTime
-                    val updateInterval = 1000 / (playbackState.sequence?.getFramesPerSecond() ?: 10)
+                    val updateInterval = MS_PER_SECOND / (playbackState.sequence?.framesPerSecond ?: 10)
                     delay(updateInterval - elapsedMs)
                 } catch (e: Exception) {
                     logger.error("Failed to send LED data to subscriber.", e)
@@ -73,6 +79,6 @@ class LedDataStreamerImpl(
 
     companion object {
         private val logger = LoggerFactory.getLogger(LedDataStreamerImpl::class.java)
-        private const val SUBSCRIBER_TIMEOUT_MS = 30000
+        private const val SUBSCRIBER_TIMEOUT_MS = 30 * MS_PER_SECOND
     }
 }

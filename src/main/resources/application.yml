@@ -18,26 +18,23 @@ micronaut:
 
 datasources:
   default:
-    url: ${JDBC_URL:`jdbc:h2:./sparkled`}
-    username: ${JDBC_USER:}
-    password: ${JDBC_PASSWORD:}
-    driverClassName: ${JDBC_DRIVER:org.h2.Driver}
+    url: jdbc:sqlite:sparkled.db
+    driverClassName: org.sqlite.JDBC
+    data-source-properties:
+      foreign_keys: true
 
 jackson:
-  serializationInclusion: ALWAYS # Include empty arrays in JSON output
   deserialization:
-    failOnUnknownProperties: false # Enables backward compatibility for effect JSON containing removed fields.
-    readUnknownEnumValuesUsingDefaultValue: true # Backward compatibility for effect JSON containing removed enums.
-
-jpa:
-  default:
-    packages-to-scan:
-      - 'io.sparkled.model.entity'
+    fail-on-unknown-properties: false
+    read-unknown-enum-values-using-default-value: true
+  serialization-inclusion: NON_NULL # Include empty arrays in JSON output
+  serialization:
+    order-map-entries-by-keys: true
+    write-dates-as-timestamps: false # Write dates as ISO 8601 strings instead of arrays.
+  mapper:
+    sort-properties-alphabetically: true
 
 liquibase:
   datasources:
     default:
       change-log: 'classpath:db/liquibase-changelog.xml'
-
-sparkled:
-  directory: './data'

@@ -1,45 +1,45 @@
 package io.sparkled.udpserver.impl.command
 
-import io.sparkled.model.entity.Sequence
-import io.sparkled.model.entity.Song
-import io.sparkled.model.entity.SongAudio
-import io.sparkled.model.entity.StageProp
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.model.entity.v2.SequenceEntity
+import io.sparkled.model.entity.v2.SongEntity
+import io.sparkled.model.entity.v2.StagePropEntity
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.music.PlaybackState
-import java.nio.charset.StandardCharsets
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.core.Is.`is`
-import org.junit.jupiter.api.Test
 import java.net.InetAddress
+import java.nio.charset.StandardCharsets
 
-internal class GetStagePropCodesCommandTest {
+class GetStagePropCodesCommandTest : StringSpec() {
 
-    @Test
-    fun can_retrieve_stage_prop_codes() {
-        val command = GetStagePropCodesCommand()
-        val response = command.handle(
-            ipAddress = InetAddress.getLocalHost(),
-            port = 2812,
-            args = listOf(GetStagePropCodesCommand.KEY),
-            settings = SettingsCache(0),
-            playbackState = PlaybackState(
-                sequences = emptyList(),
-                sequenceIndex = 0,
-                progressFunction = { 0.0 },
-                sequence = Sequence(),
-                song = Song(),
-                songAudio = SongAudio(),
-                renderedStageProps = RenderedStagePropDataMap(),
-                stageProps = mapOf(
-                    "P1" to StageProp().setCode("P1").setDisplayOrder(1),
-                    "P2" to StageProp().setCode("P2").setDisplayOrder(3),
-                    "P3" to StageProp().setCode("P3").setDisplayOrder(2)
+    init {
+        "can retrieve stage prop codes" {
+            val command = GetStagePropCodesCommand()
+            val response = command.handle(
+                ipAddress = InetAddress.getLocalHost(),
+                port = 2812,
+                args = listOf(GetStagePropCodesCommand.KEY),
+                settings = SettingsCache(0),
+                playbackState = PlaybackState(
+                    sequences = emptyList(),
+                    sequenceIndex = 0,
+                    progressFunction = { 0.0 },
+                    sequence = SequenceEntity(songId = 0, stageId = 0, framesPerSecond = 0, name = "", status = SequenceStatus.NEW),
+                    song = SongEntity(name = "", durationMs = 0),
+                    songAudio = byteArrayOf(),
+                    renderedStageProps = RenderedStagePropDataMap(),
+                    stageProps = mapOf(
+                        "P1" to StagePropEntity(code = "P1", displayOrder = 1),
+                        "P2" to StagePropEntity(code = "P2", displayOrder = 3),
+                        "P3" to StagePropEntity(code = "P3", displayOrder = 2)
+                    )
                 )
             )
-        )
 
-        val responseString = String(response, StandardCharsets.UTF_8)
-        assertThat(responseString, `is`("P1:P3:P2"))
+            val responseString = String(response, StandardCharsets.UTF_8)
+            responseString shouldBe "P1:P3:P2"
+        }
     }
 }

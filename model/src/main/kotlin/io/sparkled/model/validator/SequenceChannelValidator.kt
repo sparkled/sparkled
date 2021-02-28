@@ -2,38 +2,37 @@ package io.sparkled.model.validator
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.effect.Effect
-import io.sparkled.model.entity.SequenceChannel
+import io.sparkled.model.entity.v2.SequenceChannelEntity
+import io.sparkled.model.util.IdUtils
 import io.sparkled.model.validator.exception.EntityValidationException
 
 class SequenceChannelValidator(
     private val objectMapper: ObjectMapper
 ) {
 
-    @Throws(EntityValidationException::class)
-    fun validate(channel: SequenceChannel) {
-        val channelJson = channel.getChannelJson()
-
-        if (channel.getUuid() == null) {
-            throw EntityValidationException(String.format(Errors.UUID_MISSING, channel.getName()))
-        } else if (channelJson == null) {
-            throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MISSING, channel.getName()))
+    fun validate(channel: SequenceChannelEntity) {
+        if (channel.uuid == IdUtils.newUuid()) {
+            throw EntityValidationException(String.format(Errors.UUID_MISSING, channel.name))
+        } else if (channel.channelJson.isBlank()) {
+            throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MISSING, channel.name))
         }
 
         val effects = getEffectsFromJson(channel)
         validateChannelEffects(channel, effects.effects)
     }
 
-    private fun getEffectsFromJson(channel: SequenceChannel): SequenceChannelEffects {
+    private fun getEffectsFromJson(channel: SequenceChannelEntity): SequenceChannelEffects {
         try {
-            return objectMapper.readValue(channel.getChannelJson(), SequenceChannelEffects::class.java)
+            return objectMapper.readValue(channel.channelJson)
         } catch (e: JsonProcessingException) {
-            throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MALFORMED, channel.getName()), e)
+            throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MALFORMED, channel.name), e)
         }
     }
 
-    private fun validateChannelEffects(channel: SequenceChannel, effects: List<Effect>) {
+    private fun validateChannelEffects(channel: SequenceChannelEntity, effects: List<Effect>) {
         var previousEndFrame: Int = -1
 
         for (effect in effects) {
@@ -42,29 +41,28 @@ class SequenceChannelValidator(
         }
     }
 
-    private fun validateEffect(channel: SequenceChannel, effect: Effect, previousEndFrame: Int) {
-        if (effect.type == "NONE") {
-            throw EntityValidationException(String.format(Errors.EFFECT_TYPE_MISSING, effect.startFrame, channel.getName()))
-        }
+    private fun validateEffect(channel: SequenceChannelEntity, effect: Effect, previousEndFrame: Int) {
+        val name = channel.name
 
-        if (effect.easing.type == "NONE") {
-            throw EntityValidationException(String.format(Errors.EFFECT_EASING_TYPE_MISSING, effect.startFrame, channel.getName()))
-        }
-
-        if (effect.startFrame > effect.endFrame) {
-            throw EntityValidationException(String.format(Errors.EFFECT_BACK_TO_FRONT, effect.startFrame, channel.getName()))
-        }
-
-        if (effect.startFrame < previousEndFrame) {
-            throw EntityValidationException(String.format(Errors.EFFECT_OVERLAPPING, previousEndFrame, channel.getName()))
-        }
-
-        if (effect.repetitions <= 0) {
-            throw EntityValidationException(String.format(Errors.EFFECT_REPETITIONS_INVALID, effect.startFrame, channel.getName()))
-        }
-
-        if (effect.repetitionSpacing < 0) {
-            throw EntityValidationException(String.format(Errors.EFFECT_REPETITION_SPACING_INVALID, effect.startFrame, channel.getName()))
+        when {
+            effect.type == "NONE" -> {
+                throw EntityValidationException(String.format(Errors.EFFECT_TYPE_MISSING, effect.startFrame, name))
+            }
+            effect.easing.type == "NONE" -> {
+                throw EntityValidationException(String.format(Errors.EFFECT_EASING_TYPE_MISSING, effect.startFrame, name))
+            }
+            effect.startFrame > effect.endFrame -> {
+                throw EntityValidationException(String.format(Errors.EFFECT_BACK_TO_FRONT, effect.startFrame, name))
+            }
+            effect.startFrame < previousEndFrame -> {
+                throw EntityValidationException(String.format(Errors.EFFECT_OVERLAPPING, previousEndFrame, name))
+            }
+            effect.repetitions <= 0 -> {
+                throw EntityValidationException(String.format(Errors.EFFECT_REPETITIONS_INVALID, effect.startFrame, name))
+            }
+            effect.repetitionSpacing < 0 -> {
+                throw EntityValidationException(String.format(Errors.EFFECT_REPETITION_SPACING_INVALID, effect.startFrame, name))
+            }
         }
     }
 

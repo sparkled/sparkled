@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
 
 enum class SequenceStatus {
     /**
-     * Has no animation data whatsoever, cannot be played.
+     * Has no animation data, cannot be played.
      */
     @JsonEnumDefaultValue
     NEW,

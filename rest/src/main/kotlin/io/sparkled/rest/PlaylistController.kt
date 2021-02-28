@@ -1,83 +1,96 @@
 package io.sparkled.rest
 
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Delete
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Put
-import io.micronaut.spring.tx.annotation.Transactional
-import io.sparkled.persistence.playlist.PlaylistPersistenceService
+import io.micronaut.http.annotation.*
+import io.sparkled.model.entity.v2.PlaylistEntity
+import io.sparkled.model.entity.v2.PlaylistSequenceEntity
+import io.sparkled.model.entity.v2.SequenceEntity
+import io.sparkled.model.entity.v2.SongEntity
+import io.sparkled.persistence.*
+import io.sparkled.persistence.v2.query.playlist.GetPlaylistSequencesByPlaylistIdQuery
 import io.sparkled.rest.response.IdResponse
-import io.sparkled.viewmodel.playlist.PlaylistViewModel
-import io.sparkled.viewmodel.playlist.PlaylistViewModelConverter
-import io.sparkled.viewmodel.playlist.search.PlaylistSearchViewModelConverter
-import io.sparkled.viewmodel.playlist.sequence.PlaylistSequenceViewModelConverter
+import io.sparkled.viewmodel.PlaylistSummaryViewModel
+import io.sparkled.viewmodel.PlaylistViewModel
+import org.springframework.transaction.annotation.Transactional
 
 @Controller("/api/playlists")
 open class PlaylistController(
-    private val playlistPersistenceService: PlaylistPersistenceService,
-    private val playlistSearchViewModelConverter: PlaylistSearchViewModelConverter,
-    private val playlistViewModelConverter: PlaylistViewModelConverter,
-    private val playlistSequenceViewModelConverter: PlaylistSequenceViewModelConverter
+    private val db: DbService
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
     open fun getAllPlaylists(): HttpResponse<Any> {
-        val playlists = playlistPersistenceService.getAllPlaylists()
-        return HttpResponse.ok(playlistSearchViewModelConverter.toViewModels(playlists))
+        val playlists = db.getAll<PlaylistEntity>(orderBy = "name")
+        val playlistSequences = db.getAll<PlaylistSequenceEntity>().groupBy { it.playlistId }
+        val sequences = db.getAll<SequenceEntity>()
+        val songs = db.getAll<SongEntity>()
+
+        val playlistSummaries = playlists.map {
+            PlaylistSummaryViewModel.fromModel(
+                it,
+                playlistSequences[it.id] ?: emptyList(),
+                sequences,
+                songs
+            )
+        }
+
+        return HttpResponse.ok(playlistSummaries)
     }
 
     @Get("/{id}")
     @Transactional(readOnly = true)
     open fun getPlaylist(id: Int): HttpResponse<Any> {
-        val playlist = playlistPersistenceService.getPlaylistById(id)
+        val playlist = db.getById<PlaylistEntity>(id)
+        val playlistSequences = db.query(GetPlaylistSequencesByPlaylistIdQuery(id))
 
-        if (playlist != null) {
-            val viewModel = playlistViewModelConverter.toViewModel(playlist)
-
-            val playlistSequences = playlistPersistenceService
-                .getPlaylistSequencesByPlaylistId(id)
-                .asSequence()
-                .map(playlistSequenceViewModelConverter::toViewModel)
-                .toList()
-            viewModel.setSequences(playlistSequences)
-
-            return HttpResponse.ok(viewModel)
-        }
-
-        return HttpResponse.notFound("Playlist not found.")
+        return if (playlist != null) {
+            val viewModel = PlaylistViewModel.fromModel(playlist, playlistSequences)
+            HttpResponse.ok(viewModel)
+        } else HttpResponse.notFound("Playlist not found.")
     }
 
     @Post("/")
     @Transactional
     open fun createPlaylist(playlistViewModel: PlaylistViewModel): HttpResponse<Any> {
-        val playlist = playlistViewModelConverter.toModel(playlistViewModel)
-        val savedPlaylist = playlistPersistenceService.createPlaylist(playlist)
-        return HttpResponse.ok(IdResponse(savedPlaylist.getId()!!))
+        val (playlist, playlistSequences) = playlistViewModel.toModel()
+        val savedId = db.insert(playlist).toInt()
+        playlistSequences.forEach { db.insert(it.copy(playlistId = savedId)) }
+
+        return HttpResponse.ok(IdResponse(savedId))
     }
 
     @Put("/{id}")
     @Transactional
     open fun updatePlaylist(id: Int, playlistViewModel: PlaylistViewModel): HttpResponse<Any> {
-        playlistViewModel.setId(id) // Prevent client-side ID tampering.
+        val playlistAndSequences = playlistViewModel.copy(id = id).toModel()
+        val playlist = playlistAndSequences.first.copy(id = id)
 
-        val playlist = playlistViewModelConverter.toModel(playlistViewModel)
-        val playlistSequences = playlistViewModel.getSequences()
-            .asSequence()
-            .map(playlistSequenceViewModelConverter::toModel)
-            .map { it.setPlaylistId(id) }
-            .toList()
+        // Update playlist.
+        db.update(playlist)
 
-        playlistPersistenceService.savePlaylist(playlist, playlistSequences)
+        val existingSequences = db.query(GetPlaylistSequencesByPlaylistIdQuery(id)).associateBy { it.uuid }
+        val newSequences = playlistAndSequences.second.map { it.copy(playlistId = id) }.associateBy { it.uuid }
+
+        // Delete playlist sequences that no longer exist.
+        (existingSequences.keys - newSequences.keys).forEach { db.delete(existingSequences.getValue(it)) }
+
+        // Insert playlist sequences that didn't exist previously.
+        (newSequences.keys - existingSequences.keys).forEach { db.insert(newSequences.getValue(it)) }
+
+        // Update playlist sequences that exist
+        (newSequences.keys.intersect(existingSequences.keys)).forEach { db.update(newSequences.getValue(it)) }
+
         return HttpResponse.ok()
     }
 
     @Delete("/{id}")
     @Transactional
     open fun deletePlaylist(id: Int): HttpResponse<Any> {
-        playlistPersistenceService.deletePlaylist(id)
+        db.getById<PlaylistEntity>(id)?.let {
+            db.delete(it)
+        }
+
         return HttpResponse.ok()
     }
 }

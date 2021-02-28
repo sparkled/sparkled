@@ -26,9 +26,9 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
         var convertedStream: AudioInputStream? = null
 
         try {
-            logger.debug("Playing sequence {}.", playbackState.sequence?.getName())
+            logger.debug("Playing sequence {}.", playbackState.sequence?.name)
 
-            byteStream = ByteArrayInputStream(playbackState.songAudio?.getAudioData())
+            byteStream = ByteArrayInputStream(playbackState.songAudio)
             mp3Stream = AudioSystem.getAudioInputStream(byteStream)
 
             val baseFormat = mp3Stream!!.format
@@ -45,7 +45,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
             clip.addLineListener(this)
             clip.start()
         } catch (e: Exception) {
-            logger.error("Failed to play sequence {}: {}.", playbackState.sequence?.getName(), e.message)
+            logger.error("Failed to play sequence {}: {}.", playbackState.sequence?.name, e.message)
         } finally {
             byteStream?.close()
             mp3Stream?.close()
@@ -97,7 +97,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
     }
 
     override fun update(event: LineEvent) {
-        listeners.forEach { l -> l.update(event) }
+        listeners.forEach { it.update(event) }
     }
 
     companion object {

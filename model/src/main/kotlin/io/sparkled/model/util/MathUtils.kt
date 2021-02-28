@@ -1,5 +1,8 @@
 package io.sparkled.model.util
 
+import kotlin.math.max
+import kotlin.math.min
+
 object MathUtils {
 
     /**
@@ -7,14 +10,14 @@ object MathUtils {
      * from start-to-end and from end-to-start.
      */
     fun getOverlap(start1: Float, end1: Float, start2: Float, end2: Float): Float {
-        val s1 = Math.min(start1, end1)
-        val e1 = Math.max(start1, end1)
-        val s2 = Math.min(start2, end2)
-        val e2 = Math.max(start2, end2)
+        val s1 = min(start1, end1)
+        val e1 = max(start1, end1)
+        val s2 = min(start2, end2)
+        val e2 = max(start2, end2)
 
-        val start = Math.max(s1, s2)
-        val end = Math.min(e1, e2)
-        return Math.max(0f, end - start)
+        val start = max(s1, s2)
+        val end = min(e1, e2)
+        return max(0f, end - start)
     }
 
     /**
@@ -36,7 +39,7 @@ object MathUtils {
      * @return the value, constrained by min and max
      */
     fun constrain(value: Int, min: Int, max: Int): Int {
-        return Math.max(min, Math.min(max, value))
+        return max(min, min(max, value))
     }
 
     /**

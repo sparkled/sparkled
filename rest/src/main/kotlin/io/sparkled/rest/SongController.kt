@@ -8,56 +8,54 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.multipart.CompletedFileUpload
-import io.micronaut.spring.tx.annotation.Transactional
-import io.sparkled.persistence.song.SongPersistenceService
+import io.sparkled.model.entity.v2.SongEntity
+import io.sparkled.persistence.*
+import io.sparkled.persistence.v2.query.song.DeleteSongsQuery
 import io.sparkled.rest.response.IdResponse
-import io.sparkled.viewmodel.song.SongViewModel
-import io.sparkled.viewmodel.song.SongViewModelConverter
+import io.sparkled.viewmodel.SongViewModel
+import org.springframework.transaction.annotation.Transactional
 
 @Controller("/api/songs")
 open class SongController(
-    private val songPersistenceService: SongPersistenceService,
-    private val songViewModelConverter: SongViewModelConverter,
-    private val objectMapper: ObjectMapper
+    private val db: DbService,
+    private val file: FileService,
+    private val objectMapper: ObjectMapper,
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
     open fun getAllSongs(): HttpResponse<Any> {
-        val songs = songPersistenceService.getAllSongs()
-        val viewModels = songs.asSequence().map(songViewModelConverter::toViewModel).toList()
+        val songs = db.getAll<SongEntity>(orderBy = "name")
+        val viewModels = songs.map(SongViewModel::fromModel)
         return HttpResponse.ok(viewModels)
     }
 
     @Get("/{id}")
     @Transactional(readOnly = true)
     open fun getSong(id: Int): HttpResponse<Any> {
-        val song = songPersistenceService.getSongById(id)
+        val song = db.getById<SongEntity>(id)
 
-        if (song != null) {
-            val viewModel = songViewModelConverter.toViewModel(song)
-            return HttpResponse.ok(viewModel)
-        }
-
-        return HttpResponse.notFound("Song not found.")
+        return if (song != null) {
+            val viewModel = SongViewModel.fromModel(song)
+            HttpResponse.ok(viewModel)
+        } else HttpResponse.notFound("Song not found.")
     }
 
     @Post("/", consumes = [MediaType.MULTIPART_FORM_DATA])
     @Transactional
     open fun createSong(song: String, mp3: CompletedFileUpload): HttpResponse<Any> {
         val songViewModel = objectMapper.readValue(song, SongViewModel::class.java)
-        songViewModel.setId(null) // Prevent client-side ID tampering.
+        val songId = db.insert(songViewModel.toModel()).toInt()
 
-        val songModel = songViewModelConverter.toModel(songViewModel)
-        val savedSong = songPersistenceService.createSong(songModel, mp3.bytes)
-
-        return HttpResponse.ok(IdResponse(savedSong.getId()!!))
+        file.writeSongAudio(songId, mp3.bytes)
+        return HttpResponse.ok(IdResponse(songId))
     }
 
     @Delete("/{id}")
     @Transactional
     open fun deleteSong(id: Int): HttpResponse<Any> {
-        songPersistenceService.deleteSong(id)
+        db.query(DeleteSongsQuery(listOf(id)))
+        file.deleteSongAudio(id)
         return HttpResponse.ok()
     }
 }

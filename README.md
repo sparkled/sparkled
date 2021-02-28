@@ -16,14 +16,7 @@ The official Sparkled clients are listed below:
 - [sparkled-client-esp](https://github.com/sparkled/sparkled-client-esp) (ESP32 and ESP8266)
 
 ## Roadmap
-### Before Initial Release
-- [x] Move project to Sparkled github account
-- [x] Set up official project website
-- [ ] Rewrite UI in React (In Progress)
-- [x] Stage editor, so users can set up their own lighting structures
-
-### After Initial Release
-- [ ] Add more effect and fill types
+- [ ] Add more effect types
 - [ ] Multithreaded rendering
 - [ ] Support sequences without music (currently requires a mute MP3 file to be uploaded)
 - [ ] Ability to replace MP3 files for existing sequences (even with different lengths)
@@ -36,7 +29,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 The following software and hardware requirements must be met before installing the Sparkled server:
 * Java 11 or later
-* Gradle v4.8 or later
+* Gradle 7 or later (or use `gradlew`)
 * A modern web browser
 
 ### Installing
@@ -85,11 +78,9 @@ npm run test
 * [Kotlin](https://kotlinlang.org)
 * [Micronaut](https://micronaut.io)
 * [Gradle](https://gradle.org)
-* [H2](https://www.h2database.com)
 * [HikariCP](https://github.com/brettwooldridge/HikariCP)
-* [Hibernate](https://hibernate.org)
 * [React.js](https://reactjs.org)
-* [Material UI](https://material-ui.com)
+* [Sqlite](https://sqlite.org)
 * [Wavesurfer.js](https://wavesurfer-js.org)
 
 ## Authors
@@ -101,8 +92,8 @@ See also the list of [contributors](https://github.com/sparkled/sparkled/contrib
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
-* [EJ-Technologies](https://www.ej-technologies.com) for providing an Open Source license for [JProfiler, the award winning all-in-one Java Profiler](https://www.ej-technologies.com/products/jprofiler/overview.html).
+* [EJ-Technologies](https://www.ej-technologies.com) for providing an Open Source license for
+  [JProfiler, the award winning all-in-one Java Profiler](https://www.ej-technologies.com/products/jprofiler/overview.html).
 * [FastLED](http://fastled.io) for building and maintaining an incredible LED strip library, without which this project
   would never have been conceived.
-* [The FastLED community](https://reddit.com/r/fastled) for being a great source of help
-  and inspiration.
+* [The FastLED community](https://reddit.com/r/fastled) for being a great source of help and inspiration.

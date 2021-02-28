@@ -4,91 +4,80 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MutableHttpResponse
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Delete
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Put
-import io.micronaut.http.annotation.QueryValue
-import io.micronaut.spring.tx.annotation.Transactional
+import io.micronaut.http.annotation.*
 import io.sparkled.model.animation.SequenceChannelEffects
-import io.sparkled.model.entity.Sequence
-import io.sparkled.model.entity.SequenceChannel
 import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.model.entity.v2.SequenceChannelEntity
+import io.sparkled.model.entity.v2.SequenceEntity
+import io.sparkled.model.entity.v2.SongEntity
+import io.sparkled.model.entity.v2.StageEntity
 import io.sparkled.model.render.RenderResult
+import io.sparkled.model.render.RenderedSequence
+import io.sparkled.model.render.RenderedSequenceStageProp
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.model.validator.exception.EntityNotFoundException
-import io.sparkled.persistence.sequence.SequencePersistenceService
-import io.sparkled.persistence.song.SongPersistenceService
-import io.sparkled.persistence.stage.StagePersistenceService
+import io.sparkled.persistence.*
+import io.sparkled.persistence.v2.query.sequence.DeleteSequencesQuery
+import io.sparkled.persistence.v2.query.sequence.GetSequenceChannelsBySequenceIdQuery
+import io.sparkled.persistence.v2.query.sequence.GetSongBySequenceIdQuery
+import io.sparkled.persistence.v2.query.sequence.GetStageBySequenceIdQuery
+import io.sparkled.persistence.v2.query.stage.GetStagePropsByStageIdQuery
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.rest.response.IdResponse
-import io.sparkled.viewmodel.sequence.SequenceViewModel
-import io.sparkled.viewmodel.sequence.SequenceViewModelConverter
-import io.sparkled.viewmodel.sequence.channel.SequenceChannelViewModelConverter
-import io.sparkled.viewmodel.sequence.search.SequenceSearchViewModelConverter
-import io.sparkled.viewmodel.stage.StageViewModelConverter
-import io.sparkled.viewmodel.stage.prop.StagePropViewModelConverter
-import java.util.UUID
+import io.sparkled.viewmodel.SequenceSummaryViewModel
+import io.sparkled.viewmodel.SequenceViewModel
+import io.sparkled.viewmodel.StageViewModel
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
 import kotlin.math.min
 
 @Controller("/api/sequences")
 open class SequenceController(
     private val pluginManager: SparkledPluginManager,
     private val objectMapper: ObjectMapper,
-    private val sequencePersistenceService: SequencePersistenceService,
-    private val songPersistenceService: SongPersistenceService,
-    private val stagePersistenceService: StagePersistenceService,
-    private val sequenceSearchViewModelConverter: SequenceSearchViewModelConverter,
-    private val sequenceViewModelConverter: SequenceViewModelConverter,
-    private val sequenceChannelViewModelConverter: SequenceChannelViewModelConverter,
-    private val stageViewModelConverter: StageViewModelConverter,
-    private val stagePropViewModelConverter: StagePropViewModelConverter
+    private val file: FileService,
+    private val db: DbService,
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
     open fun getAllSequences(): HttpResponse<Any> {
-        val sequences = sequencePersistenceService.getAllSequences()
-        return HttpResponse.ok(sequenceSearchViewModelConverter.toViewModels(sequences))
+        val songs = db.getAll<SongEntity>().associateBy { it.id }
+        val stages = db.getAll<StageEntity>().associateBy { it.id }
+
+        val viewModels = db.getAll<SequenceEntity>(orderBy = "name").map {
+            SequenceSummaryViewModel.fromModel(it, songs.getValue(it.id), stages.getValue(it.id))
+        }
+
+        return HttpResponse.ok(viewModels)
     }
 
     @Get("/{id}")
     @Transactional(readOnly = true)
     open fun getSequence(id: Int): HttpResponse<Any> {
-        val sequence = sequencePersistenceService.getSequenceById(id)
-
-        if (sequence != null) {
-            val viewModel = sequenceViewModelConverter.toViewModel(sequence)
-
-            val channels = sequencePersistenceService
-                .getSequenceChannelsBySequenceId(id)
-                .asSequence()
-                .map(sequenceChannelViewModelConverter::toViewModel)
-                .toList()
-            viewModel.setChannels(channels)
-
-            return HttpResponse.ok(viewModel)
+        val viewModel = db.getById<SequenceEntity>(id)?.let {
+            val song = db.query(GetSongBySequenceIdQuery(it.id))!!
+            val channels = db.query(GetSequenceChannelsBySequenceIdQuery(it.id))
+            SequenceViewModel.fromModel(it, song, channels, objectMapper)
         }
 
-        return HttpResponse.notFound("Sequence not found.")
+        return if (viewModel != null) {
+            HttpResponse.ok(viewModel)
+        } else {
+            HttpResponse.notFound("Sequence not found.")
+        }
     }
 
     @Get("/{id}/stage")
     @Transactional(readOnly = true)
     open fun getSequenceStage(id: Int): HttpResponse<Any> {
-        val stage = sequencePersistenceService.getStageBySequenceId(id)
+        val viewModel = db.query(GetStageBySequenceIdQuery(id))?.let {
+            val stageProps = db.query(GetStagePropsByStageIdQuery(it.id))
+            StageViewModel.fromModel(it, stageProps)
+        }
 
-        return if (stage != null) {
-            val viewModel = stageViewModelConverter.toViewModel(stage)
-            val stageProps = stagePersistenceService
-                .getStagePropsByStageId(stage.getId()!!)
-                .asSequence()
-                .map(stagePropViewModelConverter::toViewModel)
-                .toList()
-
-            viewModel.setStageProps(stageProps)
+        return if (viewModel != null) {
             HttpResponse.ok(viewModel)
         } else {
             HttpResponse.notFound("Stage not found for sequence.")
@@ -98,87 +87,108 @@ open class SequenceController(
     @Get("/{id}/songAudio")
     @Transactional(readOnly = true)
     open fun getSequenceSongAudio(id: Int): MutableHttpResponse<out Any> {
-        val songAudio = sequencePersistenceService.getSongAudioBySequenceId(id)
+        val songAudio = db.query(GetSongBySequenceIdQuery(id))?.let { file.readSongAudio(it.id) }
         return if (songAudio != null) {
-            HttpResponse.ok(songAudio.getAudioData()!!).contentType("audio/mpeg")
-        } else {
-            HttpResponse.notFound("Song audio not found.")
-        }
+            HttpResponse.ok(songAudio).contentType("audio/mpeg")
+        } else HttpResponse.notFound("Song audio not found.")
     }
 
     @Post("/")
     @Transactional
     open fun createSequence(sequenceViewModel: SequenceViewModel): HttpResponse<Any> {
-        sequenceViewModel.setId(null)
-        sequenceViewModel.setStatus(SequenceStatus.NEW)
 
-        val sequence = sequenceViewModelConverter.toModel(sequenceViewModel)
-        val sequenceChannels = createSequenceChannels(sequence)
-        val savedSequence = sequencePersistenceService.saveSequence(sequence, sequenceChannels)
+        val (sequence) = sequenceViewModel.copy(status = SequenceStatus.NEW).toModel(objectMapper)
+        val savedId = db.insert(sequence).toInt()
 
-        return HttpResponse.ok(IdResponse(savedSequence.getId()!!))
+        val sequenceChannels = createSequenceChannels(sequence.copy(id = savedId))
+        sequenceChannels.map { it.copy(sequenceId = savedId) }.forEach {
+            db.insert(it)
+        }
+
+        return HttpResponse.ok(IdResponse(savedId))
     }
 
-    private fun createSequenceChannels(sequence: Sequence): List<SequenceChannel> {
-        val stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId()!!)
+    private fun createSequenceChannels(sequence: SequenceEntity): List<SequenceChannelEntity> {
+        val stageProps = db.query(GetStagePropsByStageIdQuery(sequence.stageId))
         return stageProps.mapIndexed { i, it ->
-            SequenceChannel()
-                .setUuid(UUID.randomUUID())
-                .setName(it.getName())
-                .setStagePropUuid(it.getUuid())
-                .setDisplayOrder(i)
-                .setChannelJson(SequenceChannelEffects.EMPTY_JSON)
+            SequenceChannelEntity(
+                uuid = UUID.randomUUID(),
+                sequenceId = sequence.id,
+                stagePropUuid = it.uuid,
+                name = it.name,
+                displayOrder = i,
+                channelJson = SequenceChannelEffects.EMPTY_JSON
+            )
         }
     }
 
     @Put("/{id}")
     @Transactional
     open fun updateSequence(id: Int, sequenceViewModel: SequenceViewModel): HttpResponse<Any> {
-        sequenceViewModel.setId(id) // Prevent client-side ID tampering.
+        val sequenceAndChannels = sequenceViewModel.copy(id = id).toModel(objectMapper)
+        val sequence = sequenceAndChannels.first.copy(id = id)
+        val sequenceChannels = sequenceAndChannels.second.map { it.copy(sequenceId = id) }
 
-        val sequence = sequenceViewModelConverter.toModel(sequenceViewModel)
-        val channels = sequenceViewModel.getChannels()
-            .asSequence()
-            .map(sequenceChannelViewModelConverter::toModel)
-            .map { it.setSequenceId(id) }
-            .toList()
+        val newChannels = sequenceChannels.associateBy { it.uuid }
+        val existingChannels = db.query(GetSequenceChannelsBySequenceIdQuery(id)).associateBy { it.uuid }
 
-        if (sequence.getStatus() === SequenceStatus.PUBLISHED) {
-            publishSequence(sequence, channels)
+        // Delete channels that no longer exist.
+        (existingChannels.keys - newChannels.keys).forEach { db.delete(existingChannels.getValue(it)) }
+
+        // Insert channels that didn't exist previously.
+        (newChannels.keys - existingChannels.keys).forEach { db.insert(newChannels.getValue(it)) }
+
+        // Update channels that exist
+        (newChannels.keys.intersect(existingChannels.keys)).forEach { db.update(newChannels.getValue(it)) }
+
+        if (sequence.status === SequenceStatus.PUBLISHED) {
+            db.update(sequence)
+            val song = db.query(GetSongBySequenceIdQuery(id)) ?: throw EntityNotFoundException("Song not found.")
+            val renderResult = renderSequence(sequence, sequenceChannels, song)
+            val renderedSequence = RenderedSequence(
+                sequenceId = sequence.id,
+                startFrame = renderResult.startFrame,
+                frameCount = renderResult.frameCount,
+                stageProps = renderResult.stageProps.mapValues {
+                    RenderedSequenceStageProp(
+                        ledCount = it.value.ledCount,
+                        base64Data = Base64.getEncoder().encodeToString(it.value.data)
+                    )
+                }
+            )
+            file.writeRender(sequence.id, renderedSequence)
         } else {
-            saveDraftSequence(sequence, channels)
+            db.update(sequence.copy(status = SequenceStatus.DRAFT))
         }
+
         return HttpResponse.ok()
     }
 
-    private fun publishSequence(sequence: Sequence, channels: List<SequenceChannel>) {
-        val renderResult = renderSequence(sequence, channels)
-        sequencePersistenceService.publishSequence(sequence, channels, renderResult.stageProps)
-    }
-
-    private fun saveDraftSequence(sequence: Sequence, channels: List<SequenceChannel>) {
-        sequencePersistenceService.saveSequence(sequence, channels)
-    }
-
     private fun renderSequence(
-        sequence: Sequence,
-        sequenceChannels: List<SequenceChannel>,
+        sequence: SequenceEntity,
+        sequenceChannels: List<SequenceChannelEntity>,
+        song: SongEntity,
         startFrame: Int = 0,
         endFrame: Int = Int.MAX_VALUE
     ): RenderResult {
-        val song = songPersistenceService.getSongBySequenceId(sequence.getId()!!)
-            ?: throw EntityNotFoundException("Song not found.")
-
-        val stageProps = stagePersistenceService.getStagePropsByStageId(sequence.getStageId()!!)
+        val stageProps = db.query(GetStagePropsByStageIdQuery(sequence.stageId))
         val endFrameBounded = min(endFrame, SequenceUtils.getFrameCount(song, sequence) - 1)
 
-        return Renderer(pluginManager, objectMapper, sequence, sequenceChannels, stageProps, startFrame, endFrameBounded).render()
+        return Renderer(
+            pluginManager,
+            objectMapper,
+            sequence,
+            sequenceChannels,
+            stageProps,
+            startFrame,
+            endFrameBounded
+        ).render()
     }
 
     @Delete("/{id}")
     @Transactional
     open fun deleteSequence(id: Int): HttpResponse<Any> {
-        sequencePersistenceService.deleteSequence(id)
+        db.query(DeleteSequencesQuery(listOf(id)))
         return HttpResponse.ok()
     }
 
@@ -191,18 +201,15 @@ open class SequenceController(
         @QueryValue(defaultValue = "0") frameCount: String,
         sequenceViewModel: SequenceViewModel
     ): HttpResponse<Any> {
-        val sequence = sequenceViewModelConverter.toModel(sequenceViewModel)
-        val sequenceChannels = sequenceViewModel.getChannels()
-            .asSequence()
-            .map(sequenceChannelViewModelConverter::toModel)
-            .toList()
+        val (sequence, sequenceChannels) = sequenceViewModel.toModel(objectMapper)
+        val song = db.query(GetSongBySequenceIdQuery(id)) ?: throw EntityNotFoundException("Song not found.")
 
         val start = startFrame.toInt()
         val frames = frameCount.toInt()
 
         val end = start + frames - 1
         return HttpResponse.ok(
-            renderSequence(sequence, sequenceChannels, start, end)
+            renderSequence(sequence, sequenceChannels, song, start, end)
         )
     }
 }

@@ -7,8 +7,28 @@ import javax.inject.Singleton
 data class SparkledConfig(
 
     /**
-     * The HTTPS URL of the Azure Key Vault endpoint used by the API.
+     * The path of the folder containing Sparkled data, such as plugins.
      */
-    @Value("\${sparkled.directory:.}")
-    val directory: String,
-)
+    @Value("\${sparkled.data-folder-path:./sparkledData}")
+    val dataFolderPath: String,
+
+    /**
+     * The name of the folder containing song audio.
+     */
+    @Value("\${sparkled.audio-folder-name:audio}")
+    val audioFolderName: String,
+
+    /**
+     * The name of the folder containing plugins.
+     */
+    @Value("\${sparkled.plugin-folder-name:plugins}")
+    val pluginFolderName: String,
+
+    /**
+     * The name of the folder containing sequence renders.
+     */
+    @Value("\${sparkled.render-folder-name:renders}")
+    val renderFolderName: String,
+) {
+    val dataFolders = listOf(audioFolderName, pluginFolderName, renderFolderName)
+}

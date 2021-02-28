@@ -2,6 +2,7 @@ package io.sparkled.renderer.util
 
 import io.sparkled.model.animation.param.HasArguments
 import java.awt.Color
+import java.util.*
 
 object ParamUtils {
 
@@ -37,6 +38,6 @@ object ParamUtils {
     }
 
     private fun convertColor(hexColor: String): Color {
-        return Color.decode(hexColor.toLowerCase())
+        return Color.decode(hexColor.lowercase(Locale.getDefault()))
     }
 }

@@ -1,8 +1,8 @@
 package io.sparkled.model.setting
 
-import io.sparkled.model.entity.Setting
+import io.sparkled.model.entity.v2.SettingEntity
 
 /**
- * A cached copy of the contents of known [Setting] records from the database.
+ * A cached copy of the contents of known [SettingEntity] records from the database.
  */
-class SettingsCache(val brightness: Int)
+data class SettingsCache(val brightness: Int)
