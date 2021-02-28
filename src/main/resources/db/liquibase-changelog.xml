@@ -1,4 +1,5 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<!-- TODO split into separate files. -->
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
@@ -8,13 +9,13 @@
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true" primaryKeyName="pk_song"/>
             </column>
-            <column name="name" type="VARCHAR(64)">
+            <column name="name" type="NVARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="album" type="VARCHAR(64)">
+            <column name="album" type="NVARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="artist" type="VARCHAR(64)">
+            <column name="artist" type="NVARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="duration_ms" type="INT(10)">
@@ -23,28 +24,12 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="chrisparton1991" id="create-table-song-audio">
-        <createTable tableName="song_audio">
-            <column name="song_id" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="pk_song_audio"/>
-            </column>
-            <column name="audio_data" type="BLOB">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addForeignKeyConstraint baseTableName="song_audio" baseColumnNames="song_id"
-                                 referencedTableName="song" referencedColumnNames="id"
-                                 constraintName="fk_song_audio_song_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
-    </changeSet>
-
     <changeSet author="chrisparton1991" id="create-table-stage">
         <createTable tableName="stage">
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true" primaryKeyName="pk_stage"/>
             </column>
-            <column name="name" type="VARCHAR(64)">
+            <column name="name" type="NVARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="width" type="INT(10)">
@@ -61,13 +46,13 @@
             <column name="uuid" type="UUID">
                 <constraints primaryKey="true" primaryKeyName="pk_stage_prop"/>
             </column>
-            <column name="code" type="VARCHAR(16)">
+            <column name="code" type="NVARCHAR(16)">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(32)">
+            <column name="name" type="NVARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="type" type="VARCHAR(32)">
+            <column name="type" type="NVARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
             <column name="led_count" type="INT(10)">
@@ -98,14 +83,15 @@
                 <constraints nullable="false"/>
             </column>
             <column name="stage_id" type="INT(10)">
-                <constraints nullable="false"/>
+                <constraints
+                    nullable="false"
+                    foreignKeyName="fk_stage_prop_stage_id"
+                    deleteCascade="true"
+                    referencedTableName="stage"
+                    referencedColumnNames="id"
+                />
             </column>
         </createTable>
-
-        <addForeignKeyConstraint baseTableName="stage_prop" baseColumnNames="stage_id"
-                                 referencedTableName="stage" referencedColumnNames="id"
-                                 constraintName="fk_stage_prop_stage_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
     </changeSet>
 
     <changeSet author="chrisparton1991" id="create-table-sequence">
@@ -114,31 +100,33 @@
                 <constraints primaryKey="true" primaryKeyName="pk_sequence"/>
             </column>
             <column name="song_id" type="INT(10)">
-                <constraints nullable="false"/>
+                <constraints
+                    nullable="false"
+                    foreignKeyName="fk_sequence_song_id"
+                    deleteCascade="true"
+                    referencedTableName="song"
+                    referencedColumnNames="id"
+                />
             </column>
             <column name="stage_id" type="INT(10)">
-                <constraints nullable="false"/>
+                <constraints
+                    nullable="false"
+                    foreignKeyName="fk_sequence_stage_id"
+                    deleteCascade="true"
+                    referencedTableName="stage"
+                    referencedColumnNames="id"
+                />
             </column>
-            <column name="name" type="VARCHAR(64)">
+            <column name="name" type="NVARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="frames_per_second" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="VARCHAR(16)">
+            <column name="status" type="NVARCHAR(16)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-        <addForeignKeyConstraint baseTableName="sequence" baseColumnNames="song_id"
-                                 referencedTableName="song" referencedColumnNames="id"
-                                 constraintName="fk_sequence_song_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
-
-        <addForeignKeyConstraint baseTableName="sequence" baseColumnNames="stage_id"
-                                 referencedTableName="stage" referencedColumnNames="id"
-                                 constraintName="fk_sequence_stage_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
     </changeSet>
 
     <changeSet author="chrisparton1991" id="create-table-sequence-channel">
@@ -147,12 +135,24 @@
                 <constraints primaryKey="true" primaryKeyName="pk_sequence_channel"/>
             </column>
             <column name="sequence_id" type="INT(10)">
-                <constraints nullable="false"/>
+                <constraints
+                    nullable="false"
+                    foreignKeyName="fk_sequence_channel_sequence_id"
+                    deleteCascade="true"
+                    referencedTableName="sequence"
+                    referencedColumnNames="id"
+                />
             </column>
             <column name="stage_prop_uuid" type="UUID">
-                <constraints nullable="false"/>
+                <constraints
+                    nullable="false"
+                    foreignKeyName="fk_sequence_channel_stage_prop_uuid"
+                    deleteCascade="true"
+                    referencedTableName="stage_prop"
+                    referencedColumnNames="uuid"
+                />
             </column>
-            <column name="name" type="VARCHAR(64)">
+            <column name="name" type="NVARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="display_order" type="INT(10)">
@@ -160,46 +160,6 @@
             </column>
             <column name="channel_json" type="CLOB"/>
         </createTable>
-
-        <addForeignKeyConstraint baseTableName="sequence_channel" baseColumnNames="sequence_id"
-                                 referencedTableName="sequence" referencedColumnNames="id"
-                                 constraintName="fk_sequence_channel_sequence_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
-
-        <addForeignKeyConstraint baseTableName="sequence_channel" baseColumnNames="stage_prop_uuid"
-                                 referencedTableName="stage_prop" referencedColumnNames="uuid"
-                                 constraintName="fk_sequence_channel_stage_prop_uuid"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
-    </changeSet>
-
-    <changeSet author="chrisparton1991" id="create-table-rendered-stage-prop">
-        <createTable tableName="rendered_stage_prop">
-            <column autoIncrement="true" name="id" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="pk_rendered_stage_prop"/>
-            </column>
-            <column name="sequence_id" type="INT(10)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="stage_prop_uuid" type="UUID">
-                <constraints nullable="false"/>
-            </column>
-            <column name="led_count" type="INT(10)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="data" type="BLOB">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addForeignKeyConstraint baseTableName="rendered_stage_prop" baseColumnNames="sequence_id"
-                                 referencedTableName="sequence" referencedColumnNames="id"
-                                 constraintName="fk_rendered_stage_prop_sequence_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
-
-        <addForeignKeyConstraint baseTableName="rendered_stage_prop" baseColumnNames="stage_prop_uuid"
-                                 referencedTableName="stage_prop" referencedColumnNames="uuid"
-                                 constraintName="fk_rendered_stage_prop_stage_prop_uuid"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
     </changeSet>
 
     <changeSet author="chrisparton1991" id="create-table-playlist">
@@ -207,7 +167,7 @@
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true" primaryKeyName="pk_playlist"/>
             </column>
-            <column name="name" type="VARCHAR(64)">
+            <column name="name" type="NVARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -219,25 +179,27 @@
                 <constraints primaryKey="true" primaryKeyName="pk_playlist_sequence"/>
             </column>
             <column name="playlist_id" type="INT(10)">
-                <constraints nullable="false"/>
+                <constraints
+                    nullable="false"
+                    foreignKeyName="fk_playlist_sequence_playlist_id"
+                    deleteCascade="true"
+                    referencedTableName="playlist"
+                    referencedColumnNames="id"
+                />
             </column>
             <column name="sequence_id" type="INT(10)">
-                <constraints nullable="false"/>
+                <constraints
+                    nullable="false"
+                    foreignKeyName="fk_playlist_sequence_sequence_id"
+                    deleteCascade="true"
+                    referencedTableName="sequence"
+                    referencedColumnNames="id"
+                />
             </column>
             <column name="display_order" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-        <addForeignKeyConstraint baseTableName="playlist_sequence" baseColumnNames="playlist_id"
-                                 referencedTableName="playlist" referencedColumnNames="id"
-                                 constraintName="fk_playlist_sequence_playlist_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
-
-        <addForeignKeyConstraint baseTableName="playlist_sequence" baseColumnNames="sequence_id"
-                                 referencedTableName="sequence" referencedColumnNames="id"
-                                 constraintName="fk_playlist_sequence_sequence_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
     </changeSet>
 
     <changeSet author="chrisparton1991" id="create-table-scheduled-job">
@@ -245,35 +207,37 @@
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true" primaryKeyName="pk_scheduled_job"/>
             </column>
-            <column name="action" type="VARCHAR(16)">
+            <column name="action" type="NVARCHAR(16)">
                 <constraints nullable="false"/>
             </column>
-            <column name="cron_expression" type="VARCHAR(32)">
+            <column name="cron_expression" type="NVARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="value" type="VARCHAR(16)"/>
-            <column name="playlist_id" type="INT(10)"/>
+            <column name="value" type="NVARCHAR(16)"/>
+            <column name="playlist_id" type="INT(10)">
+                <constraints
+                    foreignKeyName="fk_scheduled_job_playlist_id"
+                    deleteCascade="true"
+                    referencedTableName="playlist"
+                    referencedColumnNames="id"
+                />
+            </column>
         </createTable>
-
-        <addForeignKeyConstraint baseTableName="scheduled_job" baseColumnNames="playlist_id"
-                                 referencedTableName="playlist" referencedColumnNames="id"
-                                 constraintName="fk_scheduled_job_playlist_id"
-                                 onDelete="RESTRICT" onUpdate="RESTRICT"/>
     </changeSet>
 
     <changeSet author="chrisparton1991" id="create-table-setting">
         <createTable tableName="setting">
-            <column name="code" type="VARCHAR(32)">
+            <column name="code" type="NVARCHAR(32)">
                 <constraints primaryKey="true" primaryKeyName="pk_table_setting"/>
             </column>
-            <column name="value" type="VARCHAR(32)">
+            <column name="value" type="NVARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
         <insert tableName="setting">
             <column name="code" value="BRIGHTNESS"/>
-            <column name="value" value="15"/>
+            <column name="value" value="100"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

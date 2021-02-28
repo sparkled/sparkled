@@ -1,28 +1,24 @@
 package io.sparkled.scheduler.impl
 
-import io.micronaut.spring.tx.annotation.Transactional
-import io.sparkled.model.entity.ScheduledJob
+import org.springframework.transaction.annotation.Transactional
 import io.sparkled.model.entity.ScheduledJobAction
+import io.sparkled.model.entity.v2.ScheduledTaskEntity
+import io.sparkled.model.entity.v2.SettingEntity
+import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.music.PlaybackService
-import io.sparkled.persistence.playlist.PlaylistPersistenceService
-import io.sparkled.persistence.scheduledjob.ScheduledJobPersistenceService
-import io.sparkled.persistence.setting.SettingPersistenceService
+import io.sparkled.persistence.DbService
+import io.sparkled.persistence.getAll
+import io.sparkled.persistence.update
+import io.sparkled.persistence.v2.query.sequence.GetSequencesByPlaylistIdQuery
 import io.sparkled.scheduler.SchedulerService
-import javax.inject.Singleton
-import org.quartz.CronScheduleBuilder
-import org.quartz.JobBuilder
-import org.quartz.JobDataMap
-import org.quartz.Scheduler
-import org.quartz.SchedulerException
-import org.quartz.TriggerBuilder
+import org.quartz.*
 import org.quartz.impl.StdSchedulerFactory
 import org.slf4j.LoggerFactory
+import javax.inject.Singleton
 
 @Singleton
 open class SchedulerServiceImpl(
-    private val scheduledJobPersistenceService: ScheduledJobPersistenceService,
-    private val playlistPersistenceService: PlaylistPersistenceService,
-    private val settingPersistenceService: SettingPersistenceService,
+    private val db: DbService,
     private val playbackService: PlaybackService
 ) : SchedulerService {
 
@@ -45,9 +41,9 @@ open class SchedulerServiceImpl(
 
     override fun reload() {
         scheduler.clear()
-        logger.info("Cleared existing scheduled job(s).")
+        logger.info("Cleared existing scheduled task(s).")
 
-        val scheduledJobs = scheduledJobPersistenceService.getAllScheduledJobs()
+        val scheduledJobs = db.getAll<ScheduledTaskEntity>()
         scheduledJobs.forEach {
             try {
                 schedule(it)
@@ -56,10 +52,10 @@ open class SchedulerServiceImpl(
             }
         }
 
-        logger.info("Started {} scheduled job(s).", scheduledJobs.size)
+        logger.info("Started {} scheduled task(s).", scheduledJobs.size)
     }
 
-    private fun schedule(scheduledJob: ScheduledJob) {
+    private fun schedule(scheduledJob: ScheduledTaskEntity) {
         val jobDataMap = JobDataMap(
             mapOf(
                 JobDelegator.SERVICE to this,
@@ -79,21 +75,21 @@ open class SchedulerServiceImpl(
         scheduler.scheduleJob(jobDetail, trigger)
     }
 
-    internal fun handleJob(job: ScheduledJob) {
-        logger.info("Executing scheduled job {}.", job.id)
+    internal fun handleTask(task: ScheduledTaskEntity) {
+        logger.info("Executing scheduled task {}.", task.id)
 
-        when (val action = job.action!!) {
-            ScheduledJobAction.PLAY_PLAYLIST -> playPlaylist(job)
+        when (val action = task.action) {
+            ScheduledJobAction.PLAY_PLAYLIST -> playPlaylist(task)
             ScheduledJobAction.STOP_PLAYBACK -> stopPlayback()
-            ScheduledJobAction.SET_BRIGHTNESS -> setBrightness(job)
-            else -> logger.warn("Unrecognised scheduler action {}, skipping.", action)
+            ScheduledJobAction.SET_BRIGHTNESS -> setBrightness(task)
+            ScheduledJobAction.NONE -> logger.warn("Unrecognised scheduler action {}, skipping.", action)
         }
     }
 
     @Synchronized
     @Transactional
-    open fun playPlaylist(job: ScheduledJob) {
-        val sequences = playlistPersistenceService.getSequencesByPlaylistId(job.playlistId ?: -1)
+    open fun playPlaylist(job: ScheduledTaskEntity) {
+        val sequences = db.query(GetSequencesByPlaylistIdQuery(job.playlistId ?: -1))
         playbackService.play(sequences, true) // TODO: Allow repeat config via scheduler API.
     }
 
@@ -104,9 +100,10 @@ open class SchedulerServiceImpl(
 
     @Synchronized
     @Transactional
-    open fun setBrightness(job: ScheduledJob) {
+    open fun setBrightness(job: ScheduledTaskEntity) {
         val brightness = (job.value ?: "0")
-        settingPersistenceService.setBrightness(brightness)
+        val setting = SettingEntity(code = SettingsConstants.Brightness.CODE, value = brightness)
+        db.update(setting, fieldsToUpdate = arrayOf("value"))
     }
 
     companion object {

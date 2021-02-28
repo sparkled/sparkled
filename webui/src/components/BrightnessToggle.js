@@ -43,7 +43,7 @@ class BrightnessToggle extends Component {
     const { brightness } = this.state
 
     return brightness == null ? null : (
-      <Slider min={0} max={15} step={1} value={brightness} onChange={this.updateBrightness} />
+      <Slider min={0} max={100} step={1} value={brightness} onChange={this.updateBrightness} />
     )
   }
 

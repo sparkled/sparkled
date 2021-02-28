@@ -1,6 +1,5 @@
 package io.sparkled.model.render
 
-import java.util.HashMap
 import java.util.UUID
 
 /**

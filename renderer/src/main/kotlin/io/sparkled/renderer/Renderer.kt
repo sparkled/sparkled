@@ -3,9 +3,9 @@ package io.sparkled.renderer
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.animation.ChannelPropPair
 import io.sparkled.model.animation.effect.Effect
-import io.sparkled.model.entity.Sequence
-import io.sparkled.model.entity.SequenceChannel
-import io.sparkled.model.entity.StageProp
+import io.sparkled.model.entity.v2.SequenceChannelEntity
+import io.sparkled.model.entity.v2.SequenceEntity
+import io.sparkled.model.entity.v2.StagePropEntity
 import io.sparkled.model.render.*
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SparkledEffect
@@ -19,11 +19,12 @@ import kotlin.math.min
 class Renderer(
     private val pluginManager: SparkledPluginManager,
     objectMapper: ObjectMapper,
-    private val sequence: Sequence,
-    sequenceChannels: List<SequenceChannel>,
-    stageProps: List<StageProp>,
+    private val sequence: SequenceEntity,
+    sequenceChannels: List<SequenceChannelEntity>,
+    stageProps: List<StagePropEntity>,
     private val startFrame: Int,
-    private val endFrame: Int
+    private val endFrame: Int,
+    // TODO there was a preview flag here. Where did that go?
 ) {
     private val channelPropPairs: List<ChannelPropPair> = ChannelPropPairUtils.makePairs(objectMapper, sequenceChannels, stageProps)
 
@@ -32,7 +33,7 @@ class Renderer(
 
         // Channels are rendered in reverse order for blending purposes.
         channelPropPairs.reversed().forEach { cpp ->
-            val stagePropUuid = cpp.stageProp.getUuid()!!
+            val stagePropUuid = cpp.stageProp.uuid
             val data = renderedProps[stagePropUuid]
             renderedProps[stagePropUuid] = renderChannel(cpp, data)
         }
@@ -45,7 +46,7 @@ class Renderer(
             data
         } else {
             val frameCount = endFrame - startFrame + 1
-            val leds = channelPropPair.stageProp.getLedCount()!!
+            val leds = channelPropPair.stageProp.ledCount
             val buffer = ByteArray(frameCount * leds * Led.BYTES_PER_LED)
             RenderedStagePropData(startFrame, endFrame, leds, buffer)
         }
@@ -57,7 +58,7 @@ class Renderer(
         return stagePropData
     }
 
-    private fun renderEffect(sequence: Sequence, data: RenderedStagePropData, prop: StageProp, effect: Effect) {
+    private fun renderEffect(sequence: SequenceEntity, data: RenderedStagePropData, prop: StagePropEntity, effect: Effect) {
         repeat(effect.repetitions) {
             val duration = effect.endFrame - effect.startFrame + 1
 
@@ -69,7 +70,7 @@ class Renderer(
         }
     }
 
-    private fun <T> renderRepetition(sequence: Sequence, data: RenderedStagePropData, prop: StageProp, effect: Effect) {
+    private fun <T> renderRepetition(sequence: SequenceEntity, data: RenderedStagePropData, prop: StagePropEntity, effect: Effect) {
         val effectTypeCode = effect.type
 
         @Suppress("UNCHECKED_CAST")
@@ -103,7 +104,7 @@ class Renderer(
                     render(sequence, data, frame, prop, effect, effectRenderer, state)
                 }
             }
-            
+
             for (frameNumber in startFrame..endFrame) {
                 val frame = data.frames[frameNumber - this.startFrame]
                 render(sequence, data, frame, prop, effect, effectRenderer, state)
@@ -111,7 +112,7 @@ class Renderer(
         }
     }
 
-    fun <T> render(sequence: Sequence, channel: RenderedStagePropData, frame: RenderedFrame, stageProp: StageProp, effect: Effect, renderer: SparkledEffect<T>, state: T) {
+    fun <T> render(sequence: SequenceEntity, channel: RenderedStagePropData, frame: RenderedFrame, stageProp: StagePropEntity, effect: Effect, renderer: SparkledEffect<T>, state: T) {
         val progress = getProgress(frame, effect)
         val ctx = RenderContext(sequence, channel, frame, stageProp, effect, progress, pluginManager.fills.get())
         renderer.render(ctx, state)

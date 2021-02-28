@@ -36,7 +36,7 @@ class SparkledPluginManager(
     val easings = AtomicReference<SortedMap<String, SparkledEasing>>(sortedMapOf())
     val effects = AtomicReference<SortedMap<String, SparkledEffect<*>>>(sortedMapOf())
     val fills = AtomicReference<SortedMap<String, SparkledFill>>(sortedMapOf())
-    
+
     fun reloadPlugins() {
         logger.info("Reloading plugins.")
         val easingPlugins = reloadTypedPlugins<SparkledEasing>("easings")
@@ -49,16 +49,16 @@ class SparkledPluginManager(
 
         logger.info("Finished reloading plugins.")
     }
-    
+
     private inline fun <reified T : SparkledPlugin> reloadTypedPlugins(subdirectory: String): List<T> {
         val pluginType = T::class.simpleName
         logger.info("Loading $pluginType plugins.")
         return with(scriptEngine) {
-            val pluginScripts = File("${sparkledConfig.directory}/plugins/$subdirectory")
+            val pluginScripts = File("${sparkledConfig.dataFolderPath}/${sparkledConfig.pluginFolderName}/$subdirectory")
                 .listFiles { _, name -> name.endsWith(".kts") } ?: emptyArray()
-            
+
             // TODO add unit tests for custom effects
-            //      security management, prevent malicious code?
+            // TODO security management, prevent malicious code?
             pluginScripts.mapNotNull {
                 try {
                     val plugin = eval(it.readText()) as T
@@ -73,7 +73,7 @@ class SparkledPluginManager(
             logger.info("Loading $size $pluginType plugin(s).")
         }
     }
-    
+
     companion object {
         private val logger = LoggerFactory.getLogger(SparkledPluginManager::class.java)
     }

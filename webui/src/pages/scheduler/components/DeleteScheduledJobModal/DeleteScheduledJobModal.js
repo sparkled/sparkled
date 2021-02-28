@@ -17,10 +17,10 @@ class DeleteScheduledJobModal extends Component {
 
     return (
       <Dialog open={Boolean(scheduledJobToDelete)} onClose={this.hideModal} fullScreen={fullScreen} fullWidth>
-        <DialogTitle>Delete scheduled job</DialogTitle>
+        <DialogTitle>Delete scheduled task</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this scheduled job?
+            Are you sure you want to delete this scheduled task?
             {this.renderDeletionError()}
           </DialogContentText>
         </DialogContent>
@@ -29,7 +29,7 @@ class DeleteScheduledJobModal extends Component {
             Cancel
           </Button>
           <Button onClick={this.deleteScheduledJob} variant='contained' color='secondary'>
-            {deleting ? 'Deleting...' : 'Delete scheduled job'}
+            {deleting ? 'Deleting...' : 'Delete scheduledJob'}
           </Button>
         </DialogActions>
       </Dialog>

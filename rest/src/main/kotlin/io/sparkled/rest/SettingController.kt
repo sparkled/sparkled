@@ -4,20 +4,25 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Put
-import io.micronaut.spring.tx.annotation.Transactional
-import io.sparkled.model.entity.Setting
+import io.sparkled.model.entity.v2.SettingEntity
 import io.sparkled.model.setting.SettingsConstants
-import io.sparkled.persistence.setting.SettingPersistenceService
+import io.sparkled.persistence.DbService
+import io.sparkled.persistence.cache.CacheService
+import io.sparkled.persistence.insert
+import io.sparkled.persistence.update
+import io.sparkled.viewmodel.SettingViewModel
+import org.springframework.transaction.annotation.Transactional
 
 @Controller("/api/settings")
 open class SettingController(
-    private val settingPersistenceService: SettingPersistenceService
+    private val caches: CacheService,
+    private val db: DbService
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
     open fun getAllSettings(): HttpResponse<Any> {
-        val settings = settingPersistenceService.settings
+        val settings = caches.settings.get()
         return HttpResponse.ok(settings)
     }
 
@@ -25,10 +30,11 @@ open class SettingController(
     @Transactional(readOnly = true)
     open fun getSetting(code: String): HttpResponse<Any> {
         return if (code == SettingsConstants.Brightness.CODE) {
-            val setting = Setting()
-                .setCode(SettingsConstants.Brightness.CODE)
-                .setValue(settingPersistenceService.settings.brightness.toString())
-            HttpResponse.ok(setting)
+            val setting = SettingEntity(
+                code = SettingsConstants.Brightness.CODE,
+                value = caches.settings.use { it.brightness }.toString()
+            )
+            HttpResponse.ok(SettingViewModel.fromModel(setting))
         } else {
             return HttpResponse.notFound()
         }
@@ -36,8 +42,21 @@ open class SettingController(
 
     @Put("/{code}")
     @Transactional
-    open fun updateSetting(code: String, setting: Setting): HttpResponse<Any> {
-        settingPersistenceService.setBrightness(setting.getValue() ?: "0")
+    open fun updateSetting(code: String, setting: SettingViewModel): HttpResponse<Any> {
+        val model = setting.toModel()
+
+        if (setting.code == SettingsConstants.Brightness.CODE) {
+            try {
+                db.insert(model)
+            } catch (e: Exception) {
+                db.update(model)
+            }
+
+            caches.settings.modify { it.copy(brightness = model.value.toInt()) }
+        } else {
+            return HttpResponse.notFound()
+        }
+
         return HttpResponse.ok()
     }
 }

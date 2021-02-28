@@ -30,7 +30,7 @@ object GlitterEffect : SparkledEffect<Unit> {
         val density = ParamUtils.getInt(ctx.effect, Params.DENSITY.name, 10) / 100f
         val patternIndex = (density * (patterns.size - 1)).toInt()
         val lifetime = ParamUtils.getFloat(ctx.effect, Params.LIFETIME.name, 1f)
-        val lifetimeFrames = (ctx.sequence.getFramesPerSecond()!! * lifetime).toInt()
+        val lifetimeFrames = (ctx.sequence.framesPerSecond * lifetime).toInt()
 
         val random = Random(ParamUtils.getInt(ctx.effect, Params.RANDOM_SEED.name, 1))
         val frameCount = ctx.effect.endFrame - ctx.effect.startFrame + 1

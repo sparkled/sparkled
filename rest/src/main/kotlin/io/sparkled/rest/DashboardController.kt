@@ -3,26 +3,52 @@ package io.sparkled.rest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
-import io.micronaut.spring.tx.annotation.Transactional
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
+import io.sparkled.model.entity.v2.*
 import io.sparkled.persistence.DbService
-import io.sparkled.viewmodel.ViewModelConverterService
-import io.sparkled.viewmodel.dashboard.DashboardViewModel
+import io.sparkled.persistence.getAll
+import io.sparkled.viewmodel.*
+import org.springframework.transaction.annotation.Transactional
 
 @Controller("/api/dashboard")
+@ExecuteOn(TaskExecutors.IO)
 open class DashboardController(
-    private val db: DbService,
-    private val vm: ViewModelConverterService
+    private val db: DbService
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
     open fun getDashboard(): HttpResponse<Any> {
+        val playlists = db.getAll<PlaylistEntity>(orderBy = "name")
+        val playlistNames = playlists.associate { it.id to it.name }
+        val scheduledTasks = db.getAll<ScheduledTaskEntity>(orderBy = "id")
+        val sequences = db.getAll<SequenceEntity>(orderBy = "name")
+        val playlistSequences = db.getAll<PlaylistSequenceEntity>().groupBy { it.playlistId }
+        val songs = db.getAll<SongEntity>(orderBy = "name")
+        val stages = db.getAll<StageEntity>(orderBy = "name")
+
         val dashboard = DashboardViewModel(
-            stages = vm.stageSearch.toViewModels(db.stage.getAllStages()),
-            songs = db.song.getAllSongs().map { vm.song.toViewModel(it) },
-            sequences = vm.sequenceSearch.toViewModels(db.sequence.getAllSequences()),
-            playlists = vm.playlistSearch.toViewModels(db.playlist.getAllPlaylists()),
-            scheduledTasks = vm.scheduledJobSearch.toViewModels(db.scheduledJob.getAllScheduledJobs()),
+            playlists = playlists.map {
+                PlaylistSummaryViewModel.fromModel(
+                    it,
+                    playlistSequences = playlistSequences[it.id] ?: emptyList(),
+                    sequences = sequences,
+                    songs = songs,
+                )
+            },
+            scheduledTasks = scheduledTasks.map {
+                ScheduledTaskSummaryViewModel.fromModel(it, playlistNames)
+            },
+            sequences = sequences.map {
+                SequenceSummaryViewModel.fromModel(
+                    it,
+                    song = songs.first { song -> song.id == it.songId },
+                    stage = stages.first { stage -> stage.id == it.stageId },
+                )
+            },
+            songs = songs.map { SongViewModel.fromModel(it) },
+            stages = stages.map { StageSummaryViewModel.fromModel(it) },
         )
 
         return HttpResponse.ok(dashboard)

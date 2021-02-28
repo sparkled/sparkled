@@ -20,6 +20,7 @@ class ErrorController {
             HttpResponse.badRequest(UserFriendlyErrorResponse(t.message!!))
         } else {
             logger.error("Unexpected error response for URI '${request.path}':", t)
+            // TODO return object response instead of string. Do this for all errors.
             HttpResponse.serverError("An unexpected error occurred.")
         }
     }

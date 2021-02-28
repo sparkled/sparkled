@@ -2,6 +2,7 @@ package io.sparkled.udpserver.impl.command
 
 import io.sparkled.model.render.RenderedFrame
 import io.sparkled.model.setting.SettingsCache
+import io.sparkled.model.util.MathUtils
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.music.PlaybackState
 import java.net.InetAddress
@@ -26,8 +27,8 @@ class GetFrameCommand : UdpCommand {
     }
 
     private fun calculateBrightness(stagePropCode: String, settings: SettingsCache, playbackState: PlaybackState): Int {
-        val propBrightness = (playbackState.stageProps[stagePropCode]?.getBrightness() ?: 100) / 100f
-        val globalBrightness = settings.brightness
+        val propBrightness = (playbackState.stageProps[stagePropCode]?.brightness ?: 100) / 100f
+        val globalBrightness = MathUtils.map(settings.brightness.toFloat(), 0f, 100f, 0f, 15f).toInt()
 
         return (globalBrightness * propBrightness).toInt()
     }
@@ -53,7 +54,7 @@ class GetFrameCommand : UdpCommand {
 
     private fun getRenderedFrame(playbackState: PlaybackState, stagePropCode: String, frameIndex: Int): RenderedFrame? {
         val renderedStageProps = playbackState.renderedStageProps
-        val stagePropUuid = playbackState.stageProps[stagePropCode]?.getUuid()
+        val stagePropUuid = playbackState.stageProps[stagePropCode]?.uuid
 
         val renderedStagePropData = renderedStageProps!![stagePropUuid]
         val frames = renderedStagePropData?.frames ?: emptyList()

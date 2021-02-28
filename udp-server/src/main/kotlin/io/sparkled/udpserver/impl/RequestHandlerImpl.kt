@@ -1,7 +1,7 @@
 package io.sparkled.udpserver.impl
 
 import io.sparkled.music.PlaybackStateService
-import io.sparkled.persistence.setting.SettingPersistenceService
+import io.sparkled.persistence.cache.CacheService
 import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.impl.command.GetFrameCommand
 import io.sparkled.udpserver.impl.command.GetStagePropCodesCommand
@@ -16,8 +16,8 @@ import java.net.InetAddress
 
 @Singleton
 class RequestHandlerImpl(
+    private val caches: CacheService,
     private val playbackStateService: PlaybackStateService,
-    private val settingPersistenceService: SettingPersistenceService,
     subscribers: UdpClientSubscribers
 ) : RequestHandler {
 
@@ -42,7 +42,7 @@ class RequestHandlerImpl(
 
     private fun getResponse(ipAddress: InetAddress, port: Int, args: List<String>): ByteArray? {
         val playbackState = playbackStateService.getPlaybackState()
-        val settings = settingPersistenceService.settings
+        val settings = caches.settings.get()
 
         val command = args[0]
         val requestCommand = commands[command] ?: throw IllegalArgumentException("Unrecognised command '$command'.")

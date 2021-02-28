@@ -35,7 +35,7 @@ object RainbowFill : SparkledFill {
 
         val frame = ctx.frame
         val ledPosition = ledIndex.toFloat() / frame.ledCount * cycleCount
-        val progress = frame.frameNumber.toFloat() / ctx.sequence.getFramesPerSecond()!! * cyclesPerSecond
+        val progress = frame.frameNumber.toFloat() / ctx.sequence.framesPerSecond * cyclesPerSecond
         val hue = ledPosition + progress % 1f
 
         return Color.getHSBColor(hue, SATURATION, brightness)

@@ -155,17 +155,17 @@ const DashboardScreen = () => {
       })
   }, [dashboard, dispatch, searchQuery])
 
-  const playSequence = (sequenceId: number) => {
+  const playSequence = async (sequenceId: number) => {
     const playlistAction = {
       action: 'PLAY_SEQUENCE',
       sequenceId: sequenceId,
     }
-    axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
+    await axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
   }
 
-  const stopSequence = () => {
+  const stopSequence = async () => {
     const playlistAction = { action: 'STOP' }
-    axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
+    await axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
   }
 
   const sequenceItems = useMemo(() => {
@@ -273,7 +273,7 @@ const DashboardScreen = () => {
 
       <AppBar />
       <S.PageLoadingContainer loading={requestStatus === 'loading'}>
-        <Container>
+        <Container style={{ width: '100%' }}>
           <Row style={{ display: 'flex', height: '100%' }}>
             <Col style={{ display: 'flex', height: '100%' }}>
               <S.PanelGrid>

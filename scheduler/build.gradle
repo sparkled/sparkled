@@ -2,6 +2,5 @@ dependencies {
     implementation project(':model')
     implementation project(':persistence')
     implementation project(':music-player')
-    implementation 'io.micronaut.configuration:micronaut-hibernate-jpa'
     implementation "org.quartz-scheduler:quartz:$quartzVersion"
 }

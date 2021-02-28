@@ -10,11 +10,11 @@ import io.sparkled.model.render.RenderedStagePropData
 object LedTestUtils {
 
     fun toLedString(channel: RenderedStagePropData): String {
-        return channel.frames.asSequence().map { toLedString(it) }.joinToString("\n")
+        return channel.frames.map { toLedString(it) }.joinToString("\n")
     }
 
     fun toLedString(leds: Array<IntArray>): String {
-        return leds.asSequence().map { toLedString(it) }.joinToString("\n")
+        return leds.map { toLedString(it) }.joinToString("\n")
     }
 
     fun toLedString(frame: RenderedFrame): String {

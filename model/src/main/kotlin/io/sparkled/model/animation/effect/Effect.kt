@@ -7,7 +7,7 @@ import io.sparkled.model.util.IdUtils
 import java.util.*
 
 data class Effect(
-    var uuid: UUID = IdUtils.NO_UUID,
+    var uuid: UUID = IdUtils.newUuid(),
     var type: String = "NONE",
     var easing: Easing = Easing("LINEAR"),
     var fill: Fill = Fill(),

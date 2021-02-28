@@ -23,7 +23,7 @@ class AddScheduledJobModal extends Component {
     }
 
     if (!this.props.addError && addError) {
-      Alert.error(`Failed to add scheduled job: ${addError}`)
+      Alert.error(`Failed to add scheduled task: ${addError}`)
     }
   }
 
@@ -32,7 +32,7 @@ class AddScheduledJobModal extends Component {
 
     return (
       <Dialog open={addModalVisible} onClose={this.props.hideAddModal} fullScreen={fullScreen} fullWidth>
-        <DialogTitle>Add scheduled job</DialogTitle>
+        <DialogTitle>Add scheduled task</DialogTitle>
         <DialogContent>
           <form id={formName} onSubmit={handleSubmit(this.addScheduledJob)} noValidate autoComplete='off'>
             <Field
@@ -66,7 +66,7 @@ class AddScheduledJobModal extends Component {
             Cancel
           </Button>
           <Button variant='contained' color='primary' type='submit' form={formName} disabled={adding || !valid}>
-            {adding ? 'Adding...' : 'Add scheduled job'}
+            {adding ? 'Adding...' : 'Add scheduled task'}
           </Button>
         </DialogActions>
       </Dialog>
