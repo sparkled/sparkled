@@ -10,7 +10,7 @@ import io.sparkled.model.playlist.PlaylistActionType
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.getById
-import io.sparkled.persistence.v2.query.sequence.GetSequencesByPlaylistIdQuery
+import io.sparkled.persistence.query.sequence.GetSequencesByPlaylistIdQuery
 import org.springframework.transaction.annotation.Transactional
 
 @Controller("/api/player")

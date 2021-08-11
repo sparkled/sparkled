@@ -17,11 +17,11 @@ import io.sparkled.model.render.RenderedSequenceStageProp
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.model.validator.exception.EntityNotFoundException
 import io.sparkled.persistence.*
-import io.sparkled.persistence.v2.query.sequence.DeleteSequencesQuery
-import io.sparkled.persistence.v2.query.sequence.GetSequenceChannelsBySequenceIdQuery
-import io.sparkled.persistence.v2.query.sequence.GetSongBySequenceIdQuery
-import io.sparkled.persistence.v2.query.sequence.GetStageBySequenceIdQuery
-import io.sparkled.persistence.v2.query.stage.GetStagePropsByStageIdQuery
+import io.sparkled.persistence.query.sequence.DeleteSequencesQuery
+import io.sparkled.persistence.query.sequence.GetSequenceChannelsBySequenceIdQuery
+import io.sparkled.persistence.query.sequence.GetSongBySequenceIdQuery
+import io.sparkled.persistence.query.sequence.GetStageBySequenceIdQuery
+import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.rest.response.IdResponse

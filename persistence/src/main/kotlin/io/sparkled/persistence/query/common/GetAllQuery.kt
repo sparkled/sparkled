@@ -1,4 +1,4 @@
-package io.sparkled.persistence.v2.query.common
+package io.sparkled.persistence.query.common
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.annotation.Entity

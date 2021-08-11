@@ -4,10 +4,9 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.sparkled.model.entity.v2.StageEntity
 import io.sparkled.persistence.*
-import io.sparkled.persistence.v2.query.playlist.GetPlaylistSequencesByPlaylistIdQuery
-import io.sparkled.persistence.v2.query.stage.DeleteStagePropsQuery
-import io.sparkled.persistence.v2.query.stage.DeleteStageQuery
-import io.sparkled.persistence.v2.query.stage.GetStagePropsByStageIdQuery
+import io.sparkled.persistence.query.stage.DeleteStagePropsQuery
+import io.sparkled.persistence.query.stage.DeleteStageQuery
+import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
 import io.sparkled.rest.response.IdResponse
 import io.sparkled.viewmodel.StageSummaryViewModel
 import io.sparkled.viewmodel.StageViewModel

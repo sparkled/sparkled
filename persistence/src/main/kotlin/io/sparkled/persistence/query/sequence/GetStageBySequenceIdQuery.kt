@@ -1,4 +1,4 @@
-package io.sparkled.persistence.v2.query.sequence
+package io.sparkled.persistence.query.sequence
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.entity.v2.StageEntity

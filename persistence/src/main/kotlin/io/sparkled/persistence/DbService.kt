@@ -2,7 +2,9 @@ package io.sparkled.persistence
 
 import io.sparkled.model.entity.v2.SparkledEntity
 import io.sparkled.model.util.IdUtils
-import io.sparkled.persistence.v2.query.common.*
+import io.sparkled.persistence.query.common.DeleteQuery
+import io.sparkled.persistence.query.common.GetByIdQuery
+import io.sparkled.persistence.query.common.*
 
 interface DbService {
     fun init()

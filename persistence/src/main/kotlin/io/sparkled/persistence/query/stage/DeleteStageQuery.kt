@@ -1,8 +1,8 @@
-package io.sparkled.persistence.v2.query.stage
+package io.sparkled.persistence.query.stage
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.persistence.DbQuery
-import io.sparkled.persistence.v2.query.sequence.DeleteSequencesQuery
+import io.sparkled.persistence.query.sequence.DeleteSequencesQuery
 import org.jdbi.v3.core.Jdbi
 import org.slf4j.LoggerFactory
 import java.util.UUID

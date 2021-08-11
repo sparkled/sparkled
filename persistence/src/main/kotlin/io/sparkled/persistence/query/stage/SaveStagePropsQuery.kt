@@ -1,4 +1,4 @@
-package io.sparkled.persistence.v2.query.stage
+package io.sparkled.persistence.query.stage
 
 // TODO
 // import io.sparkled.model.entity.QStageProp.Companion.stageProp

@@ -10,7 +10,7 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.multipart.CompletedFileUpload
 import io.sparkled.model.entity.v2.SongEntity
 import io.sparkled.persistence.*
-import io.sparkled.persistence.v2.query.song.DeleteSongsQuery
+import io.sparkled.persistence.query.song.DeleteSongsQuery
 import io.sparkled.rest.response.IdResponse
 import io.sparkled.viewmodel.SongViewModel
 import org.springframework.transaction.annotation.Transactional

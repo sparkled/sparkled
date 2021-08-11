@@ -1,33 +1,33 @@
-package io.sparkled.persistence.v2.query.song
+package io.sparkled.persistence.query.sequence
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.persistence.DbQuery
 import org.jdbi.v3.core.Jdbi
 import org.slf4j.LoggerFactory
 
-class DeleteSongsQuery(
-    private val songIds: Collection<Int>
+class DeleteSequencesQuery(
+    private val sequenceIds: Collection<Int>
 ) : DbQuery<Unit> {
 
     override fun execute(jdbi: Jdbi, objectMapper: ObjectMapper) {
-        if (songIds.isEmpty()) {
-            logger.info("No songs to delete.")
+        if (sequenceIds.isEmpty()) {
+            logger.info("No sequences to delete.")
         } else {
             jdbi.perform { handle ->
                 val rowsDeleted = handle
                     .createUpdate(query)
-                    .bindList("songIds", songIds)
+                    .bindList("sequenceIds", sequenceIds)
                     .execute()
 
-                logger.info("Deleted $rowsDeleted song(s).")
+                logger.info("Deleted $rowsDeleted sequence(s).")
             }
         }
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(DeleteSongsQuery::class.java)
+        private val logger = LoggerFactory.getLogger(DeleteSequencesQuery::class.java)
         private val query = """
-            DELETE FROM song WHERE id IN (<songIds>);
+            DELETE FROM sequence WHERE id IN (<sequenceIds>);
         """.trimIndent()
     }
 }

@@ -10,8 +10,8 @@ import io.sparkled.music.PlaybackState
 import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
-import io.sparkled.persistence.v2.query.sequence.GetSongBySequenceIdQuery
-import io.sparkled.persistence.v2.query.stage.GetStagePropsByStageIdQuery
+import io.sparkled.persistence.query.sequence.GetSongBySequenceIdQuery
+import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
 import java.util.*

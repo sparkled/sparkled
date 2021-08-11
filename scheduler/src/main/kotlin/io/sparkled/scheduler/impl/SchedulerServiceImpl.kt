@@ -9,7 +9,7 @@ import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.getAll
 import io.sparkled.persistence.update
-import io.sparkled.persistence.v2.query.sequence.GetSequencesByPlaylistIdQuery
+import io.sparkled.persistence.query.sequence.GetSequencesByPlaylistIdQuery
 import io.sparkled.scheduler.SchedulerService
 import org.quartz.*
 import org.quartz.impl.StdSchedulerFactory

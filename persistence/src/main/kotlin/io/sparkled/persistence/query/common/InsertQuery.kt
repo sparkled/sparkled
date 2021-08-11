@@ -1,10 +1,10 @@
-package io.sparkled.persistence.v2.query.common
+package io.sparkled.persistence.query.common
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.annotation.Entity
 import io.sparkled.model.entity.v2.SparkledEntity
 import io.sparkled.persistence.DbQuery
-import io.sparkled.persistence.v2.util.toSnakeCase
+import io.sparkled.persistence.util.toSnakeCase
 import org.jdbi.v3.core.Jdbi
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass

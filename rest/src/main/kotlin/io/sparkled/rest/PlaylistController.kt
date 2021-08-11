@@ -7,7 +7,7 @@ import io.sparkled.model.entity.v2.PlaylistSequenceEntity
 import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.entity.v2.SongEntity
 import io.sparkled.persistence.*
-import io.sparkled.persistence.v2.query.playlist.GetPlaylistSequencesByPlaylistIdQuery
+import io.sparkled.persistence.query.playlist.GetPlaylistSequencesByPlaylistIdQuery
 import io.sparkled.rest.response.IdResponse
 import io.sparkled.viewmodel.PlaylistSummaryViewModel
 import io.sparkled.viewmodel.PlaylistViewModel

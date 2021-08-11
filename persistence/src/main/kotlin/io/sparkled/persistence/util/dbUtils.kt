@@ -1,4 +1,4 @@
-package io.sparkled.persistence.v2.util
+package io.sparkled.persistence.util
 
 import java.util.*
 
