@@ -1,5 +1,6 @@
 package io.sparkled.viewmodel
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.entity.v2.*
 import io.sparkled.model.util.IdUtils
 
@@ -10,7 +11,7 @@ data class StageViewModel(
     val height: Int,
     val stageProps: List<StagePropViewModel> = emptyList()
 ) {
-    fun toModel(): Pair<StageEntity, List<StagePropEntity>> {
+    fun toModel(objectMapper: ObjectMapper): Pair<StageEntity, List<StagePropEntity>> {
         val stage = StageEntity(
             id = id,
             name = name,
@@ -18,17 +19,17 @@ data class StageViewModel(
             height = height
         )
 
-        val stageProps = stageProps.map(StagePropViewModel::toModel)
+        val stageProps = stageProps.map { it.toModel(objectMapper) }
         return stage to stageProps
     }
 
     companion object {
-        fun fromModel(model: StageEntity, stageProps: List<StagePropEntity>) = StageViewModel(
+        fun fromModel(model: StageEntity, stageProps: List<StagePropEntity>, objectMapper: ObjectMapper) = StageViewModel(
             id = model.id,
             name = model.name,
             width = model.width,
             height = model.height,
-            stageProps = stageProps.map(StagePropViewModel::fromModel)
+            stageProps = stageProps.map { StagePropViewModel.fromModel(it, objectMapper) }
         )
     }
 }

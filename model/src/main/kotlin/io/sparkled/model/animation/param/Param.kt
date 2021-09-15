@@ -18,13 +18,17 @@ data class Param(
         fun colors(code: String, displayName: String, defaultValue: List<String>): Param {
             return Param(code, displayName, ParamType.COLORS, defaultValue)
         }
-        
+
         fun decimal(code: String, displayName: String, defaultValue: Double): Param {
             return Param(code, displayName, ParamType.DECIMAL, listOf(defaultValue.toString()))
         }
 
         fun int(code: String, displayName: String, defaultValue: Int): Param {
             return Param(code, displayName, ParamType.INTEGER, listOf(defaultValue.toString()))
+        }
+
+        fun string(code: String, displayName: String, defaultValue: String): Param {
+            return Param(code, displayName, ParamType.STRING, listOf(defaultValue))
         }
     }
 }

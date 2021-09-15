@@ -3,7 +3,6 @@ import * as PIXI from 'pixi.js'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import {
   Point,
-  SvgPathProperties,
   svgPathProperties
 } from 'svg-path-properties'
 import stagePropTypes from '../../../data/stagePropTypes'
@@ -14,6 +13,8 @@ import StagePropBackground from './StagePropBackground'
 import StagePropPath from './StagePropPath'
 import StagePropRotateHandle from './StagePropRotateHandle'
 import StagePropLeds from './StagePropLeds'
+import { getLinePoints } from '../../../utils/stagePropUtils'
+import { IPoint } from 'pixi.js'
 
 const logger = new Logger('StageProp')
 
@@ -70,6 +71,17 @@ const StageProp: React.FC<Props> = props => {
 
   setRotation()
   useEffect(setRotation, [pixiContainer, stageProp.rotation])
+
+  useEffect(() => {
+    const gridPos = props.pixiApp.stage.position;
+    console.info(gridPos)
+
+    const ledPositions = ledPoints
+      .map(it => pixiContainer.toGlobal(it as IPoint))
+      .map(it => ({ x: it.x - gridPos.x, y: it.y - gridPos.y }))
+
+    dispatch({ type: 'UpdateStagePropLedPositions', payload: { ledPositions } })
+  }, [dispatch, ledPoints, pixiContainer, props.pixiApp.stage, stageProp])
 
   useEffect(() => {
     return () => {
@@ -167,32 +179,6 @@ function buildContainer(
   pixiContainer.pivot.x = width / 2
   pixiContainer.pivot.y = height / 2
   return pixiContainer
-}
-
-function getLinePoints(
-  pathProperties: SvgPathProperties,
-  stageProp: StagePropViewModel,
-  pointCount: number = -1
-): Point[] {
-  const length = pathProperties.getTotalLength()
-  pointCount = pointCount === -1 ? Math.floor(length) : pointCount
-
-  const linePoints: Point[] = []
-
-  if (pointCount === 1) {
-    linePoints.push(pathProperties.getPointAtLength(length * .5))
-  } else {
-    _.forEach(Array(pointCount), (a, i) => {
-      const progress = length * (i / (pointCount - 1))
-      const point = pathProperties.getPointAtLength(progress)
-      linePoints.push(point)
-    })
-  }
-
-  return _.map(linePoints, point => ({
-    x: point.x * stageProp.scaleX!,
-    y: point.y * stageProp.scaleY!
-  }))
 }
 
 export default StageProp

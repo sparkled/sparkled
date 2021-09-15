@@ -4,6 +4,8 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.playlist.PlaylistAction
 import io.sparkled.model.playlist.PlaylistActionType
@@ -13,6 +15,7 @@ import io.sparkled.persistence.getById
 import io.sparkled.persistence.query.sequence.GetSequencesByPlaylistIdQuery
 import org.springframework.transaction.annotation.Transactional
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller("/api/player")
 open class PlayerController(
     private val playbackService: PlaybackService,

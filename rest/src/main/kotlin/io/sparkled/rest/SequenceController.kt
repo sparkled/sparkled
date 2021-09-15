@@ -5,6 +5,8 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.SequenceStatus
 import io.sparkled.model.entity.v2.SequenceChannelEntity
@@ -17,6 +19,7 @@ import io.sparkled.model.render.RenderedSequenceStageProp
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.model.validator.exception.EntityNotFoundException
 import io.sparkled.persistence.*
+import io.sparkled.persistence.cache.CacheService
 import io.sparkled.persistence.query.sequence.DeleteSequencesQuery
 import io.sparkled.persistence.query.sequence.GetSequenceChannelsBySequenceIdQuery
 import io.sparkled.persistence.query.sequence.GetSongBySequenceIdQuery
@@ -32,11 +35,13 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import kotlin.math.min
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller("/api/sequences")
 open class SequenceController(
     private val pluginManager: SparkledPluginManager,
     private val objectMapper: ObjectMapper,
     private val file: FileService,
+    private val caches: CacheService,
     private val db: DbService,
 ) {
 
@@ -74,7 +79,7 @@ open class SequenceController(
     open fun getSequenceStage(id: Int): HttpResponse<Any> {
         val viewModel = db.query(GetStageBySequenceIdQuery(id))?.let {
             val stageProps = db.query(GetStagePropsByStageIdQuery(it.id))
-            StageViewModel.fromModel(it, stageProps)
+            StageViewModel.fromModel(it, stageProps, objectMapper)
         }
 
         return if (viewModel != null) {
@@ -143,8 +148,9 @@ open class SequenceController(
 
         if (sequence.status === SequenceStatus.PUBLISHED) {
             db.update(sequence)
+            val stage = db.query(GetStageBySequenceIdQuery(id)) ?: throw EntityNotFoundException("Stage not found.")
             val song = db.query(GetSongBySequenceIdQuery(id)) ?: throw EntityNotFoundException("Song not found.")
-            val renderResult = renderSequence(sequence, sequenceChannels, song)
+            val renderResult = renderSequence(stage, sequence, sequenceChannels, song)
             val renderedSequence = RenderedSequence(
                 sequenceId = sequence.id,
                 startFrame = renderResult.startFrame,
@@ -165,6 +171,7 @@ open class SequenceController(
     }
 
     private fun renderSequence(
+        stage: StageEntity,
         sequence: SequenceEntity,
         sequenceChannels: List<SequenceChannelEntity>,
         song: SongEntity,
@@ -176,7 +183,9 @@ open class SequenceController(
 
         return Renderer(
             pluginManager,
+            caches.gifs.get(),
             objectMapper,
+            stage,
             sequence,
             sequenceChannels,
             stageProps,
@@ -202,6 +211,7 @@ open class SequenceController(
         sequenceViewModel: SequenceViewModel
     ): HttpResponse<Any> {
         val (sequence, sequenceChannels) = sequenceViewModel.toModel(objectMapper)
+        val stage = db.query(GetStageBySequenceIdQuery(id)) ?: throw EntityNotFoundException("Stage not found.")
         val song = db.query(GetSongBySequenceIdQuery(id)) ?: throw EntityNotFoundException("Song not found.")
 
         val start = startFrame.toInt()
@@ -209,7 +219,7 @@ open class SequenceController(
 
         val end = start + frames - 1
         return HttpResponse.ok(
-            renderSequence(sequence, sequenceChannels, song, start, end)
+            renderSequence(stage, sequence, sequenceChannels, song, start, end)
         )
     }
 }

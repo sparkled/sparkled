@@ -46,12 +46,12 @@ class FileServiceImpl(
     override fun readRender(sequenceId: Int): RenderedSequence {
         val file = File(getRenderPath(sequenceId))
 
-        if (!file.exists()) {
+        return if (!file.exists()) {
             logger.error("Failed to find render file ${file.name}.")
             throw FileNotFoundException()
         } else {
             val stream = GZIPInputStream(FileInputStream(file))
-            return objectMapper.readValue(stream)
+            objectMapper.readValue(stream)
         }
     }
 

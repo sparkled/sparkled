@@ -4,6 +4,8 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Put
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.entity.v2.SettingEntity
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
@@ -13,6 +15,7 @@ import io.sparkled.persistence.update
 import io.sparkled.viewmodel.SettingViewModel
 import org.springframework.transaction.annotation.Transactional
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller("/api/settings")
 open class SettingController(
     private val caches: CacheService,

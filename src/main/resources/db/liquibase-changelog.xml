@@ -82,6 +82,9 @@
             <column name="display_order" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
+            <column name="led_positions_json" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
             <column name="stage_id" type="INT(10)">
                 <constraints
                     nullable="false"
@@ -158,7 +161,7 @@
             <column name="display_order" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="channel_json" type="CLOB"/>
+            <column name="channel_json" type="TEXT"/>
         </createTable>
     </changeSet>
 

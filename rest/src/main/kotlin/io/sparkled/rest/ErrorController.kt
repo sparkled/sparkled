@@ -6,11 +6,14 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Error
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.validator.exception.EntityValidationException
 import io.sparkled.rest.response.UserFriendlyErrorResponse
 import io.sparkled.viewmodel.exception.ViewModelConversionException
 import org.slf4j.LoggerFactory
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller
 class ErrorController {
 

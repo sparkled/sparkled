@@ -8,6 +8,8 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.multipart.CompletedFileUpload
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.entity.v2.SongEntity
 import io.sparkled.persistence.*
 import io.sparkled.persistence.query.song.DeleteSongsQuery
@@ -15,6 +17,7 @@ import io.sparkled.rest.response.IdResponse
 import io.sparkled.viewmodel.SongViewModel
 import org.springframework.transaction.annotation.Transactional
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller("/api/songs")
 open class SongController(
     private val db: DbService,

@@ -21,6 +21,12 @@ data class SparkledConfig(
     /**
      * The name of the folder containing plugins.
      */
+    @Value("\${sparkled.gif-folder-name:gifs}")
+    val gifFolderName: String,
+
+    /**
+     * The name of the folder containing plugins.
+     */
     @Value("\${sparkled.plugin-folder-name:plugins}")
     val pluginFolderName: String,
 
@@ -30,5 +36,5 @@ data class SparkledConfig(
     @Value("\${sparkled.render-folder-name:renders}")
     val renderFolderName: String,
 ) {
-    val dataFolders = listOf(audioFolderName, pluginFolderName, renderFolderName)
+    val dataFolders = listOf(audioFolderName, gifFolderName, pluginFolderName, renderFolderName)
 }

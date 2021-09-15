@@ -5,6 +5,8 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.entity.v2.PlaylistEntity
 import io.sparkled.model.entity.v2.ScheduledTaskEntity
 import io.sparkled.persistence.*
@@ -14,6 +16,7 @@ import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
 import io.sparkled.viewmodel.ScheduledTaskViewModel
 import org.springframework.transaction.annotation.Transactional
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller("/api/scheduledTasks")
 open class ScheduledTaskController(
     private val db: DbService,

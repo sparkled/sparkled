@@ -58,8 +58,9 @@ interface DragState {
   mouseY: number
 }
 
+const sidebarWidth = 300
+
 const useStyles = makeStyles((theme: Theme) => {
-  const sidebarWidth = 300
   const tween = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
   return {
@@ -122,7 +123,7 @@ const StageEditor: React.FC<Props> = props => {
   if (pixiApp === null || canvasElement.current === null) {
     logger.debug('Waiting for canvas element to mount.')
   } else if (pixiApp.stage.children.length === 0) {
-    initCanvas(pixiApp, canvasElement.current)
+    initCanvas(pixiApp, canvasElement.current, props.stage)
 
     const { interaction } = pixiApp.renderer.plugins
     interaction.on('pointerdown', (event: InteractionEvent) => {
@@ -162,7 +163,8 @@ const StageEditor: React.FC<Props> = props => {
 
 function initCanvas(
   pixiApp: PIXI.Application,
-  container: HTMLDivElement
+  container: HTMLDivElement,
+  stage: StageViewModel,
 ): PIXI.Application {
   const parent = container.parentElement!
   pixiApp.resizeTo = parent
@@ -170,7 +172,10 @@ function initCanvas(
   pixiApp.stage.addChild(buildGrid())
   parent.appendChild(pixiApp.view)
 
-  redrawGrid(pixiApp)
+  pixiApp.stage.x = ((parent.clientWidth - sidebarWidth) / 2) - (stage.width / 2)
+  pixiApp.stage.y = (parent.clientHeight / 2) - (stage.height / 2)
+
+  renderGrid(pixiApp, stage)
   return pixiApp
 }
 
@@ -188,9 +193,8 @@ function onZoom(event: WheelEvent, pixiApp: PIXI.Application) {
     zoomLimits.min,
     zoomLimits.max
   )
-  pixiApp.stage.scale.x = pixiApp.stage.scale.y = newScale
 
-  redrawGrid(pixiApp)
+  pixiApp.stage.scale.x = pixiApp.stage.scale.y = newScale
 }
 
 function onDragStart(
@@ -233,42 +237,39 @@ function onDragMove(
 
   pixiApp.stage.x = originX + (newMouseX - mouseX)
   pixiApp.stage.y = originY + (newMouseY - mouseY)
-  redrawGrid(pixiApp)
 }
 
 function onDragEnd(setDragState: Dispatch<null>) {
   setDragState(null)
 }
 
-function redrawGrid(pixiApp: PIXI.Application) {
+function renderGrid(pixiApp: PIXI.Application, stage: StageViewModel) {
   const grid = pixiApp.stage.getChildByName('Grid') as PIXI.Graphics
   grid.clear()
 
-  const scale = pixiApp.stage.scale.x
-
   // Calculate left and top positions for the grid, and subtract gridSize to allow for partial grid cells to be drawn.
-  let startX = -pixiApp.stage.x / scale - gridSize
-  let startY = -pixiApp.stage.y / scale - gridSize
+  let startX = 0
+  let startY = 0
 
-  // Adjust positions to account for the grid offset, otherwise the grid will always be drawn from the top-left.
-  startX -= startX % gridSize
-  startY -= startY % gridSize
+  grid.lineStyle(1, 0xffffff, 0.2, .5)
 
-  // Calculate the width and height, and add gridSize to allow for partial grid cells to be drawn.
-  const width = pixiApp.view.clientWidth / scale + gridSize * 2
-  const height = pixiApp.view.clientHeight / scale + gridSize * 2
-
-  grid.lineStyle(1, 0xffffff, 0.2, 1)
-
-  for (let x = 0; x < width; x += gridSize) {
+  for (let x = 0; x < stage.width; x += gridSize) {
     grid.moveTo(x + startX, startY)
-    grid.lineTo(x + startX, height + startY)
+    grid.lineTo(x + startX, stage.height + startY)
   }
 
-  for (let y = 0; y < height; y += gridSize) {
+  for (let y = 0; y < stage.height; y += gridSize) {
     grid.moveTo(startX, y + startY)
-    grid.lineTo(width + startX, y + startY)
+    grid.lineTo(stage.width + startX, y + startY)
   }
+
+  // Right line
+  grid.moveTo(stage.width, 0)
+  grid.lineTo(stage.width, stage.height)
+
+  // Bottom line
+  grid.moveTo(0, stage.height)
+  grid.lineTo(stage.width, stage.height)
 }
 
 function renderStageProps(

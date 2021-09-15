@@ -8,6 +8,7 @@ import io.sparkled.renderer.api.SparkledPlugin
 import io.sparkled.renderer.easing.function.ExpoOutEasing
 import io.sparkled.renderer.easing.function.LinearEasing
 import io.sparkled.renderer.effect.FlashEffect
+import io.sparkled.renderer.effect.GifEffect
 import io.sparkled.renderer.effect.GlitterEffect
 import io.sparkled.renderer.effect.SolidEffect
 import io.sparkled.renderer.effect.line.BuildLineEffect
@@ -30,7 +31,7 @@ class SparkledPluginManager(
 ) {
     private val scriptEngine = ScriptEngineManager().getEngineByExtension("kts")
     private val defaultEasings = listOf(LinearEasing, ExpoOutEasing)
-    private val defaultEffects: List<SparkledEffect<*>> = listOf(BuildLineEffect, FireEffect, FlashEffect, GlitterEffect, LineEffect, SplitLineEffect, SolidEffect)
+    private val defaultEffects: List<SparkledEffect<*>> = listOf(BuildLineEffect, FireEffect, FlashEffect, GifEffect, GlitterEffect, LineEffect, SplitLineEffect, SolidEffect)
     private val defaultFills = listOf(GradientFill, RainbowFill, SingleColorFill)
 
     val easings = AtomicReference<SortedMap<String, SparkledEasing>>(sortedMapOf())

@@ -6,6 +6,8 @@ export class StageViewModel {
   public stageProps: StagePropViewModel[] = []
 }
 
+export type Point = { x: number, y: number }
+
 export type StagePropViewModel = {
   uuid: string
   stageId: number
@@ -21,4 +23,5 @@ export type StagePropViewModel = {
   rotation: number
   brightness: number
   displayOrder: number
+  ledPositions: Point[]
 }

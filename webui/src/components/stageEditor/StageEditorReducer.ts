@@ -1,7 +1,7 @@
 import produce, { immerable } from 'immer'
-import { identity, remove } from 'lodash'
+import { identity, isEqual, remove } from 'lodash'
 import React, { createContext, Dispatch } from 'react'
-import { StagePropViewModel, StageViewModel } from '../../types/ViewModel'
+import { Point, StagePropViewModel, StageViewModel } from '../../types/ViewModel'
 import { StagePropType } from '../../data/stagePropTypes'
 import uuidv4 from 'uuid/v4'
 
@@ -20,6 +20,7 @@ export type Action =
   | { type: 'ScaleStageProp'; payload: { x: number; y: number } }
   | { type: 'RotateStageProp'; payload: { rotation: number } }
   | { type: 'UpdateStagePropLedCount'; payload: { ledCount: number } }
+  | { type: 'UpdateStagePropLedPositions'; payload: { ledPositions: Point[] } }
   | { type: 'DeleteStageProp' }
 
 export const StageEditorStateContext = createContext<State>(new State())
@@ -63,6 +64,13 @@ export const stageEditorReducer: React.Reducer<State, Action> = (
       case 'UpdateStagePropLedCount':
         updateStagePropLedCount(selectedStageProp, action.payload.ledCount)
         break
+      case 'UpdateStagePropLedPositions':
+        if (selectedStageProp) {
+          if (!isEqual(selectedStageProp.ledPositions, action.payload.ledPositions)) {
+            selectedStageProp.ledPositions = action.payload.ledPositions;
+          }
+        }
+        break
       case 'DeleteStageProp':
         deleteStageProp(draft)
         break
@@ -87,7 +95,8 @@ function addStageProp(draft: State, type: StagePropType) {
     scaleY: 1,
     rotation: 0,
     brightness: 100,
-    displayOrder: 0
+    displayOrder: 0,
+    ledPositions: [],
   })
 
   stage.stageProps.forEach((stageProp, i) => (stageProp.displayOrder = i))

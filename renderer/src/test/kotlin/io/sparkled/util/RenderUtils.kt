@@ -8,6 +8,7 @@ import io.sparkled.model.config.SparkledConfig
 import io.sparkled.model.entity.SequenceStatus
 import io.sparkled.model.entity.v2.SequenceChannelEntity
 import io.sparkled.model.entity.v2.SequenceEntity
+import io.sparkled.model.entity.v2.StageEntity
 import io.sparkled.model.entity.v2.StagePropEntity
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
@@ -22,6 +23,7 @@ object RenderUtils {
         SparkledConfig(
             dataFolderPath = ".",
             audioFolderName = ".",
+            gifFolderName = ".",
             pluginFolderName = ".",
             renderFolderName = ".",
         )
@@ -41,6 +43,7 @@ object RenderUtils {
         frameCount: Int,
         stageProps: List<StagePropEntity>
     ): RenderedStagePropDataMap {
+        val stage = StageEntity(name = "Test stage", width = 800, height = 600)
         val sequence = SequenceEntity(framesPerSecond = 60, stageId = 0, status = SequenceStatus.DRAFT, name = "Test", songId = 1)
         val sequenceChannels = effects.map {
             SequenceChannelEntity(
@@ -54,7 +57,9 @@ object RenderUtils {
 
         val renderResult = Renderer(
             pluginManager,
+            emptyMap(),
             objectMapper,
+            stage,
             sequence,
             sequenceChannels,
             stageProps,

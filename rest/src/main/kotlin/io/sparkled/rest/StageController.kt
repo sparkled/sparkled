@@ -1,7 +1,10 @@
 package io.sparkled.rest
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.entity.v2.StageEntity
 import io.sparkled.persistence.*
 import io.sparkled.persistence.query.stage.DeleteStagePropsQuery
@@ -12,9 +15,11 @@ import io.sparkled.viewmodel.StageSummaryViewModel
 import io.sparkled.viewmodel.StageViewModel
 import org.springframework.transaction.annotation.Transactional
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller("/api/stages")
 open class StageController(
     private val db: DbService,
+    private val objectMapper: ObjectMapper,
 ) {
 
     @Get("/")
@@ -33,7 +38,7 @@ open class StageController(
 
         return if (stage != null) {
             val stageProps = db.query(GetStagePropsByStageIdQuery(id))
-            val viewModel = StageViewModel.fromModel(stage, stageProps)
+            val viewModel = StageViewModel.fromModel(stage, stageProps, objectMapper)
             HttpResponse.ok(viewModel)
         } else HttpResponse.notFound("Stage not found.")
     }
@@ -41,7 +46,7 @@ open class StageController(
     @Post("/")
     @Transactional
     open fun createStage(stageViewModel: StageViewModel): HttpResponse<Any> {
-        val (stage) = stageViewModel.toModel()
+        val (stage) = stageViewModel.toModel(objectMapper)
         val stageId = db.insert(stage)
         return HttpResponse.ok(IdResponse(stageId.toInt()))
     }
@@ -49,7 +54,7 @@ open class StageController(
     @Put("/{id}")
     @Transactional
     open fun updateStage(id: Int, stageViewModel: StageViewModel): HttpResponse<Any> {
-        val stageAndStageProps = stageViewModel.copy(id = id).toModel()
+        val stageAndStageProps = stageViewModel.copy(id = id).toModel(objectMapper)
         val stage = stageAndStageProps.first.copy(id = id)
 
         // Update stage.

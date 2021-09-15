@@ -3,10 +3,13 @@ package io.sparkled.rest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.animation.easing.EditorItem
 import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.renderer.SparkledPluginManager
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller("/api/referenceData")
 open class ReferenceDataController(
     private val pluginManager: SparkledPluginManager

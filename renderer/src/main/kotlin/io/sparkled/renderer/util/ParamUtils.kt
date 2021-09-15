@@ -20,6 +20,11 @@ object ParamUtils {
         return if (values.isEmpty()) default else values[0].toFloat()
     }
 
+    fun getString(parent: HasArguments, paramCode: String, default: String = ""): String {
+        val values = getArgumentValues(parent, paramCode)
+        return if (values.isEmpty()) default else values[0]
+    }
+
     fun getColorValue(parent: HasArguments, paramCode: String, default: Color = Color.BLACK): Color {
         return getColors(parent, paramCode, default)[0]
     }

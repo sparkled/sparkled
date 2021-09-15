@@ -2,6 +2,8 @@ package io.sparkled.rest
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.entity.v2.PlaylistEntity
 import io.sparkled.model.entity.v2.PlaylistSequenceEntity
 import io.sparkled.model.entity.v2.SequenceEntity
@@ -13,6 +15,7 @@ import io.sparkled.viewmodel.PlaylistSummaryViewModel
 import io.sparkled.viewmodel.PlaylistViewModel
 import org.springframework.transaction.annotation.Transactional
 
+@ExecuteOn(TaskExecutors.IO)
 @Controller("/api/playlists")
 open class PlaylistController(
     private val db: DbService

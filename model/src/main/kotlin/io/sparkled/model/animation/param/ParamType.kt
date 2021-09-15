@@ -33,5 +33,10 @@ enum class ParamType {
     /**
      * A whole number.
      */
-    INTEGER
+    INTEGER,
+
+    /**
+     * A string.
+     */
+    STRING
 }
