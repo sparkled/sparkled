@@ -4,7 +4,10 @@ import rootReducer from './reducers/rootReducer'
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: getDefaultMiddleware().concat(promiseMiddleware()),
+  middleware: getDefaultMiddleware({
+    immutableCheck: false,
+    serializableCheck: false,
+  }).concat(promiseMiddleware()),
 })
 
 export default store
