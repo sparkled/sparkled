@@ -33,6 +33,11 @@ export type SequenceSearchViewModel = {
 
 export type SequenceStatus = 'NEW' | 'DRAFT' | 'PUBLISHED'
 
+export type PlaylistViewModel = {
+  id: number
+  name: string
+}
+
 export type PlaylistSearchViewModel = {
   id: number
   name: string

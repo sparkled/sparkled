@@ -1,15 +1,15 @@
 import { Popover } from '@material-ui/core'
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { Col, Container, Row } from 'react-grid-system'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { setQuery } from '../store/reducers/dashboardScreenReducer'
-import { AppState } from '../store/reducers/rootReducer'
+import { useAppSelector } from '../store/store'
 import AppLogo from './AppLogo'
-import { Col, Container, Row } from 'react-grid-system'
 import BrightnessToggle from './BrightnessToggle'
+import Icons from './Icons'
 import RoundButton from './RoundButton'
 import SearchBar from './SearchBar'
-import Icons from './Icons'
 
 const S = {
   Nav: styled.nav`
@@ -46,7 +46,7 @@ const S = {
   RightCol: styled(Col)`
     display: flex;
     justify-content: flex-end;
-  `,
+  `
 }
 
 const AppBar = () => {
@@ -55,7 +55,7 @@ const AppBar = () => {
   const handleClose = () => setAnchorEl(null)
 
   const dispatch = useDispatch()
-  const { query } = useSelector((state: AppState) => state.dashboardScreen)
+  const { query } = useAppSelector(state => state.dashboardScreen)
 
   return (
     <S.Nav>
@@ -85,11 +85,11 @@ const AppBar = () => {
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'center',
+          horizontal: 'center'
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'center',
+          horizontal: 'center'
         }}
       >
         <div style={{ width: 300, padding: 16 }}>

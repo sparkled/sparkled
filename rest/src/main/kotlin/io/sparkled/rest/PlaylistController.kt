@@ -44,12 +44,10 @@ open class PlaylistController(
     @Get("/{id}")
     @Transactional(readOnly = true)
     open fun getPlaylist(id: Int): HttpResponse<Any> {
-        val playlist = db.getById<PlaylistEntity>(id)
-        val playlistSequences = db.query(GetPlaylistSequencesByPlaylistIdQuery(id))
+        val playlist = getPlaylistById(id)
 
         return if (playlist != null) {
-            val viewModel = PlaylistViewModel.fromModel(playlist, playlistSequences)
-            HttpResponse.ok(viewModel)
+            HttpResponse.ok(playlist)
         } else HttpResponse.notFound("Playlist not found.")
     }
 
@@ -60,7 +58,13 @@ open class PlaylistController(
         val savedId = db.insert(playlist).toInt()
         playlistSequences.forEach { db.insert(it.copy(playlistId = savedId)) }
 
-        return HttpResponse.ok(IdResponse(savedId))
+        return HttpResponse.ok(getPlaylistById(savedId))
+    }
+
+    private fun getPlaylistById(id: Int): PlaylistViewModel? {
+        val playlist = db.getById<PlaylistEntity>(id)
+        val playlistSequences = db.query(GetPlaylistSequencesByPlaylistIdQuery(id))
+        return playlist?.let { PlaylistViewModel.fromModel(it, playlistSequences) }
     }
 
     @Put("/{id}")

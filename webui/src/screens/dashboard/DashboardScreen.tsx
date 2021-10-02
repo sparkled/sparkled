@@ -1,20 +1,15 @@
 import axios from 'axios'
 import React, { useMemo } from 'react'
 import { Col, Container, Row } from 'react-grid-system'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import AppBar from '../../components/AppBar'
 import PageLoadingContainer from '../../components/PageLoadingContainer'
 import * as restConfig from '../../config/restConfig'
 import useApiGetDashboard from '../../hooks/api/useApiGetDashboard'
-import {
-  playPlaylist,
-  showAddPlaylistModal,
-  showDeletePlaylistModal,
-  stopPlaylist,
-} from '../../pages/playlistList/actions'
-import AddPlaylistModal from '../../pages/playlistList/components/AddPlaylistModal/AddPlaylistModal'
+import useModal from '../../hooks/useModal'
+import { playPlaylist, showDeletePlaylistModal, stopPlaylist } from '../../pages/playlistList/actions'
 import DeletePlaylistModal from '../../pages/playlistList/components/DeletePlaylistModal/DeletePlaylistModal'
 import { showAddScheduledTaskModal, showDeleteScheduledTaskModal } from '../../pages/scheduler/actions'
 import AddScheduledJobModal from '../../pages/scheduler/components/AddScheduledJobModal/AddScheduledJobModal'
@@ -28,8 +23,9 @@ import DeleteSongModal from '../../pages/songList/components/DeleteSongModal/Del
 import { showAddStageModal, showDeleteStageModal } from '../../pages/stageList/actions'
 import AddStageModal from '../../pages/stageList/components/AddStageModal'
 import DeleteStageModal from '../../pages/stageList/components/DeleteStageModal'
-import { AppState } from '../../store/reducers/rootReducer'
+import { useAppSelector } from '../../store/store'
 import { getFormattedDuration } from '../../utils/dateUtils'
+import AddPlaylistModal from './AddPlaylistModal'
 import DashboardSwimlane from './DashboardSwimlane'
 import DashboardSwimlaneItem from './DashboardSwimlaneItem'
 
@@ -103,12 +99,13 @@ const S = {
       color: #fff !important;
       text-decoration: none;
     }
-  `,
+  `
 }
 
 const DashboardScreen = () => {
   useApiGetDashboard()
-  const { dashboard, query, requestStatus } = useSelector((state: AppState) => state.dashboardScreen)
+  const addPlaylistModal = useModal('playlistAdd')
+  const { dashboard, query, requestStatus } = useAppSelector(state => state.dashboardScreen)
   const searchQuery = query.trim().toLowerCase()
   const dispatch = useDispatch()
 
@@ -158,7 +155,7 @@ const DashboardScreen = () => {
   const playSequence = async (sequenceId: number) => {
     const playlistAction = {
       action: 'PLAY_SEQUENCE',
-      sequenceId: sequenceId,
+      sequenceId: sequenceId
     }
     await axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
   }
@@ -293,7 +290,7 @@ const DashboardScreen = () => {
                 <DashboardSwimlane
                   gridArea='playlists'
                   title='Playlists'
-                  onAdd={() => dispatch(showAddPlaylistModal())}
+                  onAdd={addPlaylistModal.showModal}
                 >
                   {playlistItems}
                 </DashboardSwimlane>

@@ -49,7 +49,7 @@ const DashboardSwimlane: React.FC<Props> = props => {
     <S.Container area={props.gridArea} className={props.className}>
       <S.HeaderRow>
         <S.Header>{props.title}</S.Header>
-        <RoundButton size={32} onClick={props.onAdd}>
+        <RoundButton size={32} onClick={() => props.onAdd?.()}>
           <Icons.Plus size={24} />
         </RoundButton>
       </S.HeaderRow>

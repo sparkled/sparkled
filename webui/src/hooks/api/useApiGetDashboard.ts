@@ -1,17 +1,15 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Dispatch } from 'redux'
 import { failed, loaded } from '../../store/reducers/dashboardScreenReducer'
+import { useAppSelector } from '../../store/store'
 import { DashboardViewModel } from './apiTypes'
 import useAxios, { isLoadingOrReloading } from './useAxios'
-import { AppState } from '../../store/reducers/rootReducer'
 
 function useApiGetDashboard() {
   const axios = useAxios()
   const dispatch = useDispatch()
-  const { requestStatus } = useSelector(
-    (state: AppState) => state.dashboardScreen
-  )
+  const { requestStatus } = useAppSelector(state => state.dashboardScreen)
 
   useEffect(() => {
     let mounted = true
