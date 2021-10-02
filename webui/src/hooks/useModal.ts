@@ -6,8 +6,8 @@ import { useAppSelector } from '../store/store'
 export type ModalManager = {
   isOpen: boolean
   isLoading: boolean
-  showModal: () => {}
-  hideModal: () => {}
+  show: (state?: any) => {}
+  hide: () => {}
   state: ModalState
 }
 
@@ -19,15 +19,15 @@ function useModal(modal: ModalName) {
   const isOpen = status === 'open' || status === 'loading'
   const isLoading = status === 'loading'
 
-  const showModal = useCallback((value?: string) => {
-    dispatch(setModalStatus({ modal, status: 'open' }))
+  const showModal = useCallback((data: any) => {
+    dispatch(setModalStatus({ modal, status: 'open', data }))
   }, [dispatch, modal])
 
   const hideModal = useCallback(() => {
     dispatch(setModalStatus({ modal, status: 'closed' }))
   }, [dispatch, modal])
 
-  return { isOpen, isLoading, showModal, hideModal, state: modals[modal] } as ModalManager
+  return { isOpen, isLoading, show: showModal, hide: hideModal, state: modals[modal] } as ModalManager
 }
 
 export default useModal

@@ -9,8 +9,7 @@ import PageLoadingContainer from '../../components/PageLoadingContainer'
 import * as restConfig from '../../config/restConfig'
 import useApiGetDashboard from '../../hooks/api/useApiGetDashboard'
 import useModal from '../../hooks/useModal'
-import { playPlaylist, showDeletePlaylistModal, stopPlaylist } from '../../pages/playlistList/actions'
-import DeletePlaylistModal from '../../pages/playlistList/components/DeletePlaylistModal/DeletePlaylistModal'
+import { playPlaylist, stopPlaylist } from '../../pages/playlistList/actions'
 import { showAddScheduledTaskModal, showDeleteScheduledTaskModal } from '../../pages/scheduler/actions'
 import AddScheduledJobModal from '../../pages/scheduler/components/AddScheduledJobModal/AddScheduledJobModal'
 import DeleteScheduledJobModal from '../../pages/scheduler/components/DeleteScheduledJobModal/DeleteScheduledJobModal'
@@ -28,6 +27,7 @@ import { getFormattedDuration } from '../../utils/dateUtils'
 import AddPlaylistModal from './AddPlaylistModal'
 import DashboardSwimlane from './DashboardSwimlane'
 import DashboardSwimlaneItem from './DashboardSwimlaneItem'
+import DeletePlaylistModal from './DeletePlaylistModal'
 
 const S = {
   PageLoadingContainer: styled(PageLoadingContainer)`
@@ -105,6 +105,7 @@ const S = {
 const DashboardScreen = () => {
   useApiGetDashboard()
   const addPlaylistModal = useModal('playlistAdd')
+  const deletePlaylistModal = useModal('playlistDelete')
   const { dashboard, query, requestStatus } = useAppSelector(state => state.dashboardScreen)
   const searchQuery = query.trim().toLowerCase()
   const dispatch = useDispatch()
@@ -203,7 +204,7 @@ const DashboardScreen = () => {
             <S.DropdownItem>
               <Link to={`/playlists/${it.id}`}>Edit Playlist</Link>
             </S.DropdownItem>
-            <S.DropdownItem onClick={() => dispatch(showDeletePlaylistModal(it))}>Delete Playlist</S.DropdownItem>
+            <S.DropdownItem onClick={() => deletePlaylistModal.show(it)}>Delete Playlist</S.DropdownItem>
           </>
         )
 
@@ -218,7 +219,7 @@ const DashboardScreen = () => {
           />
         )
       })
-  }, [dashboard, dispatch, searchQuery])
+  }, [dashboard?.playlists, deletePlaylistModal, dispatch, searchQuery])
 
   const scheduledTaskItems = useMemo(() => {
     return (dashboard?.scheduledTasks ?? [])
@@ -290,7 +291,7 @@ const DashboardScreen = () => {
                 <DashboardSwimlane
                   gridArea='playlists'
                   title='Playlists'
-                  onAdd={addPlaylistModal.showModal}
+                  onAdd={addPlaylistModal.show}
                 >
                   {playlistItems}
                 </DashboardSwimlane>

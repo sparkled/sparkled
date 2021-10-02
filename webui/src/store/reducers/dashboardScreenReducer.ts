@@ -12,14 +12,18 @@ export type State = {
 const initialState: State = {
   requestStatus: 'loading',
   dashboard: null,
-  query: '',
+  query: ''
 }
 
 export const addPlaylist = createAsyncThunk('dashboard/addPlaylist', async (playlist: PlaylistViewModel) => {
   const url = `${restConfig.ROOT_URL}/playlists`
-  await new Promise(r => setTimeout(r, 2000))
-  throw new Error('fail1')
   return (await axios.post(url, playlist)).data as PlaylistViewModel
+})
+
+export const deletePlaylist = createAsyncThunk('dashboard/deletePlaylist', async (playlist: PlaylistViewModel) => {
+  const url = `${restConfig.ROOT_URL}/playlists/${playlist.id}`
+  await axios.delete(url)
+  return playlist
 })
 
 const slice = createSlice({
@@ -52,6 +56,12 @@ const slice = createSlice({
           durationSeconds: 0,
           sequenceCount: 0
         })
+      }
+    })
+
+    builder.addCase(deletePlaylist.fulfilled, (state, action) => {
+      if (state.dashboard) {
+        state.dashboard.playlists = state.dashboard.playlists.filter(it => it.id !== action.payload.id)
       }
     })
 

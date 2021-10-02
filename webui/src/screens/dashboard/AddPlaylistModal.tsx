@@ -22,9 +22,7 @@ const Impl: React.FC = () => {
   }
 
   const buttons = (
-    <>
       <Form.Button type='submit' loading={modal.isLoading}>Create</Form.Button>
-    </>
   )
 
   return (

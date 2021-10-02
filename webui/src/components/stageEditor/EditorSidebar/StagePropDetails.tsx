@@ -1,7 +1,7 @@
 import { Button, Grid, TextField } from '@material-ui/core'
 import { find } from 'lodash'
 import React, { useCallback, useContext, useEffect } from 'react'
-import useForm from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import {
   CODE_NAME,
   POSITIVE_INTEGER,
@@ -16,7 +16,7 @@ const StagePropDetails: React.FC = () => {
   const state = useContext(StageEditorStateContext)
   const dispatch = useContext(StageEditorDispatchContext)
 
-  const { register, errors, reset, setValue, watch } = useForm({
+  const { register, formState: { errors }, reset, setValue, watch } = useForm({
     mode: 'onChange'
   })
 
@@ -29,14 +29,14 @@ const StagePropDetails: React.FC = () => {
     if (!stageProp) {
       reset()
     } else {
-      setValue('code', stageProp.code, true)
-      setValue('name', stageProp.name, true)
-      setValue('positionX', stageProp.positionX.toString(), true)
-      setValue('positionY', stageProp.positionY.toString(), true)
-      setValue('scaleX', stageProp.scaleX.toString(), true)
-      setValue('scaleY', stageProp.scaleY.toString(), true)
-      setValue('rotation', stageProp.rotation.toString(), true)
-      setValue('ledCount', stageProp.ledCount.toString(), true)
+      setValue('code', stageProp.code, { shouldValidate: true })
+      setValue('name', stageProp.name, { shouldValidate: true })
+      setValue('positionX', stageProp.positionX.toString(), { shouldValidate: true })
+      setValue('positionY', stageProp.positionY.toString(), { shouldValidate: true })
+      setValue('scaleX', stageProp.scaleX.toString(), { shouldValidate: true })
+      setValue('scaleY', stageProp.scaleY.toString(), { shouldValidate: true })
+      setValue('rotation', stageProp.rotation.toString(), { shouldValidate: true })
+      setValue('ledCount', stageProp.ledCount.toString(), { shouldValidate: true })
     }
   }, [reset, setValue, stageProp])
 
@@ -124,6 +124,42 @@ const StagePropDetails: React.FC = () => {
     dispatch({ type: 'DeleteStageProp' })
   }, [dispatch])
 
+  const codeField = register('code', { required: true, pattern: CODE_NAME })
+  const nameField = register('name', { required: true })
+  const positionXField = register('positionX', {
+    required: true,
+    min: 0,
+    pattern: POSITIVE_INTEGER
+  })
+  const positionYField = register('positionY', {
+    required: true,
+    min: 0,
+    pattern: POSITIVE_INTEGER
+  })
+  const scaleXField = register('scaleX', {
+    required: true,
+    min: 0.1,
+    max: 10,
+    pattern: POSITIVE_NUMBER
+  })
+  const scaleYField = register('scaleY', {
+    required: true,
+    min: 0.1,
+    max: 10,
+    pattern: POSITIVE_NUMBER
+  })
+  const rotationField = register('rotation', {
+    required: true,
+    min: 0,
+    max: 359,
+    pattern: POSITIVE_INTEGER
+  })
+  const ledCountField = register('ledCount', {
+    required: true,
+    min: 1,
+    pattern: POSITIVE_INTEGER
+  })
+
   return (
     <form>
       <Grid container spacing={2}>
@@ -137,10 +173,7 @@ const StagePropDetails: React.FC = () => {
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.code !== undefined}
-            inputRef={register({
-              required: true,
-              pattern: CODE_NAME
-            })}
+            inputRef={codeField.ref}
           />
         </Grid>
 
@@ -154,9 +187,7 @@ const StagePropDetails: React.FC = () => {
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.name !== undefined}
-            inputRef={register({
-              required: true
-            })}
+            inputRef={nameField.ref}
           />
         </Grid>
 
@@ -170,11 +201,7 @@ const StagePropDetails: React.FC = () => {
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.positionX !== undefined}
-            inputRef={register({
-              required: true,
-              min: 0,
-              pattern: POSITIVE_INTEGER
-            })}
+            inputRef={positionXField.ref}
           />
         </Grid>
 
@@ -188,11 +215,7 @@ const StagePropDetails: React.FC = () => {
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.positionY !== undefined}
-            inputRef={register({
-              required: true,
-              min: 0,
-              pattern: POSITIVE_INTEGER
-            })}
+            inputRef={positionYField.ref}
           />
         </Grid>
 
@@ -206,12 +229,7 @@ const StagePropDetails: React.FC = () => {
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.scaleX !== undefined}
-            inputRef={register({
-              required: true,
-              min: 0.1,
-              max: 10,
-              pattern: POSITIVE_NUMBER
-            })}
+            inputRef={scaleXField.ref}
           />
         </Grid>
 
@@ -225,12 +243,7 @@ const StagePropDetails: React.FC = () => {
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.scaleY !== undefined}
-            inputRef={register({
-              required: true,
-              min: 0.1,
-              max: 10,
-              pattern: POSITIVE_NUMBER
-            })}
+            inputRef={scaleYField.ref}
           />
         </Grid>
 
@@ -244,12 +257,7 @@ const StagePropDetails: React.FC = () => {
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.rotation !== undefined}
-            inputRef={register({
-              required: true,
-              min: 0,
-              max: 359,
-              pattern: POSITIVE_INTEGER
-            })}
+            inputRef={rotationField.ref}
           />
         </Grid>
         <Grid item xs={6} />
@@ -264,11 +272,7 @@ const StagePropDetails: React.FC = () => {
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.ledCount !== undefined}
-            inputRef={register({
-              required: true,
-              min: 1,
-              pattern: POSITIVE_INTEGER
-            })}
+            inputRef={ledCountField.ref}
           />
         </Grid>
 

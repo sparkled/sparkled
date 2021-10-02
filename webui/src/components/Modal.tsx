@@ -87,7 +87,7 @@ const Modal: React.FC<PropsWithChildren<Props>> = props => {
 
   const hideIfNotLoading = useCallback(() => {
     if (!props.modal.isLoading) {
-      props.modal.hideModal()
+      props.modal.hide()
     }
   }, [props.modal])
 
@@ -97,7 +97,7 @@ const Modal: React.FC<PropsWithChildren<Props>> = props => {
         <S.Fieldset disabled={props.disabled}>
           <S.ModalHeader>
             <S.ModalTitle>{props.title}</S.ModalTitle>
-            <S.CloseButton onClick={props.modal.hideModal} enabled={props.modal.state.status !== 'loading'}>
+            <S.CloseButton onClick={props.modal.hide} enabled={props.modal.state.status !== 'loading'}>
               <S.CloseIcon />
             </S.CloseButton>
           </S.ModalHeader>

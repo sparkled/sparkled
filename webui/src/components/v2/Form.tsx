@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import theme from '../../config/theme'
 import LoadingIndicator from './LoadingIndicator'
 
-const BaseButton = styled.button`
+const BaseButton = styled.button<{ enabled: boolean }>`
   position: relative;
   font-family: Raleway, sans-serif;
   font-weight: 600;
@@ -15,6 +15,12 @@ const BaseButton = styled.button`
   border-radius: 8px;
   color: ${theme.colors.white};
   padding: 8px 12px;
+  cursor: ${p => p.enabled ? 'pointer' : 'initial'};
+  transition: filter .2s;
+  
+  &:hover {
+    filter: ${p => p.enabled ? 'brightness(1.2)' : 'none'};
+  }
 `
 
 const LoadingContainer = styled.div`
@@ -34,7 +40,7 @@ const VisibleToggle = styled.span<{ visible: boolean }>`
 
 const Button: React.FC<PropsWithChildren<ButtonProps & { loading?: boolean }>> = props => {
   return (
-    <BaseButton {...props}>
+    <BaseButton {...props} enabled={!props.loading}>
       <VisibleToggle visible={!props.loading}>{props.children}</VisibleToggle>
       <LoadingContainer>
         <LoadingIndicator visible={props.loading ?? false} />

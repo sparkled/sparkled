@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { addPlaylist } from './dashboardScreenReducer'
+import { addPlaylist, deletePlaylist } from './dashboardScreenReducer'
 
 export type ModalStatus = 'closed' | 'open' | 'loading'
 
 export type ModalState = {
   status: ModalStatus
-  data?: string
+  data?: any
   error?: string
 }
 
@@ -65,6 +65,21 @@ const slice = createSlice({
     builder.addCase(addPlaylist.rejected, (state, action) => {
       state.modals['playlistAdd'].status = 'open'
       state.modals['playlistAdd'].error = action.error.message as string
+    })
+
+    builder.addCase(deletePlaylist.pending, state => {
+      state.modals['playlistDelete'].status = 'loading'
+      state.modals['playlistDelete'].error = undefined
+    })
+
+    builder.addCase(deletePlaylist.fulfilled, state => {
+      state.modals['playlistDelete'].status = 'closed'
+      state.modals['playlistDelete'].error = undefined
+    })
+
+    builder.addCase(deletePlaylist.rejected, (state, action) => {
+      state.modals['playlistDelete'].status = 'open'
+      state.modals['playlistDelete'].error = action.error.message as string
     })
   }
 })
