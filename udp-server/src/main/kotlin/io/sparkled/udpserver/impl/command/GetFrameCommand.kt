@@ -12,16 +12,15 @@ import kotlin.math.round
 /**
  * Retrieves the rendered stage prop data frame for the current sequence, synchronised to the current point of playback.
  * Returns an empty response if no rendered frame is found for the stage prop.
- * Command syntax: GF:StagePropCode[:ClientID], e.g. GF:P1:1 or GF:P1 (ClientID defaults to 0).
+ * Command syntax: GF:StagePropCode, e.g. GF:P1.
  */
 class GetFrameCommand : UdpCommand {
 
     override fun handle(ipAddress: InetAddress, port: Int, args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
         val stagePropCode = args[1]
-        val clientId = args[2].toInt()
         val brightness = calculateBrightness(stagePropCode, settings, playbackState)
 
-        val headerData = buildHeader(clientId, brightness)
+        val headerData = buildHeader(brightness)
         val frameData = buildFrame(stagePropCode, playbackState)
         return buildResponse(headerData, frameData)
     }
@@ -33,10 +32,9 @@ class GetFrameCommand : UdpCommand {
         return (globalBrightness * propBrightness).toInt()
     }
 
-    private fun buildHeader(clientId: Int, brightness: Int): ByteArray {
-        val headerClientId = clientId shl 4 and 0b11110000 // CCCC0000
+    private fun buildHeader(brightness: Int): ByteArray {
         val headerBrightness = brightness and 0b00001111 // 0000BBBB
-        return byteArrayOf((headerClientId or headerBrightness).toByte()) // CCCCBBBB
+        return byteArrayOf(headerBrightness.toByte()) // CCCCBBBB
     }
 
     private fun buildFrame(stagePropCode: String, playbackState: PlaybackState): ByteArray {
@@ -56,7 +54,7 @@ class GetFrameCommand : UdpCommand {
         val renderedStageProps = playbackState.renderedStageProps
         val stagePropUuid = playbackState.stageProps[stagePropCode]?.uuid
 
-        val renderedStagePropData = renderedStageProps!![stagePropUuid]
+        val renderedStagePropData = renderedStageProps[stagePropUuid]
         val frames = renderedStagePropData?.frames ?: emptyList()
         return if (frameIndex >= frames.size) null else frames[frameIndex]
     }

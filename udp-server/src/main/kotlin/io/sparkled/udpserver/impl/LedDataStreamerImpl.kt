@@ -50,15 +50,13 @@ class LedDataStreamerImpl(
                         continue
                     }
 
-                    subscribers.forEach { subscriber ->
-                        subscriber.value.forEach {
-                            if (iterationTime - it.timestamp < SUBSCRIBER_TIMEOUT_MS) {
-                                val args = listOf("GF", it.stagePropCode, it.clientId.toString())
-                                val ledData: ByteArray = GetFrameCommand().handle(subscriber.key, it.port, args, settings, playbackState)
-                                val ipAddress = subscriber.key
-                                val sendPacket = DatagramPacket(ledData, ledData.size, ipAddress, it.port)
-                                socket.send(sendPacket)
-                            }
+                    subscribers.forEach { subscriberIp, it ->
+                        if (iterationTime - it.timestamp < SUBSCRIBER_TIMEOUT_MS) {
+                            val args = listOf("GF", it.stagePropCode)
+                            val ledData: ByteArray =
+                                GetFrameCommand().handle(subscriberIp, it.port, args, settings, playbackState)
+                            val sendPacket = DatagramPacket(ledData, ledData.size, subscriberIp, it.port)
+                            socket.send(sendPacket)
                         }
                     }
 

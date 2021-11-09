@@ -9,7 +9,7 @@ import java.net.InetAddress
 /**
  * Notifies the server that a client is interested in receiving data for a stage prop. No response is returned to
  * the client.
- * Command syntax: S:StagePropCode:ClientID, e.g. S:P1:1.
+ * Command syntax: S:StagePropCode, e.g. S:P1.
  */
 class SubscribeCommand(private val subscribers: UdpClientSubscribers) : UdpCommand {
 
@@ -22,19 +22,12 @@ class SubscribeCommand(private val subscribers: UdpClientSubscribers) : UdpComma
     ): ByteArray? {
         // TODO error handling for malformed request.
         val stagePropCode = args[1]
-        val clientId = args[2].toInt()
 
-        val ipSubscriptions = subscribers.getOrPut(ipAddress, { arrayListOf() })
-        val clientIdSubscription = ipSubscriptions.firstOrNull { it.stagePropCode == stagePropCode }
-
-        if (clientIdSubscription != null) {
-            clientIdSubscription.clientId = clientId
-            clientIdSubscription.timestamp = System.currentTimeMillis()
-        } else {
-            ipSubscriptions.add(
-                UdpClientSubscription(stagePropCode, clientId, System.currentTimeMillis(), port)
-            )
+        subscribers.compute(ipAddress) { _, v ->
+            v?.copy(timestamp = System.currentTimeMillis())
+                ?: UdpClientSubscription(stagePropCode, System.currentTimeMillis(), port)
         }
+
         return null
     }
 
