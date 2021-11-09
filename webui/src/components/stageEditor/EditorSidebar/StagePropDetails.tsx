@@ -167,13 +167,12 @@ const StagePropDetails: React.FC = () => {
           <TextField
             variant="outlined"
             label="Code"
-            name="code"
             type="text"
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.code !== undefined}
-            inputRef={codeField.ref}
+            { ...codeField }
           />
         </Grid>
 
@@ -181,13 +180,12 @@ const StagePropDetails: React.FC = () => {
           <TextField
             variant="outlined"
             label="Name"
-            name="name"
             type="text"
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.name !== undefined}
-            inputRef={nameField.ref}
+            {...nameField}
           />
         </Grid>
 
@@ -195,13 +193,12 @@ const StagePropDetails: React.FC = () => {
           <TextField
             variant="outlined"
             label="Position X"
-            name="positionX"
             type="number"
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.positionX !== undefined}
-            inputRef={positionXField.ref}
+            {...positionXField}
           />
         </Grid>
 
@@ -209,13 +206,12 @@ const StagePropDetails: React.FC = () => {
           <TextField
             variant="outlined"
             label="Position Y"
-            name="positionY"
             type="number"
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.positionY !== undefined}
-            inputRef={positionYField.ref}
+            {...positionYField}
           />
         </Grid>
 
@@ -223,13 +219,12 @@ const StagePropDetails: React.FC = () => {
           <TextField
             variant="outlined"
             label="Scale X"
-            name="scaleX"
             type="number"
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.scaleX !== undefined}
-            inputRef={scaleXField.ref}
+            {...scaleXField}
           />
         </Grid>
 
@@ -237,13 +232,12 @@ const StagePropDetails: React.FC = () => {
           <TextField
             variant="outlined"
             label="Scale Y"
-            name="scaleY"
             type="number"
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.scaleY !== undefined}
-            inputRef={scaleYField.ref}
+            {...scaleYField}
           />
         </Grid>
 
@@ -251,13 +245,12 @@ const StagePropDetails: React.FC = () => {
           <TextField
             variant="outlined"
             label="Rotation &deg;"
-            name="rotation"
             type="number"
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.rotation !== undefined}
-            inputRef={rotationField.ref}
+            {...rotationField}
           />
         </Grid>
         <Grid item xs={6} />
@@ -266,13 +259,12 @@ const StagePropDetails: React.FC = () => {
           <TextField
             variant="outlined"
             label="LED Count"
-            name="ledCount"
             type="number"
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.ledCount !== undefined}
-            inputRef={ledCountField.ref}
+            {...ledCountField}
           />
         </Grid>
 
