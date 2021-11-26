@@ -2,7 +2,6 @@ package io.sparkled.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.model.entity.SequenceStatus
@@ -35,7 +34,7 @@ object RenderUtils {
     fun render(effect: Effect, frameCount: Int, ledCount: Int): RenderedStagePropData {
         val stageProp = StagePropEntity(code = PROP_CODE, uuid = PROP_UUID, ledCount = ledCount, reverse = false)
         val result = render(mapOf(PROP_UUID to listOf(effect)), frameCount, listOf(stageProp))
-        return result.getValue(PROP_UUID)
+        return result.getValue(PROP_UUID.toString())
     }
 
     fun render(
@@ -44,11 +43,12 @@ object RenderUtils {
         stageProps: List<StagePropEntity>
     ): RenderedStagePropDataMap {
         val stage = StageEntity(name = "Test stage", width = 800, height = 600)
-        val sequence = SequenceEntity(framesPerSecond = 60, stageId = 0, status = SequenceStatus.DRAFT, name = "Test", songId = 1)
+        val sequence =
+            SequenceEntity(framesPerSecond = 60, stageId = 0, status = SequenceStatus.DRAFT, name = "Test", songId = 1)
         val sequenceChannels = effects.map {
             SequenceChannelEntity(
                 stagePropUuid = it.key,
-                channelJson = objectMapper.writeValueAsString(SequenceChannelEffects(it.value)),
+                channelJson = objectMapper.writeValueAsString(it.value),
                 name = "Test",
                 sequenceId = 1,
                 displayOrder = 1,
@@ -65,6 +65,7 @@ object RenderUtils {
             stageProps,
             0,
             frameCount - 1,
+            preview = false
         ).render()
 
         return renderResult.stageProps

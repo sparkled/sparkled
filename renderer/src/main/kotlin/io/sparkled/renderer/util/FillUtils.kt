@@ -13,12 +13,13 @@ object FillUtils {
     //      will be merged into one, where effects can stack and act as a mask to combine effects.
     fun fill(ctx: RenderContext, ledIndex: Int, alpha: Float, effectColor: Color? = null) {
         val frame = ctx.frame
+        val ledRange = ctx.channel.stagePropRanges[ctx.stageProp.uuid] ?: error("Stage prop range not found")
 
         if (alpha < 0 || alpha > 1) {
             val frameNumber = frame.frameNumber
             logger.warn("Alpha {} for led #{} in frame #{} is invalid, skipping.", alpha, ledIndex, frameNumber)
-        } else if (ledIndex >= 0 && ledIndex < frame.ledCount) {
-            val index = if (ctx.stageProp.reverse) frame.ledCount - ledIndex - 1 else ledIndex
+        } else if (ledIndex >= 0 && ledIndex < ctx.stageProp.ledCount) {
+            val index = if (ctx.stageProp.reverse) ledRange.last - ledIndex else ledRange.first + ledIndex
             val led = frame.getLed(index)
             val fillColor = effectColor ?: ctx.fill?.getFill(ctx, ledIndex) ?: Color.BLACK
 

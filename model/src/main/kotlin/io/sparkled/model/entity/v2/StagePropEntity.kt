@@ -20,5 +20,7 @@ data class StagePropEntity(
     val rotation: Int = 0,
     val brightness: Int = 100, // TODO move to constant
     val displayOrder: Int = 0,
+    val groupId: String? = null,
+    val groupDisplayOrder: Int = 0,
     val ledPositionsJson: String = "[]",
 ) : SparkledEntity

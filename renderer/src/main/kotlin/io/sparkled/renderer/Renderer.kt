@@ -25,41 +25,57 @@ class Renderer(
     private val stage: StageEntity,
     private val sequence: SequenceEntity,
     sequenceChannels: List<SequenceChannelEntity>,
-    stageProps: List<StagePropEntity>,
+    private val stageProps: List<StagePropEntity>,
     private val startFrame: Int,
     private val endFrame: Int,
-    // TODO there was a preview flag here. Where did that go?
+    private val preview: Boolean,
 ) {
     private val channelPropPairs: List<ChannelPropPair> = ChannelPropPairUtils.makePairs(objectMapper, sequenceChannels, stageProps)
 
     fun render(): RenderResult {
         val renderedProps = RenderedStagePropDataMap()
 
-        // Channels are rendered in reverse order for blending purposes.
+        val groupedStageProps = if (preview) {
+            stageProps.groupBy { it.uuid.toString() }
+        } else {
+            stageProps
+                .sortedBy { it.groupDisplayOrder }
+                .groupBy { it.groupId ?: it.uuid.toString() }
+        }
+
+        groupedStageProps.forEach { (groupId, stageProps) ->
+            val frameCount = endFrame - startFrame + 1
+            val leds = stageProps.sumOf { it.ledCount }
+            val buffer = ByteArray(frameCount * leds * Led.BYTES_PER_LED)
+
+            var nextStartIndex = 0
+            val ledIndexes = stageProps.associate {
+                val startIndex = nextStartIndex
+                nextStartIndex += it.ledCount
+                it.uuid to (startIndex until startIndex + it.ledCount)
+            }
+
+            renderedProps[groupId] = RenderedStagePropData(startFrame, endFrame, leds, buffer, ledIndexes)
+        }
+
         channelPropPairs.reversed().forEach { cpp ->
-            val stagePropUuid = cpp.stageProp.uuid
-            val data = renderedProps[stagePropUuid]
-            renderedProps[stagePropUuid] = renderChannel(stage, cpp, data)
+            val groupId = if (preview) cpp.stageProp.uuid.toString() else {
+                cpp.stageProp.groupId ?: cpp.stageProp.uuid.toString()
+            }
+
+            val data = renderedProps[groupId]!!
+            renderChannel(stage, cpp, data)
         }
 
         return RenderResult(renderedProps, startFrame, endFrame - startFrame + 1)
     }
 
-    private fun renderChannel(stage: StageEntity, channelPropPair: ChannelPropPair, data: RenderedStagePropData?): RenderedStagePropData {
-        val stagePropData = if (data != null) {
-            data
-        } else {
-            val frameCount = endFrame - startFrame + 1
-            val leds = channelPropPair.stageProp.ledCount
-            val buffer = ByteArray(frameCount * leds * Led.BYTES_PER_LED)
-            RenderedStagePropData(startFrame, endFrame, leds, buffer)
-        }
-
+    private fun renderChannel(stage: StageEntity, channelPropPair: ChannelPropPair, data: RenderedStagePropData): RenderedStagePropData {
         channelPropPair.channel.effects.forEach {
-            renderEffect(stage, sequence, stagePropData, channelPropPair.stageProp, it)
+            renderEffect(stage, sequence, data, channelPropPair.stageProp, it)
         }
 
-        return stagePropData
+        return data
     }
 
     private fun renderEffect(stage: StageEntity, sequence: SequenceEntity, data: RenderedStagePropData, prop: StagePropEntity, effect: Effect) {

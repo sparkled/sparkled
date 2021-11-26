@@ -22,6 +22,8 @@ data class StagePropViewModel(
     val rotation: Int,
     val brightness: Int,
     val displayOrder: Int,
+    val groupId: String? = null,
+    val groupDisplayOrder: Int? = null,
     val ledPositions: List<Point2d> = emptyList(),
 ) {
     fun toModel(objectMapper: ObjectMapper) = StagePropEntity(
@@ -39,6 +41,8 @@ data class StagePropViewModel(
         rotation = rotation,
         brightness = brightness,
         displayOrder = displayOrder,
+        groupId = groupId,
+        groupDisplayOrder = groupDisplayOrder ?: 0,
         ledPositionsJson = objectMapper.writeValueAsString(ledPositions),
     )
 
@@ -58,7 +62,9 @@ data class StagePropViewModel(
             rotation = model.rotation,
             brightness = model.brightness,
             displayOrder = model.displayOrder,
-            ledPositions = objectMapper.readValue<List<Point2d>>(model.ledPositionsJson),
+            groupId = model.groupId,
+            groupDisplayOrder = model.groupDisplayOrder,
+            ledPositions = objectMapper.readValue(model.ledPositionsJson),
         )
     }
 }

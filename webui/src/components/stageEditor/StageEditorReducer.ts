@@ -21,6 +21,8 @@ export type Action =
   | { type: 'RotateStageProp'; payload: { rotation: number } }
   | { type: 'UpdateStagePropLedCount'; payload: { ledCount: number } }
   | { type: 'UpdateStagePropLedPositions'; payload: { ledPositions: Point[] } }
+  | { type: 'UpdateStagePropGroupId'; payload: string | null }
+  | { type: 'UpdateStagePropGroupDisplayOrder'; payload: string | null }
   | { type: 'DeleteStageProp' }
 
 export const StageEditorStateContext = createContext<State>(new State())
@@ -71,6 +73,12 @@ export const stageEditorReducer: React.Reducer<State, Action> = (
           }
         }
         break
+      case 'UpdateStagePropGroupId':
+        updateStagePropGroupId(selectedStageProp, action.payload)
+        break
+      case 'UpdateStagePropGroupDisplayOrder':
+        updateStagePropGroupDisplayOrder(selectedStageProp, action.payload)
+        break
       case 'DeleteStageProp':
         deleteStageProp(draft)
         break
@@ -96,6 +104,8 @@ function addStageProp(draft: State, type: StagePropType) {
     rotation: 0,
     brightness: 100,
     displayOrder: 0,
+    groupId: null,
+    groupDisplayOrder: null,
     ledPositions: [],
   })
 
@@ -139,6 +149,26 @@ function updateStagePropLedCount(
 ) {
   if (stageProp) {
     stageProp.ledCount = ledCount
+  }
+}
+
+function updateStagePropGroupId(
+  stageProp: StagePropViewModel | undefined,
+  groupId: string | null
+) {
+  if (stageProp) {
+    stageProp.groupId = groupId || null
+  }
+}
+
+function updateStagePropGroupDisplayOrder(
+  stageProp: StagePropViewModel | undefined,
+  groupDisplayOrder: string | null
+) {
+  if (stageProp) {
+    let number: number | null = parseInt(groupDisplayOrder ?? '')
+    number = isNaN(number) ? null : number
+    stageProp.groupDisplayOrder = number
   }
 }
 

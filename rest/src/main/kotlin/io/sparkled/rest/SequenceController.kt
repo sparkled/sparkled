@@ -150,7 +150,7 @@ open class SequenceController(
             db.update(sequence)
             val stage = db.query(GetStageBySequenceIdQuery(id)) ?: throw EntityNotFoundException("Stage not found.")
             val song = db.query(GetSongBySequenceIdQuery(id)) ?: throw EntityNotFoundException("Song not found.")
-            val renderResult = renderSequence(stage, sequence, sequenceChannels, song)
+            val renderResult = renderSequence(stage, sequence, sequenceChannels, song, preview = false)
             val renderedSequence = RenderedSequence(
                 sequenceId = sequence.id,
                 startFrame = renderResult.startFrame,
@@ -176,7 +176,8 @@ open class SequenceController(
         sequenceChannels: List<SequenceChannelEntity>,
         song: SongEntity,
         startFrame: Int = 0,
-        endFrame: Int = Int.MAX_VALUE
+        endFrame: Int = Int.MAX_VALUE,
+        preview: Boolean,
     ): RenderResult {
         val stageProps = db.query(GetStagePropsByStageIdQuery(sequence.stageId))
         val endFrameBounded = min(endFrame, SequenceUtils.getFrameCount(song, sequence) - 1)
@@ -190,7 +191,8 @@ open class SequenceController(
             sequenceChannels,
             stageProps,
             startFrame,
-            endFrameBounded
+            endFrameBounded,
+            preview,
         ).render()
     }
 
@@ -219,7 +221,7 @@ open class SequenceController(
 
         val end = start + frames - 1
         return HttpResponse.ok(
-            renderSequence(stage, sequence, sequenceChannels, song, start, end)
+            renderSequence(stage, sequence, sequenceChannels, song, start, end, preview = true)
         )
     }
 }

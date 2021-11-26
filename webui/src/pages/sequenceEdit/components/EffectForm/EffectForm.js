@@ -258,8 +258,9 @@ class EffectForm extends Component {
       return (
         <Field
           key={param.code}
-          name={path}
+          name={path + '.0'}
           component={InputField}
+          value={true}
           type='checkbox'
           label={label}
           onChange={this.updateEffect}

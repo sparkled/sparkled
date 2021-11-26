@@ -37,6 +37,8 @@ const StagePropDetails: React.FC = () => {
       setValue('scaleY', stageProp.scaleY.toString(), { shouldValidate: true })
       setValue('rotation', stageProp.rotation.toString(), { shouldValidate: true })
       setValue('ledCount', stageProp.ledCount.toString(), { shouldValidate: true })
+      setValue('groupId', stageProp.groupId?.toString() ?? '', { shouldValidate: true })
+      setValue('groupDisplayOrder', stageProp.groupDisplayOrder?.toString() ?? '', { shouldValidate: true })
     }
   }, [reset, setValue, stageProp])
 
@@ -48,7 +50,9 @@ const StagePropDetails: React.FC = () => {
     scaleX,
     scaleY,
     rotation,
-    ledCount
+    ledCount,
+    groupId,
+    groupDisplayOrder
   ] = watch([
     'code',
     'name',
@@ -57,7 +61,9 @@ const StagePropDetails: React.FC = () => {
     'scaleX',
     'scaleY',
     'rotation',
-    'ledCount'
+    'ledCount',
+    'groupId',
+    'groupDisplayOrder'
   ])
 
   useEffect(() => {
@@ -120,6 +126,24 @@ const StagePropDetails: React.FC = () => {
     }
   }, [dispatch, errors.ledCount, ledCount])
 
+  useEffect(() => {
+    if (!errors.groupId) {
+      dispatch({
+        type: 'UpdateStagePropGroupId',
+        payload: groupId
+      })
+    }
+  }, [dispatch, errors.groupId, groupId])
+
+  useEffect(() => {
+    if (!errors.groupDisplayOrder) {
+      dispatch({
+        type: 'UpdateStagePropGroupDisplayOrder',
+        payload: groupDisplayOrder
+      })
+    }
+  }, [dispatch, errors.groupDisplayOrder, groupDisplayOrder])
+
   const deleteStageProp = useCallback(() => {
     dispatch({ type: 'DeleteStageProp' })
   }, [dispatch])
@@ -157,6 +181,11 @@ const StagePropDetails: React.FC = () => {
   const ledCountField = register('ledCount', {
     required: true,
     min: 1,
+    pattern: POSITIVE_INTEGER
+  })
+  const groupIdField = register('groupId', {})
+  const groupDisplayOrderField = register('groupDisplayOrder', {
+    min: 0,
     pattern: POSITIVE_INTEGER
   })
 
@@ -265,6 +294,33 @@ const StagePropDetails: React.FC = () => {
             disabled={!hasStageProp}
             error={errors.ledCount !== undefined}
             {...ledCountField}
+          />
+        </Grid>
+        <Grid item xs={6} />
+
+        <Grid item xs={6}>
+          <TextField
+            variant="outlined"
+            label="Group ID"
+            type="text"
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+            disabled={!hasStageProp}
+            error={errors.groupId !== undefined}
+            {...groupIdField}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            variant="outlined"
+            label="Group Display Order"
+            type="number"
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+            disabled={!hasStageProp}
+            error={errors.groupId !== undefined}
+            {...groupDisplayOrderField}
           />
         </Grid>
 

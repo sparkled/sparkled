@@ -243,4 +243,11 @@
             <column name="value" value="100"/>
         </insert>
     </changeSet>
+
+    <changeSet author="chrisparton1991" id="add-stage-prop-groups">
+        <addColumn tableName="stage_prop">
+            <column name="group_id" type="VARCHAR(16)" />
+            <column name="group_display_order" type="TINYINT" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
