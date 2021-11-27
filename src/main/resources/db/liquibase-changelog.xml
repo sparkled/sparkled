@@ -82,6 +82,12 @@
             <column name="display_order" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
+            <column name="group_id" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="group_display_order" type="TINYINT">
+                <constraints nullable="true"/>
+            </column>
             <column name="led_positions_json" type="TEXT">
                 <constraints nullable="false"/>
             </column>
@@ -242,12 +248,5 @@
             <column name="code" value="BRIGHTNESS"/>
             <column name="value" value="100"/>
         </insert>
-    </changeSet>
-
-    <changeSet author="chrisparton1991" id="add-stage-prop-groups">
-        <addColumn tableName="stage_prop">
-            <column name="group_id" type="VARCHAR(16)" />
-            <column name="group_display_order" type="TINYINT" />
-        </addColumn>
     </changeSet>
 </databaseChangeLog>
