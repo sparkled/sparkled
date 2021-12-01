@@ -1,5 +1,5 @@
 import produce, { immerable } from 'immer'
-import { identity, isEqual, remove } from 'lodash'
+import _, { identity, isEqual, remove } from 'lodash'
 import React, { createContext, Dispatch } from 'react'
 import { Point, StagePropViewModel, StageViewModel } from '../../types/ViewModel'
 import { StagePropType } from '../../data/stagePropTypes'
@@ -23,6 +23,7 @@ export type Action =
   | { type: 'UpdateStagePropLedPositions'; payload: { ledPositions: Point[] } }
   | { type: 'UpdateStagePropGroupId'; payload: string | null }
   | { type: 'UpdateStagePropGroupDisplayOrder'; payload: string | null }
+  | { type: 'UpdateStageProp'; payload: Partial<StagePropViewModel> }
   | { type: 'DeleteStageProp' }
 
 export const StageEditorStateContext = createContext<State>(new State())
@@ -78,6 +79,13 @@ export const stageEditorReducer: React.Reducer<State, Action> = (
         break
       case 'UpdateStagePropGroupDisplayOrder':
         updateStagePropGroupDisplayOrder(selectedStageProp, action.payload)
+        break
+      case 'UpdateStageProp':
+        if (selectedStageProp) {
+          _.keys(action.payload).forEach(key => {
+            (selectedStageProp as any)[key] = (action.payload as any)[key]
+          })
+        }
         break
       case 'DeleteStageProp':
         deleteStageProp(draft)

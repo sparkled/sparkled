@@ -39,6 +39,7 @@ const StagePropDetails: React.FC = () => {
       setValue('ledCount', stageProp.ledCount.toString(), { shouldValidate: true })
       setValue('groupId', stageProp.groupId?.toString() ?? '', { shouldValidate: true })
       setValue('groupDisplayOrder', stageProp.groupDisplayOrder?.toString() ?? '', { shouldValidate: true })
+      setValue('reverse', stageProp.reverse ? '1' : '0', { shouldValidate: true })
     }
   }, [reset, setValue, stageProp])
 
@@ -52,7 +53,8 @@ const StagePropDetails: React.FC = () => {
     rotation,
     ledCount,
     groupId,
-    groupDisplayOrder
+    groupDisplayOrder,
+    reverse,
   ] = watch([
     'code',
     'name',
@@ -63,7 +65,8 @@ const StagePropDetails: React.FC = () => {
     'rotation',
     'ledCount',
     'groupId',
-    'groupDisplayOrder'
+    'groupDisplayOrder',
+    'reverse',
   ])
 
   useEffect(() => {
@@ -144,6 +147,13 @@ const StagePropDetails: React.FC = () => {
     }
   }, [dispatch, errors.groupDisplayOrder, groupDisplayOrder])
 
+  useEffect(() => {
+      dispatch({
+        type: 'UpdateStageProp',
+        payload: { reverse: parseInt(reverse) === 1 }
+      })
+  }, [dispatch, errors.groupDisplayOrder, reverse])
+
   const deleteStageProp = useCallback(() => {
     dispatch({ type: 'DeleteStageProp' })
   }, [dispatch])
@@ -188,6 +198,7 @@ const StagePropDetails: React.FC = () => {
     min: 0,
     pattern: POSITIVE_INTEGER
   })
+  const reverseField = register('reverse', {})
 
   return (
     <form>
@@ -321,6 +332,18 @@ const StagePropDetails: React.FC = () => {
             disabled={!hasStageProp}
             error={errors.groupId !== undefined}
             {...groupDisplayOrderField}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            variant="outlined"
+            label="Reverse"
+            type="text"
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+            disabled={!hasStageProp}
+            {...reverseField}
           />
         </Grid>
 
