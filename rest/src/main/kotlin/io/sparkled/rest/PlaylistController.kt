@@ -4,26 +4,28 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.PlaylistEntity
 import io.sparkled.model.entity.v2.PlaylistSequenceEntity
 import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.entity.v2.SongEntity
 import io.sparkled.persistence.*
 import io.sparkled.persistence.query.playlist.GetPlaylistSequencesByPlaylistIdQuery
-import io.sparkled.rest.response.IdResponse
 import io.sparkled.viewmodel.PlaylistSummaryViewModel
 import io.sparkled.viewmodel.PlaylistViewModel
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/playlists")
-open class PlaylistController(
+class PlaylistController(
     private val db: DbService
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
-    open fun getAllPlaylists(): HttpResponse<Any> {
+    fun getAllPlaylists(): HttpResponse<Any> {
         val playlists = db.getAll<PlaylistEntity>(orderBy = "name")
         val playlistSequences = db.getAll<PlaylistSequenceEntity>().groupBy { it.playlistId }
         val sequences = db.getAll<SequenceEntity>()
@@ -43,7 +45,7 @@ open class PlaylistController(
 
     @Get("/{id}")
     @Transactional(readOnly = true)
-    open fun getPlaylist(id: Int): HttpResponse<Any> {
+    fun getPlaylist(id: Int): HttpResponse<Any> {
         val playlist = getPlaylistById(id)
 
         return if (playlist != null) {
@@ -53,7 +55,7 @@ open class PlaylistController(
 
     @Post("/")
     @Transactional
-    open fun createPlaylist(playlistViewModel: PlaylistViewModel): HttpResponse<Any> {
+    fun createPlaylist(playlistViewModel: PlaylistViewModel): HttpResponse<Any> {
         val (playlist, playlistSequences) = playlistViewModel.toModel()
         val savedId = db.insert(playlist).toInt()
         playlistSequences.forEach { db.insert(it.copy(playlistId = savedId)) }
@@ -69,7 +71,7 @@ open class PlaylistController(
 
     @Put("/{id}")
     @Transactional
-    open fun updatePlaylist(id: Int, playlistViewModel: PlaylistViewModel): HttpResponse<Any> {
+    fun updatePlaylist(id: Int, playlistViewModel: PlaylistViewModel): HttpResponse<Any> {
         val playlistAndSequences = playlistViewModel.copy(id = id).toModel()
         val playlist = playlistAndSequences.first.copy(id = id)
 
@@ -93,7 +95,7 @@ open class PlaylistController(
 
     @Delete("/{id}")
     @Transactional
-    open fun deletePlaylist(id: Int): HttpResponse<Any> {
+    fun deletePlaylist(id: Int): HttpResponse<Any> {
         db.getById<PlaylistEntity>(id)?.let {
             db.delete(it)
         }

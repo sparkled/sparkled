@@ -6,6 +6,8 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Put
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.SettingEntity
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
@@ -16,22 +18,23 @@ import io.sparkled.viewmodel.SettingViewModel
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/settings")
-open class SettingController(
+class SettingController(
     private val caches: CacheService,
     private val db: DbService
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
-    open fun getAllSettings(): HttpResponse<Any> {
+    fun getAllSettings(): HttpResponse<Any> {
         val settings = caches.settings.get()
         return HttpResponse.ok(settings)
     }
 
     @Get("/{code}")
     @Transactional(readOnly = true)
-    open fun getSetting(code: String): HttpResponse<Any> {
+    fun getSetting(code: String): HttpResponse<Any> {
         return if (code == SettingsConstants.Brightness.CODE) {
             val setting = SettingEntity(
                 code = SettingsConstants.Brightness.CODE,
@@ -45,7 +48,7 @@ open class SettingController(
 
     @Put("/{code}")
     @Transactional
-    open fun updateSetting(code: String, setting: SettingViewModel): HttpResponse<Any> {
+    fun updateSetting(code: String, setting: SettingViewModel): HttpResponse<Any> {
         val model = setting.toModel()
 
         if (setting.code == SettingsConstants.Brightness.CODE) {

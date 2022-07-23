@@ -7,6 +7,8 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.PlaylistEntity
 import io.sparkled.model.entity.v2.ScheduledTaskEntity
 import io.sparkled.persistence.*
@@ -17,15 +19,16 @@ import io.sparkled.viewmodel.ScheduledTaskViewModel
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/scheduledTasks")
-open class ScheduledTaskController(
+class ScheduledTaskController(
     private val db: DbService,
     private val schedulerService: SchedulerService,
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
-    open fun getAllScheduledTasks(): HttpResponse<Any> {
+    fun getAllScheduledTasks(): HttpResponse<Any> {
         val playlists = db.getAll<PlaylistEntity>(orderBy = "name")
         val playlistNames = playlists.associate { it.id to it.name }
 
@@ -38,7 +41,7 @@ open class ScheduledTaskController(
 
     @Get("/{id}")
     @Transactional(readOnly = true)
-    open fun getScheduledTask(id: Int): HttpResponse<Any> {
+    fun getScheduledTask(id: Int): HttpResponse<Any> {
         val viewModel = db.getById<ScheduledTaskEntity>(id)?.let {
             ScheduledTaskViewModel.fromModel(it)
         }
@@ -52,7 +55,7 @@ open class ScheduledTaskController(
 
     @Post("/")
     @Transactional
-    open fun createScheduledTask(scheduledTaskViewModel: ScheduledTaskViewModel): HttpResponse<Any> {
+    fun createScheduledTask(scheduledTaskViewModel: ScheduledTaskViewModel): HttpResponse<Any> {
         val scheduledJob = scheduledTaskViewModel.toModel()
         val savedId = db.insert(scheduledJob).toInt()
         schedulerService.reload()
@@ -61,7 +64,7 @@ open class ScheduledTaskController(
 
     @Delete("/{id}")
     @Transactional
-    open fun deleteScheduledTask(id: Int): HttpResponse<Any> {
+    fun deleteScheduledTask(id: Int): HttpResponse<Any> {
         db.getById<ScheduledTaskEntity>(id)?.let {
             db.delete(it)
         }

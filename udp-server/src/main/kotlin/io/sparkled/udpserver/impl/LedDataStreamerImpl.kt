@@ -6,13 +6,13 @@ import io.sparkled.persistence.cache.CacheService
 import io.sparkled.udpserver.LedDataStreamer
 import io.sparkled.udpserver.impl.command.GetFrameCommand
 import io.sparkled.udpserver.impl.subscriber.UdpClientSubscribers
+import jakarta.inject.Singleton
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import javax.inject.Singleton
 
 @Singleton
 class LedDataStreamerImpl(

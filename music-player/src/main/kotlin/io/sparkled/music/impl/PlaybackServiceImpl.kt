@@ -12,16 +12,16 @@ import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
 import io.sparkled.persistence.query.sequence.GetSongBySequenceIdQuery
 import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
+import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Singleton
 import javax.sound.sampled.LineEvent
 
 @Singleton
-open class PlaybackServiceImpl(
+class PlaybackServiceImpl(
     private val db: DbService,
     private val file: FileService,
     private val musicPlayerService: MusicPlayerService
@@ -78,7 +78,7 @@ open class PlaybackServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    open fun loadPlaybackState(sequences: List<SequenceEntity>, sequenceIndex: Int, repeat: Boolean): PlaybackState {
+    fun loadPlaybackState(sequences: List<SequenceEntity>, sequenceIndex: Int, repeat: Boolean): PlaybackState {
         try {
             if (sequenceIndex >= sequences.size) {
                 return PlaybackState(repeat = repeat)

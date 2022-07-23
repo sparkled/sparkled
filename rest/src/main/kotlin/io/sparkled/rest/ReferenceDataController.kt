@@ -5,18 +5,21 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.animation.easing.EditorItem
 import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.renderer.SparkledPluginManager
 
 @ExecuteOn(TaskExecutors.IO)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/referenceData")
-open class ReferenceDataController(
+class ReferenceDataController(
     private val pluginManager: SparkledPluginManager
 ) {
 
     @Get("/")
-    open fun getAllReferenceData(): HttpResponse<Any> {
+    fun getAllReferenceData(): HttpResponse<Any> {
         val data = ReferenceDataResponse(
             blendModes = BlendMode.values().map { EditorItem(it.name, it.displayName) },
             easings = pluginManager.easings.get().values.map { EditorItem(it.id, it.name, it.params) },

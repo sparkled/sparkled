@@ -7,6 +7,8 @@ import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.entity.SequenceStatus
 import io.sparkled.model.entity.v2.SequenceChannelEntity
@@ -36,8 +38,9 @@ import java.util.*
 import kotlin.math.min
 
 @ExecuteOn(TaskExecutors.IO)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/sequences")
-open class SequenceController(
+class SequenceController(
     private val pluginManager: SparkledPluginManager,
     private val objectMapper: ObjectMapper,
     private val file: FileService,
@@ -47,7 +50,7 @@ open class SequenceController(
 
     @Get("/")
     @Transactional(readOnly = true)
-    open fun getAllSequences(): HttpResponse<Any> {
+    fun getAllSequences(): HttpResponse<Any> {
         val songs = db.getAll<SongEntity>().associateBy { it.id }
         val stages = db.getAll<StageEntity>().associateBy { it.id }
 
@@ -60,7 +63,7 @@ open class SequenceController(
 
     @Get("/{id}")
     @Transactional(readOnly = true)
-    open fun getSequence(id: Int): HttpResponse<Any> {
+    fun getSequence(id: Int): HttpResponse<Any> {
         val viewModel = db.getById<SequenceEntity>(id)?.let {
             val song = db.query(GetSongBySequenceIdQuery(it.id))!!
             val channels = db.query(GetSequenceChannelsBySequenceIdQuery(it.id))
@@ -76,7 +79,7 @@ open class SequenceController(
 
     @Get("/{id}/stage")
     @Transactional(readOnly = true)
-    open fun getSequenceStage(id: Int): HttpResponse<Any> {
+    fun getSequenceStage(id: Int): HttpResponse<Any> {
         val viewModel = db.query(GetStageBySequenceIdQuery(id))?.let {
             val stageProps = db.query(GetStagePropsByStageIdQuery(it.id))
             StageViewModel.fromModel(it, stageProps, objectMapper)
@@ -91,7 +94,7 @@ open class SequenceController(
 
     @Get("/{id}/songAudio")
     @Transactional(readOnly = true)
-    open fun getSequenceSongAudio(id: Int): MutableHttpResponse<out Any> {
+    fun getSequenceSongAudio(id: Int): MutableHttpResponse<out Any> {
         val songAudio = db.query(GetSongBySequenceIdQuery(id))?.let { file.readSongAudio(it.id) }
         return if (songAudio != null) {
             HttpResponse.ok(songAudio).contentType("audio/mpeg")
@@ -100,7 +103,7 @@ open class SequenceController(
 
     @Post("/")
     @Transactional
-    open fun createSequence(sequenceViewModel: SequenceViewModel): HttpResponse<Any> {
+    fun createSequence(sequenceViewModel: SequenceViewModel): HttpResponse<Any> {
 
         val (sequence) = sequenceViewModel.copy(status = SequenceStatus.NEW).toModel(objectMapper)
         val savedId = db.insert(sequence).toInt()
@@ -129,7 +132,7 @@ open class SequenceController(
 
     @Put("/{id}")
     @Transactional
-    open fun updateSequence(id: Int, sequenceViewModel: SequenceViewModel): HttpResponse<Any> {
+    fun updateSequence(id: Int, sequenceViewModel: SequenceViewModel): HttpResponse<Any> {
         val sequenceAndChannels = sequenceViewModel.copy(id = id).toModel(objectMapper)
         val sequence = sequenceAndChannels.first.copy(id = id)
         val sequenceChannels = sequenceAndChannels.second.map { it.copy(sequenceId = id) }
@@ -198,14 +201,14 @@ open class SequenceController(
 
     @Delete("/{id}")
     @Transactional
-    open fun deleteSequence(id: Int): HttpResponse<Any> {
+    fun deleteSequence(id: Int): HttpResponse<Any> {
         db.query(DeleteSequencesQuery(listOf(id)))
         return HttpResponse.ok()
     }
 
     @Post("/{id}/preview{?startFrame,frameCount}")
     @Transactional
-    open fun previewSequence(
+    fun previewSequence(
         request: HttpRequest<Any>,
         id: Int,
         @QueryValue(defaultValue = "0") startFrame: String,

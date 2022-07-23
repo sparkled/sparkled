@@ -2,11 +2,11 @@ package io.sparkled.music.impl
 
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackState
+import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.*
-import javax.inject.Singleton
 import javax.sound.sampled.*
 import kotlin.math.min
 

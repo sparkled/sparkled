@@ -6,6 +6,8 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.playlist.PlaylistAction
 import io.sparkled.model.playlist.PlaylistActionType
@@ -16,15 +18,16 @@ import io.sparkled.persistence.query.sequence.GetSequencesByPlaylistIdQuery
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/player")
-open class PlayerController(
+class PlayerController(
     private val playbackService: PlaybackService,
     private val db: DbService
 ) {
 
     @Post("/")
     @Transactional(readOnly = true)
-    open fun adjustPlayback(@Body action: PlaylistAction): HttpResponse<Any> {
+    fun adjustPlayback(@Body action: PlaylistAction): HttpResponse<Any> {
         return when (action.action) {
             PlaylistActionType.PLAY_PLAYLIST, PlaylistActionType.PLAY_SEQUENCE -> {
                 play(action)

@@ -5,21 +5,24 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.*
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.getAll
 import io.sparkled.viewmodel.*
 import org.springframework.transaction.annotation.Transactional
 
-@Controller("/api/dashboard")
 @ExecuteOn(TaskExecutors.IO)
-open class DashboardController(
+@Secured(SecurityRule.IS_ANONYMOUS)
+@Controller("/api/dashboard")
+class DashboardController(
     private val db: DbService
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
-    open fun getDashboard(): HttpResponse<Any> {
+    fun getDashboard(): HttpResponse<Any> {
         val playlists = db.getAll<PlaylistEntity>(orderBy = "name")
         val playlistNames = playlists.associate { it.id to it.name }
         val scheduledTasks = db.getAll<ScheduledTaskEntity>(orderBy = "id")

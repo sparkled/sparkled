@@ -10,6 +10,8 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.multipart.CompletedFileUpload
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.SongEntity
 import io.sparkled.persistence.*
 import io.sparkled.persistence.query.song.DeleteSongsQuery
@@ -18,8 +20,9 @@ import io.sparkled.viewmodel.SongViewModel
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/songs")
-open class SongController(
+class SongController(
     private val db: DbService,
     private val file: FileService,
     private val objectMapper: ObjectMapper,
@@ -27,7 +30,7 @@ open class SongController(
 
     @Get("/")
     @Transactional(readOnly = true)
-    open fun getAllSongs(): HttpResponse<Any> {
+    fun getAllSongs(): HttpResponse<Any> {
         val songs = db.getAll<SongEntity>(orderBy = "name")
         val viewModels = songs.map(SongViewModel::fromModel)
         return HttpResponse.ok(viewModels)
@@ -35,7 +38,7 @@ open class SongController(
 
     @Get("/{id}")
     @Transactional(readOnly = true)
-    open fun getSong(id: Int): HttpResponse<Any> {
+    fun getSong(id: Int): HttpResponse<Any> {
         val song = db.getById<SongEntity>(id)
 
         return if (song != null) {
@@ -46,7 +49,7 @@ open class SongController(
 
     @Post("/", consumes = [MediaType.MULTIPART_FORM_DATA])
     @Transactional
-    open fun createSong(song: String, mp3: CompletedFileUpload): HttpResponse<Any> {
+    fun createSong(song: String, mp3: CompletedFileUpload): HttpResponse<Any> {
         val songViewModel = objectMapper.readValue(song, SongViewModel::class.java)
         val songId = db.insert(songViewModel.toModel()).toInt()
 
@@ -56,7 +59,7 @@ open class SongController(
 
     @Delete("/{id}")
     @Transactional
-    open fun deleteSong(id: Int): HttpResponse<Any> {
+    fun deleteSong(id: Int): HttpResponse<Any> {
         db.query(DeleteSongsQuery(listOf(id)))
         file.deleteSongAudio(id)
         return HttpResponse.ok()

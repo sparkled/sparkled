@@ -5,6 +5,8 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.StageEntity
 import io.sparkled.persistence.*
 import io.sparkled.persistence.query.stage.DeleteStagePropsQuery
@@ -16,15 +18,16 @@ import io.sparkled.viewmodel.StageViewModel
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/stages")
-open class StageController(
+class StageController(
     private val db: DbService,
     private val objectMapper: ObjectMapper,
 ) {
 
     @Get("/")
     @Transactional(readOnly = true)
-    open fun getAllStages(): HttpResponse<Any> {
+    fun getAllStages(): HttpResponse<Any> {
         val viewModels = db.getAll<StageEntity>(orderBy = "name").map {
             StageSummaryViewModel.fromModel(it)
         }
@@ -33,7 +36,7 @@ open class StageController(
 
     @Get("/{id}")
     @Transactional(readOnly = true)
-    open fun getStage(id: Int): HttpResponse<Any> {
+    fun getStage(id: Int): HttpResponse<Any> {
         val stage = db.getById<StageEntity>(id)
 
         return if (stage != null) {
@@ -45,7 +48,7 @@ open class StageController(
 
     @Post("/")
     @Transactional
-    open fun createStage(stageViewModel: StageViewModel): HttpResponse<Any> {
+    fun createStage(stageViewModel: StageViewModel): HttpResponse<Any> {
         val (stage) = stageViewModel.toModel(objectMapper)
         val stageId = db.insert(stage)
         return HttpResponse.ok(IdResponse(stageId.toInt()))
@@ -53,7 +56,7 @@ open class StageController(
 
     @Put("/{id}")
     @Transactional
-    open fun updateStage(id: Int, stageViewModel: StageViewModel): HttpResponse<Any> {
+    fun updateStage(id: Int, stageViewModel: StageViewModel): HttpResponse<Any> {
         val stageAndStageProps = stageViewModel.copy(id = id).toModel(objectMapper)
         val stage = stageAndStageProps.first.copy(id = id)
 
@@ -78,7 +81,7 @@ open class StageController(
 
     @Delete("/{id}")
     @Transactional
-    open fun deleteStage(id: Int): HttpResponse<Any> {
+    fun deleteStage(id: Int): HttpResponse<Any> {
         db.query(DeleteStageQuery(id))
         return HttpResponse.ok()
     }

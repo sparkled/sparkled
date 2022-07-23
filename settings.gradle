@@ -1,2 +1,2 @@
 rootProject.name = 'sparkled'
-include 'model', 'music-player', 'persistence', 'renderer', 'rest', 'scheduler', 'udp-server', 'webui'
+include 'model', 'music-player', 'persistence', 'liquibase', 'renderer', 'rest', 'scheduler', 'udp-server', 'webui'
