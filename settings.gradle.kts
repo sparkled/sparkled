@@ -1,0 +1,10 @@
+rootProject.name = "sparkled"
+include("model")
+include("music-player")
+include("persistence")
+include("liquibase")
+include("renderer")
+include("rest")
+include("scheduler")
+include("udp-server")
+include("webui")
