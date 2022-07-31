@@ -1,4 +1,4 @@
-package io.sparkled.rest
+package io.sparkled.api
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -9,7 +9,7 @@ import io.micronaut.http.annotation.Error
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.sparkled.model.validator.exception.EntityValidationException
-import io.sparkled.rest.response.UserFriendlyErrorResponse
+import io.sparkled.api.response.UserFriendlyErrorResponse
 import io.sparkled.viewmodel.exception.ViewModelConversionException
 import org.slf4j.LoggerFactory
 

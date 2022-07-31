@@ -1,4 +1,4 @@
-package io.sparkled.rest
+package io.sparkled.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpRequest
@@ -29,7 +29,7 @@ import io.sparkled.persistence.query.sequence.GetStageBySequenceIdQuery
 import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
-import io.sparkled.rest.response.IdResponse
+import io.sparkled.api.response.IdResponse
 import io.sparkled.viewmodel.SequenceSummaryViewModel
 import io.sparkled.viewmodel.SequenceViewModel
 import io.sparkled.viewmodel.StageViewModel

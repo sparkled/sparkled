@@ -1,4 +1,4 @@
-package io.sparkled.rest
+package io.sparkled.api
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
@@ -12,7 +12,7 @@ import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.PlaylistEntity
 import io.sparkled.model.entity.v2.ScheduledTaskEntity
 import io.sparkled.persistence.*
-import io.sparkled.rest.response.IdResponse
+import io.sparkled.api.response.IdResponse
 import io.sparkled.scheduler.SchedulerService
 import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
 import io.sparkled.viewmodel.ScheduledTaskViewModel

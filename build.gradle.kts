@@ -77,7 +77,7 @@ dependencies {
     implementation(project(":model"))
     implementation(project(":persistence")) // TODO rename to db.
     implementation(project(":renderer"))
-    implementation(project(":rest")) // TODO rename to api.
+    implementation(project(":api"))
     implementation(project(":scheduler"))
     implementation(project(":udp-server"))
 

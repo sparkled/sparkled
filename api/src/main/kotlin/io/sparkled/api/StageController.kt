@@ -1,4 +1,4 @@
-package io.sparkled.rest
+package io.sparkled.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpResponse
@@ -12,7 +12,7 @@ import io.sparkled.persistence.*
 import io.sparkled.persistence.query.stage.DeleteStagePropsQuery
 import io.sparkled.persistence.query.stage.DeleteStageQuery
 import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
-import io.sparkled.rest.response.IdResponse
+import io.sparkled.api.response.IdResponse
 import io.sparkled.viewmodel.StageSummaryViewModel
 import io.sparkled.viewmodel.StageViewModel
 import org.springframework.transaction.annotation.Transactional

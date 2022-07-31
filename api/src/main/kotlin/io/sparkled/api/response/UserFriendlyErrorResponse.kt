@@ -1,3 +1,3 @@
-package io.sparkled.rest.response
+package io.sparkled.api.response
 
 data class UserFriendlyErrorResponse(val userFriendlyError: String)

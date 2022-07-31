@@ -1,4 +1,4 @@
-package io.sparkled.rest
+package io.sparkled.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpResponse
@@ -15,7 +15,7 @@ import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.entity.v2.SongEntity
 import io.sparkled.persistence.*
 import io.sparkled.persistence.query.song.DeleteSongsQuery
-import io.sparkled.rest.response.IdResponse
+import io.sparkled.api.response.IdResponse
 import io.sparkled.viewmodel.SongViewModel
 import org.springframework.transaction.annotation.Transactional
 

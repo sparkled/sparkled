@@ -1,4 +1,4 @@
-package io.sparkled.rest
+package io.sparkled.api
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
