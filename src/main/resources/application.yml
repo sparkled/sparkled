@@ -8,6 +8,14 @@ micronaut:
         paths:
           - classpath:webui
 
+  security:
+    intercept-url-map:
+      - pattern: /**
+        httpMethod: GET
+        access:
+          # Enable access to static webui resources.
+          - isAnonymous() # TODO this will prevent API calls from being secured in the future.
+
   server:
     max-file-size: 20971520 # 30MB
     max-request-size: 20971520 # 30MB

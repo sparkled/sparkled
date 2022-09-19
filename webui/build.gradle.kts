@@ -9,7 +9,7 @@ tasks {
     dependsOn("npmSetup")
   }
 
-  create<NpmTask>("buildWebUiz") {
+  create<NpmTask>("buildWebUi") {
     setArgs(listOf("run", "build"))
     dependsOn("npmInstall")
   }
