@@ -1,5 +1,9 @@
 # Sparkled
 
+## Under active development
+Sparkled is in a pre-alpha state. You are more than welcome to experiment with Sparkled, but it's not yet ready for
+production use.
+
 Sparkled is a web-based LED sequencer that aims to reduce the barrier to entry for lighting projects.
 ![Sparkled](https://github.com/sparkled/sparkled/raw/gh-pages/images/sparkled-screenshot.jpg "Sparkled")
 
