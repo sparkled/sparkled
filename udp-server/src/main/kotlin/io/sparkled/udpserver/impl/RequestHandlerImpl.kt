@@ -8,9 +8,9 @@ import io.sparkled.udpserver.impl.command.GetStagePropCodesCommand
 import io.sparkled.udpserver.impl.command.GetVersionCommand
 import io.sparkled.udpserver.impl.command.SubscribeCommand
 import io.sparkled.udpserver.impl.subscriber.UdpClientSubscribers
+import jakarta.inject.Singleton
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import javax.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.net.InetAddress
 

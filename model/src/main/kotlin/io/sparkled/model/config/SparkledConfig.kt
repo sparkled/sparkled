@@ -1,7 +1,7 @@
 package io.sparkled.model.config
 
 import io.micronaut.context.annotation.Value
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 data class SparkledConfig(
@@ -36,5 +36,7 @@ data class SparkledConfig(
     @Value("\${sparkled.render-folder-name:renders}")
     val renderFolderName: String,
 ) {
-    val dataFolders = listOf(audioFolderName, gifFolderName, pluginFolderName, renderFolderName)
+    val dataFolders by lazy {
+        listOf(audioFolderName, gifFolderName, pluginFolderName, renderFolderName)
+    }
 }

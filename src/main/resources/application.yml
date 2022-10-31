@@ -8,18 +8,26 @@ micronaut:
         paths:
           - classpath:webui
 
+  security:
+    intercept-url-map:
+      - pattern: /**
+        httpMethod: GET
+        access:
+          # Enable access to static webui resources.
+          - isAnonymous() # TODO this will prevent API calls from being secured in the future.
+
   server:
-    maxFileSize: 30mb
-    maxRequestSize: 30mb
+    max-file-size: 20971520 # 30MB
+    max-request-size: 20971520 # 30MB
     multipart:
-      maxFileSize: 30mb
+      max-file-size: 20971520 # 30MB
     cors:
       enabled: true
 
 datasources:
   default:
     url: jdbc:sqlite:sparkled.db
-    driverClassName: org.sqlite.JDBC
+    driver-class-name: org.sqlite.JDBC
     data-source-properties:
       foreign_keys: true
 
@@ -37,4 +45,4 @@ jackson:
 liquibase:
   datasources:
     default:
-      change-log: 'classpath:db/liquibase-changelog.xml'
+      change-log: 'classpath:liquibase-changelog.xml'

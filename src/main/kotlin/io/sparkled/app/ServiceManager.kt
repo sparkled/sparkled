@@ -4,23 +4,19 @@ import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.runtime.server.event.ServerShutdownEvent
 import io.micronaut.runtime.server.event.ServerStartupEvent
-import io.sparkled.model.config.SparkledConfig
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
 import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.scheduler.SchedulerService
 import io.sparkled.udpserver.LedDataStreamer
 import io.sparkled.udpserver.UdpServer
+import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
-import java.io.File
 import java.net.DatagramSocket
-import java.nio.file.Paths
-import javax.inject.Singleton
-import kotlin.io.path.createDirectory
 
 @Singleton
-open class ServiceManager(
+class ServiceManager(
     private val applicationContext: ApplicationContext,
     private val schedulerService: SchedulerService,
     private val udpServer: UdpServer,
@@ -32,7 +28,7 @@ open class ServiceManager(
 
     @EventListener
     @Transactional(readOnly = true)
-    open fun onStartup(event: ServerStartupEvent) {
+    fun onStartup(event: ServerStartupEvent) {
         pluginManager.reloadPlugins()
         schedulerService.start()
         db.init()
@@ -68,7 +64,7 @@ open class ServiceManager(
     }
 
     @EventListener
-    open fun onShutdown(event: ServerShutdownEvent) {
+    fun onShutdown(event: ServerShutdownEvent) {
         schedulerService.stop()
         udpServer.stop()
         ledDataStreamer.stop()

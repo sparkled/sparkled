@@ -1,9 +1,9 @@
 package io.sparkled.persistence
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import jakarta.inject.Singleton
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
-import javax.inject.Singleton
 
 @Singleton
 class DbServiceImpl(

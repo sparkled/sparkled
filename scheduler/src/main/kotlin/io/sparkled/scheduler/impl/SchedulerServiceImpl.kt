@@ -11,13 +11,13 @@ import io.sparkled.persistence.getAll
 import io.sparkled.persistence.update
 import io.sparkled.persistence.query.sequence.GetSequencesByPlaylistIdQuery
 import io.sparkled.scheduler.SchedulerService
+import jakarta.inject.Singleton
 import org.quartz.*
 import org.quartz.impl.StdSchedulerFactory
 import org.slf4j.LoggerFactory
-import javax.inject.Singleton
 
 @Singleton
-open class SchedulerServiceImpl(
+class SchedulerServiceImpl(
     private val db: DbService,
     private val playbackService: PlaybackService
 ) : SchedulerService {
@@ -88,7 +88,7 @@ open class SchedulerServiceImpl(
 
     @Synchronized
     @Transactional
-    open fun playPlaylist(job: ScheduledTaskEntity) {
+    fun playPlaylist(job: ScheduledTaskEntity) {
         val sequences = db.query(GetSequencesByPlaylistIdQuery(job.playlistId ?: -1))
         playbackService.play(sequences, true) // TODO: Allow repeat config via scheduler API.
     }
@@ -100,7 +100,7 @@ open class SchedulerServiceImpl(
 
     @Synchronized
     @Transactional
-    open fun setBrightness(job: ScheduledTaskEntity) {
+    fun setBrightness(job: ScheduledTaskEntity) {
         val brightness = (job.value ?: "0")
         val setting = SettingEntity(code = SettingsConstants.Brightness.CODE, value = brightness)
         db.update(setting, fieldsToUpdate = arrayOf("value"))

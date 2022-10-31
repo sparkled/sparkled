@@ -3,12 +3,12 @@ package io.sparkled.udpserver.impl
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.UdpServer
+import jakarta.inject.Singleton
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import javax.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton

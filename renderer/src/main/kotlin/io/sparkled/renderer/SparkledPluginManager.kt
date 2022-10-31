@@ -18,11 +18,11 @@ import io.sparkled.renderer.effect.line.SplitLineEffect
 import io.sparkled.renderer.fill.GradientFill
 import io.sparkled.renderer.fill.RainbowFill
 import io.sparkled.renderer.fill.SingleColorFill
+import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Singleton
 import javax.script.ScriptEngineManager
 
 @Singleton

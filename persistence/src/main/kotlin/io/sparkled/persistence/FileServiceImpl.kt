@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.model.render.RenderedSequence
+import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileInputStream
@@ -11,7 +12,6 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
-import javax.inject.Singleton
 
 @Singleton
 class FileServiceImpl(

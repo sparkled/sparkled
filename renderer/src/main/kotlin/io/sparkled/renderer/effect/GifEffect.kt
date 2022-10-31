@@ -27,7 +27,6 @@ object GifEffect : SparkledEffect<Unit> {
     override fun createState(ctx: RenderContext) {}
 
     override fun render(ctx: RenderContext, state: Unit) {
-        // TODO does reversing the LEDs in the stage editor work correctly?
         val points = ObjectMapper().registerKotlinModule().readValue<List<Point2d>>(ctx.stageProp.ledPositionsJson)
 
         val gifFrames = ctx.loadGif(ParamUtils.getString(ctx.effect, Params.FILE_NAME.name))
@@ -40,7 +39,7 @@ object GifEffect : SparkledEffect<Unit> {
             val y = (frame.height * (it.y / ctx.stage.height)).roundToInt()
             val gifPixel = frame.getRGB(x, y)
 
-            FillUtils.fill(ctx, i, 1f, Color(gifPixel))
+            FillUtils.fill(ctx, i, 1f, Color(gifPixel), ignoreReverse = true)
         }
     }
 }

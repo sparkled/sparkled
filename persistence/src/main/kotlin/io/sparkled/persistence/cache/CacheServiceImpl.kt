@@ -7,9 +7,10 @@ import io.sparkled.model.setting.SettingsCache
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.getAll
+import jakarta.inject.Singleton
 import java.io.File
 import java.util.*
-import javax.inject.Singleton
+import kotlin.reflect.full.memberProperties
 
 @Singleton
 class CacheServiceImpl(
@@ -17,7 +18,7 @@ class CacheServiceImpl(
     db: DbService,
 ) : CacheService {
 
-    override val gifs = Cache(
+    final override val gifs = Cache(
         name = "Gifs",
         fallback = linkedMapOf(),
     ) {
@@ -39,7 +40,7 @@ class CacheServiceImpl(
         frames.toMap(LinkedHashMap())
     }
 
-    override val settings = Cache(
+    final override val settings = Cache(
         name = "Settings",
         fallback = SettingsCache(brightness = SettingsConstants.Brightness.MAX),
     ) {
@@ -47,5 +48,9 @@ class CacheServiceImpl(
         SettingsCache(brightness = brightness?.value?.toInt() ?: SettingsConstants.Brightness.MAX)
     }
 
-    override val allCaches = listOf(settings)
+    override val allCaches by lazy {
+        this::class.memberProperties.filter {
+            it.returnType.classifier == Cache::class
+        }.map { it.getter.call(this) as Cache<*> }
+    }
 }

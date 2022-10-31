@@ -11,7 +11,16 @@ object FillUtils {
 
     // TODO effectColor is an intermediate step. At present, we have the concept of fills and effects. These concepts
     //      will be merged into one, where effects can stack and act as a mask to combine effects.
-    fun fill(ctx: RenderContext, ledIndex: Int, alpha: Float, effectColor: Color? = null) {
+    /**
+     * @param ignoreReverse used for location-aware effects, which only care about the position of the LED in 2D space.
+     */
+    fun fill(
+        ctx: RenderContext,
+        ledIndex: Int,
+        alpha: Float,
+        effectColor: Color? = null,
+        ignoreReverse: Boolean = false,
+    ) {
         val frame = ctx.frame
         val ledRange = ctx.channel.stagePropRanges[ctx.stageProp.uuid] ?: error("Stage prop range not found")
 
@@ -19,7 +28,8 @@ object FillUtils {
             val frameNumber = frame.frameNumber
             logger.warn("Alpha {} for led #{} in frame #{} is invalid, skipping.", alpha, ledIndex, frameNumber)
         } else if (ledIndex >= 0 && ledIndex < ctx.stageProp.ledCount) {
-            val index = if (ctx.stageProp.reverse) ledRange.last - ledIndex else ledRange.first + ledIndex
+            val reverse = !ignoreReverse && ctx.stageProp.reverse
+            val index = if (reverse) ledRange.last - ledIndex else ledRange.first + ledIndex
             val led = frame.getLed(index)
             val fillColor = effectColor ?: ctx.fill?.getFill(ctx, ledIndex) ?: Color.BLACK
 

@@ -1,5 +1,0 @@
-dependencies {
-    implementation "org.jdbi:jdbi3-core:$jdbiVersion"
-    implementation "org.jdbi:jdbi3-kotlin:$jdbiVersion"
-    implementation "org.jdbi:jdbi3-kotlin-sqlobject:$jdbiVersion"
-}

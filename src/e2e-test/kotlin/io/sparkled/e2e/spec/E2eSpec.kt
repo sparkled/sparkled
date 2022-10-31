@@ -16,11 +16,11 @@ open class E2eSpec : StringSpec() {
     val http by lazy { E2eContext.http }
     inline fun <reified T> inject(): T = E2eContext.inject()
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         E2eContext.begin()
     }
 
-    override fun afterSpec(spec: Spec) {
+    override suspend fun afterSpec(spec: Spec) {
         E2eContext.end()
     }
 

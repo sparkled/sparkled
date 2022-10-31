@@ -1,6 +1,7 @@
 package io.sparkled.renderer.easing.function.expo
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.floats.plusOrMinus
 import io.kotest.matchers.shouldBe
 import io.sparkled.model.animation.easing.Easing
 import io.sparkled.renderer.easing.function.ExpoOutEasing
@@ -14,7 +15,9 @@ class ExpoOutEasingTest : StringSpec() {
             val testCount = expected.size
 
             val actual = (0 until testCount).map { ExpoOutEasing.getScaledProgress(easing, it, testCount) }.toFloatArray()
-            actual shouldBe expected
+            actual.zip(expected).forEach {(a, e) ->
+                a shouldBe (e plusOrMinus 0.001f)
+            }
         }
 
         "can ease 100 to 0" {
@@ -24,7 +27,9 @@ class ExpoOutEasingTest : StringSpec() {
             val testCount = expected.size
 
             val actual = (0 until testCount).map { ExpoOutEasing.getScaledProgress(easing, it, testCount) }.toFloatArray()
-            actual shouldBe expected
+            actual.zip(expected).forEach {(a, e) ->
+                a shouldBe (e plusOrMinus 0.001f)
+            }
         }
 
         "can ease 20 to 80" {
@@ -34,7 +39,9 @@ class ExpoOutEasingTest : StringSpec() {
             val testCount = expected.size
 
             val actual = (0 until testCount).map { ExpoOutEasing.getScaledProgress(easing, it, testCount) }.toFloatArray()
-            actual shouldBe expected
+            actual.zip(expected).forEach {(a, e) ->
+                a shouldBe (e plusOrMinus 0.001f)
+            }
         }
 
         "can ease 80 to 20" {
@@ -44,7 +51,9 @@ class ExpoOutEasingTest : StringSpec() {
             val testCount = expected.size
 
             val actual = (0 until testCount).map { ExpoOutEasing.getScaledProgress(easing, it, testCount) }.toFloatArray()
-            actual shouldBe expected
+            actual.zip(expected).forEach {(a, e) ->
+                a shouldBe (e plusOrMinus 0.001f)
+            }
         }
     }
 }
