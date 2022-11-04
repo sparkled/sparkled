@@ -1,5 +1,20 @@
 export type RequestStatus = 'init' | 'loading' | 'success' | 'fail' | 'reloading'
 
+export type ApiErrorCode =
+  | 'ERR_DATABASE'
+  | 'ERR_METHOD_NOT_ALLOWED'
+  | 'ERR_NOT_FOUND'
+  | 'ERR_REQUEST_CONTENT_LENGTH_EXCEEDED'
+  | 'ERR_REQUEST_INVALID'
+  | 'ERR_UNKNOWN'
+
+export type ErrorViewModel = {
+  code: ApiErrorCode
+  devMessage?: string
+  id: string
+  userMessage: string
+}
+
 export type DashboardViewModel = {
   stages: StageSearchViewModel[]
   songs: SongViewModel[]

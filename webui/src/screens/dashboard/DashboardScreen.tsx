@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Col, Container, Row } from 'react-grid-system'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import AppBar from '../../components/AppBar'
 import PageLoadingContainer from '../../components/PageLoadingContainer'
 import * as restConfig from '../../config/restConfig'
-import useApiGetDashboard from '../../hooks/api/useApiGetDashboard'
+import useApiGetDashboard from '../../hooks/api/dashboard/useApiGetDashboard'
 import useModal from '../../hooks/useModal'
 import { playPlaylist, stopPlaylist } from '../../pages/playlistList/actions'
 import { showAddScheduledTaskModal, showDeleteScheduledTaskModal } from '../../pages/scheduler/actions'
@@ -22,7 +22,6 @@ import DeleteSongModal from '../../pages/songList/components/DeleteSongModal/Del
 import { showAddStageModal, showDeleteStageModal } from '../../pages/stageList/actions'
 import AddStageModal from '../../pages/stageList/components/AddStageModal'
 import DeleteStageModal from '../../pages/stageList/components/DeleteStageModal'
-import { useAppSelector } from '../../store/store'
 import { getFormattedDuration } from '../../utils/dateUtils'
 import AddPlaylistModal from './AddPlaylistModal'
 import DashboardSwimlane from './DashboardSwimlane'
@@ -102,17 +101,25 @@ const S = {
   `
 }
 
-const DashboardScreen = () => {
-  useApiGetDashboard()
+const DashboardScreen: React.FC = () => {
+  const { data, loading } = useApiGetDashboard() // TODO handle error state.
   const addPlaylistModal = useModal('playlistAdd')
   const deletePlaylistModal = useModal('playlistDelete')
-  const { dashboard, query, requestStatus } = useAppSelector(state => state.dashboardScreen)
-  const searchQuery = query.trim().toLowerCase()
   const dispatch = useDispatch()
 
+  const [addStageModalVisible, setAddStageModalVisible] = useState(false)
+  const [deleteStageModalVisible, setDeleteStageModalVisible] = useState(false)
+  const [addSongModalVisible, setAddSongModalVisible] = useState(false)
+  const [deleteSongModalVisible, setDeleteSongModalVisible] = useState(false)
+  const [addSequenceModalVisible, setAddSequenceModalVisible] = useState(false)
+  const [deleteSequenceModalVisible, setDeleteSequenceModalVisible] = useState(false)
+  const [addPlaylistModalVisible, setAddPlaylistModalVisible] = useState(false)
+  const [deletePlaylistModalVisible, setDeletePlaylistModalVisible] = useState(false)
+  const [addScheduledJobModalVisible, setAddScheduledJobModalVisible] = useState(false)
+  const [deleteScheduledJobModalVisible, setDeleteScheduledJobModalVisible] = useState(false)
+
   const stageItems = useMemo(() => {
-    return (dashboard?.stages ?? [])
-      .filter(it => it.name.toLowerCase().includes(searchQuery))
+    return (data?.stages ?? [])
       .map(it => {
         let actions = (
           <>
@@ -125,16 +132,10 @@ const DashboardScreen = () => {
 
         return <DashboardSwimlaneItem key={it.id} title={it.name} actions={actions} />
       })
-  }, [dashboard, dispatch, searchQuery])
+  }, [data, dispatch])
 
   const songItems = useMemo(() => {
-    return (dashboard?.songs ?? [])
-      .filter(
-        it =>
-          it.name.toLowerCase().includes(searchQuery) ||
-          it.album.toLowerCase().includes(searchQuery) ||
-          it.artist.toLowerCase().includes(searchQuery)
-      )
+    return (data?.songs ?? [])
       .map(it => {
         let actions = (
           <>
@@ -151,7 +152,7 @@ const DashboardScreen = () => {
           />
         )
       })
-  }, [dashboard, dispatch, searchQuery])
+  }, [data, dispatch])
 
   const playSequence = async (sequenceId: number) => {
     const playlistAction = {
@@ -167,8 +168,7 @@ const DashboardScreen = () => {
   }
 
   const sequenceItems = useMemo(() => {
-    return (dashboard?.sequences ?? [])
-      .filter(it => it.name.toLowerCase().includes(searchQuery))
+    return (data?.sequences ?? [])
       .map(it => {
         let actions = (
           <>
@@ -191,11 +191,10 @@ const DashboardScreen = () => {
           />
         )
       })
-  }, [dashboard, dispatch, searchQuery])
+  }, [data, dispatch])
 
   const playlistItems = useMemo(() => {
-    return (dashboard?.playlists ?? [])
-      .filter(it => it.name.toLowerCase().includes(searchQuery))
+    return (data?.playlists ?? [])
       .map(it => {
         let actions = (
           <>
@@ -219,11 +218,10 @@ const DashboardScreen = () => {
           />
         )
       })
-  }, [dashboard?.playlists, deletePlaylistModal, dispatch, searchQuery])
+  }, [data?.playlists, deletePlaylistModal, dispatch])
 
   const scheduledTaskItems = useMemo(() => {
-    return (dashboard?.scheduledTasks ?? [])
-      .filter(it => it.action.toLowerCase().includes(searchQuery))
+    return (data?.scheduledTasks ?? [])
       .map(it => {
         let actions = (
           <>
@@ -252,7 +250,7 @@ const DashboardScreen = () => {
 
         return <DashboardSwimlaneItem key={it.id} title={action} subtitle={trigger} actions={actions} />
       })
-  }, [dashboard, dispatch, searchQuery])
+  }, [data, dispatch])
 
   return (
     <>
@@ -261,16 +259,16 @@ const DashboardScreen = () => {
       <AddSongModal />
       <DeleteSongModal />
       {/*@ts-ignore*/}
-      <AddSequenceModal songs={dashboard?.songs} stages={dashboard?.stages} />
+      <AddSequenceModal songs={data?.songs} stages={data?.stages} />
       <DeleteSequenceModal />
-      <AddPlaylistModal />
+      <AddPlaylistModal show={addPlaylistModalVisible} onHide={() => setAddPlaylistModalVisible(false)} />
       <DeletePlaylistModal />
       {/*@ts-ignore*/}
-      <AddScheduledJobModal playlists={dashboard?.playlists} />
+      <AddScheduledJobModal playlists={data?.playlists} />
       <DeleteScheduledJobModal />
 
       <AppBar />
-      <S.PageLoadingContainer loading={requestStatus === 'loading'}>
+      <S.PageLoadingContainer loading={loading}>
         <Container style={{ width: '100%' }}>
           <Row style={{ display: 'flex', height: '100%' }}>
             <Col style={{ display: 'flex', height: '100%' }}>
@@ -291,7 +289,7 @@ const DashboardScreen = () => {
                 <DashboardSwimlane
                   gridArea='playlists'
                   title='Playlists'
-                  onAdd={addPlaylistModal.show}
+                  onAdd={() => setAddPlaylistModalVisible(true)}
                 >
                   {playlistItems}
                 </DashboardSwimlane>

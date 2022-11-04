@@ -1,6 +1,6 @@
 import { AppBar, IconButton, Toolbar } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import BackIcon from '@material-ui/icons/ChevronLeft'
+import { ChevronLeft as BackIcon } from '@material-ui/icons'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'

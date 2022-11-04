@@ -1,0 +1,57 @@
+@import '/src/styles/variables';
+
+.borderless {
+  :global {
+    .modal-content {
+      border: none;
+    }
+  }
+}
+
+.inline {
+  position: initial;
+  display: initial;
+
+  :global {
+    .modal-content {
+      margin: initial;
+    }
+  }
+}
+
+.notInline {
+  :global {
+    .modal-content {
+      border: none;
+    }
+  }
+}
+
+.backButton,
+.closeButton {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.backButton {
+  justify-self: start;
+  grid-area: left;
+}
+
+.closeButton {
+  justify-self: end;
+  grid-area: right;
+}
+
+.modalHeader {
+  display: grid;
+  grid-template-areas: 'left middle right';
+  grid-template-columns: 50px 1fr 50px;
+  justify-items: center;
+  align-items: center;
+}
+
+.modalTitle {
+  grid-area: middle;
+}
