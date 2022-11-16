@@ -29,10 +29,10 @@ class ServiceManager(
     @EventListener
     @Transactional(readOnly = true)
     fun onStartup(event: ServerStartupEvent) {
-        pluginManager.reloadPlugins()
-        schedulerService.start()
         db.init()
         file.init()
+        pluginManager.reloadPlugins()
+        schedulerService.start()
 
         val socket = buildSocket()
         udpServer.start(socket)

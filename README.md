@@ -46,23 +46,23 @@ HTTPS:
 git clone https://github.com/<your_username>/sparkled.git
 ```
 
-Build the project
+##Build the project
 
-**Note:** the initial build will take quite a while, as all of the dependencies need to be downloaded
+**Note:** the initial build will take quite a while, as the dependencies need to be downloaded.
 ```
 cd sparkled
-./gradlew clean copyWebUi shadowJar
+./gradlew clean buildWebUi copyWebUi build
 ```
 
 Run Sparkled
 ```
 cd build/libs
-java -jar sparkled-0.0.1-all.jar
+java -jar sparkled-all.jar
 ```
 
 Wait for the application to start, then connect to the UI in Chrome via the following URL:
 ```
-http://localhost:8080
+http://localhost
 ```
 
 ## Running the tests
@@ -97,7 +97,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 * [EJ-Technologies](https://www.ej-technologies.com) for providing an Open Source license for
-  [JProfiler, the award winning all-in-one Java Profiler](https://www.ej-technologies.com/products/jprofiler/overview.html).
+  [JProfiler, the award-winning all-in-one Java Profiler](https://www.ej-technologies.com/products/jprofiler/overview.html).
 * [FastLED](http://fastled.io) for building and maintaining an incredible LED strip library, without which this project
-  would never have been conceived.
+  would have never been conceived.
 * [The FastLED community](https://reddit.com/r/fastled) for being a great source of help and inspiration.

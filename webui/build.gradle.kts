@@ -5,19 +5,22 @@ plugins {
 
 tasks {
   create<Delete>("deleteWebUi") {
-    delete("$rootDir/src/main/resources/webui")
     dependsOn("npmSetup")
+
+    delete("$rootDir/src/main/resources/webui")
   }
 
   create<NpmTask>("buildWebUi") {
-    setArgs(listOf("run", "build"))
     dependsOn("npmInstall")
+
+    setArgs(listOf("run", "build"))
   }
 
   create<Copy>("copyWebUi") {
+    dependsOn("deleteWebUi")
+
     from(buildDir)
     into("$rootDir/src/main/resources/webui")
-    dependsOn("deleteWebUi")
   }
 
   findByName("npmInstall")?.dependsOn("deleteWebUi")
