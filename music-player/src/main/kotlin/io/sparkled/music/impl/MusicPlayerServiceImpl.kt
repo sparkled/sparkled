@@ -14,42 +14,36 @@ import kotlin.math.min
 class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
 
     private val listeners = HashSet<LineListener>()
-    private var clip: Clip? = null
+    private val clip by lazy {
+        val clip = AudioSystem.getClip()
+        clip.addLineListener(this)
+        clip
+    }
+
     private var lastFramePosition = 0
     private var lastProgressUpdate = 0L
 
     override fun play(playbackState: PlaybackState) {
         stopPlayback()
-
-        var byteStream: InputStream? = null
-        var mp3Stream: AudioInputStream? = null
-        var convertedStream: AudioInputStream? = null
+        logger.debug("Playing sequence {}.", playbackState.sequence?.name)
 
         try {
-            logger.debug("Playing sequence {}.", playbackState.sequence?.name)
+            val byteStream = ByteArrayInputStream(playbackState.songAudio)
+            AudioSystem.getAudioInputStream(byteStream).use { mp3Stream ->
+                val baseFormat = mp3Stream.format
+                val decodedFormat = AudioFormat(
+                    AudioFormat.Encoding.PCM_SIGNED, baseFormat.sampleRate, 16, baseFormat.channels,
+                    baseFormat.channels * 2, baseFormat.sampleRate, false
+                )
 
-            byteStream = ByteArrayInputStream(playbackState.songAudio)
-            mp3Stream = AudioSystem.getAudioInputStream(byteStream)
-
-            val baseFormat = mp3Stream!!.format
-            val decodedFormat = AudioFormat(
-                AudioFormat.Encoding.PCM_SIGNED, baseFormat.sampleRate, 16, baseFormat.channels,
-                baseFormat.channels * 2, baseFormat.sampleRate, false
-            )
-            convertedStream = AudioSystem.getAudioInputStream(decodedFormat, mp3Stream)
-
-            val clip = AudioSystem.getClip()
-            this.clip = clip
-
-            clip.open(convertedStream)
-            clip.addLineListener(this)
-            clip.start()
+                AudioSystem.getAudioInputStream(decodedFormat, mp3Stream).use { convertedStream ->
+                    clip.close()
+                    clip.open(convertedStream)
+                    clip.start()
+                }
+            }
         } catch (e: Exception) {
             logger.error("Failed to play sequence {}: {}.", playbackState.sequence?.name, e.message)
-        } finally {
-            byteStream?.close()
-            mp3Stream?.close()
-            convertedStream?.close()
         }
     }
 
@@ -60,9 +54,8 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
 
     override val sequenceProgress: Double
         get() {
-            val clip = this.clip
             return when {
-                clip == null -> 0.0
+                !clip.isActive -> 0.0
                 System.currentTimeMillis() - lastProgressUpdate < 1000 -> {
                     // Looking up playback position can be slow (up to 50ms), so the position is only looked up once per
                     // second, and progress is inferred from that.
@@ -80,20 +73,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
 
     override fun stopPlayback() {
         lastProgressUpdate = 0
-
-        val clip = this.clip
-        if (clip != null && clip.isOpen) {
-            try {
-                clip.close()
-                logger.debug("Clip closed.")
-            } catch (e: Exception) {
-                logger.error("Failed to close clip.")
-            }
-        } else {
-            logger.warn("Clip is already closed.")
-        }
-
-        this.clip = null
+        clip.close()
     }
 
     override fun update(event: LineEvent) {

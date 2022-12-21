@@ -60,7 +60,7 @@ class LedDataStreamerImpl(
                         }
                     }
 
-                    if (System.currentTimeMillis() - iterationTime > 5) {
+                    if (System.currentTimeMillis() - iterationTime > 30) {
                         println("${System.currentTimeMillis()} Iteration took ${System.currentTimeMillis() - iterationTime} ms")
                     }
                     val elapsedMs = System.currentTimeMillis() - iterationTime
