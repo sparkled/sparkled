@@ -1,6 +1,6 @@
 import { AppBar, IconButton, Toolbar } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import BackIcon from '@material-ui/icons/ChevronLeft'
+import { ChevronLeft } from '@material-ui/icons'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -57,7 +57,7 @@ class PageContainer extends Component {
           <Toolbar className={classes.toolbar}>
             <div>
               <IconButton component={Link} to='/dashboard'>
-                <BackIcon />
+                <ChevronLeft />
               </IconButton>
             </div>
 
