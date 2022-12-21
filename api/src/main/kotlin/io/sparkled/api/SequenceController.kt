@@ -55,7 +55,7 @@ class SequenceController(
         val stages = db.getAll<StageEntity>().associateBy { it.id }
 
         val viewModels = db.getAll<SequenceEntity>(orderBy = "name").map {
-            SequenceSummaryViewModel.fromModel(it, songs.getValue(it.id), stages.getValue(it.id))
+            SequenceSummaryViewModel.fromModel(it, songs.getValue(it.songId), stages.getValue(it.stageId))
         }
 
         return HttpResponse.ok(viewModels)
