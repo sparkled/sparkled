@@ -53,8 +53,10 @@ class PlaybackServiceImpl(
     }
 
     override fun play(sequences: List<SequenceEntity>, repeat: Boolean) {
-        stopPlayback()
-        submitSequencePlayback(sequences, 0, repeat)
+        synchronized(this) {
+            stopPlayback()
+            submitSequencePlayback(sequences, 0, repeat)
+        }
     }
 
     private fun submitSequencePlayback(sequences: List<SequenceEntity>, sequenceIndex: Int, repeat: Boolean) {
@@ -118,9 +120,11 @@ class PlaybackServiceImpl(
     }
 
     override fun stopPlayback() {
-        logger.info("Stopping playback.")
-        playbackState.set(PlaybackState.empty)
-        musicPlayerService.stopPlayback()
+        synchronized(this) {
+            logger.info("Stopping playback.")
+            playbackState.set(PlaybackState.empty)
+            musicPlayerService.stopPlayback()
+        }
     }
 
     companion object {
