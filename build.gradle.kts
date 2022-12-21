@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
-val projectVersion = "0.2.0"
+val projectVersion = "0.2.1"
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.7.10"
