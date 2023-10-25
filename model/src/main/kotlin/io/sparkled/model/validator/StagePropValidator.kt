@@ -1,17 +1,17 @@
 package io.sparkled.model.validator
 
-import io.sparkled.model.entity.v2.StagePropEntity
+import io.sparkled.model.StagePropModel
 import io.sparkled.model.validator.exception.EntityValidationException
 
 class StagePropValidator {
 
-    fun validate(stageProps: List<StagePropEntity>) {
+    fun validate(stageProps: List<StagePropModel>) {
         checkForDuplicates(stageProps)
         stageProps.forEach(this::validateStageProp)
     }
 
-    private fun checkForDuplicates(stageProps: List<StagePropEntity>) {
-        val stagePropCodes = stageProps.map(StagePropEntity::code)
+    private fun checkForDuplicates(stageProps: List<StagePropModel>) {
+        val stagePropCodes = stageProps.map(StagePropModel::code)
         val duplicateCodes = ValidatorUtils.findDuplicates(stagePropCodes)
 
         if (duplicateCodes.isNotEmpty()) {
@@ -20,7 +20,7 @@ class StagePropValidator {
         }
     }
 
-    private fun validateStageProp(stageProp: StagePropEntity) {
+    private fun validateStageProp(stageProp: StagePropModel) {
         if (stageProp.ledCount < 0) {
             throw EntityValidationException(Errors.LED_COUNT_NEGATIVE)
         } else if (stageProp.rotation < 0 || stageProp.rotation > 360) {

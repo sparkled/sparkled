@@ -1,10 +1,13 @@
 package io.sparkled.model.animation.param
 
+import io.sparkled.model.annotation.GenerateClientType
+
+@GenerateClientType
 data class Param(
     val code: String,
     val displayName: String,
     val type: ParamType = ParamType.NONE,
-    val defaultValue: List<String> = emptyList()
+    val defaultValue: List<String> = emptyList(),
 ) {
     companion object {
         fun boolean(code: String, displayName: String, defaultValue: Boolean): Param {

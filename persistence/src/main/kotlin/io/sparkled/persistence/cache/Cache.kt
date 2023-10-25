@@ -1,16 +1,14 @@
 package io.sparkled.persistence.cache
 
-import org.slf4j.LoggerFactory
-import java.lang.IllegalStateException
+import io.sparkled.common.logging.getLogger
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicReference
 
-class Cache<T>(
+abstract class Cache<T>(
     val name: String,
     private val expiryInterval: Duration = defaultExpiryInterval,
     private val fallback: T,
-    val reload: (lastLoadedAt: Instant?) -> T
 ) {
     private val cache = AtomicReference<T?>(null)
     private var lastLoadedAt = Instant.MIN
@@ -18,6 +16,8 @@ class Cache<T>(
     init {
         logger.info("Creating '$name' cache with expiry of $expiryInterval.")
     }
+
+    abstract fun reload(lastLoadedAt: Instant?): T
 
     fun clear() {
         logger.info("Clearing '$name' cache.")
@@ -27,10 +27,10 @@ class Cache<T>(
     }
 
     fun get(): T {
-        if (getCacheStatus() != CacheStatus.POPULATED) {
+        if (getStatus() != CacheStatus.POPULATED) {
             synchronized(cache) {
                 // Recheck to prevent a second reload from occurring before the first reload completes.
-                val cacheStatus = getCacheStatus()
+                val cacheStatus = getStatus()
                 if (cacheStatus != CacheStatus.POPULATED) {
                     logger.info("Reloading '$name' cache (status: $cacheStatus).")
                     cache.set(reload(lastLoadedAt))
@@ -67,7 +67,7 @@ class Cache<T>(
         }
     }
 
-    private fun getCacheStatus(): CacheStatus {
+    fun getStatus(): CacheStatus {
         return when {
             isEmpty() -> CacheStatus.IS_EMPTY
             (lastLoadedAt.plus(expiryInterval)).isBefore(Instant.now()) -> CacheStatus.EXPIRED
@@ -86,12 +86,12 @@ class Cache<T>(
     private fun isEmpty(): Boolean {
         val value = cache.get()
         return value == null ||
-            (value is Collection<*> && value.isEmpty()) ||
-            (value is Map<*, *> && value.isEmpty())
+                (value is Collection<*> && value.isEmpty()) ||
+                (value is Map<*, *> && value.isEmpty())
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(Cache::class.java)
+        private val logger = getLogger<Cache<*>>()
         private val defaultExpiryInterval: Duration = Duration.ofDays(99999) // Never expire by default.
     }
 }

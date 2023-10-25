@@ -1,21 +1,19 @@
 package io.sparkled.e2e.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.sparkled.common.logging.getLogger
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.server.EmbeddedServer
-import io.sparkled.e2e.util.query.ResetDatabaseE2eQuery
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
-import org.slf4j.LoggerFactory
 
 object E2eContext {
-    private val logger = LoggerFactory.getLogger(E2eContext::class.java)
+    private val logger = getLogger<E2eContext>()
     private val appContext: ApplicationContext
     private val jsonMapper: ObjectMapper
-    val embeddedServer: EmbeddedServer
-    val caches: CacheService
+    val cache: CacheService
     val db: DbService
-    val http: E2eHttpClient
+    val embeddedServer: EmbeddedServer
 
     init {
         val properties = hashMapOf<String, Any>(
@@ -24,10 +22,9 @@ object E2eContext {
 
         embeddedServer = ApplicationContext.run(EmbeddedServer::class.java, properties, "e2eTest")
         appContext = embeddedServer.applicationContext
-        caches = inject()
+        cache = inject()
         db = inject()
         jsonMapper = inject()
-        http = E2eHttpClient(embeddedServer.url, jsonMapper)
     }
 
     inline fun <reified T : Any> inject(): T {
@@ -46,7 +43,17 @@ object E2eContext {
      */
     fun end() {
         logger.info("Resetting database.")
-        db.query(ResetDatabaseE2eQuery())
+
+        db.scheduledActions.deleteAll()
+        db.settings.deleteAll()
+        db.playlistSequences.deleteAll()
+        db.sequenceChannels.deleteAll()
+        db.sequences.deleteAll()
+        db.stageProps.deleteAll()
+        db.stages.deleteAll()
+        db.songs.deleteAll()
+        db.playlists.deleteAll()
+
         logger.info("Finished E2E test.")
     }
 }

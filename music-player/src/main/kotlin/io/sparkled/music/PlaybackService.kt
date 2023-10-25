@@ -1,6 +1,6 @@
 package io.sparkled.music
 
-import io.sparkled.model.entity.v2.SequenceEntity
+import io.sparkled.model.SequenceModel
 
 /**
  * Plays and stops playlists.
@@ -12,7 +12,7 @@ interface PlaybackService {
 
      * @param sequences The sequences to be played
      */
-    fun play(sequences: List<SequenceEntity>, repeat: Boolean)
+    fun play(sequences: List<SequenceModel>, repeat: Boolean)
 
     /**
      * Stops playback of the current playlist. If no playlist is playing, this is a no-op.

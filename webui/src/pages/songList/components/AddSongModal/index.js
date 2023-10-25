@@ -1,2 +1,2 @@
-import AddSongModal from './AddSongModal'
+import AddSongModal from './AddSongModal.jsx'
 export default AddSongModal

@@ -2,10 +2,11 @@ package io.sparkled.persistence
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.sparkled.common.logging.getLogger
+import io.sparkled.model.UniqueId
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.model.render.RenderedSequence
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -24,7 +25,7 @@ class FileServiceImpl(
         config.dataFolders.forEach { File("${config.dataFolderPath}/$it").mkdirs() }
     }
 
-    override fun readSongAudio(songId: Int): ByteArray {
+    override fun readSongAudio(songId: UniqueId): ByteArray {
         val file = File(getSongAudioPath(songId))
 
         if (!file.exists()) {
@@ -35,15 +36,15 @@ class FileServiceImpl(
         }
     }
 
-    override fun writeSongAudio(songId: Int, audio: ByteArray) {
+    override fun writeSongAudio(songId: UniqueId, audio: ByteArray) {
         File(getSongAudioPath(songId)).apply { createNewFile() }.writeBytes(audio)
     }
 
-    override fun deleteSongAudio(songId: Int) {
+    override fun deleteSongAudio(songId: UniqueId) {
         File(getSongAudioPath(songId)).delete()
     }
 
-    override fun readRender(sequenceId: Int): RenderedSequence {
+    override fun readRender(sequenceId: UniqueId): RenderedSequence {
         val file = File(getRenderPath(sequenceId))
 
         return if (!file.exists()) {
@@ -55,21 +56,22 @@ class FileServiceImpl(
         }
     }
 
-    override fun writeRender(sequenceId: Int, render: RenderedSequence) {
+    override fun writeRender(sequenceId: UniqueId, render: RenderedSequence) {
         val file = File(getRenderPath(sequenceId)).apply { createNewFile() }
         GZIPOutputStream(FileOutputStream(file)).use {
             it.write(objectMapper.writeValueAsBytes(render))
         }
     }
 
-    override fun deleteRender(sequenceId: Int) {
+    override fun deleteRender(sequenceId: UniqueId) {
         File(getRenderPath(sequenceId)).delete()
     }
 
-    private fun getSongAudioPath(songId: Int) = "${config.dataFolderPath}/${config.audioFolderName}/$songId.mp3"
-    private fun getRenderPath(sequenceId: Int) = "${config.dataFolderPath}/${config.renderFolderName}/$sequenceId.json.gz"
+    private fun getSongAudioPath(songId: UniqueId) = "${config.dataFolderPath}/${config.audioFolderName}/$songId.mp3"
+    private fun getRenderPath(sequenceId: UniqueId) =
+        "${config.dataFolderPath}/${config.renderFolderName}/$sequenceId.json.gz"
 
     companion object {
-        private val logger = LoggerFactory.getLogger(FileServiceImpl::class.java)
+        private val logger = getLogger<FileServiceImpl>()
     }
 }

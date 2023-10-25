@@ -6,5 +6,5 @@ package io.sparkled.model.render
 data class RenderResult(
     val stageProps: RenderedStagePropDataMap,
     val startFrame: Int,
-    val frameCount: Int
+    val frameCount: Int,
 )

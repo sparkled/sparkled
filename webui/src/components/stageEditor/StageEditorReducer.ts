@@ -1,18 +1,17 @@
-import produce, { immerable } from 'immer'
+import { produce } from 'immer'
 import _, { identity, isEqual, remove } from 'lodash'
 import React, { createContext, Dispatch } from 'react'
 import { Point, StagePropViewModel, StageViewModel } from '../../types/ViewModel'
 import { StagePropType } from '../../data/stagePropTypes'
-import uuidv4 from 'uuid/v4'
+import { uniqueId } from '../../utils/idUtils'
 
 export class State {
-  private static [immerable] = true
   public stage = new StageViewModel()
   public selectedStageProp = ''
 }
 
 export type Action =
-  | { type: 'SelectStageProp'; payload: { uuid: string | null } }
+  | { type: 'SelectStageProp'; payload: { id: string | null } }
   | { type: 'AddStageProp'; payload: { type: StagePropType } }
   | { type: 'UpdateStagePropCode'; payload: string }
   | { type: 'UpdateStagePropName'; payload: string }
@@ -40,7 +39,7 @@ export const stageEditorReducer: React.Reducer<State, Action> = (
 
     switch (action.type) {
       case 'SelectStageProp':
-        draft.selectedStageProp = action.payload.uuid || ''
+        draft.selectedStageProp = action.payload.id || ''
         break
       case 'AddStageProp':
         addStageProp(draft, action.payload.type)
@@ -98,7 +97,7 @@ function addStageProp(draft: State, type: StagePropType) {
   const { stage } = draft
 
   stage.stageProps.push({
-    uuid: uuidv4(),
+    id: uniqueId(),
     stageId: stage.id!,
     code: `PROP_${stage.stageProps.length}`,
     name: `Prop ${stage.stageProps.length}`,
@@ -112,7 +111,7 @@ function addStageProp(draft: State, type: StagePropType) {
     rotation: 0,
     brightness: 100,
     displayOrder: 0,
-    groupId: null,
+    groupCode: null,
     groupDisplayOrder: null,
     ledPositions: [],
   })
@@ -162,10 +161,10 @@ function updateStagePropLedCount(
 
 function updateStagePropGroupId(
   stageProp: StagePropViewModel | undefined,
-  groupId: string | null
+  groupCode: string | null
 ) {
   if (stageProp) {
-    stageProp.groupId = groupId || null
+    stageProp.groupCode = groupCode || null
   }
 }
 
@@ -180,10 +179,10 @@ function updateStagePropGroupDisplayOrder(
   }
 }
 
-let getSelectedStageProp = function(draft: State) {
-  return draft.stage.stageProps.find(sp => sp.uuid === draft.selectedStageProp)
+const getSelectedStageProp = function(draft: State) {
+  return draft.stage.stageProps.find(sp => sp.id === draft.selectedStageProp)
 }
 
 function deleteStageProp(draft: State) {
-  remove(draft.stage.stageProps, sp => sp.uuid === draft.selectedStageProp)
+  remove(draft.stage.stageProps, sp => sp.id === draft.selectedStageProp)
 }

@@ -1,2 +1,2 @@
-import AddScheduledJobModal from './AddScheduledJobModal'
+import AddScheduledJobModal from './AddScheduledJobModal.jsx'
 export default AddScheduledJobModal

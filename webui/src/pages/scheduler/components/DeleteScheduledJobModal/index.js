@@ -1,2 +1,2 @@
-import DeleteScheduledJobModal from './DeleteScheduledJobModal'
+import DeleteScheduledJobModal from './DeleteScheduledJobModal.jsx'
 export default DeleteScheduledJobModal

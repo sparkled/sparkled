@@ -1,24 +1,25 @@
 package io.sparkled.viewmodel
 
-import io.sparkled.model.entity.v2.PlaylistSequenceEntity
-import io.sparkled.model.util.IdUtils
-import java.util.*
+import io.sparkled.model.PlaylistSequenceModel
+import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 data class PlaylistSequenceViewModel(
-    val uuid: UUID = IdUtils.newUuid(),
-    val sequenceId: Int,
+    val id: UniqueId,
+    val sequenceId: UniqueId,
     val displayOrder: Int,
-) {
-    fun toModel(playlistId: Int) = PlaylistSequenceEntity(
-        uuid = uuid,
+) : ViewModel {
+    fun toModel(playlistId: UniqueId) = PlaylistSequenceModel(
+        id = id,
         playlistId = playlistId,
         sequenceId = sequenceId,
         displayOrder = displayOrder
     )
 
     companion object {
-        fun fromModel(model: PlaylistSequenceEntity) = PlaylistSequenceViewModel(
-            uuid = model.uuid,
+        fun fromModel(model: PlaylistSequenceModel) = PlaylistSequenceViewModel(
+            id = model.id,
             sequenceId = model.sequenceId,
             displayOrder = model.displayOrder,
         )

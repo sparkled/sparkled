@@ -6,14 +6,11 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd"
 >
   <changeSet author="chrisparton1991" id="create-table-song">
-    <createTable tableName="song">
-      <column autoIncrement="true" name="id" type="INT(10)">
+    <createTable tableName="SONG">
+      <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_song"/>
       </column>
       <column name="name" type="NVARCHAR(64)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="album" type="NVARCHAR(64)">
         <constraints nullable="false"/>
       </column>
       <column name="artist" type="NVARCHAR(64)">
@@ -22,12 +19,18 @@
       <column name="duration_ms" type="INT(10)">
         <constraints nullable="false"/>
       </column>
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_song_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_song_updatedat">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
   </changeSet>
 
   <changeSet author="chrisparton1991" id="create-table-stage">
-    <createTable tableName="stage">
-      <column autoIncrement="true" name="id" type="INT(10)">
+    <createTable tableName="STAGE">
+      <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_stage"/>
       </column>
       <column name="name" type="NVARCHAR(64)">
@@ -39,13 +42,27 @@
       <column name="height" type="INT(10)">
         <constraints nullable="false"/>
       </column>
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_stage_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_stage_updatedat">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
   </changeSet>
 
   <changeSet author="chrisparton1991" id="create-table-stage-prop">
-    <createTable tableName="stage_prop">
-      <column name="uuid" type="UUID">
-        <constraints primaryKey="true" primaryKeyName="pk_stage_prop"/>
+    <createTable tableName="STAGE_PROP">
+      <column name="id" type="NVARCHAR(12)">
+        <constraints primaryKey="true" primaryKeyName="pk_stageprop"/>
+      </column>
+      <column name="stage_id" type="NVARCHAR(12)">
+        <constraints
+                nullable="false"
+                foreignKeyName="fk_stageprop_stageid"
+                referencedTableName="stage"
+                referencedColumnNames="id"
+        />
       </column>
       <column name="code" type="NVARCHAR(16)">
         <constraints nullable="false"/>
@@ -68,13 +85,13 @@
       <column name="position_y" type="INT(10)">
         <constraints nullable="false"/>
       </column>
-      <column name="scale_x" type="FLOAT(4)">
+      <column name="scale_x" type="DOUBLE">
         <constraints nullable="false"/>
       </column>
-      <column name="scale_y" type="FLOAT(4)">
+      <column name="scale_y" type="DOUBLE">
         <constraints nullable="false"/>
       </column>
-      <column name="rotation" type="INT(10)">
+      <column name="rotation" type="DOUBLE">
         <constraints nullable="false"/>
       </column>
       <column name="brightness" type="INT(10)">
@@ -83,46 +100,41 @@
       <column name="display_order" type="INT(10)">
         <constraints nullable="false"/>
       </column>
-      <column name="group_id" type="VARCHAR(16)">
+      <column name="group_code" type="NVARCHAR(16)">
         <constraints nullable="true"/>
       </column>
       <column name="group_display_order" type="TINYINT">
         <constraints nullable="true"/>
       </column>
-      <column name="led_positions_json" type="TEXT">
+      <column name="led_positions" type="TEXT">
         <constraints nullable="false"/>
       </column>
-      <column name="stage_id" type="INT(10)">
-        <constraints
-                nullable="false"
-                foreignKeyName="fk_stage_prop_stage_id"
-                deleteCascade="true"
-                referencedTableName="stage"
-                referencedColumnNames="id"
-        />
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_stage_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_stage_updatedat">
+        <constraints nullable="false"/>
       </column>
     </createTable>
   </changeSet>
 
   <changeSet author="chrisparton1991" id="create-table-sequence">
-    <createTable tableName="sequence">
-      <column autoIncrement="true" name="id" type="INT(10)">
+    <createTable tableName="SEQUENCE">
+      <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_sequence"/>
       </column>
-      <column name="song_id" type="INT(10)">
+      <column name="song_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_sequence_song_id"
-                deleteCascade="true"
+                foreignKeyName="fk_sequence_songid"
                 referencedTableName="song"
                 referencedColumnNames="id"
         />
       </column>
-      <column name="stage_id" type="INT(10)">
+      <column name="stage_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_sequence_stage_id"
-                deleteCascade="true"
+                foreignKeyName="fk_sequence_stageid"
                 referencedTableName="stage"
                 referencedColumnNames="id"
         />
@@ -136,30 +148,34 @@
       <column name="status" type="NVARCHAR(16)">
         <constraints nullable="false"/>
       </column>
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_sequence_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_sequence_updatedat">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
   </changeSet>
 
   <changeSet author="chrisparton1991" id="create-table-sequence-channel">
-    <createTable tableName="sequence_channel">
-      <column name="uuid" type="UUID">
-        <constraints primaryKey="true" primaryKeyName="pk_sequence_channel"/>
+    <createTable tableName="SEQUENCE_CHANNEL">
+      <column name="id" type="NVARCHAR(12)">
+        <constraints primaryKey="true" primaryKeyName="pk_sequencechannel"/>
       </column>
-      <column name="sequence_id" type="INT(10)">
+      <column name="sequence_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_sequence_channel_sequence_id"
-                deleteCascade="true"
+                foreignKeyName="fk_sequencechannel_sequenceid"
                 referencedTableName="sequence"
                 referencedColumnNames="id"
         />
       </column>
-      <column name="stage_prop_uuid" type="UUID">
+      <column name="stage_prop_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_sequence_channel_stage_prop_uuid"
-                deleteCascade="true"
+                foreignKeyName="fk_sequencechannel_stagepropid"
                 referencedTableName="stage_prop"
-                referencedColumnNames="uuid"
+                referencedColumnNames="id"
         />
       </column>
       <column name="name" type="NVARCHAR(64)">
@@ -168,40 +184,50 @@
       <column name="display_order" type="INT(10)">
         <constraints nullable="false"/>
       </column>
-      <column name="channel_json" type="TEXT"/>
+      <column name="channel_data" type="TEXT"/>
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_sequencechannel_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_sequencechannel_updatedat">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
   </changeSet>
 
   <changeSet author="chrisparton1991" id="create-table-playlist">
-    <createTable tableName="playlist">
-      <column autoIncrement="true" name="id" type="INT(10)">
+    <createTable tableName="PLAYLIST">
+      <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_playlist"/>
       </column>
       <column name="name" type="NVARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_playlist_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_playlist_updatedat">
         <constraints nullable="false"/>
       </column>
     </createTable>
   </changeSet>
 
   <changeSet author="chrisparton1991" id="create-table-playlist-sequence">
-    <createTable tableName="playlist_sequence">
-      <column name="uuid" type="UUID">
-        <constraints primaryKey="true" primaryKeyName="pk_playlist_sequence"/>
+    <createTable tableName="PLAYLIST_SEQUENCE">
+      <column name="id" type="NVARCHAR(12)">
+        <constraints primaryKey="true" primaryKeyName="pk_playlistsequence"/>
       </column>
-      <column name="playlist_id" type="INT(10)">
+      <column name="playlist_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_playlist_sequence_playlist_id"
-                deleteCascade="true"
+                foreignKeyName="fk_playlistsequence_playlistid"
                 referencedTableName="playlist"
                 referencedColumnNames="id"
         />
       </column>
-      <column name="sequence_id" type="INT(10)">
+      <column name="sequence_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_playlist_sequence_sequence_id"
-                deleteCascade="true"
+                foreignKeyName="fk_playlistsequence_sequenceid"
                 referencedTableName="sequence"
                 referencedColumnNames="id"
         />
@@ -209,45 +235,57 @@
       <column name="display_order" type="INT(10)">
         <constraints nullable="false"/>
       </column>
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_playlistsequence_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_playlistsequence_updatedat">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
   </changeSet>
 
-  <changeSet author="chrisparton1991" id="create-table-scheduled-job">
-    <createTable tableName="scheduled_job">
-      <column autoIncrement="true" name="id" type="INT(10)">
-        <constraints primaryKey="true" primaryKeyName="pk_scheduled_job"/>
+  <changeSet author="chrisparton1991" id="create-table-scheduled-action">
+    <createTable tableName="SCHEDULED_ACTION">
+      <column name="id" type="NVARCHAR(12)">
+        <constraints primaryKey="true" primaryKeyName="pk_scheduledaction"/>
       </column>
-      <column name="action" type="NVARCHAR(16)">
+      <column name="type" type="NVARCHAR(32)">
         <constraints nullable="false"/>
       </column>
       <column name="cron_expression" type="NVARCHAR(32)">
         <constraints nullable="false"/>
       </column>
       <column name="value" type="NVARCHAR(16)"/>
-      <column name="playlist_id" type="INT(10)">
+      <column name="playlist_id" type="NVARCHAR(12)">
         <constraints
-                foreignKeyName="fk_scheduled_job_playlist_id"
-                deleteCascade="true"
+                foreignKeyName="fk_scheduledaction_playlistid"
                 referencedTableName="playlist"
                 referencedColumnNames="id"
         />
+      </column>
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_scheduledaction_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_scheduledaction_updatedat">
+        <constraints nullable="false"/>
       </column>
     </createTable>
   </changeSet>
 
   <changeSet author="chrisparton1991" id="create-table-setting">
-    <createTable tableName="setting">
-      <column name="code" type="NVARCHAR(32)">
-        <constraints primaryKey="true" primaryKeyName="pk_table_setting"/>
+    <createTable tableName="SETTING">
+      <column name="id" type="NVARCHAR(12)">
+        <constraints primaryKey="true" primaryKeyName="pk_setting"/>
       </column>
       <column name="value" type="NVARCHAR(32)">
         <constraints nullable="false"/>
       </column>
+      <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_setting_createdat">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_setting_updatedat">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
-
-    <insert tableName="setting">
-      <column name="code" value="BRIGHTNESS"/>
-      <column name="value" value="100"/>
-    </insert>
   </changeSet>
 </databaseChangeLog>

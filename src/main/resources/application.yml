@@ -30,6 +30,8 @@ datasources:
     driver-class-name: org.sqlite.JDBC
     data-source-properties:
       foreign_keys: true
+    maximum-pool-size: 2
+    validation-query: "SELECT 1"
 
 jackson:
   deserialization:

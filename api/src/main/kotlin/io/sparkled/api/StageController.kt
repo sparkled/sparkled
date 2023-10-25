@@ -1,88 +1,115 @@
 package io.sparkled.api
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.annotation.*
+import io.micronaut.http.annotation.Body
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Delete
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.PathVariable
+import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.model.entity.v2.StageEntity
-import io.sparkled.persistence.*
-import io.sparkled.persistence.query.stage.DeleteStagePropsQuery
-import io.sparkled.persistence.query.stage.DeleteStageQuery
-import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
-import io.sparkled.api.response.IdResponse
+import io.sparkled.model.StageModel
+import io.sparkled.model.UniqueId
+import io.sparkled.persistence.DbService
+import io.sparkled.persistence.repository.findByIdOrNull
+import io.sparkled.viewmodel.StageEditViewModel
 import io.sparkled.viewmodel.StageSummaryViewModel
 import io.sparkled.viewmodel.StageViewModel
-import org.springframework.transaction.annotation.Transactional
+import io.sparkled.viewmodel.error.ApiErrorCode
+import io.sparkled.viewmodel.exception.HttpResponseException
+import io.micronaut.transaction.annotation.Transactional
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/stages")
 class StageController(
     private val db: DbService,
-    private val objectMapper: ObjectMapper,
 ) {
 
     @Get("/")
-    @Transactional(readOnly = true)
+    @Transactional
     fun getAllStages(): HttpResponse<Any> {
-        val viewModels = db.getAll<StageEntity>(orderBy = "name").map {
+        val viewModels = db.stages.findAll().sortedBy { it.name }.map {
             StageSummaryViewModel.fromModel(it)
         }
         return HttpResponse.ok(viewModels)
     }
 
     @Get("/{id}")
-    @Transactional(readOnly = true)
-    fun getStage(id: Int): HttpResponse<Any> {
-        val stage = db.getById<StageEntity>(id)
+    @Transactional
+    fun getStage(id: UniqueId): HttpResponse<Any> {
+        val stage = db.stages.findByIdOrNull(id)
 
-        return if (stage != null) {
-            val stageProps = db.query(GetStagePropsByStageIdQuery(id))
-            val viewModel = StageViewModel.fromModel(stage, stageProps, objectMapper)
+        return if (stage == null) {
+            HttpResponse.notFound("Stage not found.")
+        } else {
+            val stageProps = db.stageProps.findAllByStageId(id)
+            val viewModel = StageViewModel.fromModel(stage, stageProps)
             HttpResponse.ok(viewModel)
-        } else HttpResponse.notFound("Stage not found.")
+        }
     }
 
     @Post("/")
     @Transactional
-    fun createStage(stageViewModel: StageViewModel): HttpResponse<Any> {
-        val (stage) = stageViewModel.toModel(objectMapper)
-        val stageId = db.insert(stage)
-        return HttpResponse.ok(IdResponse(stageId.toInt()))
+    fun createStage(
+        @Body body: StageEditViewModel
+    ): HttpResponse<Any> {
+        val stage = StageModel(
+            name = body.name,
+            width = body.width,
+            height = body.height,
+        )
+
+        val created = db.stages.save(stage)
+        val viewModel = StageViewModel.fromModel(created, emptyList())
+        return HttpResponse.created(viewModel)
     }
 
     @Put("/{id}")
     @Transactional
-    fun updateStage(id: Int, stageViewModel: StageViewModel): HttpResponse<Any> {
-        val stageAndStageProps = stageViewModel.copy(id = id).toModel(objectMapper)
-        val stage = stageAndStageProps.first.copy(id = id)
+    fun updateStage(
+        @PathVariable id: UniqueId,
+        @Body body: StageEditViewModel,
+    ): HttpResponse<Any> {
+        val stage = db.stages.findByIdOrNull(id)
+            ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
         // Update stage.
-        db.update(stage)
+        val updatedStage = db.stages.update(
+            stage.copy(
+                name = body.name,
+                width = body.width,
+                height = body.height,
+            )
+        )
 
-        val existingStageProps = db.query(GetStagePropsByStageIdQuery(id)).associateBy { it.uuid }
-        val newStageProps = stageAndStageProps.second.map { it.copy(stageId = id) }.associateBy { it.uuid }
+        val existingStageProps = db.stageProps.findAllByStageId(id).associateBy { it.id }
+        val newStageProps = body.stageProps.map { it.toModel().copy(stageId = id) }.associateBy { it.id }
 
-        // Delete playlist sequences that no longer exist.
-        val uuidsToDelete = existingStageProps.keys - newStageProps.keys
-        db.query(DeleteStagePropsQuery(uuidsToDelete))
+        // Delete stage props that no longer exist.
+        val idsToDelete = existingStageProps.keys - newStageProps.keys
+        idsToDelete.forEach(db.stageProps::deleteById)
 
-        // Insert playlist sequences that didn't exist previously.
-        (newStageProps.keys - existingStageProps.keys).forEach { db.insert(newStageProps.getValue(it).copy(stageId = stage.id)) }
+        // Insert stage props that didn't exist previously.
+        val idsToInsert = newStageProps.keys - existingStageProps.keys
+        idsToInsert.forEach { db.stageProps.save(newStageProps.getValue(it).copy(stageId = stage.id)) }
 
-        // Update playlist sequences that exist
-        (newStageProps.keys.intersect(existingStageProps.keys)).forEach { db.update(newStageProps.getValue(it).copy(stageId = stage.id)) }
+        // Update stage props that exist
+        val idsToUpdate = newStageProps.keys.intersect(existingStageProps.keys)
+        idsToUpdate.forEach { db.stageProps.update(newStageProps.getValue(it).copy(stageId = stage.id)) }
 
-        return HttpResponse.ok()
+        val viewModel = StageViewModel.fromModel(updatedStage, newStageProps.values)
+        return HttpResponse.ok(viewModel)
     }
 
     @Delete("/{id}")
     @Transactional
-    fun deleteStage(id: Int): HttpResponse<Any> {
-        db.query(DeleteStageQuery(id))
-        return HttpResponse.ok()
+    fun deleteStage(id: UniqueId): HttpResponse<Any> {
+        db.stages.deleteStageAndDependentsById(id)
+        return HttpResponse.noContent()
     }
 }

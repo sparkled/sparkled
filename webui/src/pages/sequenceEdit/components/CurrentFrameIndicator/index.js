@@ -1,2 +1,2 @@
-import CurrentFrameIndicator from './CurrentFrameIndicator'
+import CurrentFrameIndicator from './CurrentFrameIndicator.jsx'
 export default CurrentFrameIndicator

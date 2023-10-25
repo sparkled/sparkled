@@ -1,5 +1,6 @@
 package io.sparkled.udpserver.impl
 
+import io.sparkled.common.logging.getLogger
 import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.cache.CacheService
 import io.sparkled.udpserver.RequestHandler
@@ -11,21 +12,20 @@ import io.sparkled.udpserver.impl.subscriber.UdpClientSubscribers
 import jakarta.inject.Singleton
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import org.slf4j.LoggerFactory
 import java.net.InetAddress
 
 @Singleton
 class RequestHandlerImpl(
-    private val caches: CacheService,
+    private val cache: CacheService,
     private val playbackStateService: PlaybackStateService,
-    subscribers: UdpClientSubscribers
+    subscribers: UdpClientSubscribers,
 ) : RequestHandler {
 
     private val commands = mapOf(
         GetFrameCommand.KEY to GetFrameCommand(),
         GetStagePropCodesCommand.KEY to GetStagePropCodesCommand(),
         GetVersionCommand.KEY to GetVersionCommand(),
-        SubscribeCommand.KEY to SubscribeCommand(subscribers)
+        SubscribeCommand.KEY to SubscribeCommand(subscribers),
     )
 
     override fun handle(serverSocket: DatagramSocket, receivePacket: DatagramPacket, message: String) {
@@ -42,7 +42,7 @@ class RequestHandlerImpl(
 
     private fun getResponse(ipAddress: InetAddress, port: Int, args: List<String>): ByteArray? {
         val playbackState = playbackStateService.getPlaybackState()
-        val settings = caches.settings.get()
+        val settings = cache.settings.get()
 
         val command = args[0]
         val requestCommand = commands[command] ?: throw IllegalArgumentException("Unrecognised command '$command'.")
@@ -57,6 +57,6 @@ class RequestHandlerImpl(
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(RequestHandlerImpl::class.java)
+        private val logger = getLogger<RequestHandlerImpl>()
     }
 }

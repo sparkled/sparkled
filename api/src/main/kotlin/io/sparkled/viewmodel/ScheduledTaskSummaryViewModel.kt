@@ -1,24 +1,29 @@
 package io.sparkled.viewmodel
 
-import io.sparkled.model.entity.ScheduledJobAction
-import io.sparkled.model.entity.v2.ScheduledTaskEntity
-import io.sparkled.model.util.IdUtils
+import io.sparkled.model.ScheduledActionModel
+import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
+import io.sparkled.model.enumeration.ScheduledActionType
 
+@GenerateClientType
 data class ScheduledTaskSummaryViewModel(
-    val id: Int = IdUtils.NO_ID,
-    val action: ScheduledJobAction,
+    val id: UniqueId,
+    val type: ScheduledActionType,
     val cronExpression: String,
     val playlistName: String? = null,
-    val playlistId: Int? = null
-) {
+    val playlistId: UniqueId? = null,
+) : ViewModel {
     companion object {
-        fun fromModel(model: ScheduledTaskEntity, playlistNames: Map<Int, String>): ScheduledTaskSummaryViewModel {
+        fun fromModel(
+            model: ScheduledActionModel,
+            playlistNames: Map<UniqueId, String>
+        ): ScheduledTaskSummaryViewModel {
             return ScheduledTaskSummaryViewModel(
                 id = model.id,
-                action = model.action,
+                type = model.type,
                 cronExpression = model.cronExpression,
                 playlistId = model.playlistId,
-                playlistName = playlistNames[model.playlistId]
+                playlistName = playlistNames[model.playlistId],
             )
         }
     }

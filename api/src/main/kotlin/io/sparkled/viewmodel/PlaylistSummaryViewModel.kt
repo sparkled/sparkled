@@ -1,32 +1,34 @@
 package io.sparkled.viewmodel
 
+import io.sparkled.model.PlaylistModel
+import io.sparkled.model.PlaylistSequenceModel
+import io.sparkled.model.SequenceModel
+import io.sparkled.model.SongModel
+import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.model.constant.ModelConstants
-import io.sparkled.model.entity.v2.PlaylistEntity
-import io.sparkled.model.entity.v2.PlaylistSequenceEntity
-import io.sparkled.model.entity.v2.SequenceEntity
-import io.sparkled.model.entity.v2.SongEntity
 
+@GenerateClientType
 data class PlaylistSummaryViewModel(
-    val id: Int,
+    val id: String,
     val name: String,
     val sequenceCount: Int,
-    val durationSeconds: Int,
-) {
+    val durationMs: Int,
+) : ViewModel {
     companion object {
         fun fromModel(
-            model: PlaylistEntity,
-            playlistSequences: List<PlaylistSequenceEntity>,
-            sequences: List<SequenceEntity>,
-            songs: List<SongEntity>
+            model: PlaylistModel,
+            playlistSequences: List<PlaylistSequenceModel>,
+            sequences: List<SequenceModel>,
+            songs: List<SongModel>
         ) = PlaylistSummaryViewModel(
             id = model.id,
             name = model.name,
             sequenceCount = playlistSequences.size,
-            durationSeconds = playlistSequences.sumOf { ps ->
+            durationMs = playlistSequences.sumOf { ps ->
                 val sequence = sequences.first { it.id == ps.sequenceId }
                 val song = songs.first { it.id == sequence.songId }
                 song.durationMs
-            } / ModelConstants.MS_PER_SECOND
+            }
         )
     }
 }

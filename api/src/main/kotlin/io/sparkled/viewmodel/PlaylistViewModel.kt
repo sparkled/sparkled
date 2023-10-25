@@ -1,16 +1,18 @@
 package io.sparkled.viewmodel
 
-import io.sparkled.model.entity.v2.PlaylistEntity
-import io.sparkled.model.entity.v2.PlaylistSequenceEntity
-import io.sparkled.model.util.IdUtils
+import io.sparkled.model.PlaylistModel
+import io.sparkled.model.PlaylistSequenceModel
+import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 data class PlaylistViewModel(
-    val id: Int = IdUtils.NO_ID,
+    val id: UniqueId,
     val name: String,
     val sequences: List<PlaylistSequenceViewModel> = emptyList()
-) {
-    fun toModel(): Pair<PlaylistEntity, List<PlaylistSequenceEntity>> {
-        val playlist = PlaylistEntity(
+) : ViewModel {
+    fun toModel(): Pair<PlaylistModel, List<PlaylistSequenceModel>> {
+        val playlist = PlaylistModel(
             id = id,
             name = name
         )
@@ -20,7 +22,7 @@ data class PlaylistViewModel(
     }
 
     companion object {
-        fun fromModel(model: PlaylistEntity, sequences: List<PlaylistSequenceEntity>) = PlaylistViewModel(
+        fun fromModel(model: PlaylistModel, sequences: List<PlaylistSequenceModel>) = PlaylistViewModel(
             id = model.id,
             name = model.name,
             sequences = sequences.map(PlaylistSequenceViewModel::fromModel)

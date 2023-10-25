@@ -1,2 +1,2 @@
-import ColorPickerField from './ColorPickerField'
+import ColorPickerField from './ColorPickerField.jsx'
 export default ColorPickerField

@@ -53,7 +53,7 @@ const slice = createSlice({
         state.dashboard.playlists.push({
           id: action.payload.id,
           name: action.payload.name,
-          durationSeconds: 0,
+          durationMs: 0,
           sequenceCount: 0
         })
       }

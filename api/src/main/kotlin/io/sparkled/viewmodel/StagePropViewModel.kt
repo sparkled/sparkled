@@ -1,33 +1,34 @@
 package io.sparkled.viewmodel
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import io.sparkled.model.entity.v2.StagePropEntity
-import io.sparkled.model.entity.v2.partial.Point2d
-import io.sparkled.model.util.IdUtils
-import java.util.*
+import io.sparkled.model.embedded.LedPositions
+import io.sparkled.model.StagePropModel
+import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
+import io.sparkled.model.embedded.Point2d
+import io.sparkled.model.enumeration.StagePropType
 
+@GenerateClientType
 data class StagePropViewModel(
-    val uuid: UUID = IdUtils.newUuid(),
-    val stageId: Int,
+    val id: UniqueId,
+    val stageId: UniqueId,
     val code: String,
     val name: String,
-    val type: String,
+    val type: StagePropType,
     val ledCount: Int,
     val reverse: Boolean,
     val positionX: Int,
     val positionY: Int,
-    val scaleX: Float,
-    val scaleY: Float,
-    val rotation: Int,
+    val scaleX: Double,
+    val scaleY: Double,
+    val rotation: Double,
     val brightness: Int,
     val displayOrder: Int,
-    val groupId: String? = null,
+    val groupCode: String? = null,
     val groupDisplayOrder: Int? = null,
-    val ledPositions: List<Point2d> = emptyList(),
-) {
-    fun toModel(objectMapper: ObjectMapper) = StagePropEntity(
-        uuid = uuid,
+    val ledPositions: List<Point2dViewModel> = emptyList(),
+) : ViewModel {
+    fun toModel() = StagePropModel(
+        id = id,
         stageId = stageId,
         code = code,
         name = name,
@@ -41,14 +42,14 @@ data class StagePropViewModel(
         rotation = rotation,
         brightness = brightness,
         displayOrder = displayOrder,
-        groupId = groupId,
+        groupCode = groupCode,
         groupDisplayOrder = groupDisplayOrder ?: 0,
-        ledPositionsJson = objectMapper.writeValueAsString(ledPositions),
+        ledPositions = LedPositions.of(ledPositions.map { Point2d(x = it.x, y = it.y) }),
     )
 
     companion object {
-        fun fromModel(model: StagePropEntity, objectMapper: ObjectMapper) = StagePropViewModel(
-            uuid = model.uuid,
+        fun fromModel(model: StagePropModel) = StagePropViewModel(
+            id = model.id,
             stageId = model.stageId,
             code = model.code,
             name = model.name,
@@ -62,9 +63,9 @@ data class StagePropViewModel(
             rotation = model.rotation,
             brightness = model.brightness,
             displayOrder = model.displayOrder,
-            groupId = model.groupId,
+            groupCode = model.groupCode,
             groupDisplayOrder = model.groupDisplayOrder,
-            ledPositions = objectMapper.readValue(model.ledPositionsJson),
+            ledPositions = model.ledPositions.map { Point2dViewModel(x = it.x, y = it.y) },
         )
     }
 }

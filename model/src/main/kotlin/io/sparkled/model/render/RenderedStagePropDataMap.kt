@@ -1,6 +1,6 @@
 package io.sparkled.model.render
 
 /**
- * A map of (stage prop UUID or stage prop group ID) to rendered stage prop data.
+ * A map of (stage prop ID or stage prop group code) to rendered stage prop data.
  */
 class RenderedStagePropDataMap : HashMap<String, RenderedStagePropData>()

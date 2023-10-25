@@ -1,2 +1,2 @@
-import DeleteSequenceModal from './DeleteSequenceModal'
+import DeleteSequenceModal from './DeleteSequenceModal.jsx'
 export default DeleteSequenceModal

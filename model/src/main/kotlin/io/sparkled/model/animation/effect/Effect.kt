@@ -1,13 +1,15 @@
 package io.sparkled.model.animation.effect
 
+import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.param.HasArguments
-import io.sparkled.model.util.IdUtils
-import java.util.*
+import io.sparkled.model.annotation.GenerateClientType
+import io.sparkled.model.util.IdUtils.uniqueId
 
+@GenerateClientType
 data class Effect(
-    var uuid: UUID = IdUtils.newUuid(),
+    var id: UniqueId = uniqueId(),
     var type: String = "NONE",
     var easing: Easing = Easing("LINEAR"),
     var fill: Fill = Fill(),
@@ -16,5 +18,5 @@ data class Effect(
     var repetitions: Int = 1,
     var repetitionSpacing: Int = 0,
 
-    override val args: Map<String, List<String>> = emptyMap()
+    override val args: Map<String, List<String>> = emptyMap(),
 ) : HasArguments

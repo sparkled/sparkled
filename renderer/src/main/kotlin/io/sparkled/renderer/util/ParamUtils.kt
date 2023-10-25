@@ -2,7 +2,7 @@ package io.sparkled.renderer.util
 
 import io.sparkled.model.animation.param.HasArguments
 import java.awt.Color
-import java.util.*
+import java.util.Locale
 
 object ParamUtils {
 

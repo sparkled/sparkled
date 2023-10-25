@@ -1,0 +1,49 @@
+[versions]
+micronaut = "4.2.0"
+
+[plugins]
+kotlin-allopen = "org.jetbrains.kotlin.plugin.allopen:1.9.21"
+kotlin-jvm = "org.jetbrains.kotlin.jvm:1.9.21"
+kotlin-kapt = "org.jetbrains.kotlin.kapt:1.9.21"
+ktlint = "org.jlleitschuh.gradle.ktlint:11.6.1"
+micronaut-aot = "io.micronaut.aot:4.2.0"
+micronaut-application = "io.micronaut.application:4.2.0"
+micronaut-library = "io.micronaut.library:4.2.0"
+node = "com.github.node-gradle.node:7.0.1"
+shadow = "com.github.johnrengelman.shadow:8.1.1"
+
+[libraries]
+guava = "com.google.guava:guava:32.1.3-jre"
+jakarta-persistenceApi = "jakarta.persistence:jakarta.persistence-api:3.1.0"
+jodd-http = "org.jodd:jodd-http:6.3.0"
+kotlin-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
+kotlin-reflect = "org.jetbrains.kotlin:kotlin-reflect:1.9.0"
+kotlin-retry = "com.michael-bull.kotlin-retry:kotlin-retry:1.0.9"
+kotlin-scriptingJsr223 = "org.jetbrains.kotlin:kotlin-scripting-jsr223:1.9.21"
+kotlin-stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21"
+madgag-animatedGifLib = "com.madgag:animated-gif-lib:1.4"
+mockk = "io.mockk:mockk:1.13.5"
+mp3Spi = "com.googlecode.soundlibs:mp3spi:1.9.5.4"
+quartz = "org.quartz-scheduler:quartz:2.3.2"
+reflections = "org.reflections:reflections:0.10.2"
+sqlite = "org.xerial:sqlite-jdbc:3.44.0.0"
+
+# Dependencies with versions managed by Micronaut's Bill of Materials (BOM).
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+jakarta-annotationApi = { module = "jakarta.annotation:jakarta.annotation-api" }
+kotest-assertionsCore = { module = "io.kotest:kotest-assertions-core-jvm" }
+kotest-runner = { module = "io.kotest:kotest-runner-junit5-jvm" }
+logback-classic = { module = "ch.qos.logback:logback-classic" }
+micronaut-data-jdbc = { module = "io.micronaut.data:micronaut-data-jdbc" }
+micronaut-data-processor = { module = "io.micronaut.data:micronaut-data-processor" }
+micronaut-httpServerNetty = { module = "io.micronaut:micronaut-http-server-netty" }
+micronaut-jdbc-hikari = { module = "io.micronaut.sql:micronaut-jdbc-hikari" }
+micronaut-injectJava = { module = "io.micronaut:micronaut-inject-java" }
+micronaut-jacksonDatabind = { module = "io.micronaut:micronaut-jackson-databind" }
+micronaut-kotlinRuntime = { module = "io.micronaut.kotlin:micronaut-kotlin-runtime" }
+micronaut-liquibase = { module = "io.micronaut.liquibase:micronaut-liquibase" }
+micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi" }
+micronaut-runtime = { module = "io.micronaut:micronaut-runtime"}
+micronaut-security = { module = "io.micronaut.security:micronaut-security" }
+snakeyaml = { module = "org.yaml:snakeyaml" }
+swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations" }

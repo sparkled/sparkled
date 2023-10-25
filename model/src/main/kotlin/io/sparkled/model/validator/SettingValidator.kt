@@ -1,15 +1,14 @@
 package io.sparkled.model.validator
 
-import io.sparkled.model.entity.v2.SettingEntity
+import io.sparkled.model.SettingModel
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.model.validator.exception.EntityValidationException
 
 class SettingValidator {
 
-    fun validate(setting: SettingEntity) {
-        val code = setting.code
+    fun validate(setting: SettingModel) {
         val value = setting.value
-        val isBrightness = code === SettingsConstants.Brightness.CODE
+        val isBrightness = setting.id === SettingsConstants.Brightness.CODE
 
         when {
             isBrightness && value.toIntOrNull() == null -> throw EntityValidationException(Errors.VALUE_INVALID)

@@ -1,19 +1,15 @@
 package io.sparkled.renderer.effect
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.sparkled.model.animation.param.Param
-import io.sparkled.model.entity.v2.partial.Point2d
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
-import io.sparkled.renderer.api.SparkledEffect
+import io.sparkled.renderer.api.StatelessSparkledEffect
 import io.sparkled.renderer.util.FillUtils
 import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 import kotlin.math.roundToInt
 
-object GifEffect : SparkledEffect<Unit> {
+object GifEffect : StatelessSparkledEffect {
 
     enum class Params { FILE_NAME }
 
@@ -24,10 +20,8 @@ object GifEffect : SparkledEffect<Unit> {
         Param.string(Params.FILE_NAME.name, "Filename", "")
     )
 
-    override fun createState(ctx: RenderContext) {}
-
-    override fun render(ctx: RenderContext, state: Unit) {
-        val points = ObjectMapper().registerKotlinModule().readValue<List<Point2d>>(ctx.stageProp.ledPositionsJson)
+    override fun render(ctx: RenderContext) {
+        val points = ctx.stageProp.ledPositions
 
         val gifFrames = ctx.loadGif(ParamUtils.getString(ctx.effect, Params.FILE_NAME.name))
 

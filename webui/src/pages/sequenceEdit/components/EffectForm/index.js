@@ -1,2 +1,2 @@
-import EffectForm from './EffectForm'
+import EffectForm from './EffectForm.jsx'
 export default EffectForm

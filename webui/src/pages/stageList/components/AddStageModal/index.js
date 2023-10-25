@@ -1,2 +1,2 @@
-import AddStageModal from './AddStageModal'
+import AddStageModal from './AddStageModal.jsx'
 export default AddStageModal

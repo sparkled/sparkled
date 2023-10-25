@@ -1,13 +1,20 @@
-val jdbiVersion: String by project
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.micronaut.library)
+}
 
 dependencies {
-    implementation("org.jdbi:jdbi3-core:$jdbiVersion") {
-        exclude(group = "com.github.ben-manes.caffeine", module = "caffeine")
-    }
-    implementation("org.jdbi:jdbi3-kotlin:$jdbiVersion") {
-        exclude(group = "com.github.ben-manes.caffeine", module = "caffeine")
-    }
-    implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbiVersion") {
-        exclude(group = "com.github.ben-manes.caffeine", module = "caffeine")
-    }
+    compileOnly(libs.jakarta.persistenceApi)
+
+    kapt(libs.micronaut.data.processor)
+    kapt(libs.micronaut.injectJava)
+
+    implementation(project(":common"))
+    implementation(libs.jackson.kotlin)
+    implementation(libs.jakarta.annotationApi)
+    implementation(libs.micronaut.data.jdbc)
+
+    testImplementation(libs.kotest.assertionsCore)
+    testImplementation(libs.kotest.runner)
 }

@@ -1,19 +1,22 @@
 package io.sparkled.viewmodel
 
-import io.sparkled.model.entity.v2.SettingEntity
+import io.sparkled.model.SettingModel
+import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 data class SettingViewModel(
-    val code: String,
+    val id: UniqueId,
     val value: String,
-) {
-    fun toModel() = SettingEntity(
-        code = code,
+) : ViewModel {
+    fun toModel() = SettingModel(
+        id = id,
         value = value,
     )
 
     companion object {
-        fun fromModel(model: SettingEntity) = SettingViewModel(
-            code = model.code,
+        fun fromModel(model: SettingModel) = SettingViewModel(
+            id = model.id,
             value = model.value,
         )
     }

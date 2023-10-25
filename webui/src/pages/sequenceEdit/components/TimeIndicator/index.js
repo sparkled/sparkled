@@ -1,2 +1,2 @@
-import TimeIndicator from './TimeIndicator'
+import TimeIndicator from './TimeIndicator.jsx'
 export default TimeIndicator

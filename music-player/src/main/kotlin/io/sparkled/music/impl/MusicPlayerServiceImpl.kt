@@ -1,13 +1,14 @@
 package io.sparkled.music.impl
 
+import io.sparkled.common.logging.getLogger
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackState
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.util.*
-import javax.sound.sampled.*
+import javax.sound.sampled.AudioFormat
+import javax.sound.sampled.AudioSystem
+import javax.sound.sampled.LineEvent
+import javax.sound.sampled.LineListener
 import kotlin.math.min
 
 @Singleton
@@ -25,7 +26,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
 
     override fun play(playbackState: PlaybackState) {
         stopPlayback()
-        logger.debug("Playing sequence {}.", playbackState.sequence?.name)
+        logger.debug("Playing sequence.", "name" to playbackState.sequence?.name)
 
         try {
             val byteStream = ByteArrayInputStream(playbackState.songAudio)
@@ -33,7 +34,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
                 val baseFormat = mp3Stream.format
                 val decodedFormat = AudioFormat(
                     AudioFormat.Encoding.PCM_SIGNED, baseFormat.sampleRate, 16, baseFormat.channels,
-                    baseFormat.channels * 2, baseFormat.sampleRate, false
+                    baseFormat.channels * 2, baseFormat.sampleRate, false,
                 )
 
                 AudioSystem.getAudioInputStream(decodedFormat, mp3Stream).use { convertedStream ->
@@ -43,13 +44,13 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
                 }
             }
         } catch (e: Exception) {
-            logger.error("Failed to play sequence {}: {}.", playbackState.sequence?.name, e.message)
+            logger.error("Failed to play sequence.", e, "name" to playbackState.sequence?.name)
         }
     }
 
     override fun addLineListener(listener: LineListener) {
         this.listeners.add(listener)
-        logger.info("Added line listener: {}.", listener)
+        logger.info("Added line listener.", "listener" to listener)
     }
 
     override val sequenceProgress: Double
@@ -63,6 +64,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
                     val frame = lastFramePosition + newFrames
                     min(1.0, frame / clip.frameLength.toDouble())
                 }
+
                 else -> {
                     lastFramePosition = clip.framePosition
                     lastProgressUpdate = System.currentTimeMillis()
@@ -81,6 +83,6 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(MusicPlayerServiceImpl::class.java)
+        private val logger = getLogger<MusicPlayerServiceImpl>()
     }
 }

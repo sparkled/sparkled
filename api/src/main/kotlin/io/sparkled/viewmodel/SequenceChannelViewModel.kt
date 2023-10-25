@@ -1,36 +1,37 @@
 package io.sparkled.viewmodel
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import io.sparkled.model.embedded.ChannelData
+import io.sparkled.model.SequenceChannelModel
+import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
-import io.sparkled.model.entity.v2.SequenceChannelEntity
-import io.sparkled.model.util.IdUtils
-import java.util.UUID
+import io.sparkled.model.annotation.GenerateClientType
+import io.sparkled.model.util.IdUtils.uniqueId
 
+@GenerateClientType
 data class SequenceChannelViewModel(
-    val uuid: UUID = IdUtils.newUuid(),
-    val stagePropUuid: UUID,
+    val id: String = uniqueId(),
+    val stagePropId: UniqueId,
     val name: String,
     val displayOrder: Int,
-    val effects: List<Effect>
-) {
+    val effects: List<Effect>,
+) : ViewModel {
 
-    fun toModel(sequenceId: Int, objectMapper: ObjectMapper) = SequenceChannelEntity(
-        uuid = uuid,
+    fun toModel(sequenceId: UniqueId) = SequenceChannelModel(
+        id = id,
         sequenceId = sequenceId,
-        stagePropUuid = stagePropUuid,
+        stagePropId = stagePropId,
         name = name,
         displayOrder = displayOrder,
-        channelJson = objectMapper.writeValueAsString(effects)
+        channelData = ChannelData.of(effects),
     )
 
     companion object {
-        fun fromModel(model: SequenceChannelEntity, objectMapper: ObjectMapper) = SequenceChannelViewModel(
-            uuid = model.uuid,
-            stagePropUuid = model.stagePropUuid,
+        fun fromModel(model: SequenceChannelModel) = SequenceChannelViewModel(
+            id = model.id,
+            stagePropId = model.stagePropId,
             name = model.name,
             displayOrder = model.displayOrder,
-            effects = objectMapper.readValue(model.channelJson)
+            effects = model.channelData,
         )
     }
 }

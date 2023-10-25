@@ -1,24 +1,24 @@
 package io.sparkled.music
 
-import io.sparkled.model.entity.v2.SequenceEntity
-import io.sparkled.model.entity.v2.SongEntity
-import io.sparkled.model.entity.v2.StagePropEntity
+import io.sparkled.model.SequenceModel
+import io.sparkled.model.SongModel
+import io.sparkled.model.StagePropModel
 import io.sparkled.model.render.RenderedStagePropDataMap
 
 /**
- * A container object holding all of the information pertaining to the current state of playback, in terms of audio
+ * A container object holding all the information pertaining to the current state of playback, in terms of audio
  * playback and associated rendered data for streaming to clients.
  */
 data class PlaybackState(
-    val sequences: List<SequenceEntity> = emptyList(),
+    val sequences: List<SequenceModel> = emptyList(),
     val sequenceIndex: Int = 0,
     val repeat: Boolean = true,
     private val progressFunction: () -> Double = { 0.0 },
-    val sequence: SequenceEntity? = null,
-    val song: SongEntity? = null,
+    val sequence: SequenceModel? = null,
+    val song: SongModel? = null,
     val songAudio: ByteArray = byteArrayOf(),
     val renderedStageProps: RenderedStagePropDataMap = RenderedStagePropDataMap(),
-    val stageProps: Map<String, StagePropEntity> = emptyMap()
+    val stageProps: Map<String, StagePropModel> = emptyMap()
 ) {
 
     val isEmpty: Boolean

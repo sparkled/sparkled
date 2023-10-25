@@ -54,8 +54,8 @@ const StageProp: React.FC<Props> = props => {
   const { pixiContainer, width, height, pathPoints, ledPoints } = state
 
   const selectStageProp = useCallback(() => {
-    dispatch({ type: 'SelectStageProp', payload: { uuid: stageProp.uuid } })
-  }, [dispatch, stageProp.uuid])
+    dispatch({ type: 'SelectStageProp', payload: { id: stageProp.id } })
+  }, [dispatch, stageProp.id])
 
   const setPosition = useCallback(() => {
     pixiContainer.x = stageProp.positionX + pixiContainer.width / 2
@@ -85,10 +85,10 @@ const StageProp: React.FC<Props> = props => {
 
   useEffect(() => {
     return () => {
-      logger.info(`Destroying ${stageProp.uuid}.`)
+      logger.info(`Destroying ${stageProp.id}.`)
       state.pixiContainer.destroy({ children: true })
     }
-  }, [stageProp.uuid, state.pixiContainer])
+  }, [stageProp.id, state.pixiContainer])
 
   const moveStageProp = useCallback(
     (offsetX: number, offsetY: number) => {
@@ -133,7 +133,7 @@ const StageProp: React.FC<Props> = props => {
 
       <StagePropLeds
         parent={pixiContainer}
-        uuid={stageProp.uuid}
+        id={stageProp.id}
         points={ledPoints}
         width={width}
         height={height}

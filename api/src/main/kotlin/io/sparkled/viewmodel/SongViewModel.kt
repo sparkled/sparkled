@@ -1,29 +1,28 @@
 package io.sparkled.viewmodel
 
-import io.sparkled.model.entity.v2.SongEntity
-import io.sparkled.model.util.IdUtils
+import io.sparkled.model.SongModel
+import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 data class SongViewModel(
-    val id: Int = IdUtils.NO_ID,
+    val id: UniqueId,
     val name: String,
     val artist: String?,
-    val album: String?,
     val durationMs: Int,
-) {
-    fun toModel() = SongEntity(
+) : ViewModel {
+    fun toModel() = SongModel(
         id = id,
         name = name,
         artist = artist,
-        album = album,
         durationMs = durationMs,
     )
 
     companion object {
-        fun fromModel(model: SongEntity) = SongViewModel(
+        fun fromModel(model: SongModel) = SongViewModel(
             id = model.id,
             name = model.name,
             artist = model.artist,
-            album = model.album,
             durationMs = model.durationMs,
         )
     }

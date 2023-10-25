@@ -1,68 +1,87 @@
 package io.sparkled.api
 
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Put
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.model.entity.v2.SettingEntity
+import io.micronaut.transaction.annotation.Transactional
+import io.sparkled.model.SettingModel
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
-import io.sparkled.persistence.insert
-import io.sparkled.persistence.update
+import io.sparkled.persistence.repository.findByIdOrNull
+import io.sparkled.viewmodel.SettingEditViewModel
 import io.sparkled.viewmodel.SettingViewModel
-import org.springframework.transaction.annotation.Transactional
+import io.sparkled.viewmodel.error.ApiErrorCode
+import io.sparkled.viewmodel.exception.HttpResponseException
+import java.time.Instant
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/settings")
 class SettingController(
-    private val caches: CacheService,
-    private val db: DbService
+    private val cache: CacheService,
+    private val db: DbService,
 ) {
 
     @Get("/")
-    @Transactional(readOnly = true)
+    @Transactional
     fun getAllSettings(): HttpResponse<Any> {
-        val settings = caches.settings.get()
+        val settings = cache.settings.get()
         return HttpResponse.ok(settings)
     }
 
-    @Get("/{code}")
-    @Transactional(readOnly = true)
-    fun getSetting(code: String): HttpResponse<Any> {
-        return if (code == SettingsConstants.Brightness.CODE) {
-            val setting = SettingEntity(
-                code = SettingsConstants.Brightness.CODE,
-                value = caches.settings.use { it.brightness }.toString()
-            )
-            HttpResponse.ok(SettingViewModel.fromModel(setting))
-        } else {
-            return HttpResponse.notFound()
-        }
-    }
-
-    @Put("/{code}")
+    @Get("/{id}")
     @Transactional
-    fun updateSetting(code: String, setting: SettingViewModel): HttpResponse<Any> {
-        val model = setting.toModel()
+    fun getSetting(id: String): HttpResponse<Any> {
+        val existing = db.settings.findByIdOrNull(id)
+        val setting = when {
+            existing != null -> existing
 
-        if (setting.code == SettingsConstants.Brightness.CODE) {
-            try {
-                db.insert(model)
-            } catch (e: Exception) {
-                db.update(model)
+            id == SettingsConstants.Brightness.CODE -> {
+                db.settings.save(
+                    SettingModel(
+                        id = SettingsConstants.Brightness.CODE,
+                        value = SettingsConstants.Brightness.MAX.toString()
+                    )
+                )
             }
 
-            caches.settings.modify { it.copy(brightness = model.value.toInt()) }
-        } else {
-            return HttpResponse.notFound()
+            else -> throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
         }
 
-        return HttpResponse.ok()
+        val viewModel = SettingViewModel(id = setting.id, value = setting.value)
+        return HttpResponse.ok(viewModel)
+    }
+
+    @Put("/{id}")
+    @Transactional
+    fun updateSetting(
+        @PathVariable id: String,
+        @Body body: SettingEditViewModel,
+    ): HttpResponse<Any> {
+        val existing = db.settings.findByIdOrNull(id)
+        val saved = if (existing == null) {
+            db.settings.update(SettingModel(id = id, value = body.value))
+        } else {
+            db.settings.update(existing.copy(value = body.value, updatedAt = Instant.now()))
+        }
+
+        if (id == SettingsConstants.Brightness.CODE) {
+            cache.settings.modify { it.copy(brightness = body.value.toInt()) }
+        }
+
+        return HttpResponse.ok(
+            SettingViewModel(
+                id = id,
+                value = saved.value,
+            )
+        )
     }
 }

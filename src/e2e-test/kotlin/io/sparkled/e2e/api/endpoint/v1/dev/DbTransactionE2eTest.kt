@@ -1,20 +1,37 @@
 package io.sparkled.e2e.api.endpoint.v1.dev
 
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
+import io.micronaut.data.exceptions.DataAccessException
 import io.sparkled.e2e.spec.E2eSpec
+import io.sparkled.persistence.DbServiceImpl
 
+// TODO fix transactions.
 class DbTransactionE2eTest : E2eSpec() {
 
-// TODO implement
-//
-//    init {
-//        "Exception in @Transactional method causes DB transaction to roll back" {
-//    }
-//
-//    private fun doRequest(rollback: Boolean): Pair<HttpResponse<Any>, Any> {
-//        return http.getResponseAndObject(
-//            HttpRequest.GET(
-//                "/api/dev/transaction"
-//            )
-//        )
-//    }
+    init {
+        val dbServiceImpl = inject<DbServiceImpl>()
+
+        beforeEach {
+            db.settings.deleteAll()
+        }
+
+        "exception in @Transactional method causes DB transaction to roll back" {
+            inject<DbServiceImpl>().withTransaction {
+                shouldThrow<DataAccessException> {
+                    dbServiceImpl.testTransaction(fail = true)
+                }
+
+                db.settings.findAll().shouldBeEmpty()
+            }
+        }
+
+        "successful @Transactional method persists results to DB" {
+            inject<DbServiceImpl>().withTransaction {
+                dbServiceImpl.testTransaction(fail = false)
+                db.settings.findAll().shouldHaveSize(1)
+            }
+        }
+    }
 }

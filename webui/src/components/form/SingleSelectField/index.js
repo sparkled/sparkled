@@ -1,2 +1,2 @@
-import SingleSelectField from './SingleSelectField'
+import SingleSelectField from './SingleSelectField.jsx'
 export default SingleSelectField

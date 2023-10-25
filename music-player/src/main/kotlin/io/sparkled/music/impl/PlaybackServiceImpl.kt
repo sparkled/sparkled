@@ -1,7 +1,8 @@
 package io.sparkled.music.impl
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import io.sparkled.model.entity.v2.SequenceEntity
+import io.sparkled.common.logging.getLogger
+import io.sparkled.model.SequenceModel
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.music.MusicPlayerService
@@ -10,12 +11,9 @@ import io.sparkled.music.PlaybackState
 import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
-import io.sparkled.persistence.query.sequence.GetSongBySequenceIdQuery
-import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
-import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import io.micronaut.transaction.annotation.Transactional
+import java.util.Base64
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 import javax.sound.sampled.LineEvent
@@ -24,13 +22,13 @@ import javax.sound.sampled.LineEvent
 class PlaybackServiceImpl(
     private val db: DbService,
     private val file: FileService,
-    private val musicPlayerService: MusicPlayerService
+    private val musicPlayerService: MusicPlayerService,
 ) : PlaybackService, PlaybackStateService {
     private val playbackState = AtomicReference(PlaybackState())
 
     // TODO remove Guava. Try Micronaut's NamedThreadFactory class.
     private val executor = Executors.newSingleThreadScheduledExecutor(
-        ThreadFactoryBuilder().setNameFormat("playback-service-%d").build()
+        ThreadFactoryBuilder().setNameFormat("playback-service-%d").build(),
     )
 
     init {
@@ -52,18 +50,18 @@ class PlaybackServiceImpl(
         return playbackState.get()
     }
 
-    override fun play(sequences: List<SequenceEntity>, repeat: Boolean) {
+    override fun play(sequences: List<SequenceModel>, repeat: Boolean) {
         synchronized(this) {
             stopPlayback()
             submitSequencePlayback(sequences, 0, repeat)
         }
     }
 
-    private fun submitSequencePlayback(sequences: List<SequenceEntity>, sequenceIndex: Int, repeat: Boolean) {
+    private fun submitSequencePlayback(sequences: List<SequenceModel>, sequenceIndex: Int, repeat: Boolean) {
         executor.submit { playSequenceAtIndex(sequences, sequenceIndex, repeat) }
     }
 
-    private fun playSequenceAtIndex(sequences: List<SequenceEntity>, sequenceIndex: Int, repeat: Boolean) {
+    private fun playSequenceAtIndex(sequences: List<SequenceModel>, sequenceIndex: Int, repeat: Boolean) {
         val playbackState = loadPlaybackState(sequences, sequenceIndex, repeat)
         this.playbackState.set(playbackState)
 
@@ -72,22 +70,22 @@ class PlaybackServiceImpl(
         } else if (sequenceIndex > 0) {
             if (playbackState.repeat) {
                 logger.debug("Finished playlist, restarting.")
-                playSequenceAtIndex(sequences, 0, playbackState.repeat)
+                playSequenceAtIndex(sequences, 0, true)
             }
         } else {
             logger.error("Failed to play empty playlist.")
         }
     }
 
-    @Transactional(readOnly = true)
-    fun loadPlaybackState(sequences: List<SequenceEntity>, sequenceIndex: Int, repeat: Boolean): PlaybackState {
+    @Transactional
+    fun loadPlaybackState(sequences: List<SequenceModel>, sequenceIndex: Int, repeat: Boolean): PlaybackState {
         try {
             if (sequenceIndex >= sequences.size) {
                 return PlaybackState(repeat = repeat)
             }
 
             val sequence = sequences[sequenceIndex]
-            val song = db.query(GetSongBySequenceIdQuery(sequence.id))!!
+            val song = db.songs.findBySequenceId(sequence.id)!!
             val songAudio = file.readSongAudio(song.id)
 
             val render = file.readRender(sequence.id)
@@ -100,7 +98,7 @@ class PlaybackServiceImpl(
                         data = Base64.getDecoder().decode(value.base64Data),
                     )
                 }
-            val stageProps = db.query(GetStagePropsByStageIdQuery(sequence.stageId)).associateBy { it.code }
+            val stageProps = db.stageProps.findAllByStageId(sequence.stageId).associateBy { it.code }
 
             return PlaybackState(
                 sequences = sequences,
@@ -111,7 +109,7 @@ class PlaybackServiceImpl(
                 song = song,
                 songAudio = songAudio,
                 renderedStageProps = stagePropData,
-                stageProps = stageProps
+                stageProps = stageProps,
             )
         } catch (e: Exception) {
             logger.error("Failed to load playback state.", e)
@@ -128,6 +126,6 @@ class PlaybackServiceImpl(
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(PlaybackServiceImpl::class.java)
+        private val logger = getLogger<PlaybackServiceImpl>()
     }
 }

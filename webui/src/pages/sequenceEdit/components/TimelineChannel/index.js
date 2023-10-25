@@ -1,2 +1,2 @@
-import TimelineChannel from './TimelineChannel'
+import TimelineChannel from './TimelineChannel.jsx'
 export default TimelineChannel

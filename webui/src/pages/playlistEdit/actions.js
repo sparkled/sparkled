@@ -13,10 +13,7 @@ export const fetchSequences = () => {
 }
 
 export const savePlaylist = playlist => {
-  const request = axios.put(
-    `${restConfig.ROOT_URL}/playlists/${playlist.id}`,
-    playlist
-  )
+  const request = axios.put(`${restConfig.ROOT_URL}/playlists/${playlist.id}`, playlist)
   return { type: actionTypes.SAVE_PLAYLIST, payload: request }
 }
 
@@ -24,27 +21,27 @@ export const addSequence = sequence => {
   return {
     type: actionTypes.ADD_SEQUENCE,
     undoable: true,
-    payload: { sequence }
+    payload: { sequence },
   }
 }
 
 export const showAddSequenceModal = () => {
   return {
-    type: actionTypes.SHOW_ADD_SEQUENCE_MODAL
+    type: actionTypes.SHOW_ADD_SEQUENCE_MODAL,
   }
 }
 
 export const hideAddSequenceModal = () => {
   return {
-    type: actionTypes.HIDE_ADD_SEQUENCE_MODAL
+    type: actionTypes.HIDE_ADD_SEQUENCE_MODAL,
   }
 }
 
-export const deletePlaylistSequence = uuid => {
+export const deletePlaylistSequence = id => {
   return {
     type: actionTypes.DELETE_PLAYLIST_SEQUENCE,
     undoable: true,
-    payload: { uuid }
+    payload: { id },
   }
 }
 
@@ -52,6 +49,6 @@ export const updatePlaylistSequence = playlistSequence => {
   return {
     type: actionTypes.UPDATE_PLAYLIST_SEQUENCE,
     undoable: true,
-    payload: { playlistSequence }
+    payload: { playlistSequence },
   }
 }

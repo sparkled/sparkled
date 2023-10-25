@@ -37,10 +37,10 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
   /** An optional callback to invoke whenever a change is made to the stage. */
   onStageUpdate?: (stage: StageViewModel) => any // TODO use.
 
-  /** Whether or not to display the tools sidebar. */
+  /** Whether to display the tools sidebar. */
   toolsVisible?: boolean
 
-  /** Whether or not to enable stage prop editing. */
+  /** Whether to enable stage prop editing. */
   editable: boolean
 }
 
@@ -95,7 +95,7 @@ const StageEditor: React.FC<Props> = props => {
   })
 
   const deselectStageProp = useCallback(
-    () => dispatch({ type: 'SelectStageProp', payload: { uuid: null } }),
+    () => dispatch({ type: 'SelectStageProp', payload: { id: null } }),
     []
   )
 
@@ -284,7 +284,7 @@ function renderStageProps(
   return _.map(stage.stageProps, stageProp => {
     // Keying on type will recreate the component with the correct path when its type changes.
     // Keying on scale rebuilds the prop line data whenever the prop is resized.
-    const key = `${stageProp.uuid!}:${stageProp.type!}:${stageProp.scaleX}:${stageProp.scaleY}:${stageProp.ledCount}`
+    const key = `${stageProp.id!}:${stageProp.type!}:${stageProp.scaleX}:${stageProp.scaleY}:${stageProp.ledCount}`
     return (
       <StageProp
         key={key}

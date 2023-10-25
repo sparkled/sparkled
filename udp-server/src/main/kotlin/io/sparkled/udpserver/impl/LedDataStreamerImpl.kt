@@ -1,5 +1,6 @@
 package io.sparkled.udpserver.impl
 
+import io.sparkled.common.logging.getLogger
 import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
 import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.cache.CacheService
@@ -7,18 +8,17 @@ import io.sparkled.udpserver.LedDataStreamer
 import io.sparkled.udpserver.impl.command.GetFrameCommand
 import io.sparkled.udpserver.impl.subscriber.UdpClientSubscribers
 import jakarta.inject.Singleton
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.slf4j.LoggerFactory
+import kotlinx.coroutines.runBlocking
 import java.net.DatagramPacket
 import java.net.DatagramSocket
+import kotlin.concurrent.thread
 
 @Singleton
 class LedDataStreamerImpl(
     private val playbackStateService: PlaybackStateService,
-    private val caches: CacheService,
-    private val subscribers: UdpClientSubscribers
+    private val cache: CacheService,
+    private val subscribers: UdpClientSubscribers,
 ) : LedDataStreamer {
 
     private var started: Boolean = false
@@ -28,7 +28,11 @@ class LedDataStreamerImpl(
             logger.warn("Attempted to start LED data streamer, but it is already running.")
         } else {
             started = true
-            GlobalScope.launch { streamData(socket) }
+            thread {
+                runBlocking {
+                    streamData(socket)
+                }
+            }
             logger.info("Started LED data streamer.")
         }
     }
@@ -41,7 +45,7 @@ class LedDataStreamerImpl(
         try {
             while (started) {
                 val iterationTime = System.currentTimeMillis()
-                val settings = caches.settings.get()
+                val settings = cache.settings.get()
                 val playbackState = playbackStateService.getPlaybackState()
 
                 try {
@@ -76,7 +80,7 @@ class LedDataStreamerImpl(
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(LedDataStreamerImpl::class.java)
+        private val logger = getLogger<LedDataStreamerImpl>()
         private const val SUBSCRIBER_TIMEOUT_MS = 30 * MS_PER_SECOND
     }
 }

@@ -35,8 +35,34 @@ data class SparkledConfig(
      */
     @Value("\${sparkled.render-folder-name:renders}")
     val renderFolderName: String,
+
+    /**
+     * The port that Sparkled clients connect to in order to receive data.
+     */
+    @Value("\${sparkled.client-udp-port:2812}")
+    val clientUdpPort: Int,
+
+    /**
+     * The size, in bytes, of the UDP buffer used to receive data from clients.
+     */
+    @Value("\${sparkled.udp-buffer-size:25000000}")
+    val udpReceiveBufferSize: Int,
+
+    /**
+     * The size, in bytes, of the UDP buffer used to send data down to clients.
+     */
+    @Value("\${sparkled.udp-buffer-size:25000000}")
+    val udpSendBufferSize: Int,
 ) {
     val dataFolders by lazy {
-        listOf(audioFolderName, gifFolderName, pluginFolderName, renderFolderName)
+        listOf(
+            audioFolderName,
+            gifFolderName,
+            pluginFolderName,
+            renderFolderName,
+            "$pluginFolderName/easings",
+            "$pluginFolderName/effects",
+            "$pluginFolderName/fills",
+        )
     }
 }
