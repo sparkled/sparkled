@@ -2,7 +2,7 @@ package io.sparkled.udpserver.impl.command
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.entity.v2.SongEntity
 import io.sparkled.model.entity.v2.StagePropEntity

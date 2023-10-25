@@ -67,8 +67,6 @@ class AddSongModal extends Component {
 
             <Field component={TextField} fullWidth name='artist' label='Artist' required validate={required} />
 
-            <Field component={TextField} fullWidth name='album' label='Album' required validate={required} />
-
             <div className='d-none'>
               <Field name='durationMs' component={TextField} label='Duration (ms)' type='number' disabled />
             </div>
@@ -99,7 +97,7 @@ class AddSongModal extends Component {
 
   populateSongFields(tags) {
     const { change } = this.props
-    const { title, artist, album } = tags
+    const { title, artist } = tags
 
     change('durationMs', null)
 
@@ -111,7 +109,6 @@ class AddSongModal extends Component {
 
     change('name', title)
     change('artist', artist)
-    change('album', album)
   }
 
   addSong = song => {

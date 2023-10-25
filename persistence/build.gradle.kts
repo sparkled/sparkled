@@ -3,6 +3,10 @@ val jdbiVersion: String by project
 dependencies {
     implementation(project(":model"))
     implementation("com.madgag:animated-gif-lib:1.4")
+
+    kapt("io.micronaut.data:micronaut-data-processor")
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+
     implementation("io.micronaut.sql:micronaut-jdbi")
     implementation("org.jdbi:jdbi3-core:$jdbiVersion") {
         exclude(group = "com.github.ben-manes.caffeine", module = "caffeine")

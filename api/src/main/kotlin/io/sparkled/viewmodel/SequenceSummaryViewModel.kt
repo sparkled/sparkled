@@ -1,7 +1,7 @@
 package io.sparkled.viewmodel
 
 import io.sparkled.model.constant.ModelConstants
-import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.entity.v2.SongEntity
 import io.sparkled.model.entity.v2.StageEntity

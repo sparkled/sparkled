@@ -8,6 +8,5 @@ data class SongEntity(
     val id: Int = IdUtils.NO_ID,
     val name: String,
     val artist: String? = null,
-    val album: String? = null,
     val durationMs: Int
 ) : SparkledEntity

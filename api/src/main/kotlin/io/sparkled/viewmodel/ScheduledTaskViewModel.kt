@@ -1,12 +1,12 @@
 package io.sparkled.viewmodel
 
-import io.sparkled.model.entity.ScheduledJobAction
+import io.sparkled.model.enumeration.ScheduledActionType
 import io.sparkled.model.entity.v2.ScheduledTaskEntity
 import io.sparkled.model.util.IdUtils
 
 data class ScheduledTaskViewModel(
     var id: Int = IdUtils.NO_ID,
-    var action: ScheduledJobAction,
+    var action: ScheduledActionType,
     var cronExpression: String,
     var value: String? = null,
     var playlistId: Int? = null

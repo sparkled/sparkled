@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.config.SparkledConfig
-import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.entity.v2.SequenceChannelEntity
 import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.entity.v2.StageEntity

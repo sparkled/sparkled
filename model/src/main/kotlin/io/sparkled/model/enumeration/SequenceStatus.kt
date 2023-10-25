@@ -1,4 +1,4 @@
-package io.sparkled.model.entity
+package io.sparkled.model.enumeration
 
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
 

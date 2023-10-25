@@ -132,7 +132,6 @@ const DashboardScreen = () => {
       .filter(
         it =>
           it.name.toLowerCase().includes(searchQuery) ||
-          it.album.toLowerCase().includes(searchQuery) ||
           it.artist.toLowerCase().includes(searchQuery)
       )
       .map(it => {

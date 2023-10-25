@@ -10,7 +10,7 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.animation.SequenceChannelEffects
-import io.sparkled.model.entity.SequenceStatus
+import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.entity.v2.SequenceChannelEntity
 import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.entity.v2.SongEntity

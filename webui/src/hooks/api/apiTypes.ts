@@ -17,7 +17,6 @@ export type SongViewModel = {
   id: number
   name: string
   artist: string
-  album: string
   durationMs: number
 }
 

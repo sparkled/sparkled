@@ -1,7 +1,7 @@
 package io.sparkled.scheduler.impl
 
 import org.springframework.transaction.annotation.Transactional
-import io.sparkled.model.entity.ScheduledJobAction
+import io.sparkled.model.enumeration.ScheduledActionType
 import io.sparkled.model.entity.v2.ScheduledTaskEntity
 import io.sparkled.model.entity.v2.SettingEntity
 import io.sparkled.model.setting.SettingsConstants
@@ -79,10 +79,10 @@ class SchedulerServiceImpl(
         logger.info("Executing scheduled task {}.", task.id)
 
         when (val action = task.action) {
-            ScheduledJobAction.PLAY_PLAYLIST -> playPlaylist(task)
-            ScheduledJobAction.STOP_PLAYBACK -> stopPlayback()
-            ScheduledJobAction.SET_BRIGHTNESS -> setBrightness(task)
-            ScheduledJobAction.NONE -> logger.warn("Unrecognised scheduler action {}, skipping.", action)
+            ScheduledActionType.PLAY_PLAYLIST -> playPlaylist(task)
+            ScheduledActionType.STOP_PLAYBACK -> stopPlayback()
+            ScheduledActionType.SET_BRIGHTNESS -> setBrightness(task)
+            ScheduledActionType.NONE -> logger.warn("Unrecognised scheduler action {}, skipping.", action)
         }
     }
 
