@@ -8,7 +8,7 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.model.entity.v2.SettingEntity
+import io.sparkled.model.SettingModel
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
@@ -26,17 +26,17 @@ class SettingController(
 ) {
 
     @Get("/")
-    @Transactional(readOnly = true)
+    @Transactional
     fun getAllSettings(): HttpResponse<Any> {
         val settings = caches.settings.get()
         return HttpResponse.ok(settings)
     }
 
     @Get("/{code}")
-    @Transactional(readOnly = true)
+    @Transactional
     fun getSetting(code: String): HttpResponse<Any> {
         return if (code == SettingsConstants.Brightness.CODE) {
-            val setting = SettingEntity(
+            val setting = SettingModel(
                 code = SettingsConstants.Brightness.CODE,
                 value = caches.settings.use { it.brightness }.toString()
             )

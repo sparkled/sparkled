@@ -4,4 +4,6 @@ dependencies {
     implementation(project(":persistence"))
     implementation(project(":renderer"))
     implementation(project(":scheduler"))
+
+    implementation("io.micronaut.data:micronaut-data-jdbc")
 }

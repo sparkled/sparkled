@@ -1,30 +1,25 @@
 package io.sparkled.persistence
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import io.sparkled.persistence.repository.PlaylistRepository
+import io.sparkled.persistence.repository.PlaylistSequenceRepository
+import io.sparkled.persistence.repository.ScheduledActionRepository
+import io.sparkled.persistence.repository.SequenceChannelRepository
+import io.sparkled.persistence.repository.SequenceRepository
+import io.sparkled.persistence.repository.SettingRepository
+import io.sparkled.persistence.repository.SongRepository
+import io.sparkled.persistence.repository.StagePropRepository
+import io.sparkled.persistence.repository.StageRepository
 import jakarta.inject.Singleton
-import org.jdbi.v3.core.Jdbi
-import org.jdbi.v3.core.kotlin.KotlinPlugin
 
 @Singleton
 class DbServiceImpl(
-    private val jdbi: Jdbi,
-    private val objectMapper: ObjectMapper
-) : DbService {
-
-    init {
-        jdbi.installPlugin(KotlinPlugin())
-    }
-
-    override fun init() {
-        jdbi.withHandle<Unit, Nothing> { handle ->
-            val result = handle.createQuery("SELECT 1 as test").map { rs, _ -> rs.getInt("test") }.first()
-            if (result != 1) {
-                throw RuntimeException("Failed to connect to database.")
-            }
-        }
-    }
-
-    override fun <T> query(query: DbQuery<T>): T {
-        return query.execute(jdbi, objectMapper)
-    }
-}
+    override val playlists: PlaylistRepository,
+    override val playlistSequences: PlaylistSequenceRepository,
+    override val scheduledActions: ScheduledActionRepository,
+    override val sequences: SequenceRepository,
+    override val sequenceChannels: SequenceChannelRepository,
+    override val settings: SettingRepository,
+    override val songs: SongRepository,
+    override val stages: StageRepository,
+    override val stageProps: StagePropRepository,
+) : DbService

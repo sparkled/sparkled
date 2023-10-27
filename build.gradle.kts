@@ -81,16 +81,14 @@ dependencies {
     implementation(project(":scheduler"))
     implementation(project(":udp-server"))
 
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    implementation("io.micronaut.sql:micronaut-jdbi")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut.liquibase:micronaut-liquibase")
     implementation("io.micronaut:micronaut-runtime")
 
     e2eTestImplementation(project(":liquibase"))
     e2eTestImplementation("io.micronaut.spring:micronaut-spring-annotation")
-    e2eTestImplementation("io.micronaut.sql:micronaut-jdbi")
     e2eTestImplementation("io.micronaut.liquibase:micronaut-liquibase")
+    e2eTestImplementation("io.micronaut.data:micronaut-data-jdbc")
     e2eTestImplementation("org.jodd:jodd-http:$joddHttpVersion")
 }
 

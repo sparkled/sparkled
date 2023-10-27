@@ -1,21 +1,22 @@
 package io.sparkled.api
 
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.model.entity.v2.PlaylistEntity
-import io.sparkled.model.entity.v2.ScheduledTaskEntity
 import io.sparkled.persistence.*
-import io.sparkled.api.response.IdResponse
+import io.sparkled.model.UniqueId
+import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.scheduler.SchedulerService
 import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
-import io.sparkled.viewmodel.ScheduledTaskViewModel
+import io.sparkled.viewmodel.ScheduledActionViewModel
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
@@ -27,12 +28,12 @@ class ScheduledTaskController(
 ) {
 
     @Get("/")
-    @Transactional(readOnly = true)
+    @Transactional
     fun getAllScheduledTasks(): HttpResponse<Any> {
-        val playlists = db.getAll<PlaylistEntity>(orderBy = "name")
+        val playlists = db.playlists.findAll().sortedBy { it.name }
         val playlistNames = playlists.associate { it.id to it.name }
 
-        val scheduledJobs = db.getAll<ScheduledTaskEntity>(orderBy = "id").map {
+        val scheduledJobs = db.scheduledActions.findAll().sortedBy { it.createdAt }.map {
             ScheduledTaskSummaryViewModel.fromModel(it, playlistNames)
         }
 
@@ -40,36 +41,38 @@ class ScheduledTaskController(
     }
 
     @Get("/{id}")
-    @Transactional(readOnly = true)
-    fun getScheduledTask(id: Int): HttpResponse<Any> {
-        val viewModel = db.getById<ScheduledTaskEntity>(id)?.let {
-            ScheduledTaskViewModel.fromModel(it)
+    @Transactional
+    fun getScheduledTask(
+        @PathVariable id: UniqueId,
+    ): HttpResponse<Any> {
+        val viewModel = db.scheduledActions.findByIdOrNull(id)?.let {
+            ScheduledActionViewModel.fromModel(it)
         }
 
-        return if (viewModel != null) {
-            HttpResponse.ok(viewModel)
-        } else {
-            HttpResponse.notFound("scheduled task not found.")
+        return when {
+            null != viewModel -> HttpResponse.ok(viewModel)
+            else -> HttpResponse.notFound("scheduled task not found.")
         }
     }
 
     @Post("/")
     @Transactional
-    fun createScheduledTask(scheduledTaskViewModel: ScheduledTaskViewModel): HttpResponse<Any> {
-        val scheduledJob = scheduledTaskViewModel.toModel()
-        val savedId = db.insert(scheduledJob).toInt()
+    fun createScheduledTask(
+        @Body body: ScheduledActionViewModel,
+    ): HttpResponse<Any> {
+        val scheduledJob = body.toModel()
+        val saved = db.scheduledActions.save(scheduledJob)
         schedulerService.reload()
-        return HttpResponse.ok(IdResponse(savedId))
+        return HttpResponse.created(saved) // TODO viewmodel
     }
 
     @Delete("/{id}")
     @Transactional
-    fun deleteScheduledTask(id: Int): HttpResponse<Any> {
-        db.getById<ScheduledTaskEntity>(id)?.let {
-            db.delete(it)
-        }
-
+    fun deleteScheduledTask(
+        @PathVariable id: UniqueId,
+    ): HttpResponse<Any> {
+        db.scheduledActions.deleteById(id)
         schedulerService.reload()
-        return HttpResponse.ok()
+        return HttpResponse.noContent()
     }
 }

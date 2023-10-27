@@ -3,7 +3,6 @@ package io.sparkled.e2e.util
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.server.EmbeddedServer
-import io.sparkled.e2e.util.query.ResetDatabaseE2eQuery
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
 import org.slf4j.LoggerFactory
@@ -46,7 +45,17 @@ object E2eContext {
      */
     fun end() {
         logger.info("Resetting database.")
-        db.query(ResetDatabaseE2eQuery())
+
+        db.scheduledActions.deleteAll()
+        db.settings.deleteAll()
+        db.playlistSequences.deleteAll()
+        db.sequenceChannels.deleteAll()
+        db.sequences.deleteAll()
+        db.stageProps.deleteAll()
+        db.stages.deleteAll()
+        db.songs.deleteAll()
+        db.playlists.deleteAll()
+
         logger.info("Finished E2E test.")
     }
 }

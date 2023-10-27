@@ -1,6 +1,5 @@
 package io.sparkled.udpserver.impl.command
 
-import io.sparkled.model.entity.v2.StagePropEntity
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.music.PlaybackState
 import java.net.InetAddress
@@ -27,8 +26,8 @@ class GetStagePropCodesCommand : UdpCommand {
 
         val stageProps = playbackState.stageProps.values
         val stagePropCodes = stageProps
-            .sortedBy(StagePropEntity::displayOrder)
-            .map(StagePropEntity::code)
+            .sortedBy(StagePropModel::displayOrder)
+            .map(StagePropModel::code)
             .joinToString(":")
 
         val bytes = stagePropCodes.toByteArray(UTF_8)

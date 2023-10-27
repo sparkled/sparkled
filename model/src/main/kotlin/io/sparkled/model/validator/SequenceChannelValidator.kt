@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.effect.Effect
-import io.sparkled.model.entity.v2.SequenceChannelEntity
 import io.sparkled.model.util.IdUtils
 import io.sparkled.model.validator.exception.EntityValidationException
 
@@ -13,8 +12,8 @@ class SequenceChannelValidator(
     private val objectMapper: ObjectMapper
 ) {
 
-    fun validate(channel: SequenceChannelEntity) {
-        if (channel.uuid == IdUtils.newUuid()) {
+    fun validate(channel: SequenceChannelModel) {
+        if (channel.id == IdUtils.uniqueId()) {
             throw EntityValidationException(String.format(Errors.UUID_MISSING, channel.name))
         } else if (channel.channelJson.isBlank()) {
             throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MISSING, channel.name))
@@ -24,7 +23,7 @@ class SequenceChannelValidator(
         validateChannelEffects(channel, effects.effects)
     }
 
-    private fun getEffectsFromJson(channel: SequenceChannelEntity): SequenceChannelEffects {
+    private fun getEffectsFromJson(channel: SequenceChannelModel): SequenceChannelEffects {
         try {
             return objectMapper.readValue(channel.channelJson)
         } catch (e: JsonProcessingException) {
@@ -32,7 +31,7 @@ class SequenceChannelValidator(
         }
     }
 
-    private fun validateChannelEffects(channel: SequenceChannelEntity, effects: List<Effect>) {
+    private fun validateChannelEffects(channel: SequenceChannelModel, effects: List<Effect>) {
         var previousEndFrame: Int = -1
 
         for (effect in effects) {
@@ -41,7 +40,7 @@ class SequenceChannelValidator(
         }
     }
 
-    private fun validateEffect(channel: SequenceChannelEntity, effect: Effect, previousEndFrame: Int) {
+    private fun validateEffect(channel: SequenceChannelModel, effect: Effect, previousEndFrame: Int) {
         val name = channel.name
 
         when {

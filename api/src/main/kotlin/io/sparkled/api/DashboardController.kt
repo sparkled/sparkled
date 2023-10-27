@@ -21,15 +21,15 @@ class DashboardController(
 ) {
 
     @Get("/")
-    @Transactional(readOnly = true)
+    @Transactional
     fun getDashboard(): HttpResponse<Any> {
-        val playlists = db.getAll<PlaylistEntity>(orderBy = "name")
+        val playlists = db.getAll<PlaylistModel>(orderBy = "name")
         val playlistNames = playlists.associate { it.id to it.name }
-        val scheduledTasks = db.getAll<ScheduledTaskEntity>(orderBy = "id")
-        val sequences = db.getAll<SequenceEntity>(orderBy = "name")
-        val playlistSequences = db.getAll<PlaylistSequenceEntity>().groupBy { it.playlistId }
-        val songs = db.getAll<SongEntity>(orderBy = "name")
-        val stages = db.getAll<StageEntity>(orderBy = "name")
+        val scheduledTasks = db.getAll<ScheduledActionModel>(orderBy = "id")
+        val sequences = db.getAll<SequenceModel>(orderBy = "name")
+        val playlistSequences = db.getAll<PlaylistSequenceModel>().groupBy { it.playlistId }
+        val songs = db.getAll<SongModel>(orderBy = "name")
+        val stages = db.getAll<StageModel>(orderBy = "name")
 
         val dashboard = DashboardViewModel(
             playlists = playlists.map {

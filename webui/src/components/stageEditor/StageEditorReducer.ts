@@ -112,7 +112,7 @@ function addStageProp(draft: State, type: StagePropType) {
     rotation: 0,
     brightness: 100,
     displayOrder: 0,
-    groupId: null,
+    groupCode: null,
     groupDisplayOrder: null,
     ledPositions: [],
   })
@@ -162,10 +162,10 @@ function updateStagePropLedCount(
 
 function updateStagePropGroupId(
   stageProp: StagePropViewModel | undefined,
-  groupId: string | null
+  groupCode: string | null
 ) {
   if (stageProp) {
-    stageProp.groupId = groupId || null
+    stageProp.groupCode = groupCode || null
   }
 }
 
@@ -181,9 +181,9 @@ function updateStagePropGroupDisplayOrder(
 }
 
 let getSelectedStageProp = function(draft: State) {
-  return draft.stage.stageProps.find(sp => sp.uuid === draft.selectedStageProp)
+  return draft.stage.stageProps.find(sp => sp.id === draft.selectedStageProp)
 }
 
 function deleteStageProp(draft: State) {
-  remove(draft.stage.stageProps, sp => sp.uuid === draft.selectedStageProp)
+  remove(draft.stage.stageProps, sp => sp.id === draft.selectedStageProp)
 }

@@ -209,7 +209,7 @@ export default (state = initialState, action) => {
 }
 
 function hasSameUuid(a, b) {
-  return (a || {}).uuid === (b || {}).uuid
+  return (a || {}).id === (b || {}).uuid
 }
 
 function selectEffect(draft, action) {

@@ -1,3 +1,3 @@
 package io.sparkled.api.response
 
-data class IdResponse(val id: Int)
+data class IdResponse(val id: UniqueId)

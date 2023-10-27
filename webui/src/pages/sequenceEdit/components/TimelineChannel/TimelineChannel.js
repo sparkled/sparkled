@@ -10,17 +10,12 @@ class TimelineChannel extends Component {
     const { channel, pixelsPerFrame, sequence, selectedChannel } = this.props
     const width = sequence.frameCount * pixelsPerFrame
 
-    const isActiveChannel =
-      selectedChannel && channel.uuid === selectedChannel.uuid
+    const isActiveChannel = selectedChannel && channel.id === selectedChannel.uuid
     const activeClass = isActiveChannel ? 'channel-active' : ''
 
     return (
-      <div
-        className={'channel ' + activeClass}
-        style={{ width }}
-        onMouseDown={this.onChannelClick}
-      >
-        <div className="label" onMouseDown={this.onLabelClick}>
+      <div className={'channel ' + activeClass} style={{ width }} onMouseDown={this.onChannelClick}>
+        <div className='label' onMouseDown={this.onLabelClick}>
           {channel.name}
         </div>
         {this.renderEffects()}
@@ -30,9 +25,7 @@ class TimelineChannel extends Component {
 
   renderEffects() {
     const { channel } = this.props
-    return _.map(channel.effects, effect => (
-      <TimelineEffect key={effect.uuid} channel={channel} effect={effect} />
-    ))
+    return _.map(channel.effects, effect => <TimelineEffect key={effect.uuid} channel={channel} effect={effect} />)
   }
 
   onChannelClick = event => {
@@ -41,9 +34,7 @@ class TimelineChannel extends Component {
 
     // TODO: Remove this hack.
     const scrollLeft = document.querySelector('.channels').scrollLeft
-    const frame = Math.round(
-      (event.clientX + scrollLeft - 100) / pixelsPerFrame
-    )
+    const frame = Math.round((event.clientX + scrollLeft - 100) / pixelsPerFrame)
     selectFrame(frame)
   }
 
@@ -55,17 +46,8 @@ class TimelineChannel extends Component {
 }
 
 function mapStateToProps({ page }) {
-  const {
-    currentFrame,
-    pixelsPerFrame,
-    sequence,
-    song,
-    selectedChannel
-  } = page.sequenceEdit.present
+  const { currentFrame, pixelsPerFrame, sequence, song, selectedChannel } = page.sequenceEdit.present
   return { currentFrame, pixelsPerFrame, sequence, song, selectedChannel }
 }
 
-export default connect(
-  mapStateToProps,
-  { selectEffect, selectFrame }
-)(TimelineChannel)
+export default connect(mapStateToProps, { selectEffect, selectFrame })(TimelineChannel)

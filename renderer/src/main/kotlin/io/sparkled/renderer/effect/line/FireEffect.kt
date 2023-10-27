@@ -3,7 +3,7 @@ package io.sparkled.renderer.effect.line
 import io.sparkled.model.animation.param.Param
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
-import io.sparkled.renderer.api.SparkledEffect
+import io.sparkled.renderer.api.StatefulSparkledEffect
 import io.sparkled.renderer.util.FillUtils
 import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
@@ -14,7 +14,7 @@ import kotlin.random.Random
 /**
  * Based on https://github.com/FastLED/FastLED/blob/master/examples/Fire2012/Fire2012.ino.
  */
-object FireEffect : SparkledEffect<MutableList<Int>> {
+object FireEffect : StatefulSparkledEffect<MutableList<Int>> {
 
     enum class Params { COOLING, SPARKING, RANDOM_SEED, SPARKS_START, SPARKS_MIDDLE, SPARKS_END }
 

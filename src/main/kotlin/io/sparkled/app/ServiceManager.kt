@@ -27,7 +27,7 @@ class ServiceManager(
 ) {
 
     @EventListener
-    @Transactional(readOnly = true)
+    @Transactional
     fun onStartup(event: ServerStartupEvent) {
         db.init()
         file.init()

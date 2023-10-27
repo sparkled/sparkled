@@ -37,7 +37,7 @@ const StagePropDetails: React.FC = () => {
       setValue('scaleY', stageProp.scaleY.toString(), { shouldValidate: true })
       setValue('rotation', stageProp.rotation.toString(), { shouldValidate: true })
       setValue('ledCount', stageProp.ledCount.toString(), { shouldValidate: true })
-      setValue('groupId', stageProp.groupId?.toString() ?? '', { shouldValidate: true })
+      setValue('groupCode', stageProp.groupCode?.toString() ?? '', { shouldValidate: true })
       setValue('groupDisplayOrder', stageProp.groupDisplayOrder?.toString() ?? '', { shouldValidate: true })
       setValue('reverse', stageProp.reverse ? '1' : '0', { shouldValidate: true })
     }
@@ -52,7 +52,7 @@ const StagePropDetails: React.FC = () => {
     scaleY,
     rotation,
     ledCount,
-    groupId,
+    groupCode,
     groupDisplayOrder,
     reverse,
   ] = watch([
@@ -64,7 +64,7 @@ const StagePropDetails: React.FC = () => {
     'scaleY',
     'rotation',
     'ledCount',
-    'groupId',
+    'groupCode',
     'groupDisplayOrder',
     'reverse',
   ])
@@ -130,13 +130,13 @@ const StagePropDetails: React.FC = () => {
   }, [dispatch, errors.ledCount, ledCount])
 
   useEffect(() => {
-    if (!errors.groupId) {
+    if (!errors.groupCode) {
       dispatch({
         type: 'UpdateStagePropGroupId',
-        payload: groupId
+        payload: groupCode
       })
     }
-  }, [dispatch, errors.groupId, groupId])
+  }, [dispatch, errors.groupCode, groupCode])
 
   useEffect(() => {
     if (!errors.groupDisplayOrder) {
@@ -193,7 +193,7 @@ const StagePropDetails: React.FC = () => {
     min: 1,
     pattern: POSITIVE_INTEGER
   })
-  const groupIdField = register('groupId', {})
+  const groupCodeField = register('groupCode', {})
   const groupDisplayOrderField = register('groupDisplayOrder', {
     min: 0,
     pattern: POSITIVE_INTEGER
@@ -317,8 +317,8 @@ const StagePropDetails: React.FC = () => {
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
-            error={errors.groupId !== undefined}
-            {...groupIdField}
+            error={errors.groupCode !== undefined}
+            {...groupCodeField}
           />
         </Grid>
 
@@ -330,7 +330,7 @@ const StagePropDetails: React.FC = () => {
             margin="dense"
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
-            error={errors.groupId !== undefined}
+            error={errors.groupCode !== undefined}
             {...groupDisplayOrderField}
           />
         </Grid>

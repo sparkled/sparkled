@@ -1,12 +1,11 @@
 package io.sparkled.model.validator
 
-import io.sparkled.model.entity.v2.SettingEntity
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.model.validator.exception.EntityValidationException
 
 class SettingValidator {
 
-    fun validate(setting: SettingEntity) {
+    fun validate(setting: SettingModel) {
         val code = setting.code
         val value = setting.value
         val isBrightness = code === SettingsConstants.Brightness.CODE

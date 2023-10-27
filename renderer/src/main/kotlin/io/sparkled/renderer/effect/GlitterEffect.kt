@@ -1,9 +1,9 @@
 package io.sparkled.renderer.effect
 
 import io.sparkled.model.animation.param.Param
-import io.sparkled.renderer.api.SemVer
-import io.sparkled.renderer.api.SparkledEffect
 import io.sparkled.renderer.api.RenderContext
+import io.sparkled.renderer.api.SemVer
+import io.sparkled.renderer.api.StatelessSparkledEffect
 import io.sparkled.renderer.util.FillUtils
 import io.sparkled.renderer.util.ParamUtils
 import kotlin.random.Random
@@ -11,8 +11,8 @@ import kotlin.random.Random
 /**
  * Random flickering lights with adjustable lifetime and density.
  */
-object GlitterEffect : SparkledEffect<Unit> {
-    
+object GlitterEffect : StatelessSparkledEffect {
+
     enum class Params { DENSITY, LIFETIME, RANDOM_SEED }
 
     override val id = "@sparkled/glitter"
@@ -24,9 +24,7 @@ object GlitterEffect : SparkledEffect<Unit> {
         Param.int(Params.RANDOM_SEED.name, "Random Seed", 1),
     )
 
-    override fun createState(ctx: RenderContext) {}
-
-    override fun render(ctx: RenderContext, state: Unit) {
+    override fun render(ctx: RenderContext) {
         val density = ParamUtils.getInt(ctx.effect, Params.DENSITY.name, 10) / 100f
         val patternIndex = (density * (patterns.size - 1)).toInt()
         val lifetime = ParamUtils.getFloat(ctx.effect, Params.LIFETIME.name, 1f)

@@ -50,11 +50,11 @@ class GetFrameCommand : UdpCommand {
         }
     }
 
-    private fun getRenderedFrame(playbackState: PlaybackState, groupIdOrStagePropCode: String, frameIndex: Int): RenderedFrame? {
+    private fun getRenderedFrame(playbackState: PlaybackState, groupCodeOrStagePropCode: String, frameIndex: Int): RenderedFrame? {
         val renderedStageProps = playbackState.renderedStageProps
-        val stagePropUuid = playbackState.stageProps[groupIdOrStagePropCode]?.uuid?.toString() ?: groupIdOrStagePropCode
+        val stagePropId = playbackState.stageProps[groupCodeOrStagePropCode]?.uuid?.toString() ?: groupCodeOrStagePropCode
 
-        val renderedStagePropData = renderedStageProps[stagePropUuid]
+        val renderedStagePropData = renderedStageProps[stagePropId]
         val frames = renderedStagePropData?.frames ?: emptyList()
         return if (frameIndex >= frames.size) null else frames[frameIndex]
     }

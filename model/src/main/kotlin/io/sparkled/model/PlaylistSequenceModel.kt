@@ -8,12 +8,12 @@ import java.util.UUID
 @MappedEntity("PLAYLIST_SEQUENCE")
 data class PlaylistSequenceModel(
     @Id
-    override var id: String,
+    override var id: UniqueId = uniqueId(),
     override var createdAt: Instant = Instant.now(),
     override var updatedAt: Instant = Instant.now(),
 
-    var playlistId: String,
-    var sequenceId: String,
+    var playlistId: UniqueId,
+    var sequenceId: UniqueId,
 
     var displayOrder: Int,
 ) : Model

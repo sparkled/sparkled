@@ -8,7 +8,7 @@ import java.time.Instant
 @MappedEntity("STAGE_PROP")
 data class StagePropModel(
     @Id
-    override var id: String,
+    override var id: UniqueId = uniqueId(),
     override var createdAt: Instant = Instant.now(),
     override var updatedAt: Instant = Instant.now(),
 
@@ -16,9 +16,10 @@ data class StagePropModel(
 
     var code: String,
     var name: String,
+    var type: StagePropType,
     var groupCode: String? = null,
     var groupDisplayOrder: Int = 0,
-    var type: StagePropType,
+    var displayOrder: Int = 0,
     var ledCount: Int,
     var reverse: Boolean = false,
     var positionX: Int,
@@ -26,7 +27,10 @@ data class StagePropModel(
     var scaleX: Double = 1.0,
     var scaleY: Double = 1.0,
     var rotation: Int = 0,
-    var brightness: Int = 100, // TODO move to constant
-    var displayOrder: Int = 0,
-    var ledPositionsJson: String = "[]",
-) : Model
+    var brightness: Int = MAX_BRIGHTNESS,
+    var ledPositionsJson: String = "[]", // TODO custom converter
+) : Model {
+    companion object {
+        const val MAX_BRIGHTNESS = 100
+    }
+}

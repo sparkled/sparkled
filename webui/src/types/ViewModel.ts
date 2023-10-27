@@ -23,7 +23,7 @@ export type StagePropViewModel = {
   rotation: number
   brightness: number
   displayOrder: number
-  groupId: string | null
+  groupCode: string | null
   groupDisplayOrder: number | null
   ledPositions: Point[]
 }

@@ -20,7 +20,7 @@ class AddChannelModal extends Component {
 
     if (selectedStagePropUuid !== nextProps.selectedStagePropUuid) {
       const stageProp = _.find(stageProps, {
-        uuid: nextProps.selectedStagePropUuid
+        uuid: nextProps.selectedStagePropUuid,
       })
       const channelName = stageProp ? stageProp.name : ''
       change('name', channelName)
@@ -32,37 +32,26 @@ class AddChannelModal extends Component {
 
     return (
       <div>
-        <Modal isOpen={visible} wrapClassName="add-channel-modal" backdrop>
+        <Modal isOpen={visible} wrapClassName='add-channel-modal' backdrop>
           <form onSubmit={handleSubmit(this.addChannel.bind(this))}>
             <ModalHeader>Add channel</ModalHeader>
             <ModalBody>
               <Field
-                name="stagePropUuid"
+                name='stagePropId'
                 component={SingleSelectField}
                 options={stageProps}
-                label="Stage Prop"
+                label='Stage Prop'
                 required
                 validate={required}
               />
 
-              <Field
-                name="name"
-                component={InputField}
-                type="text"
-                label="Channel Name"
-                required
-                validate={required}
-              />
+              <Field name='name' component={InputField} type='text' label='Channel Name' required validate={required} />
             </ModalBody>
             <ModalFooter>
-              <Button type="submit" color="info" disabled={!valid}>
+              <Button type='submit' color='info' disabled={!valid}>
                 Add channel
               </Button>
-              <Button
-                type="button"
-                color="secondary"
-                onClick={this.hideModal.bind(this)}
-              >
+              <Button type='button' color='secondary' onClick={this.hideModal.bind(this)}>
                 Cancel
               </Button>
             </ModalFooter>
@@ -75,18 +64,14 @@ class AddChannelModal extends Component {
   addChannel(channel) {
     const { sequence } = this.props
 
-    const displayOrder =
-      _.findLastIndex(
-        sequence.channels,
-        it => it.stagePropUuid === channel.stagePropUuid
-      ) + 1
+    const displayOrder = _.findLastIndex(sequence.channels, it => it.stagePropId === channel.stagePropId) + 1
 
     this.props.addChannel({
       ...channel,
       uuid: uuidv4(),
       sequenceId: sequence.id,
       effects: [],
-      displayOrder
+      displayOrder,
     })
   }
 
@@ -99,18 +84,15 @@ const selector = formValueSelector(FORM_NAME)
 
 function mapStateToProps(state) {
   const { sequenceEdit } = state.page
-  const selectedStagePropUuid = selector(state, 'stagePropUuid')
+  const selectedStagePropUuid = selector(state, 'stagePropId')
 
   return {
     sequence: sequenceEdit.present.sequence,
     stageProps: sequenceEdit.present.stage.stageProps,
     visible: sequenceEdit.present.addChannelModalVisible,
-    selectedStagePropUuid
+    selectedStagePropUuid,
   }
 }
 
-AddChannelModal = connect(
-  mapStateToProps,
-  { addChannel, hideAddChannelModal }
-)(AddChannelModal)
+AddChannelModal = connect(mapStateToProps, { addChannel, hideAddChannelModal })(AddChannelModal)
 export default reduxForm({ form: FORM_NAME })(AddChannelModal)

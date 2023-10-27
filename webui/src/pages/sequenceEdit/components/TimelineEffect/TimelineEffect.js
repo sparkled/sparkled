@@ -54,7 +54,7 @@ class TimelineEffect extends Component {
 
   getEffectClass() {
     const { effect, selectedEffect } = this.props
-    if (selectedEffect && effect.uuid === selectedEffect.uuid) {
+    if (selectedEffect && effect.id === selectedEffect.uuid) {
       return 'Active'
     } else if (effect.invalid) {
       return 'Invalid'

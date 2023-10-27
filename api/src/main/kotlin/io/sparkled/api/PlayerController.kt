@@ -8,13 +8,11 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.model.entity.v2.SequenceEntity
 import io.sparkled.model.playlist.PlaylistAction
 import io.sparkled.model.playlist.PlaylistActionType
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
-import io.sparkled.persistence.getById
-import io.sparkled.persistence.query.sequence.GetSequencesByPlaylistIdQuery
+import io.sparkled.persistence.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
@@ -26,26 +24,28 @@ class PlayerController(
 ) {
 
     @Post("/")
-    @Transactional(readOnly = true)
+    @Transactional
     fun adjustPlayback(@Body action: PlaylistAction): HttpResponse<Any> {
         return when (action.action) {
             PlaylistActionType.PLAY_PLAYLIST, PlaylistActionType.PLAY_SEQUENCE -> {
                 play(action)
                 HttpResponse.ok()
             }
+
             PlaylistActionType.STOP -> {
                 stop()
                 HttpResponse.ok()
             }
+
             else -> HttpResponse.badRequest("A valid playback action must be supplied.")
         }
     }
 
     private fun play(action: PlaylistAction) {
         val sequences = if (action.action === PlaylistActionType.PLAY_PLAYLIST) {
-            db.query(GetSequencesByPlaylistIdQuery(action.playlistId ?: -1))
+            db.sequences.findAllByPlaylistId(action.playlistId ?: "")
         } else {
-            val sequence = db.getById<SequenceEntity>(action.sequenceId ?: -1)
+            val sequence = db.sequences.findByIdOrNull(action.sequenceId ?: "")
             listOfNotNull(sequence)
         }
 

@@ -8,11 +8,11 @@ import java.time.Instant
 @MappedEntity("SCHEDULED_ACTION")
 data class ScheduledActionModel(
     @Id
-    override var id: String,
+    override var id: UniqueId = uniqueId(),
     override var createdAt: Instant = Instant.now(),
     override var updatedAt: Instant = Instant.now(),
 
-    var playlistId: String?,
+    var playlistId: UniqueId?,
 
     var type: ScheduledActionType,
     var cronExpression: String,

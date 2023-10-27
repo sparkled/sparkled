@@ -3,11 +3,11 @@ package io.sparkled.renderer.effect.line
 import io.sparkled.model.animation.param.Param
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
-import io.sparkled.renderer.api.SparkledEffect
+import io.sparkled.renderer.api.StatefulSparkledEffect
 import io.sparkled.renderer.effect.line.LineEffectUtils.renderLine
 import io.sparkled.renderer.util.ParamUtils
 
-object SplitLineEffect : SparkledEffect<Unit> {
+object SplitLineEffect : StatefulSparkledEffect<Unit> {
     
     enum class Params { LENGTH }
 

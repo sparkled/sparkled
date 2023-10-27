@@ -30,10 +30,9 @@ class ErrorController {
 
     @Error(global = true, status = HttpStatus.NOT_FOUND)
     fun handleNotFoundError(request: HttpRequest<Any>): HttpResponse<out Any> {
-        return if (!request.path.startsWith("/api")) {
-            return rerouteUiRequest()
-        } else {
-            HttpResponse.notFound()
+        return when {
+            !request.path.startsWith("/api") -> return rerouteUiRequest()
+            else -> HttpResponse.notFound()
         }
     }
 
@@ -43,7 +42,7 @@ class ErrorController {
      * means that the SPA will load up and automatically navigate the user to the correct SPA page based on the URL.
      */
     private fun rerouteUiRequest(): HttpResponse<out Any> {
-        val indexPage = ErrorController::class.java.getResource("/webui/index.html")?.readText() ?: ""
+        val indexPage = javaClass.getResource("/webui/index.html")?.readText() ?: ""
 
         return if (indexPage.isNotEmpty()) {
             HttpResponse.ok(indexPage).contentType(MediaType.TEXT_HTML)

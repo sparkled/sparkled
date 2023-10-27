@@ -7,33 +7,28 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.model.animation.easing.EditorItem
 import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.renderer.SparkledPluginManager
+import io.sparkled.viewmodel.EditorItemViewModel
+import io.sparkled.viewmodel.ReferenceDataViewModel
 
 @ExecuteOn(TaskExecutors.IO)
 @Secured(SecurityRule.IS_ANONYMOUS)
-@Controller("/api/referenceData")
+@Controller("/api/reference-data")
 class ReferenceDataController(
     private val pluginManager: SparkledPluginManager
 ) {
 
     @Get("/")
-    fun getAllReferenceData(): HttpResponse<Any> {
-        val data = ReferenceDataResponse(
-            blendModes = BlendMode.values().map { EditorItem(it.name, it.displayName) },
-            easings = pluginManager.easings.get().values.map { EditorItem(it.id, it.name, it.params) },
-            effects = pluginManager.effects.get().values.map { EditorItem(it.id, it.name, it.params) },
-            fills = pluginManager.fills.get().values.map { EditorItem(it.id, it.name, it.params) },
+    fun getAllReferenceData(): HttpResponse<ReferenceDataViewModel> {
+        val data = ReferenceDataViewModel(
+            blendModes = BlendMode.values().map { EditorItemViewModel(it.name, it.displayName) },
+            easings = pluginManager.easings.get().values.map { EditorItemViewModel(it.id, it.name, it.params) },
+            effects = pluginManager.effects.get().values.map { EditorItemViewModel(it.id, it.name, it.params) },
+            fills = pluginManager.fills.get().values.map { EditorItemViewModel(it.id, it.name, it.params) },
         )
 
         return HttpResponse.ok(data)
     }
 }
 
-data class ReferenceDataResponse(
-    val blendModes: List<EditorItem>,
-    val easings: List<EditorItem>,
-    val effects: List<EditorItem>,
-    val fills: List<EditorItem>
-)
