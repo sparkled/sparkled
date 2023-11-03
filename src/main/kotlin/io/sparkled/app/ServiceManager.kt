@@ -4,7 +4,7 @@ import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.runtime.server.event.ServerShutdownEvent
 import io.micronaut.runtime.server.event.ServerStartupEvent
-import io.sparkled.persistence.DbService
+import io.sparkled.model.config.SparkledConfig
 import io.sparkled.persistence.FileService
 import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.scheduler.SchedulerService
@@ -18,18 +18,17 @@ import java.net.DatagramSocket
 @Singleton
 class ServiceManager(
     private val applicationContext: ApplicationContext,
+    private val config: SparkledConfig,
     private val schedulerService: SchedulerService,
     private val udpServer: UdpServer,
     private val ledDataStreamer: LedDataStreamer,
     private val pluginManager: SparkledPluginManager,
-    private val db: DbService,
     private val file: FileService,
 ) {
 
     @EventListener
     @Transactional
     fun onStartup(event: ServerStartupEvent) {
-        db.init()
         file.init()
         pluginManager.reloadPlugins()
         schedulerService.start()
@@ -42,18 +41,17 @@ class ServiceManager(
             applicationContext.environment.activeNames.contains("e2eTest") -> {
                 logger.info("Server running in e2eTest mode.")
             }
+
             else -> logger.info("Sparkled server is running.")
         }
     }
 
     private fun buildSocket(): DatagramSocket {
-        // TODO make configurable.
-        val socket = DatagramSocket(2812)
+        val socket = DatagramSocket(config.clientUdpPort)
 
         try {
-            // TODO make configurable.
-            socket.sendBufferSize = UDP_BUFFER_SIZE
-            socket.receiveBufferSize = UDP_BUFFER_SIZE
+            socket.sendBufferSize = config.udpSendBufferSize
+            socket.receiveBufferSize = config.udpReceiveBufferSize
         } catch (e: Exception) {
             logger.error("Failed to set socket buffer size.", e)
         }

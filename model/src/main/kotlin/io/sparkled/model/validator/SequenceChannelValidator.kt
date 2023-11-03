@@ -3,6 +3,7 @@ package io.sparkled.model.validator
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.animation.SequenceChannelEffects
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.util.IdUtils

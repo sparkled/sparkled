@@ -40,7 +40,7 @@ class EffectForm extends Component {
   }
 
   getEffectUuid(effect) {
-    return effect ? effect.uuid : null
+    return effect ? effect.id : null
   }
 
   render() {

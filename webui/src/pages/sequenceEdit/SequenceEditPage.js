@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import Alert from 'react-s-alert'
 import SplitPane from 'react-split-pane'
 import { ActionCreators } from 'redux-undo'
-import uuidv4 from 'uuid/v4'
 import LoadingIndicator from '../../components/LoadingIndicator'
 import PageContainer from '../../components/PageContainer'
 import { setCurrentPage } from '../actions'
@@ -32,6 +31,7 @@ import './SequenceEditPage.css'
 import { IconButton, withStyles } from '@material-ui/core'
 import { Redo, Undo, Save, Publish, Layers, Star, PlayArrow } from '@material-ui/icons'
 import { getErrorMessage } from '../../utils/errorUtils'
+import { uniqueId } from '../../utils/idUtils'
 
 const { undo, redo, clearHistory } = ActionCreators
 
@@ -231,7 +231,7 @@ class SequenceEditPage extends Component {
   addEffect = () => {
     const { addEffect, currentFrame, sequence } = this.props
     const effect = {
-      uuid: uuidv4(),
+      id: uniqueId(),
       type: '@sparkled/flash',
       args: {},
       easing: {

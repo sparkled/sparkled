@@ -4,11 +4,11 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
-import io.sparkled.model.StagePropModel
 import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.setting.SettingsCache
+import io.sparkled.model.util.testStageProp
 import io.sparkled.music.PlaybackState
 import java.net.InetAddress
 
@@ -41,9 +41,9 @@ class GetStagePropCodesCommandTest : StringSpec() {
                         this["P1"] = RenderedStagePropData(0, 0, 0, byteArrayOf())
                     },
                     stageProps = mapOf(
-                        "P1" to StagePropModel(code = "P1", displayOrder = 1),
-                        "P2" to StagePropModel(code = "P2", displayOrder = 3),
-                        "P3" to StagePropModel(code = "P3", displayOrder = 2)
+                        "P1" to testStageProp.copy(code = "P1", displayOrder = 1),
+                        "P2" to testStageProp.copy(code = "P2", displayOrder = 3),
+                        "P3" to testStageProp.copy(code = "P3", displayOrder = 2)
                     )
                 )
             )

@@ -1,6 +1,5 @@
 import produce from 'immer'
 import _ from 'lodash'
-import uuidv4 from 'uuid/v4'
 import { getResponseError } from '../../utils/reducerUtils'
 import * as actionTypes from './actionTypes'
 
@@ -147,7 +146,7 @@ export default (state = initialState, action) => {
           const frameOffset = state.currentFrame - state.copiedEffect.startFrame
           const effect = {
             ...state.copiedEffect,
-            uuid: uuidv4(),
+            id: uuidv4(),
             startFrame: state.currentFrame,
             endFrame: state.copiedEffect.endFrame + frameOffset,
           }
@@ -209,7 +208,7 @@ export default (state = initialState, action) => {
 }
 
 function hasSameUuid(a, b) {
-  return (a || {}).id === (b || {}).uuid
+  return (a || {}).id === (b || {}).id
 }
 
 function selectEffect(draft, action) {
@@ -244,11 +243,11 @@ function deleteEffect(draft, effect) {
 function getChannelAndEffectIndexes(draft, effect) {
   const { sequence, selectedChannel } = draft
   const channelIndex = _.findIndex(sequence.channels, {
-    uuid: selectedChannel.uuid,
+    id: selectedChannel.id,
   })
 
   const { effects } = sequence.channels[channelIndex]
-  let effectIndex = _.findIndex(effects, { uuid: effect.uuid })
+  let effectIndex = _.findIndex(effects, { id: effect.id })
   if (effectIndex === -1) {
     // If effect was not found (i.e. is being added), return the index it should be inserted at.
     effectIndex = _.sortedIndexBy(effects, effect, 'startFrame')

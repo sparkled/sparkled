@@ -5,10 +5,9 @@ import io.sparkled.model.config.SparkledConfig
 import io.sparkled.model.setting.SettingsCache
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
-import io.sparkled.persistence.getAll
 import jakarta.inject.Singleton
 import java.io.File
-import java.util.*
+import java.util.Locale
 import kotlin.reflect.full.memberProperties
 
 @Singleton
@@ -43,7 +42,7 @@ class CacheServiceImpl(
         name = "Settings",
         fallback = SettingsCache(brightness = SettingsConstants.Brightness.MAX),
     ) {
-        val brightness = db.getAll<SettingModel>().firstOrNull { it.code == SettingsConstants.Brightness.CODE }
+        val brightness = db.settings.findAll().firstOrNull { it.code == SettingsConstants.Brightness.CODE }
         SettingsCache(brightness = brightness?.value?.toInt() ?: SettingsConstants.Brightness.MAX)
     }
 

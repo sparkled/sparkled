@@ -6,6 +6,7 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.util.ArgumentUtils.arg
+import io.sparkled.model.util.testStageProp
 import io.sparkled.renderer.easing.function.LinearEasing
 import io.sparkled.renderer.effect.line.LineEffect
 import io.sparkled.renderer.fill.SingleColorFill
@@ -31,14 +32,9 @@ class ReverseStagePropRendererTest : StringSpec() {
                 )
             )
 
-            val stageProp = StagePropModel(
-                code = RenderUtils.PROP_CODE,
-                id = RenderUtils.PROP_ID,
-                ledCount = 10,
-                reverse = true,
-            )
-
-            val renderedStagePropData = RenderUtils.render(mapOf(RenderUtils.PROP_ID to listOf(effect)), effect.endFrame + 1, listOf(stageProp))
+            val stageProp = testStageProp.copy(ledCount = 10, reverse = true)
+            val renderedStagePropData =
+                RenderUtils.render(mapOf(RenderUtils.PROP_ID to listOf(effect)), effect.endFrame + 1, listOf(stageProp))
 // TODO
 //        assertThat(
 //            renderedStagePropData[RenderUtils.PROP_UUID.toString()]!!, hasRenderedFrames(

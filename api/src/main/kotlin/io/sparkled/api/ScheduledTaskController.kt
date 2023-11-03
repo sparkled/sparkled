@@ -11,12 +11,12 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.persistence.*
 import io.sparkled.model.UniqueId
+import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.scheduler.SchedulerService
-import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
 import io.sparkled.viewmodel.ScheduledActionViewModel
+import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)

@@ -25,7 +25,7 @@ type Props = {
   parent: PIXI.Container
 
   /** The UUID of the stage prop. */
-  uuid: string
+  id: string
 
   /** The width of the stage prop in pixels, accounting for scale. */
   width: number
@@ -54,13 +54,13 @@ const StagePropLeds: React.FC<Props> = props => {
         renderLeds(leds, props.points, 0, 0, null)
       } else {
         const { renderData } = data
-        renderLeds(leds, props.points, renderData.startFrame, data.playbackFrame, renderData.stageProps[props.uuid] || null)
+        renderLeds(leds, props.points, renderData.startFrame, data.playbackFrame, renderData.stageProps[props.id] || null)
       }
     }
 
     subscribe('RENDER_DATA', callback)
     return () => unsubscribe('RENDER_DATA', callback)
-  }, [leds, props.points, props.uuid])
+  }, [leds, props.points, props.id])
 
   return <></>
 }

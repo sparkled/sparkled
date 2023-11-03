@@ -10,12 +10,10 @@ import io.sparkled.music.PlaybackState
 import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
-import io.sparkled.persistence.query.sequence.GetSongBySequenceIdQuery
-import io.sparkled.persistence.query.stage.GetStagePropsByStageIdQuery
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.Base64
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 import javax.sound.sampled.LineEvent
@@ -24,7 +22,7 @@ import javax.sound.sampled.LineEvent
 class PlaybackServiceImpl(
     private val db: DbService,
     private val file: FileService,
-    private val musicPlayerService: MusicPlayerService
+    private val musicPlayerService: MusicPlayerService,
 ) : PlaybackService, PlaybackStateService {
     private val playbackState = AtomicReference(PlaybackState())
 

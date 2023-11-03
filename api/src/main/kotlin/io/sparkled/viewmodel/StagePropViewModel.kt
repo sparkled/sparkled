@@ -18,7 +18,7 @@ data class StagePropViewModel(
     val positionY: Int,
     val scaleX: Double,
     val scaleY: Double,
-    val rotation: Int,
+    val rotation: Double,
     val brightness: Int,
     val displayOrder: Int,
     val groupCode: String? = null,

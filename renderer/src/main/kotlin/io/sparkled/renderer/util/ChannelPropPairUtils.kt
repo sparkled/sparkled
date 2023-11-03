@@ -2,6 +2,8 @@ package io.sparkled.renderer.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.sparkled.model.SequenceChannelModel
+import io.sparkled.model.StagePropModel
 import io.sparkled.model.animation.ChannelPropPair
 import io.sparkled.model.animation.SequenceChannelEffects
 

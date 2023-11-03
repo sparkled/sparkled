@@ -2,9 +2,9 @@ package io.sparkled.renderer
 
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.renderer.api.SparkledEasing
-import io.sparkled.renderer.api.StatefulSparkledEffect
 import io.sparkled.renderer.api.SparkledFill
 import io.sparkled.renderer.api.SparkledPlugin
+import io.sparkled.renderer.api.StatefulSparkledEffect
 import io.sparkled.renderer.easing.function.ExpoOutEasing
 import io.sparkled.renderer.easing.function.LinearEasing
 import io.sparkled.renderer.effect.FlashEffect
@@ -21,17 +21,26 @@ import io.sparkled.renderer.fill.SingleColorFill
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.util.*
+import java.util.SortedMap
 import java.util.concurrent.atomic.AtomicReference
 import javax.script.ScriptEngineManager
 
 @Singleton
 class SparkledPluginManager(
-    private val sparkledConfig: SparkledConfig
+    private val sparkledConfig: SparkledConfig,
 ) {
     private val scriptEngine = ScriptEngineManager().getEngineByExtension("kts")
     private val defaultEasings = listOf(LinearEasing, ExpoOutEasing)
-    private val defaultEffects: List<StatefulSparkledEffect<*>> = listOf(BuildLineEffect, FireEffect, FlashEffect, GifEffect, GlitterEffect, LineEffect, SplitLineEffect, SolidEffect)
+    private val defaultEffects: List<StatefulSparkledEffect<*>> = listOf(
+        BuildLineEffect,
+        FireEffect,
+        FlashEffect,
+        GifEffect,
+        GlitterEffect,
+        LineEffect,
+        SplitLineEffect,
+        SolidEffect
+    )
     private val defaultFills = listOf(GradientFill, RainbowFill, SingleColorFill)
 
     val easings = AtomicReference<SortedMap<String, SparkledEasing>>(sortedMapOf())
@@ -55,8 +64,9 @@ class SparkledPluginManager(
         val pluginType = T::class.simpleName
         logger.info("Loading $pluginType plugins.")
         return with(scriptEngine) {
-            val pluginScripts = File("${sparkledConfig.dataFolderPath}/${sparkledConfig.pluginFolderName}/$subdirectory")
-                .listFiles { _, name -> name.endsWith(".kts") } ?: emptyArray()
+            val pluginScripts =
+                File("${sparkledConfig.dataFolderPath}/${sparkledConfig.pluginFolderName}/$subdirectory")
+                    .listFiles { _, name -> name.endsWith(".kts") } ?: emptyArray()
 
             // TODO add unit tests for custom effects
             // TODO security management, prevent malicious code?

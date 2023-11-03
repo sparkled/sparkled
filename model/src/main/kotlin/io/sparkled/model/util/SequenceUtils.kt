@@ -1,5 +1,7 @@
 package io.sparkled.model.util
 
+import io.sparkled.model.SequenceModel
+import io.sparkled.model.SongModel
 import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
 
 /**

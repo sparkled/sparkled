@@ -27,5 +27,5 @@ abstract class StageRepository : CrudRepository<StageModel, String> {
             WHERE sq.id = :sequenceId
     """
     )
-    abstract fun findBySequenceId(id: UniqueId): StageModel?
+    abstract fun findBySequenceId(sequenceId: UniqueId): StageModel?
 }

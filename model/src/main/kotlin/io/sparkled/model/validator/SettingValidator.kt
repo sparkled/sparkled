@@ -1,5 +1,6 @@
 package io.sparkled.model.validator
 
+import io.sparkled.model.SettingModel
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.model.validator.exception.EntityValidationException
 

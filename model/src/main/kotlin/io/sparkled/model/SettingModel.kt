@@ -1,10 +1,11 @@
 package io.sparkled.model
 
 import io.micronaut.data.annotation.MappedEntity
+import io.sparkled.model.util.IdUtils.uniqueId
 import jakarta.persistence.Id
 import java.time.Instant
 
-@MappedEntity("SEQUENCE")
+@MappedEntity("SETTING")
 data class SettingModel(
     @Id
     override var id: UniqueId = uniqueId(),

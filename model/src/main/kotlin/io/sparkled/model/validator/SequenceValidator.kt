@@ -1,5 +1,6 @@
 package io.sparkled.model.validator
 
+import io.sparkled.model.SequenceModel
 import io.sparkled.model.validator.exception.EntityValidationException
 
 class SequenceValidator {

@@ -1,5 +1,7 @@
 package io.sparkled.model.render
 
+import io.sparkled.model.UniqueId
+
 /**
  * Serializable representation of a rendered sequence, useful for persisting to disk.
  */

@@ -10,18 +10,16 @@ const SingleSelectField = ({
   required,
   label,
   name,
-  meta
+  meta,
 }) => {
   const hasError = meta.touched && meta.error
   const formGroupClass = hasError ? 'form-group has-danger' : 'form-group'
   const fieldClass = hasError ? 'form-control is-invalid' : 'form-control'
-  const errorContent = hasError ? (
-    <div className="invalid-feedback">{meta.error}</div>
-  ) : null
+  const errorContent = hasError ? <div className='invalid-feedback'>{meta.error}</div> : null
   const attrs = { disabled, required }
 
   const optionElements = _.map(options, option => {
-    const id = option.id || option.uuid || option.code
+    const id = option.id || option.id || option.code
     return (
       <option key={id} value={id}>
         {option.name}
@@ -30,7 +28,7 @@ const SingleSelectField = ({
   })
 
   const labelElem = label ? (
-    <label className="form-control-label" htmlFor={name}>
+    <label className='form-control-label' htmlFor={name}>
       {label} {required ? '*' : ''}
     </label>
   ) : (

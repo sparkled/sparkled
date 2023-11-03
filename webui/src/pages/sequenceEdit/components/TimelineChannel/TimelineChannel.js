@@ -10,7 +10,7 @@ class TimelineChannel extends Component {
     const { channel, pixelsPerFrame, sequence, selectedChannel } = this.props
     const width = sequence.frameCount * pixelsPerFrame
 
-    const isActiveChannel = selectedChannel && channel.id === selectedChannel.uuid
+    const isActiveChannel = selectedChannel && channel.id === selectedChannel.id
     const activeClass = isActiveChannel ? 'channel-active' : ''
 
     return (
@@ -25,7 +25,7 @@ class TimelineChannel extends Component {
 
   renderEffects() {
     const { channel } = this.props
-    return _.map(channel.effects, effect => <TimelineEffect key={effect.uuid} channel={channel} effect={effect} />)
+    return _.map(channel.effects, effect => <TimelineEffect key={effect.id} channel={channel} effect={effect} />)
   }
 
   onChannelClick = event => {

@@ -2,6 +2,7 @@ package io.sparkled.model
 
 import io.micronaut.data.annotation.MappedEntity
 import io.sparkled.model.enumeration.StagePropType
+import io.sparkled.model.util.IdUtils.uniqueId
 import jakarta.persistence.Id
 import java.time.Instant
 
@@ -26,7 +27,7 @@ data class StagePropModel(
     var positionY: Int,
     var scaleX: Double = 1.0,
     var scaleY: Double = 1.0,
-    var rotation: Int = 0,
+    var rotation: Double = 0.0,
     var brightness: Int = MAX_BRIGHTNESS,
     var ledPositionsJson: String = "[]", // TODO custom converter
 ) : Model {

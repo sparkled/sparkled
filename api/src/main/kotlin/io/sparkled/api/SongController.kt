@@ -53,7 +53,7 @@ class SongController(
         val saved = db.songs.save(songViewModel.toModel())
 
         file.writeSongAudio(saved.id, mp3.bytes)
-        return HttpResponse.ok(IdResponse(saved))
+        return HttpResponse.ok(IdResponse(saved.id))
     }
 
     @Delete("/{id}")

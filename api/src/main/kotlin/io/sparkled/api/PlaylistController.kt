@@ -1,7 +1,12 @@
 package io.sparkled.api
 
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.annotation.*
+import io.micronaut.http.annotation.Body
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Delete
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -9,7 +14,7 @@ import io.micronaut.security.rules.SecurityRule
 import io.sparkled.model.PlaylistModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.util.IdUtils.uniqueId
-import io.sparkled.persistence.*
+import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.viewmodel.PlaylistSummaryViewModel
 import io.sparkled.viewmodel.PlaylistViewModel
@@ -60,7 +65,7 @@ class PlaylistController(
         val playlist = PlaylistModel(id = uniqueId(), name = body.name)
         db.playlists.save(playlist)
 
-        val playlistSequences = body.sequences.map {it.toModel(playlistId = playlist.id) }
+        val playlistSequences = body.sequences.map { it.toModel(playlistId = playlist.id) }
         db.playlistSequences.saveAll(playlistSequences)
 
         return HttpResponse.created(getPlaylistById(playlist.id))
@@ -91,7 +96,13 @@ class PlaylistController(
         (newSequences.keys - existingSequences.keys).forEach { db.playlistSequences.save(newSequences.getValue(it)) }
 
         // Update playlist sequences that exist
-        (newSequences.keys.intersect(existingSequences.keys)).forEach { db.playlistSequences.update(newSequences.getValue(it)) }
+        (newSequences.keys.intersect(existingSequences.keys)).forEach {
+            db.playlistSequences.update(
+                newSequences.getValue(
+                    it
+                )
+            )
+        }
 
         return HttpResponse.ok()
     }

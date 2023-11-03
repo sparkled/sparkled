@@ -22,7 +22,7 @@ object FillUtils {
         ignoreReverse: Boolean = false,
     ) {
         val frame = ctx.frame
-        val ledRange = ctx.channel.stagePropRanges[ctx.stageProp.uuid] ?: error("Stage prop range not found")
+        val ledRange = ctx.channel.stagePropRanges[ctx.stageProp.id] ?: error("Stage prop range not found")
 
         if (alpha < 0 || alpha > 1) {
             val frameNumber = frame.frameNumber

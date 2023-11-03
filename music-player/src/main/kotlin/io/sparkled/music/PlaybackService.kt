@@ -1,5 +1,7 @@
 package io.sparkled.music
 
+import io.sparkled.model.SequenceModel
+
 /**
  * Plays and stops playlists.
  */

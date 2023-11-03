@@ -2,8 +2,6 @@ package io.sparkled.viewmodel
 
 import io.sparkled.model.PlaylistSequenceModel
 import io.sparkled.model.UniqueId
-import io.sparkled.model.util.IdUtils
-import java.util.*
 
 data class PlaylistSequenceViewModel(
     val id: UniqueId,

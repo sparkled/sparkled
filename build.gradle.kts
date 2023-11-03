@@ -81,6 +81,7 @@ dependencies {
     implementation(project(":scheduler"))
     implementation(project(":udp-server"))
 
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut.liquibase:micronaut-liquibase")
     implementation("io.micronaut:micronaut-runtime")

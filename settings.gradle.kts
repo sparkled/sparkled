@@ -1,4 +1,5 @@
 rootProject.name = "sparkled"
+include("common")
 include("model")
 include("music-player")
 include("persistence")

@@ -18,5 +18,5 @@ abstract class SongRepository : CrudRepository<SongModel, String> {
             WHERE sq.id = :sequenceId
     """
     )
-    abstract fun findBySequenceId(id: UniqueId): SongModel?
+    abstract fun findBySequenceId(sequenceId: UniqueId): SongModel?
 }

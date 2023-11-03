@@ -7,29 +7,32 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.model.entity.v2.*
 import io.sparkled.persistence.DbService
-import io.sparkled.persistence.getAll
-import io.sparkled.viewmodel.*
+import io.sparkled.viewmodel.DashboardViewModel
+import io.sparkled.viewmodel.PlaylistSummaryViewModel
+import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
+import io.sparkled.viewmodel.SequenceSummaryViewModel
+import io.sparkled.viewmodel.SongViewModel
+import io.sparkled.viewmodel.StageSummaryViewModel
 import org.springframework.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/dashboard")
 class DashboardController(
-    private val db: DbService
+    private val db: DbService,
 ) {
 
     @Get("/")
     @Transactional
     fun getDashboard(): HttpResponse<Any> {
-        val playlists = db.getAll<PlaylistModel>(orderBy = "name")
+        val playlists = db.playlists.findAll().sortedBy { it.name }
         val playlistNames = playlists.associate { it.id to it.name }
-        val scheduledTasks = db.getAll<ScheduledActionModel>(orderBy = "id")
-        val sequences = db.getAll<SequenceModel>(orderBy = "name")
-        val playlistSequences = db.getAll<PlaylistSequenceModel>().groupBy { it.playlistId }
-        val songs = db.getAll<SongModel>(orderBy = "name")
-        val stages = db.getAll<StageModel>(orderBy = "name")
+        val scheduledTasks = db.scheduledActions.findAll().sortedBy { it.createdAt }
+        val sequences = db.sequences.findAll().sortedBy { it.name }
+        val playlistSequences = db.playlistSequences.findAll().groupBy { it.playlistId }
+        val songs = db.songs.findAll().sortedBy { it.name }
+        val stages = db.stages.findAll().sortedBy { it.name }
 
         val dashboard = DashboardViewModel(
             playlists = playlists.map {

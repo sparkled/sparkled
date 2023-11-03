@@ -12,7 +12,7 @@ const initialState = {
   savingError: null,
   playlist: null,
   sequences: [],
-  addSequenceModalVisible: false
+  addSequenceModalVisible: false,
 }
 
 export default (state = initialState, action) => {
@@ -68,20 +68,20 @@ export default (state = initialState, action) => {
 
       case actionTypes.ADD_PLAYLIST_SEQUENCE:
         draft.playlist.sequences = _.reject(draft.playlist.sequences, {
-          uuid: action.payload.uuid
+          id: action.payload.id,
         })
         break
 
       case actionTypes.DELETE_PLAYLIST_SEQUENCE:
         draft.playlist.sequences = _.reject(draft.playlist.sequences, {
-          uuid: action.payload.uuid
+          id: action.payload.id,
         })
         break
 
       case actionTypes.UPDATE_PLAYLIST_SEQUENCE:
         const { playlistSequence } = action.payload
         const index = _.findIndex(draft.playlist.sequences, {
-          uuid: playlistSequence.uuid
+          id: playlistSequence.id,
         })
         draft.playlist.sequences[index] = playlistSequence
         break

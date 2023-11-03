@@ -5,9 +5,10 @@ import io.sparkled.music.PlaybackState
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.util.*
-import javax.sound.sampled.*
+import javax.sound.sampled.AudioFormat
+import javax.sound.sampled.AudioSystem
+import javax.sound.sampled.LineEvent
+import javax.sound.sampled.LineListener
 import kotlin.math.min
 
 @Singleton
@@ -63,6 +64,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
                     val frame = lastFramePosition + newFrames
                     min(1.0, frame / clip.frameLength.toDouble())
                 }
+
                 else -> {
                     lastFramePosition = clip.framePosition
                     lastProgressUpdate = System.currentTimeMillis()

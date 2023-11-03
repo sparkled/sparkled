@@ -21,7 +21,7 @@ const StagePropDetails: React.FC = () => {
   })
 
   const stageProp = find(state.stage.stageProps, {
-    uuid: state.selectedStageProp
+    id: state.selectedStageProp
   })
   const hasStageProp = stageProp !== undefined
 

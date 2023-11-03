@@ -3,6 +3,7 @@ package io.sparkled.api
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MutableHttpResponse
+import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
@@ -33,6 +34,7 @@ import io.sparkled.persistence.cache.CacheService
 import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
+import io.sparkled.viewmodel.SequenceEditViewModel
 import io.sparkled.viewmodel.SequenceSummaryViewModel
 import io.sparkled.viewmodel.SequenceViewModel
 import io.sparkled.viewmodel.StageViewModel
@@ -135,49 +137,54 @@ class SequenceController(
 
     @Put("/{id}")
     @Transactional
-    fun updateSequence(id: UniqueId, sequenceViewModel: SequenceViewModel): HttpResponse<Any> {
-        val sequenceAndChannels = sequenceViewModel.copy(id = id).toModel(objectMapper)
-        val sequence = sequenceAndChannels.first.copy(id = id)
-        val sequenceChannels = sequenceAndChannels.second.map { it.copy(sequenceId = id) }
-
-        val newChannels = sequenceChannels.associateBy { it.id }
-        val existingChannels = db.sequenceChannels.findAllBySequenceId(id).associateBy { it.id }
-
-        // Delete channels that no longer exist.
-        val toDelete = existingChannels.keys - newChannels.keys
-        toDelete.forEach { db.sequenceChannels.deleteById(it) }
-
-        // Insert channels that didn't exist previously.
-        val toCreate = newChannels.keys - existingChannels.keys
-        toCreate.forEach { db.sequences.save(newChannels.getValue(it)) }
-
-        // Update channels that exist
-        val toUpdate = newChannels.keys.intersect(existingChannels.keys)
-        toUpdate.forEach { db.sequences.update(newChannels.getValue(it)) }
-
-        if (sequence.status === SequenceStatus.PUBLISHED) {
-            db.sequences.update(sequence)
-            val stage = db.stages.findBySequenceId(id) ?: throw EntityNotFoundException("Stage not found.")
-            val song = db.songs.findBySequenceId(id) ?: throw EntityNotFoundException("Song not found.")
-
-            val renderResult = renderSequence(stage, sequence, sequenceChannels, song, preview = false)
-            val renderedSequence = RenderedSequence(
-                sequenceId = sequence.id,
-                startFrame = renderResult.startFrame,
-                frameCount = renderResult.frameCount,
-                stageProps = renderResult.stageProps.mapValues {
-                    RenderedSequenceStageProp(
-                        ledCount = it.value.ledCount,
-                        base64Data = Base64.getEncoder().encodeToString(it.value.data)
-                    )
-                }
-            )
-            file.writeRender(sequence.id, renderedSequence)
-        } else {
-            db.sequences.update(sequence.copy(status = SequenceStatus.DRAFT, updatedAt = Instant.now()))
-        }
-
-        return HttpResponse.ok()
+    fun updateSequence(
+        @PathVariable id: UniqueId,
+        @Body body: SequenceEditViewModel,
+    ): HttpResponse<Any> {
+        TODO()
+//
+//        val sequenceAndChannels = body.copy(id = id).toModel(objectMapper)
+//        val sequence = sequenceAndChannels.first.copy(id = id)
+//        val sequenceChannels = sequenceAndChannels.second.map { it.copy(sequenceId = id) }
+//
+//        val newChannels = sequenceChannels.associateBy { it.id }
+//        val existingChannels = db.sequenceChannels.findAllBySequenceId(id).associateBy { it.id }
+//
+//        // Delete channels that no longer exist.
+//        val toDelete = existingChannels.keys - newChannels.keys
+//        toDelete.forEach { db.sequenceChannels.deleteById(it) }
+//
+//        // Insert channels that didn't exist previously.
+//        val toCreate = newChannels.keys - existingChannels.keys
+//        toCreate.forEach { db.sequences.save(newChannels.getValue(it)) }
+//
+//        // Update channels that exist
+//        val toUpdate = newChannels.keys.intersect(existingChannels.keys)
+//        toUpdate.forEach { db.sequences.update(newChannels.getValue(it)) }
+//
+//        if (sequence.status === SequenceStatus.PUBLISHED) {
+//            db.sequences.update(sequence)
+//            val stage = db.stages.findBySequenceId(id) ?: throw EntityNotFoundException("Stage not found.")
+//            val song = db.songs.findBySequenceId(id) ?: throw EntityNotFoundException("Song not found.")
+//
+//            val renderResult = renderSequence(stage, sequence, sequenceChannels, song, preview = false)
+//            val renderedSequence = RenderedSequence(
+//                sequenceId = sequence.id,
+//                startFrame = renderResult.startFrame,
+//                frameCount = renderResult.frameCount,
+//                stageProps = renderResult.stageProps.mapValues {
+//                    RenderedSequenceStageProp(
+//                        ledCount = it.value.ledCount,
+//                        base64Data = Base64.getEncoder().encodeToString(it.value.data)
+//                    )
+//                }
+//            )
+//            file.writeRender(sequence.id, renderedSequence)
+//        } else {
+//            db.sequences.update(sequence.copy(status = SequenceStatus.DRAFT, updatedAt = Instant.now()))
+//        }
+//
+//        return HttpResponse.ok()
     }
 
     private fun renderSequence(

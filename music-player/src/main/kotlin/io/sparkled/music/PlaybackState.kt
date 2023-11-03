@@ -1,9 +1,12 @@
 package io.sparkled.music
 
+import io.sparkled.model.SequenceModel
+import io.sparkled.model.SongModel
+import io.sparkled.model.StagePropModel
 import io.sparkled.model.render.RenderedStagePropDataMap
 
 /**
- * A container object holding all of the information pertaining to the current state of playback, in terms of audio
+ * A container object holding all the information pertaining to the current state of playback, in terms of audio
  * playback and associated rendered data for streaming to clients.
  */
 data class PlaybackState(

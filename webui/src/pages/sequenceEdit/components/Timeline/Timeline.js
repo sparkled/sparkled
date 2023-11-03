@@ -9,24 +9,19 @@ import './Timeline.css'
 
 const Timeline = ({ sequence, pixelsPerFrame }) => {
   const channels = useMemo(() => {
-    return _.map(sequence.channels, channel => (
-      <TimelineChannel key={channel.uuid} channel={channel} />
-    ))
+    return _.map(sequence.channels, channel => <TimelineChannel key={channel.id} channel={channel} />)
   }, [sequence.channels])
 
   return (
-    <div className="timeline" onScroll={handleScroll}>
-      <div className="timeline-container">
-        <div className="channels">
-          <div className="channel-wrapper">
+    <div className='timeline' onScroll={handleScroll}>
+      <div className='timeline-container'>
+        <div className='channels'>
+          <div className='channel-wrapper'>
             <CurrentFrameIndicator />
             <PlaybackFrameIndicator />
             {channels}
             <Waveform />
-            <TimeIndicator
-              sequence={sequence}
-              pixelsPerFrame={pixelsPerFrame}
-            />
+            <TimeIndicator sequence={sequence} pixelsPerFrame={pixelsPerFrame} />
           </div>
         </div>
       </div>

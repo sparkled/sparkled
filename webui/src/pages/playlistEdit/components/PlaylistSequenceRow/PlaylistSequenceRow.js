@@ -24,11 +24,11 @@ class PlaylistSequenceRow extends Component {
 
     return (
       <tr>
-        <td width="66%">
+        <td width='66%'>
           <form>
             <Field
-              name="sequenceId"
-              className="m-0"
+              name='sequenceId'
+              className='m-0'
               component={SingleSelectField}
               options={sequences}
               parse={toNumber}
@@ -39,10 +39,7 @@ class PlaylistSequenceRow extends Component {
           </form>
         </td>
         <td>
-          <Button
-            color="danger"
-            onClick={() => deletePlaylistSequence(playlistSequence.uuid)}
-          >
+          <Button color='danger' onClick={() => deletePlaylistSequence(playlistSequence.id)}>
             Delete
           </Button>
         </td>
@@ -62,8 +59,5 @@ function mapStateToProps({ page }) {
   return { sequences }
 }
 
-PlaylistSequenceRow = connect(
-  mapStateToProps,
-  { deletePlaylistSequence, updatePlaylistSequence }
-)(PlaylistSequenceRow)
+PlaylistSequenceRow = connect(mapStateToProps, { deletePlaylistSequence, updatePlaylistSequence })(PlaylistSequenceRow)
 export default reduxForm({})(PlaylistSequenceRow)

@@ -9,7 +9,7 @@ export class StageViewModel {
 export type Point = { x: number, y: number }
 
 export type StagePropViewModel = {
-  uuid: string
+  id: string
   stageId: number
   code: string
   name: string

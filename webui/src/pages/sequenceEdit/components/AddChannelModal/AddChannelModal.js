@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import uuidv4 from 'uuid/v4'
 import { connect } from 'react-redux'
 import { Field, formValueSelector, reduxForm } from 'redux-form'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
@@ -8,6 +7,7 @@ import InputField from '../../../../components/form/InputField'
 import SingleSelectField from '../../../../components/form/SingleSelectField'
 import { required } from '../../../../components/form/validators'
 import { addChannel, hideAddChannelModal } from '../../actions'
+import { uniqueId } from '../../../../utils/idUtils'
 
 const FORM_NAME = 'addChannel'
 
@@ -20,7 +20,7 @@ class AddChannelModal extends Component {
 
     if (selectedStagePropUuid !== nextProps.selectedStagePropUuid) {
       const stageProp = _.find(stageProps, {
-        uuid: nextProps.selectedStagePropUuid,
+        id: nextProps.selectedStagePropUuid,
       })
       const channelName = stageProp ? stageProp.name : ''
       change('name', channelName)
@@ -68,7 +68,7 @@ class AddChannelModal extends Component {
 
     this.props.addChannel({
       ...channel,
-      uuid: uuidv4(),
+      id: uniqueId(),
       sequenceId: sequence.id,
       effects: [],
       displayOrder,

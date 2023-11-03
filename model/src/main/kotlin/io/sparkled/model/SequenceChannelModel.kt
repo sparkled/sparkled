@@ -1,6 +1,7 @@
 package io.sparkled.model
 
 import io.micronaut.data.annotation.MappedEntity
+import io.sparkled.model.util.IdUtils.uniqueId
 import jakarta.persistence.Id
 import java.time.Instant
 
@@ -16,5 +17,5 @@ data class SequenceChannelModel(
 
     var name: String,
     var displayOrder: Int,
-    var channelJson: String,
+    var channelJson: String = "[]",
 ) : Model

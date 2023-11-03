@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import uuidv4 from 'uuid/v4'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import SingleSelectField from '../../../../components/form/SingleSelectField'
 import { required } from '../../../../components/form/validators'
 import { addSequence, hideAddSequenceModal } from '../../actions'
+import { uniqueId } from '../../../../utils/idUtils'
 
 class AddSequenceModal extends Component {
   componentWillReceiveProps(nextProps) {
@@ -20,28 +20,24 @@ class AddSequenceModal extends Component {
 
     return (
       <div>
-        <Modal isOpen={visible} wrapClassName="AddSequenceModal" backdrop>
+        <Modal isOpen={visible} wrapClassName='AddSequenceModal' backdrop>
           <form onSubmit={handleSubmit(this.addSequence.bind(this))}>
             <ModalHeader>Add channel</ModalHeader>
             <ModalBody>
               <Field
-                name="sequenceId"
+                name='sequenceId'
                 component={SingleSelectField}
                 options={sequences}
-                label="Sequence"
+                label='Sequence'
                 required
                 validate={required}
               />
             </ModalBody>
             <ModalFooter>
-              <Button type="submit" color="info" disabled={!valid}>
+              <Button type='submit' color='info' disabled={!valid}>
                 Add sequence
               </Button>
-              <Button
-                type="button"
-                color="secondary"
-                onClick={this.hideModal.bind(this)}
-              >
+              <Button type='button' color='secondary' onClick={this.hideModal.bind(this)}>
                 Cancel
               </Button>
             </ModalFooter>
@@ -56,9 +52,9 @@ class AddSequenceModal extends Component {
     const displayOrder = playlist.sequences.length
     this.props.addSequence({
       ...playlistSequence,
-      uuid: uuidv4(),
+      id: uniqueId(),
       playlistId: playlist.id,
-      displayOrder
+      displayOrder,
     })
   }
 
@@ -73,12 +69,9 @@ function mapStateToProps(state) {
   return {
     playlist: playlistEdit.present.playlist,
     sequences: playlistEdit.present.sequences,
-    visible: playlistEdit.present.addSequenceModalVisible
+    visible: playlistEdit.present.addSequenceModalVisible,
   }
 }
 
-AddSequenceModal = connect(
-  mapStateToProps,
-  { addSequence, hideAddSequenceModal }
-)(AddSequenceModal)
+AddSequenceModal = connect(mapStateToProps, { addSequence, hideAddSequenceModal })(AddSequenceModal)
 export default reduxForm({ form: 'addSequence' })(AddSequenceModal)

@@ -17,7 +17,7 @@ abstract class SequenceRepository : CrudRepository<SequenceModel, String> {
         WHERE ps.playlist_id = :playlistId
         ORDER BY ps.display_order
     """)
-    abstract fun findAllByPlaylistId(id: UniqueId): List<SequenceModel>
+    abstract fun findAllByPlaylistId(playlistId: UniqueId): List<SequenceModel>
 
     @Query("""
         DELETE FROM SEQUENCE_CHANNEL WHERE sequence_id = :id

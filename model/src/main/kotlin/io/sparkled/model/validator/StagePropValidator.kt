@@ -1,5 +1,6 @@
 package io.sparkled.model.validator
 
+import io.sparkled.model.StagePropModel
 import io.sparkled.model.validator.exception.EntityValidationException
 
 class StagePropValidator {

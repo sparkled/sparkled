@@ -12,8 +12,6 @@ import io.sparkled.model.SettingModel
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
-import io.sparkled.persistence.insert
-import io.sparkled.persistence.update
 import io.sparkled.viewmodel.SettingViewModel
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 @Controller("/api/settings")
 class SettingController(
     private val caches: CacheService,
-    private val db: DbService
+    private val db: DbService,
 ) {
 
     @Get("/")
@@ -53,9 +51,9 @@ class SettingController(
 
         if (setting.code == SettingsConstants.Brightness.CODE) {
             try {
-                db.insert(model)
+                db.settings.save(model)
             } catch (e: Exception) {
-                db.update(model)
+                db.settings.update(model)
             }
 
             caches.settings.modify { it.copy(brightness = model.value.toInt()) }
@@ -63,6 +61,6 @@ class SettingController(
             return HttpResponse.notFound()
         }
 
-        return HttpResponse.ok()
+        return HttpResponse.noContent()
     }
 }
