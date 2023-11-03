@@ -17,7 +17,7 @@ import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.scheduler.SchedulerService
 import io.sparkled.viewmodel.ScheduledActionViewModel
 import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
-import org.springframework.transaction.annotation.Transactional
+import jakarta.transaction.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
 @Secured(SecurityRule.IS_ANONYMOUS)

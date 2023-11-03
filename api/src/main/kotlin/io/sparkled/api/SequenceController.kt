@@ -38,7 +38,7 @@ import io.sparkled.viewmodel.SequenceEditViewModel
 import io.sparkled.viewmodel.SequenceSummaryViewModel
 import io.sparkled.viewmodel.SequenceViewModel
 import io.sparkled.viewmodel.StageViewModel
-import org.springframework.transaction.annotation.Transactional
+import jakarta.transaction.Transactional
 import java.time.Instant
 import java.util.Base64
 import kotlin.math.min

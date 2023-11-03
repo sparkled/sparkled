@@ -12,7 +12,7 @@ import io.sparkled.udpserver.LedDataStreamer
 import io.sparkled.udpserver.UdpServer
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
-import org.springframework.transaction.annotation.Transactional
+import jakarta.transaction.Transactional
 import java.net.DatagramSocket
 
 @Singleton

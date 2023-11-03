@@ -13,7 +13,7 @@ import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
 import io.sparkled.viewmodel.SettingViewModel
-import org.springframework.transaction.annotation.Transactional
+import jakarta.transaction.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
 @Secured(SecurityRule.IS_ANONYMOUS)

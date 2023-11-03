@@ -14,7 +14,7 @@ import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
 import io.sparkled.viewmodel.SequenceSummaryViewModel
 import io.sparkled.viewmodel.SongViewModel
 import io.sparkled.viewmodel.StageSummaryViewModel
-import org.springframework.transaction.annotation.Transactional
+import jakarta.transaction.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
 @Secured(SecurityRule.IS_ANONYMOUS)

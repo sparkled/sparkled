@@ -145,6 +145,7 @@ allprojects {
         // Prevent warning as per https://docs.micronaut.io/latest/guide/index.html#_nullable_annotations.
         compileOnly("com.google.code.findbugs:jsr305")
         compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+        compileOnly("jakarta.transaction:jakarta.transaction-api:2.0.1")
 
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
@@ -215,9 +216,6 @@ allprojects {
         annotation("io.micronaut.aop.Around")
         annotation("io.micronaut.http.annotation.Controller")
         annotation("jakarta.inject.Singleton")
-        annotation("javax.transaction.Transactional")
-
-        // TODO remove once migrated to Micronaut Data.
-        annotation("org.springframework.transaction.annotation.Transactional")
+        annotation("jakarta.transaction.Transactional")
     }
 }

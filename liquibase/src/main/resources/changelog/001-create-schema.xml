@@ -7,7 +7,7 @@
 >
   <changeSet author="chrisparton1991" id="create-table-song">
     <createTable tableName="SONG">
-      <column autoIncrement="true" name="id" type="INT(10)">
+      <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_song"/>
       </column>
       <column name="name" type="NVARCHAR(64)">
@@ -30,7 +30,7 @@
 
   <changeSet author="chrisparton1991" id="create-table-stage">
     <createTable tableName="STAGE">
-      <column autoIncrement="true" name="id" type="INT(10)">
+      <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_stage"/>
       </column>
       <column name="name" type="NVARCHAR(64)">
@@ -54,13 +54,12 @@
   <changeSet author="chrisparton1991" id="create-table-stage-prop">
     <createTable tableName="STAGE_PROP">
       <column name="id" type="NVARCHAR(12)">
-        <constraints primaryKey="true" primaryKeyName="pk_stage_prop"/>
+        <constraints primaryKey="true" primaryKeyName="pk_stageprop"/>
       </column>
       <column name="stage_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_stage_prop_stage_id"
-                deleteCascade="true"
+                foreignKeyName="fk_stageprop_stageid"
                 referencedTableName="stage"
                 referencedColumnNames="id"
         />
@@ -121,14 +120,13 @@
 
   <changeSet author="chrisparton1991" id="create-table-sequence">
     <createTable tableName="SEQUENCE">
-      <column autoIncrement="true" name="id" type="INT(10)">
+      <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_sequence"/>
       </column>
       <column name="song_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_sequence_song_id"
-                deleteCascade="true"
+                foreignKeyName="fk_sequence_songid"
                 referencedTableName="song"
                 referencedColumnNames="id"
         />
@@ -136,8 +134,7 @@
       <column name="stage_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_sequence_stage_id"
-                deleteCascade="true"
+                foreignKeyName="fk_sequence_stageid"
                 referencedTableName="stage"
                 referencedColumnNames="id"
         />
@@ -163,13 +160,12 @@
   <changeSet author="chrisparton1991" id="create-table-sequence-channel">
     <createTable tableName="SEQUENCE_CHANNEL">
       <column name="id" type="NVARCHAR(12)">
-        <constraints primaryKey="true" primaryKeyName="pk_sequence_channel"/>
+        <constraints primaryKey="true" primaryKeyName="pk_sequencechannel"/>
       </column>
       <column name="sequence_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
                 foreignKeyName="fk_sequencechannel_sequenceid"
-                deleteCascade="true"
                 referencedTableName="sequence"
                 referencedColumnNames="id"
         />
@@ -178,7 +174,6 @@
         <constraints
                 nullable="false"
                 foreignKeyName="fk_sequencechannel_stagepropid"
-                deleteCascade="true"
                 referencedTableName="stage_prop"
                 referencedColumnNames="id"
         />
@@ -201,7 +196,7 @@
 
   <changeSet author="chrisparton1991" id="create-table-playlist">
     <createTable tableName="PLAYLIST">
-      <column autoIncrement="true" name="id" type="INT(10)">
+      <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_playlist"/>
       </column>
       <column name="name" type="NVARCHAR(64)">
@@ -219,13 +214,12 @@
   <changeSet author="chrisparton1991" id="create-table-playlist-sequence">
     <createTable tableName="PLAYLIST_SEQUENCE">
       <column name="id" type="NVARCHAR(12)">
-        <constraints primaryKey="true" primaryKeyName="pk_playlist_sequence"/>
+        <constraints primaryKey="true" primaryKeyName="pk_playlistsequence"/>
       </column>
       <column name="playlist_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_playlist_sequence_playlist_id"
-                deleteCascade="true"
+                foreignKeyName="fk_playlistsequence_playlistid"
                 referencedTableName="playlist"
                 referencedColumnNames="id"
         />
@@ -233,8 +227,7 @@
       <column name="sequence_id" type="NVARCHAR(12)">
         <constraints
                 nullable="false"
-                foreignKeyName="fk_playlist_sequence_sequence_id"
-                deleteCascade="true"
+                foreignKeyName="fk_playlistsequence_sequenceid"
                 referencedTableName="sequence"
                 referencedColumnNames="id"
         />
@@ -253,8 +246,8 @@
 
   <changeSet author="chrisparton1991" id="create-table-scheduled-job">
     <createTable tableName="SCHEDULED_ACTION">
-      <column autoIncrement="true" name="id" type="INT(10)">
-        <constraints primaryKey="true" primaryKeyName="pk_scheduled_job"/>
+      <column name="id" type="NVARCHAR(12)">
+        <constraints primaryKey="true" primaryKeyName="pk_scheduledjob"/>
       </column>
       <column name="type" type="NVARCHAR(32)">
         <constraints nullable="false"/>
@@ -265,8 +258,7 @@
       <column name="value" type="NVARCHAR(16)"/>
       <column name="playlist_id" type="NVARCHAR(12)">
         <constraints
-                foreignKeyName="fk_scheduled_job_playlist_id"
-                deleteCascade="true"
+                foreignKeyName="fk_scheduledjob_playlistid"
                 referencedTableName="playlist"
                 referencedColumnNames="id"
         />

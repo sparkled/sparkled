@@ -18,7 +18,7 @@ import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.viewmodel.PlaylistSummaryViewModel
 import io.sparkled.viewmodel.PlaylistViewModel
-import org.springframework.transaction.annotation.Transactional
+import jakarta.transaction.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
 @Secured(SecurityRule.IS_ANONYMOUS)

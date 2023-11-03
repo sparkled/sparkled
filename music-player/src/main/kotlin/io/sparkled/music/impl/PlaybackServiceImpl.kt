@@ -12,7 +12,7 @@ import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
-import org.springframework.transaction.annotation.Transactional
+import jakarta.transaction.Transactional
 import java.util.Base64
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
