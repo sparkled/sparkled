@@ -5,9 +5,9 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 val projectVersion = "0.2.1"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.7.10"
-    id("org.jetbrains.kotlin.kapt") version "1.7.10"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.7.10"
+    id("org.jetbrains.kotlin.jvm") version "1.9.20"
+    id("org.jetbrains.kotlin.kapt") version "1.9.20"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.9.20"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.4.1"
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
@@ -60,6 +60,17 @@ val e2eTestSourceSet = sourceSets.create("e2eTest") {
     runtimeClasspath += sourceSets.main.get().output + sourceSets.test.get().output
 }
 
+val scriptsImplementation: Configuration by configurations.creating {
+    extendsFrom(configurations.implementation.get())
+}
+
+val scriptsSourceSet: SourceSet = sourceSets.create("scripts") {
+    java.srcDir("src/scripts/kotlin")
+    resources.srcDir("src/scripts/resources")
+    compileClasspath += sourceSets.main.get().output + sourceSets.test.get().output
+    runtimeClasspath += sourceSets.main.get().output + sourceSets.test.get().output
+}
+
 tasks {
     withType<ShadowJar> {
         archiveVersion.set("")
@@ -87,10 +98,11 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
 
     e2eTestImplementation(project(":liquibase"))
-    e2eTestImplementation("io.micronaut.spring:micronaut-spring-annotation")
     e2eTestImplementation("io.micronaut.liquibase:micronaut-liquibase")
     e2eTestImplementation("io.micronaut.data:micronaut-data-jdbc")
     e2eTestImplementation("org.jodd:jodd-http:$joddHttpVersion")
+
+    scriptsImplementation("org.jodd:jodd-http:$joddHttpVersion")
 }
 
 allprojects {
@@ -152,7 +164,7 @@ allprojects {
         // Kotlin runtime scripting.
         implementation("org.jetbrains.kotlin:kotlin-script-runtime")
         implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
-        implementation("org.jetbrains.kotlin:kotlin-script-util")
+        implementation("org.jetbrains.kotlin:kotlin-script-util:1.8.22")
         implementation("net.java.dev.jna:jna:$javaNativeAccessVersion")
         runtimeOnly("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable")
 
