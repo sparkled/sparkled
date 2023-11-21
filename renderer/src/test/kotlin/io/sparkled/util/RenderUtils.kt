@@ -17,6 +17,7 @@ import io.sparkled.renderer.SparkledPluginManager
 object RenderUtils {
 
     private val objectMapper = jacksonObjectMapper()
+
     private val pluginManager = SparkledPluginManager(
         SparkledConfig(
             dataFolderPath = ".",
@@ -24,15 +25,16 @@ object RenderUtils {
             gifFolderName = ".",
             pluginFolderName = ".",
             renderFolderName = ".",
+            clientUdpPort = 1,
+            udpReceiveBufferSize = 1,
+            udpSendBufferSize = 1,
         )
     ).apply { reloadPlugins() }
 
-    const val PROP_ID = "0"
-
     fun render(effect: Effect, frameCount: Int, ledCount: Int): RenderedStagePropData {
         val stageProp = testStageProp.copy(ledCount = ledCount)
-        val result = render(mapOf(PROP_ID to listOf(effect)), frameCount, listOf(stageProp))
-        return result.getValue(PROP_ID)
+        val result = render(mapOf(stageProp.id to listOf(effect)), frameCount, listOf(stageProp))
+        return result.getValue(stageProp.id)
     }
 
     fun render(

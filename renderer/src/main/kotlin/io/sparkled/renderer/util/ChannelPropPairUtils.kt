@@ -12,18 +12,27 @@ import io.sparkled.model.animation.SequenceChannelEffects
  */
 object ChannelPropPairUtils {
 
-    fun makePairs(objectMapper: ObjectMapper, sequenceChannels: List<SequenceChannelModel>, stageProps: List<StagePropModel>): List<ChannelPropPair> {
-        return sequenceChannels.map { sc -> getPair(objectMapper, sc, stageProps) }
-    }
+    fun makePairs(
+        objectMapper: ObjectMapper,
+        sequenceChannels: List<SequenceChannelModel>,
+        stageProps: List<StagePropModel>
+    ) = sequenceChannels.map { getPair(objectMapper, it, stageProps) }
 
-    private fun getPair(objectMapper: ObjectMapper, sequenceChannel: SequenceChannelModel, stageProps: List<StagePropModel>): ChannelPropPair {
+    private fun getPair(
+        objectMapper: ObjectMapper,
+        sequenceChannel: SequenceChannelModel,
+        stageProps: List<StagePropModel>,
+    ): ChannelPropPair {
         return ChannelPropPair(
             convertChannelData(objectMapper, sequenceChannel),
             stageProps.first { sp -> sp.id == sequenceChannel.stagePropId }
         )
     }
 
-    private fun convertChannelData(objectMapper: ObjectMapper, sequenceChannel: SequenceChannelModel): SequenceChannelEffects {
+    private fun convertChannelData(
+        objectMapper: ObjectMapper,
+        sequenceChannel: SequenceChannelModel,
+    ): SequenceChannelEffects {
         return SequenceChannelEffects(
             effects = objectMapper.readValue(sequenceChannel.channelJson)
         )

@@ -34,7 +34,7 @@ class ReverseStagePropRendererTest : StringSpec() {
 
             val stageProp = testStageProp.copy(ledCount = 10, reverse = true)
             val renderedStagePropData =
-                RenderUtils.render(mapOf(RenderUtils.PROP_ID to listOf(effect)), effect.endFrame + 1, listOf(stageProp))
+                RenderUtils.render(mapOf(testStageProp.id to listOf(effect)), effect.endFrame + 1, listOf(stageProp))
 // TODO
 //        assertThat(
 //            renderedStagePropData[RenderUtils.PROP_UUID.toString()]!!, hasRenderedFrames(

@@ -15,7 +15,7 @@ class SequenceChannelValidator(
 
     fun validate(channel: SequenceChannelModel) {
         if (channel.id == IdUtils.uniqueId()) {
-            throw EntityValidationException(String.format(Errors.UUID_MISSING, channel.name))
+            throw EntityValidationException(String.format(Errors.ID_MISSING, channel.name))
         } else if (channel.channelJson.isBlank()) {
             throw EntityValidationException(String.format(Errors.CHANNEL_JSON_MISSING, channel.name))
         }
@@ -67,7 +67,7 @@ class SequenceChannelValidator(
     }
 
     private object Errors {
-        const val UUID_MISSING = "Channel '%s' has no unique identifier."
+        const val ID_MISSING = "Channel '%s' has no unique identifier."
         const val CHANNEL_JSON_MISSING = "Channel '%s' has no animation data."
         const val CHANNEL_JSON_MALFORMED = "Channel '%s' has malformed effect data."
 

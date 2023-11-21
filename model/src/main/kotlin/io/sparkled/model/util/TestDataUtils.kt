@@ -89,8 +89,6 @@ val testStageProp
         code = "TEST_STAGE_PROP",
         name = "Test stage prop",
         type = StagePropType.LINE,
-        groupCode = "TEST_GROUP",
-        groupDisplayOrder = 1,
         displayOrder = 1,
         ledCount = 16,
         positionX = 100,

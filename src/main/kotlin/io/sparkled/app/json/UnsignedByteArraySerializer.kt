@@ -13,6 +13,7 @@ import kotlin.experimental.and
 /**
  * By default, Jackson serialises byte arrays as some weird kind of base64, which isn't ideal. This serializer outputs
  * bytes as an unsigned array, so for a byte array of [-128, -1, 0, 1, 127], the output is [0, 1]
+ * TODO see if this is still necessary, and use unsigned bytes at any rate.
  */
 class UnsignedByteArraySerializer : StdSerializer<ByteArray>(ByteArray::class.java) {
 

@@ -4,7 +4,7 @@ package io.sparkled.model.util
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.longs.shouldBeLessThan
 import io.kotest.matchers.shouldBe
-import io.kotest.mpp.uniqueId
+import io.sparkled.model.util.IdUtils.uniqueId
 import kotlin.system.measureTimeMillis
 
 class IdUtilsTest : StringSpec() {

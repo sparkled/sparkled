@@ -163,6 +163,8 @@ allprojects {
         implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
 
         // Kotlin runtime scripting.
+        // TODO consider implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable:$kotlinVersion")
+        //      as per https://slack-chats.kotlinlang.org/t/483178/is-there-a-reason-why-jsr-223-scripting-is-so-slow-or-is-the
         implementation("org.jetbrains.kotlin:kotlin-script-runtime")
         implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
         implementation("org.jetbrains.kotlin:kotlin-script-util:1.8.22")
