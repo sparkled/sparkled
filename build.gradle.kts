@@ -8,8 +8,9 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.20"
     id("org.jetbrains.kotlin.kapt") version "1.9.20"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.20"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.4.1"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.2.0"
+    id("io.micronaut.aot") version "4.2.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
 }
 
@@ -34,11 +35,23 @@ application {
 
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
 }
 
 micronaut {
     runtime("netty")
     testRuntime("kotest")
+
+    aot {
+        cacheEnvironment = true
+        convertYamlToJava = true
+        deduceEnvironment = true
+        optimizeClassLoading = true
+        optimizeNetty = true
+        optimizeServiceLoading = true
+        precomputeOperations = true
+    }
+
     processing {
         incremental(true)
         annotations("io.sparkled.*")
@@ -114,13 +127,6 @@ allprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
-    ext {
-        set("dbServer", System.getProperty("db.server", "dbServer"))
-        set("dbName", System.getProperty("db.name", "dbName"))
-        set("dbUsername", System.getProperty("db.username", "dbUsername"))
-        set("dbPassword", System.getProperty("db.password", "dbPassword"))
-    }
-
     kapt {
         arguments {
             arg("micronaut.processing.incremental", true)
@@ -150,17 +156,15 @@ allprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
         implementation("io.micronaut.security:micronaut-security")
-        implementation("io.micronaut:micronaut-tracing") // Required for the LoggingFilter, see comment on that class.
         implementation("io.micronaut:micronaut-runtime")
         implementation("org.springframework:spring-jdbc")
         implementation("org.xerial:sqlite-jdbc:$sqliteVersion")
         implementation("io.swagger.core.v3:swagger-annotations")
         implementation("io.projectreactor:reactor-core")
-        implementation("jakarta.annotation:jakarta.annotation-api")
+        implementation("jakarta.annotation:jakarta.annotation-api:2.1.1")
         implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
-        implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
 
         // Kotlin runtime scripting.
         // TODO consider implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable:$kotlinVersion")
@@ -175,14 +179,11 @@ allprojects {
         runtimeOnly("ch.qos.logback.contrib:logback-json-classic:$logbackJsonClassicVersion")
         runtimeOnly("ch.qos.logback.contrib:logback-jackson:$logbackJacksonVersion")
 
-        kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
         kapt("io.micronaut:micronaut-inject-java")
         kapt("io.micronaut.openapi:micronaut-openapi:$micronautOpenApiVersion")
         kapt("io.micronaut.security:micronaut-security")
-        kaptTest(platform("io.micronaut:micronaut-bom:$micronautVersion"))
         kaptTest("io.micronaut:micronaut-inject-java")
 
-        testImplementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
         testImplementation("io.mockk:mockk:$mockkVersion")
         testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
         testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")

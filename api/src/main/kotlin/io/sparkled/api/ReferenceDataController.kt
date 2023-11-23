@@ -12,7 +12,7 @@ import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.viewmodel.EditorItemViewModel
 import io.sparkled.viewmodel.ReferenceDataViewModel
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/reference-data")
 class ReferenceDataController(
@@ -31,4 +31,3 @@ class ReferenceDataController(
         return HttpResponse.ok(data)
     }
 }
-

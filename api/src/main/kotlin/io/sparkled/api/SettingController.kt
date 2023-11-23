@@ -15,7 +15,7 @@ import io.sparkled.persistence.cache.CacheService
 import io.sparkled.viewmodel.SettingViewModel
 import jakarta.transaction.Transactional
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/settings")
 class SettingController(

@@ -37,7 +37,7 @@ import io.sparkled.viewmodel.exception.HttpResponseException
 import jakarta.transaction.Transactional
 import kotlin.math.min
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/sequences")
 class SequenceController(

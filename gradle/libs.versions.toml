@@ -1,0 +1,52 @@
+[versions]
+micronaut = "4.2.0"
+
+[plugins]
+kotlin-allopen = "org.jetbrains.kotlin.plugin.allopen:1.9.0"
+kotlin-jvm = "org.jetbrains.kotlin.jvm:1.9.20"
+kotlin-kapt = "org.jetbrains.kotlin.kapt:1.9.20"
+ktlint = "org.jlleitschuh.gradle.ktlint:11.5.0"
+micronaut-aot = "io.micronaut.aot:4.0.2"
+micronaut-application = "io.micronaut.application:4.0.2"
+micronaut-library = "io.micronaut.library:4.0.2"
+shadow = "com.github.johnrengelman.shadow:8.1.1"
+
+[libraries]
+auth0-javaJwt = "com.auth0:java-jwt:4.4.0"
+azure-storage-blob = "com.azure:azure-storage-blob:12.22.1"
+firebase-admin = "com.google.firebase:firebase-admin:9.2.0"
+jakarta-persistenceApi = "jakarta.persistence:jakarta.persistence-api:3.1.0"
+jodd-http = "org.jodd:jodd-http:6.3.0"
+kopper = "us.jimschubert:kopper-typed:0.0.4"
+kotlin-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
+kotlin-reflect = "org.jetbrains.kotlin:kotlin-reflect:1.9.0"
+kotlin-retry = "com.michael-bull.kotlin-retry:kotlin-retry:1.0.9"
+kotlin-stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0"
+microsoft-mssqlJdbc = "com.microsoft.sqlserver:mssql-jdbc:11.2.3.jre17"
+mindrot-jbcrypt = "org.mindrot:jbcrypt:0.4"
+mockk = "io.mockk:mockk:1.13.5"
+reflections = "org.reflections:reflections:0.10.2"
+sentry = "io.sentry:sentry:6.16.0"
+sentry-logback = "io.sentry:sentry-logback:6.16.0"
+testcontainers-mssqlServer = "org.testcontainers:mssqlserver:1.18.3"
+uuidCreator = "com.github.f4b6a3:uuid-creator:5.3.2"
+
+# Dependencies with versions managed by Micronaut's Bill of Materials (BOM).
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+jakarta-annotationApi = { module = "jakarta.annotation:jakarta.annotation-api" }
+kotest-assertionsCore = { module = "io.kotest:kotest-assertions-core-jvm" }
+kotest-runner = { module = "io.kotest:kotest-runner-junit5-jvm" }
+micronaut-data-jdbc = { module = "io.micronaut.data:micronaut-data-jdbc" }
+micronaut-data-processor = { module = "io.micronaut.data:micronaut-data-processor" }
+micronaut-httpServerNetty = { module = "io.micronaut:micronaut-http-server-netty" }
+micronaut-jdbc-hikari = { module = "io.micronaut.sql:micronaut-jdbc-hikari" }
+micronaut-injectJava = { module = "io.micronaut:micronaut-inject-java" }
+micronaut-jacksonDatabind = { module = "io.micronaut:micronaut-jackson-databind" }
+micronaut-kotlinRuntime = { module = "io.micronaut.kotlin:micronaut-kotlin-runtime" }
+micronaut-liquibase = { module = "io.micronaut.liquibase:micronaut-liquibase" }
+micronaut-management = { module = "io.micronaut:micronaut-management" }
+micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi" }
+micronaut-runtime = { module = "io.micronaut:micronaut-runtime"}
+micronaut-security = { module = "io.micronaut.security:micronaut-security" }
+snakeyaml = { module = "org.yaml:snakeyaml" }
+swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations" }

@@ -23,7 +23,7 @@ import io.sparkled.viewmodel.error.ApiErrorCode
 import io.sparkled.viewmodel.exception.HttpResponseException
 import jakarta.transaction.Transactional
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/stages")
 class StageController(

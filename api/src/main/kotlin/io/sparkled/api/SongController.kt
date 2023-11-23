@@ -22,7 +22,7 @@ import io.sparkled.viewmodel.SongEditViewModel
 import io.sparkled.viewmodel.SongViewModel
 import jakarta.transaction.Transactional
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/songs")
 class SongController(

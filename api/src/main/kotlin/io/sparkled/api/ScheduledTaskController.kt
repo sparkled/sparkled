@@ -19,7 +19,7 @@ import io.sparkled.viewmodel.ScheduledActionViewModel
 import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
 import jakarta.transaction.Transactional
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/scheduledTasks")
 class ScheduledTaskController(

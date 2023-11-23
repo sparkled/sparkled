@@ -20,7 +20,7 @@ import io.sparkled.viewmodel.PlaylistSummaryViewModel
 import io.sparkled.viewmodel.PlaylistViewModel
 import jakarta.transaction.Transactional
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/playlists")
 class PlaylistController(

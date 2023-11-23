@@ -15,7 +15,7 @@ import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
 import jakarta.transaction.Transactional
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/player")
 class PlayerController(

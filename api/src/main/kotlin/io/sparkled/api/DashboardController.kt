@@ -16,7 +16,7 @@ import io.sparkled.viewmodel.SongViewModel
 import io.sparkled.viewmodel.StageSummaryViewModel
 import jakarta.transaction.Transactional
 
-@ExecuteOn(TaskExecutors.IO)
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/dashboard")
 class DashboardController(
