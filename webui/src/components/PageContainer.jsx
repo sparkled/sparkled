@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import AppLogo from './AppLogo'
-import BrightnessToggle from './BrightnessToggle'
+import BrightnessToggle from './BrightnessToggle.jsx'
 
 const styles = theme => ({
   root: {

@@ -1,2 +1,2 @@
-import PlaylistSequenceRow from './PlaylistSequenceRow'
+import PlaylistSequenceRow from './PlaylistSequenceRow.jsx'
 export default PlaylistSequenceRow

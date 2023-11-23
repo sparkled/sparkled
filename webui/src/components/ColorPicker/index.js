@@ -1,2 +1,2 @@
-import ColorPicker from './ColorPicker'
+import ColorPicker from './ColorPicker.jsx'
 export default ColorPicker

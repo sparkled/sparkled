@@ -1,7 +1,6 @@
 package io.sparkled.viewmodel
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import io.sparkled.model.ChannelData
 import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
@@ -15,22 +14,22 @@ data class SequenceChannelViewModel(
     val effects: List<Effect>,
 ) : ViewModel {
 
-    fun toModel(sequenceId: UniqueId, objectMapper: ObjectMapper) = SequenceChannelModel(
+    fun toModel(sequenceId: UniqueId) = SequenceChannelModel(
         id = id,
         sequenceId = sequenceId,
         stagePropId = stagePropId,
         name = name,
         displayOrder = displayOrder,
-        channelJson = objectMapper.writeValueAsString(effects),
+        channelData = ChannelData.of(effects),
     )
 
     companion object {
-        fun fromModel(model: SequenceChannelModel, objectMapper: ObjectMapper) = SequenceChannelViewModel(
+        fun fromModel(model: SequenceChannelModel) = SequenceChannelViewModel(
             id = model.id,
             stagePropId = model.stagePropId,
             name = model.name,
             displayOrder = model.displayOrder,
-            effects = objectMapper.readValue(model.channelJson),
+            effects = model.channelData,
         )
     }
 }

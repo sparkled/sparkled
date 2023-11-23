@@ -1,6 +1,5 @@
 package io.sparkled.api
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -29,7 +28,6 @@ import jakarta.transaction.Transactional
 @Controller("/api/stages")
 class StageController(
     private val db: DbService,
-    private val objectMapper: ObjectMapper,
 ) {
 
     @Get("/")
@@ -50,7 +48,7 @@ class StageController(
             HttpResponse.notFound("Stage not found.")
         } else {
             val stageProps = db.stageProps.findAllByStageId(id)
-            val viewModel = StageViewModel.fromModel(stage, stageProps, objectMapper)
+            val viewModel = StageViewModel.fromModel(stage, stageProps)
             HttpResponse.ok(viewModel)
         }
     }
@@ -67,7 +65,7 @@ class StageController(
         )
 
         val created = db.stages.save(stage)
-        val viewModel = StageViewModel.fromModel(created, emptyList(), objectMapper)
+        val viewModel = StageViewModel.fromModel(created, emptyList())
         return HttpResponse.created(viewModel)
     }
 
@@ -81,14 +79,16 @@ class StageController(
             ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
         // Update stage.
-        val updatedStage = db.stages.update(stage.copy(
-            name = body.name,
-            width = body.width,
-            height = body.height,
-        ))
+        val updatedStage = db.stages.update(
+            stage.copy(
+                name = body.name,
+                width = body.width,
+                height = body.height,
+            )
+        )
 
         val existingStageProps = db.stageProps.findAllByStageId(id).associateBy { it.id }
-        val newStageProps = body.stageProps.map { it.toModel(objectMapper).copy(stageId = id) }.associateBy { it.id }
+        val newStageProps = body.stageProps.map { it.toModel().copy(stageId = id) }.associateBy { it.id }
 
         // Delete stage props that no longer exist.
         val idsToDelete = existingStageProps.keys - newStageProps.keys
@@ -102,7 +102,7 @@ class StageController(
         val idsToUpdate = newStageProps.keys.intersect(existingStageProps.keys)
         idsToUpdate.forEach { db.stageProps.update(newStageProps.getValue(it).copy(stageId = stage.id)) }
 
-        val viewModel = StageViewModel.fromModel(updatedStage, newStageProps.values, objectMapper)
+        val viewModel = StageViewModel.fromModel(updatedStage, newStageProps.values)
         return HttpResponse.ok(viewModel)
     }
 

@@ -19,7 +19,7 @@ const SingleSelectField = ({
   const attrs = { disabled, required }
 
   const optionElements = _.map(options, option => {
-    const id = option.id || option.id || option.code
+    const id = option.id || option.code
     return (
       <option key={id} value={id}>
         {option.name}

@@ -1,4 +1,4 @@
-import produce, { immerable } from 'immer'
+import { produce } from 'immer'
 import _, { identity, isEqual, remove } from 'lodash'
 import React, { createContext, Dispatch } from 'react'
 import { Point, StagePropViewModel, StageViewModel } from '../../types/ViewModel'
@@ -6,7 +6,6 @@ import { StagePropType } from '../../data/stagePropTypes'
 import { uniqueId } from '../../utils/idUtils'
 
 export class State {
-  private static [immerable] = true
   public stage = new StageViewModel()
   public selectedStageProp = ''
 }
@@ -180,7 +179,7 @@ function updateStagePropGroupDisplayOrder(
   }
 }
 
-let getSelectedStageProp = function(draft: State) {
+const getSelectedStageProp = function(draft: State) {
   return draft.stage.stageProps.find(sp => sp.id === draft.selectedStageProp)
 }
 

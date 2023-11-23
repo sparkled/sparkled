@@ -1,2 +1,2 @@
-import Waveform from './Waveform'
+import Waveform from './Waveform.jsx'
 export default Waveform

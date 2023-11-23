@@ -14,5 +14,5 @@ data class SongModel(
 
     var name: String,
     var artist: String? = null,
-    var durationMs: Int
+    var durationMs: Int,
 ) : Model

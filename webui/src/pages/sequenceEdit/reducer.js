@@ -1,4 +1,4 @@
-import produce from 'immer'
+import { produce } from 'immer'
 import _ from 'lodash'
 import { getResponseError } from '../../utils/reducerUtils'
 import * as actionTypes from './actionTypes'

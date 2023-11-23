@@ -1,11 +1,10 @@
 package io.sparkled.renderer
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import io.sparkled.model.ChannelData
 import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
-import io.sparkled.model.animation.ChannelPropPair
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.render.Led
 import io.sparkled.model.render.RenderResult
@@ -15,17 +14,15 @@ import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.StatefulSparkledEffect
 import io.sparkled.renderer.easing.function.LinearEasing
-import io.sparkled.renderer.util.ChannelPropPairUtils
 import org.slf4j.LoggerFactory
 import java.awt.image.BufferedImage
 import kotlin.math.max
 import kotlin.math.min
 
-// TODO inject the renderer, so cache and objectMapper can be injected.
+// TODO inject the renderer, so cache can be injected.
 class Renderer(
     private val pluginManager: SparkledPluginManager,
     private val gifs: Map<String, List<BufferedImage>>,
-    objectMapper: ObjectMapper,
     private val stage: StageModel,
     private val sequence: SequenceModel,
     sequenceChannels: List<SequenceChannelModel>,
@@ -34,8 +31,9 @@ class Renderer(
     private val endFrame: Int,
     private val preview: Boolean,
 ) {
-    private val channelPropPairs: List<ChannelPropPair> =
-        ChannelPropPairUtils.makePairs(objectMapper, sequenceChannels, stageProps)
+    private val channelPropPairs = sequenceChannels.map {
+        it.channelData to stageProps.first { sp -> sp.id == it.stagePropId }
+    }
 
     fun render(): RenderResult {
         val renderedProps = RenderedStagePropDataMap()
@@ -63,13 +61,13 @@ class Renderer(
             renderedProps[groupCode] = RenderedStagePropData(startFrame, endFrame, leds, buffer, ledIndexes)
         }
 
-        channelPropPairs.reversed().forEach { cpp ->
-            val groupCode = if (preview) cpp.stageProp.id else {
-                cpp.stageProp.groupCode ?: cpp.stageProp.id
+        channelPropPairs.reversed().forEach { (channelData, stageProp) ->
+            val groupCode = if (preview) stageProp.id else {
+                stageProp.groupCode ?: stageProp.id
             }
 
             val data = renderedProps[groupCode]!!
-            renderChannel(stage, cpp, data)
+            renderChannel(stage, channelData, stageProp, data)
         }
 
         return RenderResult(renderedProps, startFrame, endFrame - startFrame + 1)
@@ -77,11 +75,12 @@ class Renderer(
 
     private fun renderChannel(
         stage: StageModel,
-        channelPropPair: ChannelPropPair,
+        channelData: ChannelData,
+        stageProp: StagePropModel,
         data: RenderedStagePropData,
     ): RenderedStagePropData {
-        channelPropPair.channel.effects.forEach {
-            renderEffect(stage, sequence, data, channelPropPair.stageProp, it)
+        channelData.forEach {
+            renderEffect(stage, sequence, data, stageProp, it)
         }
 
         return data

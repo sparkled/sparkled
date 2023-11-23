@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import ColorPicker from '../../ColorPicker/ColorPicker'
+import ColorPicker from '../../ColorPicker/ColorPicker.jsx'
 import './MultiColorPickerField.css'
 import { Button } from 'reactstrap'
 

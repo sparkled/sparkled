@@ -1,2 +1,2 @@
-import DeleteSongModal from './DeleteSongModal'
+import DeleteSongModal from './DeleteSongModal.jsx'
 export default DeleteSongModal

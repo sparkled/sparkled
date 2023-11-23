@@ -106,7 +106,7 @@
       <column name="group_display_order" type="TINYINT">
         <constraints nullable="true"/>
       </column>
-      <column name="led_positions_json" type="TEXT">
+      <column name="led_positions" type="TEXT">
         <constraints nullable="false"/>
       </column>
       <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_stage_createdat">
@@ -184,7 +184,7 @@
       <column name="display_order" type="INT(10)">
         <constraints nullable="false"/>
       </column>
-      <column name="channel_json" type="TEXT"/>
+      <column name="channel_data" type="TEXT"/>
       <column name="created_at" type="DATETIME2" defaultValueDate="CURRENT_TIMESTAMP" defaultValueConstraintName="dv_sequencechannel_createdat">
         <constraints nullable="false"/>
       </column>

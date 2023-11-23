@@ -1,6 +1,6 @@
 package io.sparkled.util
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.sparkled.model.ChannelData
 import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId
@@ -15,8 +15,6 @@ import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
 
 object RenderUtils {
-
-    private val objectMapper = jacksonObjectMapper()
 
     private val pluginManager = SparkledPluginManager(
         SparkledConfig(
@@ -47,7 +45,7 @@ object RenderUtils {
         val sequenceChannels = effects.map {
             testSequenceChannel.copy(
                 stagePropId = it.key,
-                channelJson = objectMapper.writeValueAsString(it.value),
+                channelData = ChannelData.of(it.value),
                 name = "Test",
             )
         }
@@ -55,7 +53,6 @@ object RenderUtils {
         val renderResult = Renderer(
             pluginManager,
             emptyMap(),
-            objectMapper,
             stage,
             testSequence,
             sequenceChannels,

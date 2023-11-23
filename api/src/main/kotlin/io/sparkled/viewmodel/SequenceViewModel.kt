@@ -1,12 +1,10 @@
 package io.sparkled.viewmodel
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.enumeration.SequenceStatus
-import io.sparkled.model.util.IdUtils
 import io.sparkled.model.util.SequenceUtils
 
 data class SequenceViewModel(
@@ -19,7 +17,7 @@ data class SequenceViewModel(
     val status: SequenceStatus = SequenceStatus.NEW,
     val channels: List<SequenceChannelViewModel> = emptyList()
 ) : ViewModel {
-    fun toModel(objectMapper: ObjectMapper): Pair<SequenceModel, List<SequenceChannelModel>> {
+    fun toModel(): Pair<SequenceModel, List<SequenceChannelModel>> {
         val sequence = SequenceModel(
             id = id,
             songId = songId,
@@ -29,7 +27,7 @@ data class SequenceViewModel(
             status = status,
         )
 
-        val channels = channels.map { it.toModel(sequenceId = id, objectMapper) }
+        val channels = channels.map { it.toModel(sequenceId = id) }
         return sequence to channels
     }
 
@@ -37,8 +35,7 @@ data class SequenceViewModel(
         fun fromModel(
             model: SequenceModel,
             song: SongModel,
-            channels: List<SequenceChannelModel>,
-            objectMapper: ObjectMapper
+            channels: Collection<SequenceChannelModel>,
         ) = SequenceViewModel(
             id = model.id,
             songId = model.songId,
@@ -47,7 +44,7 @@ data class SequenceViewModel(
             framesPerSecond = model.framesPerSecond,
             frameCount = SequenceUtils.getFrameCount(song, model),
             status = model.status,
-            channels = channels.map { SequenceChannelViewModel.fromModel(it, objectMapper) },
+            channels = channels.map(SequenceChannelViewModel::fromModel),
         )
     }
 }

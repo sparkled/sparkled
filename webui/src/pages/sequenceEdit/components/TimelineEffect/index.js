@@ -1,2 +1,2 @@
-import TimelineEffect from './TimelineEffect'
+import TimelineEffect from './TimelineEffect.jsx'
 export default TimelineEffect

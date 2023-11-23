@@ -1,2 +1,2 @@
-import AddChannelModal from './AddChannelModal'
+import AddChannelModal from './AddChannelModal.jsx'
 export default AddChannelModal

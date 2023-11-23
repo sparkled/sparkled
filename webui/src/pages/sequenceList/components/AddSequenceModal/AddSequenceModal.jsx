@@ -48,7 +48,6 @@ class AddSequenceModal extends Component {
               label='Song'
               type='text'
               options={songs}
-              parse={toNumber}
               required
               validate={required}
             />
@@ -60,7 +59,6 @@ class AddSequenceModal extends Component {
               label='Stage'
               type='text'
               options={stages}
-              parse={toNumber}
               required
               validate={required}
             />

@@ -1,9 +1,9 @@
 package io.sparkled.viewmodel
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import io.sparkled.model.LedPositions
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.embedded.Point2d
 import io.sparkled.model.enumeration.StagePropType
 
 data class StagePropViewModel(
@@ -25,7 +25,7 @@ data class StagePropViewModel(
     val groupDisplayOrder: Int? = null,
     val ledPositions: List<Point2dViewModel> = emptyList(),
 ) : ViewModel {
-    fun toModel(objectMapper: ObjectMapper) = StagePropModel(
+    fun toModel() = StagePropModel(
         id = id,
         stageId = stageId,
         code = code,
@@ -42,11 +42,11 @@ data class StagePropViewModel(
         displayOrder = displayOrder,
         groupCode = groupCode,
         groupDisplayOrder = groupDisplayOrder ?: 0,
-        ledPositionsJson = objectMapper.writeValueAsString(ledPositions),
+        ledPositions = LedPositions.of(ledPositions.map { Point2d(x = it.x, y = it.y) }),
     )
 
     companion object {
-        fun fromModel(model: StagePropModel, objectMapper: ObjectMapper) = StagePropViewModel(
+        fun fromModel(model: StagePropModel) = StagePropViewModel(
             id = model.id,
             stageId = model.stageId,
             code = model.code,
@@ -63,7 +63,7 @@ data class StagePropViewModel(
             displayOrder = model.displayOrder,
             groupCode = model.groupCode,
             groupDisplayOrder = model.groupDisplayOrder,
-            ledPositions = objectMapper.readValue(model.ledPositionsJson),
+            ledPositions = model.ledPositions.map { Point2dViewModel(x = it.x, y = it.y) },
         )
     }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import ColorPicker from '../../ColorPicker/ColorPicker'
+import ColorPicker from '../../ColorPicker/ColorPicker.jsx'
 
 class ColorPickerField extends React.Component {
   constructor(props) {

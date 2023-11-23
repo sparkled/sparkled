@@ -46,7 +46,6 @@ val testSequenceChannel
         stagePropId = "1",
         name = "Test sequence channel",
         displayOrder = 1,
-        channelJson = "[]",
     )
 
 val testSequence
@@ -97,5 +96,4 @@ val testStageProp
         scaleY = 1.0,
         rotation = 0.0,
         brightness = StagePropModel.MAX_BRIGHTNESS,
-        ledPositionsJson = "[]",
     )

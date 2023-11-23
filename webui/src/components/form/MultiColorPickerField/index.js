@@ -1,2 +1,2 @@
-import MultiColorPickerField from './MultiColorPickerField'
+import MultiColorPickerField from './MultiColorPickerField.jsx'
 export default MultiColorPickerField

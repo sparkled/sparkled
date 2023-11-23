@@ -1,6 +1,7 @@
 package io.sparkled.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
@@ -12,11 +13,12 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.api.response.IdResponse
+import io.sparkled.model.SongModel
 import io.sparkled.model.UniqueId
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
 import io.sparkled.persistence.repository.findByIdOrNull
+import io.sparkled.viewmodel.SongEditViewModel
 import io.sparkled.viewmodel.SongViewModel
 import jakarta.transaction.Transactional
 
@@ -49,11 +51,17 @@ class SongController(
     @Post("/", consumes = [MediaType.MULTIPART_FORM_DATA])
     @Transactional
     fun createSong(song: String, mp3: CompletedFileUpload): HttpResponse<Any> {
-        val songViewModel = objectMapper.readValue(song, SongViewModel::class.java)
-        val saved = db.songs.save(songViewModel.toModel())
+        val viewModel = objectMapper.readValue<SongEditViewModel>(song)
+        val saved = db.songs.save(
+            SongModel(
+                name = viewModel.name,
+                artist = viewModel.artist,
+                durationMs = viewModel.durationMs,
+            )
+        )
 
         file.writeSongAudio(saved.id, mp3.bytes)
-        return HttpResponse.ok(IdResponse(saved.id))
+        return HttpResponse.created(SongViewModel.fromModel(saved))
     }
 
     @Delete("/{id}")

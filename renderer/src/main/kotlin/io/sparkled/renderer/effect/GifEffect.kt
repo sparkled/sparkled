@@ -1,8 +1,6 @@
 package io.sparkled.renderer.effect
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.sparkled.model.animation.param.Param
-import io.sparkled.model.embedded.Point2d
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.StatelessSparkledEffect
@@ -23,7 +21,7 @@ object GifEffect : StatelessSparkledEffect {
     )
 
     override fun render(ctx: RenderContext) {
-        val points = ctx.objectMapper.readValue<List<Point2d>>(ctx.stageProp.ledPositionsJson)
+        val points = ctx.stageProp.ledPositions
 
         val gifFrames = ctx.loadGif(ParamUtils.getString(ctx.effect, Params.FILE_NAME.name))
 
