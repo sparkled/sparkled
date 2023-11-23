@@ -5,8 +5,7 @@ import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId
 
-data class StageViewModel(
-    val id: UniqueId,
+data class StageEditViewModel(
     val name: String,
     val width: Int,
     val height: Int,
@@ -14,7 +13,6 @@ data class StageViewModel(
 ) : ViewModel {
     fun toModel(objectMapper: ObjectMapper): Pair<StageModel, List<StagePropModel>> {
         val stage = StageModel(
-            id = id,
             name = name,
             width = width,
             height = height,
@@ -25,16 +23,11 @@ data class StageViewModel(
     }
 
     companion object {
-        fun fromModel(
-            model: StageModel,
-            stageProps: Collection<StagePropModel>,
-            objectMapper: ObjectMapper,
-        ) = StageViewModel(
-            id = model.id,
+        fun fromModel(model: StageModel, stageProps: List<StagePropModel>, objectMapper: ObjectMapper) = StageEditViewModel(
             name = model.name,
             width = model.width,
             height = model.height,
-            stageProps = stageProps.map { StagePropViewModel.fromModel(it, objectMapper) }
+            stageProps = stageProps.map { StagePropViewModel.fromModel(it, objectMapper) },
         )
     }
 }

@@ -1,4 +1,5 @@
 dependencies {
+    implementation(project(":common"))
     implementation(project(":model"))
     implementation(project(":music-player"))
     implementation(project(":persistence"))

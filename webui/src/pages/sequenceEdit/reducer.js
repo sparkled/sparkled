@@ -2,6 +2,7 @@ import produce from 'immer'
 import _ from 'lodash'
 import { getResponseError } from '../../utils/reducerUtils'
 import * as actionTypes from './actionTypes'
+import { uniqueId } from '../../utils/idUtils'
 
 const initialState = {
   fetchingSequence: false,
@@ -146,7 +147,7 @@ export default (state = initialState, action) => {
           const frameOffset = state.currentFrame - state.copiedEffect.startFrame
           const effect = {
             ...state.copiedEffect,
-            id: uuidv4(),
+            id: uniqueId(),
             startFrame: state.currentFrame,
             endFrame: state.copiedEffect.endFrame + frameOffset,
           }

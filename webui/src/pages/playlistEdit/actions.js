@@ -41,7 +41,7 @@ export const deletePlaylistSequence = id => {
   return {
     type: actionTypes.DELETE_PLAYLIST_SEQUENCE,
     undoable: true,
-    payload: { uuid },
+    payload: { id },
   }
 }
 

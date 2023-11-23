@@ -2,20 +2,26 @@ package io.sparkled.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Put
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
+import io.sparkled.model.StageModel
 import io.sparkled.model.UniqueId
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
+import io.sparkled.viewmodel.StageEditViewModel
 import io.sparkled.viewmodel.StageSummaryViewModel
 import io.sparkled.viewmodel.StageViewModel
+import io.sparkled.viewmodel.error.ApiErrorCode
+import io.sparkled.viewmodel.exception.HttpResponseException
 import jakarta.transaction.Transactional
 
 @ExecuteOn(TaskExecutors.IO)
@@ -51,23 +57,38 @@ class StageController(
 
     @Post("/")
     @Transactional
-    fun createStage(stageViewModel: StageViewModel): HttpResponse<Any> {
-        val (stage) = stageViewModel.toModel(objectMapper)
+    fun createStage(
+        @Body body: StageEditViewModel
+    ): HttpResponse<Any> {
+        val stage = StageModel(
+            name = body.name,
+            width = body.width,
+            height = body.height,
+        )
+
         val created = db.stages.save(stage)
-        return HttpResponse.created(created)
+        val viewModel = StageViewModel.fromModel(created, emptyList(), objectMapper)
+        return HttpResponse.created(viewModel)
     }
 
     @Put("/{id}")
     @Transactional
-    fun updateStage(id: UniqueId, stageViewModel: StageViewModel): HttpResponse<Any> {
-        val stageAndStageProps = stageViewModel.copy(id = id).toModel(objectMapper)
-        val stage = stageAndStageProps.first.copy(id = id)
+    fun updateStage(
+        @PathVariable id: UniqueId,
+        @Body body: StageEditViewModel,
+    ): HttpResponse<Any> {
+        val stage = db.stages.findByIdOrNull(id)
+            ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
         // Update stage.
-        db.stages.update(stage)
+        val updatedStage = db.stages.update(stage.copy(
+            name = body.name,
+            width = body.width,
+            height = body.height,
+        ))
 
         val existingStageProps = db.stageProps.findAllByStageId(id).associateBy { it.id }
-        val newStageProps = stageAndStageProps.second.map { it.copy(stageId = id) }.associateBy { it.id }
+        val newStageProps = body.stageProps.map { it.toModel(objectMapper).copy(stageId = id) }.associateBy { it.id }
 
         // Delete stage props that no longer exist.
         val idsToDelete = existingStageProps.keys - newStageProps.keys
@@ -81,7 +102,8 @@ class StageController(
         val idsToUpdate = newStageProps.keys.intersect(existingStageProps.keys)
         idsToUpdate.forEach { db.stageProps.update(newStageProps.getValue(it).copy(stageId = stage.id)) }
 
-        return HttpResponse.ok()
+        val viewModel = StageViewModel.fromModel(updatedStage, newStageProps.values, objectMapper)
+        return HttpResponse.ok(viewModel)
     }
 
     @Delete("/{id}")

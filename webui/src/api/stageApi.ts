@@ -20,7 +20,7 @@ const unexpectedError: Error = [
 ]
 
 const loadStage = (
-  stageId: number,
+  stageId: string,
   onSuccess: (stage: StageViewModel) => void,
   onFailure: (error: Error) => void
 ) => {

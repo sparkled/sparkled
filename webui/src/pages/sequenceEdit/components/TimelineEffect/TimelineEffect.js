@@ -117,14 +117,14 @@ class TimelineEffect extends Component {
 
   renderRepetitions() {
     const { effect, pixelsPerFrame } = this.props
-    const { endFrame, repetitions = 1, repetitionSpacing = 0, startFrame, uuid } = effect
+    const { endFrame, repetitions = 1, repetitionSpacing = 0, startFrame, id } = effect
     if (repetitions > 1) {
       const duration = endFrame - startFrame + 1
       const width = duration * pixelsPerFrame
 
       return _.map(Array(repetitions - 1), (_, i) => {
         const left = (startFrame + (duration + repetitionSpacing) * (i + 1)) * pixelsPerFrame
-        return <div key={`${uuid}-${i}`} className='TimelineEffectRepetition' style={{ left, width }} />
+        return <div key={`${id}-${i}`} className='TimelineEffectRepetition' style={{ left, width }} />
       })
     } else {
       return []

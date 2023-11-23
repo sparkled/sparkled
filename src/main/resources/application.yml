@@ -26,7 +26,7 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:sqlite:sparkled.db
+    url: jdbc:sqlite:sparkledData/sparkled.db
     driver-class-name: org.sqlite.JDBC
     data-source-properties:
       foreign_keys: true

@@ -133,7 +133,7 @@ const StageProp: React.FC<Props> = props => {
 
       <StagePropLeds
         parent={pixiContainer}
-        uuid={stageProp.id}
+        id={stageProp.id}
         points={ledPoints}
         width={width}
         height={height}

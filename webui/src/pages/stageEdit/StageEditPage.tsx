@@ -89,7 +89,7 @@ const StageEditPage: React.FC<Props> = props => {
       setPageTitle('Edit Stage')
       dispatch({ type: 'Load' })
       loadStage(
-        Number(props.match.params.stageId),
+        props.match.params.stageId!,
         stage => dispatch({ type: 'LoadSuccess', payload: stage }),
         error => dispatch({ type: 'LoadFailure', payload: error })
       )
