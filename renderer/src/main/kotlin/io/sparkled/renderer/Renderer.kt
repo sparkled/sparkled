@@ -1,6 +1,7 @@
 package io.sparkled.renderer
 
-import io.sparkled.model.ChannelData
+import common.logging.getLogger
+import io.sparkled.model.embedded.ChannelData
 import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.StageModel
@@ -14,7 +15,6 @@ import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.StatefulSparkledEffect
 import io.sparkled.renderer.easing.function.LinearEasing
-import org.slf4j.LoggerFactory
 import java.awt.image.BufferedImage
 import kotlin.math.max
 import kotlin.math.min
@@ -143,7 +143,7 @@ class Renderer(
                     0f,
                     pluginManager.fills.get(),
                     this::loadGif,
-                )
+                ),
             )
 
             // Stateful effects need to be rendered from the beginning, so perform a dummy render on any frames that
@@ -213,6 +213,6 @@ class Renderer(
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(Renderer::class.java)
+        private val logger = getLogger<Renderer>()
     }
 }

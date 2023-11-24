@@ -6,7 +6,7 @@ data class RenderedFrame(
     val frameNumber: Int,
     val ledCount: Int,
     private val data: ByteArray,
-    private val dummyFrame: Boolean = false
+    private val dummyFrame: Boolean = false,
 ) {
 
     fun getData(): ByteArray {

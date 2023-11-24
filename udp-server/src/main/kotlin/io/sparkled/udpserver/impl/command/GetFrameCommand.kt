@@ -1,7 +1,7 @@
 package io.sparkled.udpserver.impl.command
 
 import io.sparkled.model.render.RenderedFrame
-import io.sparkled.model.setting.SettingsCache
+import io.sparkled.model.setting.SettingsCacheEntry
 import io.sparkled.model.util.MathUtils
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.music.PlaybackState
@@ -16,7 +16,7 @@ import kotlin.math.round
  */
 class GetFrameCommand : UdpCommand {
 
-    override fun handle(ipAddress: InetAddress, port: Int, args: List<String>, settings: SettingsCache, playbackState: PlaybackState): ByteArray {
+    override fun handle(ipAddress: InetAddress, port: Int, args: List<String>, settings: SettingsCacheEntry, playbackState: PlaybackState): ByteArray {
         val stagePropCode = args[1]
         val brightness = calculateBrightness(stagePropCode, settings, playbackState)
 
@@ -25,7 +25,7 @@ class GetFrameCommand : UdpCommand {
         return buildResponse(headerData, frameData)
     }
 
-    private fun calculateBrightness(stagePropCode: String, settings: SettingsCache, playbackState: PlaybackState): Int {
+    private fun calculateBrightness(stagePropCode: String, settings: SettingsCacheEntry, playbackState: PlaybackState): Int {
         val propBrightness = (playbackState.stageProps[stagePropCode]?.brightness ?: 100) / 100f
         val globalBrightness = MathUtils.map(settings.brightness.toFloat(), 0f, 100f, 0f, 15f).toInt()
 

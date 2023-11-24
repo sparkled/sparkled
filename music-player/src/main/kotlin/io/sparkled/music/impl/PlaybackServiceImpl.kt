@@ -1,6 +1,7 @@
 package io.sparkled.music.impl
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
+import common.logging.getLogger
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
@@ -11,7 +12,6 @@ import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 import jakarta.transaction.Transactional
 import java.util.Base64
 import java.util.concurrent.Executors
@@ -28,7 +28,7 @@ class PlaybackServiceImpl(
 
     // TODO remove Guava. Try Micronaut's NamedThreadFactory class.
     private val executor = Executors.newSingleThreadScheduledExecutor(
-        ThreadFactoryBuilder().setNameFormat("playback-service-%d").build()
+        ThreadFactoryBuilder().setNameFormat("playback-service-%d").build(),
     )
 
     init {
@@ -109,7 +109,7 @@ class PlaybackServiceImpl(
                 song = song,
                 songAudio = songAudio,
                 renderedStageProps = stagePropData,
-                stageProps = stageProps
+                stageProps = stageProps,
             )
         } catch (e: Exception) {
             logger.error("Failed to load playback state.", e)
@@ -126,6 +126,6 @@ class PlaybackServiceImpl(
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(PlaybackServiceImpl::class.java)
+        private val logger = getLogger<PlaybackServiceImpl>()
     }
 }

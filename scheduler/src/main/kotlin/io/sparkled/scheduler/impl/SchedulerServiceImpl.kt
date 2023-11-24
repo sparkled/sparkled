@@ -1,14 +1,15 @@
 package io.sparkled.scheduler.impl
 
+import common.logging.getLogger
 import io.sparkled.model.ScheduledActionModel
 import io.sparkled.model.SettingModel
-import jakarta.transaction.Transactional
 import io.sparkled.model.enumeration.ScheduledActionType
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
 import io.sparkled.scheduler.SchedulerService
 import jakarta.inject.Singleton
+import jakarta.transaction.Transactional
 import org.quartz.CronScheduleBuilder
 import org.quartz.JobBuilder
 import org.quartz.JobDataMap
@@ -16,12 +17,11 @@ import org.quartz.Scheduler
 import org.quartz.SchedulerException
 import org.quartz.TriggerBuilder
 import org.quartz.impl.StdSchedulerFactory
-import org.slf4j.LoggerFactory
 
 @Singleton
 class SchedulerServiceImpl(
     private val db: DbService,
-    private val playbackService: PlaybackService
+    private val playbackService: PlaybackService,
 ) : SchedulerService {
 
     private val scheduler: Scheduler = StdSchedulerFactory.getDefaultScheduler()
@@ -50,19 +50,19 @@ class SchedulerServiceImpl(
             try {
                 schedule(it)
             } catch (e: RuntimeException) {
-                logger.error("Failed to schedule job {}.", it.id, e)
+                logger.error("Failed to schedule action.", e, "id" to it.id)
             }
         }
 
-        logger.info("Started {} scheduled task(s).", scheduledJobs.size)
+        logger.info("Started scheduled action.", "count" to scheduledJobs.size)
     }
 
     private fun schedule(scheduledJob: ScheduledActionModel) {
         val jobDataMap = JobDataMap(
             mapOf(
                 JobDelegator.SERVICE to this,
-                JobDelegator.JOB to scheduledJob
-            )
+                JobDelegator.JOB to scheduledJob,
+            ),
         )
 
         val jobDetail = JobBuilder.newJob(JobDelegator::class.java)
@@ -78,13 +78,13 @@ class SchedulerServiceImpl(
     }
 
     internal fun handleTask(task: ScheduledActionModel) {
-        logger.info("Executing scheduled task {}.", task.id)
+        logger.info("Executing scheduled task.", "id" to task.id, "type" to task.type)
 
         when (val action = task.type) {
             ScheduledActionType.PLAY_PLAYLIST -> playPlaylist(task)
             ScheduledActionType.STOP_PLAYBACK -> stopPlayback()
             ScheduledActionType.SET_BRIGHTNESS -> setBrightness(task)
-            ScheduledActionType.NONE -> logger.warn("Unrecognised scheduler action {}, skipping.", action)
+            ScheduledActionType.NONE -> logger.warn("Unrecognised scheduler action, skipping.", "action" to action)
         }
     }
 
@@ -110,6 +110,6 @@ class SchedulerServiceImpl(
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(SchedulerServiceImpl::class.java)
+        private val logger = getLogger<SchedulerServiceImpl>()
     }
 }

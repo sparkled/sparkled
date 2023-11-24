@@ -1,6 +1,7 @@
 package io.sparkled.udpserver.impl
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
+import common.logging.getLogger
 import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.UdpServer
 import jakarta.inject.Singleton
@@ -9,17 +10,19 @@ import java.net.DatagramSocket
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import org.slf4j.LoggerFactory
 
+// TODO consider using NIO sockets.
 @Singleton
-class UdpServerImpl(private val requestHandler: RequestHandler) : UdpServer {
+class UdpServerImpl(
+    private val requestHandler: RequestHandler,
+) : UdpServer {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor(
-        ThreadFactoryBuilder().setNameFormat("udp-server-%d").build()
+        ThreadFactoryBuilder().setNameFormat("udp-server-%d").build(),
     )
 
     private val responseExecutor: ExecutorService = Executors.newFixedThreadPool(
-        REQUEST_HANDLER_THREADS, ThreadFactoryBuilder().setNameFormat("request-handler-%d").build()
+        REQUEST_HANDLER_THREADS, ThreadFactoryBuilder().setNameFormat("request-handler-%d").build(),
     )
 
     private var started: Boolean = false
@@ -33,7 +36,7 @@ class UdpServerImpl(private val requestHandler: RequestHandler) : UdpServer {
         started = true
         executor.submit { listen(socket) }
 
-        logger.info("Started UDP server at port {}.", socket.port)
+        logger.info("Started UDP server.", "port" to socket.localPort)
     }
 
     override fun stop() {
@@ -61,7 +64,7 @@ class UdpServerImpl(private val requestHandler: RequestHandler) : UdpServer {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(UdpServerImpl::class.java)
+        private val logger = getLogger<UdpServerImpl>()
         private const val RECEIVE_BUFFER_SIZE = 32
         private const val REQUEST_HANDLER_THREADS = 4
     }

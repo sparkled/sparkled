@@ -7,7 +7,7 @@ import io.sparkled.model.util.IdUtils
 import io.sparkled.model.validator.exception.EntityValidationException
 
 class SequenceChannelValidator(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) {
 
     fun validate(channel: SequenceChannelModel) {
@@ -42,8 +42,8 @@ class SequenceChannelValidator(
                     String.format(
                         Errors.EFFECT_EASING_TYPE_MISSING,
                         effect.startFrame,
-                        name
-                    )
+                        name,
+                    ),
                 )
             }
 
@@ -60,8 +60,8 @@ class SequenceChannelValidator(
                     String.format(
                         Errors.EFFECT_REPETITIONS_INVALID,
                         effect.startFrame,
-                        name
-                    )
+                        name,
+                    ),
                 )
             }
 
@@ -70,8 +70,8 @@ class SequenceChannelValidator(
                     String.format(
                         Errors.EFFECT_REPETITION_SPACING_INVALID,
                         effect.startFrame,
-                        name
-                    )
+                        name,
+                    ),
                 )
             }
         }

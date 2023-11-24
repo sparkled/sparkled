@@ -8,8 +8,14 @@ class ScheduledTaskValidator {
 
     fun validate(scheduledTask: ScheduledActionModel) {
         when {
-            scheduledTask.type == ScheduledActionType.PLAY_PLAYLIST && scheduledTask.playlistId == null -> throw EntityValidationException(Errors.NO_PLAYLIST_SPECIFIED)
-            scheduledTask.type == ScheduledActionType.SET_BRIGHTNESS && scheduledTask.value.isNullOrBlank() -> throw EntityValidationException(Errors.NO_BRIGHTNESS_SPECIFIED)
+            scheduledTask.type == ScheduledActionType.PLAY_PLAYLIST && scheduledTask.playlistId == null -> throw EntityValidationException(
+                Errors.NO_PLAYLIST_SPECIFIED,
+            )
+
+            scheduledTask.type == ScheduledActionType.SET_BRIGHTNESS && scheduledTask.value.isNullOrBlank() -> throw EntityValidationException(
+                Errors.NO_BRIGHTNESS_SPECIFIED,
+            )
+
             !scheduledTask.value.isNullOrBlank() -> throw EntityValidationException(Errors.UNEXPECTED_VALUE)
         }
     }

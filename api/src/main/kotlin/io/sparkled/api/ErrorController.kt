@@ -1,6 +1,7 @@
 package io.sparkled.api
 
 import com.fasterxml.jackson.core.JsonParseException
+import common.logging.getLogger
 import io.micronaut.core.convert.exceptions.ConversionErrorException
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -15,7 +16,6 @@ import io.sparkled.api.util.errorResponse
 import io.sparkled.viewmodel.error.ApiErrorCode
 import io.sparkled.viewmodel.error.ErrorViewModel
 import io.sparkled.viewmodel.exception.HttpResponseException
-import org.slf4j.LoggerFactory
 
 @Controller
 class ErrorController {
@@ -89,6 +89,6 @@ class ErrorController {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(ErrorController::class.java)
+        private val logger = getLogger<ErrorController>()
     }
 }

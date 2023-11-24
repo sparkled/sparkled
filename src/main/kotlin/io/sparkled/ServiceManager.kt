@@ -1,35 +1,42 @@
-package io.sparkled.app
+package io.sparkled
 
+import common.logging.getLogger
 import io.micronaut.context.ApplicationContext
+import io.micronaut.runtime.event.ApplicationShutdownEvent
+import io.micronaut.runtime.event.ApplicationStartupEvent
 import io.micronaut.runtime.event.annotation.EventListener
-import io.micronaut.runtime.server.event.ServerShutdownEvent
-import io.micronaut.runtime.server.event.ServerStartupEvent
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.persistence.FileService
+import io.sparkled.persistence.cache.CacheService
 import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.scheduler.SchedulerService
 import io.sparkled.udpserver.LedDataStreamer
 import io.sparkled.udpserver.UdpServer
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 import jakarta.transaction.Transactional
 import java.net.DatagramSocket
 
 @Singleton
 class ServiceManager(
     private val applicationContext: ApplicationContext,
+    private val cache: CacheService,
     private val config: SparkledConfig,
-    private val schedulerService: SchedulerService,
-    private val udpServer: UdpServer,
+    private val file: FileService,
     private val ledDataStreamer: LedDataStreamer,
     private val pluginManager: SparkledPluginManager,
-    private val file: FileService,
+    private val schedulerService: SchedulerService,
+    private val udpServer: UdpServer,
 ) {
 
     @EventListener
     @Transactional
-    fun onStartup(event: ServerStartupEvent) {
+    fun onStartup(event: ApplicationStartupEvent) {
         file.init()
+
+        // Pre-warm caches.
+        cache.settings.get()
+        cache.gifs.get()
+
         pluginManager.reloadPlugins()
         schedulerService.start()
 
@@ -38,11 +45,13 @@ class ServiceManager(
         ledDataStreamer.start(socket)
 
         when {
-            applicationContext.environment.activeNames.contains("e2eTest") -> {
-                logger.info("Server running in e2eTest mode.")
+            "e2eTest" in applicationContext.environment.activeNames -> {
+                logger.info("Sparkled server running in e2eTest mode.")
             }
 
-            else -> logger.info("Sparkled server is running.")
+            else -> {
+                logger.info("Sparkled server is running.")
+            }
         }
     }
 
@@ -62,14 +71,13 @@ class ServiceManager(
     }
 
     @EventListener
-    fun onShutdown(event: ServerShutdownEvent) {
+    fun onShutdown(event: ApplicationShutdownEvent) {
         schedulerService.stop()
         udpServer.stop()
         ledDataStreamer.stop()
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(ServiceManager::class.java)
-        private const val UDP_BUFFER_SIZE = 25 * 1024 * 1024 // 25MB
+        private val logger = getLogger<ServiceManager>()
     }
 }

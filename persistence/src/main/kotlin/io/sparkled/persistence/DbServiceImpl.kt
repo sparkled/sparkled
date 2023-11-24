@@ -30,6 +30,12 @@ class DbServiceImpl(
 
     @TestOnly
     @Transactional
+    fun withTransaction(fn: () -> Unit) {
+        fn.invoke()
+    }
+
+    @TestOnly
+    @Transactional
     fun testTransaction(fail: Boolean) {
         val id = uniqueId()
         settings.save(SettingModel(id = id, code = "TEST", value = "TEST"))

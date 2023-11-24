@@ -1,16 +1,12 @@
 package io.sparkled.model
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
-import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.model.DataType
-import io.sparkled.model.embedded.Point2d
+import io.sparkled.model.converter.InstantConverter
+import io.sparkled.model.embedded.LedPositions
 import io.sparkled.model.enumeration.StagePropType
 import io.sparkled.model.util.IdUtils.uniqueId
-import jakarta.inject.Singleton
-import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Id
 import java.time.Instant
 
@@ -18,7 +14,11 @@ import java.time.Instant
 data class StagePropModel(
     @Id
     override var id: UniqueId = uniqueId(),
+
+    @MappedProperty(converter = InstantConverter::class)
     override var createdAt: Instant = Instant.now(),
+
+    @MappedProperty(converter = InstantConverter::class)
     override var updatedAt: Instant = Instant.now(),
 
     var stageId: String,
@@ -42,39 +42,5 @@ data class StagePropModel(
 ) : Model {
     companion object {
         const val MAX_BRIGHTNESS = 100
-    }
-}
-
-@TypeDef(type = DataType.STRING, converter = LedPositionConverter::class)
-class LedPositions(initialCapacity: Int) : ArrayList<Point2d>(initialCapacity) {
-    companion object {
-        fun of(vararg ledPositions: Point2d) = LedPositions(ledPositions.size).apply {
-            addAll(ledPositions)
-        }
-
-        fun of(ledPositions: Collection<Point2d>) = LedPositions(ledPositions.size).apply {
-            addAll(ledPositions)
-        }
-
-        val empty = LedPositions(0)
-    }
-}
-
-@Singleton
-class LedPositionConverter(
-    private val objectMapper: ObjectMapper,
-) : AttributeConverter<LedPositions, String> {
-
-    override fun convertToDatabaseColumn(attribute: LedPositions?): String {
-        return objectMapper.writeValueAsString(attribute ?: emptyList<String>())
-    }
-
-    override fun convertToEntityAttribute(dbData: String?): LedPositions? {
-        return if (dbData == null) {
-            null
-        } else {
-            val list = objectMapper.readValue<List<Point2d>>(dbData)
-            LedPositions.of(list)
-        }
     }
 }

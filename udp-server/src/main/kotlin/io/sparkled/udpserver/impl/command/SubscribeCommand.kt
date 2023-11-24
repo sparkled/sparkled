@@ -1,6 +1,6 @@
 package io.sparkled.udpserver.impl.command
 
-import io.sparkled.model.setting.SettingsCache
+import io.sparkled.model.setting.SettingsCacheEntry
 import io.sparkled.music.PlaybackState
 import io.sparkled.udpserver.impl.subscriber.UdpClientSubscribers
 import io.sparkled.udpserver.impl.subscriber.UdpClientSubscription
@@ -17,7 +17,7 @@ class SubscribeCommand(private val subscribers: UdpClientSubscribers) : UdpComma
         ipAddress: InetAddress,
         port: Int,
         args: List<String>,
-        settings: SettingsCache,
+        settings: SettingsCacheEntry,
         playbackState: PlaybackState
     ): ByteArray? {
         // TODO error handling for malformed request.

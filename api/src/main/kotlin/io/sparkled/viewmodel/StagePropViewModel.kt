@@ -1,6 +1,6 @@
 package io.sparkled.viewmodel
 
-import io.sparkled.model.LedPositions
+import io.sparkled.model.embedded.LedPositions
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.embedded.Point2d

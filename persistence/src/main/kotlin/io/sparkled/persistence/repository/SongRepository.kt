@@ -7,7 +7,7 @@ import io.micronaut.data.repository.CrudRepository
 import io.sparkled.model.SongModel
 import io.sparkled.model.UniqueId
 
-@JdbcRepository(dialect = Dialect.SQL_SERVER)
+@JdbcRepository(dialect = Dialect.ANSI)
 abstract class SongRepository : CrudRepository<SongModel, String> {
 
     @Query(

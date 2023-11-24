@@ -2,11 +2,11 @@ package io.sparkled.persistence
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import common.logging.getLogger
 import io.sparkled.model.UniqueId
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.model.render.RenderedSequence
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -68,9 +68,10 @@ class FileServiceImpl(
     }
 
     private fun getSongAudioPath(songId: UniqueId) = "${config.dataFolderPath}/${config.audioFolderName}/$songId.mp3"
-    private fun getRenderPath(sequenceId: UniqueId) = "${config.dataFolderPath}/${config.renderFolderName}/$sequenceId.json.gz"
+    private fun getRenderPath(sequenceId: UniqueId) =
+        "${config.dataFolderPath}/${config.renderFolderName}/$sequenceId.json.gz"
 
     companion object {
-        private val logger = LoggerFactory.getLogger(FileServiceImpl::class.java)
+        private val logger = getLogger<FileServiceImpl>()
     }
 }

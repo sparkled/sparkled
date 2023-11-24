@@ -9,7 +9,7 @@ import kotlin.math.roundToInt
 data class Led(
     @Suppress("ArrayInDataClass") private val ledData: ByteArray,
     private val ledIndex: Int,
-    private val offset: Int
+    private val offset: Int,
 ) {
     private val index: Int = ledIndex * BYTES_PER_LED
 

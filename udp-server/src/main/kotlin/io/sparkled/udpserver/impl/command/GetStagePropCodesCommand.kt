@@ -1,6 +1,6 @@
 package io.sparkled.udpserver.impl.command
 
-import io.sparkled.model.setting.SettingsCache
+import io.sparkled.model.setting.SettingsCacheEntry
 import io.sparkled.music.PlaybackState
 import java.net.InetAddress
 import java.nio.charset.StandardCharsets.UTF_8
@@ -15,7 +15,7 @@ class GetStagePropCodesCommand : UdpCommand {
         ipAddress: InetAddress,
         port: Int,
         args: List<String>,
-        settings: SettingsCache,
+        settings: SettingsCacheEntry,
         playbackState: PlaybackState,
     ): ByteArray {
         if (playbackState.isEmpty) {

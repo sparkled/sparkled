@@ -12,8 +12,12 @@ class DbTransactionE2eTest : E2eSpec() {
     init {
         val dbServiceImpl = inject<DbServiceImpl>()
 
+        beforeEach {
+            db.settings.deleteAll()
+        }
+
         "exception in @Transactional method causes DB transaction to roll back" {
-            io {
+            inject<DbServiceImpl>().withTransaction {
                 shouldThrow<DataAccessException> {
                     dbServiceImpl.testTransaction(fail = true)
                 }
@@ -23,7 +27,7 @@ class DbTransactionE2eTest : E2eSpec() {
         }
 
         "successful @Transactional method persists results to DB" {
-            io {
+            inject<DbServiceImpl>().withTransaction {
                 dbServiceImpl.testTransaction(fail = false)
                 db.settings.findAll().shouldHaveSize(1)
             }

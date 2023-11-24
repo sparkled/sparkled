@@ -26,10 +26,11 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:sqlite:sparkledData/sparkled.db
+    url: jdbc:sqlite:sparkled.db
     driver-class-name: org.sqlite.JDBC
     data-source-properties:
       foreign_keys: true
+    validation-query: "SELECT 1"
 
 jackson:
   deserialization:

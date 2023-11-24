@@ -1,5 +1,6 @@
 package io.sparkled.renderer
 
+import common.logging.getLogger
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.renderer.api.SparkledEasing
 import io.sparkled.renderer.api.SparkledFill
@@ -19,7 +20,6 @@ import io.sparkled.renderer.fill.GradientFill
 import io.sparkled.renderer.fill.RainbowFill
 import io.sparkled.renderer.fill.SingleColorFill
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.SortedMap
 import java.util.concurrent.atomic.AtomicReference
@@ -39,7 +39,7 @@ class SparkledPluginManager(
         GlitterEffect,
         LineEffect,
         SplitLineEffect,
-        SolidEffect
+        SolidEffect,
     )
     private val defaultFills = listOf(GradientFill, RainbowFill, SingleColorFill)
 
@@ -86,6 +86,6 @@ class SparkledPluginManager(
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(SparkledPluginManager::class.java)
+        private val logger = getLogger<SparkledPluginManager>()
     }
 }

@@ -1,13 +1,13 @@
 package io.sparkled.renderer.util
 
+import common.logging.getLogger
 import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.renderer.api.RenderContext
-import org.slf4j.LoggerFactory
 import java.awt.Color
 
 object FillUtils {
 
-    private val logger = LoggerFactory.getLogger(FillUtils::class.java)
+    private val logger = getLogger<FillUtils>()
 
     // TODO effectColor is an intermediate step. At present, we have the concept of fills and effects. These concepts
     //      will be merged into one, where effects can stack and act as a mask to combine effects.
@@ -26,7 +26,7 @@ object FillUtils {
 
         if (alpha < 0 || alpha > 1) {
             val frameNumber = frame.frameNumber
-            logger.warn("Alpha {} for led #{} in frame #{} is invalid, skipping.", alpha, ledIndex, frameNumber)
+            logger.warn("Alpha is invalid, skipping.", "value" to alpha, "ledIndex" to ledIndex, "frameNumber" to frameNumber)
         } else if (ledIndex >= 0 && ledIndex < ctx.stageProp.ledCount) {
             val reverse = !ignoreReverse && ctx.stageProp.reverse
             val index = if (reverse) ledRange.last - ledIndex else ledRange.first + ledIndex
@@ -39,10 +39,12 @@ object FillUtils {
                     val color = ColorUtils.adjustBrightness(fillColor, alpha)
                     led.addColor(color)
                 }
+
                 BlendMode.SUBTRACT -> {
                     val color = ColorUtils.adjustBrightness(fillColor, alpha)
                     led.subtractColor(color)
                 }
+
                 BlendMode.ALPHA_MASK -> {
                     val color = ColorUtils.adjustBrightness(fillColor, alpha)
                     led.maskColor(color)

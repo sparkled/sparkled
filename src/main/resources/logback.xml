@@ -3,7 +3,7 @@
     <file>sparkled.log</file>
 
     <encoder>
-      <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg %mdc%n</pattern>
     </encoder>
 
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
@@ -15,10 +15,14 @@
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
       <maxFileSize>5MB</maxFileSize>
     </triggeringPolicy>
-
   </appender>
 
   <root level="info">
     <appender-ref ref="FILE"/>
   </root>
+
+  <logger name="io.sparkled" level="DEBUG"/>
+
+  <!-- Uncomment the next line to enable SQL query logging, useful for debugging. -->
+  <!-- <logger name="io.micronaut.data.query" level="TRACE" /> -->
 </configuration>

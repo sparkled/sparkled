@@ -1,72 +1,25 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jlleitschuh.gradle.ktlint.KtlintExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val projectVersion = "0.2.1"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.9.20"
-    id("org.jetbrains.kotlin.kapt") version "1.9.20"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.9.20"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.2.0"
-    id("io.micronaut.aot") version "4.2.0"
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
-}
+    alias(libs.plugins.kotlin.allopen)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.micronaut.aot)
+    alias(libs.plugins.micronaut.application)
+    alias(libs.plugins.shadow)
 
-val javaNativeAccessVersion: String by project
-val jetbrainsAnnotationsVersion: String by project
-val joddHttpVersion: String by project
-val kopperVersion: String by project
-val kotestVersion: String by project
-val kotlinCoroutinesVersion: String by project
-val kotlinRetryVersion: String by project
-val kotlinVersion: String by project
-val logbackJacksonVersion: String by project
-val logbackJsonClassicVersion: String by project
-val micronautVersion: String by project
-val micronautOpenApiVersion: String by project
-val mockkVersion: String by project
-val sqliteVersion: String by project
-
-application {
-    mainClass.set("io.sparkled.app.Main")
-}
-
-java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
-}
-
-micronaut {
-    runtime("netty")
-    testRuntime("kotest")
-
-    aot {
-        cacheEnvironment = true
-        convertYamlToJava = true
-        deduceEnvironment = true
-        optimizeClassLoading = true
-        optimizeNetty = true
-        optimizeServiceLoading = true
-        precomputeOperations = true
-    }
-
-    processing {
-        incremental(true)
-        annotations("io.sparkled.*")
-    }
+    // Plugins used by submodules.
+    alias(libs.plugins.micronaut.library) apply false
 }
 
 val e2eTestImplementation: Configuration by configurations.creating {
     extendsFrom(configurations.testImplementation.get())
 }
 
-val e2eTestRuntime: Configuration by configurations.creating {
-    extendsFrom(configurations.testRuntimeClasspath.get())
-}
-
-val e2eTestSourceSet = sourceSets.create("e2eTest") {
+val e2eTestSourceSet: SourceSet = sourceSets.create("e2eTest") {
     java.srcDir("src/e2e-test/kotlin")
     resources.srcDir("src/e2e-test/resources")
     compileClasspath += sourceSets.main.get().output + sourceSets.test.get().output
@@ -84,9 +37,62 @@ val scriptsSourceSet: SourceSet = sourceSets.create("scripts") {
     runtimeClasspath += sourceSets.main.get().output + sourceSets.test.get().output
 }
 
+application {
+    mainClass = "io.sparkled.Application"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("kotest5")
+    version(libs.versions.micronaut.get())
+
+    // Micronaut build-time optimisations to improve startup speed and reduce memory footprint.
+    aot {
+        cacheEnvironment = true
+        convertYamlToJava = true
+        deduceEnvironment = true
+        optimizeClassLoading = true
+        optimizeNetty = true
+        optimizeServiceLoading = true
+        precomputeOperations = true
+    }
+
+    processing {
+        incremental(true)
+        annotations("io.sparkled.*")
+    }
+}
+
 tasks {
-    withType<ShadowJar> {
-        archiveVersion.set("")
+    compileKotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
+    }
+
+    compileTestKotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
+    }
+
+    // Allow application version to be retrieved at runtime. Only works in full Gradle builds, not dev runs.
+    jar {
+        manifest {
+            attributes["Implementation-Title"] = "Sparkled"
+            attributes["Implementation-Version"] = project.version
+        }
+    }
+
+    // Prevents the current build number from being appended to the shaded jar filename, which simplifies our deployment
+    // logic as we don't need to account for the name changing.
+    shadowJar {
+        archiveVersion = ""
     }
 
     create<Test>("e2eTest") {
@@ -97,128 +103,62 @@ tasks {
 }
 
 dependencies {
+    e2eTestImplementation(project(":liquibase"))
+    e2eTestImplementation(libs.jackson.kotlin)
+    e2eTestImplementation(libs.jodd.http)
+    e2eTestImplementation(libs.micronaut.data.jdbc)
+    e2eTestImplementation(libs.micronaut.liquibase)
+    e2eTestImplementation(libs.kotlin.reflect)
+
+    kapt(libs.micronaut.data.processor)
+    kapt(libs.micronaut.injectJava)
+
+    implementation(project(":common"))
     implementation(project(":liquibase"))
     implementation(project(":model"))
-    implementation(project(":persistence")) // TODO rename to db.
+    implementation(project(":persistence"))
     implementation(project(":renderer"))
     implementation(project(":api"))
     implementation(project(":scheduler"))
     implementation(project(":udp-server"))
+    implementation(libs.kotlin.scriptingJsr223)
+    implementation(libs.micronaut.data.jdbc)
+    implementation(libs.micronaut.httpServerNetty)
+    implementation(libs.micronaut.jacksonDatabind)
+    implementation(libs.micronaut.kotlinRuntime)
+    implementation(libs.micronaut.liquibase)
+    implementation(libs.sqlite)
 
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    implementation("io.micronaut:micronaut-http-server-netty")
-    implementation("io.micronaut.liquibase:micronaut-liquibase")
-    implementation("io.micronaut:micronaut-runtime")
+    runtimeOnly(libs.snakeyaml)
 
-    e2eTestImplementation(project(":liquibase"))
-    e2eTestImplementation("io.micronaut.liquibase:micronaut-liquibase")
-    e2eTestImplementation("io.micronaut.data:micronaut-data-jdbc")
-    e2eTestImplementation("org.jodd:jodd-http:$joddHttpVersion")
+    scriptsImplementation(libs.jackson.kotlin)
+    scriptsImplementation(libs.kopper)
+    scriptsImplementation(libs.micronaut.data.jdbc)
+    scriptsImplementation(libs.micronaut.liquibase)
+    scriptsImplementation(libs.reflections)
+}
 
-    scriptsImplementation("org.jodd:jodd-http:$joddHttpVersion")
+allOpen {
+    annotation("io.micronaut.aop.Around")
+    annotation("io.micronaut.http.annotation.Controller")
+    annotation("jakarta.inject.Singleton")
+    annotation("jakarta.transaction.Transactional")
+}
+
+ktlint {
+    version = "0.50.0"
+    ignoreFailures = true
 }
 
 allprojects {
+    group = "com.example"
     version = projectVersion
-    group = "io.sparkled"
-
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jetbrains.kotlin.kapt")
-    apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
-
-    kapt {
-        arguments {
-            arg("micronaut.processing.incremental", true)
-            arg("micronaut.processing.annotations", "io.sparkled.*")
-        }
-    }
 
     repositories {
         mavenCentral()
     }
 
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         useJUnitPlatform()
-    }
-
-    configure<KtlintExtension> {
-        ignoreFailures.set(true)
-        disabledRules.add("no-wildcard-imports")
-    }
-
-    dependencies {
-        // Prevent warning as per https://docs.micronaut.io/latest/guide/index.html#_nullable_annotations.
-        compileOnly("com.google.code.findbugs:jsr305")
-        compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-        compileOnly("jakarta.transaction:jakarta.transaction-api:2.0.1")
-
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-        implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-        implementation("io.micronaut.security:micronaut-security")
-        implementation("io.micronaut:micronaut-runtime")
-        implementation("org.springframework:spring-jdbc")
-        implementation("org.xerial:sqlite-jdbc:$sqliteVersion")
-        implementation("io.swagger.core.v3:swagger-annotations")
-        implementation("io.projectreactor:reactor-core")
-        implementation("jakarta.annotation:jakarta.annotation-api:2.1.1")
-        implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
-
-        // Kotlin runtime scripting.
-        // TODO consider implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable:$kotlinVersion")
-        //      as per https://slack-chats.kotlinlang.org/t/483178/is-there-a-reason-why-jsr-223-scripting-is-so-slow-or-is-the
-        implementation("org.jetbrains.kotlin:kotlin-script-runtime")
-        implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
-        implementation("org.jetbrains.kotlin:kotlin-script-util:1.8.22")
-        implementation("net.java.dev.jna:jna:$javaNativeAccessVersion")
-        runtimeOnly("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable")
-
-        runtimeOnly("ch.qos.logback:logback-classic")
-        runtimeOnly("ch.qos.logback.contrib:logback-json-classic:$logbackJsonClassicVersion")
-        runtimeOnly("ch.qos.logback.contrib:logback-jackson:$logbackJacksonVersion")
-
-        kapt("io.micronaut:micronaut-inject-java")
-        kapt("io.micronaut.openapi:micronaut-openapi:$micronautOpenApiVersion")
-        kapt("io.micronaut.security:micronaut-security")
-        kaptTest("io.micronaut:micronaut-inject-java")
-
-        testImplementation("io.mockk:mockk:$mockkVersion")
-        testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-        testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-        testImplementation("io.kotest:kotest-framework-concurrency:$kotestVersion")
-    }
-
-    tasks {
-        withType<KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = "17"
-                javaParameters = true
-            }
-        }
-
-        withType<Test> {
-            useJUnitPlatform()
-        }
-
-        // Allow application version to be retrieved at runtime. Only works in full Gradle builds, not dev runs.
-        withType<Jar> {
-            manifest {
-                attributes["Implementation-Title"] = "Sparkled API"
-                attributes["Implementation-Version"] = project.version
-            }
-        }
-    }
-
-    // Micronaut requires that Kotlin classes be marked as "open" in order to perform AOP interception.
-    // We leverage this for transactions using the @Transactional annotation in our Controller classes and
-    // some services. The Kotlin all-open plugin automatically applies the "open" keyword at compile time,
-    // instead of us needing to remember to add it. Classes annotated with one of the below are affected.
-    allOpen {
-        annotation("io.micronaut.aop.Around")
-        annotation("io.micronaut.http.annotation.Controller")
-        annotation("jakarta.inject.Singleton")
-        annotation("jakarta.transaction.Transactional")
     }
 }

@@ -1,20 +1,19 @@
 package io.sparkled.e2e.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import common.logging.getLogger
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.server.EmbeddedServer
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
-import org.slf4j.LoggerFactory
 
 object E2eContext {
-    private val logger = LoggerFactory.getLogger(E2eContext::class.java)
+    private val logger = getLogger<E2eContext>()
     private val appContext: ApplicationContext
     private val jsonMapper: ObjectMapper
     val embeddedServer: EmbeddedServer
     val caches: CacheService
     val db: DbService
-    val http: E2eHttpClient
 
     init {
         val properties = hashMapOf<String, Any>(
@@ -26,7 +25,6 @@ object E2eContext {
         caches = inject()
         db = inject()
         jsonMapper = inject()
-        http = E2eHttpClient(embeddedServer.url, jsonMapper)
     }
 
     inline fun <reified T : Any> inject(): T {

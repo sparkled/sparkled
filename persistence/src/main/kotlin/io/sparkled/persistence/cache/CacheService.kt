@@ -1,12 +1,11 @@
 package io.sparkled.persistence.cache
 
-import io.sparkled.model.setting.SettingsCache
-import java.awt.image.BufferedImage
-
+import io.sparkled.persistence.cache.impl.GifsCache
+import io.sparkled.persistence.cache.impl.SettingsCache
 
 interface CacheService {
-    val gifs: Cache<LinkedHashMap<String, List<BufferedImage>>>
-    val settings: Cache<SettingsCache>
+    val gifs: GifsCache
+    val settings: SettingsCache
     val allCaches: List<Cache<*>>
 }
 

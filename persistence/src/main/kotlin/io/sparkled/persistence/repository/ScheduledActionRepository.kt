@@ -5,5 +5,5 @@ import io.micronaut.data.model.query.builder.sql.Dialect
 import io.micronaut.data.repository.CrudRepository
 import io.sparkled.model.ScheduledActionModel
 
-@JdbcRepository(dialect = Dialect.SQL_SERVER)
+@JdbcRepository(dialect = Dialect.ANSI)
 abstract class ScheduledActionRepository : CrudRepository<ScheduledActionModel, String>

@@ -1,6 +1,6 @@
 package io.sparkled.viewmodel
 
-import io.sparkled.model.ChannelData
+import io.sparkled.model.embedded.ChannelData
 import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect

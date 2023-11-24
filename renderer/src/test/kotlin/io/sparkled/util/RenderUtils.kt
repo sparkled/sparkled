@@ -1,6 +1,6 @@
 package io.sparkled.util
 
-import io.sparkled.model.ChannelData
+import io.sparkled.model.embedded.ChannelData
 import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId

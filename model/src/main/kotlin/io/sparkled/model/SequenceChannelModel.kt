@@ -1,14 +1,10 @@
 package io.sparkled.model
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.micronaut.data.annotation.MappedEntity
-import io.micronaut.data.annotation.TypeDef
-import io.micronaut.data.model.DataType
-import io.sparkled.model.animation.effect.Effect
+import io.micronaut.data.annotation.MappedProperty
+import io.sparkled.model.converter.InstantConverter
+import io.sparkled.model.embedded.ChannelData
 import io.sparkled.model.util.IdUtils.uniqueId
-import jakarta.inject.Singleton
-import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Id
 import java.time.Instant
 
@@ -16,7 +12,11 @@ import java.time.Instant
 data class SequenceChannelModel(
     @Id
     override var id: UniqueId = uniqueId(),
+
+    @MappedProperty(converter = InstantConverter::class)
     override var createdAt: Instant = Instant.now(),
+
+    @MappedProperty(converter = InstantConverter::class)
     override var updatedAt: Instant = Instant.now(),
 
     var sequenceId: String,
@@ -24,40 +24,5 @@ data class SequenceChannelModel(
 
     var name: String,
     var displayOrder: Int,
-    var channelData: ChannelData = ChannelData.empty
+    var channelData: ChannelData = ChannelData.empty,
 ) : Model
-
-
-@TypeDef(type = DataType.STRING, converter = ChannelDataConverter::class)
-class ChannelData(initialCapacity: Int) : ArrayList<Effect>(initialCapacity) {
-    companion object {
-        fun of(vararg effects: Effect) = ChannelData(effects.size).apply {
-            addAll(effects)
-        }
-
-        fun of(effects: Collection<Effect>) = ChannelData(effects.size).apply {
-            addAll(effects)
-        }
-
-        val empty = ChannelData(0)
-    }
-}
-
-@Singleton
-class ChannelDataConverter(
-    private val objectMapper: ObjectMapper,
-) : AttributeConverter<ChannelData, String> {
-
-    override fun convertToDatabaseColumn(attribute: ChannelData?): String {
-        return objectMapper.writeValueAsString(attribute ?: emptyList<String>())
-    }
-
-    override fun convertToEntityAttribute(dbData: String?): ChannelData? {
-        return if (dbData == null) {
-            null
-        } else {
-            val list = objectMapper.readValue<List<Effect>>(dbData)
-            ChannelData.of(list)
-        }
-    }
-}

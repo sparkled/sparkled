@@ -7,7 +7,7 @@ import io.micronaut.data.repository.CrudRepository
 import io.sparkled.model.PlaylistSequenceModel
 import io.sparkled.model.UniqueId
 
-@JdbcRepository(dialect = Dialect.SQL_SERVER)
+@JdbcRepository(dialect = Dialect.ANSI)
 abstract class PlaylistSequenceRepository : CrudRepository<PlaylistSequenceModel, String> {
     @Query(
         """

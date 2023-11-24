@@ -7,7 +7,7 @@ import io.sparkled.model.SongModel
 import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
-import io.sparkled.model.setting.SettingsCache
+import io.sparkled.model.setting.SettingsCacheEntry
 import io.sparkled.model.util.testStageProp
 import io.sparkled.music.PlaybackState
 import java.net.InetAddress
@@ -29,7 +29,7 @@ class GetStagePropCodesCommandTest : StringSpec() {
                 ipAddress = InetAddress.getLocalHost(),
                 port = 2812,
                 args = listOf(GetStagePropCodesCommand.KEY),
-                settings = SettingsCache(0),
+                settings = SettingsCacheEntry(0),
                 playbackState = PlaybackState(
                     sequences = listOf(sequence),
                     sequenceIndex = 0,
