@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Col, Container, Row } from 'react-grid-system'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -114,7 +114,7 @@ const DashboardScreen = () => {
     return (dashboard?.stages ?? [])
       .filter(it => it.name.toLowerCase().includes(searchQuery))
       .map(it => {
-        let actions = (
+        const actions = (
           <>
             <S.DropdownItem>
               <Link to={`/stages/${it.id}`}>Edit Stage</Link>
@@ -135,7 +135,7 @@ const DashboardScreen = () => {
           it.artist.toLowerCase().includes(searchQuery)
       )
       .map(it => {
-        let actions = (
+        const actions = (
           <>
             <S.DropdownItem onClick={() => dispatch(showDeleteSongModal(it))}>Delete Song</S.DropdownItem>
           </>
@@ -145,7 +145,7 @@ const DashboardScreen = () => {
           <DashboardSwimlaneItem
             key={it.id}
             title={it.name}
-            subtitle={getFormattedDuration(Math.floor(it.durationMs / 1000))}
+            subtitle={getFormattedDuration(it.durationMs / 1000)}
             actions={actions}
           />
         )
@@ -169,7 +169,7 @@ const DashboardScreen = () => {
     return (dashboard?.sequences ?? [])
       .filter(it => it.name.toLowerCase().includes(searchQuery))
       .map(it => {
-        let actions = (
+        const actions = (
           <>
             <S.DropdownItem onClick={() => playSequence(it.id)}>Play Sequence</S.DropdownItem>
             <S.DropdownItem onClick={() => stopSequence()}>Stop Sequence</S.DropdownItem>
@@ -185,7 +185,7 @@ const DashboardScreen = () => {
             key={it.id}
             status={it.status === 'PUBLISHED' ? 'success' : 'danger'}
             title={it.name}
-            subtitle={`${it.stageName} · ${it.songName} · ${getFormattedDuration(Math.floor(it.durationSeconds))}`}
+            subtitle={`${it.stageName} · ${it.songName} · ${getFormattedDuration(it.durationMs / 1000)}`}
             actions={actions}
           />
         )
@@ -196,7 +196,7 @@ const DashboardScreen = () => {
     return (dashboard?.playlists ?? [])
       .filter(it => it.name.toLowerCase().includes(searchQuery))
       .map(it => {
-        let actions = (
+        const actions = (
           <>
             <S.DropdownItem onClick={() => dispatch(playPlaylist(it.id))}>Play Playlist</S.DropdownItem>
             <S.DropdownItem onClick={() => dispatch(stopPlaylist())}>Stop Playlist</S.DropdownItem>
@@ -207,8 +207,8 @@ const DashboardScreen = () => {
           </>
         )
 
-        let sequenceCount = `${it.sequenceCount} sequence${it.sequenceCount === 1 ? '' : 's'}`
-        let totalDuration = getFormattedDuration(Math.floor(it.durationSeconds))
+        const sequenceCount = `${it.sequenceCount} sequence${it.sequenceCount === 1 ? '' : 's'}`
+        const totalDuration = getFormattedDuration(it.durationMs / 1000)
         return (
           <DashboardSwimlaneItem
             key={it.id}
@@ -222,9 +222,9 @@ const DashboardScreen = () => {
 
   const scheduledTaskItems = useMemo(() => {
     return (dashboard?.scheduledTasks ?? [])
-      .filter(it => it.action.toLowerCase().includes(searchQuery))
+      .filter(it => it.type.toLowerCase().includes(searchQuery))
       .map(it => {
-        let actions = (
+        const actions = (
           <>
             <S.DropdownItem onClick={() => dispatch(showDeleteScheduledTaskModal(it))}>
               Delete scheduled task
@@ -232,10 +232,10 @@ const DashboardScreen = () => {
           </>
         )
 
-        let trigger = `Cron (${it.cronExpression})`
+        const trigger = `Cron (${it.cronExpression})`
 
         let action
-        switch (it.action) {
+        switch (it.type) {
           case 'PLAY_PLAYLIST':
             action = `Play playlist ${it.playlistName}`
             break
@@ -259,12 +259,10 @@ const DashboardScreen = () => {
       <DeleteStageModal />
       <AddSongModal />
       <DeleteSongModal />
-      {/*@ts-ignore*/}
       <AddSequenceModal songs={dashboard?.songs} stages={dashboard?.stages} />
       <DeleteSequenceModal />
       <AddPlaylistModal />
       <DeletePlaylistModal />
-      {/*@ts-ignore*/}
       <AddScheduledJobModal playlists={dashboard?.playlists} />
       <DeleteScheduledJobModal />
 

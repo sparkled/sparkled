@@ -8,7 +8,7 @@ plugins {
 allOpen {
     annotation("io.micronaut.http.annotation.Controller")
     annotation("io.micronaut.runtime.http.scope.RequestScope")
-    annotation("jakarta.transaction.Transactional")
+    annotation("io.micronaut.transaction.annotation.Transactional")
 }
 
 dependencies {

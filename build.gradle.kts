@@ -42,8 +42,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 micronaut {
@@ -71,13 +71,13 @@ micronaut {
 tasks {
     compileKotlin {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
+            jvmTarget = JvmTarget.JVM_21
         }
     }
 
     compileTestKotlin {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
+            jvmTarget = JvmTarget.JVM_21
         }
     }
 
@@ -142,7 +142,7 @@ allOpen {
     annotation("io.micronaut.aop.Around")
     annotation("io.micronaut.http.annotation.Controller")
     annotation("jakarta.inject.Singleton")
-    annotation("jakarta.transaction.Transactional")
+    annotation("io.micronaut.transaction.annotation.Transactional")
 }
 
 ktlint {

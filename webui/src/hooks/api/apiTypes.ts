@@ -26,7 +26,7 @@ export type SequenceSearchViewModel = {
   songName: string
   stageName: string
   framesPerSecond: number
-  durationSeconds: number
+  durationMs: number
   status: SequenceStatus
 }
 
@@ -41,12 +41,12 @@ export type PlaylistSearchViewModel = {
   id: number
   name: string
   sequenceCount: number
-  durationSeconds: number
+  durationMs: number
 }
 
 export type ScheduledJobSearchViewModel = {
   id: number
-  action: ScheduledJobAction
+  type: ScheduledJobAction
   cronExpression: string
   playlistName: string
   playlistId: number

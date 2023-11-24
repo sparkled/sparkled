@@ -16,7 +16,7 @@ import java.net.InetAddress
 
 @Singleton
 class RequestHandlerImpl(
-    private val caches: CacheService,
+    private val cache: CacheService,
     private val playbackStateService: PlaybackStateService,
     subscribers: UdpClientSubscribers,
 ) : RequestHandler {
@@ -42,7 +42,7 @@ class RequestHandlerImpl(
 
     private fun getResponse(ipAddress: InetAddress, port: Int, args: List<String>): ByteArray? {
         val playbackState = playbackStateService.getPlaybackState()
-        val settings = caches.settings.get()
+        val settings = cache.settings.get()
 
         val command = args[0]
         val requestCommand = commands[command] ?: throw IllegalArgumentException("Unrecognised command '$command'.")

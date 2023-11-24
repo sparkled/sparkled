@@ -12,7 +12,7 @@ import io.sparkled.persistence.repository.SongRepository
 import io.sparkled.persistence.repository.StagePropRepository
 import io.sparkled.persistence.repository.StageRepository
 import jakarta.inject.Singleton
-import jakarta.transaction.Transactional
+import io.micronaut.transaction.annotation.Transactional
 import org.jetbrains.annotations.TestOnly
 
 @Singleton
@@ -37,12 +37,11 @@ class DbServiceImpl(
     @TestOnly
     @Transactional
     fun testTransaction(fail: Boolean) {
-        val id = uniqueId()
-        settings.save(SettingModel(id = id, code = "TEST", value = "TEST"))
+        settings.save(SettingModel(id = "BRIGHTNESS", value = "TEST"))
 
         if (fail) {
             // Attempt to insert duplicate record. Should cause a rollback, resulting in no users being persisted.
-            settings.save(SettingModel(id = id, code = "TEST", value = "TEST"))
+            settings.save(SettingModel(id = "BRIGHTNESS", value = "TEST"))
         }
     }
 

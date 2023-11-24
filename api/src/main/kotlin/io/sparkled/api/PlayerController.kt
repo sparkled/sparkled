@@ -13,7 +13,7 @@ import io.sparkled.model.playlist.PlaylistActionType
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
-import jakarta.transaction.Transactional
+import io.micronaut.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)

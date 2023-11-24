@@ -20,7 +20,7 @@ import io.sparkled.persistence.FileService
 import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.viewmodel.SongEditViewModel
 import io.sparkled.viewmodel.SongViewModel
-import jakarta.transaction.Transactional
+import io.micronaut.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)

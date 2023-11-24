@@ -55,6 +55,14 @@ data class SparkledConfig(
     val udpSendBufferSize: Int,
 ) {
     val dataFolders by lazy {
-        listOf(audioFolderName, gifFolderName, pluginFolderName, renderFolderName)
+        listOf(
+            audioFolderName,
+            gifFolderName,
+            pluginFolderName,
+            renderFolderName,
+            "$pluginFolderName/easings",
+            "$pluginFolderName/effects",
+            "$pluginFolderName/fills",
+        )
     }
 }

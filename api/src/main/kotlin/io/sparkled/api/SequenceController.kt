@@ -14,12 +14,16 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
+import io.micronaut.transaction.annotation.Transactional
 import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
 import io.sparkled.model.StageModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.render.RenderResult
+import io.sparkled.model.render.RenderedSequence
+import io.sparkled.model.render.RenderedSequenceStageProp
 import io.sparkled.model.util.IdUtils.uniqueId
 import io.sparkled.model.util.SequenceUtils
 import io.sparkled.persistence.DbService
@@ -34,14 +38,15 @@ import io.sparkled.viewmodel.SequenceViewModel
 import io.sparkled.viewmodel.StageViewModel
 import io.sparkled.viewmodel.error.ApiErrorCode
 import io.sparkled.viewmodel.exception.HttpResponseException
-import jakarta.transaction.Transactional
+import java.time.Instant
+import java.util.Base64
 import kotlin.math.min
 
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/sequences")
 class SequenceController(
-    private val caches: CacheService,
+    private val cache: CacheService,
     private val db: DbService,
     private val file: FileService,
     private val pluginManager: SparkledPluginManager,
@@ -55,7 +60,7 @@ class SequenceController(
 
         val viewModels = db.sequences.findAll()
             .sortedBy { it.name }
-            .map { SequenceSummaryViewModel.fromModel(it, songs.getValue(it.id), stages.getValue(it.id)) }
+            .map { SequenceSummaryViewModel.fromModel(it, songs.getValue(it.songId), stages.getValue(it.stageId)) }
 
         return HttpResponse.ok(viewModels)
     }
@@ -142,50 +147,49 @@ class SequenceController(
         @PathVariable id: UniqueId,
         @Body body: SequenceEditViewModel,
     ): HttpResponse<Any> {
-        TODO()
-//
-//        val sequenceAndChannels = body.copy(id = id).toModel(objectMapper)
-//        val sequence = sequenceAndChannels.first.copy(id = id)
-//        val sequenceChannels = sequenceAndChannels.second.map { it.copy(sequenceId = id) }
-//
-//        val newChannels = sequenceChannels.associateBy { it.id }
-//        val existingChannels = db.sequenceChannels.findAllBySequenceId(id).associateBy { it.id }
-//
-//        // Delete channels that no longer exist.
-//        val toDelete = existingChannels.keys - newChannels.keys
-//        toDelete.forEach { db.sequenceChannels.deleteById(it) }
-//
-//        // Insert channels that didn't exist previously.
-//        val toCreate = newChannels.keys - existingChannels.keys
-//        toCreate.forEach { db.sequences.save(newChannels.getValue(it)) }
-//
-//        // Update channels that exist
-//        val toUpdate = newChannels.keys.intersect(existingChannels.keys)
-//        toUpdate.forEach { db.sequences.update(newChannels.getValue(it)) }
-//
-//        if (sequence.status === SequenceStatus.PUBLISHED) {
-//            db.sequences.update(sequence)
-//            val stage = db.stages.findBySequenceId(id) ?: throw EntityNotFoundException("Stage not found.")
-//            val song = db.songs.findBySequenceId(id) ?: throw EntityNotFoundException("Song not found.")
-//
-//            val renderResult = renderSequence(stage, sequence, sequenceChannels, song, preview = false)
-//            val renderedSequence = RenderedSequence(
-//                sequenceId = sequence.id,
-//                startFrame = renderResult.startFrame,
-//                frameCount = renderResult.frameCount,
-//                stageProps = renderResult.stageProps.mapValues {
-//                    RenderedSequenceStageProp(
-//                        ledCount = it.value.ledCount,
-//                        base64Data = Base64.getEncoder().encodeToString(it.value.data)
-//                    )
-//                }
-//            )
-//            file.writeRender(sequence.id, renderedSequence)
-//        } else {
-//            db.sequences.update(sequence.copy(status = SequenceStatus.DRAFT, updatedAt = Instant.now()))
-//        }
-//
-//        return HttpResponse.ok()
+        val sequence = db.sequences.findByIdOrNull(id)
+            ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
+
+        val sequenceChannels = body.channels.map { it.toModel(id) }
+
+        val newChannels = sequenceChannels.associateBy { it.id }
+        val existingChannels = db.sequenceChannels.findAllBySequenceId(id).associateBy { it.id }
+
+        // Delete channels that no longer exist.
+        val toDelete = existingChannels.keys - newChannels.keys
+        toDelete.forEach { db.sequenceChannels.deleteById(it) }
+
+        // Insert channels that didn't exist previously.
+        val toCreate = newChannels.keys - existingChannels.keys
+        toCreate.forEach { db.sequenceChannels.save(newChannels.getValue(it)) }
+
+        // Update channels that exist
+        val toUpdate = newChannels.keys.intersect(existingChannels.keys)
+        toUpdate.forEach { db.sequenceChannels.update(newChannels.getValue(it)) }
+
+        if (sequence.status === SequenceStatus.PUBLISHED) {
+            db.sequences.update(sequence)
+            val stage = db.stages.findBySequenceId(id) ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
+            val song = db.songs.findBySequenceId(id) ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
+
+            val renderResult = renderSequence(stage, sequence, sequenceChannels, song, preview = false)
+            val renderedSequence = RenderedSequence(
+                sequenceId = sequence.id,
+                startFrame = renderResult.startFrame,
+                frameCount = renderResult.frameCount,
+                stageProps = renderResult.stageProps.mapValues {
+                    RenderedSequenceStageProp(
+                        ledCount = it.value.ledCount,
+                        base64Data = Base64.getEncoder().encodeToString(it.value.data)
+                    )
+                }
+            )
+            file.writeRender(sequence.id, renderedSequence)
+        } else {
+            db.sequences.update(sequence.copy(status = SequenceStatus.DRAFT, updatedAt = Instant.now()))
+        }
+
+        return HttpResponse.ok()
     }
 
     private fun renderSequence(
@@ -202,7 +206,7 @@ class SequenceController(
 
         return Renderer(
             pluginManager,
-            caches.gifs.get(),
+            cache.gifs.get(),
             stage,
             sequence,
             sequenceChannels,
@@ -219,9 +223,13 @@ class SequenceController(
         @PathVariable id: UniqueId,
         @QueryValue(defaultValue = "0") startFrame: Int,
         @QueryValue(defaultValue = "0") frameCount: Int,
-        sequenceViewModel: SequenceViewModel
+        @Body body: SequenceEditViewModel,
     ): HttpResponse<Any> {
-        val (sequence, sequenceChannels) = sequenceViewModel.toModel()
+        val sequence = db.sequences.findByIdOrNull(id)
+            ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
+
+        val sequenceChannels = body.channels.map { it.toModel(id) }
+
         val stage = db.stages.findBySequenceId(id) ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
         val song = db.songs.findBySequenceId(id) ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 

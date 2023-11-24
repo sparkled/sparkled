@@ -21,7 +21,7 @@ import io.sparkled.viewmodel.StageSummaryViewModel
 import io.sparkled.viewmodel.StageViewModel
 import io.sparkled.viewmodel.error.ApiErrorCode
 import io.sparkled.viewmodel.exception.HttpResponseException
-import jakarta.transaction.Transactional
+import io.micronaut.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)

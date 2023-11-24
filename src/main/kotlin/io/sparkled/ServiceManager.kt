@@ -5,6 +5,7 @@ import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.event.ApplicationShutdownEvent
 import io.micronaut.runtime.event.ApplicationStartupEvent
 import io.micronaut.runtime.event.annotation.EventListener
+import io.micronaut.transaction.annotation.Transactional
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.persistence.FileService
 import io.sparkled.persistence.cache.CacheService
@@ -13,7 +14,6 @@ import io.sparkled.scheduler.SchedulerService
 import io.sparkled.udpserver.LedDataStreamer
 import io.sparkled.udpserver.UdpServer
 import jakarta.inject.Singleton
-import jakarta.transaction.Transactional
 import java.net.DatagramSocket
 
 @Singleton

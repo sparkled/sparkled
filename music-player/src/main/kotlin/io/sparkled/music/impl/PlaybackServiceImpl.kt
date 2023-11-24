@@ -12,7 +12,7 @@ import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
 import jakarta.inject.Singleton
-import jakarta.transaction.Transactional
+import io.micronaut.transaction.annotation.Transactional
 import java.util.Base64
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference

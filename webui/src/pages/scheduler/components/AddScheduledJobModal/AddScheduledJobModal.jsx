@@ -13,7 +13,7 @@ const formName = 'addScheduledJob'
 
 class AddScheduledJobModal extends Component {
   state = {
-    action: null,
+    type: null,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -46,7 +46,7 @@ class AddScheduledJobModal extends Component {
             />
 
             <Field
-              name='action'
+              name='type'
               component={SingleSelectField}
               fullWidth
               label='Action'
@@ -77,11 +77,11 @@ class AddScheduledJobModal extends Component {
     const { change } = this.props
     change('value', null)
     change('playlistId', null)
-    this.setState({ action: newValue })
+    this.setState({ type: newValue })
   }
 
   renderPlaylistField() {
-    const hasPlaylist = this.state.action === 'PLAY_PLAYLIST'
+    const hasPlaylist = this.state.type === 'PLAY_PLAYLIST'
 
     if (hasPlaylist) {
       return (
@@ -100,7 +100,7 @@ class AddScheduledJobModal extends Component {
   }
 
   renderValueField() {
-    const hasValue = this.state.action === 'SET_BRIGHTNESS'
+    const hasValue = this.state.type === 'SET_BRIGHTNESS'
 
     if (hasValue) {
       return <Field name='value' component={TextField} fullWidth label='Brightness' required validate={required} />

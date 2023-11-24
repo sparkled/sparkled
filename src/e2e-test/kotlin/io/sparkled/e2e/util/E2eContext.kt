@@ -11,9 +11,9 @@ object E2eContext {
     private val logger = getLogger<E2eContext>()
     private val appContext: ApplicationContext
     private val jsonMapper: ObjectMapper
-    val embeddedServer: EmbeddedServer
-    val caches: CacheService
+    val cache: CacheService
     val db: DbService
+    val embeddedServer: EmbeddedServer
 
     init {
         val properties = hashMapOf<String, Any>(
@@ -22,7 +22,7 @@ object E2eContext {
 
         embeddedServer = ApplicationContext.run(EmbeddedServer::class.java, properties, "e2eTest")
         appContext = embeddedServer.applicationContext
-        caches = inject()
+        cache = inject()
         db = inject()
         jsonMapper = inject()
     }

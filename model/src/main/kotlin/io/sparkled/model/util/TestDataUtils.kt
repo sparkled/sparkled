@@ -60,9 +60,8 @@ val testSequence
 
 val testSetting
     get() = SettingModel(
-        id = "1",
-        code = "TEST_SETTING",
-        value = "Test setting value",
+        id = "BRIGHTNESS",
+        value = "100",
     )
 
 val testSong

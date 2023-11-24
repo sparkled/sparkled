@@ -7,9 +7,8 @@ import io.sparkled.model.validator.exception.EntityValidationException
 class SettingValidator {
 
     fun validate(setting: SettingModel) {
-        val code = setting.code
         val value = setting.value
-        val isBrightness = code === SettingsConstants.Brightness.CODE
+        val isBrightness = setting.id === SettingsConstants.Brightness.CODE
 
         when {
             isBrightness && value.toIntOrNull() == null -> throw EntityValidationException(Errors.VALUE_INVALID)

@@ -244,10 +244,10 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="chrisparton1991" id="create-table-scheduled-job">
+  <changeSet author="chrisparton1991" id="create-table-scheduled-action">
     <createTable tableName="SCHEDULED_ACTION">
       <column name="id" type="NVARCHAR(12)">
-        <constraints primaryKey="true" primaryKeyName="pk_scheduledjob"/>
+        <constraints primaryKey="true" primaryKeyName="pk_scheduledaction"/>
       </column>
       <column name="type" type="NVARCHAR(32)">
         <constraints nullable="false"/>
@@ -258,7 +258,7 @@
       <column name="value" type="NVARCHAR(16)"/>
       <column name="playlist_id" type="NVARCHAR(12)">
         <constraints
-                foreignKeyName="fk_scheduledjob_playlistid"
+                foreignKeyName="fk_scheduledaction_playlistid"
                 referencedTableName="playlist"
                 referencedColumnNames="id"
         />
@@ -276,9 +276,6 @@
     <createTable tableName="SETTING">
       <column name="id" type="NVARCHAR(12)">
         <constraints primaryKey="true" primaryKeyName="pk_setting"/>
-      </column>
-      <column name="code" type="NVARCHAR(32)">
-        <constraints nullable="false" unique="true" uniqueConstraintName="uq_setting_code"/>
       </column>
       <column name="value" type="NVARCHAR(32)">
         <constraints nullable="false"/>

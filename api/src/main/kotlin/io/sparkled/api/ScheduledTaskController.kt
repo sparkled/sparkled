@@ -11,13 +11,17 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
+import io.micronaut.transaction.annotation.Transactional
+import io.sparkled.model.ScheduledActionModel
 import io.sparkled.model.UniqueId
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.scheduler.SchedulerService
+import io.sparkled.viewmodel.ScheduledActionEditViewModel
 import io.sparkled.viewmodel.ScheduledActionViewModel
 import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
-import jakarta.transaction.Transactional
+import io.sparkled.viewmodel.error.ApiErrorCode
+import io.sparkled.viewmodel.exception.HttpResponseException
 
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
@@ -45,25 +49,30 @@ class ScheduledTaskController(
     fun getScheduledTask(
         @PathVariable id: UniqueId,
     ): HttpResponse<Any> {
-        val viewModel = db.scheduledActions.findByIdOrNull(id)?.let {
-            ScheduledActionViewModel.fromModel(it)
-        }
+        val existing = db.scheduledActions.findByIdOrNull(id)
+            ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
-        return when {
-            null != viewModel -> HttpResponse.ok(viewModel)
-            else -> HttpResponse.notFound("scheduled task not found.")
-        }
+        val viewModel = ScheduledActionViewModel.fromModel(existing)
+        return HttpResponse.ok(viewModel)
     }
 
     @Post("/")
     @Transactional
     fun createScheduledTask(
-        @Body body: ScheduledActionViewModel,
+        @Body body: ScheduledActionEditViewModel,
     ): HttpResponse<Any> {
-        val scheduledJob = body.toModel()
+        val scheduledJob = ScheduledActionModel(
+            type = body.type,
+            cronExpression = body.cronExpression,
+            value = body.value,
+            playlistId = body.playlistId,
+        )
+
         val saved = db.scheduledActions.save(scheduledJob)
         schedulerService.reload()
-        return HttpResponse.created(saved) // TODO viewmodel
+
+        val viewModel = ScheduledActionViewModel.fromModel(saved)
+        return HttpResponse.created(viewModel)
     }
 
     @Delete("/{id}")

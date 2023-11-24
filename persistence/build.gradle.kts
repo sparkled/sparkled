@@ -8,7 +8,7 @@ plugins {
 allOpen {
     annotation("io.micronaut.data.jdbc.annotation.JdbcRepository")
     annotation("jakarta.inject.Singleton")
-    annotation("jakarta.transaction.Transactional")
+    annotation("io.micronaut.transaction.annotation.Transactional")
 }
 
 dependencies {

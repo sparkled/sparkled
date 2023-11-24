@@ -14,7 +14,7 @@ abstract class SongRepository : CrudRepository<SongModel, String> {
         """
         SELECT s.*
             FROM SONG s
-            JOIN SEQUENCE sq on s.id = sq.stage_id
+            JOIN SEQUENCE sq on s.id = sq.song_id
             WHERE sq.id = :sequenceId
     """
     )

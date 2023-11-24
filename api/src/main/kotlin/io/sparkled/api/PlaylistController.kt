@@ -5,20 +5,25 @@ import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Put
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
+import io.micronaut.transaction.annotation.Transactional
 import io.sparkled.model.PlaylistModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.util.IdUtils.uniqueId
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
+import io.sparkled.viewmodel.PlaylistEditViewModel
 import io.sparkled.viewmodel.PlaylistSummaryViewModel
 import io.sparkled.viewmodel.PlaylistViewModel
-import jakarta.transaction.Transactional
+import io.sparkled.viewmodel.error.ApiErrorCode
+import io.sparkled.viewmodel.exception.HttpResponseException
+import java.time.Instant
 
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
@@ -51,16 +56,15 @@ class PlaylistController(
     @Transactional
     fun getPlaylist(id: UniqueId): HttpResponse<Any> {
         val playlist = getPlaylistById(id)
+            ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
-        return if (playlist != null) {
-            HttpResponse.ok(playlist)
-        } else HttpResponse.notFound("Playlist not found.")
+        return HttpResponse.ok(playlist)
     }
 
     @Post("/")
     @Transactional
     fun createPlaylist(
-        @Body body: PlaylistViewModel,
+        @Body body: PlaylistEditViewModel,
     ): HttpResponse<Any> {
         val playlist = PlaylistModel(id = uniqueId(), name = body.name)
         db.playlists.save(playlist)
@@ -79,15 +83,18 @@ class PlaylistController(
 
     @Put("/{id}")
     @Transactional
-    fun updatePlaylist(id: UniqueId, playlistViewModel: PlaylistViewModel): HttpResponse<Any> {
-        val playlistAndSequences = playlistViewModel.copy(id = id).toModel()
-        val playlist = playlistAndSequences.first.copy(id = id)
+    fun updatePlaylist(
+        @PathVariable id: UniqueId,
+        @Body body: PlaylistEditViewModel,
+    ): HttpResponse<Any> {
+        val existing = db.playlists.findByIdOrNull(id)
+            ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
-        // Update playlist.
-        db.playlists.update(playlist)
+        val updated = db.playlists.update(existing.copy(name = body.name, updatedAt = Instant.now()))
+        val sequences = body.sequences.map { it.toModel(updated.id) }
 
         val existingSequences = db.playlistSequences.getPlaylistSequencesByPlaylistId(id).associateBy { it.id }
-        val newSequences = playlistAndSequences.second.map { it.copy(playlistId = id) }.associateBy { it.id }
+        val newSequences = sequences.map { it.copy(playlistId = id) }.associateBy { it.id }
 
         // Delete playlist sequences that no longer exist.
         (existingSequences.keys - newSequences.keys).forEach { db.playlistSequences.delete(existingSequences.getValue(it)) }
@@ -98,9 +105,7 @@ class PlaylistController(
         // Update playlist sequences that exist
         (newSequences.keys.intersect(existingSequences.keys)).forEach {
             db.playlistSequences.update(
-                newSequences.getValue(
-                    it
-                )
+                newSequences.getValue(it)
             )
         }
 

@@ -17,7 +17,7 @@ import kotlin.concurrent.thread
 @Singleton
 class LedDataStreamerImpl(
     private val playbackStateService: PlaybackStateService,
-    private val caches: CacheService,
+    private val cache: CacheService,
     private val subscribers: UdpClientSubscribers,
 ) : LedDataStreamer {
 
@@ -45,7 +45,7 @@ class LedDataStreamerImpl(
         try {
             while (started) {
                 val iterationTime = System.currentTimeMillis()
-                val settings = caches.settings.get()
+                val settings = cache.settings.get()
                 val playbackState = playbackStateService.getPlaybackState()
 
                 try {

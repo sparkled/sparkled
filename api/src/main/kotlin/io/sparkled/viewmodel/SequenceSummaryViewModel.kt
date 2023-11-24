@@ -6,7 +6,6 @@ import io.sparkled.model.StageModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.constant.ModelConstants
 import io.sparkled.model.enumeration.SequenceStatus
-import io.sparkled.model.util.IdUtils
 
 data class SequenceSummaryViewModel(
     val id: UniqueId,
@@ -14,7 +13,7 @@ data class SequenceSummaryViewModel(
     val songName: String,
     val stageName: String,
     val framesPerSecond: Int,
-    val durationSeconds: Int,
+    val durationMs: Int,
     val status: SequenceStatus,
 ) : ViewModel {
     companion object {
@@ -29,7 +28,7 @@ data class SequenceSummaryViewModel(
                 songName = song.name,
                 stageName = stage.name,
                 framesPerSecond = model.framesPerSecond,
-                durationSeconds = song.durationMs.div(ModelConstants.MS_PER_SECOND),
+                durationMs = song.durationMs,
                 status = model.status,
             )
         }

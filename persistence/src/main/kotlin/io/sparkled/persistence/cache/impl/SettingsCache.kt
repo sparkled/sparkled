@@ -15,7 +15,7 @@ class SettingsCache(
     fallback = SettingsCacheEntry(brightness = SettingsConstants.Brightness.MAX),
 ) {
     override fun reload(lastLoadedAt: Instant?): SettingsCacheEntry {
-        val brightness = db.settings.findAll().firstOrNull { it.code == SettingsConstants.Brightness.CODE }
+        val brightness = db.settings.findAll().firstOrNull { it.id == SettingsConstants.Brightness.CODE }
         return SettingsCacheEntry(brightness = brightness?.value?.toInt() ?: SettingsConstants.Brightness.MAX)
     }
 }

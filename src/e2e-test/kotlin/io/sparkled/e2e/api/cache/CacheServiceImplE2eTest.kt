@@ -1,7 +1,6 @@
 package io.sparkled.e2e.api.cache
 
 import io.kotest.matchers.shouldBe
-import io.micronaut.data.jdbc.runtime.JdbcOperations
 import io.sparkled.e2e.spec.E2eSpec
 import io.sparkled.model.SettingModel
 import io.sparkled.model.setting.SettingsConstants

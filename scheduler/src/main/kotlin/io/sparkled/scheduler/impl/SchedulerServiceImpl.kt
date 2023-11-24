@@ -9,7 +9,7 @@ import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
 import io.sparkled.scheduler.SchedulerService
 import jakarta.inject.Singleton
-import jakarta.transaction.Transactional
+import io.micronaut.transaction.annotation.Transactional
 import org.quartz.CronScheduleBuilder
 import org.quartz.JobBuilder
 import org.quartz.JobDataMap
@@ -105,7 +105,7 @@ class SchedulerServiceImpl(
     fun setBrightness(job: ScheduledActionModel) {
         val brightness = (job.value ?: "0")
         // TODO create or update
-        val setting = SettingModel(id = "", code = SettingsConstants.Brightness.CODE, value = brightness)
+        val setting = SettingModel(id = SettingsConstants.Brightness.CODE, value = brightness)
         db.settings.update(setting)
     }
 

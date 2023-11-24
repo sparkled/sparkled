@@ -18,6 +18,5 @@ data class SettingModel(
     @MappedProperty(converter = InstantConverter::class)
     override var updatedAt: Instant = Instant.now(),
 
-    var code: String,
     var value: String,
 ) : Model

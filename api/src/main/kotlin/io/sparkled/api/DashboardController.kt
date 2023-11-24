@@ -14,7 +14,7 @@ import io.sparkled.viewmodel.ScheduledTaskSummaryViewModel
 import io.sparkled.viewmodel.SequenceSummaryViewModel
 import io.sparkled.viewmodel.SongViewModel
 import io.sparkled.viewmodel.StageSummaryViewModel
-import jakarta.transaction.Transactional
+import io.micronaut.transaction.annotation.Transactional
 
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)

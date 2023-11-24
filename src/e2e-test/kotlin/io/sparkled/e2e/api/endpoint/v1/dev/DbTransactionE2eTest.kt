@@ -7,6 +7,7 @@ import io.micronaut.data.exceptions.DataAccessException
 import io.sparkled.e2e.spec.E2eSpec
 import io.sparkled.persistence.DbServiceImpl
 
+// TODO fix transactions.
 class DbTransactionE2eTest : E2eSpec() {
 
     init {

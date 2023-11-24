@@ -7,7 +7,7 @@ plugins {
 
 allOpen {
     annotation("jakarta.inject.Singleton")
-    annotation("jakarta.transaction.Transactional")
+    annotation("io.micronaut.transaction.annotation.Transactional")
 }
 
 dependencies {
