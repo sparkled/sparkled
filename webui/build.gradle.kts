@@ -1,32 +1,21 @@
-import com.github.gradle.node.npm.task.NodeTask
+import com.github.gradle.node.npm.task.NpmTask
 
 plugins {
-  alias(libs.plugins.node)
+    alias(libs.plugins.node)
 }
 
 repositories {
-  gradlePluginPortal()
+    gradlePluginPortal()
 }
 
 tasks {
-  create<Delete>("deleteWebUi") {
-    dependsOn("npmSetup")
+    create<NpmTask>("buildWebUi") {
+        args = listOf("run", "build")
+    }
 
-    delete("$rootDir/src/main/resources/webui")
-  }
-
-  create<NodeTask>("buildWebUi") {
-    dependsOn("npmInstall")
-
-    setArgs(listOf("run", "build"))
-  }
-
-  create<Copy>("copyWebUi") {
-    dependsOn("deleteWebUi")
-
-    from(layout.buildDirectory)
-    into("$rootDir/src/main/resources/webui")
-  }
-
-  findByName("npmInstall")?.dependsOn("deleteWebUi")
+    create<Copy>("copyWebUi") {
+        delete("$rootDir/src/main/resources/webui")
+        from(layout.buildDirectory)
+        into("$rootDir/src/main/resources/webui")
+    }
 }

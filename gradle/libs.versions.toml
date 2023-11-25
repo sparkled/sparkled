@@ -9,7 +9,7 @@ ktlint = "org.jlleitschuh.gradle.ktlint:11.6.1"
 micronaut-aot = "io.micronaut.aot:4.2.0"
 micronaut-application = "io.micronaut.application:4.2.0"
 micronaut-library = "io.micronaut.library:4.2.0"
-node = "com.github.node-gradle.node:7.0.0"
+node = "com.github.node-gradle.node:7.0.1"
 shadow = "com.github.johnrengelman.shadow:8.1.1"
 
 [libraries]
