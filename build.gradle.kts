@@ -13,6 +13,7 @@ plugins {
 
     // Plugins used by submodules.
     alias(libs.plugins.micronaut.library) apply false
+    alias(libs.plugins.node) apply false
 }
 
 val e2eTestImplementation: Configuration by configurations.creating {

@@ -1,7 +1,11 @@
-import com.moowork.gradle.node.npm.NpmTask
+import com.github.gradle.node.npm.task.NodeTask
 
 plugins {
-  id("com.moowork.node") version "1.3.1"
+  alias(libs.plugins.node)
+}
+
+repositories {
+  gradlePluginPortal()
 }
 
 tasks {
@@ -11,7 +15,7 @@ tasks {
     delete("$rootDir/src/main/resources/webui")
   }
 
-  create<NpmTask>("buildWebUi") {
+  create<NodeTask>("buildWebUi") {
     dependsOn("npmInstall")
 
     setArgs(listOf("run", "build"))
@@ -20,7 +24,7 @@ tasks {
   create<Copy>("copyWebUi") {
     dependsOn("deleteWebUi")
 
-    from(buildDir)
+    from(layout.buildDirectory)
     into("$rootDir/src/main/resources/webui")
   }
 
