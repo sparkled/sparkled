@@ -4,9 +4,11 @@ import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.util.SequenceUtils
 
+@GenerateClientType
 data class SequenceViewModel(
     val id: UniqueId,
     val songId: UniqueId,

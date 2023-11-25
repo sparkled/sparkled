@@ -122,6 +122,7 @@ dependencies {
     implementation(project(":scheduler"))
     implementation(project(":udp-server"))
     implementation(libs.kotlin.scriptingJsr223)
+    implementation(libs.logback.classic)
     implementation(libs.micronaut.data.jdbc)
     implementation(libs.micronaut.httpServerNetty)
     implementation(libs.micronaut.jacksonDatabind)
@@ -132,7 +133,6 @@ dependencies {
     runtimeOnly(libs.snakeyaml)
 
     scriptsImplementation(libs.jackson.kotlin)
-    scriptsImplementation(libs.kopper)
     scriptsImplementation(libs.micronaut.data.jdbc)
     scriptsImplementation(libs.micronaut.liquibase)
     scriptsImplementation(libs.reflections)
@@ -151,7 +151,7 @@ ktlint {
 }
 
 allprojects {
-    group = "com.example"
+    group = "io.sparkled"
     version = projectVersion
 
     repositories {

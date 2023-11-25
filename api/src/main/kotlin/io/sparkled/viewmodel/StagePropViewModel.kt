@@ -3,9 +3,11 @@ package io.sparkled.viewmodel
 import io.sparkled.model.embedded.LedPositions
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.model.embedded.Point2d
 import io.sparkled.model.enumeration.StagePropType
 
+@GenerateClientType
 data class StagePropViewModel(
     val id: UniqueId,
     val stageId: UniqueId,

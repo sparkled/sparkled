@@ -1,7 +1,7 @@
 package io.sparkled.music.impl
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap

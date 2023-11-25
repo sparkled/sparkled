@@ -1,7 +1,7 @@
 package io.sparkled.udpserver.impl
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.UdpServer
 import jakarta.inject.Singleton

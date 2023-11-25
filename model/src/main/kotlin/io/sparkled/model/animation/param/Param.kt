@@ -1,5 +1,8 @@
 package io.sparkled.model.animation.param
 
+import io.sparkled.model.annotation.GenerateClientType
+
+@GenerateClientType
 data class Param(
     val code: String,
     val displayName: String,

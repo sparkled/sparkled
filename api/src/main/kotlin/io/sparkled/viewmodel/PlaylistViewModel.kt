@@ -3,7 +3,9 @@ package io.sparkled.viewmodel
 import io.sparkled.model.PlaylistModel
 import io.sparkled.model.PlaylistSequenceModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 data class PlaylistViewModel(
     val id: UniqueId,
     val name: String,

@@ -1,5 +1,8 @@
 package io.sparkled.viewmodel.error
 
+import io.sparkled.model.annotation.GenerateClientType
+
+@GenerateClientType
 enum class ApiErrorCode(val httpStatus: Int, val userMessage: String) {
     ERR_AUTH_UNAUTHORIZED(401, "You are not authorized to perform this action."),
     ERR_METHOD_NOT_ALLOWED(405, "Method not allowed."),

@@ -1,6 +1,6 @@
 package io.sparkled.udpserver.impl
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.music.PlaybackStateService
 import io.sparkled.persistence.cache.CacheService
 import io.sparkled.udpserver.RequestHandler

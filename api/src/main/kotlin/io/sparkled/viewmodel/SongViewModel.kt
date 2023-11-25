@@ -2,7 +2,9 @@ package io.sparkled.viewmodel
 
 import io.sparkled.model.SongModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 data class SongViewModel(
     val id: UniqueId,
     val name: String,

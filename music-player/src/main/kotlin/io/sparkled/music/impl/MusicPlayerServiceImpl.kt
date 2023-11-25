@@ -1,6 +1,6 @@
 package io.sparkled.music.impl
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackState
 import jakarta.inject.Singleton

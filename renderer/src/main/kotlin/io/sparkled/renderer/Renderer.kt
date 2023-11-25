@@ -1,6 +1,6 @@
 package io.sparkled.renderer
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.model.embedded.ChannelData
 import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.SequenceModel

@@ -1,4 +1,4 @@
-package common.logging
+package io.sparkled.common.logging
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

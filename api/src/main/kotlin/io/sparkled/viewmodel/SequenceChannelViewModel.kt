@@ -4,8 +4,10 @@ import io.sparkled.model.embedded.ChannelData
 import io.sparkled.model.SequenceChannelModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
+import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.model.util.IdUtils.uniqueId
 
+@GenerateClientType
 data class SequenceChannelViewModel(
     val id: String = uniqueId(),
     val stagePropId: UniqueId,

@@ -2,8 +2,10 @@ package io.sparkled.viewmodel
 
 import io.sparkled.model.ScheduledActionModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.model.enumeration.ScheduledActionType
 
+@GenerateClientType
 data class ScheduledTaskSummaryViewModel(
     val id: UniqueId,
     val type: ScheduledActionType,

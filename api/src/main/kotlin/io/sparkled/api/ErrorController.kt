@@ -1,7 +1,7 @@
 package io.sparkled.api
 
 import com.fasterxml.jackson.core.JsonParseException
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.micronaut.core.convert.exceptions.ConversionErrorException
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse

@@ -1,8 +1,10 @@
 package io.sparkled.viewmodel
 
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.model.enumeration.SequenceStatus
 
+@GenerateClientType
 data class SequenceEditViewModel(
     val songId: UniqueId,
     val stageId: UniqueId,

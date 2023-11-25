@@ -1,6 +1,6 @@
 package io.sparkled.renderer.util
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.renderer.api.RenderContext
 import java.awt.Color

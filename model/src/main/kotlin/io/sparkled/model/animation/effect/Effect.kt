@@ -4,8 +4,10 @@ import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.param.HasArguments
+import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.model.util.IdUtils.uniqueId
 
+@GenerateClientType
 data class Effect(
     var id: UniqueId = uniqueId(),
     var type: String = "NONE",

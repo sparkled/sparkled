@@ -1,6 +1,6 @@
 package io.sparkled.persistence.cache
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicReference

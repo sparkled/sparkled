@@ -2,7 +2,9 @@ package io.sparkled.viewmodel
 
 import io.sparkled.model.PlaylistSequenceModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 data class PlaylistSequenceViewModel(
     val id: UniqueId,
     val sequenceId: UniqueId,

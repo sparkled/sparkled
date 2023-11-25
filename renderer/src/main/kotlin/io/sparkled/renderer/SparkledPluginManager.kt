@@ -1,6 +1,6 @@
 package io.sparkled.renderer
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.renderer.api.SparkledEasing
 import io.sparkled.renderer.api.SparkledFill

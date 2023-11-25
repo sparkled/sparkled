@@ -8,8 +8,8 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import io.sparkled.model.playlist.PlaylistAction
-import io.sparkled.model.playlist.PlaylistActionType
+import io.sparkled.viewmodel.PlaylistActionViewModel
+import io.sparkled.viewmodel.PlaylistActionType
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.repository.findByIdOrNull
@@ -25,7 +25,7 @@ class PlayerController(
 
     @Post("/")
     @Transactional
-    fun adjustPlayback(@Body action: PlaylistAction): HttpResponse<Any> {
+    fun adjustPlayback(@Body action: PlaylistActionViewModel): HttpResponse<Any> {
         return when (action.action) {
             PlaylistActionType.PLAY_PLAYLIST, PlaylistActionType.PLAY_SEQUENCE -> {
                 play(action)
@@ -41,7 +41,7 @@ class PlayerController(
         }
     }
 
-    private fun play(action: PlaylistAction) {
+    private fun play(action: PlaylistActionViewModel) {
         val sequences = if (action.action === PlaylistActionType.PLAY_PLAYLIST) {
             db.sequences.findAllByPlaylistId(action.playlistId ?: "")
         } else {

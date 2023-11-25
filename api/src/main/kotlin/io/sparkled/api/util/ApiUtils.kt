@@ -1,6 +1,6 @@
 package io.sparkled.api.util
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.sparkled.api.util.ApiUtils.logger

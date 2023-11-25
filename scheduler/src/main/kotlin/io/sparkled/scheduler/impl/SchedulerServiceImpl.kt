@@ -1,6 +1,6 @@
 package io.sparkled.scheduler.impl
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.model.ScheduledActionModel
 import io.sparkled.model.SettingModel
 import io.sparkled.model.enumeration.ScheduledActionType

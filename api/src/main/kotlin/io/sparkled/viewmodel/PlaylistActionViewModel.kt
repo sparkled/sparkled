@@ -1,8 +1,10 @@
-package io.sparkled.model.playlist
+package io.sparkled.viewmodel
 
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
-data class PlaylistAction(
+@GenerateClientType
+data class PlaylistActionViewModel(
     val action: PlaylistActionType,
     val playlistId: UniqueId? = null,
     val sequenceId: UniqueId? = null,

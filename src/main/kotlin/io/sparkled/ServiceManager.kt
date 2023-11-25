@@ -1,6 +1,6 @@
 package io.sparkled
 
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.event.ApplicationShutdownEvent
 import io.micronaut.runtime.event.ApplicationStartupEvent

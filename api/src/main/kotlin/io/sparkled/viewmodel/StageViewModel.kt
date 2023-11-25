@@ -3,7 +3,9 @@ package io.sparkled.viewmodel
 import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 data class StageViewModel(
     val id: UniqueId,
     val name: String,

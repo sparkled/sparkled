@@ -2,7 +2,7 @@ package io.sparkled.persistence
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import common.logging.getLogger
+import io.sparkled.common.logging.getLogger
 import io.sparkled.model.UniqueId
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.model.render.RenderedSequence

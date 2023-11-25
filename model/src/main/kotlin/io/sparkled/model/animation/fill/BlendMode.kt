@@ -1,7 +1,9 @@
 package io.sparkled.model.animation.fill
 
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
+import io.sparkled.model.annotation.GenerateClientType
 
+@GenerateClientType
 enum class BlendMode(val displayName: String) {
 
     /**
