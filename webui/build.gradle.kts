@@ -4,10 +4,6 @@ plugins {
     alias(libs.plugins.node)
 }
 
-repositories {
-    gradlePluginPortal()
-}
-
 tasks {
     create<NpmTask>("buildWebUi") {
         args = listOf("run", "build")
@@ -15,7 +11,7 @@ tasks {
 
     create<Copy>("copyWebUi") {
         delete("$rootDir/src/main/resources/webui")
-        from(layout.buildDirectory)
+        from("${layout.projectDirectory}/dist")
         into("$rootDir/src/main/resources/webui")
     }
 }
