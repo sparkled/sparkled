@@ -10,8 +10,7 @@ tasks {
     }
 
     create<Copy>("copyWebUi") {
-        delete("$rootDir/src/main/resources/webui")
-        from("${layout.projectDirectory}/dist")
+        from("${rootDir}/webUi/dist")
         into("$rootDir/src/main/resources/webui")
     }
 }
