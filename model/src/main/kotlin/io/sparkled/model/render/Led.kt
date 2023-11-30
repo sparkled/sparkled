@@ -1,6 +1,5 @@
 package io.sparkled.model.render
 
-import io.sparkled.model.util.MathUtils.constrain
 import io.sparkled.model.util.MathUtils.lerp
 import java.awt.Color
 import kotlin.math.roundToInt
@@ -8,10 +7,10 @@ import kotlin.math.roundToInt
 // TODO consider replacing this class with functions to save memory
 data class Led(
     @Suppress("ArrayInDataClass") private val ledData: ByteArray,
-    private val ledIndex: Int,
+    private val pixelIndex: Int,
     private val offset: Int,
 ) {
-    private val index: Int = ledIndex * BYTES_PER_LED
+    private val index: Int = pixelIndex * BYTES_PER_LED
 
     fun setColor(color: Color, alpha: Float) {
         this.r = lerp(this.r.toFloat(), color.red.toFloat(), alpha).roundToInt()
@@ -23,10 +22,16 @@ data class Led(
     fun subtractColor(color: Color) = addRgb(-color.red, -color.green, -color.blue)
     fun maskColor(color: Color) = addRgb(-(255 - color.red), -(255 - color.green), -(255 - color.blue))
 
+    fun setRgb(r: Int, g: Int, b: Int) {
+        this.r = r.coerceIn(0, 255)
+        this.g = g.coerceIn(0, 255)
+        this.b = b.coerceIn(0, 255)
+    }
+
     fun addRgb(r: Int, g: Int, b: Int) {
-        this.r = constrain(this.r + r, 0, 255)
-        this.g = constrain(this.g + g, 0, 255)
-        this.b = constrain(this.b + b, 0, 255)
+        this.r = (this.r + r).coerceIn(0, 255)
+        this.g = (this.g + g).coerceIn(0, 255)
+        this.b = (this.b + b).coerceIn(0, 255)
     }
 
     private var r: Int

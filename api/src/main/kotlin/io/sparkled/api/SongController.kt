@@ -21,13 +21,15 @@ import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.viewmodel.SongEditViewModel
 import io.sparkled.viewmodel.SongViewModel
 import io.micronaut.transaction.annotation.Transactional
+import io.sparkled.persistence.cache.CacheService
 
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/songs")
 class SongController(
+    private val cache: CacheService,
     private val db: DbService,
-    private val file: FileService,
+    private val fileService: FileService,
     private val objectMapper: ObjectMapper,
 ) {
 
@@ -60,7 +62,11 @@ class SongController(
             )
         )
 
-        file.writeSongAudio(saved.id, mp3.bytes)
+        fileService.writeSongAudio(saved.id, mp3.bytes)
+        cache.songAudios.modify {
+            it.toMap(LinkedHashMap()).apply { put(saved.id, mp3.bytes) }
+        }
+
         return HttpResponse.created(SongViewModel.fromModel(saved))
     }
 
@@ -68,7 +74,10 @@ class SongController(
     @Transactional
     fun deleteSong(id: UniqueId): HttpResponse<Any> {
         db.songs.deleteById(id)
-        file.deleteSongAudio(id)
+        fileService.deleteSongAudio(id)
+        cache.songAudios.modify {
+            it.toMap(LinkedHashMap()).apply { remove(id) }
+        }
         return HttpResponse.noContent()
     }
 }

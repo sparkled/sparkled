@@ -13,7 +13,7 @@ class CacheServiceImplE2eTest : E2eSpec() {
             inject<DbServiceImpl>().withTransaction {
                 val setting = db.settings.save(
                     SettingModel(
-                        code = SettingsConstants.Brightness.CODE,
+                        id = SettingsConstants.Brightness.CODE,
                         value = "10",
                     ),
                 )

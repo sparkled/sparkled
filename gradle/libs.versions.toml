@@ -13,7 +13,6 @@ node = "com.github.node-gradle.node:7.0.1"
 shadow = "com.github.johnrengelman.shadow:8.1.1"
 
 [libraries]
-guava = "com.google.guava:guava:32.1.3-jre"
 jakarta-persistenceApi = "jakarta.persistence:jakarta.persistence-api:3.1.0"
 jodd-http = "org.jodd:jodd-http:6.3.0"
 kotlin-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
@@ -45,5 +44,6 @@ micronaut-liquibase = { module = "io.micronaut.liquibase:micronaut-liquibase" }
 micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi" }
 micronaut-runtime = { module = "io.micronaut:micronaut-runtime"}
 micronaut-security = { module = "io.micronaut.security:micronaut-security" }
+micronaut-websocket = { module = "io.micronaut:micronaut-websocket" }
 snakeyaml = { module = "org.yaml:snakeyaml" }
 swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations" }

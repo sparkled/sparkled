@@ -9,8 +9,9 @@ import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.setting.SettingsCacheEntry
 import io.sparkled.model.util.testStageProp
-import io.sparkled.music.PlaybackState
+import io.sparkled.music.SequencePlaybackState
 import java.net.InetAddress
+import java.nio.ByteBuffer
 
 class GetStagePropCodesCommandTest : StringSpec() {
 
@@ -30,20 +31,19 @@ class GetStagePropCodesCommandTest : StringSpec() {
                 port = 2812,
                 args = listOf(GetStagePropCodesCommand.KEY),
                 settings = SettingsCacheEntry(0),
-                playbackState = PlaybackState(
+                playbackState = SequencePlaybackState(
                     sequences = listOf(sequence),
                     sequenceIndex = 0,
                     progressFunction = { 0.0 },
-                    sequence = sequence,
                     song = SongModel(name = "", durationMs = 0),
-                    songAudio = byteArrayOf(1),
+                    songAudio = ByteBuffer.allocate(0),
                     renderedStageProps = RenderedStagePropDataMap().apply {
                         this["P1"] = RenderedStagePropData(0, 0, 0, byteArrayOf())
                     },
                     stageProps = mapOf(
-                        "P1" to testStageProp.copy(code = "P1", displayOrder = 1),
-                        "P2" to testStageProp.copy(code = "P2", displayOrder = 3),
-                        "P3" to testStageProp.copy(code = "P3", displayOrder = 2)
+                        "1" to testStageProp.copy(id = "1", code = "P1", displayOrder = 1),
+                        "2" to testStageProp.copy(id = "2", code = "P2", displayOrder = 3),
+                        "3" to testStageProp.copy(id = "3", code = "P3", displayOrder = 2)
                     )
                 )
             )

@@ -1,8 +1,8 @@
 package io.sparkled.script.generateclienttypes
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.sparkled.common.logging.getLogger
 import io.sparkled.model.annotation.GenerateClientType
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.reflections.Reflections
 import org.reflections.scanners.Scanners
 import org.reflections.util.ConfigurationBuilder
@@ -18,7 +18,6 @@ object GenerateClientTypesScript {
 
     @JvmStatic
     fun main(args: Array<String>) {
-
         try {
             logger.info("Generating types")
             val reflections = Reflections(

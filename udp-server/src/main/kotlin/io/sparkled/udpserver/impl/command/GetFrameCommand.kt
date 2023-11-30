@@ -3,7 +3,6 @@ package io.sparkled.udpserver.impl.command
 import io.sparkled.model.render.RenderedFrame
 import io.sparkled.model.setting.SettingsCacheEntry
 import io.sparkled.model.util.MathUtils
-import io.sparkled.model.util.SequenceUtils
 import io.sparkled.music.PlaybackState
 import java.net.InetAddress
 import kotlin.math.min
@@ -16,7 +15,13 @@ import kotlin.math.round
  */
 class GetFrameCommand : UdpCommand {
 
-    override fun handle(ipAddress: InetAddress, port: Int, args: List<String>, settings: SettingsCacheEntry, playbackState: PlaybackState): ByteArray {
+    override fun handle(
+        ipAddress: InetAddress,
+        port: Int,
+        args: List<String>,
+        settings: SettingsCacheEntry,
+        playbackState: PlaybackState,
+    ): ByteArray {
         val stagePropCode = args[1]
         val brightness = calculateBrightness(stagePropCode, settings, playbackState)
 
@@ -25,8 +30,13 @@ class GetFrameCommand : UdpCommand {
         return buildResponse(headerData, frameData)
     }
 
-    private fun calculateBrightness(stagePropCode: String, settings: SettingsCacheEntry, playbackState: PlaybackState): Int {
-        val propBrightness = (playbackState.stageProps[stagePropCode]?.brightness ?: 100) / 100f
+    private fun calculateBrightness(
+        stagePropCode: String,
+        settings: SettingsCacheEntry,
+        playbackState: PlaybackState,
+    ): Int {
+        val stageProp = playbackState.stageProps[stagePropCode]
+        val propBrightness = (stageProp?.brightness ?: 100) / 100f
         val globalBrightness = MathUtils.map(settings.brightness.toFloat(), 0f, 100f, 0f, 15f).toInt()
 
         return (globalBrightness * propBrightness).toInt()
@@ -38,25 +48,24 @@ class GetFrameCommand : UdpCommand {
     }
 
     private fun buildFrame(stagePropCode: String, playbackState: PlaybackState): ByteArray {
-        return when {
-            playbackState.isEmpty -> blackFrame
-            else -> {
-                val frameCount = SequenceUtils.getFrameCount(playbackState.song!!, playbackState.sequence!!)
+        val frameCount = playbackState.frameCount
+        val frameIndex = min(frameCount - 1, round(playbackState.progress * frameCount).toInt())
 
-                val frameIndex = min(frameCount - 1, round(playbackState.progress * frameCount).toInt())
-                val renderedFrame = getRenderedFrame(playbackState, stagePropCode, frameIndex)
-                renderedFrame?.getData() ?: blackFrame
-            }
-        }
+        val renderedFrame = getRenderedFrame(playbackState, stagePropCode, frameIndex)
+        return renderedFrame?.getData() ?: blackFrame
     }
 
-    private fun getRenderedFrame(playbackState: PlaybackState, groupCodeOrStagePropCode: String, frameIndex: Int): RenderedFrame? {
+    private fun getRenderedFrame(
+        playbackState: PlaybackState,
+        groupCodeOrStagePropCode: String,
+        frameIndex: Int,
+    ): RenderedFrame? {
         val renderedStageProps = playbackState.renderedStageProps
         val stagePropId = playbackState.stageProps[groupCodeOrStagePropCode]?.id ?: groupCodeOrStagePropCode
 
         val renderedStagePropData = renderedStageProps[stagePropId]
         val frames = renderedStagePropData?.frames ?: emptyList()
-        return if (frameIndex >= frames.size) null else frames[frameIndex]
+        return frames.getOrNull(frameIndex)
     }
 
     private fun buildResponse(header: ByteArray, frameData: ByteArray): ByteArray {

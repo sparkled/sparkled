@@ -1,12 +1,9 @@
-import _ from 'lodash'
+import _, { maxBy, minBy } from 'lodash'
 import * as PIXI from 'pixi.js'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import {
-  Point,
-  svgPathProperties
-} from 'svg-path-properties'
+import { Point, svgPathProperties } from 'svg-path-properties'
 import stagePropTypes from '../../../data/stagePropTypes'
-import { StagePropViewModel } from '../../../types/ViewModel'
+import { Rectangle, StagePropViewModel } from '../../../types/viewModels.ts'
 import Logger from '../../../utils/Logger'
 import { StageEditorDispatchContext } from '../StageEditorReducer'
 import StagePropBackground from './StagePropBackground'
@@ -25,7 +22,7 @@ interface Props {
   /** The stage prop being displayed or edited. */
   stageProp: StagePropViewModel
 
-  /** Whether or not to enable stage prop editing. */
+  /** Whether to enable stage prop editing. */
   editable: boolean
 }
 
@@ -73,14 +70,19 @@ const StageProp: React.FC<Props> = props => {
   useEffect(setRotation, [pixiContainer, stageProp.rotation])
 
   useEffect(() => {
-    const gridPos = props.pixiApp.stage.position;
-    console.info(gridPos)
+    const gridPos = props.pixiApp.stage.position
+    const { x: scaleX, y: scaleY } = props.pixiApp.stage.scale
 
-    const ledPositions = ledPoints
+    const points = ledPoints
       .map(it => pixiContainer.toGlobal(it as IPoint))
-      .map(it => ({ x: it.x - gridPos.x, y: it.y - gridPos.y }))
-
-    dispatch({ type: 'UpdateStagePropLedPositions', payload: { ledPositions } })
+      .map(it => ({ x: (it.x - gridPos.x) / scaleX, y: (it.y - gridPos.y) / scaleY }))
+    const bounds: Rectangle = {
+      x1: minBy(points, it => it.x)?.x ?? 0,
+      y1: minBy(points, it => it.y)?.y ?? 0,
+      x2: maxBy(points, it => it.x)?.x ?? 0,
+      y2: maxBy(points, it => it.y)?.y ?? 0,
+    }
+    dispatch({ type: 'UpdateStagePropLedPositions', payload: { ledPositions: { bounds, points } } })
   }, [dispatch, ledPoints, pixiContainer, props.pixiApp.stage, stageProp])
 
   useEffect(() => {
@@ -96,8 +98,8 @@ const StageProp: React.FC<Props> = props => {
         type: 'MoveStageProp',
         payload: {
           x: Math.round(stageProp.positionX + offsetX),
-          y: Math.round(stageProp.positionY + offsetY)
-        }
+          y: Math.round(stageProp.positionY + offsetY),
+        },
       })
     },
     [dispatch, stageProp.positionX, stageProp.positionY]
@@ -107,7 +109,7 @@ const StageProp: React.FC<Props> = props => {
     (rotation: number) => {
       dispatch({
         type: 'RotateStageProp',
-        payload: { rotation: Math.round(rotation) }
+        payload: { rotation: Math.round(rotation) },
       })
     },
     [dispatch]
@@ -124,20 +126,9 @@ const StageProp: React.FC<Props> = props => {
         onMoved={moveStageProp}
       />
 
-      <StagePropPath
-        parent={pixiContainer}
-        points={pathPoints}
-        width={width}
-        height={height}
-      />
+      <StagePropPath parent={pixiContainer} points={pathPoints} width={width} height={height} />
 
-      <StagePropLeds
-        parent={pixiContainer}
-        id={stageProp.id}
-        points={ledPoints}
-        width={width}
-        height={height}
-      />
+      <StagePropLeds parent={pixiContainer} stageProp={stageProp} points={ledPoints} width={width} height={height} />
 
       <StagePropRotateHandle
         parent={pixiContainer}
@@ -150,10 +141,7 @@ const StageProp: React.FC<Props> = props => {
   )
 }
 
-function initState(
-  pixiApp: PIXI.Application,
-  stageProp: StagePropViewModel
-): State {
+function initState(pixiApp: PIXI.Application, stageProp: StagePropViewModel): State {
   const { path } = stagePropTypes[stageProp.type!]
   const pathProperties = svgPathProperties(path)
 
@@ -162,17 +150,13 @@ function initState(
   const width = _.maxBy(pathPoints, 'x')!.x
   const height = _.maxBy(pathPoints, 'y')!.y
 
-  const pixiContainer = buildContainer(stageProp, width, height)
+  const pixiContainer = buildContainer(width, height)
   pixiApp.stage.addChild(pixiContainer)
 
   return { pixiContainer, pathPoints, ledPoints, width, height }
 }
 
-function buildContainer(
-  stageProp: StagePropViewModel,
-  width: number,
-  height: number
-) {
+function buildContainer(width: number, height: number) {
   const pixiContainer = new PIXI.Container()
   pixiContainer.sortableChildren = true
   pixiContainer.scale.x = pixiContainer.scale.y = 1

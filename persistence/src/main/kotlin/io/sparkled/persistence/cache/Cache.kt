@@ -67,9 +67,9 @@ abstract class Cache<T>(
         }
     }
 
-    fun getStatus(): CacheStatus {
+    private fun getStatus(): CacheStatus {
         return when {
-            isEmpty() -> CacheStatus.IS_EMPTY
+            lastLoadedAt == null -> CacheStatus.EMPTY
             (lastLoadedAt.plus(expiryInterval)).isBefore(Instant.now()) -> CacheStatus.EXPIRED
             else -> CacheStatus.POPULATED
         }

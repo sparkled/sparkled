@@ -20,4 +20,7 @@ interface DbService {
     val songs: SongRepository
     val stageProps: StagePropRepository
     val stages: StageRepository
+
+    // TODO workaround for Micronaut Data error: "Could not set JDBC Connection read-only: Cannot change read-only flag after establishing a connection."
+    fun <T> inTransaction(fn: () -> T): T
 }

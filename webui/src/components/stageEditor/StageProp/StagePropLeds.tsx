@@ -1,8 +1,10 @@
 import * as PIXI from 'pixi.js'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Point } from 'svg-path-properties'
-import * as StagePropPart from './StagePropPart'
+import { EventBusContext } from '../../../hooks/useEventBus.ts'
+import { LiveDataResponseCommand, StagePropViewModel } from '../../../types/viewModels.ts'
 import { subscribe, unsubscribe } from '../../../utils/eventBus'
+import * as StagePropPart from './StagePropPart'
 
 const ledRadius = 3
 
@@ -24,8 +26,7 @@ type Props = {
   /** The parent container that manages the stage prop. */
   parent: PIXI.Container
 
-  /** The UUID of the stage prop. */
-  id: string
+  stageProp: StagePropViewModel
 
   /** The width of the stage prop in pixels, accounting for scale. */
   width: number
@@ -39,48 +40,88 @@ type Props = {
 
 const StagePropLeds: React.FC<Props> = props => {
   const [leds] = useState<PIXI.Graphics>(() => new PIXI.Graphics())
+  const eventBus = useContext(EventBusContext)
+
+  useEffect(() => {
+    const listener = eventBus.addListener('responseReceived', async command => {
+      if (command.type === 'LDR') {
+        const { data } = command as LiveDataResponseCommand
+        const propData = data[props.stageProp.groupCode ?? props.stageProp.code]
+
+        renderLeds(leds, props.points, 0, 0, props.stageProp.ledOffset, {
+          data: propData,
+          ledCount: props.stageProp.ledCount,
+        })
+      }
+    })
+
+    return () => eventBus.removeListener(listener)
+  }, [
+    eventBus,
+    leds,
+    props.stageProp.code,
+    props.points,
+    props.stageProp.ledCount,
+    props.stageProp.groupCode,
+    props.stageProp.ledOffset,
+  ])
 
   useEffect(() => {
     leds.name = StagePropPart.led.name
     leds.zIndex = StagePropPart.led.zIndex
 
-    renderLeds(leds, props.points, 0, 0, null)
+    renderLeds(leds, props.points, 0, 0, 0, null)
     props.parent.addChild(leds)
   }, [leds, props.parent, props.points])
 
   useEffect(() => {
     const callback = (data: RenderedFrameData | null) => {
       if (!data) {
-        renderLeds(leds, props.points, 0, 0, null)
+        renderLeds(leds, props.points, 0, 0, 0, null)
       } else {
         const { renderData } = data
-        renderLeds(leds, props.points, renderData.startFrame, data.playbackFrame, renderData.stageProps[props.id] || null)
+        renderLeds(
+          leds,
+          props.points,
+          renderData.startFrame,
+          data.playbackFrame,
+          0,
+          renderData.stageProps[props.stageProp.code] || null
+        )
       }
     }
 
     subscribe('RENDER_DATA', callback)
-    return () => unsubscribe('RENDER_DATA', callback)
-  }, [leds, props.points, props.id])
+    return () => {
+      return unsubscribe('RENDER_DATA', callback)
+    }
+  }, [leds, props.points, props.stageProp.code, props.stageProp.groupCode, props.stageProp.id])
 
   return <></>
 }
 
-function renderLeds(leds: PIXI.Graphics, points: Point[], startFrame: number, frameCount: number, data: RenderedStagePropData | null) {
+function renderLeds(
+  leds: PIXI.Graphics,
+  points: Point[],
+  startFrame: number,
+  frameCount: number,
+  groupLedOffset: number,
+  data: RenderedStagePropData | null
+) {
   leds.clear()
-
   for (let i = points.length - 1; i >= 0; i--) {
     const point = points[i]
-    if (data) {
+    if (data && data.data) {
       // TODO handle reversed stage props.
-      const frameSize = data.ledCount * 3;
-      const offset = frameSize * (frameCount - startFrame);
+      const frameSize = data.ledCount * 3
+      const offset = groupLedOffset * 3 + frameSize * (frameCount - startFrame)
 
-      const ledOffset = offset + (i * 3);
-      const r = data.data[ledOffset];
-      const g = data.data[ledOffset + 1];
-      const b = data.data[ledOffset + 2];
+      const ledOffset = offset + i * 3
+      const r = data.data[ledOffset]
+      const g = data.data[ledOffset + 1]
+      const b = data.data[ledOffset + 2]
 
-      leds.beginFill((r << 16) + (g << 0x8) + b)
+      leds.beginFill((r << 16) + (g << 8) + b)
     } else {
       leds.beginFill(0x000000)
     }

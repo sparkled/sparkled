@@ -2,7 +2,10 @@ package io.sparkled.udpserver.impl
 
 import io.sparkled.common.logging.getLogger
 import io.sparkled.model.constant.ModelConstants.MS_PER_SECOND
+import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.PlaybackStateService
+import io.sparkled.music.SequencePlaybackState
+import io.sparkled.music.StoppedPlaybackState
 import io.sparkled.persistence.cache.CacheService
 import io.sparkled.udpserver.LedDataStreamer
 import io.sparkled.udpserver.impl.command.GetFrameCommand
@@ -46,7 +49,7 @@ class LedDataStreamerImpl(
             while (started) {
                 val iterationTime = System.currentTimeMillis()
                 val settings = cache.settings.get()
-                val playbackState = playbackStateService.getPlaybackState()
+                val playbackState = playbackStateService.state
 
                 try {
                     if (subscribers.isEmpty()) {
@@ -68,7 +71,13 @@ class LedDataStreamerImpl(
                         println("${System.currentTimeMillis()} Iteration took ${System.currentTimeMillis() - iterationTime} ms")
                     }
                     val elapsedMs = System.currentTimeMillis() - iterationTime
-                    val updateInterval = MS_PER_SECOND / (playbackState.sequence?.framesPerSecond ?: 10)
+
+                    val updateInterval = MS_PER_SECOND / when (playbackState) {
+                        is InteractivePlaybackState -> 30
+                        is SequencePlaybackState -> playbackState.sequence.framesPerSecond
+                        is StoppedPlaybackState -> 10
+                    }
+
                     delay(updateInterval - elapsedMs)
                 } catch (e: Exception) {
                     logger.error("Failed to send LED data to subscriber.", e)

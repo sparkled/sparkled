@@ -1,11 +1,10 @@
 package io.sparkled.renderer.effect
 
-import io.sparkled.model.animation.param.Param
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.StatelessSparkledEffect
+import io.sparkled.renderer.parameter.DecimalParameter
+import io.sparkled.renderer.parameter.IntParameter
 import io.sparkled.renderer.util.FillUtils
-import io.sparkled.renderer.util.ParamUtils
 import kotlin.random.Random
 
 /**
@@ -13,45 +12,44 @@ import kotlin.random.Random
  */
 object GlitterEffect : StatelessSparkledEffect {
 
-    enum class Params { DENSITY, LIFETIME, RANDOM_SEED }
-
-    override val id = "@sparkled/glitter"
+    override val id = "sparkled:glitter:1.0.0"
     override val name = "Glitter"
-    override val version = SemVer(1, 0, 0)
-    override val params = listOf(
-        Param.int(Params.DENSITY.name, "Density (%)", 50),
-        Param.decimal(Params.LIFETIME.name, "Lifetime", 1.0),
-        Param.int(Params.RANDOM_SEED.name, "Random Seed", 1),
-    )
+
+    private val density by DecimalParameter(displayName = "Density (%)", defaultValue = 0.5f)
+    private val lifetimeMs by IntParameter(displayName = "Lifetime (ms)", defaultValue = 1000)
+    private val randomSeed by IntParameter(displayName = "Random seed", defaultValue = 1)
 
     override fun render(ctx: RenderContext) {
-        val density = ParamUtils.getInt(ctx.effect, Params.DENSITY.name, 10) / 100f
-        val patternIndex = (density * (patterns.size - 1)).toInt()
-        val lifetime = ParamUtils.getFloat(ctx.effect, Params.LIFETIME.name, 1f)
-        val lifetimeFrames = (ctx.sequence.framesPerSecond * lifetime).toInt()
+        val patternIndex = (density.get(ctx) * (patterns.lastIndex)).toInt()
+        val lifetime = lifetimeMs.get(ctx)
+        val lifetimeFrames = (ctx.framesPerSecond * (lifetime / 1000.0)).toInt()
 
-        val random = Random(ParamUtils.getInt(ctx.effect, Params.RANDOM_SEED.name, 1))
+        val randomSeed = randomSeed.get(ctx)
+        val random = Random(randomSeed)
         val frameCount = ctx.effect.endFrame - ctx.effect.startFrame + 1
         val fadeAlpha = getFadeAlpha(ctx, lifetimeFrames)
 
-        for (i in 0 until ctx.ledCount) {
-            var alpha = 0f
-            if (lifetimeFrames > 0) {
-                val pattern = patterns[patternIndex]
-                val patternStart = random.nextInt(BITS_PER_PATTERN)
-                val offset = random.nextInt(lifetimeFrames)
+        for (i in 0 until ctx.pixelCount) {
+            val targetPixels = ctx.effect.targetPixels
+            if (targetPixels == null || targetPixels[i]) {
+                var alpha = 0f
+                if (lifetimeFrames > 0) {
+                    val pattern = patterns[patternIndex]
+                    val patternStart = random.nextInt(BITS_PER_PATTERN)
+                    val offset = random.nextInt(lifetimeFrames)
 
-                val offsetFrameNumber = ctx.progress * frameCount + offset
+                    val offsetFrameNumber = ctx.progress * frameCount + offset
 
-                val bit = ((offsetFrameNumber / lifetimeFrames.toFloat()) + patternStart).toInt() % BITS_PER_PATTERN
-                val isOn = pattern and (1 shl bit).toLong() != 0L
-                val progress = if (!isOn) 0f else (offsetFrameNumber % lifetimeFrames) / lifetimeFrames.toFloat()
+                    val bit = ((offsetFrameNumber / lifetimeFrames.toFloat()) + patternStart).toInt() % BITS_PER_PATTERN
+                    val isOn = pattern and (1 shl bit).toLong() != 0L
+                    val progress = if (!isOn) 0f else (offsetFrameNumber % lifetimeFrames) / lifetimeFrames.toFloat()
 
-                // Linear flash over lifetime of glitter particle.
-                alpha = 2 * if (progress < .5) progress else 1 - progress
+                    // Linear flash over lifetime of glitter particle.
+                    alpha = 2 * if (progress < .5) progress else 1 - progress
+                }
+
+                FillUtils.fill(ctx, i, alpha * fadeAlpha)
             }
-
-            FillUtils.fill(ctx, i, alpha * fadeAlpha)
         }
     }
 
@@ -139,6 +137,6 @@ object GlitterEffect : StatelessSparkledEffect {
         0b111111111111111111111111111111111111111111111101111100111111111,
         0b111111111111111111111111101111111111101111111111111111111111111,
         0b111111111111111111111111111111111101111111111111111111111111111,
-        0b111111111111111111111111111111111111111111111111111111111111111
+        0b111111111111111111111111111111111111111111111111111111111111111,
     )
 }

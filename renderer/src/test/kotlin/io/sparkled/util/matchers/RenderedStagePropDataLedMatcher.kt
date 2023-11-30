@@ -1,8 +1,5 @@
 package io.sparkled.util.matchers
 
-import io.sparkled.model.render.RenderedStagePropData
-import io.sparkled.util.LedTestUtils
-
 /**
  * Convenience matcher for verifying the LEDs in the rendered frames of a rendered stage prop.
  */

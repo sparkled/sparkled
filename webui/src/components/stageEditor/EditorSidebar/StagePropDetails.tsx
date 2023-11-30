@@ -2,26 +2,25 @@ import { Button, Grid, TextField } from '@material-ui/core'
 import { find } from 'lodash'
 import React, { useCallback, useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  CODE_NAME,
-  POSITIVE_INTEGER,
-  POSITIVE_NUMBER
-} from '../../../utils/regexes'
-import {
-  StageEditorDispatchContext,
-  StageEditorStateContext
-} from '../StageEditorReducer'
+import { CODE_NAME, POSITIVE_INTEGER, POSITIVE_NUMBER } from '../../../utils/regexes'
+import { StageEditorDispatchContext, StageEditorStateContext } from '../StageEditorReducer'
 
 const StagePropDetails: React.FC = () => {
   const state = useContext(StageEditorStateContext)
   const dispatch = useContext(StageEditorDispatchContext)
 
-  const { register, formState: { errors }, reset, setValue, watch } = useForm({
-    mode: 'onChange'
+  const {
+    register,
+    formState: { errors },
+    reset,
+    setValue,
+    watch,
+  } = useForm({
+    mode: 'onChange',
   })
 
   const stageProp = find(state.stage.stageProps, {
-    id: state.selectedStageProp
+    id: state.selectedStageProp,
   })
   const hasStageProp = stageProp !== undefined
 
@@ -73,7 +72,7 @@ const StagePropDetails: React.FC = () => {
     if (code && !errors.code) {
       dispatch({
         type: 'UpdateStagePropCode',
-        payload: code
+        payload: code,
       })
     }
   }, [code, dispatch, errors.code])
@@ -82,7 +81,7 @@ const StagePropDetails: React.FC = () => {
     if (name && !errors.name) {
       dispatch({
         type: 'UpdateStagePropName',
-        payload: name
+        payload: name,
       })
     }
   }, [name, dispatch, errors.name])
@@ -93,8 +92,8 @@ const StagePropDetails: React.FC = () => {
         type: 'MoveStageProp',
         payload: {
           x: Number(positionX),
-          y: Number(positionY)
-        }
+          y: Number(positionY),
+        },
       })
     }
   }, [dispatch, errors.positionX, errors.positionY, positionX, positionY])
@@ -105,8 +104,8 @@ const StagePropDetails: React.FC = () => {
         type: 'ScaleStageProp',
         payload: {
           x: Number(scaleX),
-          y: Number(scaleY)
-        }
+          y: Number(scaleY),
+        },
       })
     }
   }, [dispatch, errors.scaleX, errors.scaleY, scaleX, scaleY])
@@ -115,7 +114,7 @@ const StagePropDetails: React.FC = () => {
     if (!errors.rotation) {
       dispatch({
         type: 'RotateStageProp',
-        payload: { rotation: Number(rotation) }
+        payload: { rotation: Number(rotation) },
       })
     }
   }, [dispatch, errors.rotation, rotation])
@@ -124,7 +123,7 @@ const StagePropDetails: React.FC = () => {
     if (!errors.ledCount) {
       dispatch({
         type: 'UpdateStagePropLedCount',
-        payload: { ledCount: Number(ledCount) }
+        payload: { ledCount: Number(ledCount) },
       })
     }
   }, [dispatch, errors.ledCount, ledCount])
@@ -132,8 +131,8 @@ const StagePropDetails: React.FC = () => {
   useEffect(() => {
     if (!errors.groupCode) {
       dispatch({
-        type: 'UpdateStagePropGroupId',
-        payload: groupCode
+        type: 'UpdateStagePropGroupCode',
+        payload: groupCode,
       })
     }
   }, [dispatch, errors.groupCode, groupCode])
@@ -142,16 +141,16 @@ const StagePropDetails: React.FC = () => {
     if (!errors.groupDisplayOrder) {
       dispatch({
         type: 'UpdateStagePropGroupDisplayOrder',
-        payload: groupDisplayOrder
+        payload: groupDisplayOrder,
       })
     }
   }, [dispatch, errors.groupDisplayOrder, groupDisplayOrder])
 
   useEffect(() => {
-      dispatch({
-        type: 'UpdateStageProp',
-        payload: { reverse: parseInt(reverse) === 1 }
-      })
+    dispatch({
+      type: 'UpdateStageProp',
+      payload: { reverse: parseInt(reverse) === 1 },
+    })
   }, [dispatch, errors.groupDisplayOrder, reverse])
 
   const deleteStageProp = useCallback(() => {
@@ -163,40 +162,40 @@ const StagePropDetails: React.FC = () => {
   const positionXField = register('positionX', {
     required: true,
     min: 0,
-    pattern: POSITIVE_INTEGER
+    pattern: POSITIVE_INTEGER,
   })
   const positionYField = register('positionY', {
     required: true,
     min: 0,
-    pattern: POSITIVE_INTEGER
+    pattern: POSITIVE_INTEGER,
   })
   const scaleXField = register('scaleX', {
     required: true,
     min: 0.1,
     max: 10,
-    pattern: POSITIVE_NUMBER
+    pattern: POSITIVE_NUMBER,
   })
   const scaleYField = register('scaleY', {
     required: true,
     min: 0.1,
     max: 10,
-    pattern: POSITIVE_NUMBER
+    pattern: POSITIVE_NUMBER,
   })
   const rotationField = register('rotation', {
     required: true,
     min: 0,
     max: 359,
-    pattern: POSITIVE_INTEGER
+    pattern: POSITIVE_INTEGER,
   })
   const ledCountField = register('ledCount', {
     required: true,
     min: 1,
-    pattern: POSITIVE_INTEGER
+    pattern: POSITIVE_INTEGER,
   })
   const groupCodeField = register('groupCode', {})
   const groupDisplayOrderField = register('groupDisplayOrder', {
     min: 0,
-    pattern: POSITIVE_INTEGER
+    pattern: POSITIVE_INTEGER,
   })
   const reverseField = register('reverse', {})
 
@@ -205,23 +204,23 @@ const StagePropDetails: React.FC = () => {
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Code"
-            type="text"
-            margin="dense"
+            variant='outlined'
+            label='Code'
+            type='text'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.code !== undefined}
-            { ...codeField }
+            {...codeField}
           />
         </Grid>
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Name"
-            type="text"
-            margin="dense"
+            variant='outlined'
+            label='Name'
+            type='text'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.name !== undefined}
@@ -231,10 +230,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Position X"
-            type="number"
-            margin="dense"
+            variant='outlined'
+            label='Position X'
+            type='number'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.positionX !== undefined}
@@ -244,10 +243,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Position Y"
-            type="number"
-            margin="dense"
+            variant='outlined'
+            label='Position Y'
+            type='number'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.positionY !== undefined}
@@ -257,10 +256,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Scale X"
-            type="number"
-            margin="dense"
+            variant='outlined'
+            label='Scale X'
+            type='number'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.scaleX !== undefined}
@@ -270,10 +269,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Scale Y"
-            type="number"
-            margin="dense"
+            variant='outlined'
+            label='Scale Y'
+            type='number'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.scaleY !== undefined}
@@ -283,10 +282,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Rotation &deg;"
-            type="number"
-            margin="dense"
+            variant='outlined'
+            label='Rotation &deg;'
+            type='number'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.rotation !== undefined}
@@ -297,10 +296,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="LED Count"
-            type="number"
-            margin="dense"
+            variant='outlined'
+            label='LED Count'
+            type='number'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.ledCount !== undefined}
@@ -311,10 +310,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Group ID"
-            type="text"
-            margin="dense"
+            variant='outlined'
+            label='Group Code'
+            type='text'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.groupCode !== undefined}
@@ -324,10 +323,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Group Display Order"
-            type="number"
-            margin="dense"
+            variant='outlined'
+            label='Group Display Order'
+            type='number'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             error={errors.groupCode !== undefined}
@@ -337,10 +336,10 @@ const StagePropDetails: React.FC = () => {
 
         <Grid item xs={6}>
           <TextField
-            variant="outlined"
-            label="Reverse"
-            type="text"
-            margin="dense"
+            variant='outlined'
+            label='Reverse'
+            type='text'
+            margin='dense'
             InputLabelProps={{ shrink: true }}
             disabled={!hasStageProp}
             {...reverseField}
@@ -348,13 +347,7 @@ const StagePropDetails: React.FC = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <Button
-            fullWidth
-            variant="outlined"
-            color="secondary"
-            disabled={!hasStageProp}
-            onClick={deleteStageProp}
-          >
+          <Button fullWidth variant='outlined' color='secondary' disabled={!hasStageProp} onClick={deleteStageProp}>
             Delete stage prop
           </Button>
         </Grid>

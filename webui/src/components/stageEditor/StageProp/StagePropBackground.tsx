@@ -42,6 +42,8 @@ interface DragState {
   dragStartY: number
 }
 
+// TODO This is being rendered for non-editable props as a workaround. If we don't render the handle, the prop
+//      renders in the wrong location which throws of the pixel positions for live paint mode.
 const StagePropBackground: React.FC<Props> = props => {
   const [background, setBackground] = useState<PIXI.Graphics | null>(null)
   const [dragState, setDragState] = useState<DragState | null>(null)
@@ -52,9 +54,7 @@ const StagePropBackground: React.FC<Props> = props => {
     if (props.editable) {
       stagePropBackground.buttonMode = true
       stagePropBackground.interactive = true
-      stagePropBackground.on('pointerdown', (event: InteractionEvent) =>
-        onDragStart(event, props, setDragState)
-      )
+      stagePropBackground.on('pointerdown', (event: InteractionEvent) => onDragStart(event, props, setDragState))
     }
 
     setBackground(stagePropBackground)
@@ -63,15 +63,9 @@ const StagePropBackground: React.FC<Props> = props => {
     logger.debug('Dragging started, adding listeners.')
 
     background
-      .on('pointermove', (event: InteractionEvent) =>
-        onDragMove(event, props, dragState)
-      )
-      .on('pointerup', (event: InteractionEvent) =>
-        onDragEnd(event, props, dragState, setDragState)
-      )
-      .on('pointerupoutside', (event: InteractionEvent) =>
-        onDragEnd(event, props, dragState, setDragState)
-      )
+      .on('pointermove', (event: InteractionEvent) => onDragMove(event, props, dragState))
+      .on('pointerup', (event: InteractionEvent) => onDragEnd(event, props, dragState, setDragState))
+      .on('pointerupoutside', (event: InteractionEvent) => onDragEnd(event, props, dragState, setDragState))
   } else if (background.listenerCount('pointermove') > 0) {
     logger.debug('Dragging stopped, removing listeners.')
 
@@ -88,22 +82,13 @@ function buildBackground(props: Props) {
   background.name = StagePropPart.background.name
   background.zIndex = StagePropPart.background.zIndex
 
-  background.beginFill(0x000000, 0.3)
-  background.drawRect(
-    -padding,
-    -padding,
-    props.width + 2 * padding,
-    props.height + 2 * padding
-  )
+  background.beginFill(0x000000, props.editable ? 0.3 : 0)
+  background.drawRect(-padding, -padding, props.width + 2 * padding, props.height + 2 * padding)
   background.endFill()
   return background
 }
 
-function onDragStart(
-  event: InteractionEvent,
-  props: Props,
-  setDragState: Dispatch<DragState | null>
-) {
+function onDragStart(event: InteractionEvent, props: Props, setDragState: Dispatch<DragState | null>) {
   const { onClicked, parent } = props
   onClicked()
 
@@ -112,25 +97,18 @@ function onDragStart(
     originX: parent.x,
     originY: parent.y,
     dragStartX: x,
-    dragStartY: y
+    dragStartY: y,
   })
 }
 
-function onDragMove(
-  event: InteractionEvent,
-  props: Props,
-  dragState: DragState
-) {
+function onDragMove(event: InteractionEvent, props: Props, dragState: DragState) {
   const { parent } = props
 
   if (dragState) {
     const { originX, originY, dragStartX, dragStartY } = dragState
 
     // Convert the mouse/touch position to a relative offset.
-    const {
-      x: relativeParentX,
-      y: relativeParentY
-    } = event.data.getLocalPosition(parent.parent)
+    const { x: relativeParentX, y: relativeParentY } = event.data.getLocalPosition(parent.parent)
 
     // Add the new offset.
     parent.x = originX + (relativeParentX - dragStartX)
@@ -138,12 +116,7 @@ function onDragMove(
   }
 }
 
-function onDragEnd(
-  event: InteractionEvent,
-  props: Props,
-  dragState: DragState,
-  setDragState: Dispatch<null>
-) {
+function onDragEnd(event: InteractionEvent, props: Props, dragState: DragState, setDragState: Dispatch<null>) {
   const { x, y } = event.data.getLocalPosition(props.parent.parent)
 
   if (dragState) {

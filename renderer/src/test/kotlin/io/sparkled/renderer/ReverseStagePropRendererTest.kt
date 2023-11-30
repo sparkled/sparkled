@@ -20,14 +20,14 @@ class ReverseStagePropRendererTest : StringSpec() {
                 endFrame = 19,
                 type = LineEffect.id,
                 args = mapOf(
-                    arg(LineEffect.Params.LENGTH.name, 3)
+                    arg("lineLength", 3)
                 ),
                 easing = Easing(LinearEasing.id),
                 fill = Fill(
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ff0000")
+                        arg("color", "#ff0000")
                     )
                 )
             )

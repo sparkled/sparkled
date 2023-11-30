@@ -41,7 +41,7 @@ class RequestHandlerImpl(
     }
 
     private fun getResponse(ipAddress: InetAddress, port: Int, args: List<String>): ByteArray? {
-        val playbackState = playbackStateService.getPlaybackState()
+        val playbackState = playbackStateService.state
         val settings = cache.settings.get()
 
         val command = args[0]

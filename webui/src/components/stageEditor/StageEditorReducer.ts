@@ -1,13 +1,13 @@
 import { produce } from 'immer'
 import _, { identity, isEqual, remove } from 'lodash'
 import React, { createContext, Dispatch } from 'react'
-import { Point, StagePropViewModel, StageViewModel } from '../../types/ViewModel'
 import { StagePropType } from '../../data/stagePropTypes'
+import { PixelPositions, StagePropViewModel, StageViewModel } from '../../types/viewModels.ts'
 import { uniqueId } from '../../utils/idUtils'
 
-export class State {
-  public stage = new StageViewModel()
-  public selectedStageProp = ''
+type State = {
+  stage: StageViewModel
+  selectedStageProp: string
 }
 
 export type Action =
@@ -19,21 +19,26 @@ export type Action =
   | { type: 'ScaleStageProp'; payload: { x: number; y: number } }
   | { type: 'RotateStageProp'; payload: { rotation: number } }
   | { type: 'UpdateStagePropLedCount'; payload: { ledCount: number } }
-  | { type: 'UpdateStagePropLedPositions'; payload: { ledPositions: Point[] } }
-  | { type: 'UpdateStagePropGroupId'; payload: string | null }
+  | { type: 'UpdateStagePropLedPositions'; payload: { ledPositions: PixelPositions } }
+  | { type: 'UpdateStagePropGroupCode'; payload: string | undefined }
   | { type: 'UpdateStagePropGroupDisplayOrder'; payload: string | null }
   | { type: 'UpdateStageProp'; payload: Partial<StagePropViewModel> }
   | { type: 'DeleteStageProp' }
 
-export const StageEditorStateContext = createContext<State>(new State())
-export const StageEditorDispatchContext = createContext<Dispatch<Action>>(
-  identity
-)
+export const StageEditorStateContext = createContext<State>({
+  stage: {
+    id: '',
+    stageProps: [],
+    name: '',
+    width: 0,
+    height: 0,
+  },
+  selectedStageProp: '',
+})
 
-export const stageEditorReducer: React.Reducer<State, Action> = (
-  state,
-  action
-): State => {
+export const StageEditorDispatchContext = createContext<Dispatch<Action>>(identity)
+
+export const stageEditorReducer: React.Reducer<State, Action> = (state, action): State => {
   return produce(state, draft => {
     const selectedStageProp = getSelectedStageProp(draft)
 
@@ -69,12 +74,12 @@ export const stageEditorReducer: React.Reducer<State, Action> = (
       case 'UpdateStagePropLedPositions':
         if (selectedStageProp) {
           if (!isEqual(selectedStageProp.ledPositions, action.payload.ledPositions)) {
-            selectedStageProp.ledPositions = action.payload.ledPositions;
+            selectedStageProp.ledPositions = action.payload.ledPositions
           }
         }
         break
-      case 'UpdateStagePropGroupId':
-        updateStagePropGroupId(selectedStageProp, action.payload)
+      case 'UpdateStagePropGroupCode':
+        updateStagePropGroupCode(selectedStageProp, action.payload)
         break
       case 'UpdateStagePropGroupDisplayOrder':
         updateStagePropGroupDisplayOrder(selectedStageProp, action.payload)
@@ -111,75 +116,55 @@ function addStageProp(draft: State, type: StagePropType) {
     rotation: 0,
     brightness: 100,
     displayOrder: 0,
-    groupCode: null,
-    groupDisplayOrder: null,
-    ledPositions: [],
+    groupCode: undefined,
+    groupDisplayOrder: undefined,
+    ledPositions: { bounds: { x1: 0, y1: 0, x2: 0, y2: 0 }, points: [] },
   })
 
   stage.stageProps.forEach((stageProp, i) => (stageProp.displayOrder = i))
 }
 
-function moveStageProp(
-  stageProp: StagePropViewModel | undefined,
-  x: number,
-  y: number
-) {
+function moveStageProp(stageProp: StagePropViewModel | undefined, x: number, y: number) {
   if (stageProp) {
     stageProp.positionX = x
     stageProp.positionY = y
   }
 }
 
-function scaleStageProp(
-  stageProp: StagePropViewModel | undefined,
-  x: number,
-  y: number
-) {
+function scaleStageProp(stageProp: StagePropViewModel | undefined, x: number, y: number) {
   if (stageProp) {
     stageProp.scaleX = x
     stageProp.scaleY = y
   }
 }
 
-function rotateStageProp(
-  stageProp: StagePropViewModel | undefined,
-  rotation: number
-) {
+function rotateStageProp(stageProp: StagePropViewModel | undefined, rotation: number) {
   if (stageProp) {
     stageProp.rotation = rotation
   }
 }
 
-function updateStagePropLedCount(
-  stageProp: StagePropViewModel | undefined,
-  ledCount: number
-) {
+function updateStagePropLedCount(stageProp: StagePropViewModel | undefined, ledCount: number) {
   if (stageProp) {
     stageProp.ledCount = ledCount
   }
 }
 
-function updateStagePropGroupId(
-  stageProp: StagePropViewModel | undefined,
-  groupCode: string | null
-) {
+function updateStagePropGroupCode(stageProp: StagePropViewModel | undefined, groupCode: string | undefined) {
   if (stageProp) {
-    stageProp.groupCode = groupCode || null
+    stageProp.groupCode = groupCode || undefined
   }
 }
 
-function updateStagePropGroupDisplayOrder(
-  stageProp: StagePropViewModel | undefined,
-  groupDisplayOrder: string | null
-) {
+function updateStagePropGroupDisplayOrder(stageProp: StagePropViewModel | undefined, groupDisplayOrder: string | null) {
   if (stageProp) {
-    let number: number | null = parseInt(groupDisplayOrder ?? '')
-    number = isNaN(number) ? null : number
+    let number: number | undefined = parseInt(groupDisplayOrder ?? '')
+    number = isNaN(number) ? undefined : number
     stageProp.groupDisplayOrder = number
   }
 }
 
-const getSelectedStageProp = function(draft: State) {
+const getSelectedStageProp = function (draft: State) {
   return draft.stage.stageProps.find(sp => sp.id === draft.selectedStageProp)
 }
 

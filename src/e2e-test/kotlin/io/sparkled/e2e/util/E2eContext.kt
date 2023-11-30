@@ -1,9 +1,9 @@
 package io.sparkled.e2e.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.sparkled.common.logging.getLogger
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.server.EmbeddedServer
+import io.sparkled.common.logging.getLogger
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
 

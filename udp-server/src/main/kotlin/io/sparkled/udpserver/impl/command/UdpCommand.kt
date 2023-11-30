@@ -11,6 +11,6 @@ interface UdpCommand {
         port: Int,
         args: List<String>,
         settings: SettingsCacheEntry,
-        playbackState: PlaybackState
+        playbackState: PlaybackState,
     ): ByteArray?
 }

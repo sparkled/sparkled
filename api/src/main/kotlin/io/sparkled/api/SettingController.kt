@@ -12,6 +12,7 @@ import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.transaction.annotation.Transactional
 import io.sparkled.model.SettingModel
+import io.sparkled.model.UniqueId
 import io.sparkled.model.setting.SettingsConstants
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
@@ -39,7 +40,7 @@ class SettingController(
 
     @Get("/{id}")
     @Transactional
-    fun getSetting(id: String): HttpResponse<Any> {
+    fun getSetting(id: UniqueId): HttpResponse<Any> {
         val existing = db.settings.findByIdOrNull(id)
         val setting = when {
             existing != null -> existing
@@ -63,7 +64,7 @@ class SettingController(
     @Put("/{id}")
     @Transactional
     fun updateSetting(
-        @PathVariable id: String,
+        @PathVariable id: UniqueId,
         @Body body: SettingEditViewModel,
     ): HttpResponse<Any> {
         val existing = db.settings.findByIdOrNull(id)

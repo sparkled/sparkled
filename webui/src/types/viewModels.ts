@@ -3,6 +3,194 @@
  * Don't edit this file manually, as it will be overwritten the next time the script is run.       *
  **************************************************************************************************/
 
+export const ParamTypeValues = ['NONE', 'BOOLEAN', 'COLOR', 'COLORS', 'DECIMAL', 'INTEGER', 'STRING'] as const
+export type ParamType = typeof ParamTypeValues[number]
+
+export type Param = {
+  code: string
+  defaultValue: string[]
+  displayName: string
+  type: ParamType
+}
+
+export const BlendModeValues = ['NORMAL', 'ADD', 'SUBTRACT', 'ALPHA_MASK'] as const
+export type BlendMode = typeof BlendModeValues[number]
+
+export type Fill = {
+  args: Record<string, string[]>
+  blendMode: BlendMode
+  type: string
+}
+
+export type Rectangle = {
+  x1: number
+  x2: number
+  y1: number
+  y2: number
+}
+
+export type Point2d = {
+  x: number
+  y: number
+}
+
+export type PixelPositions = {
+  bounds: Rectangle
+  points: Point2d[]
+}
+
+export const StagePropTypeValues = ['ARCH', 'LINE', 'RING', 'SPIRAL'] as const
+export type StagePropType = typeof StagePropTypeValues[number]
+
+export type StagePropViewModel = {
+  brightness: number
+  code: string
+  displayOrder: number
+  groupCode?: string
+  groupDisplayOrder?: number
+  id: string
+  ledCount: number
+  ledOffset: number
+  ledPositions: PixelPositions
+  name: string
+  positionX: number
+  positionY: number
+  reverse: boolean
+  rotation: number
+  scaleX: number
+  scaleY: number
+  stageId: string
+  type: StagePropType
+}
+
+export const ScheduledActionTypeValues = ['NONE', 'PLAY_PLAYLIST', 'STOP_PLAYBACK', 'SET_BRIGHTNESS'] as const
+export type ScheduledActionType = typeof ScheduledActionTypeValues[number]
+
+export type ScheduledTaskSummaryViewModel = {
+  cronExpression: string
+  id: string
+  playlistId?: string
+  playlistName?: string
+  type: ScheduledActionType
+}
+
+export type EditorItemViewModel = {
+  code: string
+  name: string
+  params: Param[]
+}
+
+export type Easing = {
+  args: Record<string, string[]>
+  end: number
+  start: number
+  type: string
+}
+
+export type Effect = {
+  args: Record<string, string[]>
+  easing: Easing
+  endFrame: number
+  fill: Fill
+  id: string
+  repetitionSpacing: number
+  repetitions: number
+  startFrame: number
+  type: string
+}
+
+export type SequenceChannelViewModel = {
+  displayOrder: number
+  effects: Effect[]
+  id: string
+  name: string
+  stagePropId: string
+}
+
+export type ScheduledActionEditViewModel = {
+  cronExpression: string
+  playlistId?: string
+  type: ScheduledActionType
+  value?: string
+}
+
+export const SparkledCommandTypeValues = ['LDC', 'LDM', 'LDR', 'LDS', 'LDU', 'P', 'PAF', 'TIM'] as const
+export type SparkledCommandType = typeof SparkledCommandTypeValues[number]
+
+export type SparkledCommand = {
+  type: SparkledCommandType
+}
+
+export type ToggleInteractiveModeCommand = SparkledCommand & {
+  enabled: boolean
+  stageId?: string
+  type: SparkledCommandType
+}
+
+export const ShapeTypeValues = ['BOX', 'LINE'] as const
+export type ShapeType = typeof ShapeTypeValues[number]
+
+export type StageViewModel = {
+  height: number
+  id: string
+  name: string
+  stageProps: StagePropViewModel[]
+  width: number
+}
+
+export type PlaylistSequenceViewModel = {
+  displayOrder: number
+  id: string
+  sequenceId: string
+}
+
+export type PlaylistViewModel = {
+  id: string
+  name: string
+  sequences: PlaylistSequenceViewModel[]
+}
+
+export type SettingViewModel = {
+  id: string
+  value: string
+}
+
+export type Point2dViewModel = {
+  x: number
+  y: number
+}
+
+export type PingCommand = SparkledCommand & {
+  ts: string
+  type: SparkledCommandType
+}
+
+export type SongViewModel = {
+  artist?: string
+  durationMs: number
+  id: string
+  name: string
+}
+
+export type ReferenceDataViewModel = {
+  blendModes: EditorItemViewModel[]
+  easings: EditorItemViewModel[]
+  effects: EditorItemViewModel[]
+  fills: EditorItemViewModel[]
+}
+
+export type StageEditViewModel = {
+  height: number
+  name: string
+  stageProps: StagePropViewModel[]
+  width: number
+}
+
+export type PlaylistEditViewModel = {
+  name: string
+  sequences: PlaylistSequenceViewModel[]
+}
+
 export const ApiErrorCodeValues = [
   'ERR_AUTH_UNAUTHORIZED',
   'ERR_METHOD_NOT_ALLOWED',
@@ -20,16 +208,6 @@ export type ErrorViewModel = {
   userMessage: string
 }
 
-export const ParamTypeValues = ['NONE', 'BOOLEAN', 'COLOR', 'COLORS', 'DECIMAL', 'INTEGER', 'STRING'] as const
-export type ParamType = typeof ParamTypeValues[number]
-
-export type Param = {
-  code: string
-  defaultValue: string[]
-  displayName: string
-  type: ParamType
-}
-
 export type PlaylistSummaryViewModel = {
   durationMs: number
   id: string
@@ -37,40 +215,9 @@ export type PlaylistSummaryViewModel = {
   sequenceCount: number
 }
 
-export type Easing = {
-  args: Record<string, string>
-  end: number
-  start: number
-  type: string
-}
-
-export const BlendModeValues = ['NORMAL', 'ADD', 'SUBTRACT', 'ALPHA_MASK'] as const
-export type BlendMode = typeof BlendModeValues[number]
-
-export type Fill = {
-  args: Record<string, string>
-  blendMode: BlendMode
-  type: string
-}
-
-export type Effect = {
-  args: Record<string, string>
-  easing: Easing
-  endFrame: number
-  fill: Fill
-  id: string
-  repetitionSpacing: number
-  repetitions: number
-  startFrame: number
-  type: string
-}
-
-export type SequenceChannelViewModel = {
-  displayOrder: number
-  effects: Effect[]
-  id: string
-  name: string
-  stagePropId: string
+export type LiveDataResponseCommand = SparkledCommand & {
+  data: Record<string, number[]>
+  type: SparkledCommandType
 }
 
 export const SequenceStatusValues = ['NEW', 'DRAFT', 'PUBLISHED'] as const
@@ -107,62 +254,38 @@ export type SequenceSummaryViewModel = {
   status: SequenceStatus
 }
 
-export type Point2dViewModel = {
+export type CircleViewModel = {
+  r: number
   x: number
   y: number
 }
 
-export const StagePropTypeValues = ['ARCH', 'LINE', 'RING', 'SPIRAL'] as const
-export type StagePropType = typeof StagePropTypeValues[number]
+export type LiveDataUnsubscribeCommand = SparkledCommand & {
+  type: SparkledCommandType
+}
 
-export type StagePropViewModel = {
-  brightness: number
-  code: string
-  displayOrder: number
-  groupCode?: string
-  groupDisplayOrder?: number
+export type PlayAudioFileCommand = SparkledCommand & {
   id: string
-  ledCount: number
-  ledPositions: Point2dViewModel[]
-  name: string
-  positionX: number
-  positionY: number
-  reverse: boolean
-  rotation: number
-  scaleX: number
-  scaleY: number
-  stageId: string
-  type: StagePropType
+  type: SparkledCommandType
 }
 
-export const ScheduledActionTypeValues = ['NONE', 'PLAY_PLAYLIST', 'STOP_PLAYBACK', 'SET_BRIGHTNESS'] as const
-export type ScheduledActionType = typeof ScheduledActionTypeValues[number]
-
-export type ScheduledTaskSummaryViewModel = {
-  cronExpression: string
-  id: string
-  playlistId?: string
-  playlistName?: string
-  type: ScheduledActionType
-}
-
-export type EditorItemViewModel = {
-  code: string
-  name: string
-  params: Param[]
-}
-
-export type ScheduledActionEditViewModel = {
-  cronExpression: string
-  playlistId?: string
-  type: ScheduledActionType
-  value?: string
+export type LiveDataModifyCommand = SparkledCommand & {
+  d: number /** distance */
+  e: Effect /** effect */
+  me: boolean /** mergeEffects */
+  st: ShapeType /** shapeType */
+  tp: Point2d[] /** touchPoints */
+  type: SparkledCommandType
 }
 
 export type SongEditViewModel = {
   artist?: string
   durationMs: number
   name: string
+}
+
+export type LiveDataClearCommand = SparkledCommand & {
+  type: SparkledCommandType
 }
 
 export type StageSummaryViewModel = {
@@ -173,24 +296,8 @@ export type StageSummaryViewModel = {
 export const PlaylistActionTypeValues = ['NONE', 'PLAY_PLAYLIST', 'PLAY_SEQUENCE', 'STOP'] as const
 export type PlaylistActionType = typeof PlaylistActionTypeValues[number]
 
-export type PlaylistSequenceViewModel = {
-  displayOrder: number
-  id: string
-  sequenceId: string
-}
-
-export type StageViewModel = {
-  height: number
-  id: string
-  name: string
-  stageProps: StagePropViewModel[]
-  width: number
-}
-
-export type PlaylistViewModel = {
-  id: string
-  name: string
-  sequences: PlaylistSequenceViewModel[]
+export type LiveDataSubscribeCommand = SparkledCommand & {
+  type: SparkledCommandType
 }
 
 export type PlaylistActionViewModel = {
@@ -208,13 +315,6 @@ export type ScheduledActionViewModel = {
   value?: string
 }
 
-export type SongViewModel = {
-  artist?: string
-  durationMs: number
-  id: string
-  name: string
-}
-
 export type DashboardViewModel = {
   playlists: PlaylistSummaryViewModel[]
   scheduledTasks: ScheduledTaskSummaryViewModel[]
@@ -223,30 +323,6 @@ export type DashboardViewModel = {
   stages: StageSummaryViewModel[]
 }
 
-export type SettingViewModel = {
-  id: string
-  value: string
-}
-
-export type ReferenceDataViewModel = {
-  blendModes: EditorItemViewModel[]
-  easings: EditorItemViewModel[]
-  effects: EditorItemViewModel[]
-  fills: EditorItemViewModel[]
-}
-
 export type SettingEditViewModel = {
   value: string
-}
-
-export type StageEditViewModel = {
-  height: number
-  name: string
-  stageProps: StagePropViewModel[]
-  width: number
-}
-
-export type PlaylistEditViewModel = {
-  name: string
-  sequences: PlaylistSequenceViewModel[]
 }

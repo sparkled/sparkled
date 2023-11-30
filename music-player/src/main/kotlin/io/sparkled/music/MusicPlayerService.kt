@@ -21,7 +21,12 @@ interface MusicPlayerService {
 
      * @param playbackState A playback state containing the [SongAudio] data to be played.
      */
-    fun play(playbackState: PlaybackState)
+    fun play(playbackState: SequencePlaybackState)
+
+    /**
+     * Plays an audio clip without keeping track of any state.
+     */
+    fun playOneShot(songAudio: ByteArray)
 
     /**
      * @return A normalised value between 0 and 1 indicating the playback progress of the current sequence.

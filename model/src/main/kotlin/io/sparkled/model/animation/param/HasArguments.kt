@@ -5,4 +5,5 @@ package io.sparkled.model.animation.param
  */
 interface HasArguments {
     val args: Map<String, List<String>>
+    val argsCache: MutableMap<String, Any?>
 }

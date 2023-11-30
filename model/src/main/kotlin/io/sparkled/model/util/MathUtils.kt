@@ -33,16 +33,6 @@ object MathUtils {
     }
 
     /**
-     * @param value the value to be constrained
-     * @param min the minimum allowable value (inclusive)
-     * @param max the maximum allowable value (inclusive)
-     * @return the value, constrained by min and max
-     */
-    fun constrain(value: Int, min: Int, max: Int): Int {
-        return max(min, min(max, value))
-    }
-
-    /**
      * Linear interpolation between two numbers
      * @param from the start value
      * @param to the end value

@@ -16,7 +16,6 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":model"))
     implementation(project(":persistence"))
-    implementation(libs.guava)
     implementation(libs.jackson.kotlin)
     implementation(libs.jakarta.annotationApi)
     implementation(libs.micronaut.data.jdbc)

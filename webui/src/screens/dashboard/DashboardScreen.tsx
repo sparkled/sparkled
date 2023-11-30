@@ -99,7 +99,7 @@ const S = {
       color: #fff !important;
       text-decoration: none;
     }
-  `
+  `,
 }
 
 const DashboardScreen = () => {
@@ -117,7 +117,16 @@ const DashboardScreen = () => {
         const actions = (
           <>
             <S.DropdownItem>
-              <Link to={`/stages/${it.id}`}>Edit Stage</Link>
+              <Link to={`/stages/${it.id}`}>Edit stage</Link>
+            </S.DropdownItem>
+            <S.DropdownItem>
+              <Link to={`/stages/${it.id}/live-view`}>Live view</Link>
+            </S.DropdownItem>
+            <S.DropdownItem>
+              <Link to={`/stages/${it.id}/live-paint`}>Live paint</Link>
+            </S.DropdownItem>
+            <S.DropdownItem>
+              <Link to={`/stages/${it.id}/live-instrument`}>Live instrument</Link>
             </S.DropdownItem>
             <S.DropdownItem onClick={() => dispatch(showDeleteStageModal(it))}>Delete Stage</S.DropdownItem>
           </>
@@ -129,11 +138,7 @@ const DashboardScreen = () => {
 
   const songItems = useMemo(() => {
     return (dashboard?.songs ?? [])
-      .filter(
-        it =>
-          it.name.toLowerCase().includes(searchQuery) ||
-          it.artist.toLowerCase().includes(searchQuery)
-      )
+      .filter(it => it.name.toLowerCase().includes(searchQuery) || it.artist.toLowerCase().includes(searchQuery))
       .map(it => {
         const actions = (
           <>
@@ -155,7 +160,7 @@ const DashboardScreen = () => {
   const playSequence = async (sequenceId: number) => {
     const playlistAction = {
       action: 'PLAY_SEQUENCE',
-      sequenceId: sequenceId
+      sequenceId: sequenceId,
     }
     await axios.post(`${restConfig.ROOT_URL}/player`, playlistAction)
   }
@@ -171,10 +176,10 @@ const DashboardScreen = () => {
       .map(it => {
         const actions = (
           <>
-            <S.DropdownItem onClick={() => playSequence(it.id)}>Play Sequence</S.DropdownItem>
-            <S.DropdownItem onClick={() => stopSequence()}>Stop Sequence</S.DropdownItem>
+            <S.DropdownItem onClick={() => playSequence(it.id)}>Play sequence</S.DropdownItem>
+            <S.DropdownItem onClick={() => stopSequence()}>Stop sequence</S.DropdownItem>
             <S.DropdownItem>
-              <Link to={`/sequences/${it.id}`}>Edit Sequence</Link>
+              <Link to={`/sequences/${it.id}`}>Edit sequence</Link>
             </S.DropdownItem>
             <S.DropdownItem onClick={() => dispatch(showDeleteSequenceModal(it))}>Delete Sequence</S.DropdownItem>
           </>
@@ -201,7 +206,7 @@ const DashboardScreen = () => {
             <S.DropdownItem onClick={() => dispatch(playPlaylist(it.id))}>Play Playlist</S.DropdownItem>
             <S.DropdownItem onClick={() => dispatch(stopPlaylist())}>Stop Playlist</S.DropdownItem>
             <S.DropdownItem>
-              <Link to={`/playlists/${it.id}`}>Edit Playlist</Link>
+              <Link to={`/playlists/${it.id}`}>Edit playlist</Link>
             </S.DropdownItem>
             <S.DropdownItem onClick={() => deletePlaylistModal.show(it)}>Delete Playlist</S.DropdownItem>
           </>
@@ -285,11 +290,7 @@ const DashboardScreen = () => {
                 >
                   {sequenceItems}
                 </DashboardSwimlane>
-                <DashboardSwimlane
-                  gridArea='playlists'
-                  title='Playlists'
-                  onAdd={addPlaylistModal.show}
-                >
+                <DashboardSwimlane gridArea='playlists' title='Playlists' onAdd={addPlaylistModal.show}>
                   {playlistItems}
                 </DashboardSwimlane>
                 <DashboardSwimlane gridArea='tasks' title='Tasks' onAdd={() => dispatch(showAddScheduledTaskModal())}>

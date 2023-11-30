@@ -28,6 +28,7 @@
     "react-router-dom": "5.0.1",
     "react-s-alert": "1.4.1",
     "react-split-pane": "0.1.87",
+    "react-use-websocket": "4.5.0",
     "reactstrap": "8.0.0",
     "redux": "4.2.1",
     "redux-form": "8.3.10",
@@ -39,6 +40,7 @@
     "styled-react-modal": "3.0.1",
     "styled-spinkit": "1.1.0",
     "svg-path-properties": "0.5.1",
+    "swr": "2.2.4",
     "wavesurfer.js": "2.0.6"
   },
   "devDependencies": {

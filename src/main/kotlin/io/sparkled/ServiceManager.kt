@@ -1,11 +1,12 @@
 package io.sparkled
 
-import io.sparkled.common.logging.getLogger
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.event.ApplicationShutdownEvent
 import io.micronaut.runtime.event.ApplicationStartupEvent
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.transaction.annotation.Transactional
+import io.sparkled.api.websocket.WebSocketServer
+import io.sparkled.common.logging.getLogger
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.persistence.FileService
 import io.sparkled.persistence.cache.CacheService
@@ -21,17 +22,18 @@ class ServiceManager(
     private val applicationContext: ApplicationContext,
     private val cache: CacheService,
     private val config: SparkledConfig,
-    private val file: FileService,
+    private val fileService: FileService,
     private val ledDataStreamer: LedDataStreamer,
     private val pluginManager: SparkledPluginManager,
     private val schedulerService: SchedulerService,
     private val udpServer: UdpServer,
+    private val webSocketServer: WebSocketServer,
 ) {
 
     @EventListener
     @Transactional
     fun onStartup(event: ApplicationStartupEvent) {
-        file.init()
+        fileService.init()
 
         // Pre-warm caches.
         cache.settings.get()
@@ -43,6 +45,7 @@ class ServiceManager(
         val socket = buildSocket()
         udpServer.start(socket)
         ledDataStreamer.start(socket)
+        webSocketServer.start()
 
         when {
             "e2eTest" in applicationContext.environment.activeNames -> {

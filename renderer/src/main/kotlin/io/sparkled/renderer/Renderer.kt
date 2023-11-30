@@ -1,11 +1,9 @@
 package io.sparkled.renderer
 
 import io.sparkled.common.logging.getLogger
-import io.sparkled.model.embedded.ChannelData
-import io.sparkled.model.SequenceChannelModel
-import io.sparkled.model.SequenceModel
 import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
+import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.render.Led
 import io.sparkled.model.render.RenderResult
@@ -13,37 +11,39 @@ import io.sparkled.model.render.RenderedFrame
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.api.StatefulSparkledEffect
+import io.sparkled.renderer.api.SparkledEffect
 import io.sparkled.renderer.easing.function.LinearEasing
 import java.awt.image.BufferedImage
 import kotlin.math.max
 import kotlin.math.min
 
+enum class RenderMode {
+    LIVE_FRAME,
+    PREVIEW_SEQUENCE,
+    PUBLISH_SEQUENCE,
+}
+
 // TODO inject the renderer, so cache can be injected.
 class Renderer(
     private val pluginManager: SparkledPluginManager,
-    private val gifs: Map<String, List<BufferedImage>>,
+    private val gifs: () -> LinkedHashMap<String, List<BufferedImage>>,
     private val stage: StageModel,
-    private val sequence: SequenceModel,
-    sequenceChannels: List<SequenceChannelModel>,
-    private val stageProps: List<StagePropModel>,
+    private val framesPerSecond: Int,
+    private val stagePropEffects: Map<UniqueId, List<Effect>>,
+    private val stageProps: Map<UniqueId, StagePropModel>,
     private val startFrame: Int,
     private val endFrame: Int,
-    private val preview: Boolean,
+    private val mode: RenderMode,
 ) {
-    private val channelPropPairs = sequenceChannels.map {
-        it.channelData to stageProps.first { sp -> sp.id == it.stagePropId }
-    }
-
     fun render(): RenderResult {
         val renderedProps = RenderedStagePropDataMap()
 
-        val groupedStageProps = if (preview) {
-            stageProps.groupBy { it.id }
+        val groupedStageProps = if (mode == RenderMode.PREVIEW_SEQUENCE) {
+            stageProps.values.groupBy { it.code }
         } else {
-            stageProps
+            stageProps.values
                 .sortedBy { it.groupDisplayOrder }
-                .groupBy { it.groupCode ?: it.id }
+                .groupBy { if (it.groupCode.isNullOrBlank()) it.code else it.groupCode!! }
         }
 
         groupedStageProps.forEach { (groupCode, stageProps) ->
@@ -52,43 +52,43 @@ class Renderer(
             val buffer = ByteArray(frameCount * leds * Led.BYTES_PER_LED)
 
             var nextStartIndex = 0
-            val ledIndexes = stageProps.associate {
+            val pixelIndexes = stageProps.associate {
                 val startIndex = nextStartIndex
                 nextStartIndex += it.ledCount
                 it.id to (startIndex until startIndex + it.ledCount)
             }
 
-            renderedProps[groupCode] = RenderedStagePropData(startFrame, endFrame, leds, buffer, ledIndexes)
+            renderedProps[groupCode] = RenderedStagePropData(startFrame, endFrame, leds, buffer, pixelIndexes)
         }
 
-        channelPropPairs.reversed().forEach { (channelData, stageProp) ->
-            val groupCode = if (preview) stageProp.id else {
-                stageProp.groupCode ?: stageProp.id
+        stagePropEffects
+            .map { it.value to stageProps[it.key]!! }
+            .reversed()
+            .forEach { (channelData, stageProp) ->
+                val groupCode = if (mode == RenderMode.PREVIEW_SEQUENCE) stageProp.code else {
+                    if (stageProp.groupCode.isNullOrBlank()) stageProp.code else stageProp.groupCode!!
+                }
+
+                val data = renderedProps[groupCode]!!
+                renderChannel(channelData, stageProp, data)
             }
-
-            val data = renderedProps[groupCode]!!
-            renderChannel(stage, channelData, stageProp, data)
-        }
 
         return RenderResult(renderedProps, startFrame, endFrame - startFrame + 1)
     }
 
     private fun renderChannel(
-        stage: StageModel,
-        channelData: ChannelData,
+        channelData: List<Effect>,
         stageProp: StagePropModel,
         data: RenderedStagePropData,
     ): RenderedStagePropData {
         channelData.forEach {
-            renderEffect(stage, sequence, data, stageProp, it)
+            renderEffect(data, stageProp, it)
         }
 
         return data
     }
 
     private fun renderEffect(
-        stage: StageModel,
-        sequence: SequenceModel,
         data: RenderedStagePropData,
         prop: StagePropModel,
         effect: Effect,
@@ -100,13 +100,11 @@ class Renderer(
             val newStartFrame = effect.startFrame + (spacedDuration * it)
 
             val effectRepetition = effect.copy(startFrame = newStartFrame, endFrame = newStartFrame + duration - 1)
-            renderRepetition<Any>(stage, sequence, data, prop, effectRepetition)
+            renderRepetition<Any>(data, prop, effectRepetition)
         }
     }
 
     private fun <T> renderRepetition(
-        stage: StageModel,
-        sequence: SequenceModel,
         data: RenderedStagePropData,
         prop: StagePropModel,
         effect: Effect,
@@ -114,7 +112,7 @@ class Renderer(
         val effectTypeCode = effect.type
 
         @Suppress("UNCHECKED_CAST")
-        val effectRenderer = pluginManager.effects.get()[effectTypeCode] as StatefulSparkledEffect<T>?
+        val effectRenderer = pluginManager.effects.get()[effectTypeCode] as SparkledEffect<T>?
 
         if (effectRenderer == null) {
             logger.warn("Failed to find effect '${effect.type}, skipping.")
@@ -131,11 +129,16 @@ class Renderer(
                 return
             }
 
-            val firstFrame = data.frames[startFrame - this.startFrame]
+            val firstFrame = when (mode) {
+                RenderMode.LIVE_FRAME -> data.frames[0]
+                else -> data.frames[startFrame - this.startFrame]
+            }
+
             val state = effectRenderer.createState(
                 RenderContext(
+                    pluginManager,
                     stage,
-                    sequence,
+                    framesPerSecond,
                     data,
                     firstFrame,
                     prop,
@@ -148,40 +151,44 @@ class Renderer(
 
             // Stateful effects need to be rendered from the beginning, so perform a dummy render on any frames that
             // fall outside the preview window.
-            if (state != null) {
-                for (frameNumber in effect.startFrame until startFrame) {
+            if (state != Unit) {
+                for (frameIndex in effect.startFrame..<startFrame) {
                     val frame = RenderedFrame(
                         startFrame = effect.startFrame,
-                        frameNumber = frameNumber,
+                        frameIndex = frameIndex,
                         ledCount = firstFrame.ledCount,
                         data = byteArrayOf(),
                         dummyFrame = true,
                     )
-                    render(stage, sequence, data, frame, prop, effect, effectRenderer, state)
+                    render(framesPerSecond, data, frame, prop, effect, effectRenderer, state)
                 }
             }
 
-            for (frameNumber in startFrame..endFrame) {
-                val frame = data.frames[frameNumber - this.startFrame]
-                render(stage, sequence, data, frame, prop, effect, effectRenderer, state)
+            for (frameIndex in startFrame..<endFrame) {
+                val frame = when (mode) {
+                    RenderMode.LIVE_FRAME -> data.frames[0]
+                    else -> data.frames[frameIndex - this.startFrame]
+                }
+
+                render(framesPerSecond, data, frame, prop, effect, effectRenderer, state)
             }
         }
     }
 
     private fun <T> render(
-        stage: StageModel,
-        sequence: SequenceModel,
+        framesPerSecond: Int,
         channel: RenderedStagePropData,
         frame: RenderedFrame,
         stageProp: StagePropModel,
         effect: Effect,
-        renderer: StatefulSparkledEffect<T>,
-        state: T,
+        effectRenderer: SparkledEffect<T>,
+        state: T & Any,
     ) {
-        val progress = getProgress(frame, effect)
+        val progress = getProgress(frame.frameIndex, effect)
         val ctx = RenderContext(
+            pluginManager,
             stage,
-            sequence,
+            framesPerSecond,
             channel,
             frame,
             stageProp,
@@ -190,17 +197,17 @@ class Renderer(
             pluginManager.fills.get(),
             this::loadGif,
         )
-        renderer.render(ctx, state)
+        effectRenderer.render(ctx, state)
     }
 
     private fun loadGif(filename: String): List<BufferedImage> {
-        return gifs[filename] ?: emptyList()
+        return gifs()[filename] ?: emptyList()
     }
 
-    private fun getProgress(frame: RenderedFrame, effect: Effect): Float {
+    private fun getProgress(frameIndex: Int, effect: Effect): Float {
         val easingFunction = pluginManager.easings.get()[effect.easing.type] ?: LinearEasing
 
-        val currentFrame = frame.frameNumber - effect.startFrame
+        val currentFrame = frameIndex - effect.startFrame
         val startFrame = effect.startFrame
         val duration = effect.endFrame - startFrame + 1
 

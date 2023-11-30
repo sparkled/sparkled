@@ -27,7 +27,7 @@ data class StageEditViewModel(
             name = model.name,
             width = model.width,
             height = model.height,
-            stageProps = stageProps.map { StagePropViewModel.fromModel(it) },
+            stageProps = stageProps.map { StagePropViewModel.fromModel(it, stageProps) },
         )
     }
 }

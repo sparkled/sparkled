@@ -9,19 +9,19 @@ export type DashboardViewModel = {
 }
 
 export type StageSearchViewModel = {
-  id: number,
+  id: string
   name: string
 }
 
 export type SongViewModel = {
-  id: number
+  id: string
   name: string
   artist: string
   durationMs: number
 }
 
 export type SequenceSearchViewModel = {
-  id: number
+  id: string
   name: string
   songName: string
   stageName: string
@@ -33,19 +33,19 @@ export type SequenceSearchViewModel = {
 export type SequenceStatus = 'NEW' | 'DRAFT' | 'PUBLISHED'
 
 export type PlaylistViewModel = {
-  id: number
+  id: string
   name: string
 }
 
 export type PlaylistSearchViewModel = {
-  id: number
+  id: string
   name: string
   sequenceCount: number
   durationMs: number
 }
 
 export type ScheduledJobSearchViewModel = {
-  id: number
+  id: string
   type: ScheduledJobAction
   cronExpression: string
   playlistName: string

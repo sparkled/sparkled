@@ -1,29 +1,24 @@
 package io.sparkled.renderer.effect.line
 
-import io.sparkled.model.animation.param.Param
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.api.SemVer
-import io.sparkled.renderer.api.StatefulSparkledEffect
+import io.sparkled.renderer.api.StatelessSparkledEffect
 import io.sparkled.renderer.effect.line.LineEffectUtils.renderLine
-import io.sparkled.renderer.util.ParamUtils
+import io.sparkled.renderer.parameter.DecimalParameter
 
-object LineEffect : StatefulSparkledEffect<Unit> {
+object LineEffect : StatelessSparkledEffect {
 
-    enum class Params { LENGTH }
-
-    override val id = "@sparkled/line"
+    override val id = "sparkled:line:1.0.0"
     override val name = "Line"
-    override val version = SemVer(1, 0, 0)
-    override val params = listOf(
-        Param.int(Params.LENGTH.name, "Length", 1)
-    )
+
+    private val lineLength by DecimalParameter(displayName = "Line length", defaultValue = 1f)
 
     override fun createState(ctx: RenderContext) {}
 
-    override fun render(ctx: RenderContext, state: Unit) {
+    override fun render(ctx: RenderContext) {
+
         val startLed = 0
-        val endLed = ctx.ledCount - 1
-        val lineLength = ParamUtils.getFloat(ctx.effect, Params.LENGTH.name, 1f)
+        val endLed = ctx.pixelCount - 1
+        val lineLength = lineLength.get(ctx)
 
         renderLine(ctx, startLed, endLed, lineLength)
     }

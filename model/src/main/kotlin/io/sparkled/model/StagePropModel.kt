@@ -4,7 +4,7 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
 import io.micronaut.data.model.DataType
 import io.sparkled.model.converter.InstantConverter
-import io.sparkled.model.embedded.LedPositions
+import io.sparkled.model.embedded.PixelPositions
 import io.sparkled.model.enumeration.StagePropType
 import io.sparkled.model.util.IdUtils.uniqueId
 import jakarta.persistence.Id
@@ -21,7 +21,7 @@ data class StagePropModel(
     @MappedProperty(converter = InstantConverter::class)
     override var updatedAt: Instant = Instant.now(),
 
-    var stageId: String,
+    var stageId: UniqueId,
 
     var code: String,
     var name: String,
@@ -38,7 +38,7 @@ data class StagePropModel(
     var scaleY: Double = 1.0,
     var rotation: Double = 0.0,
     var brightness: Int = MAX_BRIGHTNESS,
-    var ledPositions: LedPositions = LedPositions.empty,
+    var ledPositions: PixelPositions = PixelPositions.empty,
 ) : Model {
     companion object {
         const val MAX_BRIGHTNESS = 100

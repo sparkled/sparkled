@@ -16,22 +16,32 @@ object FillUtils {
      */
     fun fill(
         ctx: RenderContext,
-        ledIndex: Int,
+        pixelIndex: Int,
         alpha: Float,
         effectColor: Color? = null,
         ignoreReverse: Boolean = false,
     ) {
+        val targetPixels = ctx.effect.targetPixels
+        if (targetPixels != null && !targetPixels[pixelIndex]) {
+            return
+        }
+
         val frame = ctx.frame
         val ledRange = ctx.channel.stagePropRanges[ctx.stageProp.id] ?: error("Stage prop range not found")
 
         if (alpha < 0 || alpha > 1) {
-            val frameNumber = frame.frameNumber
-            logger.warn("Alpha is invalid, skipping.", "value" to alpha, "ledIndex" to ledIndex, "frameNumber" to frameNumber)
-        } else if (ledIndex >= 0 && ledIndex < ctx.stageProp.ledCount) {
+            val frameIndex = frame.frameIndex
+            logger.warn(
+                "Alpha is invalid, skipping.",
+                "value" to alpha,
+                "pixelIndex" to pixelIndex,
+                "frameNumber" to frameIndex,
+            )
+        } else if (pixelIndex >= 0 && pixelIndex < ctx.stageProp.ledCount) {
             val reverse = !ignoreReverse && ctx.stageProp.reverse
-            val index = if (reverse) ledRange.last - ledIndex else ledRange.first + ledIndex
+            val index = if (reverse) ledRange.last - pixelIndex else ledRange.first + pixelIndex
             val led = frame.getLed(index)
-            val fillColor = effectColor ?: ctx.fill?.getFill(ctx, ledIndex) ?: Color.BLACK
+            val fillColor = effectColor ?: ctx.fill?.getFill(ctx, pixelIndex) ?: Color.BLACK
 
             when (ctx.effect.fill.blendMode) {
                 BlendMode.NORMAL -> led.setColor(fillColor, alpha)

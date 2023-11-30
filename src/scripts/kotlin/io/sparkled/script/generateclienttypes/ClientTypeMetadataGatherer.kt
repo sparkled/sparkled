@@ -1,9 +1,11 @@
 package io.sparkled.script.generateclienttypes
 
-import io.sparkled.model.annotation.GenerateClientType
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.sparkled.model.annotation.GenerateClientType
 import java.lang.reflect.AnnotatedElement
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
@@ -83,7 +85,9 @@ class ClientTypeMetadataGatherer(
         typeClass: Class<*>,
         annotation: GenerateClientType,
     ): ClientTypeMetadata {
-        val publicProperties = typeClass.kotlin.declaredMemberProperties.filter { it.visibility == KVisibility.PUBLIC }
+        val publicProperties = typeClass.kotlin.declaredMemberProperties
+            .filter { it.visibility == KVisibility.PUBLIC }
+            .filter { it.javaField == null || !it.javaField!!.isAnnotationPresent(JsonIgnore::class.java) }
 
         val interfaceTypes = typeClass.interfaces.mapNotNull {
             val interfaceAnnotation = getAnnotationOrNull(it, GenerateClientType::class)
@@ -97,6 +101,7 @@ class ClientTypeMetadataGatherer(
         val fields = publicProperties.map {
             val fieldType = it.javaField?.type ?: it.returnType.javaType as Class<*>
             val genericType = it.javaField?.genericType ?: Nothing::class.java
+
             val simpleType = getSimpleType(fieldType)
 
             val type = when {
@@ -153,6 +158,8 @@ class ClientTypeMetadataGatherer(
             areClassesCompatible(type, Long::class.java) -> nativeNumberType
             areClassesCompatible(type, Float::class.java) -> nativeNumberType
             areClassesCompatible(type, Double::class.java) -> nativeNumberType
+            areClassesCompatible(type, ByteArray::class.java) -> nativeNumberArrayType
+            areClassesCompatible(type, JsonNode::class.java) -> nativeAnyType
             Number::class.java.isAssignableFrom(type) -> nativeNumberType
             Temporal::class.java.isAssignableFrom(type) -> nativeStringType
             else -> null
@@ -166,7 +173,22 @@ class ClientTypeMetadataGatherer(
         return when (genericType) {
             is TypeVariable<*> -> genericParameterType(genericType.name)
             is ParameterizedType -> {
-                getGenericParameterType(genericType.actualTypeArguments[parameterIndex], 0)
+                val typeArgument = genericType.actualTypeArguments[parameterIndex]
+                if (typeArgument is ParameterizedType) {
+                    if (Collection::class.java.isAssignableFrom(typeArgument.rawType as Class<*>)) {
+                        val parameterType = getGenericParameterType(genericType, 0)
+                        nativeArrayType(type = parameterType)
+                    } else if (Map::class.java.isAssignableFrom(typeArgument.rawType as Class<*>)) {
+                        val keyType = getGenericParameterType(genericType, 0)
+                        val valueType = getGenericParameterType(genericType, 1)
+                        nativeRecordType(keyType, valueType)
+                    } else {
+                        val parameterType = getGenericParameterType(genericType, 0)
+                        nativeArrayType(type = parameterType)
+                    }
+                } else {
+                    getGenericParameterType(genericType.actualTypeArguments[parameterIndex], 0)
+                }
             }
 
             is WildcardType -> visit((genericType.upperBounds[0] as Class<*>))
@@ -240,6 +262,16 @@ val nativeBooleanType = ClientTypeMetadata(
 val nativeNumberType = ClientTypeMetadata(
     category = GeneratedTypeCategory.NATIVE,
     name = "number",
+)
+
+val nativeNumberArrayType = ClientTypeMetadata(
+    category = GeneratedTypeCategory.NATIVE,
+    name = "number[]",
+)
+
+val nativeAnyType = ClientTypeMetadata(
+    category = GeneratedTypeCategory.NATIVE,
+    name = "any",
 )
 
 fun nativeRecordType(keyType: ClientTypeMetadata, valueType: ClientTypeMetadata) = ClientTypeMetadata(

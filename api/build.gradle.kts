@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.micronaut.injectJava)
     implementation(libs.micronaut.httpServerNetty)
     implementation(libs.micronaut.security)
+    implementation(libs.micronaut.websocket)
     implementation(libs.swagger.annotations)
 
     testImplementation(libs.kotest.assertionsCore)

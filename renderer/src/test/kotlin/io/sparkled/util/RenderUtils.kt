@@ -11,6 +11,7 @@ import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.util.testSequence
 import io.sparkled.model.util.testSequenceChannel
 import io.sparkled.model.util.testStageProp
+import io.sparkled.renderer.RenderMode
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
 
@@ -32,7 +33,7 @@ object RenderUtils {
     fun render(effect: Effect, frameCount: Int, ledCount: Int): RenderedStagePropData {
         val stageProp = testStageProp.copy(ledCount = ledCount)
         val result = render(mapOf(stageProp.id to listOf(effect)), frameCount, listOf(stageProp))
-        return result.getValue(stageProp.id)
+        return result.getValue(stageProp.code)
     }
 
     fun render(
@@ -52,14 +53,14 @@ object RenderUtils {
 
         val renderResult = Renderer(
             pluginManager,
-            emptyMap(),
+            { linkedMapOf() },
             stage,
-            testSequence,
-            sequenceChannels,
-            stageProps,
+            30,
+            sequenceChannels.associate { it.stagePropId to it.channelData },
+            stageProps.associateBy { it.id },
             0,
             frameCount - 1,
-            preview = false,
+            mode = RenderMode.PUBLISH_SEQUENCE,
         ).render()
 
         return renderResult.stageProps

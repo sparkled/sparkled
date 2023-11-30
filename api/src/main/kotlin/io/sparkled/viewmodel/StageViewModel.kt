@@ -34,7 +34,7 @@ data class StageViewModel(
             name = model.name,
             width = model.width,
             height = model.height,
-            stageProps = stageProps.map(StagePropViewModel::fromModel)
+            stageProps = stageProps.map { StagePropViewModel.fromModel(it, stageProps) }
         )
     }
 }

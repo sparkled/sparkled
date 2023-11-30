@@ -1,7 +1,8 @@
 import Axios from 'axios'
-import {useMemo} from 'react'
+import { useMemo } from 'react'
 import { RequestStatus } from './apiTypes'
 
+// TODO use .env file.
 const baseUrl = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8080/api'
 
 const createAxiosInstance = () => {
@@ -9,8 +10,8 @@ const createAxiosInstance = () => {
     baseURL: baseUrl,
     timeout: 60000,
     headers: {
-      Accept: 'application/json'
-    }
+      Accept: 'application/json',
+    },
   })
 }
 
@@ -27,4 +28,3 @@ function isLoadingOrReloading(status?: RequestStatus) {
 
 export { isLoadingOrReloading }
 export default useAxios
-

@@ -1,7 +1,7 @@
 package io.sparkled.udpserver.impl
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.sparkled.common.logging.getLogger
+import io.sparkled.common.threading.NamedVirtualThreadFactory
 import io.sparkled.udpserver.RequestHandler
 import io.sparkled.udpserver.UdpServer
 import jakarta.inject.Singleton
@@ -18,11 +18,12 @@ class UdpServerImpl(
 ) : UdpServer {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor(
-        ThreadFactoryBuilder().setNameFormat("udp-server-%d").build(),
+        NamedVirtualThreadFactory(javaClass.simpleName),
     )
 
     private val responseExecutor: ExecutorService = Executors.newFixedThreadPool(
-        REQUEST_HANDLER_THREADS, ThreadFactoryBuilder().setNameFormat("request-handler-%d").build(),
+        REQUEST_HANDLER_THREADS,
+        NamedVirtualThreadFactory("${javaClass.simpleName}RequestHandler"),
     )
 
     private var started: Boolean = false

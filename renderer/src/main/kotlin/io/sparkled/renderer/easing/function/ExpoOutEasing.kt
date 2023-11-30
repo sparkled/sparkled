@@ -1,7 +1,6 @@
 package io.sparkled.renderer.easing.function
 
 import io.sparkled.model.animation.easing.Easing
-import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.SparkledEasing
 import kotlin.math.pow
 
@@ -10,9 +9,8 @@ import kotlin.math.pow
  */
 object ExpoOutEasing : SparkledEasing {
 
-    override val id = "@sparkled/expo-out"
+    override val id = "sparkled:expo-out:1.0.0"
     override val name = "Expo Out"
-    override val version = SemVer(1, 0, 0)
 
     override fun getProgress(easing: Easing, currentFrame: Int, frameCount: Int): Float {
         val frameNumber = currentFrame + 1

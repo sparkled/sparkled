@@ -6,31 +6,31 @@ import io.micronaut.core.convert.ConversionContext
 import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.model.DataType
 import io.micronaut.data.model.runtime.convert.AttributeConverter
+import io.sparkled.model.annotation.GenerateClientType
 import jakarta.inject.Singleton
 
+@GenerateClientType
 @TypeDef(type = DataType.STRING, converter = LedPositionConverter::class)
-class LedPositions(initialCapacity: Int) : ArrayList<Point2d>(initialCapacity) {
+data class PixelPositions(
+    val points: List<Point2d>,
+    val bounds: Rectangle,
+) {
     companion object {
-        fun of(vararg ledPositions: Point2d) = LedPositions(ledPositions.size).apply {
-            addAll(ledPositions)
-        }
-
-        fun of(ledPositions: Collection<Point2d>) = LedPositions(ledPositions.size).apply {
-            addAll(ledPositions)
-        }
-
-        val empty = LedPositions(0)
+        val empty = PixelPositions(
+            points = emptyList(),
+            bounds = Rectangle(0.0, 0.0, 0.0, 0.0)
+        )
     }
 }
 
 @Singleton
 class LedPositionConverter(
     private val objectMapper: ObjectMapper,
-) : AttributeConverter<LedPositions, String> {
+) : AttributeConverter<PixelPositions, String> {
 
-    override fun convertToPersistedValue(entityValue: LedPositions?, context: ConversionContext?) =
+    override fun convertToPersistedValue(entityValue: PixelPositions?, context: ConversionContext?) =
         entityValue?.let(objectMapper::writeValueAsString)
 
     override fun convertToEntityValue(persistedValue: String?, context: ConversionContext?) =
-        persistedValue?.let { LedPositions.of(objectMapper.readValue<List<Point2d>>(persistedValue)) }
+        persistedValue?.let { objectMapper.readValue<PixelPositions>(persistedValue) }
 }

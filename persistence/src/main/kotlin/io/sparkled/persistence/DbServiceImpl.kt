@@ -1,7 +1,6 @@
 package io.sparkled.persistence
 
 import io.sparkled.model.SettingModel
-import io.sparkled.model.util.IdUtils.uniqueId
 import io.sparkled.persistence.repository.PlaylistRepository
 import io.sparkled.persistence.repository.PlaylistSequenceRepository
 import io.sparkled.persistence.repository.ScheduledActionRepository
@@ -57,4 +56,7 @@ class DbServiceImpl(
         stages.deleteAll()
         songs.deleteAll()
     }
+
+    @Transactional
+    override fun <T> inTransaction(fn: () -> T) = fn()
 }

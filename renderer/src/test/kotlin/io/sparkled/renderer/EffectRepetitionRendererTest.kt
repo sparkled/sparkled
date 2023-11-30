@@ -24,7 +24,7 @@ class EffectRepetitionRendererTest : StringSpec() {
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ffffff")
+                        arg("color", "#ffffff")
                     )
                 )
             )
@@ -74,7 +74,7 @@ class EffectRepetitionRendererTest : StringSpec() {
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ffffff")
+                        arg("color", "#ffffff")
                     )
                 )
             )

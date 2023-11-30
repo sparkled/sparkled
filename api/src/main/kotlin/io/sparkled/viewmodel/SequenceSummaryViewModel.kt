@@ -5,7 +5,6 @@ import io.sparkled.model.SongModel
 import io.sparkled.model.StageModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.annotation.GenerateClientType
-import io.sparkled.model.constant.ModelConstants
 import io.sparkled.model.enumeration.SequenceStatus
 
 @GenerateClientType
