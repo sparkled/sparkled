@@ -24,9 +24,9 @@ data class Led(
     fun maskColor(color: Color) = addRgb(-(255 - color.red), -(255 - color.green), -(255 - color.blue))
 
     fun addRgb(r: Int, g: Int, b: Int) {
-        this.r = constrain(this.r + r, 0, 255)
-        this.g = constrain(this.g + g, 0, 255)
-        this.b = constrain(this.b + b, 0, 255)
+        this.r = (this.r + r).coerceIn(0, 255)
+        this.g = (this.g + g).coerceIn(0, 255)
+        this.b = (this.b + b).coerceIn(0, 255)
     }
 
     private var r: Int

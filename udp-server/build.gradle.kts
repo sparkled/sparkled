@@ -18,7 +18,6 @@ dependencies {
     implementation(project(":model"))
     implementation(project(":persistence"))
     implementation(project(":music-player"))
-    implementation(libs.guava)
     implementation(libs.kotlin.coroutines)
     implementation(libs.micronaut.data.jdbc)
     implementation(libs.micronaut.injectJava)

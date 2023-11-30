@@ -18,4 +18,6 @@ interface PlaybackService {
      * Stops playback of the current playlist. If no playlist is playing, this is a no-op.
      */
     fun stopPlayback()
+
+    val state: PlaybackState
 }

@@ -1,9 +1,11 @@
 package io.sparkled.udpserver.impl.command
 
 import io.sparkled.model.setting.SettingsCacheEntry
+import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.PlaybackState
+import io.sparkled.music.SequencePlaybackState
+import io.sparkled.music.StoppedPlaybackState
 import java.net.InetAddress
-import java.nio.charset.StandardCharsets.UTF_8
 
 /**
  * Retrieves the stage prop codes that contain rendered data for the sequence that is currently playing.
@@ -18,17 +20,12 @@ class GetStagePropCodesCommand : UdpCommand {
         settings: SettingsCacheEntry,
         playbackState: PlaybackState,
     ): ByteArray {
-        if (playbackState.isEmpty) {
-            return ByteArray(0)
-        }
-
         val stageProps = playbackState.stageProps.values
         val stagePropCodes = stageProps
             .sortedBy { it.displayOrder }
             .joinToString(":") { it.code }
 
-        val bytes = stagePropCodes.toByteArray(UTF_8)
-        return if (bytes.isEmpty()) ByteArray(0) else bytes
+        return stagePropCodes.toByteArray()
     }
 
     companion object {

@@ -2,7 +2,7 @@ package io.sparkled.music.impl
 
 import io.sparkled.common.logging.getLogger
 import io.sparkled.music.MusicPlayerService
-import io.sparkled.music.PlaybackState
+import io.sparkled.music.SequencePlaybackState
 import jakarta.inject.Singleton
 import java.io.ByteArrayInputStream
 import javax.sound.sampled.AudioFormat
@@ -24,12 +24,14 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
     private var lastFramePosition = 0
     private var lastProgressUpdate = 0L
 
-    override fun play(playbackState: PlaybackState) {
+    override fun play(playbackState: SequencePlaybackState) {
         stopPlayback()
-        logger.debug("Playing sequence.", "name" to playbackState.sequence?.name)
+
+        val sequence = playbackState.sequence
+        logger.debug("Playing sequence.", "name" to sequence.name)
 
         try {
-            val byteStream = ByteArrayInputStream(playbackState.songAudio)
+            val byteStream = ByteArrayInputStream(playbackState.songAudio.buffer)
             AudioSystem.getAudioInputStream(byteStream).use { mp3Stream ->
                 val baseFormat = mp3Stream.format
                 val decodedFormat = AudioFormat(
@@ -44,7 +46,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
                 }
             }
         } catch (e: Exception) {
-            logger.error("Failed to play sequence.", e, "name" to playbackState.sequence?.name)
+            logger.error("Failed to play sequence.", e, "name" to sequence.name)
         }
     }
 

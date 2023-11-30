@@ -9,8 +9,9 @@ import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.setting.SettingsCacheEntry
 import io.sparkled.model.util.testStageProp
-import io.sparkled.music.PlaybackState
+import io.sparkled.music.SequencePlaybackState
 import java.net.InetAddress
+import java.nio.ByteBuffer
 
 class GetStagePropCodesCommandTest : StringSpec() {
 
@@ -30,13 +31,12 @@ class GetStagePropCodesCommandTest : StringSpec() {
                 port = 2812,
                 args = listOf(GetStagePropCodesCommand.KEY),
                 settings = SettingsCacheEntry(0),
-                playbackState = PlaybackState(
+                playbackState = SequencePlaybackState(
                     sequences = listOf(sequence),
                     sequenceIndex = 0,
                     progressFunction = { 0.0 },
-                    sequence = sequence,
                     song = SongModel(name = "", durationMs = 0),
-                    songAudio = byteArrayOf(1),
+                    songAudio = ByteBuffer.allocate(0),
                     renderedStageProps = RenderedStagePropDataMap().apply {
                         this["P1"] = RenderedStagePropData(0, 0, 0, byteArrayOf())
                     },

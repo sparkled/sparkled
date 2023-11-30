@@ -1,7 +1,8 @@
 package io.sparkled.music.impl
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder
+import io.micronaut.transaction.annotation.Transactional
 import io.sparkled.common.logging.getLogger
+import io.sparkled.common.threading.NamedVirtualThreadFactory
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
@@ -9,10 +10,12 @@ import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackService
 import io.sparkled.music.PlaybackState
 import io.sparkled.music.PlaybackStateService
+import io.sparkled.music.SequencePlaybackState
+import io.sparkled.music.StoppedPlaybackState
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
 import jakarta.inject.Singleton
-import io.micronaut.transaction.annotation.Transactional
+import java.nio.ByteBuffer
 import java.util.Base64
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
@@ -24,21 +27,23 @@ class PlaybackServiceImpl(
     private val file: FileService,
     private val musicPlayerService: MusicPlayerService,
 ) : PlaybackService, PlaybackStateService {
-    private val playbackState = AtomicReference(PlaybackState())
+    private val playbackState = AtomicReference<PlaybackState>(StoppedPlaybackState)
 
-    // TODO remove Guava. Try Micronaut's NamedThreadFactory class.
     private val executor = Executors.newSingleThreadScheduledExecutor(
-        ThreadFactoryBuilder().setNameFormat("playback-service-%d").build(),
+        NamedVirtualThreadFactory("playback-service"),
     )
 
     init {
         musicPlayerService.addLineListener { this.onLineEvent(it) }
     }
 
+    override val state: PlaybackState
+        get() = playbackState.get()
+
     private fun onLineEvent(event: LineEvent) {
         if (event.type === LineEvent.Type.STOP) {
             val state = this.playbackState.get()
-            if (!state.isEmpty) {
+            if (state is SequencePlaybackState) {
                 val sequences = state.sequences
                 val sequenceIndex = state.sequenceIndex
                 submitSequencePlayback(sequences, sequenceIndex + 1, state.repeat)
@@ -46,9 +51,7 @@ class PlaybackServiceImpl(
         }
     }
 
-    override fun getPlaybackState(): PlaybackState {
-        return playbackState.get()
-    }
+    override fun getPlaybackState(): PlaybackState = playbackState.get()
 
     override fun play(sequences: List<SequenceModel>, repeat: Boolean) {
         synchronized(this) {
@@ -65,23 +68,23 @@ class PlaybackServiceImpl(
         val playbackState = loadPlaybackState(sequences, sequenceIndex, repeat)
         this.playbackState.set(playbackState)
 
-        if (!playbackState.isEmpty) {
+        if (playbackState is SequencePlaybackState) {
             musicPlayerService.play(playbackState)
-        } else if (sequenceIndex > 0) {
-            if (playbackState.repeat) {
-                logger.debug("Finished playlist, restarting.")
-                playSequenceAtIndex(sequences, 0, true)
-            }
-        } else {
-            logger.error("Failed to play empty playlist.")
         }
     }
 
     @Transactional
     fun loadPlaybackState(sequences: List<SequenceModel>, sequenceIndex: Int, repeat: Boolean): PlaybackState {
         try {
+            val currentPlaybackState = state
+
             if (sequenceIndex >= sequences.size) {
-                return PlaybackState(repeat = repeat)
+                return if (currentPlaybackState is SequencePlaybackState && currentPlaybackState.repeat) {
+                    logger.debug("Finished playlist, restarting.")
+                    currentPlaybackState.copy(sequenceIndex = 0)
+                } else {
+                    StoppedPlaybackState
+                }
             }
 
             val sequence = sequences[sequenceIndex]
@@ -100,27 +103,26 @@ class PlaybackServiceImpl(
                 }
             val stageProps = db.stageProps.findAllByStageId(sequence.stageId).associateBy { it.code }
 
-            return PlaybackState(
+            return SequencePlaybackState(
                 sequences = sequences,
                 sequenceIndex = sequenceIndex,
                 repeat = repeat,
                 progressFunction = { musicPlayerService.sequenceProgress },
-                sequence = sequence,
                 song = song,
-                songAudio = songAudio,
+                songAudio = ByteBuffer.wrap(songAudio),
                 renderedStageProps = stagePropData,
                 stageProps = stageProps,
             )
         } catch (e: Exception) {
             logger.error("Failed to load playback state.", e)
-            return PlaybackState.empty
+            return StoppedPlaybackState
         }
     }
 
     override fun stopPlayback() {
         synchronized(this) {
             logger.info("Stopping playback.")
-            playbackState.set(PlaybackState.empty)
+            playbackState.set(StoppedPlaybackState)
             musicPlayerService.stopPlayback()
         }
     }
