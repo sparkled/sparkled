@@ -2,9 +2,6 @@ package io.sparkled.persistence.cache.impl
 
 import com.madgag.gif.fmsware.GifDecoder
 import io.sparkled.model.config.SparkledConfig
-import io.sparkled.model.setting.SettingsCacheEntry
-import io.sparkled.model.setting.SettingsConstants
-import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.Cache
 import java.awt.image.BufferedImage
 import java.io.File

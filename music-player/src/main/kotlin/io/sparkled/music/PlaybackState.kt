@@ -3,7 +3,6 @@ package io.sparkled.music
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
 import io.sparkled.model.StagePropModel
-import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.util.SequenceUtils
 import java.nio.ByteBuffer

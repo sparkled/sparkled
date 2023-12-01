@@ -1,6 +1,5 @@
 package io.sparkled.model.render
 
-import io.sparkled.model.util.MathUtils.constrain
 import io.sparkled.model.util.MathUtils.lerp
 import java.awt.Color
 import kotlin.math.roundToInt

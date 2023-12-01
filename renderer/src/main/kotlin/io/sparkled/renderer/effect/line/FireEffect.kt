@@ -85,10 +85,6 @@ object FireEffect : StatefulSparkledEffect<MutableList<Int>> {
         }
     }
 
-    private fun getHeat(state: List<Int>, index: Int): Int {
-        return state.getOrElse(index) { 0 }
-    }
-
     private fun heatColor(temperature: Int): Color {
         return when {
             temperature > 168 -> Color(255, 255, temperature)

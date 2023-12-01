@@ -1,9 +1,9 @@
 package io.sparkled.script.generateclienttypes
 
-import io.sparkled.model.annotation.GenerateClientType
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.sparkled.model.annotation.GenerateClientType
 import java.lang.reflect.AnnotatedElement
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type

@@ -1,12 +1,9 @@
 package io.sparkled.model
 
-import io.micronaut.core.convert.ConversionContext
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
-import io.micronaut.data.model.runtime.convert.AttributeConverter
 import io.sparkled.model.converter.InstantConverter
 import io.sparkled.model.util.IdUtils.uniqueId
-import jakarta.inject.Singleton
 import jakarta.persistence.Id
 import java.time.Instant
 

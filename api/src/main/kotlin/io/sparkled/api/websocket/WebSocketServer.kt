@@ -13,6 +13,7 @@ import io.micronaut.websocket.annotation.OnOpen
 import io.micronaut.websocket.annotation.ServerWebSocket
 import io.sparkled.common.logging.getLogger
 import io.sparkled.common.threading.NamedVirtualThreadFactory
+import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.PlaybackService
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
@@ -21,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import kotlin.system.measureTimeMillis
 
-@ServerWebSocket("/")
+@ServerWebSocket("/websocket")
 @Secured(SecurityRule.IS_ANONYMOUS)
 class WebSocketServer(
     private val objectMapper: ObjectMapper,
@@ -73,9 +74,20 @@ class WebSocketServer(
 
     @OnMessage
     fun onMessage(message: String, session: WebSocketSession) {
-        val command = objectMapper.readValue<WebSocketCommand>(message)
+        val command = objectMapper.readValue<SparkledCommand>(message)
         when (command.code) {
             WebSocketCommandType.SUBSCRIBE_TO_LIVE_UPDATES -> {
+                subscribers[session.id] = currentTimeMillis()
+                logger.info("Added live update subscriber.", "id" to session.id)
+            }
+
+            WebSocketCommandType.UPDATE_LIVE_DATA -> {
+                with (playbackService.state) {
+                    if (this is InteractivePlaybackState) {
+                        TODO()
+                    }
+                }
+
                 subscribers[session.id] = currentTimeMillis()
                 logger.info("Added live update subscriber.", "id" to session.id)
             }
@@ -99,4 +111,3 @@ class WebSocketServer(
         private const val SUBSCRIPTION_DURATION_MS = 5000
     }
 }
-

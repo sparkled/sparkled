@@ -5,7 +5,6 @@ import io.sparkled.model.PlaylistSequenceModel
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
 import io.sparkled.model.annotation.GenerateClientType
-import io.sparkled.model.constant.ModelConstants
 
 @GenerateClientType
 data class PlaylistSummaryViewModel(

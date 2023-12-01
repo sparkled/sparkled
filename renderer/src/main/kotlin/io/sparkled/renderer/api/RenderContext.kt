@@ -24,10 +24,4 @@ data class RenderContext(
         get() = fills[effect.fill.type]
 
     val ledCount = stageProp.ledCount
-
-    val objectMapper = sharedObjectMapper
-
-    companion object {
-        private val sharedObjectMapper = jacksonObjectMapper()
-    }
 }

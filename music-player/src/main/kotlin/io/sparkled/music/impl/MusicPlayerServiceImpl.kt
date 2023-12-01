@@ -31,7 +31,7 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
         logger.debug("Playing sequence.", "name" to sequence.name)
 
         try {
-            val byteStream = ByteArrayInputStream(playbackState.songAudio.buffer)
+            val byteStream = ByteArrayInputStream(playbackState.songAudio.array())
             AudioSystem.getAudioInputStream(byteStream).use { mp3Stream ->
                 val baseFormat = mp3Stream.format
                 val decodedFormat = AudioFormat(
