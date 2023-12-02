@@ -1,29 +1,16 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
-import useApi from '../../../api/useApi'
+import { useAppDispatch } from '../store/reducers/rootReducer.ts'
+import { PingCommand, SparkledCommand } from '../types/viewModels.ts'
 import { EventBusContext } from './useEventBus'
-import { useAppDispatch } from '../../../redux/reduxHooks'
-import { AssessmentCommand, PingCommand } from '../../../types/assessmentCommands'
 
-const pingFrequencyMs = 1000
+const pingFrequencyMs = 2000
 const websocketTimeoutMs = 5000
 const maxReconnectAttempts = 5
 
-type Props = {
-  onReconnect: () => void
-}
-
-const WebSocketManager: React.FC<Props> = ({ onReconnect }) => {
+const WebSocketManager: React.FC = () => {
   const eventBus = useContext(EventBusContext)
-
-  const webSocketRef = useWebSocket(onReconnect)
+  const webSocketRef = useServerWebSocket()
 
   useEffect(() => {
     eventBus.setWebSocket(webSocketRef)
@@ -32,10 +19,9 @@ const WebSocketManager: React.FC<Props> = ({ onReconnect }) => {
   return null
 }
 
-const useServerWebSocket = (onReconnect: () => void) => {
+const useServerWebSocket = () => {
   const eventBus = useContext(EventBusContext)
   const dispatch = useAppDispatch()
-  const api = useApi()
 
   const [reconnectAttempts, setReconnectAttempts] = useState(0)
   const [lastResponseAt, setLastResponseAt] = useState(Date.now())
@@ -45,8 +31,10 @@ const useServerWebSocket = (onReconnect: () => void) => {
   const buildUrl = useCallback(async () => {
     // connectCount has no meaning in the URL, it's simply a trigger to force a websocket reconnect when no WebSocket
     // activity has been detected for a while.
-    return `./v1.0/websocket?connectCount=${reconnectAttempts}`
-  }, [api, reconnectAttempts])
+    // TODO use .env file.
+    const host = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost:8080'
+    return `ws://${host}/api/websocket?connectCount=${reconnectAttempts}`
+  }, [reconnectAttempts])
 
   const webSocket = useWebSocket(buildUrl, {
     reconnectAttempts: 10,
@@ -65,30 +53,28 @@ const useServerWebSocket = (onReconnect: () => void) => {
     const interval = setInterval(() => {
       const now = Date.now()
       eventBus.sendWebSocketCommand<PingCommand>({
-        t: 'p',
-        ct: now,
+        type: 'P',
+        ts: new Date().toISOString(),
       })
       lastPingSentAt.current = now
     }, pingFrequencyMs)
 
     return () => clearInterval(interval)
-  }, [api, eventBus])
+  }, [eventBus])
 
-  // Mark person as active when a ping response is received.
   const { lastJsonMessage } = webSocket
   useEffect(() => {
     if (lastJsonMessage) {
-      eventBus.dispatch('responseReceived', lastJsonMessage as AssessmentCommand)
+      eventBus.dispatch('responseReceived', lastJsonMessage as SparkledCommand)
 
       if (!connected.current) {
         connected.current = true
-        onReconnect()
       }
 
       setReconnectAttempts(0)
       setLastResponseAt(Date.now())
     }
-  }, [dispatch, eventBus, lastJsonMessage, onReconnect])
+  }, [dispatch, eventBus, lastJsonMessage])
 
   // Monitor ping responses to detect connectivity issues.
   useEffect(() => {
@@ -112,11 +98,7 @@ const useServerWebSocket = (onReconnect: () => void) => {
     }, pingFrequencyMs)
 
     return () => clearTimeout(timeout)
-  }, [
-    api,
-    lastResponseAt,
-    webSocket,
-  ])
+  }, [lastResponseAt, webSocket])
 
   return webSocketRef
 }

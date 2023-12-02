@@ -40,6 +40,7 @@
     "styled-react-modal": "3.0.1",
     "styled-spinkit": "1.1.0",
     "svg-path-properties": "0.5.1",
+    "swr": "2.2.4",
     "wavesurfer.js": "2.0.6"
   },
   "devDependencies": {

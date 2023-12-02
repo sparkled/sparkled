@@ -153,6 +153,7 @@ class ClientTypeMetadataGatherer(
             areClassesCompatible(type, Long::class.java) -> nativeNumberType
             areClassesCompatible(type, Float::class.java) -> nativeNumberType
             areClassesCompatible(type, Double::class.java) -> nativeNumberType
+            areClassesCompatible(type, ByteArray::class.java) -> nativeNumberArrayType
             Number::class.java.isAssignableFrom(type) -> nativeNumberType
             Temporal::class.java.isAssignableFrom(type) -> nativeStringType
             else -> null
@@ -240,6 +241,11 @@ val nativeBooleanType = ClientTypeMetadata(
 val nativeNumberType = ClientTypeMetadata(
     category = GeneratedTypeCategory.NATIVE,
     name = "number",
+)
+
+val nativeNumberArrayType = ClientTypeMetadata(
+    category = GeneratedTypeCategory.NATIVE,
+    name = "number[]",
 )
 
 fun nativeRecordType(keyType: ClientTypeMetadata, valueType: ClientTypeMetadata) = ClientTypeMetadata(

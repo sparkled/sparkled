@@ -1,22 +1,22 @@
 import { createContext, RefObject, useMemo } from 'react'
 import { WebSocketHook } from 'react-use-websocket/dist/lib/types'
-import { NotNullRefObject } from '../types/commonTypes'
+import { SparkledCommand } from '../types/viewModels.ts'
 
 export const EventBusContext = createContext<EventBus>(null!)
 
 export interface EventBus {
-  addListener: (eventType: AssessmentEventType, callback: AssessmentEventCallback) => number
+  addListener: (eventType: EventType, callback: EventCallback) => number
   removeListener: (listenerId: number) => void
-  dispatch: (eventType: AssessmentEventType, command: AssessmentCommand) => void
-  setWebSocket: (webSocket: NotNullRefObject<WebSocketHook<any>>) => void
-  sendWebSocketCommand: <T extends AssessmentCommand>(command: T) => void
+  dispatch: (eventType: EventType, command: SparkledCommand) => void
+  setWebSocket: (webSocket: RefObject<WebSocketHook>) => void
+  sendWebSocketCommand: <T extends SparkledCommand>(command: T) => void
 }
 
-type AssessmentEventType = 'commandSent' | 'responseReceived'
-type AssessmentEventCallback = (command: AssessmentCommand) => void
+type EventType = 'commandSent' | 'responseReceived'
+type EventCallback = (command: SparkledCommand) => void
 type EventListenerEntry = {
-  eventType: AssessmentEventType
-  listener: (command: AssessmentCommand) => void
+  eventType: EventType
+  listener: (command: SparkledCommand) => void
 }
 
 /**
@@ -29,7 +29,7 @@ function useEventBus() {
 
     let currentListenerId = 0
 
-    const dispatch = (eventType: AssessmentEventType, command: AssessmentCommand) => {
+    const dispatch = (eventType: EventType, command: SparkledCommand) => {
       Object.values(listeners).forEach(entry => {
         if (entry.eventType === eventType) {
           entry.listener(command)

@@ -16,6 +16,9 @@ import StageEditPage from '../../pages/stageEdit/StageEditPage'
 import store from '../../store/store'
 import './App.css'
 import DashboardScreen from '../../screens/dashboard/DashboardScreen'
+import useEventBus, { EventBusContext } from '../../hooks/useEventBus'
+import WebSocketManager from '../../hooks/WebSocketManager'
+import StageLiveViewPage from '../../pages/stageLiveView/StageLiveViewPage'
 
 const theme = createMuiTheme({
   palette: {
@@ -30,29 +33,37 @@ const theme = createMuiTheme({
 const RedirectInvalidUrlToIndex = () => <Redirect to='/dashboard' />
 
 const snackbarAnchor = { horizontal: 'right', vertical: 'bottom' }
-const App = () => (
-  <>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <SnackbarProvider maxSnack={1} anchorOrigin={snackbarAnchor} TransitionProps={{ direction: 'up' }}>
-        <ModalProvider>
-          <Provider store={store}>
-            <Router>
-              <Switch>
-                <Route exact path='/dashboard' component={DashboardScreen} />
-                <Route exact path='/stages/:stageId' component={StageEditPage} />
-                <Route exact path='/sequences/:sequenceId' component={SequenceEditPage} />
-                <Route exact path='/playlists/:playlistId' component={PlaylistEditPage} />
-                <Route component={RedirectInvalidUrlToIndex} />
-              </Switch>
-            </Router>
-          </Provider>
-        </ModalProvider>
-      </SnackbarProvider>
-    </ThemeProvider>
+const App = () => {
+  const eventBus = useEventBus()
 
-    <Alert position='bottom-right' effect='scale' stack={{ limit: 3 }} />
-  </>
-)
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <SnackbarProvider maxSnack={1} anchorOrigin={snackbarAnchor} TransitionProps={{ direction: 'up' }}>
+          <ModalProvider>
+            <Provider store={store}>
+              <EventBusContext.Provider value={eventBus}>
+                <WebSocketManager />
+                <Router>
+                  <Switch>
+                    <Route exact path='/dashboard' component={DashboardScreen} />
+                    <Route exact path='/stages/:stageId' component={StageEditPage} />
+                    <Route exact path='/stages/:stageId/live' component={StageLiveViewPage} />
+                    <Route exact path='/sequences/:sequenceId' component={SequenceEditPage} />
+                    <Route exact path='/playlists/:playlistId' component={PlaylistEditPage} />
+                    <Route component={RedirectInvalidUrlToIndex} />
+                  </Switch>
+                </Router>
+              </EventBusContext.Provider>
+            </Provider>
+          </ModalProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
+
+      <Alert position='bottom-right' effect='scale' stack={{ limit: 3 }} />
+    </>
+  )
+}
 
 export default App

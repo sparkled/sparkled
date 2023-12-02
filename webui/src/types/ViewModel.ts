@@ -1,3 +1,5 @@
+import { StagePropViewModel } from './viewModels.ts'
+
 export class StageViewModel {
   public id: number | null = null
   public name: string = ''
@@ -6,24 +8,4 @@ export class StageViewModel {
   public stageProps: StagePropViewModel[] = []
 }
 
-export type Point = { x: number, y: number }
-
-export type StagePropViewModel = {
-  id: string
-  stageId: number
-  code: string
-  name: string
-  type: string
-  ledCount: number
-  reverse: boolean
-  positionX: number
-  positionY: number
-  scaleX: number
-  scaleY: number
-  rotation: number
-  brightness: number
-  displayOrder: number
-  groupCode: string | null
-  groupDisplayOrder: number | null
-  ledPositions: Point[]
-}
+export type Point = { x: number; y: number }

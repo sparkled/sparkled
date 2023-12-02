@@ -1,5 +1,6 @@
 package io.sparkled.api.websocket
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.micronaut.security.annotation.Secured
@@ -17,12 +18,12 @@ import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.PlaybackService
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
-import java.util.Base64
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
+import java.util.function.Predicate
 import kotlin.system.measureTimeMillis
 
-@ServerWebSocket("/websocket")
+@ServerWebSocket("/api/websocket")
 @Secured(SecurityRule.IS_ANONYMOUS)
 class WebSocketServer(
     private val objectMapper: ObjectMapper,
@@ -43,7 +44,7 @@ class WebSocketServer(
 
                         // TODO calculate time to sleep depending on playback type.
                         val elapsed = measureTimeMillis(::broadcastLiveData)
-                        sleep((10 - elapsed).coerceAtLeast(0))
+                        sleep((33 - elapsed).coerceAtLeast(0))
                     }
                 } catch (e: Exception) {
                     logger.error("Error occurred during live data broadcast.", e)
@@ -56,42 +57,59 @@ class WebSocketServer(
     private fun broadcastLiveData() {
         val playbackState = playbackService.state
 
-        val liveData = playbackState.renderedStageProps.map {
-            val frameIndex = (it.value.frames.size * playbackState.progress).toInt()
-            val frameData = it.value.frames.getOrNull(frameIndex)?.getData()
-            it.key to Base64.getEncoder().encode(frameData)
+        val liveData = playbackState.renderedStageProps.entries.associate { (key, value) ->
+            val frameIndex = (playbackState.progress * (value.frames.size - 1)).toInt()
+            val frameData = value.frames.getOrNull(frameIndex)?.getData() ?: byteArrayOf()
+            key to frameData
         }
 
+        val liveDataResponse = LiveDataResponseCommand(liveData)
+
         subscribers.keys.forEach { sessionId ->
-            webSocketBroadcaster.broadcastAsync(liveData) { it.id == sessionId }
+            webSocketBroadcaster.broadcastAsync(liveDataResponse) { it.id == sessionId }
         }
     }
 
     @OnOpen
     fun onOpen(session: WebSocketSession) {
-        logger.info("Session opened.", "id" to session.id)
+        logger.info("Websocket opened.", "id" to session.id)
     }
 
     @OnMessage
     fun onMessage(message: String, session: WebSocketSession) {
-        val command = objectMapper.readValue<SparkledCommand>(message)
-        when (command.code) {
-            WebSocketCommandType.SUBSCRIBE_TO_LIVE_UPDATES -> {
-                subscribers[session.id] = currentTimeMillis()
-                logger.info("Added live update subscriber.", "id" to session.id)
-            }
-
-            WebSocketCommandType.UPDATE_LIVE_DATA -> {
-                with (playbackService.state) {
+        val command = objectMapper.readValue<JsonNode>(message)
+        val commandType = enumValues<WebSocketCommandType>().find { it.code == command.get("type").asText() }
+        when (commandType) {
+            WebSocketCommandType.LIVE_DATA_MODIFY -> {
+                with(playbackService.state) {
                     if (this is InteractivePlaybackState) {
                         TODO()
                     }
                 }
-
-                subscribers[session.id] = currentTimeMillis()
-                logger.info("Added live update subscriber.", "id" to session.id)
             }
 
+            WebSocketCommandType.LIVE_DATA_RESPONSE -> {
+                // This command is only sent as a response, so it doesn't need to be processed.
+            }
+
+            WebSocketCommandType.LIVE_DATA_SUBSCRIBE -> {
+                val action = if (subscribers.containsKey(session.id)) "Updated" else "Added"
+                subscribers[session.id] = currentTimeMillis()
+                logger.info("$action live update subscriber.", "id" to session.id)
+            }
+
+            WebSocketCommandType.LIVE_DATA_UNSUBSCRIBE -> {
+                subscribers -= session.id
+                logger.info("Removed live update subscriber.", "id" to session.id)
+            }
+
+            WebSocketCommandType.PING -> {
+                webSocketBroadcaster.broadcast(command, isSameSession(session))
+            }
+
+            null -> {
+                // Command not recognised, ignore.
+            }
         }
     }
 
@@ -104,6 +122,10 @@ class WebSocketServer(
     @OnError
     fun onError(session: WebSocketSession) {
         logger.error("A websocket error occurred.", "id" to session.id)
+    }
+
+    private fun isSameSession(session: WebSocketSession?) = Predicate<WebSocketSession> {
+        it === session
     }
 
     companion object {

@@ -39,11 +39,11 @@ class Renderer(
         val renderedProps = RenderedStagePropDataMap()
 
         val groupedStageProps = if (preview) {
-            stageProps.groupBy { it.id }
+            stageProps.groupBy { it.code }
         } else {
             stageProps
                 .sortedBy { it.groupDisplayOrder }
-                .groupBy { it.groupCode ?: it.id }
+                .groupBy { it.groupCode ?: it.code }
         }
 
         groupedStageProps.forEach { (groupCode, stageProps) ->
@@ -62,8 +62,8 @@ class Renderer(
         }
 
         channelPropPairs.reversed().forEach { (channelData, stageProp) ->
-            val groupCode = if (preview) stageProp.id else {
-                stageProp.groupCode ?: stageProp.id
+            val groupCode = if (preview) stageProp.code else {
+                stageProp.groupCode ?: stageProp.code
             }
 
             val data = renderedProps[groupCode]!!
