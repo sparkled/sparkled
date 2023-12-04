@@ -2,6 +2,7 @@ package io.sparkled.api.websocket
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
@@ -16,6 +17,7 @@ import io.sparkled.common.logging.getLogger
 import io.sparkled.common.threading.NamedVirtualThreadFactory
 import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.PlaybackService
+import io.sparkled.persistence.DbService
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
 import java.util.concurrent.ConcurrentHashMap
@@ -26,6 +28,7 @@ import kotlin.system.measureTimeMillis
 @ServerWebSocket("/api/websocket")
 @Secured(SecurityRule.IS_ANONYMOUS)
 class WebSocketServer(
+    private val db: DbService,
     private val objectMapper: ObjectMapper,
     private val playbackService: PlaybackService,
     private val webSocketBroadcaster: WebSocketBroadcaster,
@@ -77,14 +80,15 @@ class WebSocketServer(
 
     @OnMessage
     fun onMessage(message: String, session: WebSocketSession) {
-        val command = objectMapper.readValue<JsonNode>(message)
-        val commandType = enumValues<WebSocketCommandType>().find { it.code == command.get("type").asText() }
+        val commandNode = objectMapper.readValue<JsonNode>(message)
+        val commandType = enumValues<WebSocketCommandType>().find { it.code == commandNode.get("type").asText() }
+
         when (commandType) {
             WebSocketCommandType.LIVE_DATA_MODIFY -> {
-                with(playbackService.state) {
-                    if (this is InteractivePlaybackState) {
-                        TODO()
-                    }
+                val command = objectMapper.convertValue<LiveDataModifyCommand>(commandNode)
+                val state = playbackService.state
+                if (state is InteractivePlaybackState) {
+                    command.stageProps
                 }
             }
 
@@ -104,7 +108,21 @@ class WebSocketServer(
             }
 
             WebSocketCommandType.PING -> {
-                webSocketBroadcaster.broadcast(command, isSameSession(session))
+                webSocketBroadcaster.broadcast(commandNode, isSameSession(session))
+            }
+
+            WebSocketCommandType.TOGGLE_INTERACTIVE_MODE -> {
+                val command = objectMapper.convertValue<ToggleInteractiveModeCommand>(commandNode)
+
+                val state = playbackService.state
+                if (command.enabled && state !is InteractivePlaybackState) {
+                    val stageId = command.stageId
+                        ?: throw RuntimeException("A stage ID must be provided when enabling interactive mode.")
+                    val stageProps = db.stageProps.findAllByStageId(stageId)
+                    playbackService.enableInteractiveMode(stageProps)
+                } else if (!command.enabled && state is InteractivePlaybackState) {
+                    playbackService.disableInteractiveMode()
+                }
             }
 
             null -> {

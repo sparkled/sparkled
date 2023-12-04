@@ -2,6 +2,8 @@ package io.sparkled.api.websocket
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.JsonNode
+import io.sparkled.model.UniqueId
 import io.sparkled.model.annotation.GenerateClientType
 import java.time.Instant
 
@@ -12,9 +14,18 @@ interface SparkledCommand {
 
 @GenerateClientType
 data class LiveDataModifyCommand(
-    val stageProps: Map<String, List<LiveDataModification>>,
+    @field:JsonProperty("m")
+    val modifications: List<LiveDataModification>,
 ) : SparkledCommand {
     override val type = WebSocketCommandType.LIVE_DATA_MODIFY
+}
+
+@GenerateClientType
+data class ToggleInteractiveModeCommand(
+    val enabled: Boolean,
+    val stageId: UniqueId?,
+) : SparkledCommand {
+    override val type = WebSocketCommandType.TOGGLE_INTERACTIVE_MODE
 }
 
 @GenerateClientType
@@ -46,15 +57,6 @@ data class PingCommand(
 }
 
 @GenerateClientType
-data class LiveDataModification(
-    @JsonProperty("i")
-    val index: Int,
-
-    @JsonProperty("c")
-    val color: Int,
-)
-
-@GenerateClientType
 enum class WebSocketCommandType(
     @field:JsonValue
     val code: String,
@@ -63,5 +65,46 @@ enum class WebSocketCommandType(
     LIVE_DATA_RESPONSE("LDR"),
     LIVE_DATA_SUBSCRIBE("LDS"),
     LIVE_DATA_UNSUBSCRIBE("LDU"),
+    TOGGLE_INTERACTIVE_MODE("TIM"),
     PING("P"),
+}
+
+@GenerateClientType
+data class LiveDataModification(
+    @field:JsonProperty("t")
+    val type: LiveDataModificationType,
+
+    @field:JsonProperty("spc")
+    val stagePropCodeOrGroupCode: String? = null,
+
+    @field:JsonProperty("i")
+    val params: JsonNode
+)
+
+
+@GenerateClientType
+sealed interface LiveDataModificationParams
+
+@GenerateClientType
+data class FillSolidParams(
+    @field:JsonProperty("c")
+    val color: Int,
+) : LiveDataModificationParams
+
+@GenerateClientType
+data class SetPixelsParams(
+    /**
+     * 0=ff0000,1-5=00ff00,6=0000ff
+     */
+    @field:JsonProperty("d")
+    val data: String,
+) : LiveDataModificationParams
+
+@GenerateClientType
+enum class LiveDataModificationType(
+    @field:JsonValue
+    val code: String,
+) {
+    FILL_SOLID("FS"),
+    SET_PIXELS("SP"),
 }

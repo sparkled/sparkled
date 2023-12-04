@@ -120,7 +120,10 @@ const DashboardScreen = () => {
               <Link to={`/stages/${it.id}`}>Edit stage</Link>
             </S.DropdownItem>
             <S.DropdownItem>
-              <Link to={`/stages/${it.id}/live`}>Live view</Link>
+              <Link to={`/stages/${it.id}/live-view`}>Live view</Link>
+            </S.DropdownItem>
+            <S.DropdownItem>
+              <Link to={`/stages/${it.id}/live-paint`}>Live paint</Link>
             </S.DropdownItem>
             <S.DropdownItem onClick={() => dispatch(showDeleteStageModal(it))}>Delete Stage</S.DropdownItem>
           </>

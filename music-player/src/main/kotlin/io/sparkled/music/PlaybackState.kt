@@ -24,6 +24,7 @@ data object StoppedPlaybackState : PlaybackState {
 data class InteractivePlaybackState(
     override val renderedStageProps: RenderedStagePropDataMap,
     override val stageProps: Map<String, StagePropModel>,
+    val previousState: PlaybackState = StoppedPlaybackState,
 ) : PlaybackState {
     override val frameCount = 1
     override val progress = 0.0

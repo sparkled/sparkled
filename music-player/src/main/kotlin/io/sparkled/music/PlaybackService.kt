@@ -1,6 +1,7 @@
 package io.sparkled.music
 
 import io.sparkled.model.SequenceModel
+import io.sparkled.model.StagePropModel
 
 /**
  * Plays and stops playlists.
@@ -20,4 +21,8 @@ interface PlaybackService {
     fun stopPlayback()
 
     val state: PlaybackState
+
+    fun disableInteractiveMode()
+
+    fun enableInteractiveMode(stageProps: List<StagePropModel>)
 }

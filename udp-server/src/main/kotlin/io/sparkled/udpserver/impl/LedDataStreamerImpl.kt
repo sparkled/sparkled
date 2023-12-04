@@ -49,7 +49,7 @@ class LedDataStreamerImpl(
             while (started) {
                 val iterationTime = System.currentTimeMillis()
                 val settings = cache.settings.get()
-                val playbackState = playbackStateService.getPlaybackState()
+                val playbackState = playbackStateService.state
 
                 try {
                     if (subscribers.isEmpty()) {

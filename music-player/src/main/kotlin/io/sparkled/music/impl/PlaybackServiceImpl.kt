@@ -4,8 +4,10 @@ import io.micronaut.transaction.annotation.Transactional
 import io.sparkled.common.logging.getLogger
 import io.sparkled.common.threading.NamedVirtualThreadFactory
 import io.sparkled.model.SequenceModel
+import io.sparkled.model.StagePropModel
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
+import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackService
 import io.sparkled.music.PlaybackState
@@ -50,8 +52,6 @@ class PlaybackServiceImpl(
             }
         }
     }
-
-    override fun getPlaybackState(): PlaybackState = playbackState.get()
 
     override fun play(sequences: List<SequenceModel>, repeat: Boolean) {
         synchronized(this) {
@@ -124,6 +124,45 @@ class PlaybackServiceImpl(
             logger.info("Stopping playback.")
             playbackState.set(StoppedPlaybackState)
             musicPlayerService.stopPlayback()
+        }
+    }
+
+    override fun disableInteractiveMode() {
+        val currentState = state
+        if (currentState is InteractivePlaybackState) {
+            val previousState = currentState.previousState
+            playbackState.set(previousState)
+
+            if (previousState is SequencePlaybackState) {
+                val sequences = previousState.sequences
+                val sequenceIndex = previousState.sequenceIndex
+                submitSequencePlayback(sequences, sequenceIndex + 1, previousState.repeat)
+            }
+        }
+    }
+
+    override fun enableInteractiveMode(stageProps: List<StagePropModel>) {
+        val currentState = state
+        if (currentState !is InteractivePlaybackState) {
+            musicPlayerService.stopPlayback()
+
+            playbackState.set(
+                InteractivePlaybackState(
+                    renderedStageProps = stageProps
+                        .groupBy { it.groupCode ?: it.code }
+                        .mapValuesTo(RenderedStagePropDataMap()) { (_, stageProps) ->
+                            val ledCount = stageProps.sumOf { it.ledCount }
+                            RenderedStagePropData(
+                                startFrame = 0,
+                                endFrame = 1,
+                                ledCount = ledCount,
+                                data = ByteArray(ledCount * 3),
+                            )
+                        },
+                    stageProps = stageProps.associateBy { it.code },
+                    previousState = currentState,
+                )
+            )
         }
     }
 

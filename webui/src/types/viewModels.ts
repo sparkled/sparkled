@@ -50,6 +50,7 @@ export type PlaylistSummaryViewModel = {
 'LDR',
 'LDS',
 'LDU',
+'TIM',
 'P'
             ] as const
             export type WebSocketCommandType = typeof WebSocketCommandTypeValues[number]
@@ -237,6 +238,12 @@ export type StageSummaryViewModel = {
 'STOP'
             ] as const
             export type PlaylistActionType = typeof PlaylistActionTypeValues[number]
+
+export type ToggleInteractiveModeCommand = SparkledCommand & {
+  enabled: boolean
+  stageId?: string
+  type: WebSocketCommandType
+}
 
 export type PlaylistSequenceViewModel = {
   displayOrder: number

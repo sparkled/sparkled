@@ -5,7 +5,11 @@ import PageContainer from '../../components/PageContainer'
 import StageEditor from '../../components/stageEditor/StageEditor'
 import useAxiosSwr from '../../hooks/api/useAxiosSwr.ts'
 import { EventBusContext } from '../../hooks/useEventBus.ts'
-import { LiveDataSubscribeCommand, LiveDataUnsubscribeCommand } from '../../types/viewModels.ts'
+import {
+  LiveDataModifyCommand,
+  LiveDataUnsubscribeCommand,
+  ToggleInteractiveModeCommand,
+} from '../../types/viewModels.ts'
 
 const useStyles = makeStyles(() => ({
   // The page container never overflows, and the editor tools need to be hidden when they slide offscreen.
@@ -23,7 +27,7 @@ const useStyles = makeStyles(() => ({
 
 type Props = RouteComponentProps<{ stageId: string }>
 
-const StageLiveViewPage: React.FC<Props> = props => {
+const StageLivePaintPage: React.FC<Props> = props => {
   const classes = useStyles()
   const eventBus = useContext(EventBusContext)
 
@@ -31,14 +35,28 @@ const StageLiveViewPage: React.FC<Props> = props => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      eventBus.sendWebSocketCommand<LiveDataSubscribeCommand>({ type: 'LDS' })
+      eventBus.sendWebSocketCommand<ToggleInteractiveModeCommand>({
+        type: 'TIM',
+        enabled: true,
+        stageId: props.match.params.stageId,
+      })
+    }, 2000)
+
+    setTimeout(() => {
+      eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
+        type: 'LDM',
+        // TODO
+      })
     }, 2000)
 
     return () => {
       clearInterval(interval)
-      eventBus.sendWebSocketCommand<LiveDataUnsubscribeCommand>({ type: 'LDU' })
+      eventBus.sendWebSocketCommand<ToggleInteractiveModeCommand>({
+        type: 'TIM',
+        enabled: false,
+      })
     }
-  }, [eventBus])
+  }, [eventBus, props.match.params.stageId])
 
   return (
     <PageContainer className={classes.pageContainer} spacing={0}>
@@ -47,4 +65,4 @@ const StageLiveViewPage: React.FC<Props> = props => {
   )
 }
 
-export default StageLiveViewPage
+export default StageLivePaintPage

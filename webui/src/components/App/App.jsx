@@ -18,7 +18,8 @@ import './App.css'
 import DashboardScreen from '../../screens/dashboard/DashboardScreen'
 import useEventBus, { EventBusContext } from '../../hooks/useEventBus'
 import WebSocketManager from '../../hooks/WebSocketManager'
-import StageLiveViewPage from '../../pages/stageLiveView/StageLiveViewPage'
+import StageLiveViewPage from '../../pages/stageLiveView/StageLiveViewPage.tsx'
+import StageLivePaintPage from '../../pages/stageLiveView/StageLivePaintPage.tsx'
 
 const theme = createMuiTheme({
   palette: {
@@ -49,7 +50,8 @@ const App = () => {
                   <Switch>
                     <Route exact path='/dashboard' component={DashboardScreen} />
                     <Route exact path='/stages/:stageId' component={StageEditPage} />
-                    <Route exact path='/stages/:stageId/live' component={StageLiveViewPage} />
+                    <Route exact path='/stages/:stageId/live-view' component={StageLiveViewPage} />
+                    <Route exact path='/stages/:stageId/live-paint' component={StageLivePaintPage} />
                     <Route exact path='/sequences/:sequenceId' component={SequenceEditPage} />
                     <Route exact path='/playlists/:playlistId' component={PlaylistEditPage} />
                     <Route component={RedirectInvalidUrlToIndex} />
