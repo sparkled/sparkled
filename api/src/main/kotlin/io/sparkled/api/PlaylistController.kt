@@ -75,7 +75,7 @@ class PlaylistController(
         return HttpResponse.created(getPlaylistById(playlist.id))
     }
 
-    private fun getPlaylistById(id: String): PlaylistViewModel? {
+    private fun getPlaylistById(id: UniqueId): PlaylistViewModel? {
         val playlist = db.playlists.findByIdOrNull(id)
         val playlistSequences = db.playlistSequences.getPlaylistSequencesByPlaylistId(id)
         return playlist?.let { PlaylistViewModel.fromModel(it, playlistSequences) }

@@ -20,7 +20,7 @@ import kotlin.math.max
 object GradientFill : SparkledFill {
 
     enum class Params { COLORS, COLOR_REPETITIONS, BLEND_HARDNESS, CYCLES_PER_SECOND }
-    
+
     override val id = "@sparkled/gradient"
     override val name = "Gradient"
     override val version = SemVer(1, 0, 0)
@@ -41,7 +41,7 @@ object GradientFill : SparkledFill {
         val ledIndexNormalised = ledIndex / ctx.ledCount.toFloat()
 
         val cyclesPerSecond = ParamUtils.getFloat(fill, Params.CYCLES_PER_SECOND.name, 0f)
-        val cycleProgress = cyclesPerSecond * (ctx.frame.frameNumber.toFloat() / ctx.sequence.framesPerSecond)
+        val cycleProgress = cyclesPerSecond * (ctx.frame.frameNumber.toFloat() / ctx.framesPerSecond)
         val gradientProgress = ledIndexNormalised + cycleProgress
 
         val colorProgress = gradientProgress * (colorCount - 1)

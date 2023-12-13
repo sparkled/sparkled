@@ -1,12 +1,12 @@
 package io.sparkled.renderer.api
 
-interface StatefulSparkledEffect<T> : SparkledPlugin {
+interface SparkledEffect<T> : SparkledPlugin {
     fun createState(ctx: RenderContext): T
 
     fun render(ctx: RenderContext, state: T)
 }
 
-interface StatelessSparkledEffect : StatefulSparkledEffect<Unit> {
+interface StatelessSparkledEffect : SparkledEffect<Unit> {
     fun render(ctx: RenderContext)
 
     override fun createState(ctx: RenderContext) {}

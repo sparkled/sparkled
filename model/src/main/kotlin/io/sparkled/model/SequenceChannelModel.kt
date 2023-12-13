@@ -19,8 +19,8 @@ data class SequenceChannelModel(
     @MappedProperty(converter = InstantConverter::class)
     override var updatedAt: Instant = Instant.now(),
 
-    var sequenceId: String,
-    var stagePropId: String,
+    var sequenceId: UniqueId,
+    var stagePropId: UniqueId,
 
     var name: String,
     var displayOrder: Int,

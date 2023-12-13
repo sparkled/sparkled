@@ -22,6 +22,12 @@ data class Led(
     fun subtractColor(color: Color) = addRgb(-color.red, -color.green, -color.blue)
     fun maskColor(color: Color) = addRgb(-(255 - color.red), -(255 - color.green), -(255 - color.blue))
 
+    fun setRgb(r: Int, g: Int, b: Int) {
+        this.r = r.coerceIn(0, 255)
+        this.g = g.coerceIn(0, 255)
+        this.b = b.coerceIn(0, 255)
+    }
+
     fun addRgb(r: Int, g: Int, b: Int) {
         this.r = (this.r + r).coerceIn(0, 255)
         this.g = (this.g + g).coerceIn(0, 255)

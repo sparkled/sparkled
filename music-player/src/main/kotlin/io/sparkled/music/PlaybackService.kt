@@ -1,6 +1,7 @@
 package io.sparkled.music
 
 import io.sparkled.model.SequenceModel
+import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
 
 /**
@@ -24,5 +25,5 @@ interface PlaybackService {
 
     fun disableInteractiveMode()
 
-    fun enableInteractiveMode(stageProps: List<StagePropModel>)
+    fun enableInteractiveMode(stage: StageModel, stageProps: List<StagePropModel>)
 }

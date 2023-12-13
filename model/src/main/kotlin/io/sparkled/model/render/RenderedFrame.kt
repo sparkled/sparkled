@@ -5,7 +5,7 @@ data class RenderedFrame(
     private val startFrame: Int,
     val frameNumber: Int,
     val ledCount: Int,
-    private val data: ByteArray,
+    private val data: ByteArray, // TODO use ByteBuffer to fix warning.
     private val dummyFrame: Boolean = false,
 ) {
 

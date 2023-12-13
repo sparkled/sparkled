@@ -2,6 +2,7 @@ package io.sparkled.music
 
 import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
+import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.util.SequenceUtils
@@ -12,6 +13,7 @@ sealed interface PlaybackState {
     val renderedStageProps: RenderedStagePropDataMap
     val frameCount: Int
     val progress: Double
+    val framesPerSecond: Int
 }
 
 data object StoppedPlaybackState : PlaybackState {
@@ -19,15 +21,22 @@ data object StoppedPlaybackState : PlaybackState {
     override val renderedStageProps = RenderedStagePropDataMap()
     override val frameCount = 0
     override val progress = 0.0
+    override val framesPerSecond = 1
 }
 
 data class InteractivePlaybackState(
-    override val renderedStageProps: RenderedStagePropDataMap,
+    override var renderedStageProps: RenderedStagePropDataMap,
     override val stageProps: Map<String, StagePropModel>,
     val previousState: PlaybackState = StoppedPlaybackState,
+    val stage: StageModel,
 ) : PlaybackState {
     override val frameCount = 1
     override val progress = 0.0
+    override val framesPerSecond = FRAMES_PER_SECOND
+
+    companion object {
+        const val FRAMES_PER_SECOND = 30
+    }
 }
 
 /**
@@ -46,6 +55,9 @@ data class SequencePlaybackState(
 ) : PlaybackState {
     val sequence: SequenceModel
         get() = sequences[sequenceIndex]
+
+    override val framesPerSecond: Int
+        get() = sequence.framesPerSecond
 
     override val frameCount: Int
         get() = SequenceUtils.getFrameCount(song, sequence)

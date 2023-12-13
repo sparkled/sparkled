@@ -4,6 +4,7 @@ import io.micronaut.transaction.annotation.Transactional
 import io.sparkled.common.logging.getLogger
 import io.sparkled.common.threading.NamedVirtualThreadFactory
 import io.sparkled.model.SequenceModel
+import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.render.RenderedStagePropData
 import io.sparkled.model.render.RenderedStagePropDataMap
@@ -141,13 +142,14 @@ class PlaybackServiceImpl(
         }
     }
 
-    override fun enableInteractiveMode(stageProps: List<StagePropModel>) {
+    override fun enableInteractiveMode(stage: StageModel, stageProps: List<StagePropModel>) {
         val currentState = state
         if (currentState !is InteractivePlaybackState) {
             musicPlayerService.stopPlayback()
 
             playbackState.set(
                 InteractivePlaybackState(
+                    stage = stage,
                     renderedStageProps = stageProps
                         .groupBy { it.groupCode ?: it.code }
                         .mapValuesTo(RenderedStagePropDataMap()) { (_, stageProps) ->

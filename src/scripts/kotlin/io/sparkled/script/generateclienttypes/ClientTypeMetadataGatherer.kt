@@ -2,6 +2,7 @@ package io.sparkled.script.generateclienttypes
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sparkled.model.annotation.GenerateClientType
 import java.lang.reflect.AnnotatedElement
@@ -97,6 +98,7 @@ class ClientTypeMetadataGatherer(
         val fields = publicProperties.map {
             val fieldType = it.javaField?.type ?: it.returnType.javaType as Class<*>
             val genericType = it.javaField?.genericType ?: Nothing::class.java
+
             val simpleType = getSimpleType(fieldType)
 
             val type = when {
@@ -154,6 +156,7 @@ class ClientTypeMetadataGatherer(
             areClassesCompatible(type, Float::class.java) -> nativeNumberType
             areClassesCompatible(type, Double::class.java) -> nativeNumberType
             areClassesCompatible(type, ByteArray::class.java) -> nativeNumberArrayType
+            areClassesCompatible(type, JsonNode::class.java) -> nativeAnyType
             Number::class.java.isAssignableFrom(type) -> nativeNumberType
             Temporal::class.java.isAssignableFrom(type) -> nativeStringType
             else -> null
@@ -246,6 +249,11 @@ val nativeNumberType = ClientTypeMetadata(
 val nativeNumberArrayType = ClientTypeMetadata(
     category = GeneratedTypeCategory.NATIVE,
     name = "number[]",
+)
+
+val nativeAnyType = ClientTypeMetadata(
+    category = GeneratedTypeCategory.NATIVE,
+    name = "any",
 )
 
 fun nativeRecordType(keyType: ClientTypeMetadata, valueType: ClientTypeMetadata) = ClientTypeMetadata(

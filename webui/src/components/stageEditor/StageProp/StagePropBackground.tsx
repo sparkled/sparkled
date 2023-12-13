@@ -46,16 +46,16 @@ const StagePropBackground: React.FC<Props> = props => {
   const [background, setBackground] = useState<PIXI.Graphics | null>(null)
   const [dragState, setDragState] = useState<DragState | null>(null)
 
+  if (!props.editable) {
+    return null
+  }
+
   if (background === null) {
     const stagePropBackground = buildBackground(props)
 
-    if (props.editable) {
-      stagePropBackground.buttonMode = true
-      stagePropBackground.interactive = true
-      stagePropBackground.on('pointerdown', (event: InteractionEvent) =>
-        onDragStart(event, props, setDragState)
-      )
-    }
+    stagePropBackground.buttonMode = true
+    stagePropBackground.interactive = true
+    stagePropBackground.on('pointerdown', (event: InteractionEvent) => onDragStart(event, props, setDragState))
 
     setBackground(stagePropBackground)
     props.parent.addChild(stagePropBackground)
@@ -63,15 +63,9 @@ const StagePropBackground: React.FC<Props> = props => {
     logger.debug('Dragging started, adding listeners.')
 
     background
-      .on('pointermove', (event: InteractionEvent) =>
-        onDragMove(event, props, dragState)
-      )
-      .on('pointerup', (event: InteractionEvent) =>
-        onDragEnd(event, props, dragState, setDragState)
-      )
-      .on('pointerupoutside', (event: InteractionEvent) =>
-        onDragEnd(event, props, dragState, setDragState)
-      )
+      .on('pointermove', (event: InteractionEvent) => onDragMove(event, props, dragState))
+      .on('pointerup', (event: InteractionEvent) => onDragEnd(event, props, dragState, setDragState))
+      .on('pointerupoutside', (event: InteractionEvent) => onDragEnd(event, props, dragState, setDragState))
   } else if (background.listenerCount('pointermove') > 0) {
     logger.debug('Dragging stopped, removing listeners.')
 
@@ -89,21 +83,12 @@ function buildBackground(props: Props) {
   background.zIndex = StagePropPart.background.zIndex
 
   background.beginFill(0x000000, 0.3)
-  background.drawRect(
-    -padding,
-    -padding,
-    props.width + 2 * padding,
-    props.height + 2 * padding
-  )
+  background.drawRect(-padding, -padding, props.width + 2 * padding, props.height + 2 * padding)
   background.endFill()
   return background
 }
 
-function onDragStart(
-  event: InteractionEvent,
-  props: Props,
-  setDragState: Dispatch<DragState | null>
-) {
+function onDragStart(event: InteractionEvent, props: Props, setDragState: Dispatch<DragState | null>) {
   const { onClicked, parent } = props
   onClicked()
 
@@ -112,25 +97,18 @@ function onDragStart(
     originX: parent.x,
     originY: parent.y,
     dragStartX: x,
-    dragStartY: y
+    dragStartY: y,
   })
 }
 
-function onDragMove(
-  event: InteractionEvent,
-  props: Props,
-  dragState: DragState
-) {
+function onDragMove(event: InteractionEvent, props: Props, dragState: DragState) {
   const { parent } = props
 
   if (dragState) {
     const { originX, originY, dragStartX, dragStartY } = dragState
 
     // Convert the mouse/touch position to a relative offset.
-    const {
-      x: relativeParentX,
-      y: relativeParentY
-    } = event.data.getLocalPosition(parent.parent)
+    const { x: relativeParentX, y: relativeParentY } = event.data.getLocalPosition(parent.parent)
 
     // Add the new offset.
     parent.x = originX + (relativeParentX - dragStartX)
@@ -138,12 +116,7 @@ function onDragMove(
   }
 }
 
-function onDragEnd(
-  event: InteractionEvent,
-  props: Props,
-  dragState: DragState,
-  setDragState: Dispatch<null>
-) {
+function onDragEnd(event: InteractionEvent, props: Props, dragState: DragState, setDragState: Dispatch<null>) {
   const { x, y } = event.data.getLocalPosition(props.parent.parent)
 
   if (dragState) {

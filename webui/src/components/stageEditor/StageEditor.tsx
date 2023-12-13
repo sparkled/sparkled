@@ -107,22 +107,28 @@ const StageEditor: React.FC<Props> = props => {
   if (pixiApp === null || canvasElement.current === null) {
     logger.debug('Waiting for canvas element to mount.')
   } else if (pixiApp.stage.children.length === 0) {
-    initCanvas(pixiApp, canvasElement.current, props.stage)
+    initCanvas(pixiApp, canvasElement.current, props.stage, props.editable === true)
 
-    const { interaction } = pixiApp.renderer.plugins
-    interaction.on('pointerdown', (event: InteractionEvent) => {
-      onDragStart(event, pixiApp, deselectStageProp, setDragState)
-    })
-    pixiApp.view.addEventListener('wheel', event => onZoom(event, pixiApp))
+    if (props.editable) {
+      const { interaction } = pixiApp.renderer.plugins
+      interaction.on('pointerdown', (event: InteractionEvent) => {
+        onDragStart(event, pixiApp, deselectStageProp, setDragState)
+      })
+      pixiApp.view.addEventListener('wheel', event => onZoom(event, pixiApp))
+    }
   } else if (dragState !== null) {
-    pixiApp.renderer.plugins.interaction
-      .on('pointermove', (event: InteractionEvent) => onDragMove(event, pixiApp, dragState))
-      .on('pointerup', () => onDragEnd(setDragState))
-      .on('pointerupoutside', () => onDragEnd(setDragState))
+    if (props.editable) {
+      pixiApp.renderer.plugins.interaction
+        .on('pointermove', (event: InteractionEvent) => onDragMove(event, pixiApp, dragState))
+        .on('pointerup', () => onDragEnd(setDragState))
+        .on('pointerupoutside', () => onDragEnd(setDragState))
+    }
   } else {
-    pixiApp.renderer.plugins.interaction.removeListener('pointermove')
-    pixiApp.renderer.plugins.interaction.removeListener('pointerup')
-    pixiApp.renderer.plugins.interaction.removeListener('pointerupoutside')
+    if (props.editable) {
+      pixiApp.renderer.plugins.interaction.removeListener('pointermove')
+      pixiApp.renderer.plugins.interaction.removeListener('pointerup')
+      pixiApp.renderer.plugins.interaction.removeListener('pointerupoutside')
+    }
   }
 
   const stageProps = useMemo(() => {
@@ -143,17 +149,26 @@ const StageEditor: React.FC<Props> = props => {
   )
 }
 
-function initCanvas(pixiApp: PIXI.Application, container: HTMLDivElement, stage: StageViewModel): PIXI.Application {
+function initCanvas(
+  pixiApp: PIXI.Application,
+  container: HTMLDivElement,
+  stage: StageViewModel,
+  editable: boolean
+): PIXI.Application {
   const parent = container.parentElement!
   pixiApp.resizeTo = parent
   pixiApp.view.style.width = pixiApp.view.style.height = '100%'
   pixiApp.stage.addChild(buildGrid())
   parent.appendChild(pixiApp.view)
 
-  pixiApp.stage.x = (parent.clientWidth - sidebarWidth) / 2 - stage.width / 2
+  const xOffset = editable ? sidebarWidth : 0
+  pixiApp.stage.x = (parent.clientWidth - xOffset) / 2 - stage.width / 2
   pixiApp.stage.y = parent.clientHeight / 2 - stage.height / 2
 
-  renderGrid(pixiApp, stage)
+  if (editable) {
+    renderGrid(pixiApp, stage)
+  }
+
   return pixiApp
 }
 
@@ -219,7 +234,7 @@ function renderGrid(pixiApp: PIXI.Application, stage: StageViewModel) {
 
   for (let x = 0; x < stage.width; x += gridSize) {
     grid.moveTo(x, 0)
-    grid.lineTo(x, stage.height + 0)
+    grid.lineTo(x, stage.height)
   }
 
   for (let y = 0; y < stage.height; y += gridSize) {

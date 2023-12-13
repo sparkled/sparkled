@@ -10,7 +10,6 @@ object ArgumentUtils {
      * @param values The argument values.
      * @return The created argument object.
      */
-    // TODO this is only used by tests, so move to test folder.
     fun arg(code: String, vararg values: Any): Pair<String, List<String>> {
         return Pair(code, values.map { it.toString() })
     }

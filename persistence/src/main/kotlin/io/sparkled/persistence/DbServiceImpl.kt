@@ -56,4 +56,7 @@ class DbServiceImpl(
         stages.deleteAll()
         songs.deleteAll()
     }
+
+    @Transactional
+    override fun <T> inTransaction(fn: () -> T) = fn()
 }

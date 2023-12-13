@@ -30,6 +30,7 @@ import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
 import io.sparkled.persistence.cache.CacheService
 import io.sparkled.persistence.repository.findByIdOrNull
+import io.sparkled.renderer.RenderMode
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.viewmodel.SequenceEditViewModel
@@ -150,6 +151,11 @@ class SequenceController(
         val sequence = db.sequences.findByIdOrNull(id)
             ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
+        val editedSequence = sequence.copy(
+            name = body.name,
+            framesPerSecond = body.framesPerSecond,
+            status = body.status,
+        )
         val sequenceChannels = body.channels.map { it.toModel(id) }
 
         val newChannels = sequenceChannels.associateBy { it.id }
@@ -167,14 +173,14 @@ class SequenceController(
         val toUpdate = newChannels.keys.intersect(existingChannels.keys)
         toUpdate.forEach { db.sequenceChannels.update(newChannels.getValue(it)) }
 
-        if (sequence.status === SequenceStatus.PUBLISHED) {
-            db.sequences.update(sequence)
+        if (editedSequence.status === SequenceStatus.PUBLISHED) {
+            db.sequences.update(editedSequence)
             val stage = db.stages.findBySequenceId(id) ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
             val song = db.songs.findBySequenceId(id) ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
-            val renderResult = renderSequence(stage, sequence, sequenceChannels, song, preview = false)
+            val renderResult = renderSequence(stage, editedSequence, sequenceChannels, song, preview = false)
             val renderedSequence = RenderedSequence(
-                sequenceId = sequence.id,
+                sequenceId = editedSequence.id,
                 startFrame = renderResult.startFrame,
                 frameCount = renderResult.frameCount,
                 stageProps = renderResult.stageProps.mapValues {
@@ -206,14 +212,14 @@ class SequenceController(
 
         return Renderer(
             pluginManager,
-            cache.gifs.get(),
+            { cache.gifs.get() },
             stage,
-            sequence,
-            sequenceChannels,
-            stageProps,
+            sequence.framesPerSecond,
+            sequenceChannels.associate { it.stagePropId to it.channelData },
+            stageProps.associateBy { it.id },
             startFrame,
             endFrameBounded,
-            preview,
+            if (preview) RenderMode.PREVIEW_SEQUENCE else RenderMode.PUBLISH_SEQUENCE,
         ).render()
     }
 

@@ -17,7 +17,7 @@ import java.awt.Color
 object RainbowFill : SparkledFill {
 
     enum class Params { BRIGHTNESS, CYCLE_COUNT, CYCLES_PER_SECOND }
-    
+
     override val id = "@sparkled/rainbow"
     override val name = "Rainbow"
     override val version = SemVer(1, 0, 0)
@@ -35,11 +35,11 @@ object RainbowFill : SparkledFill {
 
         val frame = ctx.frame
         val ledPosition = ledIndex.toFloat() / frame.ledCount * cycleCount
-        val progress = frame.frameNumber.toFloat() / ctx.sequence.framesPerSecond * cyclesPerSecond
+        val progress = frame.frameNumber.toFloat() / ctx.framesPerSecond * cyclesPerSecond
         val hue = ledPosition + progress % 1f
 
         return Color.getHSBColor(hue, SATURATION, brightness)
     }
-    
+
     private const val SATURATION = .95f
 }

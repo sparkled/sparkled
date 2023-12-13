@@ -71,31 +71,28 @@ enum class WebSocketCommandType(
 
 @GenerateClientType
 data class LiveDataModification(
-    @field:JsonProperty("t")
     val type: LiveDataModificationType,
-
-    @field:JsonProperty("spc")
-    val stagePropCodeOrGroupCode: String? = null,
-
-    @field:JsonProperty("i")
-    val params: JsonNode
+    val params: JsonNode,
 )
-
 
 @GenerateClientType
 sealed interface LiveDataModificationParams
 
 @GenerateClientType
-data class FillSolidParams(
+data class FillSolidLiveDataParams(
+    @field:JsonProperty("gc")
+    val groupCode: String?,
+
     @field:JsonProperty("c")
-    val color: Int,
+    val color: String,
 ) : LiveDataModificationParams
 
 @GenerateClientType
-data class SetPixelsParams(
-    /**
-     * 0=ff0000,1-5=00ff00,6=0000ff
-     */
+data class SetPixelsLiveDataModification(
+    @field:JsonProperty("gc")
+    val groupCode: String,
+
+    /** Example: 0=ff0000,1-5=00ff00,6=0000ff */
     @field:JsonProperty("d")
     val data: String,
 ) : LiveDataModificationParams

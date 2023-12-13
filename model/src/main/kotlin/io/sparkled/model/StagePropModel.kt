@@ -21,7 +21,7 @@ data class StagePropModel(
     @MappedProperty(converter = InstantConverter::class)
     override var updatedAt: Instant = Instant.now(),
 
-    var stageId: String,
+    var stageId: UniqueId,
 
     var code: String,
     var name: String,

@@ -9,7 +9,7 @@ import io.sparkled.model.util.IdUtils.uniqueId
 
 @GenerateClientType
 data class SequenceChannelViewModel(
-    val id: String = uniqueId(),
+    val id: UniqueId = uniqueId(),
     val stagePropId: UniqueId,
     val name: String,
     val displayOrder: Int,

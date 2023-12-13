@@ -7,6 +7,7 @@ import useAxiosSwr from '../../hooks/api/useAxiosSwr.ts'
 import { EventBusContext } from '../../hooks/useEventBus.ts'
 import {
   LiveDataModifyCommand,
+  LiveDataSubscribeCommand,
   LiveDataUnsubscribeCommand,
   ToggleInteractiveModeCommand,
 } from '../../types/viewModels.ts'
@@ -35,6 +36,17 @@ const StageLivePaintPage: React.FC<Props> = props => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      eventBus.sendWebSocketCommand<LiveDataSubscribeCommand>({ type: 'LDS' })
+    }, 2000)
+
+    return () => {
+      clearInterval(interval)
+      eventBus.sendWebSocketCommand<LiveDataUnsubscribeCommand>({ type: 'LDU' })
+    }
+  }, [eventBus])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
       eventBus.sendWebSocketCommand<ToggleInteractiveModeCommand>({
         type: 'TIM',
         enabled: true,
@@ -42,12 +54,21 @@ const StageLivePaintPage: React.FC<Props> = props => {
       })
     }, 2000)
 
-    setTimeout(() => {
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF'
+      let color = ''
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)]
+      }
+      return color
+    }
+
+    setInterval(() => {
       eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
         type: 'LDM',
-        // TODO
+        m: [],
       })
-    }, 2000)
+    }, 50)
 
     return () => {
       clearInterval(interval)

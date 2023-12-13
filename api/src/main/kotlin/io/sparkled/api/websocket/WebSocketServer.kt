@@ -15,40 +15,108 @@ import io.micronaut.websocket.annotation.OnOpen
 import io.micronaut.websocket.annotation.ServerWebSocket
 import io.sparkled.common.logging.getLogger
 import io.sparkled.common.threading.NamedVirtualThreadFactory
+import io.sparkled.model.UniqueId
+import io.sparkled.model.animation.effect.Effect
+import io.sparkled.model.animation.fill.BlendMode
+import io.sparkled.model.animation.fill.Fill
+import io.sparkled.model.render.Led
+import io.sparkled.model.util.ArgumentUtils
 import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
+import io.sparkled.persistence.cache.CacheService
+import io.sparkled.persistence.repository.findByIdOrNull
+import io.sparkled.renderer.RenderMode
+import io.sparkled.renderer.Renderer
+import io.sparkled.renderer.SparkledPluginManager
+import io.sparkled.renderer.effect.GlitterEffect
+import io.sparkled.renderer.fill.SingleColorFill
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
-import java.util.function.Predicate
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.system.measureTimeMillis
 
 @ServerWebSocket("/api/websocket")
 @Secured(SecurityRule.IS_ANONYMOUS)
 class WebSocketServer(
+    private val cache: CacheService,
     private val db: DbService,
     private val objectMapper: ObjectMapper,
     private val playbackService: PlaybackService,
+    private val pluginManager: SparkledPluginManager,
     private val webSocketBroadcaster: WebSocketBroadcaster,
 ) {
     private val subscribers = ConcurrentHashMap<String, Long>()
     private val threadPool = Executors.newThreadPerTaskExecutor(NamedVirtualThreadFactory("webSocketServer"))
+    private val liveDataRenderRequired = AtomicBoolean(false)
+
+    private val stagePropEffects = mutableMapOf<UniqueId, MutableList<Effect>>()
 
     init {
         threadPool.execute {
             while (true) {
                 try {
-                    if (subscribers.isEmpty()) {
-                        sleep(500)
-                    } else {
-                        subscribers.entries.removeIf { currentTimeMillis() - it.value > SUBSCRIPTION_DURATION_MS }
+                    subscribers.entries.removeIf { currentTimeMillis() - it.value > SUBSCRIPTION_DURATION_MS }
+                    val elapsed = measureTimeMillis(::broadcastLiveData)
+                    val frameDurationMs = (1000.0 / playbackService.state.framesPerSecond).toInt()
+                    sleep((frameDurationMs - elapsed).coerceAtLeast(0))
+                } catch (e: Exception) {
+                    logger.error("Error occurred during live data broadcast.", e)
+                    sleep(100)
+                }
+            }
+        }
 
-                        // TODO calculate time to sleep depending on playback type.
-                        val elapsed = measureTimeMillis(::broadcastLiveData)
-                        sleep((33 - elapsed).coerceAtLeast(0))
+        threadPool.execute {
+            val startFrame = (currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND).toInt()
+
+            val effectDurationFrames = 1_000_000_000
+            // TODO remove hard-coded effect.
+            stagePropEffects["jcyrk6ds8krm"] = mutableListOf(
+                Effect(
+                    type = GlitterEffect.id,
+                    fill = Fill(
+                        SingleColorFill.id,
+                        BlendMode.NORMAL,
+                        mapOf(
+                            ArgumentUtils.arg(SingleColorFill.Params.COLOR.name, "#ff00ff")
+                        ),
+                    ),
+                    startFrame = startFrame,
+                    endFrame = startFrame + effectDurationFrames,
+                    args = mapOf(
+                        ArgumentUtils.arg(GlitterEffect.Params.DENSITY.name, 99),
+                        ArgumentUtils.arg(GlitterEffect.Params.LIFETIME.name, 4)
+                    )
+                )
+            )
+
+            while (true) {
+                try {
+                    val playbackState = playbackService.state
+
+                    val elapsed = measureTimeMillis {  }
+                    if (playbackState is InteractivePlaybackState) {
+                        val currentFrame = currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND
+                        val renderer = Renderer(
+                            pluginManager = pluginManager,
+                            gifs = { cache.gifs.get() },
+                            stage = playbackState.stage,
+                            framesPerSecond = 30,
+                            stagePropEffects = stagePropEffects,
+                            stageProps = playbackState.stageProps.values.associateBy { it.id },
+                            startFrame = currentFrame.toInt(),
+                            endFrame = currentFrame.toInt() + 1,
+                            mode = RenderMode.LIVE_FRAME,
+                        )
+
+                        playbackState.renderedStageProps = renderer.render().stageProps
                     }
+
+
+                    sleep((33 - elapsed).coerceAtLeast(0))
                 } catch (e: Exception) {
                     logger.error("Error occurred during live data broadcast.", e)
                     sleep(100)
@@ -88,7 +156,30 @@ class WebSocketServer(
                 val command = objectMapper.convertValue<LiveDataModifyCommand>(commandNode)
                 val state = playbackService.state
                 if (state is InteractivePlaybackState) {
-                    command.stageProps
+                    command.modifications.forEach { modification ->
+                        when (modification.type) {
+                            LiveDataModificationType.FILL_SOLID -> {
+                                val params = objectMapper.convertValue<FillSolidLiveDataParams>(modification.params)
+                                val (r, g, b) = params.color.chunked(2).map { it.toInt(16) }
+
+                                state.renderedStageProps.forEach { (groupCode, renderedStageProp) ->
+                                    if (params.groupCode == null || params.groupCode == groupCode) {
+                                        val renderedFrame = renderedStageProp.frames[0]
+
+                                        repeat(renderedStageProp.data.size / Led.BYTES_PER_LED) { index ->
+                                            renderedFrame.getLed(index).setRgb(r, g, b)
+                                        }
+                                    }
+                                }
+                            }
+
+                            LiveDataModificationType.SET_PIXELS -> {
+                                TODO()
+                            }
+                        }
+                    }
+
+                    liveDataRenderRequired.set(true)
                 }
             }
 
@@ -97,9 +188,11 @@ class WebSocketServer(
             }
 
             WebSocketCommandType.LIVE_DATA_SUBSCRIBE -> {
-                val action = if (subscribers.containsKey(session.id)) "Updated" else "Added"
                 subscribers[session.id] = currentTimeMillis()
-                logger.info("$action live update subscriber.", "id" to session.id)
+
+                if (!subscribers.containsKey(session.id)) {
+                    logger.info("Added live update subscriber.", "id" to session.id)
+                }
             }
 
             WebSocketCommandType.LIVE_DATA_UNSUBSCRIBE -> {
@@ -108,8 +201,9 @@ class WebSocketServer(
             }
 
             WebSocketCommandType.PING -> {
-                webSocketBroadcaster.broadcast(commandNode, isSameSession(session))
+                webSocketBroadcaster.broadcastAsync(commandNode) { it.id == session.id }
             }
+
 
             WebSocketCommandType.TOGGLE_INTERACTIVE_MODE -> {
                 val command = objectMapper.convertValue<ToggleInteractiveModeCommand>(commandNode)
@@ -118,8 +212,13 @@ class WebSocketServer(
                 if (command.enabled && state !is InteractivePlaybackState) {
                     val stageId = command.stageId
                         ?: throw RuntimeException("A stage ID must be provided when enabling interactive mode.")
-                    val stageProps = db.stageProps.findAllByStageId(stageId)
-                    playbackService.enableInteractiveMode(stageProps)
+                    val (stage, stageProps) = db.inTransaction {
+                        val stage = db.stages.findByIdOrNull(stageId)
+                            ?: throw RuntimeException("Stage $stageId not found.")
+                        val stageProps = db.stageProps.findAllByStageId(stageId)
+                        stage to stageProps
+                    }
+                    playbackService.enableInteractiveMode(stage, stageProps)
                 } else if (!command.enabled && state is InteractivePlaybackState) {
                     playbackService.disableInteractiveMode()
                 }
@@ -140,10 +239,6 @@ class WebSocketServer(
     @OnError
     fun onError(session: WebSocketSession) {
         logger.error("A websocket error occurred.", "id" to session.id)
-    }
-
-    private fun isSameSession(session: WebSocketSession?) = Predicate<WebSocketSession> {
-        it === session
     }
 
     companion object {
