@@ -55,49 +55,39 @@ class WebSocketServer(
     private val stagePropEffects = mutableMapOf<UniqueId, MutableList<Effect>>()
 
     init {
-        threadPool.execute {
-            while (true) {
-                try {
-                    subscribers.entries.removeIf { currentTimeMillis() - it.value > SUBSCRIPTION_DURATION_MS }
-                    val elapsed = measureTimeMillis(::broadcastLiveData)
-                    val frameDurationMs = (1000.0 / playbackService.state.framesPerSecond).toInt()
-                    sleep((frameDurationMs - elapsed).coerceAtLeast(0))
-                } catch (e: Exception) {
-                    logger.error("Error occurred during live data broadcast.", e)
-                    sleep(100)
-                }
-            }
-        }
+        threadPool.execute(::initLiveDataRenderer)
+        threadPool.execute(::initLiveDataBroadcaster)
+    }
 
-        threadPool.execute {
-            val startFrame = (currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND).toInt()
+    private fun initLiveDataRenderer() {
+        val startFrame = (currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND).toInt()
 
-            val effectDurationFrames = 1_000_000_000
-            // TODO remove hard-coded effect.
-            stagePropEffects["jcyrk6ds8krm"] = mutableListOf(
-                Effect(
-                    type = GlitterEffect.id,
-                    fill = Fill(
-                        SingleColorFill.id,
-                        BlendMode.NORMAL,
-                        mapOf(
-                            ArgumentUtils.arg(SingleColorFill.Params.COLOR.name, "#ff00ff")
-                        ),
+        val effectDurationFrames = 1_000_000_000
+        // TODO remove hard-coded effect.
+        stagePropEffects["jcyrk6ds8krm"] = mutableListOf(
+            Effect(
+                type = GlitterEffect.id,
+                fill = Fill(
+                    SingleColorFill.id,
+                    BlendMode.NORMAL,
+                    mapOf(
+                        ArgumentUtils.arg(SingleColorFill.Params.COLOR.name, "#ff00ff")
                     ),
-                    startFrame = startFrame,
-                    endFrame = startFrame + effectDurationFrames,
-                    args = mapOf(
-                        ArgumentUtils.arg(GlitterEffect.Params.DENSITY.name, 99),
-                        ArgumentUtils.arg(GlitterEffect.Params.LIFETIME.name, 4)
-                    )
+                ),
+                startFrame = startFrame,
+                endFrame = startFrame + effectDurationFrames,
+                args = mapOf(
+                    ArgumentUtils.arg(GlitterEffect.Params.DENSITY.name, 99),
+                    ArgumentUtils.arg(GlitterEffect.Params.LIFETIME.name, 4)
                 )
             )
+        )
 
-            while (true) {
-                try {
-                    val playbackState = playbackService.state
+        while (true) {
+            try {
+                val playbackState = playbackService.state
 
-                    val elapsed = measureTimeMillis {  }
+                val elapsedMs = measureTimeMillis {
                     if (playbackState is InteractivePlaybackState) {
                         val currentFrame = currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND
                         val renderer = Renderer(
@@ -114,13 +104,33 @@ class WebSocketServer(
 
                         playbackState.renderedStageProps = renderer.render().stageProps
                     }
-
-
-                    sleep((33 - elapsed).coerceAtLeast(0))
-                } catch (e: Exception) {
-                    logger.error("Error occurred during live data broadcast.", e)
-                    sleep(100)
                 }
+
+
+                val frameDurationMs = 1000 / (playbackState.framesPerSecond - elapsedMs)
+                sleep(frameDurationMs.coerceAtLeast(0))
+            } catch (e: Exception) {
+                logger.error("Error occurred during live data render.", e)
+                sleep(100)
+            }
+        }
+    }
+
+    /**
+     * Broadcasts live data to websocket clients. The live data might be sequence that is playing, or the current
+     * interactive mode data. Note that this broadcast is primarily for the Sparkled web application, and other Sparkled
+     * clients will generally use the UDP data stream.
+     */
+    private fun initLiveDataBroadcaster() {
+        while (true) {
+            try {
+                subscribers.entries.removeIf { currentTimeMillis() - it.value > SUBSCRIPTION_DURATION_MS }
+                val elapsedMs = measureTimeMillis(::broadcastLiveData)
+                val frameDurationMs = (1000.0 / playbackService.state.framesPerSecond).toInt()
+                sleep((frameDurationMs - elapsedMs).coerceAtLeast(0))
+            } catch (e: Exception) {
+                logger.error("Error occurred during live data broadcast.", e)
+                sleep(100)
             }
         }
     }
