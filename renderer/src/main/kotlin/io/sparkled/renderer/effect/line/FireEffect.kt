@@ -38,7 +38,7 @@ object FireEffect : SparkledEffect<MutableList<Int>> {
 
     override fun render(ctx: RenderContext, state: MutableList<Int>) {
         val randomSeed = ParamUtils.getInt(ctx.effect, Params.RANDOM_SEED.name, 1)
-        val random = Random(ctx.frame.frameNumber + randomSeed)
+        val random = Random(ctx.frame.frameIndex + randomSeed)
 
         val sparksStart = ParamUtils.getBoolean(ctx.effect, Params.SPARKS_START.name, true)
         val sparksMiddle = ParamUtils.getBoolean(ctx.effect, Params.SPARKS_MIDDLE.name, false)
@@ -62,19 +62,19 @@ object FireEffect : SparkledEffect<MutableList<Int>> {
         // Step 3. Randomly ignite new 'sparks' of heat
         if (sparksStart) {
             if (random.nextInt(256) < sparking) {
-                val i = random.nextInt(min(7, state.size - 1))
+                val i = random.nextInt(min(7, state.lastIndex))
                 state[i] = min(255, state[i] + random.nextInt(160, 255))
             }
         }
         if (sparksMiddle) {
             if (random.nextInt(256) < sparking) {
-                val i = state.size - random.nextInt(min(7, state.size - 1)) - 1
+                val i = state.size - random.nextInt(min(7, state.lastIndex)) - 1
                 state[i] = min(255, state[i] + random.nextInt(160, 255))
             }
         }
         if (sparksEnd) {
             if (random.nextInt(256) < sparking) {
-                val i = state.size - random.nextInt(min(7, state.size - 1)) - 1
+                val i = state.size - random.nextInt(min(7, state.lastIndex)) - 1
                 state[i] = min(255, state[i] + random.nextInt(160, 255))
             }
         }

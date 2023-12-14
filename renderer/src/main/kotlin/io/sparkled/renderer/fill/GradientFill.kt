@@ -41,7 +41,7 @@ object GradientFill : SparkledFill {
         val ledIndexNormalised = ledIndex / ctx.ledCount.toFloat()
 
         val cyclesPerSecond = ParamUtils.getFloat(fill, Params.CYCLES_PER_SECOND.name, 0f)
-        val cycleProgress = cyclesPerSecond * (ctx.frame.frameNumber.toFloat() / ctx.framesPerSecond)
+        val cycleProgress = cyclesPerSecond * (ctx.frame.frameIndex.toFloat() / ctx.framesPerSecond)
         val gradientProgress = ledIndexNormalised + cycleProgress
 
         val colorProgress = gradientProgress * (colorCount - 1)

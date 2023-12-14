@@ -138,7 +138,7 @@ class WebSocketServer(
             val ledPositions = stageProp?.ledPositions ?: emptyList()
             ledPositions.forEachIndexed { index, position ->
                 val pixelIndex = when (stageProp?.reverse) {
-                    true -> ledPositions.size - 1 - index
+                    true -> ledPositions.lastIndex - index
                     else -> index
                 }
                 if (lastEffect.targetPixels?.get(pixelIndex) == true) {
@@ -159,7 +159,7 @@ class WebSocketServer(
         val playbackState = playbackService.state
 
         val liveData = playbackState.renderedStageProps.entries.associate { (key, value) ->
-            val frameIndex = (playbackState.progress * (value.frames.size - 1)).toInt()
+            val frameIndex = (playbackState.progress * value.frames.lastIndex).toInt()
             val frameData = value.frames.getOrNull(frameIndex)?.getData() ?: byteArrayOf()
             key to frameData
         }

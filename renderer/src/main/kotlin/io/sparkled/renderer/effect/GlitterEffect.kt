@@ -26,7 +26,7 @@ object GlitterEffect : StatelessSparkledEffect {
 
     override fun render(ctx: RenderContext) {
         val density = ParamUtils.getInt(ctx.effect, Params.DENSITY.name, 10) / 100f
-        val patternIndex = (density * (patterns.size - 1)).toInt()
+        val patternIndex = (density * (patterns.lastIndex)).toInt()
         val lifetime = ParamUtils.getFloat(ctx.effect, Params.LIFETIME.name, 1f)
         val lifetimeFrames = (ctx.framesPerSecond * lifetime).toInt()
 

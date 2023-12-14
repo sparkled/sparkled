@@ -151,10 +151,10 @@ class Renderer(
             // Stateful effects need to be rendered from the beginning, so perform a dummy render on any frames that
             // fall outside the preview window.
             if (state != null) {
-                for (frameNumber in effect.startFrame until startFrame) {
+                for (frameIndex in effect.startFrame until startFrame) {
                     val frame = RenderedFrame(
                         startFrame = effect.startFrame,
-                        frameNumber = frameNumber,
+                        frameIndex = frameIndex,
                         ledCount = firstFrame.ledCount,
                         data = byteArrayOf(),
                         dummyFrame = true,
@@ -163,10 +163,10 @@ class Renderer(
                 }
             }
 
-            for (frameNumber in startFrame..endFrame) {
+            for (frameIndex in startFrame..endFrame) {
                 val frame = when (mode) {
                     RenderMode.LIVE_FRAME -> data.frames[0]
-                    else -> data.frames[frameNumber - this.startFrame]
+                    else -> data.frames[frameIndex - this.startFrame]
                 }
 
                 render(framesPerSecond, data, frame, prop, effect, effectRenderer, state)
@@ -183,7 +183,7 @@ class Renderer(
         renderer: SparkledEffect<T>,
         state: T,
     ) {
-        val progress = getProgress(frame.frameNumber, effect)
+        val progress = getProgress(frame.frameIndex, effect)
         val ctx = RenderContext(
             stage,
             framesPerSecond,
@@ -202,10 +202,10 @@ class Renderer(
         return gifs()[filename] ?: emptyList()
     }
 
-    private fun getProgress(frameNumber: Int, effect: Effect): Float {
+    private fun getProgress(frameIndex: Int, effect: Effect): Float {
         val easingFunction = pluginManager.easings.get()[effect.easing.type] ?: LinearEasing
 
-        val currentFrame = frameNumber - effect.startFrame
+        val currentFrame = frameIndex - effect.startFrame
         val startFrame = effect.startFrame
         val duration = effect.endFrame - startFrame + 1
 

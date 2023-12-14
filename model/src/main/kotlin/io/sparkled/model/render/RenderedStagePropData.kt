@@ -13,7 +13,7 @@ class RenderedStagePropData(
 
     // Don't serialise frames to JSON, as each frame contains a reference to the (very large) data array
     @JsonIgnore
-    val frames = (startFrame..endFrame).map {
+    val frames = (startFrame..<endFrame).map {
         RenderedFrame(startFrame, it, ledCount, data)
     }
 }

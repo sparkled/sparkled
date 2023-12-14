@@ -1,10 +1,8 @@
 package io.sparkled.renderer.util
 
 import io.sparkled.common.logging.getLogger
-import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.animation.fill.BlendMode
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.api.SparkledEffect
 import java.awt.Color
 
 object FillUtils {
@@ -32,8 +30,8 @@ object FillUtils {
         val ledRange = ctx.channel.stagePropRanges[ctx.stageProp.id] ?: error("Stage prop range not found")
 
         if (alpha < 0 || alpha > 1) {
-            val frameNumber = frame.frameNumber
-            logger.warn("Alpha is invalid, skipping.", "value" to alpha, "ledIndex" to ledIndex, "frameNumber" to frameNumber)
+            val frameIndex = frame.frameIndex
+            logger.warn("Alpha is invalid, skipping.", "value" to alpha, "ledIndex" to ledIndex, "frameNumber" to frameIndex)
         } else if (ledIndex >= 0 && ledIndex < ctx.stageProp.ledCount) {
             val reverse = !ignoreReverse && ctx.stageProp.reverse
             val index = if (reverse) ledRange.last - ledIndex else ledRange.first + ledIndex

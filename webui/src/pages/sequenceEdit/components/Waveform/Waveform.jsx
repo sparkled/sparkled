@@ -8,7 +8,7 @@ import { eventType, publish } from '../../../../utils/eventBus'
 
 class Waveform extends Component {
   state = {
-    waveformId: `waveform-${+new Date()}`
+    waveformId: `waveform-${+new Date()}`,
   }
 
   waveSurfer = null
@@ -43,12 +43,8 @@ class Waveform extends Component {
     const width = sequence.frameCount * pixelsPerFrame
 
     return (
-      <div className="WaveformContainer">
-        <div
-          id={this.state.waveformId}
-          className="Waveform"
-          style={{ width }}
-        />
+      <div className='WaveformContainer'>
+        <div id={this.state.waveformId} className='Waveform' style={{ width }} />
       </div>
     )
   }
@@ -84,7 +80,7 @@ class Waveform extends Component {
       cursorWidth: 0,
       height: 50,
       waveColor: '#fff',
-      progressColor: '#fff'
+      progressColor: '#fff',
     }
   }
 
@@ -106,23 +102,14 @@ class Waveform extends Component {
 
   selectFrame = progressNormalised => {
     const { sequence, selectFrame } = this.props
-    const frameNumber = Math.floor(sequence.frameCount * progressNormalised)
-    selectFrame(frameNumber)
+    const frameIndex = Math.floor(sequence.frameCount * progressNormalised)
+    selectFrame(frameIndex)
   }
 }
 
 function mapStateToProps({ page }) {
-  const {
-    currentFrame,
-    sequence,
-    pixelsPerFrame,
-    playbackSpeed,
-    renderData
-  } = page.sequenceEdit.present
+  const { currentFrame, sequence, pixelsPerFrame, playbackSpeed, renderData } = page.sequenceEdit.present
   return { currentFrame, sequence, pixelsPerFrame, playbackSpeed, renderData }
 }
 
-export default connect(
-  mapStateToProps,
-  { selectFrame }
-)(Waveform)
+export default connect(mapStateToProps, { selectFrame })(Waveform)

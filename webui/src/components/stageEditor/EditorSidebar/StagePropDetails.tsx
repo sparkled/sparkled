@@ -311,7 +311,7 @@ const StagePropDetails: React.FC = () => {
         <Grid item xs={6}>
           <TextField
             variant='outlined'
-            label='Group ID'
+            label='Group Code'
             type='text'
             margin='dense'
             InputLabelProps={{ shrink: true }}

@@ -25,7 +25,7 @@ object GifEffect : StatelessSparkledEffect {
 
         val gifFrames = ctx.loadGif(ParamUtils.getString(ctx.effect, Params.FILE_NAME.name))
 
-        val gifFrame = ((gifFrames.size - 1) * ctx.progress).roundToInt()
+        val gifFrame = ((gifFrames.lastIndex) * ctx.progress).roundToInt()
         val frame = gifFrames[gifFrame]
 
         points.forEachIndexed { i, it ->
