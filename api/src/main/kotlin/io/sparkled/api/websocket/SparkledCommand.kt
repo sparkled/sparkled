@@ -16,6 +16,11 @@ interface SparkledCommand {
 }
 
 @GenerateClientType
+data object LiveDataClearCommand : SparkledCommand {
+    override val type = WebSocketCommandType.LIVE_DATA_MODIFY
+}
+
+@GenerateClientType
 data class LiveDataModifyCommand(
     @field:JsonProperty("e")
     val effect: Effect,
@@ -67,6 +72,7 @@ enum class WebSocketCommandType(
     @field:JsonValue
     val code: String,
 ) {
+    LIVE_DATA_CLEAR("LDC"),
     LIVE_DATA_MODIFY("LDM"),
     LIVE_DATA_RESPONSE("LDR"),
     LIVE_DATA_SUBSCRIBE("LDS"),
@@ -74,9 +80,3 @@ enum class WebSocketCommandType(
     TOGGLE_INTERACTIVE_MODE("TIM"),
     PING("P"),
 }
-
-@GenerateClientType
-data class LiveDataModification(
-    val effect: Effect,
-    val point: Point2dViewModel,
-)

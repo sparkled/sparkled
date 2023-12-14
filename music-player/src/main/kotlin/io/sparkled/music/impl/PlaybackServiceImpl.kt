@@ -151,7 +151,7 @@ class PlaybackServiceImpl(
                 InteractivePlaybackState(
                     stage = stage,
                     renderedStageProps = stageProps
-                        .groupBy { it.groupCode ?: it.code }
+                        .groupBy { if ( it.groupCode.isNullOrBlank()) it.code else it.groupCode!! }
                         .mapValuesTo(RenderedStagePropDataMap()) { (_, stageProps) ->
                             val ledCount = stageProps.sumOf { it.ledCount }
                             RenderedStagePropData(

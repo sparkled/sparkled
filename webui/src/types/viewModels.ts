@@ -46,7 +46,8 @@ export type PlaylistSummaryViewModel = {
 }
 
             export const WebSocketCommandTypeValues = [
-                'LDM',
+                'LDC',
+'LDM',
 'LDR',
 'LDS',
 'LDU',
@@ -113,21 +114,21 @@ export type SequenceChannelViewModel = {
             ] as const
             export type SequenceStatus = typeof SequenceStatusValues[number]
 
-export type SequenceEditViewModel = {
+export type SequenceViewModel = {
   channels: SequenceChannelViewModel[]
   frameCount: number
   framesPerSecond: number
+  id: string
   name: string
   songId: string
   stageId: string
   status: SequenceStatus
 }
 
-export type SequenceViewModel = {
+export type SequenceEditViewModel = {
   channels: SequenceChannelViewModel[]
   frameCount: number
   framesPerSecond: number
-  id: string
   name: string
   songId: string
   stageId: string
@@ -229,6 +230,10 @@ export type SongEditViewModel = {
   name: string
 }
 
+export type LiveDataClearCommand = SparkledCommand & {
+  type: WebSocketCommandType
+}
+
 export type StageSummaryViewModel = {
   id: string
   name: string
@@ -305,11 +310,6 @@ export type DashboardViewModel = {
 export type SettingViewModel = {
   id: string
   value: string
-}
-
-export type LiveDataModification = {
-  effect: Effect
-  point: Point2dViewModel
 }
 
 export type PingCommand = SparkledCommand & {

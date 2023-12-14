@@ -1,6 +1,6 @@
 import { Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import _ from 'lodash'
+import _, { debounce } from 'lodash'
 import * as PIXI from 'pixi.js'
 import React, { Dispatch, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import SimpleBar from 'simplebar-react'
@@ -114,32 +114,6 @@ const StageEditor: React.FC<Props> = props => {
   } else if (pixiApp.stage.children.length === 0) {
     initCanvas(pixiApp, canvasElement.current, props.stage, props.editable === true)
 
-    const { onTouchMove } = props
-    if (onTouchMove) {
-      let mouseDown = false
-      pixiApp.renderer.plugins.interaction.on('pointerdown', () => {
-        mouseDown = true
-      })
-      pixiApp.renderer.plugins.interaction.on('pointerup', () => {
-        mouseDown = false
-      })
-
-      pixiApp.renderer.plugins.interaction.on('pointermove', (event: InteractionEvent) => {
-        if (!mouseDown) {
-          return
-        }
-
-        const { offsetX, offsetY } = event.data.originalEvent as MouseEvent & TouchEvent
-
-        const x = offsetX - pixiApp.stage.x
-        const y = offsetY - pixiApp.stage.y
-
-        if (x >= 0 && x <= props.stage.width && y >= 0 && y <= props.stage.height) {
-          onTouchMove(x, y)
-        }
-      })
-    }
-
     if (props.editable) {
       const { interaction } = pixiApp.renderer.plugins
       interaction.on('pointerdown', (event: InteractionEvent) => {
@@ -161,6 +135,54 @@ const StageEditor: React.FC<Props> = props => {
       pixiApp.renderer.plugins.interaction.removeListener('pointerupoutside')
     }
   }
+
+  const { onTouchMove } = props
+  useEffect(() => {
+    if (pixiApp == null) {
+      return
+    }
+
+    if (onTouchMove) {
+      let mouseDown = false
+
+      const onPointerMove = (event: InteractionEvent) => {
+        if (!mouseDown) {
+          return
+        }
+
+        const { offsetX, offsetY } = event.data.originalEvent as MouseEvent & TouchEvent
+
+        const x = offsetX - pixiApp.stage.x
+        const y = offsetY - pixiApp.stage.y
+
+        if (x >= 0 && x <= props.stage.width && y >= 0 && y <= props.stage.height) {
+          onTouchMove(x, y)
+        }
+      }
+      const onDebouncedPointerMove = debounce(onPointerMove, 100, {
+        leading: true,
+        trailing: true,
+        maxWait: 100,
+      })
+
+      const onPointerDown = (event: InteractionEvent) => {
+        mouseDown = true
+        onPointerMove(event)
+      }
+
+      const onPointerUp = () => (mouseDown = false)
+
+      pixiApp.renderer.plugins.interaction.on('pointerdown', onPointerDown)
+      pixiApp.renderer.plugins.interaction.on('pointerup', onPointerUp)
+      pixiApp.renderer.plugins.interaction.on('pointermove', onDebouncedPointerMove)
+
+      return () => {
+        pixiApp.renderer.plugins.interaction.off('pointerdown', onPointerDown)
+        pixiApp.renderer.plugins.interaction.off('pointerup', onPointerUp)
+        pixiApp.renderer.plugins.interaction.off('pointermove', onDebouncedPointerMove)
+      }
+    }
+  }, [onTouchMove, pixiApp, props.stage.height, props.stage.width])
 
   const stageProps = useMemo(() => {
     return renderStageProps(pixiApp, state.stage, props.editable === true)

@@ -43,7 +43,7 @@ class Renderer(
         } else {
             stageProps.values
                 .sortedBy { it.groupDisplayOrder }
-                .groupBy { it.groupCode ?: it.code }
+                .groupBy { if (it.groupCode.isNullOrBlank()) it.code else it.groupCode!! }
         }
 
         groupedStageProps.forEach { (groupCode, stageProps) ->
@@ -66,7 +66,7 @@ class Renderer(
             .reversed()
             .forEach { (channelData, stageProp) ->
                 val groupCode = if (mode == RenderMode.PREVIEW_SEQUENCE) stageProp.code else {
-                    stageProp.groupCode ?: stageProp.code
+                    if (stageProp.groupCode.isNullOrBlank()) stageProp.code else stageProp.groupCode!!
                 }
 
                 val data = renderedProps[groupCode]!!
