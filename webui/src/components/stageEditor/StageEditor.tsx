@@ -150,10 +150,10 @@ const StageEditor: React.FC<Props> = props => {
           return
         }
 
-        const { offsetX, offsetY } = event.data.originalEvent as MouseEvent & TouchEvent
+        const { offsetX, offsetY, changedTouches } = event.data.originalEvent as MouseEvent & TouchEvent
 
-        const x = offsetX - pixiApp.stage.x
-        const y = offsetY - pixiApp.stage.y
+        const x = (offsetX ?? changedTouches[0].screenX) - pixiApp.stage.x
+        const y = (offsetY ?? changedTouches[0].screenY) - pixiApp.stage.y
 
         if (x >= 0 && x <= props.stage.width && y >= 0 && y <= props.stage.height) {
           onTouchMove(x, y)

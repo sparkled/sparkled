@@ -190,8 +190,13 @@ class WebSocketServer(
 
                             val lastEffect = effects.last()
 
-                            val ledPositions = state.stageProps[id]?.ledPositions ?: emptyList()
-                            ledPositions.forEachIndexed { pixelIndex, position ->
+                            val stageProp = state.stageProps[id]
+                            val ledPositions = stageProp?.ledPositions ?: emptyList()
+                            ledPositions.forEachIndexed { index, position ->
+                                val pixelIndex = when (stageProp?.reverse) {
+                                    true -> ledPositions.size - 1 - index
+                                    else -> index
+                                }
                                 if (lastEffect.targetPixels[pixelIndex]) {
                                     // Already present, skip.
                                 } else if (command.points.any { point -> isInCircle(point, position) }) {

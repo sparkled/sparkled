@@ -20,7 +20,7 @@ export type Action =
   | { type: 'RotateStageProp'; payload: { rotation: number } }
   | { type: 'UpdateStagePropLedCount'; payload: { ledCount: number } }
   | { type: 'UpdateStagePropLedPositions'; payload: { ledPositions: Point2dViewModel[] } }
-  | { type: 'UpdateStagePropGroupId'; payload: string | undefined }
+  | { type: 'UpdateStagePropGroupCode'; payload: string | undefined }
   | { type: 'UpdateStagePropGroupDisplayOrder'; payload: string | null }
   | { type: 'UpdateStageProp'; payload: Partial<StagePropViewModel> }
   | { type: 'DeleteStageProp' }
@@ -78,8 +78,8 @@ export const stageEditorReducer: React.Reducer<State, Action> = (state, action):
           }
         }
         break
-      case 'UpdateStagePropGroupId':
-        updateStagePropGroupId(selectedStageProp, action.payload)
+      case 'UpdateStagePropGroupCode':
+        updateStagePropGroupCode(selectedStageProp, action.payload)
         break
       case 'UpdateStagePropGroupDisplayOrder':
         updateStagePropGroupDisplayOrder(selectedStageProp, action.payload)
@@ -150,9 +150,9 @@ function updateStagePropLedCount(stageProp: StagePropViewModel | undefined, ledC
   }
 }
 
-function updateStagePropGroupId(stageProp: StagePropViewModel | undefined, groupCode: string | undefined) {
+function updateStagePropGroupCode(stageProp: StagePropViewModel | undefined, groupCode: string | undefined) {
   if (stageProp) {
-    stageProp.groupCode = groupCode
+    stageProp.groupCode = groupCode || undefined
   }
 }
 
