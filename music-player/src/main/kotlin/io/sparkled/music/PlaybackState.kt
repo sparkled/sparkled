@@ -36,17 +36,13 @@ data class InteractivePlaybackState(
 ) : PlaybackState {
     override val frameCount = 1
     override val progress = 0.0
-    override val framesPerSecond = FRAMES_PER_SECOND
-    val startFrame = (System.currentTimeMillis() / FRAMES_PER_SECOND).toInt()
+    override val framesPerSecond = 10
+    val startFrame = (System.currentTimeMillis() / framesPerSecond).toInt()
 
     init {
         stageProps.keys.forEach {
             stagePropEffects[it] = mutableListOf()
         }
-    }
-
-    companion object {
-        const val FRAMES_PER_SECOND = 30
     }
 }
 

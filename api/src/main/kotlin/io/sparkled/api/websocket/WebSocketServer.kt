@@ -31,9 +31,9 @@ import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
 import java.util.BitSet
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.system.measureTimeMillis
@@ -51,7 +51,8 @@ class WebSocketServer(
     private var running = false
     private val subscribers = ConcurrentHashMap<String, Long>()
     private val threadPool = Executors.newThreadPerTaskExecutor(NamedVirtualThreadFactory("webSocketServer"))
-    private val lock = ReentrantLock()
+    private val pendingCommands = ConcurrentLinkedQueue<LiveDataModifyCommand>()
+    private val isClearRequested = AtomicBoolean(false)
 
     init {
         threadPool.execute(::initLiveDataRenderer)
@@ -65,22 +66,29 @@ class WebSocketServer(
 
                 val elapsedMs = measureTimeMillis {
                     if (playbackState is InteractivePlaybackState) {
-                        lock.withLock {
-                            val currentFrame = currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND
-                            val renderer = Renderer(
-                                pluginManager = pluginManager,
-                                gifs = { cache.gifs.get() },
-                                stage = playbackState.stage,
-                                framesPerSecond = 30,
-                                stagePropEffects = playbackState.stagePropEffects,
-                                stageProps = playbackState.stageProps.values.associateBy { it.id },
-                                startFrame = currentFrame.toInt(),
-                                endFrame = currentFrame.toInt() + 1,
-                                mode = RenderMode.LIVE_FRAME,
-                            )
-
-                            playbackState.renderedStageProps = renderer.render().stageProps
+                        if (isClearRequested.get()) {
+                            pendingCommands.clear()
+                            playbackState.stagePropEffects.values.forEach { it.clear() }
                         }
+
+                        while (pendingCommands.isNotEmpty()) {
+                            addLiveEffect(playbackState)
+                        }
+
+                        val currentFrame = currentTimeMillis() / playbackState.framesPerSecond
+                        val renderer = Renderer(
+                            pluginManager = pluginManager,
+                            gifs = { cache.gifs.get() },
+                            stage = playbackState.stage,
+                            framesPerSecond = playbackState.framesPerSecond,
+                            stagePropEffects = playbackState.stagePropEffects,
+                            stageProps = playbackState.stageProps.values.associateBy { it.id },
+                            startFrame = currentFrame.toInt(),
+                            endFrame = currentFrame.toInt() + 1,
+                            mode = RenderMode.LIVE_FRAME,
+                        )
+
+                        playbackState.renderedStageProps = renderer.render().stageProps
                     }
                 }
 
@@ -90,6 +98,35 @@ class WebSocketServer(
             } catch (e: Exception) {
                 logger.error("Error occurred during live data render.", e)
                 sleep(100)
+            }
+        }
+    }
+
+    private fun addLiveEffect(playbackState: InteractivePlaybackState) {
+        val command = pendingCommands.poll()
+        playbackState.stagePropEffects.forEach { (id, effects) ->
+            if (!isSameEffect(effects.lastOrNull(), command.effect)) {
+                effects += command.effect.copy(
+                    startFrame = playbackState.startFrame,
+                    endFrame = Int.MAX_VALUE,
+                    targetPixels = BitSet(100),
+                )
+            }
+
+            val lastEffect = effects.last()
+
+            val stageProp = playbackState.stageProps[id]
+            val ledPositions = stageProp?.ledPositions ?: emptyList()
+            ledPositions.forEachIndexed { index, position ->
+                val pixelIndex = when (stageProp?.reverse) {
+                    true -> ledPositions.size - 1 - index
+                    else -> index
+                }
+                if (lastEffect.targetPixels[pixelIndex]) {
+                    // Already present, skip.
+                } else if (command.points.any { point -> isInCircle(point, position) }) {
+                    lastEffect.targetPixels.set(pixelIndex)
+                }
             }
         }
     }
@@ -166,45 +203,14 @@ class WebSocketServer(
 
         when (commandType) {
             WebSocketCommandType.LIVE_DATA_CLEAR -> {
-                val state = playbackService.state
-                if (state is InteractivePlaybackState) {
-                    lock.withLock {
-                        state.stagePropEffects.values.forEach { it.clear() }
-                    }
+                if (playbackService.state is InteractivePlaybackState) {
+                    isClearRequested.set(true)
                 }
             }
 
             WebSocketCommandType.LIVE_DATA_MODIFY -> {
-                val command = objectMapper.convertValue<LiveDataModifyCommand>(commandNode)
-                val state = playbackService.state
-                if (state is InteractivePlaybackState) {
-                    lock.withLock {
-                        state.stagePropEffects.forEach { (id, effects) ->
-                            if (!isSameEffect(effects.lastOrNull(), command.effect)) {
-                                effects += command.effect.copy(
-                                    startFrame = state.startFrame,
-                                    endFrame = Int.MAX_VALUE,
-                                    targetPixels = BitSet(100),
-                                )
-                            }
-
-                            val lastEffect = effects.last()
-
-                            val stageProp = state.stageProps[id]
-                            val ledPositions = stageProp?.ledPositions ?: emptyList()
-                            ledPositions.forEachIndexed { index, position ->
-                                val pixelIndex = when (stageProp?.reverse) {
-                                    true -> ledPositions.size - 1 - index
-                                    else -> index
-                                }
-                                if (lastEffect.targetPixels[pixelIndex]) {
-                                    // Already present, skip.
-                                } else if (command.points.any { point -> isInCircle(point, position) }) {
-                                    lastEffect.targetPixels.set(pixelIndex)
-                                }
-                            }
-                        }
-                    }
+                if (playbackService.state is InteractivePlaybackState) {
+                    pendingCommands += objectMapper.convertValue<LiveDataModifyCommand>(commandNode)
                 }
             }
 
