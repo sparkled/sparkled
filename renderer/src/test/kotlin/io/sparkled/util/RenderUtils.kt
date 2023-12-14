@@ -33,7 +33,7 @@ object RenderUtils {
     fun render(effect: Effect, frameCount: Int, ledCount: Int): RenderedStagePropData {
         val stageProp = testStageProp.copy(ledCount = ledCount)
         val result = render(mapOf(stageProp.id to listOf(effect)), frameCount, listOf(stageProp))
-        return result.getValue(stageProp.id)
+        return result.getValue(stageProp.code)
     }
 
     fun render(
