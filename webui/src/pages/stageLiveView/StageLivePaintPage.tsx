@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/styles'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import PageContainer from '../../components/PageContainer'
 import StageEditor from '../../components/stageEditor/StageEditor'
 import useAxiosSwr from '../../hooks/api/useAxiosSwr.ts'
 import { EventBusContext } from '../../hooks/useEventBus.ts'
 import {
+  CircleViewModel,
   Effect,
   LiveDataClearCommand,
   LiveDataModifyCommand,
@@ -16,6 +17,7 @@ import {
 } from '../../types/viewModels.ts'
 import { uniqueId } from '../../utils/idUtils.ts'
 import { Button } from '@material-ui/core'
+import { isEmpty } from 'lodash'
 
 const effectNames = ['Purple', 'Rainbow', 'Glitter']
 const effects: Record<typeof effectNames[number], Effect> = {
@@ -55,7 +57,7 @@ const effects: Record<typeof effectNames[number], Effect> = {
       type: '@sparkled/rainbow',
       blendMode: 'NORMAL',
       args: {
-        CYCLES_PER_SECOND: '1',
+        CYCLES_PER_SECOND: '.5',
       },
     },
     startFrame: 0,
@@ -88,7 +90,6 @@ const effects: Record<typeof effectNames[number], Effect> = {
     repetitions: 1,
     repetitionSpacing: 0,
     args: {},
-    targetPixels: [],
   },
 }
 
@@ -109,6 +110,7 @@ const useStyles = makeStyles(() => ({
     bottom: '0',
     width: '100%',
     display: 'flex',
+    flexWrap: 'wrap',
     gap: '4px',
     padding: '4px',
     alignItems: 'center',
@@ -125,6 +127,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
   const classes = useStyles()
   const eventBus = useContext(EventBusContext)
   const [effectName, setEffectName] = useState(effectNames[0])
+  const pendingCircles = useRef<CircleViewModel[]>([])
 
   const { data } = useAxiosSwr<StageViewModel>({ url: `/stages/${props.match.params.stageId}` }, true)
 
@@ -163,6 +166,22 @@ const StageLivePaintPage: React.FC<Props> = props => {
     })
   }, [eventBus])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const circles = pendingCircles.current
+      if (!isEmpty(circles)) {
+        eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
+          type: 'LDM',
+          p: circles,
+          e: effects[effectName],
+        })
+        pendingCircles.current = []
+      }
+    }, 50)
+
+    return () => clearInterval(interval)
+  }, [effectName, eventBus])
+
   return (
     <PageContainer className={classes.pageContainer} spacing={0}>
       <div className={classes.container}>
@@ -170,12 +189,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
           <StageEditor
             stage={data}
             onTouchMove={(x, y) => {
-              console.info(effectName)
-              eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
-                type: 'LDM',
-                p: [{ x, y, r: 30 }],
-                e: effects[effectName],
-              })
+              pendingCircles.current = [...pendingCircles.current, { x, y, r: 30 }]
             }}
           />
         )}
@@ -190,7 +204,9 @@ const StageLivePaintPage: React.FC<Props> = props => {
               {it}
             </Button>
           ))}
-          <Button onClick={clearLiveData}>Clear</Button>
+          <Button onClick={clearLiveData} color='secondary'>
+            Clear
+          </Button>
         </div>
       </div>
     </PageContainer>

@@ -159,10 +159,10 @@ const StageEditor: React.FC<Props> = props => {
           onTouchMove(x, y)
         }
       }
-      const onDebouncedPointerMove = debounce(onPointerMove, 100, {
+      const onDebouncedPointerMove = debounce(onPointerMove, 30, {
         leading: true,
         trailing: true,
-        maxWait: 100,
+        maxWait: 30,
       })
 
       const onPointerDown = (event: InteractionEvent) => {
@@ -177,9 +177,11 @@ const StageEditor: React.FC<Props> = props => {
       pixiApp.renderer.plugins.interaction.on('pointermove', onDebouncedPointerMove)
 
       return () => {
-        pixiApp.renderer.plugins.interaction.off('pointerdown', onPointerDown)
-        pixiApp.renderer.plugins.interaction.off('pointerup', onPointerUp)
-        pixiApp.renderer.plugins.interaction.off('pointermove', onDebouncedPointerMove)
+        if (pixiApp.renderer != null) {
+          pixiApp.renderer.plugins.interaction.off('pointerdown', onPointerDown)
+          pixiApp.renderer.plugins.interaction.off('pointerup', onPointerUp)
+          pixiApp.renderer.plugins.interaction.off('pointermove', onDebouncedPointerMove)
+        }
       }
     }
   }, [onTouchMove, pixiApp, props.stage.height, props.stage.width])

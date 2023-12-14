@@ -23,7 +23,7 @@ object FillUtils {
         effectColor: Color? = null,
         ignoreReverse: Boolean = false,
     ) {
-        if (ctx.effect.targetPixels.isEmpty() || ledIndex !in ctx.effect.targetPixels) {
+        if (ctx.effect.targetPixels.isEmpty || !ctx.effect.targetPixels[ledIndex]) {
             return
         }
 

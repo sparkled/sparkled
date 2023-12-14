@@ -1,5 +1,6 @@
 package io.sparkled.script.generateclienttypes
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.JsonNode
@@ -84,7 +85,9 @@ class ClientTypeMetadataGatherer(
         typeClass: Class<*>,
         annotation: GenerateClientType,
     ): ClientTypeMetadata {
-        val publicProperties = typeClass.kotlin.declaredMemberProperties.filter { it.visibility == KVisibility.PUBLIC }
+        val publicProperties = typeClass.kotlin.declaredMemberProperties
+            .filter { it.visibility == KVisibility.PUBLIC }
+            .filter { !(it.javaField?.isAnnotationPresent(JsonIgnore::class.java) ?: true) }
 
         val interfaceTypes = typeClass.interfaces.mapNotNull {
             val interfaceAnnotation = getAnnotationOrNull(it, GenerateClientType::class)

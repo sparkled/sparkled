@@ -3,11 +3,10 @@ package io.sparkled.renderer.util
 import io.sparkled.model.animation.param.HasArguments
 import java.awt.Color
 import java.util.Locale
-import java.util.concurrent.ConcurrentHashMap
 
 object ParamUtils {
 
-    private val colorCache = ConcurrentHashMap<List<String>, List<Color>>()
+    private val colorCache = hashMapOf<List<String>, List<Color>>()
 
     fun getBoolean(parent: HasArguments, paramCode: String, default: Boolean = false): Boolean {
         val values = getArgumentValues(parent, paramCode)
@@ -35,13 +34,12 @@ object ParamUtils {
     fun getColors(parent: HasArguments, paramCode: String, default: Color = Color.BLACK): List<Color> {
         val values = getArgumentValues(parent, paramCode)
 
-        return colorCache.compute(values) { _, v ->
-             when {
-                v != null -> v
+        return colorCache.getOrPut(values) {
+            when {
                 values.isEmpty() -> listOf(default)
                 else -> values.map { convertColor(it) }.toList()
             }
-        }!!
+        }
     }
 
     private fun getArgumentValues(parent: HasArguments, paramCode: String): List<String> {

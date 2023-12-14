@@ -1,11 +1,13 @@
 package io.sparkled.model.animation.effect
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.easing.Easing
 import io.sparkled.model.animation.fill.Fill
 import io.sparkled.model.animation.param.HasArguments
 import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.model.util.IdUtils.uniqueId
+import java.util.BitSet
 
 @GenerateClientType
 data class Effect(
@@ -21,7 +23,8 @@ data class Effect(
     /**
      * Render this effect only on the pixels specified in this list. If the list is empty, render for all pixels.
      */
-    val targetPixels: MutableSet<Int> = mutableSetOf(),
+    @field:JsonIgnore
+    val targetPixels: BitSet = BitSet(1),
 
     override val args: Map<String, List<String>> = emptyMap(),
 ) : HasArguments

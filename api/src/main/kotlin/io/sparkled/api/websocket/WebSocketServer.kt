@@ -16,7 +16,6 @@ import io.micronaut.websocket.annotation.OnOpen
 import io.micronaut.websocket.annotation.ServerWebSocket
 import io.sparkled.common.logging.getLogger
 import io.sparkled.common.threading.NamedVirtualThreadFactory
-import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.embedded.Point2d
 import io.sparkled.music.InteractivePlaybackState
@@ -30,9 +29,9 @@ import io.sparkled.renderer.SparkledPluginManager
 import io.sparkled.viewmodel.CircleViewModel
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
+import java.util.BitSet
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.math.pow
@@ -67,22 +66,20 @@ class WebSocketServer(
                 val elapsedMs = measureTimeMillis {
                     if (playbackState is InteractivePlaybackState) {
                         lock.withLock {
-                            if (playbackState.stagePropEffects.none { it.value.isEmpty()}) {
-                                val currentFrame = currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND
-                                val renderer = Renderer(
-                                    pluginManager = pluginManager,
-                                    gifs = { cache.gifs.get() },
-                                    stage = playbackState.stage,
-                                    framesPerSecond = 30,
-                                    stagePropEffects = playbackState.stagePropEffects,
-                                    stageProps = playbackState.stageProps.values.associateBy { it.id },
-                                    startFrame = currentFrame.toInt(),
-                                    endFrame = currentFrame.toInt() + 1,
-                                    mode = RenderMode.LIVE_FRAME,
-                                )
+                            val currentFrame = currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND
+                            val renderer = Renderer(
+                                pluginManager = pluginManager,
+                                gifs = { cache.gifs.get() },
+                                stage = playbackState.stage,
+                                framesPerSecond = 30,
+                                stagePropEffects = playbackState.stagePropEffects,
+                                stageProps = playbackState.stageProps.values.associateBy { it.id },
+                                startFrame = currentFrame.toInt(),
+                                endFrame = currentFrame.toInt() + 1,
+                                mode = RenderMode.LIVE_FRAME,
+                            )
 
-                                playbackState.renderedStageProps = renderer.render().stageProps
-                            }
+                            playbackState.renderedStageProps = renderer.render().stageProps
                         }
                     }
                 }
@@ -176,6 +173,7 @@ class WebSocketServer(
                     }
                 }
             }
+
             WebSocketCommandType.LIVE_DATA_MODIFY -> {
                 val command = objectMapper.convertValue<LiveDataModifyCommand>(commandNode)
                 val state = playbackService.state
@@ -186,7 +184,7 @@ class WebSocketServer(
                                 effects += command.effect.copy(
                                     startFrame = state.startFrame,
                                     endFrame = Int.MAX_VALUE,
-                                    targetPixels = mutableSetOf(),
+                                    targetPixels = BitSet(100),
                                 )
                             }
 
@@ -194,10 +192,10 @@ class WebSocketServer(
 
                             val ledPositions = state.stageProps[id]?.ledPositions ?: emptyList()
                             ledPositions.forEachIndexed { pixelIndex, position ->
-                                if (pixelIndex in lastEffect.targetPixels) {
+                                if (lastEffect.targetPixels[pixelIndex]) {
                                     // Already present, skip.
                                 } else if (command.points.any { point -> isInCircle(point, position) }) {
-                                    lastEffect.targetPixels += pixelIndex
+                                    lastEffect.targetPixels.set(pixelIndex)
                                 }
                             }
                         }
