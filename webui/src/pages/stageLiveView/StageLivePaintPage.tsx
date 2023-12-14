@@ -19,9 +19,32 @@ import { uniqueId } from '../../utils/idUtils.ts'
 import { Button } from '@material-ui/core'
 import { isEmpty } from 'lodash'
 
-const effectNames = ['Purple', 'Rainbow', 'Glitter']
+const effectNames = [
+  'Red',
+  'Green',
+  'Blue',
+  'Yellow',
+  'Purple',
+  'Rainbow',
+  'Green Glitter',
+  'Purple Glitter',
+  'Pink Glitter',
+]
+
 const effects: Record<typeof effectNames[number], Effect> = {
-  Purple: {
+  Red: solid('#ff0000'),
+  Green: solid('#00ff00'),
+  Blue: solid('#0000ff'),
+  Yellow: solid('#ffff00'),
+  Purple: solid('#5c1cff'),
+  Rainbow: rainbow(),
+  'Green Glitter': glitter('#00ff00', 1),
+  'Purple Glitter': glitter('#5c1cff', 2),
+  'Pink Glitter': glitter('#ff06c6', 3),
+}
+
+function solid(color: string): Effect {
+  return {
     id: uniqueId(),
     type: '@sparkled/solid',
     easing: {
@@ -34,7 +57,7 @@ const effects: Record<typeof effectNames[number], Effect> = {
       type: '@sparkled/single-color',
       blendMode: 'NORMAL',
       args: {
-        COLOR: '#ff00ff',
+        COLOR: color,
       },
     },
     startFrame: 0,
@@ -42,9 +65,39 @@ const effects: Record<typeof effectNames[number], Effect> = {
     repetitions: 1,
     repetitionSpacing: 0,
     args: {},
-    targetPixels: [],
-  },
-  Rainbow: {
+  }
+}
+
+function glitter(color: string, seed: number): Effect {
+  return {
+    id: uniqueId(),
+    type: '@sparkled/glitter',
+    easing: {
+      type: '@sparkled/linear',
+      start: 0,
+      end: 100,
+      args: {},
+    },
+    fill: {
+      type: '@sparkled/single-color',
+      blendMode: 'NORMAL',
+      args: {
+        COLOR: color,
+        DENSITY: '100',
+        LIFETIME: '2',
+        SEED: seed.toString(),
+      },
+    },
+    startFrame: 0,
+    endFrame: 1,
+    repetitions: 1,
+    repetitionSpacing: 0,
+    args: {},
+  }
+}
+
+function rainbow(): Effect {
+  return {
     id: uniqueId(),
     type: '@sparkled/solid',
     easing: {
@@ -65,32 +118,7 @@ const effects: Record<typeof effectNames[number], Effect> = {
     repetitions: 1,
     repetitionSpacing: 0,
     args: {},
-    targetPixels: [],
-  },
-  Glitter: {
-    id: uniqueId(),
-    type: '@sparkled/glitter',
-    easing: {
-      type: '@sparkled/linear',
-      start: 0,
-      end: 100,
-      args: {},
-    },
-    fill: {
-      type: '@sparkled/single-color',
-      blendMode: 'NORMAL',
-      args: {
-        COLOR: '#00ff00',
-        DENSITY: '100',
-        LIFETIME: '30',
-      },
-    },
-    startFrame: 0,
-    endFrame: 1,
-    repetitions: 1,
-    repetitionSpacing: 0,
-    args: {},
-  },
+  }
 }
 
 const useStyles = makeStyles(() => ({
