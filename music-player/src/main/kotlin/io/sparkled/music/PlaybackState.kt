@@ -4,9 +4,12 @@ import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
 import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
+import io.sparkled.model.UniqueId
+import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.util.SequenceUtils
 import java.nio.ByteBuffer
+import java.util.concurrent.ConcurrentHashMap
 
 sealed interface PlaybackState {
     val stageProps: Map<String, StagePropModel>
@@ -26,13 +29,21 @@ data object StoppedPlaybackState : PlaybackState {
 
 data class InteractivePlaybackState(
     override var renderedStageProps: RenderedStagePropDataMap,
-    override val stageProps: Map<String, StagePropModel>,
+    override val stageProps: Map<UniqueId, StagePropModel>,
     val previousState: PlaybackState = StoppedPlaybackState,
     val stage: StageModel,
+    val stagePropEffects: ConcurrentHashMap<UniqueId, MutableList<Effect>> = ConcurrentHashMap()
 ) : PlaybackState {
     override val frameCount = 1
     override val progress = 0.0
     override val framesPerSecond = FRAMES_PER_SECOND
+    val startFrame = (System.currentTimeMillis() / FRAMES_PER_SECOND).toInt()
+
+    init {
+        stageProps.keys.forEach {
+            stagePropEffects[it] = mutableListOf()
+        }
+    }
 
     companion object {
         const val FRAMES_PER_SECOND = 30
@@ -51,7 +62,7 @@ data class SequencePlaybackState(
     val song: SongModel,
     val songAudio: ByteBuffer = ByteBuffer.allocate(0),
     override val renderedStageProps: RenderedStagePropDataMap = RenderedStagePropDataMap(),
-    override val stageProps: Map<String, StagePropModel> = emptyMap()
+    override val stageProps: Map<UniqueId, StagePropModel> = emptyMap()
 ) : PlaybackState {
     val sequence: SequenceModel
         get() = sequences[sequenceIndex]

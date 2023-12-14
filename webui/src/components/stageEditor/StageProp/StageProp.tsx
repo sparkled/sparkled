@@ -22,7 +22,7 @@ interface Props {
   /** The stage prop being displayed or edited. */
   stageProp: StagePropViewModel
 
-  /** Whether or not to enable stage prop editing. */
+  /** Whether to enable stage prop editing. */
   editable: boolean
 }
 

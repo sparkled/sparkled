@@ -9,14 +9,19 @@ import io.sparkled.model.util.IdUtils.uniqueId
 
 @GenerateClientType
 data class Effect(
-    var id: UniqueId = uniqueId(),
-    var type: String = "NONE",
-    var easing: Easing = Easing("LINEAR"),
-    var fill: Fill = Fill(),
-    var startFrame: Int = 0,
-    var endFrame: Int = 0,
-    var repetitions: Int = 1,
-    var repetitionSpacing: Int = 0,
+    val id: UniqueId = uniqueId(),
+    val type: String = "NONE",
+    val easing: Easing = Easing("LINEAR"),
+    val fill: Fill = Fill(),
+    val startFrame: Int = 0,
+    val endFrame: Int = 0,
+    val repetitions: Int = 1,
+    val repetitionSpacing: Int = 0,
+
+    /**
+     * Render this effect only on the pixels specified in this list. If the list is empty, render for all pixels.
+     */
+    val targetPixels: MutableSet<Int> = mutableSetOf(),
 
     override val args: Map<String, List<String>> = emptyMap(),
 ) : HasArguments

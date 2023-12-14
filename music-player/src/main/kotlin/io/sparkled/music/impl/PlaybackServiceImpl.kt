@@ -102,7 +102,7 @@ class PlaybackServiceImpl(
                         data = Base64.getDecoder().decode(value.base64Data),
                     )
                 }
-            val stageProps = db.stageProps.findAllByStageId(sequence.stageId).associateBy { it.code }
+            val stageProps = db.stageProps.findAllByStageId(sequence.stageId).associateBy { it.id }
 
             return SequencePlaybackState(
                 sequences = sequences,
@@ -161,7 +161,7 @@ class PlaybackServiceImpl(
                                 data = ByteArray(ledCount * 3),
                             )
                         },
-                    stageProps = stageProps.associateBy { it.code },
+                    stageProps = stageProps.associateBy { it.id },
                     previousState = currentState,
                 )
             )

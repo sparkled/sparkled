@@ -41,9 +41,9 @@ class GetStagePropCodesCommandTest : StringSpec() {
                         this["P1"] = RenderedStagePropData(0, 0, 0, byteArrayOf())
                     },
                     stageProps = mapOf(
-                        "P1" to testStageProp.copy(code = "P1", displayOrder = 1),
-                        "P2" to testStageProp.copy(code = "P2", displayOrder = 3),
-                        "P3" to testStageProp.copy(code = "P3", displayOrder = 2)
+                        "1" to testStageProp.copy(id = "1", code = "P1", displayOrder = 1),
+                        "2" to testStageProp.copy(id = "2", code = "P2", displayOrder = 3),
+                        "3" to testStageProp.copy(id = "3", code = "P3", displayOrder = 2)
                     )
                 )
             )

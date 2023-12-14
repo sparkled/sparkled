@@ -5,6 +5,7 @@ import io.micronaut.runtime.event.ApplicationShutdownEvent
 import io.micronaut.runtime.event.ApplicationStartupEvent
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.transaction.annotation.Transactional
+import io.sparkled.api.websocket.WebSocketServer
 import io.sparkled.common.logging.getLogger
 import io.sparkled.model.config.SparkledConfig
 import io.sparkled.persistence.FileService
@@ -26,6 +27,7 @@ class ServiceManager(
     private val pluginManager: SparkledPluginManager,
     private val schedulerService: SchedulerService,
     private val udpServer: UdpServer,
+    private val webSocketServer: WebSocketServer,
 ) {
 
     @EventListener
@@ -43,6 +45,7 @@ class ServiceManager(
         val socket = buildSocket()
         udpServer.start(socket)
         ledDataStreamer.start(socket)
+        webSocketServer.start()
 
         when {
             "e2eTest" in applicationContext.environment.activeNames -> {

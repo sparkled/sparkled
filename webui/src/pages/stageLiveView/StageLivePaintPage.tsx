@@ -9,8 +9,10 @@ import {
   LiveDataModifyCommand,
   LiveDataSubscribeCommand,
   LiveDataUnsubscribeCommand,
+  StageViewModel,
   ToggleInteractiveModeCommand,
 } from '../../types/viewModels.ts'
+import { uniqueId } from '../../utils/idUtils.ts'
 
 const useStyles = makeStyles(() => ({
   // The page container never overflows, and the editor tools need to be hidden when they slide offscreen.
@@ -32,7 +34,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
   const classes = useStyles()
   const eventBus = useContext(EventBusContext)
 
-  const { data } = useAxiosSwr({ url: `/stages/${props.match.params.stageId}` }, true)
+  const { data } = useAxiosSwr<StageViewModel>({ url: `/stages/${props.match.params.stageId}` }, true)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -54,22 +56,6 @@ const StageLivePaintPage: React.FC<Props> = props => {
       })
     }, 2000)
 
-    function getRandomColor() {
-      const letters = '0123456789ABCDEF'
-      let color = ''
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)]
-      }
-      return color
-    }
-
-    setInterval(() => {
-      eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
-        type: 'LDM',
-        m: [],
-      })
-    }, 50)
-
     return () => {
       clearInterval(interval)
       eventBus.sendWebSocketCommand<ToggleInteractiveModeCommand>({
@@ -81,7 +67,42 @@ const StageLivePaintPage: React.FC<Props> = props => {
 
   return (
     <PageContainer className={classes.pageContainer} spacing={0}>
-      <div className={classes.container}>{data && <StageEditor stage={data} />}</div>
+      <div className={classes.container}>
+        {data && (
+          <StageEditor
+            stage={data}
+            onTouchMove={(x, y) => {
+              eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
+                type: 'LDM',
+                p: [{ x, y, r: 10 }],
+                e: {
+                  id: uniqueId(),
+                  type: '@sparkled/solid',
+                  easing: {
+                    type: '@sparkled/linear',
+                    start: 0,
+                    end: 100,
+                    args: {},
+                  },
+                  fill: {
+                    type: '@sparkled/single-color',
+                    blendMode: 'NORMAL',
+                    args: {
+                      COLOR: '#ff00ff',
+                    },
+                  },
+                  startFrame: 0,
+                  endFrame: 1,
+                  repetitions: 1,
+                  repetitionSpacing: 0,
+                  args: {},
+                  targetPixels: [],
+                },
+              })
+            }}
+          />
+        )}
+      </div>
     </PageContainer>
   )
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
+import io.micronaut.websocket.CloseReason
 import io.micronaut.websocket.WebSocketBroadcaster
 import io.micronaut.websocket.WebSocketSession
 import io.micronaut.websocket.annotation.OnClose
@@ -17,10 +18,7 @@ import io.sparkled.common.logging.getLogger
 import io.sparkled.common.threading.NamedVirtualThreadFactory
 import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
-import io.sparkled.model.animation.fill.BlendMode
-import io.sparkled.model.animation.fill.Fill
-import io.sparkled.model.render.Led
-import io.sparkled.model.util.ArgumentUtils
+import io.sparkled.model.embedded.Point2d
 import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
@@ -29,13 +27,14 @@ import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.renderer.RenderMode
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
-import io.sparkled.renderer.effect.GlitterEffect
-import io.sparkled.renderer.fill.SingleColorFill
+import io.sparkled.viewmodel.CircleViewModel
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.math.pow
+import kotlin.math.sqrt
 import kotlin.system.measureTimeMillis
 
 @ServerWebSocket("/api/websocket")
@@ -48,11 +47,10 @@ class WebSocketServer(
     private val pluginManager: SparkledPluginManager,
     private val webSocketBroadcaster: WebSocketBroadcaster,
 ) {
+    private var running = false
     private val subscribers = ConcurrentHashMap<String, Long>()
     private val threadPool = Executors.newThreadPerTaskExecutor(NamedVirtualThreadFactory("webSocketServer"))
     private val liveDataRenderRequired = AtomicBoolean(false)
-
-    private val stagePropEffects = mutableMapOf<UniqueId, MutableList<Effect>>()
 
     init {
         threadPool.execute(::initLiveDataRenderer)
@@ -60,29 +58,6 @@ class WebSocketServer(
     }
 
     private fun initLiveDataRenderer() {
-        val startFrame = (currentTimeMillis() / InteractivePlaybackState.FRAMES_PER_SECOND).toInt()
-
-        val effectDurationFrames = 1_000_000_000
-        // TODO remove hard-coded effect.
-        stagePropEffects["jcyrk6ds8krm"] = mutableListOf(
-            Effect(
-                type = GlitterEffect.id,
-                fill = Fill(
-                    SingleColorFill.id,
-                    BlendMode.NORMAL,
-                    mapOf(
-                        ArgumentUtils.arg(SingleColorFill.Params.COLOR.name, "#ff00ff")
-                    ),
-                ),
-                startFrame = startFrame,
-                endFrame = startFrame + effectDurationFrames,
-                args = mapOf(
-                    ArgumentUtils.arg(GlitterEffect.Params.DENSITY.name, 99),
-                    ArgumentUtils.arg(GlitterEffect.Params.LIFETIME.name, 4)
-                )
-            )
-        )
-
         while (true) {
             try {
                 val playbackState = playbackService.state
@@ -95,7 +70,7 @@ class WebSocketServer(
                             gifs = { cache.gifs.get() },
                             stage = playbackState.stage,
                             framesPerSecond = 30,
-                            stagePropEffects = stagePropEffects,
+                            stagePropEffects = playbackState.stagePropEffects,
                             stageProps = playbackState.stageProps.values.associateBy { it.id },
                             startFrame = currentFrame.toInt(),
                             endFrame = currentFrame.toInt() + 1,
@@ -107,7 +82,7 @@ class WebSocketServer(
                 }
 
 
-                val frameDurationMs = 1000 / (playbackState.framesPerSecond - elapsedMs)
+                val frameDurationMs = (1000 / playbackState.framesPerSecond) - elapsedMs
                 sleep(frameDurationMs.coerceAtLeast(0))
             } catch (e: Exception) {
                 logger.error("Error occurred during live data render.", e)
@@ -151,9 +126,34 @@ class WebSocketServer(
         }
     }
 
+    fun start() {
+        running = true
+    }
+
     @OnOpen
     fun onOpen(session: WebSocketSession) {
-        logger.info("Websocket opened.", "id" to session.id)
+        if (!running) {
+            logger.warn("Rejected Websocket connection, server isn't running yet.", "id" to session.id)
+            session.close(CloseReason.TRY_AGAIN_LATER)
+        } else {
+            logger.info("Websocket opened.", "id" to session.id)
+        }
+    }
+
+    /**
+     * Compares two effects without taking into account the unique ID or target pixels.
+     */
+    private fun isSameEffect(a: Effect?, b: Effect?): Boolean {
+        return when {
+            a == null || b == null -> false
+            a.type != b.type -> false
+            a.easing != b.easing -> false
+            a.fill != b.fill -> false
+            a.repetitions != b.repetitions -> false
+            a.repetitionSpacing != b.repetitionSpacing -> false
+            a.args != b.args -> false
+            else -> true
+        }
     }
 
     @OnMessage
@@ -166,25 +166,22 @@ class WebSocketServer(
                 val command = objectMapper.convertValue<LiveDataModifyCommand>(commandNode)
                 val state = playbackService.state
                 if (state is InteractivePlaybackState) {
-                    command.modifications.forEach { modification ->
-                        when (modification.type) {
-                            LiveDataModificationType.FILL_SOLID -> {
-                                val params = objectMapper.convertValue<FillSolidLiveDataParams>(modification.params)
-                                val (r, g, b) = params.color.chunked(2).map { it.toInt(16) }
+                    state.stagePropEffects.forEach { (id, effects) ->
+                        if (!isSameEffect(effects.lastOrNull(), command.effect)) {
+                            effects += command.effect.copy(
+                                startFrame = state.startFrame,
+                                endFrame = Int.MAX_VALUE,
+                            )
+                        }
 
-                                state.renderedStageProps.forEach { (groupCode, renderedStageProp) ->
-                                    if (params.groupCode == null || params.groupCode == groupCode) {
-                                        val renderedFrame = renderedStageProp.frames[0]
+                        val lastEffect = effects.last()
 
-                                        repeat(renderedStageProp.data.size / Led.BYTES_PER_LED) { index ->
-                                            renderedFrame.getLed(index).setRgb(r, g, b)
-                                        }
-                                    }
-                                }
-                            }
-
-                            LiveDataModificationType.SET_PIXELS -> {
-                                TODO()
+                        val ledPositions = state.stageProps[id]?.ledPositions ?: emptyList()
+                        ledPositions.forEachIndexed { pixelIndex, position ->
+                            if (pixelIndex in lastEffect.targetPixels) {
+                                // Already present, skip.
+                            } else if (command.points.any { point -> isInCircle(point, position) }) {
+                                lastEffect.targetPixels += pixelIndex
                             }
                         }
                     }
@@ -238,6 +235,11 @@ class WebSocketServer(
                 // Command not recognised, ignore.
             }
         }
+    }
+
+    private fun isInCircle(circle: CircleViewModel, point: Point2d): Boolean {
+        val distance = sqrt(((circle.x - point.x).pow(2)) + ((circle.y - point.y).pow(2)))
+        return distance <= circle.r
     }
 
     @OnClose

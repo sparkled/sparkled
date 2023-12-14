@@ -5,7 +5,7 @@ import * as PIXI from 'pixi.js'
 import React, { Dispatch, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.css'
-import { StageViewModel } from '../../types/ViewModel'
+import { StageViewModel } from '../../types/viewModels.ts'
 import Logger from '../../utils/Logger'
 import { clamp } from '../../utils/numberUtils'
 import EditorSidebar from './EditorSidebar'
@@ -18,7 +18,7 @@ const zoomLimits = { min: 0.5, max: 5 }
 
 type InteractionEvent = PIXI.interaction.InteractionEvent
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
+interface Props {
   /** The stage being viewed or edited. */
   stage: StageViewModel
 
@@ -30,6 +30,11 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
 
   /** Whether to enable stage prop editing. */
   editable?: boolean
+
+  /**
+   * Monitor the user's mouse/finger as it moves over the stage portion of the canvas.
+   */
+  onTouchMove?: (x: number, y: number) => void
 }
 
 interface DragState {
@@ -108,6 +113,32 @@ const StageEditor: React.FC<Props> = props => {
     logger.debug('Waiting for canvas element to mount.')
   } else if (pixiApp.stage.children.length === 0) {
     initCanvas(pixiApp, canvasElement.current, props.stage, props.editable === true)
+
+    const { onTouchMove } = props
+    if (onTouchMove) {
+      let mouseDown = false
+      pixiApp.renderer.plugins.interaction.on('pointerdown', () => {
+        mouseDown = true
+      })
+      pixiApp.renderer.plugins.interaction.on('pointerup', () => {
+        mouseDown = false
+      })
+
+      pixiApp.renderer.plugins.interaction.on('pointermove', (event: InteractionEvent) => {
+        if (!mouseDown) {
+          return
+        }
+
+        const { offsetX, offsetY } = event.data.originalEvent as MouseEvent & TouchEvent
+
+        const x = offsetX - pixiApp.stage.x
+        const y = offsetY - pixiApp.stage.y
+
+        if (x >= 0 && x <= props.stage.width && y >= 0 && y <= props.stage.height) {
+          onTouchMove(x, y)
+        }
+      })
+    }
 
     if (props.editable) {
       const { interaction } = pixiApp.renderer.plugins
