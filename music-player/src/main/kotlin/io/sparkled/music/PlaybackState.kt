@@ -8,6 +8,7 @@ import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.util.SequenceUtils
+import java.lang.System.currentTimeMillis
 import java.nio.ByteBuffer
 import java.util.concurrent.ConcurrentHashMap
 
@@ -37,7 +38,11 @@ data class InteractivePlaybackState(
     override val frameCount = 1
     override val progress = 0.0
     override val framesPerSecond = 10
-    val startFrame = (System.currentTimeMillis() / framesPerSecond).toInt()
+
+    private val startTime = currentTimeMillis()
+    val startFrame = getFrameAtCurrentTime()
+
+    fun getFrameAtCurrentTime() = (currentTimeMillis() - startTime).toInt() / framesPerSecond
 
     init {
         stageProps.keys.forEach {

@@ -225,6 +225,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
         <div className={classes.buttonRow}>
           {effectNames.map(it => (
             <Button
+              key={it}
               variant='outlined'
               className={effectName === it ? classes.activeEffect : undefined}
               onClick={() => setEffectName(it)}

@@ -21,10 +21,10 @@ data class Effect(
     val repetitionSpacing: Int = 0,
 
     /**
-     * Render this effect only on the pixels specified in this list. If the list is empty, render for all pixels.
+     * Render this effect only on the pixels specified in this list. If the list is null, render for all pixels.
      */
     @field:JsonIgnore
-    val targetPixels: BitSet = BitSet(1),
+    val targetPixels: BitSet? = null,
 
     override val args: Map<String, List<String>> = emptyMap(),
 ) : HasArguments

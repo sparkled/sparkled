@@ -23,7 +23,8 @@ object FillUtils {
         effectColor: Color? = null,
         ignoreReverse: Boolean = false,
     ) {
-        if (!ctx.effect.targetPixels.isEmpty && !ctx.effect.targetPixels[ledIndex]) {
+        val targetPixels = ctx.effect.targetPixels
+        if (targetPixels != null && !targetPixels[ledIndex]) {
             return
         }
 

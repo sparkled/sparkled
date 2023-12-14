@@ -54,52 +54,71 @@ class WebSocketServer(
     private val pendingCommands = ConcurrentLinkedQueue<LiveDataModifyCommand>()
     private val isClearRequested = AtomicBoolean(false)
 
-    init {
-        threadPool.execute(::initLiveDataRenderer)
-        threadPool.execute(::initLiveDataBroadcaster)
+    fun start() {
+        threadPool.execute(::initLiveData)
+        running = true
     }
 
-    private fun initLiveDataRenderer() {
+    private fun initLiveData() {
         while (true) {
             try {
-                val playbackState = playbackService.state
-
-                val elapsedMs = measureTimeMillis {
-                    if (playbackState is InteractivePlaybackState) {
-                        if (isClearRequested.get()) {
-                            pendingCommands.clear()
-                            playbackState.stagePropEffects.values.forEach { it.clear() }
-                        }
-
-                        while (pendingCommands.isNotEmpty()) {
-                            addLiveEffect(playbackState)
-                        }
-
-                        val currentFrame = currentTimeMillis() / playbackState.framesPerSecond
-                        val renderer = Renderer(
-                            pluginManager = pluginManager,
-                            gifs = { cache.gifs.get() },
-                            stage = playbackState.stage,
-                            framesPerSecond = playbackState.framesPerSecond,
-                            stagePropEffects = playbackState.stagePropEffects,
-                            stageProps = playbackState.stageProps.values.associateBy { it.id },
-                            startFrame = currentFrame.toInt(),
-                            endFrame = currentFrame.toInt() + 1,
-                            mode = RenderMode.LIVE_FRAME,
-                        )
-
-                        playbackState.renderedStageProps = renderer.render().stageProps
-                    }
-                }
-
-
-                val frameDurationMs = (1000 / playbackState.framesPerSecond) - elapsedMs
-                sleep(frameDurationMs.coerceAtLeast(0))
+                renderLiveFrame()
             } catch (e: Exception) {
                 logger.error("Error occurred during live data render.", e)
                 sleep(100)
             }
+
+            try {
+                broadcastLiveFrame()
+            } catch (e: Exception) {
+                logger.error("Error occurred during live data broadcast.", e)
+                sleep(100)
+            }
         }
+    }
+
+    private fun renderLiveFrame() {
+        val playbackState = playbackService.state
+
+        val elapsedMs = measureTimeMillis {
+            if (playbackState is InteractivePlaybackState) {
+                if (isClearRequested.get()) {
+                    pendingCommands.clear()
+                    playbackState.stagePropEffects.values.forEach { it.clear() }
+                    isClearRequested.set(false)
+                }
+
+                while (pendingCommands.isNotEmpty()) {
+                    addLiveEffect(playbackState)
+                }
+
+                val currentFrame = playbackState.getFrameAtCurrentTime()
+                val renderer = Renderer(
+                    pluginManager = pluginManager,
+                    gifs = { cache.gifs.get() },
+                    stage = playbackState.stage,
+                    framesPerSecond = playbackState.framesPerSecond,
+                    stagePropEffects = playbackState.stagePropEffects,
+                    stageProps = playbackState.stageProps.values.associateBy { it.id },
+                    startFrame = currentFrame,
+                    endFrame = currentFrame + 1,
+                    mode = RenderMode.LIVE_FRAME,
+                )
+
+                playbackState.renderedStageProps = renderer.render().stageProps
+            }
+        }
+
+
+        val frameDurationMs = (1000 / playbackState.framesPerSecond) - elapsedMs
+        sleep(frameDurationMs.coerceAtLeast(0))
+    }
+
+    private fun broadcastLiveFrame() {
+        subscribers.entries.removeIf { currentTimeMillis() - it.value > SUBSCRIPTION_DURATION_MS }
+        val elapsedMs = measureTimeMillis(::broadcastLiveData)
+        val frameDurationMs = (1000.0 / playbackService.state.framesPerSecond).toInt()
+        sleep((frameDurationMs - elapsedMs).coerceAtLeast(0))
     }
 
     private fun addLiveEffect(playbackState: InteractivePlaybackState) {
@@ -108,7 +127,7 @@ class WebSocketServer(
             if (!isSameEffect(effects.lastOrNull(), command.effect)) {
                 effects += command.effect.copy(
                     startFrame = playbackState.startFrame,
-                    endFrame = Int.MAX_VALUE,
+                    endFrame = playbackState.startFrame + 9999999,
                     targetPixels = BitSet(100),
                 )
             }
@@ -122,10 +141,10 @@ class WebSocketServer(
                     true -> ledPositions.size - 1 - index
                     else -> index
                 }
-                if (lastEffect.targetPixels[pixelIndex]) {
+                if (lastEffect.targetPixels?.get(pixelIndex) == true) {
                     // Already present, skip.
                 } else if (command.points.any { point -> isInCircle(point, position) }) {
-                    lastEffect.targetPixels.set(pixelIndex)
+                    lastEffect.targetPixels?.set(pixelIndex)
                 }
             }
         }
@@ -136,20 +155,6 @@ class WebSocketServer(
      * interactive mode data. Note that this broadcast is primarily for the Sparkled web application, and other Sparkled
      * clients will generally use the UDP data stream.
      */
-    private fun initLiveDataBroadcaster() {
-        while (true) {
-            try {
-                subscribers.entries.removeIf { currentTimeMillis() - it.value > SUBSCRIPTION_DURATION_MS }
-                val elapsedMs = measureTimeMillis(::broadcastLiveData)
-                val frameDurationMs = (1000.0 / playbackService.state.framesPerSecond).toInt()
-                sleep((frameDurationMs - elapsedMs).coerceAtLeast(0))
-            } catch (e: Exception) {
-                logger.error("Error occurred during live data broadcast.", e)
-                sleep(100)
-            }
-        }
-    }
-
     private fun broadcastLiveData() {
         val playbackState = playbackService.state
 
@@ -164,10 +169,6 @@ class WebSocketServer(
         subscribers.keys.forEach { sessionId ->
             webSocketBroadcaster.broadcastAsync(liveDataResponse) { it.id == sessionId }
         }
-    }
-
-    fun start() {
-        running = true
     }
 
     @OnOpen
