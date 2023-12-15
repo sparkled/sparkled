@@ -18,12 +18,12 @@ class UdpServerImpl(
 ) : UdpServer {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor(
-        NamedVirtualThreadFactory("udp-server"),
+        NamedVirtualThreadFactory(javaClass.simpleName),
     )
 
     private val responseExecutor: ExecutorService = Executors.newFixedThreadPool(
         REQUEST_HANDLER_THREADS,
-        NamedVirtualThreadFactory("request-handler"),
+        NamedVirtualThreadFactory("${javaClass.simpleName}RequestHandler"),
     )
 
     private var started: Boolean = false

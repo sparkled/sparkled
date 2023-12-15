@@ -33,7 +33,7 @@ class PlaybackServiceImpl(
     private val playbackState = AtomicReference<PlaybackState>(StoppedPlaybackState)
 
     private val executor = Executors.newSingleThreadScheduledExecutor(
-        NamedVirtualThreadFactory("playback-service"),
+        NamedVirtualThreadFactory(javaClass.simpleName),
     )
 
     init {

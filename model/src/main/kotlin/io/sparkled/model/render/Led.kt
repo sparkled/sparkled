@@ -7,10 +7,10 @@ import kotlin.math.roundToInt
 // TODO consider replacing this class with functions to save memory
 data class Led(
     @Suppress("ArrayInDataClass") private val ledData: ByteArray,
-    private val ledIndex: Int,
+    private val pixelIndex: Int,
     private val offset: Int,
 ) {
-    private val index: Int = ledIndex * BYTES_PER_LED
+    private val index: Int = pixelIndex * BYTES_PER_LED
 
     fun setColor(color: Color, alpha: Float) {
         this.r = lerp(this.r.toFloat(), color.red.toFloat(), alpha).roundToInt()

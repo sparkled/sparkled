@@ -23,7 +23,7 @@ object SingleColorFill : SparkledFill {
         Param.color(Params.COLOR.name, "Color", "#ff0000")
     )
 
-    override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
+    override fun getFill(ctx: RenderContext, pixelIndex: Int): Color {
         return ctx.effect.fill.getParam(Params.COLOR, Color::class, Color.MAGENTA)
     }
 }

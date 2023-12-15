@@ -24,13 +24,13 @@ data class RenderedFrame(
         return frameData
     }
 
-    fun getLed(ledIndex: Int): Led {
+    fun getLed(pixelIndex: Int): Led {
         return if (dummyFrame) {
             Led(byteArrayOf(0, 0, 0), 0, 0)
         } else {
             val bytesPerFrame = ledCount * Led.BYTES_PER_LED
             val offset = (frameIndex - startFrame) * bytesPerFrame
-            Led(data, ledIndex, offset)
+            Led(data, pixelIndex, offset)
         }
     }
 }

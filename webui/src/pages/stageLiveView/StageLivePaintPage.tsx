@@ -8,6 +8,7 @@ import { EventBusContext } from '../../hooks/useEventBus.ts'
 import {
   CircleViewModel,
   Effect,
+  Fill,
   LiveDataClearCommand,
   LiveDataModifyCommand,
   LiveDataSubscribeCommand,
@@ -17,7 +18,7 @@ import {
 } from '../../types/viewModels.ts'
 import { uniqueId } from '../../utils/idUtils.ts'
 import { Button } from '@material-ui/core'
-import { isEmpty } from 'lodash'
+import { isEmpty, pickBy } from 'lodash'
 
 const effectNames = [
   'Red',
@@ -29,21 +30,47 @@ const effectNames = [
   'Green Glitter',
   'Purple Glitter',
   'Pink Glitter',
+  'Gold Glitter',
+  'Erase',
 ]
 
-const effects: Record<typeof effectNames[number], Effect> = {
-  Red: solid('#ff0000'),
-  Green: solid('#00ff00'),
-  Blue: solid('#0000ff'),
-  Yellow: solid('#ffff00'),
-  Purple: solid('#5c1cff'),
-  Rainbow: rainbow(),
-  'Green Glitter': glitter('#00ff00', 1),
-  'Purple Glitter': glitter('#5c1cff', 2),
-  'Pink Glitter': glitter('#ff06c6', 3),
+const allEffects: Record<typeof effectNames[number], Effect> = {
+  Red: solid(singleColorFill('#ff0000')),
+  Green: solid(singleColorFill('#00ff00')),
+  Blue: solid(singleColorFill('#0000ff')),
+  Yellow: solid(singleColorFill('#ffff00')),
+  Gold: solid(singleColorFill('#ffcc33')),
+  Purple: solid(singleColorFill('#781ffd')),
+  Pink: solid(singleColorFill('#ff06c6')),
+  White: solid(singleColorFill('#ffffff')),
+  Black: solid(singleColorFill('#000000')),
+  Rainbow: solid(rainbowFill()),
+  Neon: solid(gradientFill(['#ff00ff', '#000000', '#ffff00', '#000000', '#00ff00'], 1, 1, 1)),
+
+  'Red Glitter': glitter(singleColorFill('#ff0000'), 1),
+  'Green Glitter': glitter(singleColorFill('#00ff00'), 2),
+  'Blue Glitter': glitter(singleColorFill('#0000ff'), 3),
+  'Yellow Glitter': glitter(singleColorFill('#ffff00'), 4),
+  'Gold Glitter': glitter(singleColorFill('#ffcc33'), 5),
+  'Purple Glitter': glitter(singleColorFill('#781ffd'), 6),
+  'Pink Glitter': glitter(singleColorFill('#ff06c6'), 7),
+  'White Glitter': glitter(singleColorFill('#ffffff'), 8),
+  'Black Glitter': glitter(singleColorFill('#000000'), 9),
+  'Rainbow Glitter': glitter(rainbowFill(), 10),
+  'Neon Glitter': glitter(gradientFill(['#ff00ff', '#000000', '#ffff00', '#000000', '#00ff00'], 5, 0.5, 1), 11),
 }
 
-function solid(color: string): Effect {
+const solidEffects: Record<typeof effectNames[number], Effect> = pickBy(allEffects, it => it.type === '@sparkled/solid')
+const glitterEffects: Record<typeof effectNames[number], Effect> = pickBy(
+  allEffects,
+  it => it.type === '@sparkled/glitter'
+)
+const otherEffects: Record<typeof effectNames[number], Effect> = pickBy(
+  allEffects,
+  it => it.type !== '@sparkled/solid' && it.type !== '@sparkled/glitter'
+)
+
+function solid(fill: Fill): Effect {
   return {
     id: uniqueId(),
     type: '@sparkled/solid',
@@ -53,13 +80,7 @@ function solid(color: string): Effect {
       end: 100,
       args: {},
     },
-    fill: {
-      type: '@sparkled/single-color',
-      blendMode: 'NORMAL',
-      args: {
-        COLOR: color,
-      },
-    },
+    fill,
     startFrame: 0,
     endFrame: 1,
     repetitions: 1,
@@ -68,7 +89,7 @@ function solid(color: string): Effect {
   }
 }
 
-function glitter(color: string, seed: number): Effect {
+function glitter(fill: Fill, seed: number): Effect {
   return {
     id: uniqueId(),
     type: '@sparkled/glitter',
@@ -78,46 +99,47 @@ function glitter(color: string, seed: number): Effect {
       end: 100,
       args: {},
     },
-    fill: {
-      type: '@sparkled/single-color',
-      blendMode: 'NORMAL',
-      args: {
-        COLOR: color,
-        DENSITY: '100',
-        LIFETIME: '2',
-        SEED: seed.toString(),
-      },
-    },
+    fill,
     startFrame: 0,
     endFrame: 1,
     repetitions: 1,
     repetitionSpacing: 0,
-    args: {},
+    args: {
+      SEED: seed.toString(),
+    },
   }
 }
 
-function rainbow(): Effect {
+function singleColorFill(color: string): Fill {
   return {
-    id: uniqueId(),
-    type: '@sparkled/solid',
-    easing: {
-      type: '@sparkled/linear',
-      start: 0,
-      end: 100,
-      args: {},
+    type: '@sparkled/single-color',
+    blendMode: 'NORMAL',
+    args: {
+      COLOR: color,
     },
-    fill: {
-      type: '@sparkled/rainbow',
-      blendMode: 'NORMAL',
-      args: {
-        CYCLES_PER_SECOND: '.5',
-      },
+  }
+}
+
+function rainbowFill(): Fill {
+  return {
+    type: '@sparkled/rainbow',
+    blendMode: 'NORMAL',
+    args: {
+      CYCLES_PER_SECOND: '.5',
     },
-    startFrame: 0,
-    endFrame: 1,
-    repetitions: 1,
-    repetitionSpacing: 0,
-    args: {},
+  }
+}
+
+function gradientFill(colors: string[], repetitions: number, hardness: number, cyclesPerSecond: number): Fill {
+  return {
+    type: '@sparkled/gradient',
+    blendMode: 'NORMAL',
+    args: {
+      COLORS: colors,
+      COLOR_REPETITIONS: repetitions.toString(),
+      BLEND_HARDNESS: hardness.toString(),
+      CYCLES_PER_SECOND: cyclesPerSecond.toString(),
+    },
   }
 }
 
@@ -133,18 +155,35 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     overflow: 'hidden',
   },
-  buttonRow: {
+  effectContainer: {
     position: 'absolute',
     bottom: '0',
     width: '100%',
     display: 'flex',
-    flexWrap: 'wrap',
-    gap: '4px',
+    flexDirection: 'column',
     padding: '4px',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  effectContainerInner: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+  },
+  effectRow: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '4px',
+    width: 'max-content',
+    alignItems: 'center',
+    justifyContent: 'start',
+  },
+  effectRowLabel: {
+    minWidth: '60px',
+    textAlign: 'end',
+    paddingRight: '8px',
   },
   activeEffect: {
-    fontWeight: 'bold',
     background: '#ffffff33',
   },
 }))
@@ -201,7 +240,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
         eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
           type: 'LDM',
           p: circles,
-          e: effects[effectName],
+          e: allEffects[effectName],
         })
         pendingCircles.current = []
       }
@@ -222,20 +261,53 @@ const StageLivePaintPage: React.FC<Props> = props => {
           />
         )}
 
-        <div className={classes.buttonRow}>
-          {effectNames.map(it => (
-            <Button
-              key={it}
-              variant='outlined'
-              className={effectName === it ? classes.activeEffect : undefined}
-              onClick={() => setEffectName(it)}
-            >
-              {it}
-            </Button>
-          ))}
-          <Button onClick={clearLiveData} color='secondary'>
-            Clear
-          </Button>
+        <div className={classes.effectContainer}>
+          <div className={classes.effectContainerInner}>
+            <div className={classes.effectRow}>
+              <div className={classes.effectRowLabel}>Paint:</div>
+              {Object.keys(solidEffects).map(it => (
+                <Button
+                  key={it}
+                  variant='outlined'
+                  className={effectName === it ? classes.activeEffect : undefined}
+                  onClick={() => setEffectName(it)}
+                >
+                  {it}
+                </Button>
+              ))}
+            </div>
+
+            <div className={classes.effectRow}>
+              <div className={classes.effectRowLabel}>Glitter:</div>
+              {Object.keys(glitterEffects).map(it => (
+                <Button
+                  key={it}
+                  variant='outlined'
+                  className={effectName === it ? classes.activeEffect : undefined}
+                  onClick={() => setEffectName(it)}
+                >
+                  {it.replace(' Glitter', '')}
+                </Button>
+              ))}
+            </div>
+
+            <div className={classes.effectRow}>
+              <div className={classes.effectRowLabel}>Other:</div>
+              {Object.keys(otherEffects).map(it => (
+                <Button
+                  key={it}
+                  variant='outlined'
+                  className={effectName === it ? classes.activeEffect : undefined}
+                  onClick={() => setEffectName(it)}
+                >
+                  {it}
+                </Button>
+              ))}
+              <Button onClick={clearLiveData} variant='contained'>
+                Clear
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </PageContainer>

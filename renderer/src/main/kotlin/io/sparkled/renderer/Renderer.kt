@@ -52,13 +52,13 @@ class Renderer(
             val buffer = ByteArray(frameCount * leds * Led.BYTES_PER_LED)
 
             var nextStartIndex = 0
-            val ledIndexes = stageProps.associate {
+            val pixelIndexes = stageProps.associate {
                 val startIndex = nextStartIndex
                 nextStartIndex += it.ledCount
                 it.id to (startIndex until startIndex + it.ledCount)
             }
 
-            renderedProps[groupCode] = RenderedStagePropData(startFrame, endFrame, leds, buffer, ledIndexes)
+            renderedProps[groupCode] = RenderedStagePropData(startFrame, endFrame, leds, buffer, pixelIndexes)
         }
 
         stagePropEffects

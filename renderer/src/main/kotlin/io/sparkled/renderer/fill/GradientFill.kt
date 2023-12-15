@@ -31,18 +31,18 @@ object GradientFill : SparkledFill {
         Param.decimal(Params.CYCLES_PER_SECOND.name, "Cycles Per Second", 0.0)
     )
 
-    override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
+    override fun getFill(ctx: RenderContext, pixelIndex: Int): Color {
         val fill = ctx.effect.fill
 
         val colors = fill.getParam(Params.COLORS, ColorList::class, defaultFill)
         val repetitions = fill.getParam(Params.COLOR_REPETITIONS, Int::class, 1)
         val colorCount = colors.size * max(1, repetitions)
 
-        val ledIndexNormalised = ledIndex / ctx.pixelCount.toFloat()
+        val pixelIndexNormalised = pixelIndex / ctx.pixelCount.toFloat()
 
         val cyclesPerSecond = fill.getParam(Params.CYCLES_PER_SECOND,  Float::class,0f)
         val cycleProgress = cyclesPerSecond * (ctx.frame.frameIndex.toFloat() / ctx.framesPerSecond)
-        val gradientProgress = ledIndexNormalised + cycleProgress
+        val gradientProgress = (pixelIndexNormalised + cycleProgress)
 
         val colorProgress = gradientProgress * (colorCount - 1)
         val color1 = colors[floor(colorProgress).toInt() % colors.size]

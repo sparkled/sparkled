@@ -50,7 +50,7 @@ class WebSocketServer(
 ) {
     private var running = false
     private val subscribers = ConcurrentHashMap<String, Long>()
-    private val threadPool = Executors.newThreadPerTaskExecutor(NamedVirtualThreadFactory("webSocketServer"))
+    private val threadPool = Executors.newThreadPerTaskExecutor(NamedVirtualThreadFactory(javaClass.simpleName))
     private val pendingCommands = ConcurrentLinkedQueue<LiveDataModifyCommand>()
     private val isClearRequested = AtomicBoolean(false)
 
@@ -114,13 +114,6 @@ class WebSocketServer(
         sleep(frameDurationMs.coerceAtLeast(0))
     }
 
-    private fun broadcastLiveFrame() {
-        subscribers.entries.removeIf { currentTimeMillis() - it.value > SUBSCRIPTION_DURATION_MS }
-        val elapsedMs = measureTimeMillis(::broadcastLiveData)
-        val frameDurationMs = (1000.0 / playbackService.state.framesPerSecond).toInt()
-        sleep((frameDurationMs - elapsedMs).coerceAtLeast(0))
-    }
-
     private fun addLiveEffect(playbackState: InteractivePlaybackState) {
         val command = pendingCommands.poll()
         playbackState.stagePropEffects.forEach { (id, effects) ->
@@ -150,24 +143,35 @@ class WebSocketServer(
         }
     }
 
+    private fun broadcastLiveFrame() {
+        subscribers.entries.removeIf { currentTimeMillis() - it.value > SUBSCRIPTION_DURATION_MS }
+        val elapsedMs = measureTimeMillis(::broadcastLiveData)
+        val frameDurationMs = (1000.0 / playbackService.state.framesPerSecond).toInt()
+        sleep((frameDurationMs - elapsedMs).coerceAtLeast(0))
+    }
+
     /**
      * Broadcasts live data to websocket clients. The live data might be sequence that is playing, or the current
      * interactive mode data. Note that this broadcast is primarily for the Sparkled web application, and other Sparkled
      * clients will generally use the UDP data stream.
      */
     private fun broadcastLiveData() {
-        val playbackState = playbackService.state
+        val sessionIds = subscribers.keys
 
-        val liveData = playbackState.renderedStageProps.entries.associate { (key, value) ->
-            val frameIndex = (playbackState.progress * value.frames.lastIndex).toInt()
-            val frameData = value.frames.getOrNull(frameIndex)?.getData() ?: byteArrayOf()
-            key to frameData
-        }
+        if (sessionIds.isNotEmpty()) {
+            val playbackState = playbackService.state
 
-        val liveDataResponse = LiveDataResponseCommand(liveData)
+            val liveData = playbackState.renderedStageProps.entries.associate { (key, value) ->
+                val frameIndex = (playbackState.progress * value.frames.lastIndex).toInt()
+                val frameData = value.frames.getOrNull(frameIndex)?.getData() ?: byteArrayOf()
+                key to frameData
+            }
 
-        subscribers.keys.forEach { sessionId ->
-            webSocketBroadcaster.broadcastAsync(liveDataResponse) { it.id == sessionId }
+            val liveDataResponse = LiveDataResponseCommand(liveData)
+
+            sessionIds.forEach { sessionId ->
+                webSocketBroadcaster.broadcastAsync(liveDataResponse) { it.id == sessionId }
+            }
         }
     }
 

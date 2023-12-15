@@ -9,5 +9,5 @@ interface SparkledFill : SparkledPlugin {
     /**
      * @return the fill color for a given LED using the [Fill] configuration of the provided [Effect].
      */
-    fun getFill(ctx: RenderContext, ledIndex: Int): Color
+    fun getFill(ctx: RenderContext, pixelIndex: Int): Color
 }

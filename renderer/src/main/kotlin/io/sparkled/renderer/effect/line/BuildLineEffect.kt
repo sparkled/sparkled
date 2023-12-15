@@ -40,8 +40,8 @@ object BuildLineEffect : SparkledEffect<Unit> {
             endPos = min(ledCount, max(lineLength * i, endPos))
 
             for (j in startPos until endPos) {
-                val ledIndex = if (reverse) ledCount - j - 1 else j
-                FillUtils.fill(ctx, ledIndex, 1f)
+                val pixelIndex = if (reverse) ledCount - j - 1 else j
+                FillUtils.fill(ctx, pixelIndex, 1f)
             }
         }
     }
