@@ -65,7 +65,7 @@ class GetFrameCommand : UdpCommand {
 
         val renderedStagePropData = renderedStageProps[stagePropId]
         val frames = renderedStagePropData?.frames ?: emptyList()
-        return if (frameIndex >= frames.size) null else frames[frameIndex]
+        return frames.getOrNull(frameIndex)
     }
 
     private fun buildResponse(header: ByteArray, frameData: ByteArray): ByteArray {
