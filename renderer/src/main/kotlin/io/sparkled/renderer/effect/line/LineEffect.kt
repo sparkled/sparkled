@@ -22,7 +22,7 @@ object LineEffect : SparkledEffect<Unit> {
 
     override fun render(ctx: RenderContext, state: Unit) {
         val startLed = 0
-        val endLed = ctx.ledCount - 1
+        val endLed = ctx.pixelCount - 1
         val lineLength = ParamUtils.getFloat(ctx.effect, Params.LENGTH.name, 1f)
 
         renderLine(ctx, startLed, endLed, lineLength)

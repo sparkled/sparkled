@@ -12,7 +12,7 @@ object SolidEffect : StatelessSparkledEffect {
     override val name = "Solid"
 
     override fun render(ctx: RenderContext) {
-        for (i in 0 until ctx.ledCount) {
+        for (i in 0 ..< ctx.pixelCount) {
             FillUtils.fill(ctx, i, 1f)
         }
     }

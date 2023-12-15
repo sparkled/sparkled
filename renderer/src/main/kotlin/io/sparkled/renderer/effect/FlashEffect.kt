@@ -15,7 +15,7 @@ object FlashEffect : StatelessSparkledEffect {
     override fun render(ctx: RenderContext) {
         val alpha = getAlpha(ctx.progress)
 
-        for (i in 0 until ctx.ledCount) {
+        for (i in 0 until ctx.pixelCount) {
             FillUtils.fill(ctx, i, alpha)
         }
     }

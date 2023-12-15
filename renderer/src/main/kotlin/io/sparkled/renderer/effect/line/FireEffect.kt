@@ -19,7 +19,7 @@ object FireEffect : SparkledEffect<MutableList<Int>> {
     enum class Params { COOLING, SPARKING, RANDOM_SEED, SPARKS_START, SPARKS_MIDDLE, SPARKS_END }
 
     override fun createState(ctx: RenderContext): MutableList<Int> {
-        return (0 until ctx.ledCount)
+        return (0 until ctx.pixelCount)
             .map { 0 }
             .toMutableList()
     }
@@ -51,11 +51,11 @@ object FireEffect : SparkledEffect<MutableList<Int>> {
 
         // Step 1. Cool down every cell a little
         state.forEachIndexed { i, it ->
-            state[i] = max(0, it - random.nextInt((cooling * 10 / ctx.ledCount) + 2))
+            state[i] = max(0, it - random.nextInt((cooling * 10 / ctx.pixelCount) + 2))
         }
 
         // Step 2. Heat from each cell drifts 'up' and diffuses a little
-        for (i in ctx.ledCount - 1 downTo 2) {
+        for (i in ctx.pixelCount - 1 downTo 2) {
             state[i] = (state[i - 1] + state[i - 2] + state[i - 2]) / 3
         }
 

@@ -29,9 +29,9 @@ object RainbowFill : SparkledFill {
 
     override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
         val fill = ctx.effect.fill
-        val cycleCount = ParamUtils.getFloat(fill, Params.CYCLE_COUNT.name, 1f)
-        val cyclesPerSecond = ParamUtils.getFloat(fill, Params.CYCLES_PER_SECOND.name, 1f)
-        val brightness = ParamUtils.getFloat(fill, Params.BRIGHTNESS.name, 100f) / 100f
+        val cycleCount = fill.getParam(Params.CYCLE_COUNT, Float::class, 1f)
+        val cyclesPerSecond = fill.getParam(Params.CYCLES_PER_SECOND, Float::class, 1f)
+        val brightness = fill.getParam(Params.BRIGHTNESS, Float::class, 100f) / 100f
 
         val frame = ctx.frame
         val ledPosition = ledIndex.toFloat() / frame.ledCount * cycleCount

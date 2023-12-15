@@ -34,24 +34,27 @@ object GlitterEffect : StatelessSparkledEffect {
         val frameCount = ctx.effect.endFrame - ctx.effect.startFrame + 1
         val fadeAlpha = getFadeAlpha(ctx, lifetimeFrames)
 
-        for (i in 0 until ctx.ledCount) {
-            var alpha = 0f
-            if (lifetimeFrames > 0) {
-                val pattern = patterns[patternIndex]
-                val patternStart = random.nextInt(BITS_PER_PATTERN)
-                val offset = random.nextInt(lifetimeFrames)
+        for (i in 0 until ctx.pixelCount) {
+            val targetPixels = ctx.effect.targetPixels
+            if (targetPixels == null || targetPixels[i]) {
+                var alpha = 0f
+                if (lifetimeFrames > 0) {
+                    val pattern = patterns[patternIndex]
+                    val patternStart = random.nextInt(BITS_PER_PATTERN)
+                    val offset = random.nextInt(lifetimeFrames)
 
-                val offsetFrameNumber = ctx.progress * frameCount + offset
+                    val offsetFrameNumber = ctx.progress * frameCount + offset
 
-                val bit = ((offsetFrameNumber / lifetimeFrames.toFloat()) + patternStart).toInt() % BITS_PER_PATTERN
-                val isOn = pattern and (1 shl bit).toLong() != 0L
-                val progress = if (!isOn) 0f else (offsetFrameNumber % lifetimeFrames) / lifetimeFrames.toFloat()
+                    val bit = ((offsetFrameNumber / lifetimeFrames.toFloat()) + patternStart).toInt() % BITS_PER_PATTERN
+                    val isOn = pattern and (1 shl bit).toLong() != 0L
+                    val progress = if (!isOn) 0f else (offsetFrameNumber % lifetimeFrames) / lifetimeFrames.toFloat()
 
-                // Linear flash over lifetime of glitter particle.
-                alpha = 2 * if (progress < .5) progress else 1 - progress
+                    // Linear flash over lifetime of glitter particle.
+                    alpha = 2 * if (progress < .5) progress else 1 - progress
+                }
+
+                FillUtils.fill(ctx, i, alpha * fadeAlpha)
             }
-
-            FillUtils.fill(ctx, i, alpha * fadeAlpha)
         }
     }
 

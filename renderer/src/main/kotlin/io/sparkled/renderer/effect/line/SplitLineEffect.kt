@@ -21,7 +21,7 @@ object SplitLineEffect : SparkledEffect<Unit> {
     override fun createState(ctx: RenderContext) {}
 
     override fun render(ctx: RenderContext, state: Unit) {
-        val end = ctx.ledCount
+        val end = ctx.pixelCount
         val evenLedCount = end % 2 == 0
         val middle = end / 2
         val lineLength = ParamUtils.getFloat(ctx.effect, Params.LENGTH.name, 1f)

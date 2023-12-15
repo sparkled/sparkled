@@ -1,9 +1,9 @@
 package io.sparkled.renderer.api
 
 interface SparkledEffect<T> : SparkledPlugin {
-    fun createState(ctx: RenderContext): T
+    fun createState(ctx: RenderContext): T & Any
 
-    fun render(ctx: RenderContext, state: T)
+    fun render(ctx: RenderContext, state: T & Any)
 }
 
 interface StatelessSparkledEffect : SparkledEffect<Unit> {

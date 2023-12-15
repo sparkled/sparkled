@@ -18,8 +18,6 @@ data class RenderContext(
     private val fills: Map<String, SparkledFill>,
     val loadGif: (String) -> List<BufferedImage>,
 ) {
-    val fill
-        get() = fills[effect.fill.type]
-
-    val ledCount = stageProp.ledCount
+    val fill = fills[effect.fill.type]
+    val pixelCount = stageProp.ledCount
 }

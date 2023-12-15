@@ -28,7 +28,7 @@ object BuildLineEffect : SparkledEffect<Unit> {
     override fun render(ctx: RenderContext, state: Unit) {
         val segments = ParamUtils.getInt(ctx.effect, Params.SEGMENTS.name, 4)
         val reverse = ParamUtils.getBoolean(ctx.effect, Params.REVERSE.name, false)
-        val ledCount = ctx.ledCount
+        val ledCount = ctx.pixelCount
         val lineLength = ceil(ledCount / segments.toFloat()).toInt()
 
         for (i in 0 until segments) {

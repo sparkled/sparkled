@@ -1,11 +1,11 @@
 package io.sparkled.renderer.fill
 
+import io.sparkled.model.animation.ColorList
 import io.sparkled.model.animation.param.Param
 import io.sparkled.model.util.MathUtils
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.SparkledFill
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -34,13 +34,13 @@ object GradientFill : SparkledFill {
     override fun getFill(ctx: RenderContext, ledIndex: Int): Color {
         val fill = ctx.effect.fill
 
-        val colors = ParamUtils.getColors(fill, Params.COLORS.name, Color.MAGENTA)
-        val repetitions = ParamUtils.getInt(fill, Params.COLOR_REPETITIONS.name, 1)
+        val colors = fill.getParam(Params.COLORS, ColorList::class, defaultFill)
+        val repetitions = fill.getParam(Params.COLOR_REPETITIONS, Int::class, 1)
         val colorCount = colors.size * max(1, repetitions)
 
-        val ledIndexNormalised = ledIndex / ctx.ledCount.toFloat()
+        val ledIndexNormalised = ledIndex / ctx.pixelCount.toFloat()
 
-        val cyclesPerSecond = ParamUtils.getFloat(fill, Params.CYCLES_PER_SECOND.name, 0f)
+        val cyclesPerSecond = fill.getParam(Params.CYCLES_PER_SECOND,  Float::class,0f)
         val cycleProgress = cyclesPerSecond * (ctx.frame.frameIndex.toFloat() / ctx.framesPerSecond)
         val gradientProgress = ledIndexNormalised + cycleProgress
 
@@ -48,7 +48,7 @@ object GradientFill : SparkledFill {
         val color1 = colors[floor(colorProgress).toInt() % colors.size]
         val color2 = colors[ceil(colorProgress).toInt() % colors.size]
 
-        val hardness = ParamUtils.getFloat(fill, Params.BLEND_HARDNESS.name, 0f) / 100f
+        val hardness = fill.getParam(Params.BLEND_HARDNESS, Float::class, 0f) / 100f
         val blend = getBlend(colorProgress % 1f, hardness)
         return interpolate(color1, blend, color2)
     }
@@ -78,4 +78,6 @@ object GradientFill : SparkledFill {
 
         return Color(r / 255, g / 255, b / 255)
     }
+
+    private val defaultFill = ColorList(listOf(Color.MAGENTA))
 }

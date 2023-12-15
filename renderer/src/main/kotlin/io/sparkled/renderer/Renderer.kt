@@ -150,8 +150,8 @@ class Renderer(
 
             // Stateful effects need to be rendered from the beginning, so perform a dummy render on any frames that
             // fall outside the preview window.
-            if (state != null) {
-                for (frameIndex in effect.startFrame until startFrame) {
+            if (state != Unit) {
+                for (frameIndex in effect.startFrame ..< startFrame) {
                     val frame = RenderedFrame(
                         startFrame = effect.startFrame,
                         frameIndex = frameIndex,
@@ -163,7 +163,7 @@ class Renderer(
                 }
             }
 
-            for (frameIndex in startFrame..endFrame) {
+            for (frameIndex in startFrame..<endFrame) {
                 val frame = when (mode) {
                     RenderMode.LIVE_FRAME -> data.frames[0]
                     else -> data.frames[frameIndex - this.startFrame]
@@ -180,8 +180,8 @@ class Renderer(
         frame: RenderedFrame,
         stageProp: StagePropModel,
         effect: Effect,
-        renderer: SparkledEffect<T>,
-        state: T,
+        effectRenderer: SparkledEffect<T>,
+        state: T & Any,
     ) {
         val progress = getProgress(frame.frameIndex, effect)
         val ctx = RenderContext(
@@ -195,7 +195,7 @@ class Renderer(
             pluginManager.fills.get(),
             this::loadGif,
         )
-        renderer.render(ctx, state)
+        effectRenderer.render(ctx, state)
     }
 
     private fun loadGif(filename: String): List<BufferedImage> {

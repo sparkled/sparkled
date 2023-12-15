@@ -37,7 +37,7 @@ data class InteractivePlaybackState(
 ) : PlaybackState {
     override val frameCount = 1
     override val progress = 0.0
-    override val framesPerSecond = 10
+    override val framesPerSecond = 30
 
     private val startTime = currentTimeMillis()
     val startFrame = getFrameAtCurrentTime()
