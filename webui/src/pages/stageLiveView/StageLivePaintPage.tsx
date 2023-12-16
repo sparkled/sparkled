@@ -6,13 +6,13 @@ import StageEditor from '../../components/stageEditor/StageEditor'
 import useAxiosSwr from '../../hooks/api/useAxiosSwr.ts'
 import { EventBusContext } from '../../hooks/useEventBus.ts'
 import {
-  CircleViewModel,
   Effect,
   Fill,
   LiveDataClearCommand,
   LiveDataModifyCommand,
   LiveDataSubscribeCommand,
   LiveDataUnsubscribeCommand,
+  Point2dViewModel,
   StageViewModel,
   ToggleInteractiveModeCommand,
 } from '../../types/viewModels.ts'
@@ -192,7 +192,8 @@ const StageLivePaintPage: React.FC<Props> = props => {
   const classes = useStyles()
   const eventBus = useContext(EventBusContext)
   const [effectName, setEffectName] = useState(effectNames[0])
-  const pendingCircles = useRef<CircleViewModel[]>([])
+  const pendingTouchPoints = useRef<Point2dViewModel[]>([])
+  const touchRadius = 30
 
   const { data: stage } = useAxiosSwr<StageViewModel>({ url: `/stages/${props.match.params.stageId}` }, true)
 
@@ -233,16 +234,17 @@ const StageLivePaintPage: React.FC<Props> = props => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const circles = pendingCircles.current
-      if (!isEmpty(circles)) {
+      const touchPoints = pendingTouchPoints.current
+      if (!isEmpty(touchPoints)) {
         eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
           type: 'LDM',
-          p: circles,
+          tp: touchPoints,
+          d: 30,
           e: allEffects[effectName],
         })
-        pendingCircles.current = []
+        pendingTouchPoints.current = []
       }
-    }, 50)
+    }, 100)
 
     return () => clearInterval(interval)
   }, [effectName, eventBus])
@@ -250,10 +252,13 @@ const StageLivePaintPage: React.FC<Props> = props => {
   const onTouchMove = useCallback(
     (x: number, y: number) => {
       if (stage != null) {
-        const radius = 3
-        if (x >= -radius && x <= stage.width + radius && y >= -radius && y <= stage.height + radius) {
-          console.info(x, y)
-          pendingCircles.current = [...pendingCircles.current, { x, y, r: radius }]
+        if (
+          x >= -touchRadius &&
+          x <= stage.width + touchRadius &&
+          y >= -touchRadius &&
+          y <= stage.height + touchRadius
+        ) {
+          pendingTouchPoints.current = [...pendingTouchPoints.current, { x, y }]
         }
       }
     },

@@ -2,11 +2,9 @@ package io.sparkled.api.websocket
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
-import com.fasterxml.jackson.databind.JsonNode
 import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.annotation.GenerateClientType
-import io.sparkled.viewmodel.CircleViewModel
 import io.sparkled.viewmodel.Point2dViewModel
 import java.time.Instant
 
@@ -25,8 +23,11 @@ data class LiveDataModifyCommand(
     @field:JsonProperty("e")
     val effect: Effect,
 
-    @field:JsonProperty("p")
-    val points: List<CircleViewModel>,
+    @field:JsonProperty("tp")
+    val touchPoints: List<Point2dViewModel>,
+
+    @field:JsonProperty("d")
+    val distance: Double,
 ) : SparkledCommand {
     override val type = WebSocketCommandType.LIVE_DATA_MODIFY
 }

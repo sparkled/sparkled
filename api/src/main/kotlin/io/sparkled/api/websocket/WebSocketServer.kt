@@ -26,7 +26,7 @@ import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.renderer.RenderMode
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
-import io.sparkled.viewmodel.CircleViewModel
+import io.sparkled.viewmodel.Point2dViewModel
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
 import java.util.BitSet
@@ -34,8 +34,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.hypot
 import kotlin.system.measureTimeMillis
 
 @ServerWebSocket("/api/websocket")
@@ -136,7 +135,12 @@ class WebSocketServer(
                 }
                 if (lastEffect.targetPixels?.get(pixelIndex) == true) {
                     // Already present, skip.
-                } else if (command.points.any { point -> isInCircle(point, pixelPosition) }) {
+                } else if (isCloseToLine(
+                        pixelPosition = pixelPosition,
+                        linePoints = command.touchPoints,
+                        maxDistance = command.distance,
+                    )
+                ) {
                     lastEffect.targetPixels?.set(pixelIndex)
                 }
             }
@@ -266,9 +270,42 @@ class WebSocketServer(
         }
     }
 
-    private fun isInCircle(circle: CircleViewModel, point: Point2d): Boolean {
-        val distance = sqrt(((circle.x - point.x).pow(2)) + ((circle.y - point.y).pow(2)))
-        return distance <= circle.r
+    private fun isCloseToLine(
+        pixelPosition: Point2d,
+        linePoints: List<Point2dViewModel>,
+        maxDistance: Double,
+    ) = when (linePoints.size) {
+        0 -> false
+        1 -> getDistanceFromLine(pixelPosition, linePoints[0], linePoints[0]) <= maxDistance
+        else -> linePoints.windowed(2).any { (lineSegmentStart, lineSegmentEnd) ->
+            getDistanceFromLine(pixelPosition, lineSegmentStart, lineSegmentEnd) <= maxDistance
+        }
+    }
+
+    // Based on https://stackoverflow.com/a/6853926.
+    private fun getDistanceFromLine(target: Point2d, lineStart: Point2dViewModel, lineEnd: Point2dViewModel): Double {
+        val a = target.x - lineStart.x
+        val b = target.y - lineStart.y
+        val c = lineEnd.x - lineStart.x
+        val d = lineEnd.y - lineStart.y
+
+        val lenSq = c * c + d * d
+        val param = if (lenSq != .0) { //in case of 0 length line
+            val dot = a * c + b * d
+            dot / lenSq
+        } else {
+            -1.0
+        }
+
+        val (xx, yy) = when {
+            param < 0 -> lineStart.x to lineStart.y
+            param > 1 -> lineEnd.x to lineEnd.y
+            else -> lineStart.x + param * c to lineStart.y + param * d
+        }
+
+        val dx = target.x - xx
+        val dy = target.y - yy
+        return hypot(dx, dy)
     }
 
     @OnClose

@@ -88,21 +88,21 @@ export type SequenceChannelViewModel = {
 export const SequenceStatusValues = ['NEW', 'DRAFT', 'PUBLISHED'] as const
 export type SequenceStatus = typeof SequenceStatusValues[number]
 
-export type SequenceViewModel = {
+export type SequenceEditViewModel = {
   channels: SequenceChannelViewModel[]
   frameCount: number
   framesPerSecond: number
-  id: string
   name: string
   songId: string
   stageId: string
   status: SequenceStatus
 }
 
-export type SequenceEditViewModel = {
+export type SequenceViewModel = {
   channels: SequenceChannelViewModel[]
   frameCount: number
   framesPerSecond: number
+  id: string
   name: string
   songId: string
   stageId: string
@@ -183,8 +183,9 @@ export type ScheduledActionEditViewModel = {
 }
 
 export type LiveDataModifyCommand = SparkledCommand & {
+  d: number /** distance */
   e: Effect /** effect */
-  p: CircleViewModel[] /** points */
+  tp: Point2dViewModel[] /** touchPoints */
   type: WebSocketCommandType
 }
 
