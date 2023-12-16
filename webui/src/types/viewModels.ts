@@ -37,7 +37,9 @@ export type PlaylistSummaryViewModel = {
   sequenceCount: number
 }
 
-export type SparkledCommand = {}
+export type SparkledCommand = {
+  type: string
+}
 
 export const WebSocketCommandTypeValues = ['LDC', 'LDM', 'LDR', 'LDS', 'LDU', 'TIM', 'P'] as const
 export type WebSocketCommandType = typeof WebSocketCommandTypeValues[number]

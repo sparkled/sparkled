@@ -45,7 +45,6 @@ const allEffects: Record<typeof effectNames[number], Effect> = {
   White: solid(singleColorFill('#ffffff')),
   Black: solid(singleColorFill('#000000')),
   Rainbow: solid(rainbowFill()),
-  Neon: solid(gradientFill(['#ff00ff', '#000000', '#ffff00', '#000000', '#00ff00'], 1, 1, 1)),
 
   'Red Glitter': glitter(singleColorFill('#ff0000'), 1),
   'Green Glitter': glitter(singleColorFill('#00ff00'), 2),
@@ -57,7 +56,6 @@ const allEffects: Record<typeof effectNames[number], Effect> = {
   'White Glitter': glitter(singleColorFill('#ffffff'), 8),
   'Black Glitter': glitter(singleColorFill('#000000'), 9),
   'Rainbow Glitter': glitter(rainbowFill(), 10),
-  'Neon Glitter': glitter(gradientFill(['#ff00ff', '#000000', '#ffff00', '#000000', '#00ff00'], 5, 0.5, 1), 11),
 }
 
 const solidEffects: Record<typeof effectNames[number], Effect> = pickBy(allEffects, it => it.type === '@sparkled/solid')
@@ -196,7 +194,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
   const [effectName, setEffectName] = useState(effectNames[0])
   const pendingCircles = useRef<CircleViewModel[]>([])
 
-  const { data } = useAxiosSwr<StageViewModel>({ url: `/stages/${props.match.params.stageId}` }, true)
+  const { data: stage } = useAxiosSwr<StageViewModel>({ url: `/stages/${props.match.params.stageId}` }, true)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -249,17 +247,23 @@ const StageLivePaintPage: React.FC<Props> = props => {
     return () => clearInterval(interval)
   }, [effectName, eventBus])
 
+  const onTouchMove = useCallback(
+    (x: number, y: number) => {
+      if (stage != null) {
+        const radius = 3
+        if (x >= -radius && x <= stage.width + radius && y >= -radius && y <= stage.height + radius) {
+          console.info(x, y)
+          pendingCircles.current = [...pendingCircles.current, { x, y, r: radius }]
+        }
+      }
+    },
+    [stage]
+  )
+
   return (
     <PageContainer className={classes.pageContainer} spacing={0}>
       <div className={classes.container}>
-        {data && (
-          <StageEditor
-            stage={data}
-            onTouchMove={(x, y) => {
-              pendingCircles.current = [...pendingCircles.current, { x, y, r: 30 }]
-            }}
-          />
-        )}
+        {stage && <StageEditor stage={stage} onTouchMove={onTouchMove} />}
 
         <div className={classes.effectContainer}>
           <div className={classes.effectContainerInner}>

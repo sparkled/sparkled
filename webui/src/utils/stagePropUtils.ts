@@ -13,21 +13,19 @@ function getLinePoints(
   const linePoints: Point[] = []
 
   if (pointCount === 1) {
-    linePoints.push(pathProperties.getPointAtLength(length * .5))
+    linePoints.push(pathProperties.getPointAtLength(length * 0.5))
   } else {
-    _.forEach(Array(pointCount), (a, i) => {
+    for (let i = 0; i < pointCount; i++) {
       const progress = length * (i / (pointCount - 1))
       const point = pathProperties.getPointAtLength(progress)
       linePoints.push(point)
-    })
+    }
   }
 
   return _.map(linePoints, point => ({
     x: point.x * (stageProp.scaleX ?? 1),
-    y: point.y * (stageProp.scaleY ?? 1)
+    y: point.y * (stageProp.scaleY ?? 1),
   }))
 }
 
-export {
-  getLinePoints
-}
+export { getLinePoints }

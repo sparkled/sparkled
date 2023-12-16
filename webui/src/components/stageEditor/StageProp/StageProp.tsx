@@ -71,12 +71,11 @@ const StageProp: React.FC<Props> = props => {
 
   useEffect(() => {
     const gridPos = props.pixiApp.stage.position
-    console.info(gridPos)
+    const { x: scaleX, y: scaleY } = props.pixiApp.stage.scale
 
     const ledPositions = ledPoints
       .map(it => pixiContainer.toGlobal(it as IPoint))
-      .map(it => ({ x: it.x - gridPos.x, y: it.y - gridPos.y }))
-
+      .map(it => ({ x: (it.x - gridPos.x) / scaleX, y: (it.y - gridPos.y) / scaleY }))
     dispatch({ type: 'UpdateStagePropLedPositions', payload: { ledPositions } })
   }, [dispatch, ledPoints, pixiContainer, props.pixiApp.stage, stageProp])
 

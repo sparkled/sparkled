@@ -14,15 +14,15 @@ import { useSnackbar } from 'notistack'
 const useStyles = makeStyles(() => ({
   // The page container never overflows, and the editor tools need to be hidden when they slide offscreen.
   pageContainer: {
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   container: {
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
     height: '100%',
-    overflow: 'hidden'
-  }
+    overflow: 'hidden',
+  },
 }))
 
 class State {
@@ -77,7 +77,7 @@ const StageEditPage: React.FC<Props> = props => {
   const toolsInitiallyVisible = window.outerWidth >= theme.breakpoints.values.sm
   const [state, dispatch] = useReducer(reducer, {
     ...new State(),
-    toolsVisible: toolsInitiallyVisible
+    toolsVisible: toolsInitiallyVisible,
   })
   const classes = useStyles()
   const snackbar = useSnackbar()
@@ -96,30 +96,17 @@ const StageEditPage: React.FC<Props> = props => {
     }
   })
 
-  const updateStage = (stage: StageViewModel) =>
+  const updateStage = useCallback((stage: StageViewModel) => {
     dispatch({ type: 'Update', payload: stage })
+  }, [])
 
   let content = <></>
   if (state.loadError !== null) {
     const [title, body] = state.loadError
-    content = (
-      <ErrorCard
-        title={title}
-        body={body}
-        linkUrl="/stages"
-        linkText="Return to stage list"
-      />
-    )
+    content = <ErrorCard title={title} body={body} linkUrl='/stages' linkText='Return to stage list' />
   } else if (state.stage) {
     const { stage, toolsVisible } = state
-    content = (
-      <StageEditor
-        stage={stage}
-        onStageUpdate={updateStage}
-        toolsVisible={toolsVisible}
-        editable
-      />
-    )
+    content = <StageEditor stage={stage} onStageUpdate={updateStage} toolsVisible={toolsVisible} editable />
   }
 
   const save = () => {
@@ -137,10 +124,7 @@ const StageEditPage: React.FC<Props> = props => {
   const pageBody = <div className={classes.container}>{content}</div>
   const actions = (
     <>
-      <IconButton
-        onClick={save}
-        disabled={state.editedStage === null || state.saving}
-      >
+      <IconButton onClick={save} disabled={state.editedStage === null || state.saving}>
         <Save />
       </IconButton>
       <IconButton onClick={toggleTools}>
@@ -150,11 +134,7 @@ const StageEditPage: React.FC<Props> = props => {
   )
 
   return (
-    <PageContainer
-      className={classes.pageContainer}
-      spacing={0}
-      actions={actions}
-    >
+    <PageContainer className={classes.pageContainer} spacing={0} actions={actions}>
       {pageBody}
     </PageContainer>
   )

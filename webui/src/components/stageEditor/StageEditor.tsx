@@ -142,6 +142,9 @@ const StageEditor: React.FC<Props> = props => {
       return
     }
 
+    const xOffset = pixiApp.view.getBoundingClientRect().left
+    const yOffset = pixiApp.view.getBoundingClientRect().top
+
     if (onTouchMove) {
       let mouseDown = false
 
@@ -150,14 +153,10 @@ const StageEditor: React.FC<Props> = props => {
           return
         }
 
-        const { offsetX, offsetY, changedTouches } = event.data.originalEvent as MouseEvent & TouchEvent
-
-        const x = (offsetX ?? changedTouches[0].screenX) - pixiApp.stage.x
-        const y = (offsetY ?? changedTouches[0].screenY) - pixiApp.stage.y
-
-        if (x >= 0 && x <= props.stage.width && y >= 0 && y <= props.stage.height) {
-          onTouchMove(x, y)
-        }
+        const { clientX, clientY, changedTouches } = event.data.originalEvent as MouseEvent & TouchEvent
+        const x = (clientX ?? changedTouches[0].screenX) - pixiApp.stage.x - xOffset
+        const y = (clientY ?? changedTouches[0].screenY) - pixiApp.stage.y - yOffset
+        onTouchMove(x, y)
       }
       const onDebouncedPointerMove = debounce(onPointerMove, 30, {
         leading: true,

@@ -42,20 +42,20 @@ interface DragState {
   dragStartY: number
 }
 
+// TODO This is being rendered for non-editable props as a workaround. If we don't render the handle, the prop
+//      renders in the wrong location which throws of the pixel positions for live paint mode.
 const StagePropBackground: React.FC<Props> = props => {
   const [background, setBackground] = useState<PIXI.Graphics | null>(null)
   const [dragState, setDragState] = useState<DragState | null>(null)
 
-  if (!props.editable) {
-    return null
-  }
-
   if (background === null) {
     const stagePropBackground = buildBackground(props)
 
-    stagePropBackground.buttonMode = true
-    stagePropBackground.interactive = true
-    stagePropBackground.on('pointerdown', (event: InteractionEvent) => onDragStart(event, props, setDragState))
+    if (props.editable) {
+      stagePropBackground.buttonMode = true
+      stagePropBackground.interactive = true
+      stagePropBackground.on('pointerdown', (event: InteractionEvent) => onDragStart(event, props, setDragState))
+    }
 
     setBackground(stagePropBackground)
     props.parent.addChild(stagePropBackground)
@@ -82,7 +82,7 @@ function buildBackground(props: Props) {
   background.name = StagePropPart.background.name
   background.zIndex = StagePropPart.background.zIndex
 
-  background.beginFill(0x000000, 0.3)
+  background.beginFill(0x000000, props.editable ? 0.3 : 0)
   background.drawRect(-padding, -padding, props.width + 2 * padding, props.height + 2 * padding)
   background.endFill()
   return background
