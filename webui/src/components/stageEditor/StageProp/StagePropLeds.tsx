@@ -56,7 +56,15 @@ const StagePropLeds: React.FC<Props> = props => {
     })
 
     return () => eventBus.removeListener(listener)
-  }, [eventBus, leds, props.stageProp.code, props.points, props.stageProp.ledCount, props.stageProp.groupCode])
+  }, [
+    eventBus,
+    leds,
+    props.stageProp.code,
+    props.points,
+    props.stageProp.ledCount,
+    props.stageProp.groupCode,
+    props.stageProp.ledOffset,
+  ])
 
   useEffect(() => {
     leds.name = StagePropPart.led.name
@@ -84,8 +92,10 @@ const StagePropLeds: React.FC<Props> = props => {
     }
 
     subscribe('RENDER_DATA', callback)
-    return () => unsubscribe('RENDER_DATA', callback)
-  }, [leds, props.points, props.stageProp.id])
+    return () => {
+      return unsubscribe('RENDER_DATA', callback)
+    }
+  }, [leds, props.points, props.stageProp.code, props.stageProp.groupCode, props.stageProp.id])
 
   return <></>
 }
@@ -99,7 +109,6 @@ function renderLeds(
   data: RenderedStagePropData | null
 ) {
   leds.clear()
-
   for (let i = points.length - 1; i >= 0; i--) {
     const point = points[i]
     if (data && data.data) {
