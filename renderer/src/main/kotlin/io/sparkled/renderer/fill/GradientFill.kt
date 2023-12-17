@@ -34,13 +34,13 @@ object GradientFill : SparkledFill {
     override fun getFill(ctx: RenderContext, pixelIndex: Int): Color {
         val fill = ctx.effect.fill
 
-        val colors = fill.getParam(Params.COLORS, ColorList::class, defaultFill)
-        val repetitions = fill.getParam(Params.COLOR_REPETITIONS, Int::class, 1)
+        val colors = ctx.getParam(fill, Params.COLORS, ColorList::class, defaultFill)
+        val repetitions = ctx.getParam(fill, Params.COLOR_REPETITIONS, Int::class, 1)
         val colorCount = colors.size * max(1, repetitions)
 
         val pixelIndexNormalised = pixelIndex / ctx.pixelCount.toFloat()
 
-        val cyclesPerSecond = fill.getParam(Params.CYCLES_PER_SECOND,  Float::class,0f)
+        val cyclesPerSecond = ctx.getParam(fill, Params.CYCLES_PER_SECOND,  Float::class,0f)
         val cycleProgress = cyclesPerSecond * (ctx.frame.frameIndex.toFloat() / ctx.framesPerSecond)
         val gradientProgress = (pixelIndexNormalised + cycleProgress)
 
@@ -48,7 +48,7 @@ object GradientFill : SparkledFill {
         val color1 = colors[floor(colorProgress).toInt() % colors.size]
         val color2 = colors[ceil(colorProgress).toInt() % colors.size]
 
-        val hardness = fill.getParam(Params.BLEND_HARDNESS, Float::class, 0f) / 100f
+        val hardness = ctx.getParam(fill, Params.BLEND_HARDNESS, Float::class, 0f) / 100f
         val blend = getBlend(colorProgress % 1f, hardness)
         return interpolate(color1, blend, color2)
     }

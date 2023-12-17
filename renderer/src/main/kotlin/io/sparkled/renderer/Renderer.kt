@@ -136,6 +136,7 @@ class Renderer(
 
             val state = effectRenderer.createState(
                 RenderContext(
+                    pluginManager,
                     stage,
                     framesPerSecond,
                     data,
@@ -185,6 +186,7 @@ class Renderer(
     ) {
         val progress = getProgress(frame.frameIndex, effect)
         val ctx = RenderContext(
+            pluginManager,
             stage,
             framesPerSecond,
             channel,

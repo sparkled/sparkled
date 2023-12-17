@@ -5,7 +5,6 @@ import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.SparkledEffect
 import io.sparkled.renderer.effect.line.LineEffectUtils.renderLine
-import io.sparkled.renderer.util.ParamUtils
 
 object LineEffect : SparkledEffect<Unit> {
 
@@ -23,7 +22,7 @@ object LineEffect : SparkledEffect<Unit> {
     override fun render(ctx: RenderContext, state: Unit) {
         val startLed = 0
         val endLed = ctx.pixelCount - 1
-        val lineLength = ParamUtils.getFloat(ctx.effect, Params.LENGTH.name, 1f)
+        val lineLength = ctx.getParam(ctx.effect, Params.LENGTH, Float::class, 1f)
 
         renderLine(ctx, startLed, endLed, lineLength)
     }

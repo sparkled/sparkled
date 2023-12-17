@@ -5,7 +5,6 @@ import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.StatelessSparkledEffect
 import io.sparkled.renderer.util.FillUtils
-import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 import kotlin.math.roundToInt
 
@@ -23,7 +22,7 @@ object GifEffect : StatelessSparkledEffect {
     override fun render(ctx: RenderContext) {
         val points = ctx.stageProp.ledPositions
 
-        val gifFrames = ctx.loadGif(ParamUtils.getString(ctx.effect, Params.FILE_NAME.name))
+        val gifFrames = ctx.loadGif(ctx.getParam(ctx.effect, Params.FILE_NAME, String::class, ""))
 
         val gifFrame = ((gifFrames.lastIndex) * ctx.progress).roundToInt()
         val frame = gifFrames[gifFrame]

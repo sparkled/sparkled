@@ -5,7 +5,6 @@ import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.SparkledEffect
 import io.sparkled.renderer.effect.line.LineEffectUtils.renderLine
-import io.sparkled.renderer.util.ParamUtils
 
 object SplitLineEffect : SparkledEffect<Unit> {
 
@@ -24,7 +23,7 @@ object SplitLineEffect : SparkledEffect<Unit> {
         val end = ctx.pixelCount
         val evenLedCount = end % 2 == 0
         val middle = end / 2
-        val lineLength = ParamUtils.getFloat(ctx.effect, Params.LENGTH.name, 1f)
+        val lineLength = ctx.getParam(ctx.effect, Params.LENGTH, Float::class, 1f)
 
         // <<<<<----- (Line moves from middle to start).
         renderLine(ctx, if (evenLedCount) middle - 1 else middle, 0, lineLength)

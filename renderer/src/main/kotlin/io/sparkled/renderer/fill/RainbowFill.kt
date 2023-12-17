@@ -4,7 +4,6 @@ import io.sparkled.model.animation.param.Param
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.SparkledFill
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 
 /**
@@ -29,9 +28,9 @@ object RainbowFill : SparkledFill {
 
     override fun getFill(ctx: RenderContext, pixelIndex: Int): Color {
         val fill = ctx.effect.fill
-        val cycleCount = fill.getParam(Params.CYCLE_COUNT, Float::class, 1f)
-        val cyclesPerSecond = fill.getParam(Params.CYCLES_PER_SECOND, Float::class, 1f)
-        val brightness = fill.getParam(Params.BRIGHTNESS, Float::class, 100f) / 100f
+        val cycleCount = ctx.getParam(fill, Params.CYCLE_COUNT, Float::class, 1f)
+        val cyclesPerSecond = ctx.getParam(fill, Params.CYCLES_PER_SECOND, Float::class, 1f)
+        val brightness = ctx.getParam(fill, Params.BRIGHTNESS, Float::class, 100f) / 100f
 
         val frame = ctx.frame
         val ledPosition = pixelIndex.toFloat() / frame.ledCount * cycleCount

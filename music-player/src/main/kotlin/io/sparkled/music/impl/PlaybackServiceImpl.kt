@@ -145,8 +145,6 @@ class PlaybackServiceImpl(
     override fun enableInteractiveMode(stage: StageModel, stageProps: List<StagePropModel>) {
         val currentState = state
         if (currentState !is InteractivePlaybackState) {
-            musicPlayerService.stopPlayback()
-
             playbackState.set(
                 InteractivePlaybackState(
                     stage = stage,
@@ -165,6 +163,8 @@ class PlaybackServiceImpl(
                     previousState = currentState,
                 )
             )
+
+            musicPlayerService.stopPlayback()
         }
     }
 

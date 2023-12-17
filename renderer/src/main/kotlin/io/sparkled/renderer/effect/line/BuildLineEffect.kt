@@ -5,7 +5,6 @@ import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SparkledEffect
 import io.sparkled.renderer.util.FillUtils
-import io.sparkled.renderer.util.ParamUtils
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
@@ -26,8 +25,8 @@ object BuildLineEffect : SparkledEffect<Unit> {
     override fun createState(ctx: RenderContext) {}
 
     override fun render(ctx: RenderContext, state: Unit) {
-        val segments = ParamUtils.getInt(ctx.effect, Params.SEGMENTS.name, 4)
-        val reverse = ParamUtils.getBoolean(ctx.effect, Params.REVERSE.name, false)
+        val segments = ctx.getParam(ctx.effect, Params.SEGMENTS, Int::class, 4)
+        val reverse = ctx.getParam(ctx.effect, Params.REVERSE, Boolean::class, false)
         val ledCount = ctx.pixelCount
         val lineLength = ceil(ledCount / segments.toFloat()).toInt()
 

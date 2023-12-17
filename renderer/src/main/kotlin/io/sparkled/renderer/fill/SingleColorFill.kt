@@ -4,7 +4,6 @@ import io.sparkled.model.animation.param.Param
 import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.SparkledFill
-import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 
 /**
@@ -24,6 +23,6 @@ object SingleColorFill : SparkledFill {
     )
 
     override fun getFill(ctx: RenderContext, pixelIndex: Int): Color {
-        return ctx.effect.fill.getParam(Params.COLOR, Color::class, Color.MAGENTA)
+        return ctx.getParam(ctx.effect.fill, Params.COLOR, Color::class, Color.MAGENTA)
     }
 }

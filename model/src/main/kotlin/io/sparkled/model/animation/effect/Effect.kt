@@ -27,4 +27,7 @@ data class Effect(
     val targetPixels: BitSet? = null,
 
     override val args: Map<String, List<String>> = emptyMap(),
-) : HasArguments
+) : HasArguments {
+    @field:JsonIgnore
+    override val argsCache = mutableMapOf<Enum<*>, Any>()
+}

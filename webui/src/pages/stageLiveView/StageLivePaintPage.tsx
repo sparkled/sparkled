@@ -46,16 +46,16 @@ const allEffects: Record<typeof effectNames[number], Effect> = {
   Black: solid(singleColorFill('#000000')),
   Rainbow: solid(rainbowFill()),
 
-  'Red Glitter': glitter(singleColorFill('#ff0000'), 1),
-  'Green Glitter': glitter(singleColorFill('#00ff00'), 2),
-  'Blue Glitter': glitter(singleColorFill('#0000ff'), 3),
-  'Yellow Glitter': glitter(singleColorFill('#ffff00'), 4),
-  'Gold Glitter': glitter(singleColorFill('#ffcc33'), 5),
-  'Purple Glitter': glitter(singleColorFill('#781ffd'), 6),
-  'Pink Glitter': glitter(singleColorFill('#ff06c6'), 7),
-  'White Glitter': glitter(singleColorFill('#ffffff'), 8),
-  'Black Glitter': glitter(singleColorFill('#000000'), 9),
-  'Rainbow Glitter': glitter(rainbowFill(), 10),
+  'Red Glitter': glitter(1, singleColorFill('#ff0000')),
+  'Green Glitter': glitter(2, singleColorFill('#00ff00')),
+  'Blue Glitter': glitter(3, singleColorFill('#0000ff')),
+  'Yellow Glitter': glitter(4, singleColorFill('#ffff00')),
+  'Gold Glitter': glitter(5, singleColorFill('#ffcc33')),
+  'Purple Glitter': glitter(6, singleColorFill('#781ffd')),
+  'Pink Glitter': glitter(7, singleColorFill('#ff06c6')),
+  'White Glitter': glitter(8, singleColorFill('#ffffff')),
+  'Black Glitter': glitter(9, singleColorFill('#000000')),
+  'Rainbow Glitter': glitter(10, rainbowFill()),
 }
 
 const solidEffects: Record<typeof effectNames[number], Effect> = pickBy(allEffects, it => it.type === '@sparkled/solid')
@@ -87,7 +87,7 @@ function solid(fill: Fill): Effect {
   }
 }
 
-function glitter(fill: Fill, seed: number): Effect {
+function glitter(seed: number, fill: Fill): Effect {
   return {
     id: uniqueId(),
     type: '@sparkled/glitter',
@@ -103,7 +103,7 @@ function glitter(fill: Fill, seed: number): Effect {
     repetitions: 1,
     repetitionSpacing: 0,
     args: {
-      SEED: [seed.toString()],
+      RANDOM_SEED: ['∴', 'kts', `${seed} + stageProp.id.hashCode()`],
     },
   }
 }

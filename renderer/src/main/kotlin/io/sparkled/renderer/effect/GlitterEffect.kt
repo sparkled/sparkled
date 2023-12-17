@@ -5,7 +5,6 @@ import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.StatelessSparkledEffect
 import io.sparkled.renderer.util.FillUtils
-import io.sparkled.renderer.util.ParamUtils
 import kotlin.random.Random
 
 /**
@@ -25,12 +24,13 @@ object GlitterEffect : StatelessSparkledEffect {
     )
 
     override fun render(ctx: RenderContext) {
-        val density = ParamUtils.getInt(ctx.effect, Params.DENSITY.name, 10) / 100f
+        val density = ctx.getParam(ctx.effect, Params.DENSITY, Float::class, 10f) / 100f
         val patternIndex = (density * (patterns.lastIndex)).toInt()
-        val lifetime = ParamUtils.getFloat(ctx.effect, Params.LIFETIME.name, 1f)
+        val lifetime = ctx.getParam(ctx.effect, Params.LIFETIME, Float::class, 1f)
         val lifetimeFrames = (ctx.framesPerSecond * lifetime).toInt()
 
-        val random = Random(ParamUtils.getInt(ctx.effect, Params.RANDOM_SEED.name, 1))
+        val randomSeed = ctx.getParam(ctx.effect, Params.RANDOM_SEED, Int::class, 1)
+        val random = Random(randomSeed)
         val frameCount = ctx.effect.endFrame - ctx.effect.startFrame + 1
         val fadeAlpha = getFadeAlpha(ctx, lifetimeFrames)
 

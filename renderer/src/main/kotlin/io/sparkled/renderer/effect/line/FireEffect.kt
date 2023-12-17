@@ -5,7 +5,6 @@ import io.sparkled.renderer.api.RenderContext
 import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.SparkledEffect
 import io.sparkled.renderer.util.FillUtils
-import io.sparkled.renderer.util.ParamUtils
 import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min
@@ -37,15 +36,15 @@ object FireEffect : SparkledEffect<MutableList<Int>> {
     )
 
     override fun render(ctx: RenderContext, state: MutableList<Int>) {
-        val randomSeed = ParamUtils.getInt(ctx.effect, Params.RANDOM_SEED.name, 1)
+        val randomSeed = ctx.getParam(ctx.effect, Params.RANDOM_SEED, Int::class, 1)
         val random = Random(ctx.frame.frameIndex + randomSeed)
 
-        val sparksStart = ParamUtils.getBoolean(ctx.effect, Params.SPARKS_START.name, true)
-        val sparksMiddle = ParamUtils.getBoolean(ctx.effect, Params.SPARKS_MIDDLE.name, false)
-        val sparksEnd = ParamUtils.getBoolean(ctx.effect, Params.SPARKS_END.name, false)
+        val sparksStart = ctx.getParam(ctx.effect, Params.SPARKS_START, Boolean::class, true)
+        val sparksMiddle = ctx.getParam(ctx.effect, Params.SPARKS_MIDDLE, Boolean::class, false)
+        val sparksEnd = ctx.getParam(ctx.effect, Params.SPARKS_END, Boolean::class, false)
 
-        val rawCooling = ParamUtils.getInt(ctx.effect, Params.COOLING.name, 20)
-        val rawSparking = ParamUtils.getInt(ctx.effect, Params.SPARKING.name, 50)
+        val rawCooling = ctx.getParam(ctx.effect, Params.COOLING, Int::class, 20)
+        val rawSparking = ctx.getParam(ctx.effect, Params.SPARKING, Int::class, 50)
         val cooling = (rawCooling / 100f * 255f).toInt()
         val sparking = (rawSparking / 100f * 255f).toInt()
 
