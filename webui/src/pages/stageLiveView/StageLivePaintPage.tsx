@@ -103,7 +103,7 @@ function glitter(fill: Fill, seed: number): Effect {
     repetitions: 1,
     repetitionSpacing: 0,
     args: {
-      SEED: seed.toString(),
+      SEED: [seed.toString()],
     },
   }
 }
@@ -113,7 +113,7 @@ function singleColorFill(color: string): Fill {
     type: '@sparkled/single-color',
     blendMode: 'NORMAL',
     args: {
-      COLOR: color,
+      COLOR: [color],
     },
   }
 }
@@ -123,7 +123,7 @@ function rainbowFill(): Fill {
     type: '@sparkled/rainbow',
     blendMode: 'NORMAL',
     args: {
-      CYCLES_PER_SECOND: '.5',
+      CYCLES_PER_SECOND: ['.5'],
     },
   }
 }
@@ -134,9 +134,9 @@ function gradientFill(colors: string[], repetitions: number, hardness: number, c
     blendMode: 'NORMAL',
     args: {
       COLORS: colors,
-      COLOR_REPETITIONS: repetitions.toString(),
-      BLEND_HARDNESS: hardness.toString(),
-      CYCLES_PER_SECOND: cyclesPerSecond.toString(),
+      COLOR_REPETITIONS: [repetitions.toString()],
+      BLEND_HARDNESS: [hardness.toString()],
+      CYCLES_PER_SECOND: [cyclesPerSecond.toString()],
     },
   }
 }

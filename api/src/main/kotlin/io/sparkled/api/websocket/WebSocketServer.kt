@@ -208,26 +208,26 @@ class WebSocketServer(
     @OnMessage
     fun onMessage(message: String, session: WebSocketSession) {
         val commandNode = objectMapper.readValue<JsonNode>(message)
-        val commandType = enumValues<WebSocketCommandType>().find { it.code == commandNode.get("type").asText() }
+        val commandType = enumValues<SparkledCommandType>().find { it.code == commandNode.get("type").asText() }
 
         when (commandType) {
-            WebSocketCommandType.LIVE_DATA_CLEAR -> {
+            SparkledCommandType.LIVE_DATA_CLEAR -> {
                 if (playbackService.state is InteractivePlaybackState) {
                     isClearRequested.set(true)
                 }
             }
 
-            WebSocketCommandType.LIVE_DATA_MODIFY -> {
+            SparkledCommandType.LIVE_DATA_MODIFY -> {
                 if (playbackService.state is InteractivePlaybackState) {
                     pendingCommands += objectMapper.convertValue<LiveDataModifyCommand>(commandNode)
                 }
             }
 
-            WebSocketCommandType.LIVE_DATA_RESPONSE -> {
+            SparkledCommandType.LIVE_DATA_RESPONSE -> {
                 // This command is only sent as a response, so it doesn't need to be processed.
             }
 
-            WebSocketCommandType.LIVE_DATA_SUBSCRIBE -> {
+            SparkledCommandType.LIVE_DATA_SUBSCRIBE -> {
                 subscribers[session.id] = currentTimeMillis()
 
                 if (!subscribers.containsKey(session.id)) {
@@ -235,17 +235,17 @@ class WebSocketServer(
                 }
             }
 
-            WebSocketCommandType.LIVE_DATA_UNSUBSCRIBE -> {
+            SparkledCommandType.LIVE_DATA_UNSUBSCRIBE -> {
                 subscribers -= session.id
                 logger.info("Removed live update subscriber.", "id" to session.id)
             }
 
-            WebSocketCommandType.PING -> {
+            SparkledCommandType.PING -> {
                 webSocketBroadcaster.broadcastAsync(commandNode) { it.id == session.id }
             }
 
 
-            WebSocketCommandType.TOGGLE_INTERACTIVE_MODE -> {
+            SparkledCommandType.TOGGLE_INTERACTIVE_MODE -> {
                 val command = objectMapper.convertValue<ToggleInteractiveModeCommand>(commandNode)
 
                 val state = playbackService.state

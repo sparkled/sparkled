@@ -87,7 +87,7 @@ class ClientTypeMetadataGatherer(
     ): ClientTypeMetadata {
         val publicProperties = typeClass.kotlin.declaredMemberProperties
             .filter { it.visibility == KVisibility.PUBLIC }
-            .filter { !(it.javaField?.isAnnotationPresent(JsonIgnore::class.java) ?: true) }
+            .filter { it.javaField == null || !it.javaField!!.isAnnotationPresent(JsonIgnore::class.java) }
 
         val interfaceTypes = typeClass.interfaces.mapNotNull {
             val interfaceAnnotation = getAnnotationOrNull(it, GenerateClientType::class)
@@ -173,7 +173,22 @@ class ClientTypeMetadataGatherer(
         return when (genericType) {
             is TypeVariable<*> -> genericParameterType(genericType.name)
             is ParameterizedType -> {
-                getGenericParameterType(genericType.actualTypeArguments[parameterIndex], 0)
+                val typeArgument = genericType.actualTypeArguments[parameterIndex]
+                if (typeArgument is ParameterizedType) {
+                    if (Collection::class.java.isAssignableFrom(typeArgument.rawType as Class<*>)) {
+                        val parameterType = getGenericParameterType(genericType, 0)
+                        nativeArrayType(type = parameterType)
+                    } else if (Map::class.java.isAssignableFrom(typeArgument.rawType as Class<*>)) {
+                        val keyType = getGenericParameterType(genericType, 0)
+                        val valueType = getGenericParameterType(genericType, 1)
+                        nativeRecordType(keyType, valueType)
+                    } else {
+                        val parameterType = getGenericParameterType(genericType, 0)
+                        nativeArrayType(type = parameterType)
+                    }
+                } else {
+                    getGenericParameterType(genericType.actualTypeArguments[parameterIndex], 0)
+                }
             }
 
             is WildcardType -> visit((genericType.upperBounds[0] as Class<*>))

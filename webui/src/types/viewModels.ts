@@ -30,6 +30,9 @@ export type Param = {
   type: ParamType
 }
 
+export const SparkledCommandTypeValues = ['LDC', 'LDM', 'LDR', 'LDS', 'LDU', 'TIM', 'P'] as const
+export type SparkledCommandType = typeof SparkledCommandTypeValues[number]
+
 export type PlaylistSummaryViewModel = {
   durationMs: number
   id: string
@@ -38,19 +41,16 @@ export type PlaylistSummaryViewModel = {
 }
 
 export type SparkledCommand = {
-  type: string
+  type: SparkledCommandType
 }
-
-export const WebSocketCommandTypeValues = ['LDC', 'LDM', 'LDR', 'LDS', 'LDU', 'TIM', 'P'] as const
-export type WebSocketCommandType = typeof WebSocketCommandTypeValues[number]
 
 export type LiveDataResponseCommand = SparkledCommand & {
   data: Record<string, number[]>
-  type: WebSocketCommandType
+  type: SparkledCommandType
 }
 
 export type Easing = {
-  args: Record<string, string>
+  args: Record<string, string[]>
   end: number
   start: number
   type: string
@@ -60,13 +60,13 @@ export const BlendModeValues = ['NORMAL', 'ADD', 'SUBTRACT', 'ALPHA_MASK'] as co
 export type BlendMode = typeof BlendModeValues[number]
 
 export type Fill = {
-  args: Record<string, string>
+  args: Record<string, string[]>
   blendMode: BlendMode
   type: string
 }
 
 export type Effect = {
-  args: Record<string, string>
+  args: Record<string, string[]>
   easing: Easing
   endFrame: number
   fill: Fill
@@ -126,7 +126,7 @@ export type CircleViewModel = {
 }
 
 export type LiveDataUnsubscribeCommand = SparkledCommand & {
-  type: WebSocketCommandType
+  type: SparkledCommandType
 }
 
 export type Point2dViewModel = {
@@ -186,7 +186,7 @@ export type LiveDataModifyCommand = SparkledCommand & {
   d: number /** distance */
   e: Effect /** effect */
   tp: Point2dViewModel[] /** touchPoints */
-  type: WebSocketCommandType
+  type: SparkledCommandType
 }
 
 export type SongEditViewModel = {
@@ -196,7 +196,7 @@ export type SongEditViewModel = {
 }
 
 export type LiveDataClearCommand = SparkledCommand & {
-  type: WebSocketCommandType
+  type: SparkledCommandType
 }
 
 export type StageSummaryViewModel = {
@@ -210,7 +210,7 @@ export type PlaylistActionType = typeof PlaylistActionTypeValues[number]
 export type ToggleInteractiveModeCommand = SparkledCommand & {
   enabled: boolean
   stageId?: string
-  type: WebSocketCommandType
+  type: SparkledCommandType
 }
 
 export type PlaylistSequenceViewModel = {
@@ -228,7 +228,7 @@ export type StageViewModel = {
 }
 
 export type LiveDataSubscribeCommand = SparkledCommand & {
-  type: WebSocketCommandType
+  type: SparkledCommandType
 }
 
 export type PlaylistViewModel = {
@@ -274,7 +274,7 @@ export type SettingViewModel = {
 
 export type PingCommand = SparkledCommand & {
   ts: string
-  type: WebSocketCommandType
+  type: SparkledCommandType
 }
 
 export type ReferenceDataViewModel = {

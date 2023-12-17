@@ -7,15 +7,16 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.viewmodel.Point2dViewModel
 import java.time.Instant
+import java.util.Queue
 
 @GenerateClientType
 interface SparkledCommand {
-    val type: WebSocketCommandType
+    val type: SparkledCommandType
 }
 
 @GenerateClientType
 data object LiveDataClearCommand : SparkledCommand {
-    override val type = WebSocketCommandType.LIVE_DATA_MODIFY
+    override val type = SparkledCommandType.LIVE_DATA_MODIFY
 }
 
 @GenerateClientType
@@ -29,7 +30,7 @@ data class LiveDataModifyCommand(
     @field:JsonProperty("d")
     val distance: Double,
 ) : SparkledCommand {
-    override val type = WebSocketCommandType.LIVE_DATA_MODIFY
+    override val type = SparkledCommandType.LIVE_DATA_MODIFY
 }
 
 @GenerateClientType
@@ -37,7 +38,7 @@ data class ToggleInteractiveModeCommand(
     val enabled: Boolean,
     val stageId: UniqueId?,
 ) : SparkledCommand {
-    override val type = WebSocketCommandType.TOGGLE_INTERACTIVE_MODE
+    override val type = SparkledCommandType.TOGGLE_INTERACTIVE_MODE
 }
 
 @GenerateClientType
@@ -48,28 +49,28 @@ data class LiveDataResponseCommand(
      */
     val data: Map<String, ByteArray>,
 ) : SparkledCommand {
-    override val type = WebSocketCommandType.LIVE_DATA_RESPONSE
+    override val type = SparkledCommandType.LIVE_DATA_RESPONSE
 }
 
 @GenerateClientType
 data object LiveDataSubscribeCommand : SparkledCommand {
-    override val type = WebSocketCommandType.LIVE_DATA_SUBSCRIBE
+    override val type = SparkledCommandType.LIVE_DATA_SUBSCRIBE
 }
 
 @GenerateClientType
 data object LiveDataUnsubscribeCommand : SparkledCommand {
-    override val type = WebSocketCommandType.LIVE_DATA_UNSUBSCRIBE
+    override val type = SparkledCommandType.LIVE_DATA_UNSUBSCRIBE
 }
 
 @GenerateClientType
 data class PingCommand(
     val ts: Instant,
 ) : SparkledCommand {
-    override val type = WebSocketCommandType.PING
+    override val type = SparkledCommandType.PING
 }
 
 @GenerateClientType
-enum class WebSocketCommandType(
+enum class SparkledCommandType(
     @field:JsonValue
     val code: String,
 ) {
