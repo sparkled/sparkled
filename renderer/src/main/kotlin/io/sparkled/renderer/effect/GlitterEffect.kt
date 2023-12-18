@@ -1,9 +1,9 @@
 package io.sparkled.renderer.effect
 
-import io.sparkled.model.animation.param.Param
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.StatelessSparkledEffect
+import io.sparkled.renderer.parameter.DecimalParameter
+import io.sparkled.renderer.parameter.IntParameter
 import io.sparkled.renderer.util.FillUtils
 import kotlin.random.Random
 
@@ -12,24 +12,19 @@ import kotlin.random.Random
  */
 object GlitterEffect : StatelessSparkledEffect {
 
-    enum class Params { DENSITY, LIFETIME, RANDOM_SEED }
-
-    override val id = "@sparkled/glitter"
+    override val id = "sparkled:glitter:1.0.0"
     override val name = "Glitter"
-    override val version = SemVer(1, 0, 0)
-    override val params = listOf(
-        Param.int(Params.DENSITY.name, "Density (%)", 50),
-        Param.decimal(Params.LIFETIME.name, "Lifetime", 1.0),
-        Param.int(Params.RANDOM_SEED.name, "Random Seed", 1),
-    )
+
+    private val density by DecimalParameter(displayName = "Density (%)", defaultValue = 0.5f)
+    private val lifetimeMs by IntParameter(displayName = "Lifetime (ms)", defaultValue = 1000)
+    private val randomSeed by IntParameter(displayName = "Random seed", defaultValue = 1)
 
     override fun render(ctx: RenderContext) {
-        val density = ctx.getParam(ctx.effect, Params.DENSITY, Float::class, 10f) / 100f
-        val patternIndex = (density * (patterns.lastIndex)).toInt()
-        val lifetime = ctx.getParam(ctx.effect, Params.LIFETIME, Float::class, 1f)
-        val lifetimeFrames = (ctx.framesPerSecond * lifetime).toInt()
+        val patternIndex = (density.get(ctx) * (patterns.lastIndex)).toInt()
+        val lifetime = lifetimeMs.get(ctx)
+        val lifetimeFrames = (ctx.framesPerSecond * (lifetime / 1000.0)).toInt()
 
-        val randomSeed = ctx.getParam(ctx.effect, Params.RANDOM_SEED, Int::class, 1)
+        val randomSeed = randomSeed.get(ctx)
         val random = Random(randomSeed)
         val frameCount = ctx.effect.endFrame - ctx.effect.startFrame + 1
         val fadeAlpha = getFadeAlpha(ctx, lifetimeFrames)
@@ -142,6 +137,6 @@ object GlitterEffect : StatelessSparkledEffect {
         0b111111111111111111111111111111111111111111111101111100111111111,
         0b111111111111111111111111101111111111101111111111111111111111111,
         0b111111111111111111111111111111111101111111111111111111111111111,
-        0b111111111111111111111111111111111111111111111111111111111111111
+        0b111111111111111111111111111111111111111111111111111111111111111,
     )
 }

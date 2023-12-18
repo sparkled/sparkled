@@ -58,85 +58,86 @@ const allEffects: Record<typeof effectNames[number], Effect> = {
   'Rainbow Glitter': glitter(10, rainbowFill()),
 }
 
-const solidEffects: Record<typeof effectNames[number], Effect> = pickBy(allEffects, it => it.type === '@sparkled/solid')
-const glitterEffects: Record<typeof effectNames[number], Effect> = pickBy(
-  allEffects,
-  it => it.type === '@sparkled/glitter'
+const solidEffects: Record<typeof effectNames[number], Effect> = pickBy(allEffects, it =>
+  it.type.startsWith('sparkled:solid:')
+)
+const glitterEffects: Record<typeof effectNames[number], Effect> = pickBy(allEffects, it =>
+  it.type.startsWith('sparkled:glitter:')
 )
 const otherEffects: Record<typeof effectNames[number], Effect> = pickBy(
   allEffects,
-  it => it.type !== '@sparkled/solid' && it.type !== '@sparkled/glitter'
+  it => !it.type.startsWith('sparkled:solid:') && !it.type.startsWith('sparkled:glitter:')
 )
 
 function solid(fill: Fill): Effect {
   return {
     id: uniqueId(),
-    type: '@sparkled/solid',
+    type: 'sparkled:solid:1.0.0',
     easing: {
-      type: '@sparkled/linear',
+      type: 'sparkled:linear:1.0.0',
       start: 0,
       end: 100,
       args: {},
     },
     fill,
     startFrame: 0,
-    endFrame: 1,
+    endFrame: 999999,
     repetitions: 1,
     repetitionSpacing: 0,
     args: {},
   }
 }
 
-function glitter(seed: number, fill: Fill): Effect {
+function glitter(randomSeed: number, fill: Fill): Effect {
   return {
     id: uniqueId(),
-    type: '@sparkled/glitter',
+    type: 'sparkled:glitter:1.0.0',
     easing: {
-      type: '@sparkled/linear',
+      type: 'sparkled:linear:1.0.0',
       start: 0,
       end: 100,
       args: {},
     },
     fill,
     startFrame: 0,
-    endFrame: 1,
+    endFrame: 999999,
     repetitions: 1,
     repetitionSpacing: 0,
     args: {
-      RANDOM_SEED: ['∴', 'kts', `${seed} + stageProp.id.hashCode()`],
+      randomSeed: ['∴kts', `${randomSeed} + stageProp.id.hashCode()`],
     },
   }
 }
 
 function singleColorFill(color: string): Fill {
   return {
-    type: '@sparkled/single-color',
+    type: 'sparkled:single-color:1.0.0',
     blendMode: 'NORMAL',
     args: {
-      COLOR: [color],
+      color: [color],
     },
   }
 }
 
 function rainbowFill(): Fill {
   return {
-    type: '@sparkled/rainbow',
+    type: 'sparkled:rainbow:1.0.0',
     blendMode: 'NORMAL',
     args: {
-      CYCLES_PER_SECOND: ['.5'],
+      cyclesPerSecond: ['.5'],
     },
   }
 }
 
 function gradientFill(colors: string[], repetitions: number, hardness: number, cyclesPerSecond: number): Fill {
   return {
-    type: '@sparkled/gradient',
+    type: 'sparkled:gradient:1.0.0',
     blendMode: 'NORMAL',
     args: {
-      COLORS: colors,
-      COLOR_REPETITIONS: [repetitions.toString()],
-      BLEND_HARDNESS: [hardness.toString()],
-      CYCLES_PER_SECOND: [cyclesPerSecond.toString()],
+      colors: colors,
+      colorRepetitions: [repetitions.toString()],
+      blendHardness: [hardness.toString()],
+      cyclesPerSecond: [cyclesPerSecond.toString()],
     },
   }
 }

@@ -152,7 +152,7 @@ class Renderer(
             // Stateful effects need to be rendered from the beginning, so perform a dummy render on any frames that
             // fall outside the preview window.
             if (state != Unit) {
-                for (frameIndex in effect.startFrame ..< startFrame) {
+                for (frameIndex in effect.startFrame..<startFrame) {
                     val frame = RenderedFrame(
                         startFrame = effect.startFrame,
                         frameIndex = frameIndex,

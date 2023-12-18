@@ -1,28 +1,22 @@
 package io.sparkled.renderer.effect
 
-import io.sparkled.model.animation.param.Param
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.StatelessSparkledEffect
+import io.sparkled.renderer.parameter.StringParameter
 import io.sparkled.renderer.util.FillUtils
 import java.awt.Color
 import kotlin.math.roundToInt
 
 object GifEffect : StatelessSparkledEffect {
 
-    enum class Params { FILE_NAME }
-
-    override val id = "@sparkled/gif"
+    override val id = "sparkled:gif:1.0.0"
     override val name = "Gif"
-    override val version = SemVer(1, 0, 0)
-    override val params = listOf(
-        Param.string(Params.FILE_NAME.name, "Filename", "")
-    )
+
+    private val filename by StringParameter(displayName = "Filename", defaultValue = "")
 
     override fun render(ctx: RenderContext) {
+        val gifFrames = ctx.loadGif(filename.get(ctx))
         val points = ctx.stageProp.ledPositions
-
-        val gifFrames = ctx.loadGif(ctx.getParam(ctx.effect, Params.FILE_NAME, String::class, ""))
 
         val gifFrame = ((gifFrames.lastIndex) * ctx.progress).roundToInt()
         val frame = gifFrames[gifFrame]

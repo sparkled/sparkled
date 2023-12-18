@@ -1,11 +1,12 @@
 package io.sparkled.renderer.fill
 
-import io.sparkled.model.animation.ColorList
-import io.sparkled.model.animation.param.Param
+import io.sparkled.model.animation.Colors
 import io.sparkled.model.util.MathUtils
-import io.sparkled.renderer.api.SemVer
-import io.sparkled.renderer.api.SparkledFill
 import io.sparkled.renderer.api.RenderContext
+import io.sparkled.renderer.api.SparkledFill
+import io.sparkled.renderer.parameter.ColorsParameter
+import io.sparkled.renderer.parameter.DecimalParameter
+import io.sparkled.renderer.parameter.IntParameter
 import java.awt.Color
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -13,34 +14,28 @@ import kotlin.math.max
 
 /**
  * Fills pixels with an N-color gradient, where N > 0. The colors are distributed equally.
- * Effect parameters:
- *  - COLORS: The colors that make up the gradient.
- *  - BLEND_HARDNESS: The amount of color mixing (0 is full mixing, 100 is no mixing, resulting in solid colors).
  */
 object GradientFill : SparkledFill {
 
-    enum class Params { COLORS, COLOR_REPETITIONS, BLEND_HARDNESS, CYCLES_PER_SECOND }
-
-    override val id = "@sparkled/gradient"
+    override val id = "sparkled:gradient:1.0.0"
     override val name = "Gradient"
-    override val version = SemVer(1, 0, 0)
-    override val params = listOf(
-        Param.colors(Params.COLORS.name, "Colors", listOf("#ff0000", "#0000ff")),
-        Param.int(Params.COLOR_REPETITIONS.name, "Color Repetitions", 1),
-        Param.decimal(Params.BLEND_HARDNESS.name, "Blend Hardness", 0.0),
-        Param.decimal(Params.CYCLES_PER_SECOND.name, "Cycles Per Second", 0.0)
-    )
+
+    /** The colors that make up the gradient. */
+    private val colors by ColorsParameter(displayName = "Colors", defaultValue = Colors(Color.MAGENTA))
+    private val repetitions by IntParameter(displayName = "Color repetitions", defaultValue = 1)
+
+    /** The amount of color mixing (0 is full mixing, 100 is no mixing, resulting in solid colors). */
+    private val blendHardness by DecimalParameter(displayName = "Blend hardness", defaultValue = 0f)
+    private val cyclesPerSecond by DecimalParameter(displayName = "Cycles per second", defaultValue = 0f)
 
     override fun getFill(ctx: RenderContext, pixelIndex: Int): Color {
-        val fill = ctx.effect.fill
-
-        val colors = ctx.getParam(fill, Params.COLORS, ColorList::class, defaultFill)
-        val repetitions = ctx.getParam(fill, Params.COLOR_REPETITIONS, Int::class, 1)
+        val colors = this.colors.get(ctx)
+        val repetitions = repetitions.get(ctx)
         val colorCount = colors.size * max(1, repetitions)
 
         val pixelIndexNormalised = pixelIndex / ctx.pixelCount.toFloat()
 
-        val cyclesPerSecond = ctx.getParam(fill, Params.CYCLES_PER_SECOND,  Float::class,0f)
+        val cyclesPerSecond = cyclesPerSecond.get(ctx)
         val cycleProgress = cyclesPerSecond * (ctx.frame.frameIndex.toFloat() / ctx.framesPerSecond)
         val gradientProgress = (pixelIndexNormalised + cycleProgress)
 
@@ -48,7 +43,7 @@ object GradientFill : SparkledFill {
         val color1 = colors[floor(colorProgress).toInt() % colors.size]
         val color2 = colors[ceil(colorProgress).toInt() % colors.size]
 
-        val hardness = ctx.getParam(fill, Params.BLEND_HARDNESS, Float::class, 0f) / 100f
+        val hardness = blendHardness.get(ctx)
         val blend = getBlend(colorProgress % 1f, hardness)
         return interpolate(color1, blend, color2)
     }
@@ -78,6 +73,4 @@ object GradientFill : SparkledFill {
 
         return Color(r / 255, g / 255, b / 255)
     }
-
-    private val defaultFill = ColorList(listOf(Color.MAGENTA))
 }

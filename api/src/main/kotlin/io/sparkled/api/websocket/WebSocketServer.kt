@@ -117,9 +117,10 @@ class WebSocketServer(
         val command = pendingCommands.poll()
         playbackState.stagePropEffects.forEach { (id, effects) ->
             if (!isSameEffect(effects.lastOrNull(), command.effect)) {
+                val currentFrame = playbackState.getFrameAtCurrentTime()
                 effects += command.effect.copy(
-                    startFrame = playbackState.startFrame,
-                    endFrame = playbackState.startFrame + 9999999,
+                    startFrame = currentFrame + command.effect.startFrame,
+                    endFrame = currentFrame + command.effect.endFrame,
                     targetPixels = BitSet(100),
                 )
             }

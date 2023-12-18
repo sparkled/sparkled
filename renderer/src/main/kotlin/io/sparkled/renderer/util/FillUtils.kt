@@ -31,7 +31,12 @@ object FillUtils {
 
         if (alpha < 0 || alpha > 1) {
             val frameIndex = frame.frameIndex
-            logger.warn("Alpha is invalid, skipping.", "value" to alpha, "pixelIndex" to pixelIndex, "frameNumber" to frameIndex)
+            logger.warn(
+                "Alpha is invalid, skipping.",
+                "value" to alpha,
+                "pixelIndex" to pixelIndex,
+                "frameNumber" to frameIndex,
+            )
         } else if (pixelIndex >= 0 && pixelIndex < ctx.stageProp.ledCount) {
             val reverse = !ignoreReverse && ctx.stageProp.reverse
             val index = if (reverse) ledRange.last - pixelIndex else ledRange.first + pixelIndex

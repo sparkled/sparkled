@@ -1,15 +1,13 @@
 package io.sparkled.renderer.effect
 
 import io.sparkled.renderer.api.RenderContext
-import io.sparkled.renderer.api.SemVer
 import io.sparkled.renderer.api.StatelessSparkledEffect
 import io.sparkled.renderer.util.FillUtils
 import kotlin.math.roundToInt
 
 object FlashEffect : StatelessSparkledEffect {
 
-    override val id = "@sparkled/flash"
-    override val version = SemVer(1, 0, 0)
+    override val id = "sparkled:flash:1.0.0"
     override val name = "Flash"
 
     override fun render(ctx: RenderContext) {

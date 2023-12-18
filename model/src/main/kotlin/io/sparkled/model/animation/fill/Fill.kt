@@ -11,5 +11,6 @@ data class Fill(
     override val args: Map<String, List<String>> = emptyMap(),
 ) : HasArguments {
     @field:JsonIgnore
-    override val argsCache = mutableMapOf<Enum<*>, Any>()
+    override val argsCache = mutableMapOf<String, Any?>()
 }
+        

@@ -1,36 +1,31 @@
 package io.sparkled.renderer.fill
 
-import io.sparkled.model.animation.param.Param
-import io.sparkled.renderer.api.SemVer
-import io.sparkled.renderer.api.SparkledFill
 import io.sparkled.renderer.api.RenderContext
+import io.sparkled.renderer.api.SparkledFill
+import io.sparkled.renderer.parameter.DecimalParameter
 import java.awt.Color
 
 /**
  * Fills pixels with a rainbow-ish effect based on a full rotation of the HSV hue circle.
- * Effect parameters:
- *  - CYCLE_COUNT: The number of hue circle rotations to fit between the first and last pixel.
- *  - CYCLES_PER_SECOND: The speed at which the hue circle rotates.
- *  - BRIGHTNESS: The brightness of the rainbow.
  */
 object RainbowFill : SparkledFill {
 
-    enum class Params { BRIGHTNESS, CYCLE_COUNT, CYCLES_PER_SECOND }
-
-    override val id = "@sparkled/rainbow"
+    override val id = "sparkled:rainbow:1.0.0"
     override val name = "Rainbow"
-    override val version = SemVer(1, 0, 0)
-    override val params = listOf(
-        Param.decimal(Params.BRIGHTNESS.name, "Brightness (%)", 100.0),
-        Param.decimal(Params.CYCLE_COUNT.name, "Cycle Count", 1.0),
-        Param.decimal(Params.CYCLES_PER_SECOND.name, "Cycles Per Second", 0.5)
-    )
+
+    /** The number of hue circle rotations to fit between the first and last pixel. */
+    private val brightness by DecimalParameter(displayName = "Brightness (%)", defaultValue = 1f)
+
+    /** The speed at which the hue circle rotates. */
+    private val cycleCount by DecimalParameter(displayName = "Cycle count", defaultValue = 1f)
+
+    /** The brightness of the rainbow. */
+    private val cyclesPerSecond by DecimalParameter(displayName = "Cycles per second", defaultValue = 0.5f)
 
     override fun getFill(ctx: RenderContext, pixelIndex: Int): Color {
-        val fill = ctx.effect.fill
-        val cycleCount = ctx.getParam(fill, Params.CYCLE_COUNT, Float::class, 1f)
-        val cyclesPerSecond = ctx.getParam(fill, Params.CYCLES_PER_SECOND, Float::class, 1f)
-        val brightness = ctx.getParam(fill, Params.BRIGHTNESS, Float::class, 100f) / 100f
+        val cycleCount = cycleCount.get(ctx)
+        val cyclesPerSecond = cyclesPerSecond.get(ctx)
+        val brightness = RainbowFill.brightness.get(ctx)
 
         val frame = ctx.frame
         val ledPosition = pixelIndex.toFloat() / frame.ledCount * cycleCount
