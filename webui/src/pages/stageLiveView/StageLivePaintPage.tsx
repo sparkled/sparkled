@@ -104,7 +104,7 @@ function glitter(randomSeed: number, fill: Fill): Effect {
     repetitions: 1,
     repetitionSpacing: 0,
     args: {
-      randomSeed: ['∴kts', `${randomSeed} + stageProp.id.hashCode()`],
+      randomSeed: [randomSeed.toString()],
       density: ['0.1'],
     },
   }
