@@ -15,4 +15,5 @@ dependencies {
 
     testImplementation(libs.kotest.assertionsCore)
     testImplementation(libs.kotest.runner)
+    testImplementation(libs.kotlin.scriptingJsr223)
 }

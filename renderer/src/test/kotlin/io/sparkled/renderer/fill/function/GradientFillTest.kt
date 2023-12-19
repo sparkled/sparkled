@@ -23,9 +23,9 @@ class GradientFillTest : StringSpec() {
                     GradientFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(GradientFill.Params.COLORS.name, "#ff0000", "#0000ff", "#00ff00"),
-                        arg(GradientFill.Params.BLEND_HARDNESS.name, 0f),
-                        arg(GradientFill.Params.CYCLES_PER_SECOND.name, 0f)
+                        arg("colors", "#ff0000", "#0000ff", "#00ff00"),
+                        arg("blendHardness", 0f),
+                        arg("cyclesPerSecond", 0f)
                     )
                 )
             )
@@ -59,9 +59,9 @@ class GradientFillTest : StringSpec() {
                     GradientFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(GradientFill.Params.COLORS.name, "#ff0000", "#0000ff", "#00ff00"),
-                        arg(GradientFill.Params.BLEND_HARDNESS.name, 50f),
-                        arg(GradientFill.Params.CYCLES_PER_SECOND.name, 0f)
+                        arg("colors", "#ff0000", "#0000ff", "#00ff00"),
+                        arg("blendHardness", 50f),
+                        arg("cyclesPerSecond", 0f)
                     )
                 )
             )
@@ -94,9 +94,9 @@ class GradientFillTest : StringSpec() {
                     GradientFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(GradientFill.Params.COLORS.name, "#ff0000", "#0000ff", "#00ff00"),
-                        arg(GradientFill.Params.BLEND_HARDNESS.name, 100f),
-                        arg(GradientFill.Params.CYCLES_PER_SECOND.name, 0f)
+                        arg("colors", "#ff0000", "#0000ff", "#00ff00"),
+                        arg("blendHardness", 100f),
+                        arg("cyclesPerSecond", 0f)
                     )
                 )
             )
@@ -131,9 +131,9 @@ class GradientFillTest : StringSpec() {
                     GradientFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(GradientFill.Params.COLORS.name, "#ff0000", "#0000ff", "#00ff00"),
-                        arg(GradientFill.Params.BLEND_HARDNESS.name, 0f),
-                        arg(GradientFill.Params.CYCLES_PER_SECOND.name, 6f)
+                        arg("colors", "#ff0000", "#0000ff", "#00ff00"),
+                        arg("blendHardness", 0f),
+                        arg("cyclesPerSecond", 6f)
                     )
                 )
             )

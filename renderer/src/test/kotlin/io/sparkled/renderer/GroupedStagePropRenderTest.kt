@@ -39,14 +39,14 @@ class GroupedStagePropRenderTest : StringSpec() {
             endFrame = 10,
             type = LineEffect.id,
             args = mapOf(
-                arg(LineEffect.Params.LENGTH.name, "1")
+                arg("lineLength", "1")
             ),
             easing = Easing(LinearEasing.id),
             fill = Fill(
                 SingleColorFill.id,
                 BlendMode.NORMAL,
                 mapOf(
-                    arg(SingleColorFill.Params.COLOR.name, lineColor)
+                    arg("color", lineColor)
                 )
             )
         )

@@ -10,8 +10,6 @@ import java.awt.Color
  */
 object SingleColorFill : SparkledFill {
 
-    enum class Params { COLOR }
-
     override val id = "sparkled:single-color:1.0.0"
     override val name = "Single Color"
 

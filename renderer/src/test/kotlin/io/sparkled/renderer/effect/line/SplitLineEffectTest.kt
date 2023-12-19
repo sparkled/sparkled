@@ -18,14 +18,14 @@ class SplitLineEffectTest : StringSpec() {
                 endFrame = 49,
                 type = SplitLineEffect.id,
                 args = mapOf(
-                    arg(SplitLineEffect.Params.LENGTH.name, 5)
+                    arg("lineLength", 5f)
                 ),
                 easing = Easing(LinearEasing.id),
                 fill = Fill(
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ffffff")
+                        arg("color", "#ffffff")
                     )
                 )
             )
@@ -94,14 +94,14 @@ class SplitLineEffectTest : StringSpec() {
                 endFrame = 49,
                 type = SplitLineEffect.id,
                 args = mapOf(
-                    arg(SplitLineEffect.Params.LENGTH.name, 5f)
+                    arg("lineLength", 5f)
                 ),
                 easing = Easing(LinearEasing.id),
                 fill = Fill(
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ffffff")
+                        arg("color", "#ffffff")
                     )
                 )
             )

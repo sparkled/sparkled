@@ -18,14 +18,14 @@ class BuildLineEffectTest : StringSpec() {
                 endFrame = 19,
                 type = BuildLineEffect.id,
                 args = mapOf(
-                    arg(BuildLineEffect.Params.SEGMENTS.name, 4)
+                    arg("segments", 4)
                 ),
                 easing = Easing(LinearEasing.id),
                 fill = Fill(
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ff0000")
+                        arg("color", "#ff0000")
                     )
                 )
             )

@@ -18,15 +18,15 @@ class GlitterEffectTest : StringSpec() {
                 endFrame = 29,
                 type = GlitterEffect.id,
                 args = mapOf(
-                    arg(GlitterEffect.Params.DENSITY.name, 10),
-                    arg(GlitterEffect.Params.LIFETIME.name, .2f)
+                    arg("density", .1f),
+                    arg("lifetimeMs", 200)
                 ),
                 easing = Easing(LinearEasing.id, 0f, 100f),
                 fill = Fill(
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ff0000")
+                        arg("color", "#ff0000")
                     )
                 )
             )
@@ -74,15 +74,15 @@ class GlitterEffectTest : StringSpec() {
                 endFrame = 29,
                 type = GlitterEffect.id,
                 args = mapOf(
-                    arg(GlitterEffect.Params.DENSITY.name, 50),
-                    arg(GlitterEffect.Params.LIFETIME.name, .2f)
+                    arg("density", .5f),
+                    arg("lifetimeMs", 200)
                 ),
                 easing = Easing(LinearEasing.id, 0f, 100f),
                 fill = Fill(
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ff0000")
+                        arg("color", "#ff0000")
                     )
                 )
             )
@@ -130,15 +130,15 @@ class GlitterEffectTest : StringSpec() {
                 endFrame = 29,
                 type = GlitterEffect.id,
                 args = mapOf(
-                    arg(GlitterEffect.Params.DENSITY.name, 90),
-                    arg(GlitterEffect.Params.LIFETIME.name, .2f)
+                    arg("density", .9f),
+                    arg("lifetimeMs", 200)
                 ),
                 easing = Easing(LinearEasing.id, 0f, 100f),
                 fill = Fill(
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ff0000")
+                        arg("color", "#ff0000")
                     )
                 )
             )
@@ -187,15 +187,15 @@ class GlitterEffectTest : StringSpec() {
                 endFrame = 29,
                 type = GlitterEffect.id,
                 args = mapOf(
-                    arg(GlitterEffect.Params.DENSITY.name, 50),
-                    arg(GlitterEffect.Params.LIFETIME.name, .2f)
+                    arg("density", .5f),
+                    arg("lifetimeMs", 200)
                 ),
                 easing = Easing(LinearEasing.id, 50f, 50f),
                 fill = Fill(
                     SingleColorFill.id,
                     BlendMode.NORMAL,
                     mapOf(
-                        arg(SingleColorFill.Params.COLOR.name, "#ff0000")
+                        arg("color", "#ff0000")
                     )
                 )
             )
