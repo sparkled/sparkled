@@ -4,6 +4,12 @@ body,
   height: 100%;
 }
 
+/* Disable bouncy scroll on iOS, which can cause issues with live paint/instrument modes. */
+html,
+body {
+  overscroll-behavior: none;
+}
+
 #root {
   display: flex;
   flex-direction: column;

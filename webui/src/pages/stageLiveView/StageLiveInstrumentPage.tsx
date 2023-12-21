@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/styles'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { MusicNoteRounded } from '@material-ui/icons'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import PageContainer from '../../components/PageContainer'
 import StageEditor from '../../components/stageEditor/StageEditor'
@@ -36,84 +37,59 @@ const instrumentsConfig: Record<
   ]
 > = {
   Drum: [
-    { songId: 'jdhyw9y2r2ht', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhywbv5w3cf', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhywcw96yy6', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhywdssmqrs', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhywfjrvv5y', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhywg9x4hzn', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhywh4qfvs6', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhywhy5rg2z', effectFn: () => flash(singleColorFill('#ff0000')) },
+    { songId: 'jdhyw9y2r2ht', effectFn: () => splitLine(singleColorFill('#ff0000')) },
+    { songId: 'jdhywbv5w3cf', effectFn: () => splitLine(singleColorFill('#ff6600')) },
+    { songId: 'jdhywcw96yy6', effectFn: () => splitLine(singleColorFill('#ffff00')) },
+    { songId: 'jdhywdssmqrs', effectFn: () => splitLine(singleColorFill('#00ff00')) },
+    { songId: 'jdhywfjrvv5y', effectFn: () => splitLine(singleColorFill('#0000ff')) },
+    { songId: 'jdhywg9x4hzn', effectFn: () => splitLine(singleColorFill('#00ccff')) },
+    { songId: 'jdhywh4qfvs6', effectFn: () => splitLine(singleColorFill('#781ffd')) },
+    { songId: 'jdhywhy5rg2z', effectFn: () => splitLine(singleColorFill('#ff06c6')) },
   ],
   Harp: [
-    { songId: 'jdhyvc2hddsx', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvcyyssgd', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvdx4975c', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvfzw3k8c', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvgtb2j8s', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvhkz8q29', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvjnptq2z', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvkk8vw6z', effectFn: () => flash(singleColorFill('#ff0000')) },
+    { songId: 'jdhyvc2hddsx', effectFn: () => flash(rainbowFill()) },
+    { songId: 'jdhyvcyyssgd', effectFn: () => flash(rainbowFill()) },
+    { songId: 'jdhyvdx4975c', effectFn: () => flash(rainbowFill()) },
+    { songId: 'jdhyvfzw3k8c', effectFn: () => flash(rainbowFill()) },
+    { songId: 'jdhyvgtb2j8s', effectFn: () => flash(rainbowFill()) },
+    { songId: 'jdhyvhkz8q29', effectFn: () => flash(rainbowFill()) },
+    { songId: 'jdhyvjnptq2z', effectFn: () => flash(rainbowFill()) },
+    { songId: 'jdhyvkk8vw6z', effectFn: () => flash(rainbowFill()) },
   ],
   Glockenspiel: [
-    { songId: 'jdhyvxvsc64y', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvyxn3zkk', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyw24tq8p5', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyw3jqyfrk', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyw4p56yxw', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyw5rhn6w6', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyw6qx5qx6', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyw7xmbc8s', effectFn: () => flash(singleColorFill('#ff0000')) },
+    { songId: 'jdhyvxvsc64y', effectFn: () => glitter(singleColorFill('#ff0000')) },
+    { songId: 'jdhyvyxn3zkk', effectFn: () => glitter(singleColorFill('#ff6600')) },
+    { songId: 'jdhyw24tq8p5', effectFn: () => glitter(singleColorFill('#ffff00')) },
+    { songId: 'jdhyw3jqyfrk', effectFn: () => glitter(singleColorFill('#00ff00')) },
+    { songId: 'jdhyw4p56yxw', effectFn: () => glitter(singleColorFill('#0000ff')) },
+    { songId: 'jdhyw5rhn6w6', effectFn: () => glitter(singleColorFill('#00ccff')) },
+    { songId: 'jdhyw6qx5qx6', effectFn: () => glitter(singleColorFill('#781ffd')) },
+    { songId: 'jdhyw7xmbc8s', effectFn: () => glitter(singleColorFill('#ff06c6')) },
   ],
+
   Guitar: [
-    { songId: 'jdhyvnp3fssj', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvpp66yjy', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvqfsptvd', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvr92krxt', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvs2fjvvd', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvsr9k6v4', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvtp2rvjc', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyvvm555wn', effectFn: () => flash(singleColorFill('#ff0000')) },
+    { songId: 'jdhyvnp3fssj', effectFn: () => line(singleColorFill('#ff0000')) },
+    { songId: 'jdhyvpp66yjy', effectFn: () => line(singleColorFill('#ff6600')) },
+    { songId: 'jdhyvqfsptvd', effectFn: () => line(singleColorFill('#ffff00')) },
+    { songId: 'jdhyvr92krxt', effectFn: () => line(singleColorFill('#00ff00')) },
+    { songId: 'jdhyvs2fjvvd', effectFn: () => line(singleColorFill('#0000ff')) },
+    { songId: 'jdhyvsr9k6v4', effectFn: () => line(singleColorFill('#00ccff')) },
+    { songId: 'jdhyvtp2rvjc', effectFn: () => line(singleColorFill('#781ffd')) },
+    { songId: 'jdhyvvm555wn', effectFn: () => line(singleColorFill('#ff06c6')) },
   ],
   Piano: [
     { songId: 'jdhyv2fs6cqk', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyv3b3wf5n', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyv4524cdy', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyv4wpn66q', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyv5zxj9ry', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyv6xbwhqx', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyv7zcchts', effectFn: () => flash(singleColorFill('#ff0000')) },
-    { songId: 'jdhyv93jnmb3', effectFn: () => flash(singleColorFill('#ff0000')) },
+    { songId: 'jdhyv3b3wf5n', effectFn: () => flash(singleColorFill('#ff6600')) },
+    { songId: 'jdhyv4524cdy', effectFn: () => flash(singleColorFill('#ffff00')) },
+    { songId: 'jdhyv4wpn66q', effectFn: () => flash(singleColorFill('#00ff00')) },
+    { songId: 'jdhyv5zxj9ry', effectFn: () => flash(singleColorFill('#0000ff')) },
+    { songId: 'jdhyv6xbwhqx', effectFn: () => flash(singleColorFill('#00ccff')) },
+    { songId: 'jdhyv7zcchts', effectFn: () => flash(singleColorFill('#781ffd')) },
+    { songId: 'jdhyv93jnmb3', effectFn: () => flash(singleColorFill('#ff06c6')) },
   ],
 }
 
 const instrumentNames = Object.keys(instrumentsConfig)
-
-const colors = ['#ff0000', '#00ff00', '#ffff00', '#ffcc33', '#781ffd', '#ff06c6', '#ff00ff']
-
-// const allEffects: Record<typeof effectNames[number], Effect> = {
-//   Red: solid(singleColorFill('#ff0000')),
-//   Green: solid(singleColorFill('#00ff00')),
-//   Blue: solid(singleColorFill('#0000ff')),
-//   Yellow: solid(singleColorFill('#ffff00')),
-//   Gold: solid(singleColorFill('#ffcc33')),
-//   Purple: solid(singleColorFill('#781ffd')),
-//   Pink: solid(singleColorFill('#ff06c6')),
-//   White: solid(singleColorFill('#ffffff')),
-//   Black: solid(singleColorFill('#000000')),
-//   Rainbow: solid(rainbowFill()),
-//
-//   'Red Glitter': glitter(1, singleColorFill('#ff0000')),
-//   'Green Glitter': glitter(2, singleColorFill('#00ff00')),
-//   'Blue Glitter': glitter(3, singleColorFill('#0000ff')),
-//   'Yellow Glitter': glitter(4, singleColorFill('#ffff00')),
-//   'Gold Glitter': glitter(5, singleColorFill('#ffcc33')),
-//   'Purple Glitter': glitter(6, singleColorFill('#781ffd')),
-//   'Pink Glitter': glitter(7, singleColorFill('#ff06c6')),
-//   'White Glitter': glitter(8, singleColorFill('#ffffff')),
-//   'Black Glitter': glitter(9, singleColorFill('#000000')),
-//   'Rainbow Glitter': glitter(10, rainbowFill()),
-// }
 
 function flash(fill: Fill): Effect {
   return {
@@ -134,6 +110,48 @@ function flash(fill: Fill): Effect {
   }
 }
 
+function line(fill: Fill): Effect {
+  return {
+    id: uniqueId(),
+    type: 'sparkled:line:1.0.0',
+    easing: {
+      type: 'sparkled:linear:1.0.0',
+      start: 0,
+      end: 100,
+      args: {},
+    },
+    fill,
+    startFrame: 0,
+    endFrame: 15,
+    repetitions: 1,
+    repetitionSpacing: 0,
+    args: {
+      lineLength: ['∴kts', `pixelCount / 2`],
+    },
+  }
+}
+
+function splitLine(fill: Fill): Effect {
+  return {
+    id: uniqueId(),
+    type: 'sparkled:split-line:1.0.0',
+    easing: {
+      type: 'sparkled:linear:1.0.0',
+      start: 0,
+      end: 100,
+      args: {},
+    },
+    fill,
+    startFrame: 0,
+    endFrame: 15,
+    repetitions: 1,
+    repetitionSpacing: 0,
+    args: {
+      lineLength: ['∴kts', `pixelCount / 2`],
+    },
+  }
+}
+
 function glitter(fill: Fill): Effect {
   return {
     id: uniqueId(),
@@ -151,7 +169,8 @@ function glitter(fill: Fill): Effect {
     repetitionSpacing: 0,
     args: {
       randomSeed: ['∴kts', `System.currentTimeMillis() + stageProp.id.hashCode()`],
-      density: ['0.1'],
+      density: ['0.3'],
+      lifetimeMs: ['500'],
     },
   }
 }
@@ -159,7 +178,7 @@ function glitter(fill: Fill): Effect {
 function singleColorFill(color: string): Fill {
   return {
     type: 'sparkled:single-color:1.0.0',
-    blendMode: 'NORMAL',
+    blendMode: 'ADD',
     args: {
       color: [color],
     },
@@ -215,6 +234,7 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     top: '8px',
     right: '8px',
+    padding: '12px 32px 12px 8px',
   },
   instrumentKeyRow: {
     display: 'flex',
@@ -305,69 +325,67 @@ const InstrumentButtonRow: React.FC<{ instrumentKeys: InstrumentKey[]; stage: St
   stage,
 }) => {
   const classes = useStyles()
-  const [pressed, setPressed] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [activeIndex, setActiveIndex] = useState(-1)
 
   const instrumentButtons = useMemo(() => {
     return instrumentKeys.map((instrumentKey, index) => (
       <InstrumentButton
+        active={activeIndex === index}
         key={instrumentKey.songId}
         keyIndex={index}
         songId={instrumentKey.songId}
         effectFn={instrumentKey.effectFn}
-        pressed={pressed}
         stage={stage}
       />
     ))
-  }, [instrumentKeys, pressed, stage])
+  }, [activeIndex, instrumentKeys, stage])
+
+  const updateActiveIndex = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      e.stopPropagation()
+      const { x, width } = containerRef.current!.getBoundingClientRect()
+      const keyIndex = Math.floor(((e.pageX - x) / width) * instrumentKeys.length)
+      setActiveIndex(keyIndex)
+    },
+    [instrumentKeys.length]
+  )
 
   return (
     <div
+      ref={containerRef}
       className={classes.instrumentKeyRow}
-      onMouseDown={() => {
-        setPressed(true)
-        console.info('pressedtrue=')
-      }}
-      onMouseUp={() => {
-        setPressed(false)
-        console.info('pressed=false')
-      }}
-      onTouchStart={() => {
-        setPressed(true)
-        console.info('pressed=true')
-      }}
-      onTouchEnd={() => {
-        setPressed(false)
-        console.info('pressed=false')
-      }}
+      onPointerEnter={updateActiveIndex}
+      onPointerDown={updateActiveIndex}
+      onPointerMove={updateActiveIndex}
+      onPointerLeave={() => setActiveIndex(-1)}
+      onPointerUp={() => setActiveIndex(-1)}
     >
       {instrumentButtons}
     </div>
   )
 }
 
-const InstrumentButton: React.FC<InstrumentKey & { pressed: boolean; stage: StageViewModel; keyIndex: number }> = ({
+const InstrumentButton: React.FC<InstrumentKey & { active: boolean; stage: StageViewModel; keyIndex: number }> = ({
+  active,
   effectFn,
   keyIndex,
-  pressed,
   songId,
   stage,
 }) => {
   const classes = useStyles()
   const eventBus = useContext(EventBusContext)
 
-  const topLeft = { x: (stage.width / 8) * keyIndex, y: 0 }
-  const bottomRight = { x: (stage.width / 8) * (keyIndex + 1), y: stage.height }
+  useEffect(() => {
+    if (active) {
+      const topLeft = { x: (stage.width / 8) * keyIndex, y: 0 }
+      const bottomRight = { x: (stage.width / 8) * (keyIndex + 1), y: stage.height }
 
-  const [active, setActive] = useState(false)
-  const onPress = useCallback(() => {
-    console.info('onPress', pressed, active)
-    if (pressed && !active) {
-      setActive(true)
       eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
         type: 'LDM',
         me: false,
         tp: [topLeft, bottomRight],
-        d: 30,
+        d: 0,
         e: effectFn(),
         st: 'BOX',
       })
@@ -379,21 +397,14 @@ const InstrumentButton: React.FC<InstrumentKey & { pressed: boolean; stage: Stag
         })
       }, 100)
     }
-  }, [active, bottomRight, effectFn, eventBus, pressed, songId, topLeft])
-
-  const onRelease = useCallback(() => {
-    setActive(false)
-  }, [])
+  }, [active, effectFn, eventBus, keyIndex, songId, stage.height, stage.width])
 
   return (
     <div
+      style={{ pointerEvents: 'none' }}
       className={`${classes.instrumentKey} ${active ? classes.activeInstrumentKey : ''}`}
-      onMouseOver={onPress}
-      onMouseOut={onRelease}
-      onTouchStart={onPress}
-      onTouchEnd={onRelease}
     >
-      M
+      <MusicNoteRounded />
     </div>
   )
 }
