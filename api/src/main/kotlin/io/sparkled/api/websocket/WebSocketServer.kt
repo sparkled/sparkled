@@ -51,6 +51,7 @@ class WebSocketServer(
     private val webSocketBroadcaster: WebSocketBroadcaster,
 ) {
     private var running = false
+    private var liveFramesRendered = 0
     private val subscribers = ConcurrentHashMap<String, Long>()
     private val threadPool = Executors.newThreadPerTaskExecutor(NamedVirtualThreadFactory(javaClass.simpleName))
     private val pendingCommands = ConcurrentLinkedQueue<LiveDataModifyCommand>()
@@ -108,12 +109,23 @@ class WebSocketServer(
                 )
 
                 playbackState.renderedStageProps = renderer.render().stageProps
+
+                liveFramesRendered++
+                removeCompletedEffects(playbackState, currentFrame)
             }
         }
 
 
         val frameDurationMs = (1000 / playbackState.framesPerSecond) - elapsedMs
         sleep(frameDurationMs.coerceAtLeast(0))
+    }
+
+    private fun removeCompletedEffects(playbackState: InteractivePlaybackState, currentFrame: Int) {
+        if (liveFramesRendered % playbackState.framesPerSecond * 2 == 0) {
+            playbackState.stagePropEffects.values.forEach { stagePropEffects ->
+                stagePropEffects.removeIf { it.endFrame <= currentFrame }
+            }
+        }
     }
 
     private fun addLiveEffect(playbackState: InteractivePlaybackState) {
