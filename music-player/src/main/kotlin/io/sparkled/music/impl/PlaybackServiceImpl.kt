@@ -17,6 +17,7 @@ import io.sparkled.music.SequencePlaybackState
 import io.sparkled.music.StoppedPlaybackState
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.FileService
+import io.sparkled.persistence.cache.CacheService
 import jakarta.inject.Singleton
 import java.nio.ByteBuffer
 import java.util.Base64
@@ -26,8 +27,9 @@ import javax.sound.sampled.LineEvent
 
 @Singleton
 class PlaybackServiceImpl(
+    private val cache: CacheService,
     private val db: DbService,
-    private val file: FileService,
+    private val fileService: FileService,
     private val musicPlayerService: MusicPlayerService,
 ) : PlaybackService, PlaybackStateService {
     private val playbackState = AtomicReference<PlaybackState>(StoppedPlaybackState)
@@ -90,9 +92,9 @@ class PlaybackServiceImpl(
 
             val sequence = sequences[sequenceIndex]
             val song = db.songs.findBySequenceId(sequence.id)!!
-            val songAudio = file.readSongAudio(song.id)
+            val songAudio = cache.songAudios.get()[song.id]
 
-            val render = file.readRender(sequence.id)
+            val render = fileService.readRender(sequence.id)
             val stagePropData = render.stageProps
                 .mapValuesTo(RenderedStagePropDataMap()) { (_, value) ->
                     RenderedStagePropData(

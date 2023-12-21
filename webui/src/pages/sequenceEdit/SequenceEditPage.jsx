@@ -232,17 +232,17 @@ class SequenceEditPage extends Component {
     const { addEffect, currentFrame, sequence } = this.props
     const effect = {
       id: uniqueId(),
-      type: '@sparkled/flash',
+      type: 'sparkled:flash:1.0.0',
       args: {},
       easing: {
-        type: '@sparkled/linear',
+        type: 'sparkled:linear:1.0.0',
         start: 0,
         end: 100,
         args: {},
       },
       fill: {
         blendMode: 'NORMAL',
-        type: '@sparkled/single-color',
+        type: 'sparkled:single-color:1.0.0',
         args: {
           COLOR: ['#ff0000'],
         },

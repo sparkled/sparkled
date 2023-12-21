@@ -2,6 +2,6 @@ package io.sparkled.persistence.cache
 
 enum class CacheStatus {
     EXPIRED,
-    IS_EMPTY,
+    EMPTY,
     POPULATED
 }

@@ -24,6 +24,11 @@ interface MusicPlayerService {
     fun play(playbackState: SequencePlaybackState)
 
     /**
+     * Plays an audio clip without keeping track of any state.
+     */
+    fun playOneShot(songAudio: ByteArray)
+
+    /**
      * @return A normalised value between 0 and 1 indicating the playback progress of the current sequence.
      */
     val sequenceProgress: Double

@@ -20,6 +20,7 @@ import useEventBus, { EventBusContext } from '../../hooks/useEventBus'
 import WebSocketManager from '../../hooks/WebSocketManager'
 import StageLiveViewPage from '../../pages/stageLiveView/StageLiveViewPage.tsx'
 import StageLivePaintPage from '../../pages/stageLiveView/StageLivePaintPage.tsx'
+import StageLiveInstrumentPage from '../../pages/stageLiveView/StageLiveInstrumentPage.tsx'
 
 const theme = createMuiTheme({
   palette: {
@@ -52,6 +53,7 @@ const App = () => {
                     <Route exact path='/stages/:stageId' component={StageEditPage} />
                     <Route exact path='/stages/:stageId/live-view' component={StageLiveViewPage} />
                     <Route exact path='/stages/:stageId/live-paint' component={StageLivePaintPage} />
+                    <Route exact path='/stages/:stageId/live-instrument' component={StageLiveInstrumentPage} />
                     <Route exact path='/sequences/:sequenceId' component={SequenceEditPage} />
                     <Route exact path='/playlists/:playlistId' component={PlaylistEditPage} />
                     <Route component={RedirectInvalidUrlToIndex} />

@@ -7,7 +7,6 @@ import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.annotation.GenerateClientType
 import io.sparkled.viewmodel.Point2dViewModel
 import java.time.Instant
-import java.util.Queue
 
 @GenerateClientType
 interface SparkledCommand {
@@ -24,6 +23,12 @@ data class LiveDataModifyCommand(
     @field:JsonProperty("e")
     val effect: Effect,
 
+    @field:JsonProperty("me")
+    val mergeEffects: Boolean,
+
+    @field:JsonProperty("st")
+    val shapeType: ShapeType,
+
     @field:JsonProperty("tp")
     val touchPoints: List<Point2dViewModel>,
 
@@ -34,11 +39,9 @@ data class LiveDataModifyCommand(
 }
 
 @GenerateClientType
-data class ToggleInteractiveModeCommand(
-    val enabled: Boolean,
-    val stageId: UniqueId?,
-) : SparkledCommand {
-    override val type = SparkledCommandType.TOGGLE_INTERACTIVE_MODE
+enum class ShapeType {
+    BOX,
+    LINE,
 }
 
 @GenerateClientType
@@ -70,6 +73,21 @@ data class PingCommand(
 }
 
 @GenerateClientType
+data class PlayAudioFileCommand(
+    val id: UniqueId,
+) : SparkledCommand {
+    override val type = SparkledCommandType.PLAY_AUDIO_FILE
+}
+
+@GenerateClientType
+data class ToggleInteractiveModeCommand(
+    val enabled: Boolean,
+    val stageId: UniqueId?,
+) : SparkledCommand {
+    override val type = SparkledCommandType.TOGGLE_INTERACTIVE_MODE
+}
+
+@GenerateClientType
 enum class SparkledCommandType(
     @field:JsonValue
     val code: String,
@@ -79,6 +97,7 @@ enum class SparkledCommandType(
     LIVE_DATA_RESPONSE("LDR"),
     LIVE_DATA_SUBSCRIBE("LDS"),
     LIVE_DATA_UNSUBSCRIBE("LDU"),
-    TOGGLE_INTERACTIVE_MODE("TIM"),
     PING("P"),
+    PLAY_AUDIO_FILE("PAF"),
+    TOGGLE_INTERACTIVE_MODE("TIM"),
 }

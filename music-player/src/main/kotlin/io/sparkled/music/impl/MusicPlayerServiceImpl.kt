@@ -7,6 +7,7 @@ import jakarta.inject.Singleton
 import java.io.ByteArrayInputStream
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.AudioSystem
+import javax.sound.sampled.Clip
 import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
 import kotlin.math.min
@@ -31,22 +32,30 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
         logger.debug("Playing sequence.", "name" to sequence.name)
 
         try {
-            val byteStream = ByteArrayInputStream(playbackState.songAudio.array())
-            AudioSystem.getAudioInputStream(byteStream).use { mp3Stream ->
-                val baseFormat = mp3Stream.format
-                val decodedFormat = AudioFormat(
-                    AudioFormat.Encoding.PCM_SIGNED, baseFormat.sampleRate, 16, baseFormat.channels,
-                    baseFormat.channels * 2, baseFormat.sampleRate, false,
-                )
-
-                AudioSystem.getAudioInputStream(decodedFormat, mp3Stream).use { convertedStream ->
-                    clip.close()
-                    clip.open(convertedStream)
-                    clip.start()
-                }
-            }
+            playAudio(clip, playbackState.songAudio.array())
         } catch (e: Exception) {
             logger.error("Failed to play sequence.", e, "name" to sequence.name)
+        }
+    }
+
+    override fun playOneShot(songAudio: ByteArray) {
+        playAudio(AudioSystem.getClip(), songAudio)
+    }
+
+    private fun playAudio(clip: Clip, audio: ByteArray) {
+        val byteStream = ByteArrayInputStream(audio)
+        AudioSystem.getAudioInputStream(byteStream).use { mp3Stream ->
+            val baseFormat = mp3Stream.format
+            val decodedFormat = AudioFormat(
+                AudioFormat.Encoding.PCM_SIGNED, baseFormat.sampleRate, 16, baseFormat.channels,
+                baseFormat.channels * 2, baseFormat.sampleRate, false,
+            )
+
+            AudioSystem.getAudioInputStream(decodedFormat, mp3Stream).use { convertedStream ->
+                clip.close()
+                clip.open(convertedStream)
+                clip.start()
+            }
         }
     }
 

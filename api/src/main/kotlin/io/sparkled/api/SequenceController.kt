@@ -49,7 +49,7 @@ import kotlin.math.min
 class SequenceController(
     private val cache: CacheService,
     private val db: DbService,
-    private val file: FileService,
+    private val fileService: FileService,
     private val pluginManager: SparkledPluginManager,
 ) {
 
@@ -100,7 +100,7 @@ class SequenceController(
     @Get("/{id}/songAudio")
     @Transactional
     fun getSequenceSongAudio(id: UniqueId): MutableHttpResponse<out Any> {
-        val songAudio = db.songs.findBySequenceId(id)?.let { file.readSongAudio(it.id) }
+        val songAudio = db.songs.findBySequenceId(id)?.let { cache.songAudios.get()[it.id] }
         return if (songAudio != null) {
             HttpResponse.ok(songAudio).contentType("audio/mpeg")
         } else HttpResponse.notFound("Song audio not found.")
@@ -190,7 +190,7 @@ class SequenceController(
                     )
                 }
             )
-            file.writeRender(sequence.id, renderedSequence)
+            fileService.writeRender(sequence.id, renderedSequence)
         } else {
             db.sequences.update(sequence.copy(status = SequenceStatus.DRAFT, updatedAt = Instant.now()))
         }

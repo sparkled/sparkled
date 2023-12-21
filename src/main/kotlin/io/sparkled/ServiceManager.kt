@@ -22,7 +22,7 @@ class ServiceManager(
     private val applicationContext: ApplicationContext,
     private val cache: CacheService,
     private val config: SparkledConfig,
-    private val file: FileService,
+    private val fileService: FileService,
     private val ledDataStreamer: LedDataStreamer,
     private val pluginManager: SparkledPluginManager,
     private val schedulerService: SchedulerService,
@@ -33,7 +33,7 @@ class ServiceManager(
     @EventListener
     @Transactional
     fun onStartup(event: ApplicationStartupEvent) {
-        file.init()
+        fileService.init()
 
         // Pre-warm caches.
         cache.settings.get()

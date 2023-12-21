@@ -30,7 +30,7 @@ export type Param = {
   type: ParamType
 }
 
-export const SparkledCommandTypeValues = ['LDC', 'LDM', 'LDR', 'LDS', 'LDU', 'TIM', 'P'] as const
+export const SparkledCommandTypeValues = ['LDC', 'LDM', 'LDR', 'LDS', 'LDU', 'P', 'PAF', 'TIM'] as const
 export type SparkledCommandType = typeof SparkledCommandTypeValues[number]
 
 export type PlaylistSummaryViewModel = {
@@ -175,6 +175,11 @@ export type EditorItemViewModel = {
   params: Param[]
 }
 
+export type PlayAudioFileCommand = SparkledCommand & {
+  id: string
+  type: SparkledCommandType
+}
+
 export type ScheduledActionEditViewModel = {
   cronExpression: string
   playlistId?: string
@@ -182,9 +187,14 @@ export type ScheduledActionEditViewModel = {
   value?: string
 }
 
+export const ShapeTypeValues = ['BOX', 'LINE'] as const
+export type ShapeType = typeof ShapeTypeValues[number]
+
 export type LiveDataModifyCommand = SparkledCommand & {
   d: number /** distance */
   e: Effect /** effect */
+  me: boolean /** mergeEffects */
+  st: ShapeType /** shapeType */
   tp: Point2dViewModel[] /** touchPoints */
   type: SparkledCommandType
 }

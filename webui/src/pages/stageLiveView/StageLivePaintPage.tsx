@@ -46,16 +46,16 @@ const allEffects: Record<typeof effectNames[number], Effect> = {
   Black: solid(singleColorFill('#000000')),
   Rainbow: solid(rainbowFill()),
 
-  'Red Glitter': glitter(1, singleColorFill('#ff0000')),
-  'Green Glitter': glitter(2, singleColorFill('#00ff00')),
-  'Blue Glitter': glitter(3, singleColorFill('#0000ff')),
-  'Yellow Glitter': glitter(4, singleColorFill('#ffff00')),
-  'Gold Glitter': glitter(5, singleColorFill('#ffcc33')),
-  'Purple Glitter': glitter(6, singleColorFill('#781ffd')),
-  'Pink Glitter': glitter(7, singleColorFill('#ff06c6')),
-  'White Glitter': glitter(8, singleColorFill('#ffffff')),
-  'Black Glitter': glitter(9, singleColorFill('#000000')),
-  'Rainbow Glitter': glitter(10, rainbowFill()),
+  'Red Glitter': glitter(singleColorFill('#ff0000')),
+  'Green Glitter': glitter(singleColorFill('#00ff00')),
+  'Blue Glitter': glitter(singleColorFill('#0000ff')),
+  'Yellow Glitter': glitter(singleColorFill('#ffff00')),
+  'Gold Glitter': glitter(singleColorFill('#ffcc33')),
+  'Purple Glitter': glitter(singleColorFill('#781ffd')),
+  'Pink Glitter': glitter(singleColorFill('#ff06c6')),
+  'White Glitter': glitter(singleColorFill('#ffffff')),
+  'Black Glitter': glitter(singleColorFill('#000000')),
+  'Rainbow Glitter': glitter(rainbowFill()),
 }
 
 const solidEffects: Record<typeof effectNames[number], Effect> = pickBy(allEffects, it =>
@@ -88,7 +88,7 @@ function solid(fill: Fill): Effect {
   }
 }
 
-function glitter(randomSeed: number, fill: Fill): Effect {
+function glitter(fill: Fill): Effect {
   return {
     id: uniqueId(),
     type: 'sparkled:glitter:1.0.0',
@@ -104,7 +104,7 @@ function glitter(randomSeed: number, fill: Fill): Effect {
     repetitions: 1,
     repetitionSpacing: 0,
     args: {
-      randomSeed: [randomSeed.toString()],
+      randomSeed: ['∴kts', `effect.fill.hashCode() + stageProp.id.hashCode()`],
       density: ['0.1'],
     },
   }
@@ -183,9 +183,6 @@ const useStyles = makeStyles(() => ({
     textAlign: 'end',
     paddingRight: '8px',
   },
-  activeEffect: {
-    background: '#ffffff33',
-  },
 }))
 
 type Props = RouteComponentProps<{ stageId: string }>
@@ -240,9 +237,11 @@ const StageLivePaintPage: React.FC<Props> = props => {
       if (!isEmpty(touchPoints)) {
         eventBus.sendWebSocketCommand<LiveDataModifyCommand>({
           type: 'LDM',
+          me: true,
           tp: touchPoints,
           d: 30,
           e: allEffects[effectName],
+          st: 'LINE',
         })
         pendingTouchPoints.current = []
       }
@@ -280,7 +279,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
                 <Button
                   key={it}
                   variant='outlined'
-                  className={effectName === it ? classes.activeEffect : undefined}
+                  color={effectName === it ? 'primary' : undefined}
                   onClick={() => setEffectName(it)}
                 >
                   {it}
@@ -294,7 +293,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
                 <Button
                   key={it}
                   variant='outlined'
-                  className={effectName === it ? classes.activeEffect : undefined}
+                  color={effectName === it ? 'primary' : undefined}
                   onClick={() => setEffectName(it)}
                 >
                   {it.replace(' Glitter', '')}
@@ -308,7 +307,7 @@ const StageLivePaintPage: React.FC<Props> = props => {
                 <Button
                   key={it}
                   variant='outlined'
-                  className={effectName === it ? classes.activeEffect : undefined}
+                  color={effectName === it ? 'primary' : undefined}
                   onClick={() => setEffectName(it)}
                 >
                   {it}

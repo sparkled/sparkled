@@ -14,6 +14,7 @@ import io.sparkled.renderer.api.SparkledPlugin
 import io.sparkled.renderer.parameter.ParameterFn
 import io.sparkled.viewmodel.EditorItemViewModel
 import io.sparkled.viewmodel.ReferenceDataViewModel
+import java.awt.Color
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
@@ -49,7 +50,9 @@ class ReferenceDataController(
                     code = parameterFn.name,
                     displayName = value.displayName,
                     type = value.type,
-                    defaultValue = listOfNotNull(value.defaultValue).map { it.toString() },
+                    defaultValue = listOfNotNull(value.defaultValue).map {
+                        if (it is Color) "#" + Integer.toHexString(it.rgb).drop(2) else it.toString()
+                    },
                 )
             }
     }

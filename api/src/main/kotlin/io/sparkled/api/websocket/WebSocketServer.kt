@@ -19,6 +19,7 @@ import io.sparkled.common.threading.NamedVirtualThreadFactory
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.embedded.Point2d
 import io.sparkled.music.InteractivePlaybackState
+import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackService
 import io.sparkled.persistence.DbService
 import io.sparkled.persistence.cache.CacheService
@@ -35,6 +36,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.hypot
+import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
 
 @ServerWebSocket("/api/websocket")
@@ -42,6 +44,7 @@ import kotlin.system.measureTimeMillis
 class WebSocketServer(
     private val cache: CacheService,
     private val db: DbService,
+    private val musicPlayerService: MusicPlayerService,
     private val objectMapper: ObjectMapper,
     private val playbackService: PlaybackService,
     private val pluginManager: SparkledPluginManager,
@@ -115,37 +118,55 @@ class WebSocketServer(
 
     private fun addLiveEffect(playbackState: InteractivePlaybackState) {
         val command = pendingCommands.poll()
-        playbackState.stagePropEffects.forEach { (id, effects) ->
-            if (!isSameEffect(effects.lastOrNull(), command.effect)) {
-                val currentFrame = playbackState.getFrameAtCurrentTime()
-                effects += command.effect.copy(
-                    startFrame = currentFrame + command.effect.startFrame,
-                    endFrame = currentFrame + command.effect.endFrame,
-                    targetPixels = BitSet(100),
-                )
-            }
 
-            val lastEffect = effects.last()
-
-            val stageProp = playbackState.stageProps[id]
-            val pixelPositions = stageProp?.ledPositions ?: emptyList()
-            pixelPositions.forEachIndexed { index, pixelPosition ->
-                val pixelIndex = when (stageProp?.reverse) {
-                    true -> pixelPositions.lastIndex - index
-                    else -> index
-                }
-                if (lastEffect.targetPixels?.get(pixelIndex) == true) {
-                    // Already present, skip.
-                } else if (isCloseToLine(
-                        pixelPosition = pixelPosition,
-                        linePoints = command.touchPoints,
-                        maxDistance = command.distance,
+        measureNanoTime {
+            playbackState.stagePropEffects.forEach { (id, effects) ->
+                if (!command.mergeEffects || !isSameEffect(effects.lastOrNull(), command.effect)) {
+                    val currentFrame = playbackState.getFrameAtCurrentTime()
+                    effects += command.effect.copy(
+                        startFrame = currentFrame + command.effect.startFrame,
+                        endFrame = currentFrame + command.effect.endFrame,
+                        targetPixels = BitSet(100),
                     )
-                ) {
-                    lastEffect.targetPixels?.set(pixelIndex)
+                }
+
+                val lastEffect = effects.last()
+
+                val stageProp = playbackState.stageProps[id]
+                val pixelPositions = stageProp?.ledPositions ?: emptyList()
+
+                // TODO optimise by checking stage prop bounds relative to line bounds.
+                pixelPositions.forEachIndexed { index, pixelPosition ->
+                    val pixelIndex = when (stageProp?.reverse) {
+                        true -> pixelPositions.lastIndex - index
+                        else -> index
+                    }
+                    if (lastEffect.targetPixels?.get(pixelIndex) == true) {
+                        // Already present, skip.
+                    } else if (isWithinShape(pixelPosition, command)
+                    ) {
+                        lastEffect.targetPixels?.set(pixelIndex)
+                    }
                 }
             }
-        }
+        }.let { logger.info("LED positioning took ${it / 1_000_000.0} ms.") }
+    }
+
+    private fun isWithinShape(
+        pixelPosition: Point2d,
+        command: LiveDataModifyCommand,
+    ) = when (command.shapeType) {
+        ShapeType.BOX -> isWithinBox(
+            pixelPosition = pixelPosition,
+            topLeft = command.touchPoints[0],
+            bottomRight = command.touchPoints[1],
+            maxDistance = command.distance,
+        )
+        ShapeType.LINE -> isCloseToLine(
+            pixelPosition = pixelPosition,
+            linePoints = command.touchPoints,
+            maxDistance = command.distance,
+        )
     }
 
     private fun broadcastLiveFrame() {
@@ -245,6 +266,14 @@ class WebSocketServer(
                 webSocketBroadcaster.broadcastAsync(commandNode) { it.id == session.id }
             }
 
+            SparkledCommandType.PLAY_AUDIO_FILE -> {
+                val command = objectMapper.convertValue<PlayAudioFileCommand>(commandNode)
+                val songAudio = cache.songAudios.get()[command.id]
+
+                if (songAudio != null) {
+                    musicPlayerService.playOneShot(songAudio)
+                }
+            }
 
             SparkledCommandType.TOGGLE_INTERACTIVE_MODE -> {
                 val command = objectMapper.convertValue<ToggleInteractiveModeCommand>(commandNode)
@@ -269,6 +298,20 @@ class WebSocketServer(
                 // Command not recognised, ignore.
             }
         }
+    }
+
+
+    private fun isWithinBox(
+        pixelPosition: Point2d,
+        topLeft: Point2dViewModel,
+        bottomRight: Point2dViewModel,
+        maxDistance: Double,
+    ) = when {
+        pixelPosition.x < topLeft.x - maxDistance -> false
+        pixelPosition.x > bottomRight.x + maxDistance -> false
+        pixelPosition.y < topLeft.y - maxDistance -> false
+        pixelPosition.y > bottomRight.y + maxDistance -> false
+        else -> true
     }
 
     private fun isCloseToLine(
