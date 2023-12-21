@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
 import io.sparkled.model.annotation.GenerateClientType
-import io.sparkled.viewmodel.Point2dViewModel
+import io.sparkled.model.embedded.Point2d
 import java.time.Instant
 
 @GenerateClientType
@@ -30,7 +30,7 @@ data class LiveDataModifyCommand(
     val shapeType: ShapeType,
 
     @field:JsonProperty("tp")
-    val touchPoints: List<Point2dViewModel>,
+    val touchPoints: List<Point2d>,
 
     @field:JsonProperty("d")
     val distance: Double,

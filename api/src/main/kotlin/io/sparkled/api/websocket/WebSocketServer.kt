@@ -17,7 +17,9 @@ import io.micronaut.websocket.annotation.ServerWebSocket
 import io.sparkled.common.logging.getLogger
 import io.sparkled.common.threading.NamedVirtualThreadFactory
 import io.sparkled.model.animation.effect.Effect
+import io.sparkled.model.embedded.PixelPositions
 import io.sparkled.model.embedded.Point2d
+import io.sparkled.model.embedded.Rectangle
 import io.sparkled.music.InteractivePlaybackState
 import io.sparkled.music.MusicPlayerService
 import io.sparkled.music.PlaybackService
@@ -27,7 +29,6 @@ import io.sparkled.persistence.repository.findByIdOrNull
 import io.sparkled.renderer.RenderMode
 import io.sparkled.renderer.Renderer
 import io.sparkled.renderer.SparkledPluginManager
-import io.sparkled.viewmodel.Point2dViewModel
 import java.lang.System.currentTimeMillis
 import java.lang.Thread.sleep
 import java.util.BitSet
@@ -36,7 +37,6 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.hypot
-import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
 
 @ServerWebSocket("/api/websocket")
@@ -119,26 +119,28 @@ class WebSocketServer(
     private fun addLiveEffect(playbackState: InteractivePlaybackState) {
         val command = pendingCommands.poll()
 
-        measureNanoTime {
-            playbackState.stagePropEffects.forEach { (id, effects) ->
-                if (!command.mergeEffects || !isSameEffect(effects.lastOrNull(), command.effect)) {
-                    val currentFrame = playbackState.getFrameAtCurrentTime()
-                    effects += command.effect.copy(
-                        startFrame = currentFrame + command.effect.startFrame,
-                        endFrame = currentFrame + command.effect.endFrame,
-                        targetPixels = BitSet(100),
-                    )
-                }
+        playbackState.stagePropEffects.forEach { (id, effects) ->
+            if (!command.mergeEffects || !isSameEffect(effects.lastOrNull(), command.effect)) {
+                val currentFrame = playbackState.getFrameAtCurrentTime()
+                effects += command.effect.copy(
+                    startFrame = currentFrame + command.effect.startFrame,
+                    endFrame = currentFrame + command.effect.endFrame,
+                    targetPixels = BitSet(100),
+                )
+            }
 
-                val lastEffect = effects.last()
+            val lastEffect = effects.last()
 
-                val stageProp = playbackState.stageProps[id]
-                val pixelPositions = stageProp?.ledPositions ?: emptyList()
+            val stageProp = playbackState.stageProps[id]
+            val pixelPositions = stageProp?.ledPositions ?: PixelPositions.empty
 
-                // TODO optimise by checking stage prop bounds relative to line bounds.
-                pixelPositions.forEachIndexed { index, pixelPosition ->
+            val touchPointBounds = computeBounds(command.touchPoints)
+            val stagePropBounds = (stageProp?.ledPositions ?: PixelPositions.empty).bounds
+
+            if (isIntersecting(stagePropBounds, touchPointBounds, maxDistance = 30.0)) {
+                pixelPositions.points.forEachIndexed { index, pixelPosition ->
                     val pixelIndex = when (stageProp?.reverse) {
-                        true -> pixelPositions.lastIndex - index
+                        true -> pixelPositions.points.lastIndex - index
                         else -> index
                     }
                     if (lastEffect.targetPixels?.get(pixelIndex) == true) {
@@ -149,19 +151,39 @@ class WebSocketServer(
                     }
                 }
             }
-        }.let { logger.info("LED positioning took ${it / 1_000_000.0} ms.") }
+        }
+    }
+
+    private fun computeBounds(touchPoints: List<Point2d>) = Rectangle(
+        x1 = touchPoints.minOfOrNull { it.x } ?: 0.0,
+        y1 = touchPoints.minOfOrNull { it.y } ?: 0.0,
+        x2 = touchPoints.maxOfOrNull { it.x } ?: 0.0,
+        y2 = touchPoints.maxOfOrNull { it.y } ?: 0.0,
+    )
+
+    private fun isIntersecting(r1: Rectangle, r2: Rectangle, maxDistance: Double) = when {
+        r1.x1 > r2.x2 + maxDistance -> false
+        r1.x2 < r2.x1 - maxDistance -> false
+        r1.y1 > r2.y2 + maxDistance -> false
+        r1.y2 < r2.y1 - maxDistance -> false
+        else -> true
     }
 
     private fun isWithinShape(
         pixelPosition: Point2d,
         command: LiveDataModifyCommand,
     ) = when (command.shapeType) {
-        ShapeType.BOX -> isWithinBox(
+        ShapeType.BOX -> isWithinBounds(
             pixelPosition = pixelPosition,
-            topLeft = command.touchPoints[0],
-            bottomRight = command.touchPoints[1],
+            bounds = Rectangle(
+                x1 = command.touchPoints[0].x,
+                y1 = command.touchPoints[0].y,
+                x2 = command.touchPoints[1].x,
+                y2 = command.touchPoints[1].y,
+            ),
             maxDistance = command.distance,
         )
+
         ShapeType.LINE -> isCloseToLine(
             pixelPosition = pixelPosition,
             linePoints = command.touchPoints,
@@ -301,22 +323,21 @@ class WebSocketServer(
     }
 
 
-    private fun isWithinBox(
+    private fun isWithinBounds(
         pixelPosition: Point2d,
-        topLeft: Point2dViewModel,
-        bottomRight: Point2dViewModel,
+        bounds: Rectangle,
         maxDistance: Double,
     ) = when {
-        pixelPosition.x < topLeft.x - maxDistance -> false
-        pixelPosition.x > bottomRight.x + maxDistance -> false
-        pixelPosition.y < topLeft.y - maxDistance -> false
-        pixelPosition.y > bottomRight.y + maxDistance -> false
+        pixelPosition.x < bounds.x1 - maxDistance -> false
+        pixelPosition.x > bounds.x2 + maxDistance -> false
+        pixelPosition.y < bounds.y1 - maxDistance -> false
+        pixelPosition.y > bounds.y2 + maxDistance -> false
         else -> true
     }
 
     private fun isCloseToLine(
         pixelPosition: Point2d,
-        linePoints: List<Point2dViewModel>,
+        linePoints: List<Point2d>,
         maxDistance: Double,
     ) = when (linePoints.size) {
         0 -> false
@@ -327,7 +348,7 @@ class WebSocketServer(
     }
 
     // Based on https://stackoverflow.com/a/6853926.
-    private fun getDistanceFromLine(target: Point2d, lineStart: Point2dViewModel, lineEnd: Point2dViewModel): Double {
+    private fun getDistanceFromLine(target: Point2d, lineStart: Point2d, lineEnd: Point2d): Double {
         val a = target.x - lineStart.x
         val b = target.y - lineStart.y
         val c = lineEnd.x - lineStart.x

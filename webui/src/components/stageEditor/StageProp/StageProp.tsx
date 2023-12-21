@@ -1,9 +1,9 @@
-import _ from 'lodash'
+import _, { maxBy, minBy } from 'lodash'
 import * as PIXI from 'pixi.js'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Point, svgPathProperties } from 'svg-path-properties'
 import stagePropTypes from '../../../data/stagePropTypes'
-import { StagePropViewModel } from '../../../types/viewModels.ts'
+import { Rectangle, StagePropViewModel } from '../../../types/viewModels.ts'
 import Logger from '../../../utils/Logger'
 import { StageEditorDispatchContext } from '../StageEditorReducer'
 import StagePropBackground from './StagePropBackground'
@@ -73,10 +73,16 @@ const StageProp: React.FC<Props> = props => {
     const gridPos = props.pixiApp.stage.position
     const { x: scaleX, y: scaleY } = props.pixiApp.stage.scale
 
-    const ledPositions = ledPoints
+    const points = ledPoints
       .map(it => pixiContainer.toGlobal(it as IPoint))
       .map(it => ({ x: (it.x - gridPos.x) / scaleX, y: (it.y - gridPos.y) / scaleY }))
-    dispatch({ type: 'UpdateStagePropLedPositions', payload: { ledPositions } })
+    const bounds: Rectangle = {
+      x1: minBy(points, it => it.x)?.x ?? 0,
+      y1: minBy(points, it => it.y)?.y ?? 0,
+      x2: maxBy(points, it => it.x)?.x ?? 0,
+      y2: maxBy(points, it => it.y)?.y ?? 0,
+    }
+    dispatch({ type: 'UpdateStagePropLedPositions', payload: { ledPositions: { bounds, points } } })
   }, [dispatch, ledPoints, pixiContainer, props.pixiApp.stage, stageProp])
 
   useEffect(() => {

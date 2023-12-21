@@ -16,7 +16,7 @@ object GifEffect : StatelessSparkledEffect {
 
     override fun render(ctx: RenderContext) {
         val gifFrames = ctx.loadGif(filename.get(ctx))
-        val points = ctx.stageProp.ledPositions
+        val points = ctx.stageProp.ledPositions.points
 
         val gifFrame = ((gifFrames.lastIndex) * ctx.progress).roundToInt()
         val frame = gifFrames[gifFrame]

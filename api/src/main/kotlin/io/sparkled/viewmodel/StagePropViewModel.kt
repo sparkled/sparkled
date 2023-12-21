@@ -3,8 +3,7 @@ package io.sparkled.viewmodel
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.annotation.GenerateClientType
-import io.sparkled.model.embedded.LedPositions
-import io.sparkled.model.embedded.Point2d
+import io.sparkled.model.embedded.PixelPositions
 import io.sparkled.model.enumeration.StagePropType
 
 @GenerateClientType
@@ -29,7 +28,7 @@ data class StagePropViewModel(
     val displayOrder: Int,
     val groupCode: String? = null,
     val groupDisplayOrder: Int? = null,
-    val ledPositions: List<Point2dViewModel> = emptyList(),
+    val ledPositions: PixelPositions = PixelPositions.empty,
 ) : ViewModel {
     fun toModel() = StagePropModel(
         id = id,
@@ -48,7 +47,7 @@ data class StagePropViewModel(
         displayOrder = displayOrder,
         groupCode = groupCode,
         groupDisplayOrder = groupDisplayOrder ?: 0,
-        ledPositions = LedPositions.of(ledPositions.map { Point2d(x = it.x, y = it.y) }),
+        ledPositions = ledPositions,
     )
 
     companion object {
@@ -77,7 +76,7 @@ data class StagePropViewModel(
                 displayOrder = model.displayOrder,
                 groupCode = model.groupCode,
                 groupDisplayOrder = model.groupDisplayOrder,
-                ledPositions = model.ledPositions.map { Point2dViewModel(x = it.x, y = it.y) },
+                ledPositions = model.ledPositions,
             )
         }
     }

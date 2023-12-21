@@ -2,7 +2,7 @@ import { produce } from 'immer'
 import _, { identity, isEqual, remove } from 'lodash'
 import React, { createContext, Dispatch } from 'react'
 import { StagePropType } from '../../data/stagePropTypes'
-import { Point2dViewModel, StagePropViewModel, StageViewModel } from '../../types/viewModels.ts'
+import { PixelPositions, StagePropViewModel, StageViewModel } from '../../types/viewModels.ts'
 import { uniqueId } from '../../utils/idUtils'
 
 type State = {
@@ -19,7 +19,7 @@ export type Action =
   | { type: 'ScaleStageProp'; payload: { x: number; y: number } }
   | { type: 'RotateStageProp'; payload: { rotation: number } }
   | { type: 'UpdateStagePropLedCount'; payload: { ledCount: number } }
-  | { type: 'UpdateStagePropLedPositions'; payload: { ledPositions: Point2dViewModel[] } }
+  | { type: 'UpdateStagePropLedPositions'; payload: { ledPositions: PixelPositions } }
   | { type: 'UpdateStagePropGroupCode'; payload: string | undefined }
   | { type: 'UpdateStagePropGroupDisplayOrder'; payload: string | null }
   | { type: 'UpdateStageProp'; payload: Partial<StagePropViewModel> }
@@ -118,7 +118,7 @@ function addStageProp(draft: State, type: StagePropType) {
     displayOrder: 0,
     groupCode: undefined,
     groupDisplayOrder: undefined,
-    ledPositions: [],
+    ledPositions: { bounds: { x1: 0, y1: 0, x2: 0, y2: 0 }, points: [] },
   })
 
   stage.stageProps.forEach((stageProp, i) => (stageProp.displayOrder = i))
