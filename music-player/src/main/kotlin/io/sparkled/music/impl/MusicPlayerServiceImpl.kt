@@ -39,7 +39,9 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
     }
 
     override fun playOneShot(songAudio: ByteArray) {
-        playAudio(AudioSystem.getClip(), songAudio)
+        AudioSystem.getClip().use {
+            playAudio(it, songAudio)
+        }
     }
 
     private fun playAudio(clip: Clip, audio: ByteArray) {
