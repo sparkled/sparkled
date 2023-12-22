@@ -39,8 +39,17 @@ class MusicPlayerServiceImpl : MusicPlayerService, LineListener {
     }
 
     override fun playOneShot(songAudio: ByteArray) {
-        AudioSystem.getClip().use {
-            playAudio(it, songAudio)
+        val clip = AudioSystem.getClip()
+        try {
+            playAudio(clip, songAudio)
+            clip.addLineListener {
+                if (it.type == LineEvent.Type.STOP) {
+                    clip.close()
+                }
+            }
+        } catch (e: Exception) {
+            logger.error("Error playing one-shot audio.", e)
+            runCatching { clip.close() }
         }
     }
 
