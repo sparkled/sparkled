@@ -3,7 +3,7 @@
     <file>sparkled.log</file>
 
     <encoder>
-      <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg %mdc%n</pattern>
+      <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} [%thread] %-5level %logger{36} - %msg %mdc%n</pattern>
     </encoder>
 
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
