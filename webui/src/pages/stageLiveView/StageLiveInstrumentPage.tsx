@@ -87,6 +87,16 @@ const instrumentsConfig: Record<
     { songId: 'jdhyv7zcchts', effectFn: () => flash(singleColorFill('#781ffd')) },
     { songId: 'jdhyv93jnmb3', effectFn: () => flash(singleColorFill('#ff06c6')) },
   ],
+  Animals: [
+    { songId: 'jnt2hkfchjqr', effectFn: () => flash(singleColorFill('#ff6600')) }, // Cat
+    { songId: 'jnt2hpm3vj6k', effectFn: () => flash(singleColorFill('#0000ff')) }, // Dog
+    { songId: 'jnt2hjctvkbm', effectFn: () => flash(singleColorFill('#ff0000')) }, // Bird
+    { songId: 'jnt2hnnsxz9x', effectFn: () => flash(singleColorFill('#781ffd')) }, // Cow
+    { songId: 'jnt2hmkj83xh', effectFn: () => flash(singleColorFill('#ffff00')) }, // Chicken
+    { songId: 'jnt2hrd4bnwn', effectFn: () => flash(singleColorFill('#00ff00')) }, // Frog
+    { songId: 'jnt2hqfsfjhb', effectFn: () => flash(singleColorFill('#00ccff')) }, // Duck
+    { songId: 'jnt2hs8qn6sg', effectFn: () => flash(singleColorFill('#ff06c6')) }, // Horse
+  ],
 }
 
 const instrumentNames = Object.keys(instrumentsConfig)
