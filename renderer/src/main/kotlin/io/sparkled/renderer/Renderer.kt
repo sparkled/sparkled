@@ -164,7 +164,7 @@ class Renderer(
                 }
             }
 
-            for (frameIndex in startFrame..<endFrame) {
+            for (frameIndex in startFrame..endFrame) {
                 val frame = when (mode) {
                     RenderMode.LIVE_FRAME -> data.frames[0]
                     else -> data.frames[frameIndex - this.startFrame]
