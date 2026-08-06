@@ -22,7 +22,8 @@ import {
 import useSWR, { SWRConfiguration } from 'swr'
 import useSWRMutation from 'swr/mutation'
 
-const API_BASE_URL = '/api'
+// TODO Use relative URL when running in jar file.
+const API_BASE_URL = 'http://localhost:8080/api'
 
 const jsonHeaders = { 'Content-Type': 'application/json' }
 
