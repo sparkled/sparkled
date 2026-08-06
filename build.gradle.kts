@@ -100,6 +100,12 @@ tasks {
         testClassesDirs = e2eTestSourceSet.output.classesDirs
         classpath = e2eTestSourceSet.runtimeClasspath
     }
+
+    create<Copy>("copyWebUi") {
+        dependsOn(":inspectRuntimeClasspath", ":processResources")
+        from("${rootDir}/webui/dist")
+        into("$rootDir/src/main/resources/webui")
+    }
 }
 
 dependencies {

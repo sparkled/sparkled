@@ -41,6 +41,6 @@ data class StagePropModel(
     var ledPositions: PixelPositions = PixelPositions.empty,
 ) : Model {
     companion object {
-        const val MAX_BRIGHTNESS = 100
+        const val MAX_BRIGHTNESS = 255
     }
 }
