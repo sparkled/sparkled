@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -73,6 +74,29 @@ class ScheduledTaskController(
 
         val viewModel = ScheduledActionViewModel.fromModel(saved)
         return HttpResponse.created(viewModel)
+    }
+
+    @Put("/{id}")
+    @Transactional
+    fun updateScheduledTask(
+        @PathVariable id: UniqueId,
+        @Body body: ScheduledActionEditViewModel,
+    ): HttpResponse<Any> {
+        val existing = db.scheduledActions.findByIdOrNull(id)
+            ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
+
+        val updated = db.scheduledActions.update(
+            existing.copy(
+                type = body.type,
+                cronExpression = body.cronExpression,
+                value = body.value,
+                playlistId = body.playlistId,
+            )
+        )
+        schedulerService.reload()
+
+        val viewModel = ScheduledActionViewModel.fromModel(updated)
+        return HttpResponse.ok(viewModel)
     }
 
     @Delete("/{id}")

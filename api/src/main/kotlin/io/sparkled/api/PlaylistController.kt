@@ -69,7 +69,7 @@ class PlaylistController(
         val playlist = PlaylistModel(id = uniqueId(), name = body.name)
         db.playlists.save(playlist)
 
-        val playlistSequences = body.sequences.map { it.toModel(playlistId = playlist.id) }
+        val playlistSequences = body.insertions.map { it.toModel(playlistId = playlist.id) }
         db.playlistSequences.saveAll(playlistSequences)
 
         return HttpResponse.created(getPlaylistById(playlist.id))
@@ -90,26 +90,16 @@ class PlaylistController(
         val existing = db.playlists.findByIdOrNull(id)
             ?: throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
 
-        val updated = db.playlists.update(existing.copy(name = body.name, updatedAt = Instant.now()))
-        val sequences = body.sequences.map { it.toModel(updated.id) }
+        db.playlists.update(existing.copy(name = body.name, updatedAt = Instant.now()))
 
-        val existingSequences = db.playlistSequences.getPlaylistSequencesByPlaylistId(id).associateBy { it.id }
-        val newSequences = sequences.map { it.copy(playlistId = id) }.associateBy { it.id }
+        // Delete playlist sequences that should be removed.
+        body.deletions.forEach { db.playlistSequences.deleteById(it) }
 
-        // Delete playlist sequences that no longer exist.
-        (existingSequences.keys - newSequences.keys).forEach { db.playlistSequences.delete(existingSequences.getValue(it)) }
+        // Insert new playlist sequences.
+        val insertions = body.insertions.map { it.toModel(playlistId = id) }
+        db.playlistSequences.saveAll(insertions)
 
-        // Insert playlist sequences that didn't exist previously.
-        (newSequences.keys - existingSequences.keys).forEach { db.playlistSequences.save(newSequences.getValue(it)) }
-
-        // Update playlist sequences that exist
-        (newSequences.keys.intersect(existingSequences.keys)).forEach {
-            db.playlistSequences.update(
-                newSequences.getValue(it)
-            )
-        }
-
-        return HttpResponse.ok()
+        return HttpResponse.noContent()
     }
 
     @Delete("/{id}")

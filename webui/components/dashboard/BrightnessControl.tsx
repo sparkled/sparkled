@@ -37,7 +37,7 @@ export function BrightnessControl() {
       <Button isIconOnly aria-label='Brightness' variant='ghost'>
         <Sun size={18} />
       </Button>
-      <Popover.Content className='w-64'>
+      <Popover.Content className='w-64' placement='bottom end'>
         <Popover.Dialog>
           <Popover.Heading>Brightness</Popover.Heading>
           <Slider

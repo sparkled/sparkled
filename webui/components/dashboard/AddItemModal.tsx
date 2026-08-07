@@ -13,6 +13,7 @@ export type AddItemModalProps = {
   submitLabel: string
   isSubmitting?: boolean
   error?: string | null
+  dialogClassName?: string
   onSubmit: AddItemSubmitHandler
   children: ReactNode
 }
@@ -24,6 +25,7 @@ export function AddItemModal({
   submitLabel,
   isSubmitting,
   error,
+  dialogClassName = 'sm:max-w-md',
   onSubmit,
   children,
 }: AddItemModalProps) {
@@ -36,7 +38,7 @@ export function AddItemModal({
       </Button>
       <Modal.Backdrop isOpen={state.isOpen} onOpenChange={state.setOpen}>
         <Modal.Container>
-          <Modal.Dialog className='sm:max-w-md'>
+          <Modal.Dialog className={dialogClassName}>
             <Modal.CloseTrigger />
             <Modal.Header>
               <Modal.Heading>{title}</Modal.Heading>

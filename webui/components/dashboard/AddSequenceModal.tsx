@@ -3,7 +3,7 @@
 import { AddItemModal, AddItemSubmitHandler } from '@/components/dashboard/AddItemModal'
 import {
   useApiCreateSequence,
-  useApiGetDashboard,
+  useApiGetSequences,
   useApiGetSongs,
   useApiGetStages,
 } from '@/hooks/api/useApi'
@@ -22,7 +22,7 @@ export function AddSequenceModal() {
   const { data: songs } = useApiGetSongs()
   const { data: stages } = useApiGetStages()
   const { trigger: createSequence, isMutating } = useApiCreateSequence()
-  const { mutate: mutateDashboard } = useApiGetDashboard()
+  const { mutate: mutateSequences } = useApiGetSequences()
 
   const handleSubmit: AddItemSubmitHandler = async (event, close) => {
     event.preventDefault()
@@ -43,7 +43,7 @@ export function AddSequenceModal() {
         stageId,
         status: 'NEW',
       })
-      await mutateDashboard()
+      await mutateSequences()
       setName('')
       setSongId(null)
       setStageId(null)

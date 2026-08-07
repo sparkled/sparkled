@@ -1,7 +1,7 @@
 'use client'
 
 import { AddItemModal, AddItemSubmitHandler } from '@/components/dashboard/AddItemModal'
-import { useApiCreatePlaylist, useApiGetDashboard } from '@/hooks/api/useApi'
+import { useApiCreatePlaylist, useApiGetPlaylists } from '@/hooks/api/useApi'
 import { FieldError, Input, Label, TextField } from '@heroui/react'
 import { useState } from 'react'
 
@@ -9,15 +9,15 @@ export function AddPlaylistModal() {
   const [name, setName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const { trigger: createPlaylist, isMutating } = useApiCreatePlaylist()
-  const { mutate: mutateDashboard } = useApiGetDashboard()
+  const { mutate: mutatePlaylists } = useApiGetPlaylists()
 
   const handleSubmit: AddItemSubmitHandler = async (event, close) => {
     event.preventDefault()
     setError(null)
 
     try {
-      await createPlaylist({ name, sequences: [] })
-      await mutateDashboard()
+      await createPlaylist({ name, insertions: [], deletions: [] })
+      await mutatePlaylists()
       setName('')
       close()
     } catch {

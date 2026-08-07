@@ -1,7 +1,7 @@
 'use client'
 
 import { AddItemModal, AddItemSubmitHandler } from '@/components/dashboard/AddItemModal'
-import { useApiCreateSong, useApiGetDashboard } from '@/hooks/api/useApi'
+import { useApiCreateSong, useApiGetSongs } from '@/hooks/api/useApi'
 import { FieldError, Input, Label, TextField } from '@heroui/react'
 import { ChangeEvent, useState } from 'react'
 
@@ -29,7 +29,7 @@ export function AddSongModal() {
   const [mp3, setMp3] = useState<File | null>(null)
   const [error, setError] = useState<string | null>(null)
   const { trigger: createSong, isMutating } = useApiCreateSong()
-  const { mutate: mutateDashboard } = useApiGetDashboard()
+  const { mutate: mutateSongs } = useApiGetSongs()
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMp3(event.target.files?.[0] ?? null)
@@ -48,7 +48,7 @@ export function AddSongModal() {
       const durationMs = await getAudioDurationMs(mp3)
 
       await createSong({ mp3, song: { artist: artist || undefined, durationMs, name } })
-      await mutateDashboard()
+      await mutateSongs()
       setName('')
       setArtist('')
       setMp3(null)

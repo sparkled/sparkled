@@ -208,9 +208,15 @@ export type StageEditViewModel = {
   width: number
 }
 
+export type PlaylistSequenceInsertionViewModel = {
+  displayOrder: number
+  sequenceId: string
+}
+
 export type PlaylistEditViewModel = {
+  deletions: string[]
+  insertions: PlaylistSequenceInsertionViewModel[]
   name: string
-  sequences: PlaylistSequenceViewModel[]
 }
 
 export const ApiErrorCodeValues = [
@@ -335,14 +341,6 @@ export type ScheduledActionViewModel = {
   playlistId?: string
   type: ScheduledActionType
   value?: string
-}
-
-export type DashboardViewModel = {
-  playlists: PlaylistSummaryViewModel[]
-  scheduledTasks: ScheduledTaskSummaryViewModel[]
-  sequences: SequenceSummaryViewModel[]
-  songs: SongViewModel[]
-  stages: StageSummaryViewModel[]
 }
 
 export type SettingEditViewModel = {

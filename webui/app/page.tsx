@@ -5,11 +5,19 @@ import { AddScheduledTaskModal } from '@/components/dashboard/AddScheduledTaskMo
 import { AddSequenceModal } from '@/components/dashboard/AddSequenceModal'
 import { AddSongModal } from '@/components/dashboard/AddSongModal'
 import { AddStageModal } from '@/components/dashboard/AddStageModal'
+import { AddToPlaylistMenu } from '@/components/dashboard/AddToPlaylistMenu'
 import { DashboardPanel } from '@/components/dashboard/DashboardPanel'
 import { DashboardPanelItem } from '@/components/dashboard/DashboardPanelItem'
 import { PlaybackActions } from '@/components/dashboard/PlaybackActions'
+import { ScheduledTaskActionsMenu } from '@/components/dashboard/ScheduledTaskActionsMenu'
 import { title } from '@/components/primitives'
-import { useApiGetDashboard } from '@/hooks/api/useApi'
+import {
+  useApiGetPlaylists,
+  useApiGetScheduledTasks,
+  useApiGetSequences,
+  useApiGetSongs,
+  useApiGetStages,
+} from '@/hooks/api/useApi'
 import { SequenceStatus } from '@/src/types/viewModels'
 import { formatDuration } from '@/utils/format'
 import { scheduledActionTypeLabel } from '@/utils/labels'
@@ -23,7 +31,25 @@ const sequenceStatusColor: Record<SequenceStatus, 'default' | 'warning' | 'succe
 }
 
 export default function Home() {
-  const { data: dashboard, error, isLoading } = useApiGetDashboard()
+  const { data: stages, error: stagesError, isLoading: stagesLoading } = useApiGetStages()
+  const { data: songs, error: songsError, isLoading: songsLoading } = useApiGetSongs()
+  const {
+    data: sequences,
+    error: sequencesError,
+    isLoading: sequencesLoading,
+  } = useApiGetSequences()
+  const {
+    data: playlists,
+    error: playlistsError,
+    isLoading: playlistsLoading,
+  } = useApiGetPlaylists()
+  const {
+    data: scheduledTasks,
+    error: scheduledTasksError,
+    isLoading: scheduledTasksLoading,
+  } = useApiGetScheduledTasks()
+
+  const error = stagesError || songsError || sequencesError || playlistsError || scheduledTasksError
 
   return (
     <section className='flex flex-col gap-6 py-8'>
@@ -46,11 +72,11 @@ export default function Home() {
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
         <DashboardPanel
           addAction={<AddStageModal />}
-          count={dashboard?.stages.length}
+          count={stages?.length}
           emptyLabel='No stages yet.'
           icon={<TheaterIcon size={20} />}
-          isLoading={isLoading}
-          items={dashboard?.stages ?? []}
+          isLoading={stagesLoading}
+          items={stages ?? []}
           title='Stages'
           viewAllHref='/stages'
           renderItem={stage => <DashboardPanelItem title={stage.name} />}
@@ -58,11 +84,11 @@ export default function Home() {
 
         <DashboardPanel
           addAction={<AddSongModal />}
-          count={dashboard?.songs.length}
+          count={songs?.length}
           emptyLabel='No songs yet.'
           icon={<Music size={20} />}
-          isLoading={isLoading}
-          items={dashboard?.songs ?? []}
+          isLoading={songsLoading}
+          items={songs ?? []}
           title='Songs'
           viewAllHref='/songs'
           renderItem={song => (
@@ -75,16 +101,21 @@ export default function Home() {
 
         <DashboardPanel
           addAction={<AddSequenceModal />}
-          count={dashboard?.sequences.length}
+          count={sequences?.length}
           emptyLabel='No sequences yet.'
           icon={<SparklesIcon size={20} />}
-          isLoading={isLoading}
-          items={dashboard?.sequences ?? []}
+          isLoading={sequencesLoading}
+          items={sequences ?? []}
           title='Sequences'
           viewAllHref='/sequences'
           renderItem={sequence => (
             <DashboardPanelItem
-              actions={<PlaybackActions sequenceId={sequence.id} />}
+              actions={
+                <>
+                  <PlaybackActions sequenceId={sequence.id} />
+                  <AddToPlaylistMenu sequenceId={sequence.id} />
+                </>
+              }
               statusChip={
                 <Chip color={sequenceStatusColor[sequence.status]} size='sm'>
                   {sequence.status}
@@ -98,11 +129,11 @@ export default function Home() {
 
         <DashboardPanel
           addAction={<AddPlaylistModal />}
-          count={dashboard?.playlists.length}
+          count={playlists?.length}
           emptyLabel='No playlists yet.'
           icon={<ListMusic size={20} />}
-          isLoading={isLoading}
-          items={dashboard?.playlists ?? []}
+          isLoading={playlistsLoading}
+          items={playlists ?? []}
           title='Playlists'
           viewAllHref='/playlists'
           renderItem={playlist => (
@@ -116,15 +147,16 @@ export default function Home() {
 
         <DashboardPanel
           addAction={<AddScheduledTaskModal />}
-          count={dashboard?.scheduledTasks.length}
+          count={scheduledTasks?.length}
           emptyLabel='No scheduled tasks yet.'
           icon={<CalendarClock size={20} />}
-          isLoading={isLoading}
-          items={dashboard?.scheduledTasks ?? []}
+          isLoading={scheduledTasksLoading}
+          items={scheduledTasks ?? []}
           title='Scheduled Tasks'
           viewAllHref='/scheduled-tasks'
           renderItem={task => (
             <DashboardPanelItem
+              actions={<ScheduledTaskActionsMenu taskId={task.id} />}
               subtitle={`Cron (${task.cronExpression})`}
               title={
                 task.type === 'PLAY_PLAYLIST' && task.playlistName

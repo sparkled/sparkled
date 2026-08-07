@@ -1,7 +1,7 @@
 'use client'
 
 import { AddItemModal, AddItemSubmitHandler } from '@/components/dashboard/AddItemModal'
-import { useApiCreateStage, useApiGetDashboard } from '@/hooks/api/useApi'
+import { useApiCreateStage, useApiGetStages } from '@/hooks/api/useApi'
 import { FieldError, Input, Label, TextField } from '@heroui/react'
 import { useState } from 'react'
 
@@ -12,7 +12,7 @@ export function AddStageModal() {
   const [name, setName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const { trigger: createStage, isMutating } = useApiCreateStage()
-  const { mutate: mutateDashboard } = useApiGetDashboard()
+  const { mutate: mutateStages } = useApiGetStages()
 
   const handleSubmit: AddItemSubmitHandler = async (event, close) => {
     event.preventDefault()
@@ -20,7 +20,7 @@ export function AddStageModal() {
 
     try {
       await createStage({ height: DEFAULT_HEIGHT, name, stageProps: [], width: DEFAULT_WIDTH })
-      await mutateDashboard()
+      await mutateStages()
       setName('')
       close()
     } catch {

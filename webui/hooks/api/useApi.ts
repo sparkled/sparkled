@@ -1,5 +1,4 @@
 import {
-  DashboardViewModel,
   PlaylistActionViewModel,
   PlaylistEditViewModel,
   PlaylistSummaryViewModel,
@@ -68,12 +67,6 @@ async function sendMultipart<TResponse>(url: string, formData: FormData): Promis
   return parseResponse<TResponse>(response)
 }
 
-// Dashboard
-
-export function useApiGetDashboard(config?: SWRConfiguration) {
-  return useSWR<DashboardViewModel>('/dashboard', fetchJson, config)
-}
-
 // Player
 
 export function useApiAdjustPlayback() {
@@ -136,6 +129,19 @@ export function useApiCreateScheduledTask() {
   return useSWRMutation<ScheduledActionViewModel, Error, string, ScheduledActionEditViewModel>(
     '/scheduledTasks',
     (url, { arg }) => sendJson<ScheduledActionViewModel>(url, 'POST', arg),
+  )
+}
+
+export type UpdateScheduledTaskArgs = {
+  id: string
+  scheduledTask: ScheduledActionEditViewModel
+}
+
+export function useApiUpdateScheduledTask() {
+  return useSWRMutation<ScheduledActionViewModel, Error, string, UpdateScheduledTaskArgs>(
+    '/scheduledTasks',
+    (_url, { arg }) =>
+      sendJson<ScheduledActionViewModel>(`/scheduledTasks/${arg.id}`, 'PUT', arg.scheduledTask),
   )
 }
 
