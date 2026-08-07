@@ -1,5 +1,6 @@
 'use client'
 
+import { BrightnessControl } from '@/components/dashboard/BrightnessControl'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { siteConfig } from '@/config/site'
 import { Button, InputGroup, Kbd, Link, TextField } from '@heroui/react'
@@ -36,21 +37,10 @@ export const Navbar = () => {
             {/* TODO Sparkled logo */}
             <p className='font-bold text-inherit'>{siteConfig.name}</p>
           </NextLink>
-          <ul className='ml-2 hidden gap-4 lg:flex'>
-            {siteConfig.navItems.map(item => (
-              <li key={item.href}>
-                <NextLink
-                  className={clsx(
-                    'text-foreground hover:text-accent transition-colors',
-                    'data-[active=true]:text-accent data-[active=true]:font-medium',
-                  )}
-                  href={item.href}
-                >
-                  {item.label}
-                </NextLink>
-              </li>
-            ))}
-          </ul>
+        </div>
+
+        <div className='flex items-center gap-2'>
+          <BrightnessControl />
         </div>
       </header>
 

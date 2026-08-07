@@ -1,27 +1,25 @@
 'use client'
 
-import { BrightnessControl } from '@/components/dashboard/BrightnessControl'
+import { AddPlaylistModal } from '@/components/dashboard/AddPlaylistModal'
+import { AddScheduledTaskModal } from '@/components/dashboard/AddScheduledTaskModal'
+import { AddSequenceModal } from '@/components/dashboard/AddSequenceModal'
+import { AddSongModal } from '@/components/dashboard/AddSongModal'
+import { AddStageModal } from '@/components/dashboard/AddStageModal'
 import { DashboardPanel } from '@/components/dashboard/DashboardPanel'
 import { DashboardPanelItem } from '@/components/dashboard/DashboardPanelItem'
 import { PlaybackActions } from '@/components/dashboard/PlaybackActions'
 import { title } from '@/components/primitives'
 import { useApiGetDashboard } from '@/hooks/api/useApi'
-import { ScheduledActionType, SequenceStatus } from '@/src/types/viewModels'
+import { SequenceStatus } from '@/src/types/viewModels'
 import { formatDuration } from '@/utils/format'
+import { scheduledActionTypeLabel } from '@/utils/labels'
 import { Alert, Chip } from '@heroui/react'
-import { AudioLines, CalendarClock, Home as HomeIcon, ListMusic, Music } from 'lucide-react'
+import { CalendarClock, ListMusic, Music, SparklesIcon, TheaterIcon } from 'lucide-react'
 
 const sequenceStatusColor: Record<SequenceStatus, 'default' | 'warning' | 'success'> = {
   NEW: 'default',
   DRAFT: 'warning',
   PUBLISHED: 'success',
-}
-
-const scheduledTaskTypeLabel: Record<ScheduledActionType, string> = {
-  NONE: 'No action',
-  PLAY_PLAYLIST: 'Play playlist',
-  STOP_PLAYBACK: 'Stop playback',
-  SET_BRIGHTNESS: 'Set brightness',
 }
 
 export default function Home() {
@@ -31,7 +29,6 @@ export default function Home() {
     <section className='flex flex-col gap-6 py-8'>
       <div className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
         <h1 className={title({ size: 'sm' })}>Dashboard</h1>
-        <BrightnessControl />
       </div>
 
       {error && (
@@ -48,9 +45,10 @@ export default function Home() {
 
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
         <DashboardPanel
+          addAction={<AddStageModal />}
           count={dashboard?.stages.length}
           emptyLabel='No stages yet.'
-          icon={<HomeIcon size={20} />}
+          icon={<TheaterIcon size={20} />}
           isLoading={isLoading}
           items={dashboard?.stages ?? []}
           title='Stages'
@@ -59,6 +57,7 @@ export default function Home() {
         />
 
         <DashboardPanel
+          addAction={<AddSongModal />}
           count={dashboard?.songs.length}
           emptyLabel='No songs yet.'
           icon={<Music size={20} />}
@@ -75,9 +74,10 @@ export default function Home() {
         />
 
         <DashboardPanel
+          addAction={<AddSequenceModal />}
           count={dashboard?.sequences.length}
           emptyLabel='No sequences yet.'
-          icon={<AudioLines size={20} />}
+          icon={<SparklesIcon size={20} />}
           isLoading={isLoading}
           items={dashboard?.sequences ?? []}
           title='Sequences'
@@ -97,6 +97,7 @@ export default function Home() {
         />
 
         <DashboardPanel
+          addAction={<AddPlaylistModal />}
           count={dashboard?.playlists.length}
           emptyLabel='No playlists yet.'
           icon={<ListMusic size={20} />}
@@ -114,6 +115,7 @@ export default function Home() {
         />
 
         <DashboardPanel
+          addAction={<AddScheduledTaskModal />}
           count={dashboard?.scheduledTasks.length}
           emptyLabel='No scheduled tasks yet.'
           icon={<CalendarClock size={20} />}
@@ -127,7 +129,7 @@ export default function Home() {
               title={
                 task.type === 'PLAY_PLAYLIST' && task.playlistName
                   ? `Play playlist ${task.playlistName}`
-                  : scheduledTaskTypeLabel[task.type]
+                  : scheduledActionTypeLabel[task.type]
               }
             />
           )}

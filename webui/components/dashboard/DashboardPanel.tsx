@@ -11,6 +11,7 @@ export type DashboardPanelProps<TItem> = {
   renderItem: (item: TItem) => ReactNode
   isLoading?: boolean
   emptyLabel: string
+  addAction?: ReactNode
 }
 
 export function DashboardPanel<TItem>({
@@ -22,21 +23,23 @@ export function DashboardPanel<TItem>({
   renderItem,
   isLoading,
   emptyLabel,
+  addAction,
 }: DashboardPanelProps<TItem>) {
   return (
     <Card className='flex h-full flex-col'>
-      <Card.Header className='flex items-center justify-between gap-2'>
+      <Card.Header className='flex flex-row items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
           <span className='text-accent'>{icon}</span>
           <Card.Title className='text-base'>{title}</Card.Title>
+          {isLoading ? (
+            <Skeleton className='h-6 w-8 rounded-full' />
+          ) : (
+            <Chip color='accent' size='sm'>
+              {count ?? 0}
+            </Chip>
+          )}
         </div>
-        {isLoading ? (
-          <Skeleton className='h-6 w-8 rounded-full' />
-        ) : (
-          <Chip color='accent' size='sm'>
-            {count ?? 0}
-          </Chip>
-        )}
+        {addAction}
       </Card.Header>
       <Card.Content className='flex-1'>
         {isLoading ? (
