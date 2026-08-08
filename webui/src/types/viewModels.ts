@@ -321,6 +321,11 @@ export type StageSummaryViewModel = {
   name: string
 }
 
+export type RenderedStagePropData = {
+  data: number[]
+  ledCount: number
+}
+
 export const PlaylistActionTypeValues = ['NONE', 'PLAY_PLAYLIST', 'PLAY_SEQUENCE', 'STOP'] as const
 export type PlaylistActionType = (typeof PlaylistActionTypeValues)[number]
 
@@ -341,6 +346,12 @@ export type ScheduledActionViewModel = {
   playlistId?: string
   type: ScheduledActionType
   value?: string
+}
+
+export type RenderResult = {
+  frameCount: number
+  stageProps: Record<string, RenderedStagePropData>
+  startFrame: number
 }
 
 export type SettingEditViewModel = {

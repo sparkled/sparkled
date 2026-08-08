@@ -21,7 +21,8 @@
     "pixi.js": "8.19.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "swr": "^2.5.0"
+    "swr": "^2.5.0",
+    "wavesurfer.js": "7.12.11"
   },
   "devDependencies": {
     "@eslint/compat": "1.2.8",

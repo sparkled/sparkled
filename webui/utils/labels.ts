@@ -1,10 +1,16 @@
-import { ScheduledActionType, StagePropType } from '@/src/types/viewModels'
+import { ScheduledActionType, SequenceStatus, StagePropType } from '@/src/types/viewModels'
 
 export const scheduledActionTypeLabel: Record<ScheduledActionType, string> = {
   NONE: 'No action',
   PLAY_PLAYLIST: 'Play playlist',
   STOP_PLAYBACK: 'Stop playback',
   SET_BRIGHTNESS: 'Set brightness',
+}
+
+export const sequenceStatusColor: Record<SequenceStatus, 'default' | 'warning' | 'success'> = {
+  NEW: 'default',
+  DRAFT: 'warning',
+  PUBLISHED: 'success',
 }
 
 export const stagePropTypeLabel: Record<StagePropType, string> = {

@@ -4,6 +4,7 @@ import {
   PlaylistSummaryViewModel,
   PlaylistViewModel,
   ReferenceDataViewModel,
+  RenderResult,
   ScheduledActionEditViewModel,
   ScheduledActionViewModel,
   ScheduledTaskSummaryViewModel,
@@ -21,8 +22,7 @@ import {
 import useSWR, { SWRConfiguration } from 'swr'
 import useSWRMutation from 'swr/mutation'
 
-// TODO Use relative URL when running in jar file.
-const API_BASE_URL = 'http://localhost:8080/api'
+const API_BASE_URL = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8080/api'
 
 const jsonHeaders = { 'Content-Type': 'application/json' }
 
@@ -195,7 +195,7 @@ export type PreviewSequenceArgs = {
 }
 
 export function useApiPreviewSequence() {
-  return useSWRMutation<unknown, Error, string, PreviewSequenceArgs>(
+  return useSWRMutation<RenderResult, Error, string, PreviewSequenceArgs>(
     '/sequences/preview',
     (_url, { arg }) => {
       const query = new URLSearchParams()
@@ -209,7 +209,11 @@ export function useApiPreviewSequence() {
 
       const queryString = query.toString() ? `?${query.toString()}` : ''
 
-      return sendJson<unknown>(`/sequences/${arg.id}/preview${queryString}`, 'POST', arg.sequence)
+      return sendJson<RenderResult>(
+        `/sequences/${arg.id}/preview${queryString}`,
+        'POST',
+        arg.sequence,
+      )
     },
   )
 }

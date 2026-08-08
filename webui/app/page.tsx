@@ -10,6 +10,7 @@ import { DashboardPanel } from '@/components/dashboard/DashboardPanel'
 import { DashboardPanelItem } from '@/components/dashboard/DashboardPanelItem'
 import { PlaybackActions } from '@/components/dashboard/PlaybackActions'
 import { ScheduledTaskActionsMenu } from '@/components/dashboard/ScheduledTaskActionsMenu'
+import { SequenceActions } from '@/components/dashboard/SequenceActions'
 import { StageActions } from '@/components/dashboard/StageActions'
 import { title } from '@/components/primitives'
 import {
@@ -19,17 +20,10 @@ import {
   useApiGetSongs,
   useApiGetStages,
 } from '@/hooks/api/useApi'
-import { SequenceStatus } from '@/src/types/viewModels'
 import { formatDuration } from '@/utils/format'
-import { scheduledActionTypeLabel } from '@/utils/labels'
+import { scheduledActionTypeLabel, sequenceStatusColor } from '@/utils/labels'
 import { Alert, Chip } from '@heroui/react'
 import { CalendarClock, ListMusic, Music, SparklesIcon, TheaterIcon } from 'lucide-react'
-
-const sequenceStatusColor: Record<SequenceStatus, 'default' | 'warning' | 'success'> = {
-  NEW: 'default',
-  DRAFT: 'warning',
-  PUBLISHED: 'success',
-}
 
 export default function Home() {
   const { data: stages, error: stagesError, isLoading: stagesLoading } = useApiGetStages()
@@ -113,6 +107,7 @@ export default function Home() {
                 <>
                   <PlaybackActions sequenceId={sequence.id} />
                   <AddToPlaylistMenu sequenceId={sequence.id} />
+                  <SequenceActions sequenceId={sequence.id} />
                 </>
               }
               statusChip={

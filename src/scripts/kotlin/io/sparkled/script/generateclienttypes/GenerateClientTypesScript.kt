@@ -36,6 +36,7 @@ object GenerateClientTypesScript {
                 .groupBy { it.path }
                 .forEach { ClientTypeCodeGenerator("./webUi/src/types", it.key!!, it.value).generateCodeToFile() }
         } catch (e: Exception) {
+            println(e.message)
             logger.error("Failed to run script", e)
         } finally {
             exitProcess(0)

@@ -29,12 +29,12 @@ class PlayerController(
         return when (action.action) {
             PlaylistActionType.PLAY_PLAYLIST, PlaylistActionType.PLAY_SEQUENCE -> {
                 play(action)
-                HttpResponse.ok()
+                HttpResponse.noContent()
             }
 
             PlaylistActionType.STOP -> {
                 stop()
-                HttpResponse.ok()
+                HttpResponse.noContent()
             }
 
             else -> HttpResponse.badRequest("A valid playback action must be supplied.")

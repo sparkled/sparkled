@@ -195,7 +195,7 @@ class SequenceController(
             db.sequences.update(sequence.copy(status = SequenceStatus.DRAFT, updatedAt = Instant.now()))
         }
 
-        return HttpResponse.ok()
+        return HttpResponse.noContent()
     }
 
     private fun renderSequence(
