@@ -10,6 +10,7 @@ import { DashboardPanel } from '@/components/dashboard/DashboardPanel'
 import { DashboardPanelItem } from '@/components/dashboard/DashboardPanelItem'
 import { PlaybackActions } from '@/components/dashboard/PlaybackActions'
 import { ScheduledTaskActionsMenu } from '@/components/dashboard/ScheduledTaskActionsMenu'
+import { StageActions } from '@/components/dashboard/StageActions'
 import { title } from '@/components/primitives'
 import {
   useApiGetPlaylists,
@@ -53,10 +54,6 @@ export default function Home() {
 
   return (
     <section className='flex flex-col gap-6 py-8'>
-      <div className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
-        <h1 className={title({ size: 'sm' })}>Dashboard</h1>
-      </div>
-
       {error && (
         <Alert status='danger'>
           <Alert.Indicator />
@@ -79,7 +76,9 @@ export default function Home() {
           items={stages ?? []}
           title='Stages'
           viewAllHref='/stages'
-          renderItem={stage => <DashboardPanelItem title={stage.name} />}
+          renderItem={stage => (
+            <DashboardPanelItem actions={<StageActions stageId={stage.id} />} title={stage.name} />
+          )}
         />
 
         <DashboardPanel
