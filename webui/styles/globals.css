@@ -7,3 +7,8 @@
 	--font-sans: "font", sans-serif;
 	--font-mono: "monospace", monospace;
 }
+
+html, body {
+  /* Disable backward navigation when swiping right with two fingers on a Mac. */
+  overscroll-behavior-x: none;
+}

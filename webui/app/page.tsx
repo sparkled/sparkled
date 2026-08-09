@@ -20,6 +20,7 @@ import {
   useApiGetSongs,
   useApiGetStages,
 } from '@/hooks/api/useApi'
+import { getCronSummary } from '@/utils/cron'
 import { formatDuration } from '@/utils/format'
 import { scheduledActionTypeLabel, sequenceStatusColor } from '@/utils/labels'
 import { Alert, Chip } from '@heroui/react'
@@ -151,10 +152,10 @@ export default function Home() {
           renderItem={task => (
             <DashboardPanelItem
               actions={<ScheduledTaskActionsMenu taskId={task.id} />}
-              subtitle={`Cron (${task.cronExpression})`}
+              subtitle={getCronSummary(task.cronExpression)}
               title={
                 task.type === 'PLAY_PLAYLIST' && task.playlistName
-                  ? `Play playlist ${task.playlistName}`
+                  ? `Play playlist: ${task.playlistName}`
                   : scheduledActionTypeLabel[task.type]
               }
             />
