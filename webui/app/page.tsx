@@ -9,10 +9,10 @@ import { AddToPlaylistMenu } from '@/components/dashboard/AddToPlaylistMenu'
 import { DashboardPanel } from '@/components/dashboard/DashboardPanel'
 import { DashboardPanelItem } from '@/components/dashboard/DashboardPanelItem'
 import { PlaybackActions } from '@/components/dashboard/PlaybackActions'
+import { PlaylistActions } from '@/components/dashboard/PlaylistActions'
 import { ScheduledTaskActionsMenu } from '@/components/dashboard/ScheduledTaskActionsMenu'
 import { SequenceActions } from '@/components/dashboard/SequenceActions'
 import { StageActions } from '@/components/dashboard/StageActions'
-import { title } from '@/components/primitives'
 import {
   useApiGetPlaylists,
   useApiGetScheduledTasks,
@@ -131,13 +131,23 @@ export default function Home() {
           items={playlists ?? []}
           title='Playlists'
           viewAllHref='/playlists'
-          renderItem={playlist => (
-            <DashboardPanelItem
-              actions={<PlaybackActions playlistId={playlist.id} />}
-              subtitle={`${playlist.sequenceCount} sequence(s) · ${formatDuration(playlist.durationMs)}`}
-              title={playlist.name}
-            />
-          )}
+          renderItem={playlist => {
+            let count = playlist.sequenceCount
+            let countMessage = `${count} ${count === 1 ? 'sequence' : 'sequences'}`
+            let duration = `${formatDuration(playlist.durationMs)}`
+            return (
+              <DashboardPanelItem
+                actions={
+                  <>
+                    <PlaybackActions playlistId={playlist.id} />
+                    <PlaylistActions playlistId={playlist.id} />
+                  </>
+                }
+                subtitle={`${countMessage} · ${duration}`}
+                title={playlist.name}
+              />
+            )
+          }}
         />
 
         <DashboardPanel
