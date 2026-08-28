@@ -12,10 +12,19 @@ class SettingsCache(
     private val db: DbService,
 ) : Cache<SettingsCacheEntry>(
     name = "Settings",
-    fallback = SettingsCacheEntry(brightness = SettingsConstants.Brightness.MAX),
+    fallback = SettingsCacheEntry(
+        brightness = SettingsConstants.Brightness.MAX,
+        framesPerSecond = SettingsConstants.FramesPerSecond.DEFAULT,
+    ),
 ) {
     override fun reload(lastLoadedAt: Instant?): SettingsCacheEntry {
-        val brightness = db.settings.findAll().firstOrNull { it.id == SettingsConstants.Brightness.CODE }
-        return SettingsCacheEntry(brightness = brightness?.value?.toInt() ?: SettingsConstants.Brightness.MAX)
+        val settings = db.settings.findAll()
+        val brightness = settings.firstOrNull { it.id == SettingsConstants.Brightness.CODE }
+        val framesPerSecond = settings.firstOrNull { it.id == SettingsConstants.FramesPerSecond.CODE }
+
+        return SettingsCacheEntry(
+            brightness = brightness?.value?.toInt() ?: SettingsConstants.Brightness.MAX,
+            framesPerSecond = framesPerSecond?.value?.toInt() ?: SettingsConstants.FramesPerSecond.DEFAULT,
+        )
     }
 }

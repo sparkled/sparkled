@@ -142,9 +142,6 @@
       <column name="name" type="NVARCHAR(64)">
         <constraints nullable="false"/>
       </column>
-      <column name="frames_per_second" type="INT(10)">
-        <constraints nullable="false"/>
-      </column>
       <column name="status" type="NVARCHAR(16)">
         <constraints nullable="false"/>
       </column>

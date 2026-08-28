@@ -7,16 +7,13 @@ import {
   useApiGetSongs,
   useApiGetStages,
 } from '@/hooks/api/useApi'
-import { FieldError, Input, Label, ListBox, NumberField, Select, TextField } from '@heroui/react'
+import { FieldError, Input, Label, ListBox, Select, TextField } from '@heroui/react'
 import { useState } from 'react'
-
-const DEFAULT_FRAMES_PER_SECOND = 30
 
 export function AddSequenceModal() {
   const [name, setName] = useState('')
   const [songId, setSongId] = useState<string | null>(null)
   const [stageId, setStageId] = useState<string | null>(null)
-  const [framesPerSecond, setFramesPerSecond] = useState(DEFAULT_FRAMES_PER_SECOND)
   const [error, setError] = useState<string | null>(null)
 
   const { data: songs } = useApiGetSongs()
@@ -37,7 +34,6 @@ export function AddSequenceModal() {
       await createSequence({
         channels: [],
         frameCount: 0,
-        framesPerSecond,
         name,
         songId,
         stageId,
@@ -47,7 +43,6 @@ export function AddSequenceModal() {
       setName('')
       setSongId(null)
       setStageId(null)
-      setFramesPerSecond(DEFAULT_FRAMES_PER_SECOND)
       close()
     } catch {
       setError('Failed to add sequence. Please try again.')
@@ -115,20 +110,6 @@ export function AddSequenceModal() {
           </ListBox>
         </Select.Popover>
       </Select>
-
-      <NumberField
-        minValue={1}
-        name='framesPerSecond'
-        value={framesPerSecond}
-        onChange={setFramesPerSecond}
-      >
-        <Label>Frames per second</Label>
-        <NumberField.Group>
-          <NumberField.DecrementButton />
-          <NumberField.Input />
-          <NumberField.IncrementButton />
-        </NumberField.Group>
-      </NumberField>
     </AddItemModal>
   )
 }

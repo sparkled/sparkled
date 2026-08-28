@@ -54,6 +54,15 @@ class SettingController(
                 )
             }
 
+            id == SettingsConstants.FramesPerSecond.CODE -> {
+                db.settings.save(
+                    SettingModel(
+                        id = SettingsConstants.FramesPerSecond.CODE,
+                        value = SettingsConstants.FramesPerSecond.DEFAULT.toString()
+                    )
+                )
+            }
+
             else -> throw HttpResponseException(ApiErrorCode.ERR_NOT_FOUND)
         }
 

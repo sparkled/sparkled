@@ -55,7 +55,6 @@ val testSequence
         songId = "1",
         status = SequenceStatus.PUBLISHED,
         name = "Test sequence",
-        framesPerSecond = 30,
     )
 
 val testSetting

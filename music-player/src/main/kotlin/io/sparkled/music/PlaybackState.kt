@@ -6,6 +6,7 @@ import io.sparkled.model.StageModel
 import io.sparkled.model.StagePropModel
 import io.sparkled.model.UniqueId
 import io.sparkled.model.animation.effect.Effect
+import io.sparkled.model.constant.ModelConstants
 import io.sparkled.model.render.RenderedStagePropDataMap
 import io.sparkled.model.util.SequenceUtils
 import java.lang.System.currentTimeMillis
@@ -69,10 +70,10 @@ data class SequencePlaybackState(
         get() = sequences[sequenceIndex]
 
     override val framesPerSecond: Int
-        get() = sequence.framesPerSecond
+        get() = ModelConstants.DEFAULT_FRAMES_PER_SECOND
 
     override val frameCount: Int
-        get() = SequenceUtils.getFrameCount(song, sequence)
+        get() = SequenceUtils.getFrameCount(song)
 
     override val progress: Double
         get() = progressFunction.invoke()

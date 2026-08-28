@@ -21,7 +21,6 @@ class GetStagePropCodesCommandTest : StringSpec() {
             val sequence = SequenceModel(
                 songId = "0",
                 stageId = "0",
-                framesPerSecond = 0,
                 name = "",
                 status = SequenceStatus.NEW,
             )
@@ -30,7 +29,7 @@ class GetStagePropCodesCommandTest : StringSpec() {
                 ipAddress = InetAddress.getLocalHost(),
                 port = 2812,
                 args = listOf(GetStagePropCodesCommand.KEY),
-                settings = SettingsCacheEntry(0),
+                settings = SettingsCacheEntry(brightness = 0, framesPerSecond = 60),
                 playbackState = SequencePlaybackState(
                     sequences = listOf(sequence),
                     sequenceIndex = 0,

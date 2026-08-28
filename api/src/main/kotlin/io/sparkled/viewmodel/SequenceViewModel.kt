@@ -14,7 +14,6 @@ data class SequenceViewModel(
     val songId: UniqueId,
     val stageId: UniqueId,
     val name: String,
-    val framesPerSecond: Int,
     val frameCount: Int = 0,
     val status: SequenceStatus = SequenceStatus.NEW,
     val channels: List<SequenceChannelViewModel> = emptyList()
@@ -25,7 +24,6 @@ data class SequenceViewModel(
             songId = songId,
             stageId = stageId,
             name = name,
-            framesPerSecond = framesPerSecond,
             status = status,
         )
 
@@ -43,8 +41,7 @@ data class SequenceViewModel(
             songId = model.songId,
             stageId = model.stageId,
             name = model.name,
-            framesPerSecond = model.framesPerSecond,
-            frameCount = SequenceUtils.getFrameCount(song, model),
+            frameCount = SequenceUtils.getFrameCount(song),
             status = model.status,
             channels = channels.map(SequenceChannelViewModel::fromModel),
         )

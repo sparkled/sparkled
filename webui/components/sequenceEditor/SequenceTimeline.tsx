@@ -5,6 +5,7 @@ import {
   SequenceChannelRow,
 } from '@/components/sequenceEditor/SequenceChannelRow'
 import { SequenceWaveform, SequenceWaveformHandle } from '@/components/sequenceEditor/SequenceWaveform'
+import { SEQUENCE_FRAMES_PER_SECOND } from '@/src/constants/sequence'
 import { Effect, SequenceViewModel } from '@/src/types/viewModels'
 import { formatDuration } from '@/utils/format'
 import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react'
@@ -60,15 +61,15 @@ export const SequenceTimeline = forwardRef<SequenceTimelineHandle, SequenceTimel
 
     const secondMarks = useMemo(() => {
       const marks: { left: number; label: string }[] = []
-      const totalSeconds = Math.ceil(sequence.frameCount / sequence.framesPerSecond)
+      const totalSeconds = Math.ceil(sequence.frameCount / SEQUENCE_FRAMES_PER_SECOND)
       for (let second = 0; second <= totalSeconds; second++) {
         marks.push({
-          left: second * sequence.framesPerSecond * pixelsPerFrame,
+          left: second * SEQUENCE_FRAMES_PER_SECOND * pixelsPerFrame,
           label: formatDuration(second * 1000),
         })
       }
       return marks
-    }, [sequence.frameCount, sequence.framesPerSecond, pixelsPerFrame])
+    }, [sequence.frameCount, pixelsPerFrame])
 
     return (
       <div className='border-default h-full overflow-auto rounded-xl border'>
@@ -119,7 +120,6 @@ export const SequenceTimeline = forwardRef<SequenceTimelineHandle, SequenceTimel
             <SequenceWaveform
               ref={waveformRef}
               frameCount={sequence.frameCount}
-              framesPerSecond={sequence.framesPerSecond}
               pixelsPerFrame={pixelsPerFrame}
               sequenceId={sequence.id}
               onAudioProcess={onPlaybackAudioProcess}

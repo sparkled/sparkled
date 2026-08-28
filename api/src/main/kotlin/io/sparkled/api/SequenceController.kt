@@ -20,6 +20,7 @@ import io.sparkled.model.SequenceModel
 import io.sparkled.model.SongModel
 import io.sparkled.model.StageModel
 import io.sparkled.model.UniqueId
+import io.sparkled.model.constant.ModelConstants
 import io.sparkled.model.enumeration.SequenceStatus
 import io.sparkled.model.render.RenderResult
 import io.sparkled.model.render.RenderedSequence
@@ -116,7 +117,6 @@ class SequenceController(
             songId = body.songId,
             status = body.status,
             name = body.name,
-            framesPerSecond = body.framesPerSecond,
         )
 
         val saved = db.sequences.save(sequence)
@@ -153,7 +153,6 @@ class SequenceController(
 
         val editedSequence = sequence.copy(
             name = body.name,
-            framesPerSecond = body.framesPerSecond,
             status = body.status,
         )
         val sequenceChannels = body.channels.map { it.toModel(id) }
@@ -208,13 +207,13 @@ class SequenceController(
         preview: Boolean,
     ): RenderResult {
         val stageProps = db.stageProps.findAllByStageId(sequence.stageId)
-        val endFrameBounded = min(endFrame, SequenceUtils.getFrameCount(song, sequence) - 1)
+        val endFrameBounded = min(endFrame, SequenceUtils.getFrameCount(song) - 1)
 
         return Renderer(
             pluginManager,
             { cache.gifs.get() },
             stage,
-            sequence.framesPerSecond,
+            ModelConstants.DEFAULT_FRAMES_PER_SECOND,
             sequenceChannels.associate { it.stagePropId to it.channelData },
             stageProps.associateBy { it.id },
             startFrame,

@@ -254,7 +254,6 @@ export type SequenceStatus = (typeof SequenceStatusValues)[number]
 export type SequenceViewModel = {
   channels: SequenceChannelViewModel[]
   frameCount: number
-  framesPerSecond: number
   id: string
   name: string
   songId: string
@@ -265,7 +264,6 @@ export type SequenceViewModel = {
 export type SequenceEditViewModel = {
   channels: SequenceChannelViewModel[]
   frameCount: number
-  framesPerSecond: number
   name: string
   songId: string
   stageId: string
@@ -274,7 +272,6 @@ export type SequenceEditViewModel = {
 
 export type SequenceSummaryViewModel = {
   durationMs: number
-  framesPerSecond: number
   id: string
   name: string
   songName: string

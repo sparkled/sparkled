@@ -1,6 +1,7 @@
 'use client'
 
 import { getSequenceSongAudioUrl } from '@/hooks/api/useApi'
+import { SEQUENCE_FRAMES_PER_SECOND } from '@/src/constants/sequence'
 import WaveSurfer from 'wavesurfer.js'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 
@@ -12,7 +13,6 @@ export type SequenceWaveformHandle = {
 export type SequenceWaveformProps = {
   sequenceId: string
   frameCount: number
-  framesPerSecond: number
   pixelsPerFrame: number
   onSeek: (frame: number) => void
   onAudioProcess: (frame: number) => void
@@ -22,13 +22,13 @@ export type SequenceWaveformProps = {
 /** Renders the sequence's song audio as a waveform using wavesurfer.js, and drives playback for previews. */
 export const SequenceWaveform = forwardRef<SequenceWaveformHandle, SequenceWaveformProps>(
   function SequenceWaveform(
-    { sequenceId, frameCount, framesPerSecond, pixelsPerFrame, onSeek, onAudioProcess, onPlaybackEnd },
+    { sequenceId, frameCount, pixelsPerFrame, onSeek, onAudioProcess, onPlaybackEnd },
     ref,
   ) {
     const containerRef = useRef<HTMLDivElement>(null)
     const waveSurferRef = useRef<WaveSurfer | null>(null)
-    const callbacksRef = useRef({ onSeek, onAudioProcess, onPlaybackEnd, frameCount, framesPerSecond })
-    callbacksRef.current = { onSeek, onAudioProcess, onPlaybackEnd, frameCount, framesPerSecond }
+    const callbacksRef = useRef({ onSeek, onAudioProcess, onPlaybackEnd, frameCount })
+    callbacksRef.current = { onSeek, onAudioProcess, onPlaybackEnd, frameCount }
 
     useEffect(() => {
       const container = containerRef.current
@@ -47,13 +47,16 @@ export const SequenceWaveform = forwardRef<SequenceWaveformHandle, SequenceWavef
       })
 
       waveSurfer.on('interaction', time => {
-        const { frameCount, framesPerSecond } = callbacksRef.current
-        const frame = Math.min(frameCount - 1, Math.max(0, Math.round(time * framesPerSecond)))
+        const { frameCount } = callbacksRef.current
+        const frame = Math.min(
+          frameCount - 1,
+          Math.max(0, Math.round(time * SEQUENCE_FRAMES_PER_SECOND)),
+        )
         callbacksRef.current.onSeek(frame)
       })
 
       waveSurfer.on('audioprocess', time => {
-        callbacksRef.current.onAudioProcess(Math.round(time * callbacksRef.current.framesPerSecond))
+        callbacksRef.current.onAudioProcess(Math.round(time * SEQUENCE_FRAMES_PER_SECOND))
       })
 
       waveSurfer.on('finish', () => callbacksRef.current.onPlaybackEnd())
@@ -74,7 +77,7 @@ export const SequenceWaveform = forwardRef<SequenceWaveformHandle, SequenceWavef
           return
         }
 
-        waveSurfer.setTime(frame / callbacksRef.current.framesPerSecond)
+        waveSurfer.setTime(frame / SEQUENCE_FRAMES_PER_SECOND)
         void waveSurfer.play()
       },
       stop() {

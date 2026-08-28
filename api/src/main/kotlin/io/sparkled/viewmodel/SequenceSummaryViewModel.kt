@@ -13,7 +13,6 @@ data class SequenceSummaryViewModel(
     val name: String,
     val songName: String,
     val stageName: String,
-    val framesPerSecond: Int,
     val durationMs: Int,
     val status: SequenceStatus,
 ) : ViewModel {
@@ -28,7 +27,6 @@ data class SequenceSummaryViewModel(
                 name = model.name,
                 songName = song.name,
                 stageName = stage.name,
-                framesPerSecond = model.framesPerSecond,
                 durationMs = song.durationMs,
                 status = model.status,
             )

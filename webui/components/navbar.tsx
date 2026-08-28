@@ -1,9 +1,8 @@
 'use client'
 
-import { BrightnessControl } from '@/components/dashboard/BrightnessControl'
-import { ThemeSwitch } from '@/components/theme-switch'
+import { SettingsControl } from '@/components/dashboard/SettingsControl'
 import { siteConfig } from '@/config/site'
-import { Button, InputGroup, Kbd, Link, TextField } from '@heroui/react'
+import { InputGroup, Kbd, Link, TextField } from '@heroui/react'
 import clsx from 'clsx'
 import { SearchIcon } from 'lucide-react'
 import NextLink from 'next/link'
@@ -40,7 +39,7 @@ export const Navbar = () => {
         </div>
 
         <div className='flex items-center gap-2'>
-          <BrightnessControl />
+          <SettingsControl />
         </div>
       </header>
 

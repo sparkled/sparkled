@@ -24,5 +24,4 @@ data class SequenceModel(
 
     var status: SequenceStatus,
     var name: String,
-    var framesPerSecond: Int,
 ) : Model

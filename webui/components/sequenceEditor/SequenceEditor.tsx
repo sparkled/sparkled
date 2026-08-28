@@ -15,6 +15,7 @@ import {
   useApiPreviewSequence,
   useApiUpdateSequence,
 } from '@/hooks/api/useApi'
+import { SEQUENCE_FRAMES_PER_SECOND } from '@/src/constants/sequence'
 import {
   Effect,
   SequenceChannelViewModel,
@@ -236,7 +237,6 @@ export function SequenceEditor({ sequenceId }: SequenceEditorProps) {
     return {
       channels: current.channels,
       frameCount: current.frameCount,
-      framesPerSecond: current.framesPerSecond,
       name: current.name,
       songId: current.songId,
       stageId: current.stageId,
@@ -278,7 +278,7 @@ export function SequenceEditor({ sequenceId }: SequenceEditorProps) {
     setSaveError(null)
 
     const frameCount = Math.min(
-      Math.round(editedSequence.framesPerSecond * previewDuration),
+      Math.round(SEQUENCE_FRAMES_PER_SECOND * previewDuration),
       editedSequence.frameCount - currentFrame,
     )
 

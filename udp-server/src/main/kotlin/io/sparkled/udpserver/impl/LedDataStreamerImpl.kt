@@ -74,7 +74,7 @@ class LedDataStreamerImpl(
 
                     val updateInterval = MS_PER_SECOND / when (playbackState) {
                         is InteractivePlaybackState -> 30
-                        is SequencePlaybackState -> playbackState.sequence.framesPerSecond
+                        is SequencePlaybackState -> settings.framesPerSecond
                         is StoppedPlaybackState -> 10
                     }
 
